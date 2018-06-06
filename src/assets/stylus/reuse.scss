@@ -1,0 +1,34 @@
+.inline-block {
+  display: inline-block;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+.text-center {
+  text-align: center;
+}
+
+.dialog-ldb-detail {
+  padding: 30px 40px 0;
+  margin: 0 auto 60px;
+  width: 90%;
+  max-width: 920px;
+  min-height: 100%;
+  border-radius: 6px;
+  background-color: #f4f4f4;
+  .el-dialog__title {
+    font-size: 30px;
+    font-weight: bold;
+  }
+  .el-dialog__headerbtn {
+    font-size: 35px;
+  }
+  &.no-header {
+    .el-dialog__header {
+      display: none;
+    }
+  }
+}

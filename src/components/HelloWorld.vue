@@ -80,15 +80,28 @@
         </a>
       </li>
     </ul>
+    <MyButton @click="buttonFunc">你</MyButton>
   </div>
 </template>
 
 <script>
+import MyButton from '@/stories/button'
 export default {
   name: 'HelloWorld',
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
+    }
+  },
+  components: {
+    MyButton
+  },
+  mounted () {
+    // let a = 1
+  },
+  methods: {
+    buttonFunc () {
+      console.log('----------')
     }
   }
 }

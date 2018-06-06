@@ -1,0 +1,37 @@
+.container, .page-container {
+  margin: 0 auto;
+  padding: 0;
+  width: 1140px;
+}
+.page-container {
+  padding-top: 50px;
+}
+.page-guide {
+  padding: 50px 30px 30px;
+  box-sizing: border-box;
+}
+
+.d-flex {
+  display: flex;
+}
+.d-inline-flex {
+  display: inline-flex;
+}
+.f-align-center {
+  align-items: center;
+}
+.f-justify-center {
+  justify-content: center;
+}
+
+@media (max-width: 1140px) {
+  .container {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 20px;
+  }
+}
