@@ -12,6 +12,13 @@
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import { mapActions } from 'vuex'
+import { erc20Token } from './assets/api/service/contract.js'
+window.erc20Token = erc20Token()
+erc20Token().then(ins => {
+  console.log('---------')
+  ins.balanceOf('0x4cD98f82DeCaDe2d152E256efd1f8d5a334a3E28').then(console.log)
+})
+
 export default {
   name: 'App',
   components: {
