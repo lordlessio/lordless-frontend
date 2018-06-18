@@ -1,21 +1,26 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld.vue'
+import { sync } from 'vuex-router-sync'
+import store from '../store'
+
+import { mutationTypes } from '@/store/typeNames'
+
 import Login from '@/pages/user/login.vue'
 import Market from '@/pages/market'
 import Lbs from '@/pages/lbs'
+import MapBox from '@/pages/mapbox'
 
 import LdbDetail from '@/pages/ldb/_detail.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'Market-index',
+      component: Market
     },
     {
       path: '/login',
@@ -33,15 +38,18 @@ export default new Router({
       component: Lbs
     },
     {
-      path: '/ldb',
-      name: 'Ldb',
-      children: [
-        {
-          path: ':ldbId',
-          name: 'ldbDetail',
-          component: LdbDetail
-        }
-      ]
+      path: '/mapbox',
+      name: 'MapBox',
+      component: MapBox,
+      meta: {
+        showHeader: false,
+        showFooter: false
+      }
+    },
+    {
+      path: '/ldb/:ldbId',
+      name: 'ldbDetail',
+      component: LdbDetail
     },
     {
       path: '*',
@@ -50,3 +58,25 @@ export default new Router({
     }
   ]
 })
+
+/**
+ * router loading status
+ */
+router.beforeEach((to, from, next) => {
+  const { showHeader = true, showFooter = true } = to.meta
+  store.commit(`layout/${mutationTypes.LAYOUT_SET_HEADER_OPTIONS}`, { show: showHeader })
+  store.commit(`layout/${mutationTypes.LAYOUT_SET_FOOTER_OPTIONS}`, { show: showFooter })
+  next()
+})
+
+// google统计
+router.afterEach(function (to) {
+  if (window.ga) {
+    window.ga('set', 'page', to.fullPath) // 你可能想根据请求参数添加其他参数，可以修改这里的 to.fullPath
+    window.ga('send', 'pageview')
+  }
+})
+
+store.router = router
+sync(store, router)
+export default router

@@ -1,0 +1,36 @@
+
+/* 功能性复用样式 */
+
+.dialog-ldb-detail {
+  padding: 15px 20px 0;
+  margin: 0 auto 60px;
+  width: 90%;
+  max-width: 1000px;
+  min-height: 100%;
+  background-color: #f4f4f4;
+  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, .5);
+  .el-dialog__title {
+    font-size: 30px;
+    color: inherit;
+  }
+  .el-dialog__headerbtn, .el-dialog__close {
+    color: inherit;
+  }
+  .el-dialog__headerbtn {
+    font-size: 35px;
+  }
+  &.no-header {
+    .el-dialog__header {
+      display: none;
+    }
+  }
+  &.dark {
+    @include dialog-theme('dark');
+  }
+  &.light {
+    @include dialog-theme('light');
+  }
+  &.gray {
+    @include dialog-theme('gray');
+  }
+}

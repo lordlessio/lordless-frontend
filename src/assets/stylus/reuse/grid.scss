@@ -1,0 +1,77 @@
+
+/* 布局样式 */
+.d-flex {
+  display: flex;
+}
+.d-inline-flex {
+  display: inline-flex;
+}
+.f-align-start {
+  align-items: flex-start;
+}
+.f-align-center {
+  align-items: center;
+}
+.f-justify-center {
+  justify-content: center;
+}
+.f-auto-center {
+  align-items: center;
+  justify-content: center;
+}
+.col-flex {
+  flex-direction: column;
+}
+.col-reverse-flex {
+  flex-direction: column-reverse;
+}
+.row-flex {
+  flex-direction: row;
+}
+.row-reverse-flex {
+  flex-direction: row-reverse;
+}
+.v-flex {
+  flex: 1;
+}
+.inline-block {
+  display: inline-block;
+}
+
+/* 文字布局样式 */
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+.text-center {
+  text-align: center;
+}
+.line-height-1 {
+  line-height: 1
+}
+.line-height-0 {
+  line-height: 0;
+}
+.text-style-cap {
+  text-transform: capitalize;
+}
+.text-style-lower {
+  text-transform: lowercase;
+}
+.text-style-upper {
+  text-transform: uppercase;
+}
+.color-green {
+  color: $--color-btn-green;
+}
+.color-red {
+  color: $--color-btn-red;
+}
+.color-yellow {
+  color: $--color-btn-yellow;
+}
+.color-blue {
+  color: $--color-btn-blue;
+}

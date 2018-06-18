@@ -18,11 +18,13 @@
   "dependencies": {
     "axios": "^0.18.0",
     "element-ui": "^2.4.0",
+    "mapbox-gl": "^0.45.0",
     "truffle-contract": "^3.0.5",
     "vue": "^2.5.2",
     "vue-i18n": "^7.7.0",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^3.4.2",
@@ -60,7 +62,6 @@
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^3.0.1",
     "extract-text-webpack-plugin": "^3.0.0",
-    "file-loader": "^1.1.4",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.30.1",
     "jest": "^22.0.4",
@@ -84,7 +85,7 @@
     "vue-jest": "^1.0.2",
     "vue-loader": "^14.2.1",
     "vue-style-loader": "^3.0.1",
-    "vue-template-compiler": "^2.5.2",
+    "vue-template-compiler": "^2.5.16",
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.9.1",

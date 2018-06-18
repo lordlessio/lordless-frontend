@@ -7,5 +7,6 @@ const config = fs.readFileSync(envPath).toString()
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   BACKEND_SERVER: '"//localhost:8080/lordless"',
-  contract: config 
+  APPROVED_NETWORK_ID: 5777,
+  contract: config,
 })

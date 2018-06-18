@@ -1,0 +1,47 @@
+
+// 一级 DOM 布局样式
+#app {
+  height: 100%;
+}
+.ld-main {
+  margin-top: -80px;
+  // margin-bottom: -150px;
+  padding: 80px 0 230px;
+  min-height: 100%;
+  box-sizing: border-box;
+  &.full {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.ld-error {
+  margin-top: 60px;
+}
+
+.container, .page-container {
+  margin: 0 auto;
+  padding: 0;
+  width: 100%;
+  max-width: 1140px;
+}
+.page-container {
+  padding-top: 50px;
+}
+.page-guide {
+  padding: 50px 30px 30px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1140px) {
+  // .container {
+  //   width: 100%;
+  // }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 20px;
+  }
+}
+

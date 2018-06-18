@@ -1,0 +1,24 @@
+
+/* 样式函数 */
+
+@mixin bg-size($size: cover, $position-x: 50%, $position-y: 30%, $repeat: no-repeat) {
+  background-size: $size;
+  background-position-x: $position-x;
+  background-position-x: $position-y;
+  background-repeat: $repeat;
+}
+
+/* dialog-ldb-detail mixin class */
+@mixin dialog-theme($theme: 'light') {
+  @if $theme == 'light' {
+    background-color: #f4f4f4;
+  }
+  @if $theme == 'dark' {
+    color: #E6E8EC;
+    background-color: #101010;
+  }
+  @if $theme == 'gray' {
+    color: #E6E8EC;
+    background-color: #2b2b2b;
+  }
+}

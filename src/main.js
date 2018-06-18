@@ -45,17 +45,19 @@ Vue.use(VueI18n)
 const messages = {
   en: {
     ...enLocale,
-    ...eleZhLocale
+    ...eleEnLocale
   },
   zh: {
     ...zhLocale,
-    ...eleEnLocale
+    ...eleZhLocale
   }
 }
+
 const i18n = new VueI18n({
   locale: 'zh',
   messages
 })
+
 // Element 国际化配置
 ElementLocale.i18n((key, value) => i18n.t(key, value))
 
@@ -66,6 +68,7 @@ new Vue({
   el: '#app',
   router,
   store,
+  i18n,
   components: { App },
   template: '<App/>'
-})
+}).$mount('#app')

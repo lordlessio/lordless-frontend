@@ -1,56 +1,64 @@
 <template>
   <div id="app">
-    <Header/>
-    <div class="ld-main">
+    <Header v-if="headerOptions.show"/>
+    <div class="ld-main" :class="{ 'full': !headerOptions.show }">
       <router-view/>
+      <div class="d-flex col-flex f-auto-center ld-error" v-if="web3Opt.error">
+        <h1>出错啦！</h1>
+        <p>{{ web3Opt.error }}</p>
+      </div>
     </div>
-    <Footer/>
+    <Footer v-if="footerOptions.show"/>
   </div>
 </template>
 
 <script>
-import Header from '@/components/header'
-import Footer from '@/components/footer'
-import { mapActions } from 'vuex'
-import { erc20Token } from './assets/api/service/contract.js'
-window.erc20Token = erc20Token()
-erc20Token().then(ins => {
-  console.log('---------')
-  ins.balanceOf('0x4cD98f82DeCaDe2d152E256efd1f8d5a334a3E28').then(console.log)
-})
+import Header from '@/components/layout/header'
+import Footer from '@/components/layout/footer'
+import { initWeb3 } from '@/assets/utils/web3/initWeb3'
+import { mapState } from 'vuex'
+import { erc20Token } from '@/api/service/contract.js'
+if (erc20Token && erc20Token()) {
+  erc20Token().then(ins => {
+  // console.log('---------', ins, ins.totalSupply().then(d => console.log(web3js.fromWei(d.toNumber(), 'finney'))))
+    ins.balanceOf('0x4cD98f82DeCaDe2d152E256efd1f8d5a334a3E28').then(console.log)
+  })
+}
 
 export default {
   name: 'App',
+  async created () {
+    if (this.web3Opt.web3js.default) initWeb3()
+  },
   components: {
     Header,
     Footer
   },
+  computed: {
+    ...mapState('layout', [
+      'headerOptions',
+      'footerOptions'
+    ]),
+    ...mapState('web3', [
+      'web3Opt'
+    ]),
+
+    // 是否登陆了 metamask
+    web3Login () {
+      return this.web3Opt.address
+    },
+
+    // web3 Network 环境是否正常
+    web3IsNetwork () {
+      return this.web3Opt.networkId === process.env.APPROVED_NETWORK_ID
+    },
+
+    // web3 整体状态是否正常
+    web3IsValidate () {
+      return this.web3Opt.networkId === process.env.APPROVED_NETWORK_ID && this.web3Opt.address
+    }
+  },
   methods: {
-    ...mapActions('user', {
-      getUserByToken: 'GET_USER_BY_TOKEN'
-    }),
-
-    // 初始化 web3js
-    initWeb3 () {
-      if (typeof web3 !== 'undefined') {
-        // Use Mist/MetaMask's provider
-        window.web3js = new Web3(web3.currentProvider)
-      } else {
-        console.log('No web3? You should consider trying MetaMask!')
-        // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-        window.web3js = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
-      }
-    },
-
-    // 监听账户变化
-    linstenAccout () {
-      const accounts = web3js.eth.accounts[0]
-      setInterval(() => {
-        if (accounts && web3js.eth.accounts[0] !== accounts) {
-          console.log('------账户失效')
-        }
-      }, 300)
-    },
 
     // 监听主网络环境
     listenNetWork () {
@@ -78,13 +86,6 @@ export default {
       })
     }
   },
-  mounted () {
-    this.getUserByToken()
-    this.$nextTick(() => {
-      this.initWeb3()
-      this.listenNetWork()
-      this.linstenAccout()
-    })
-  }
+  mounted () {}
 }
 </script>

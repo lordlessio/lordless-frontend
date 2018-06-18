@@ -7,49 +7,52 @@
     </div>
     <div class="btn">
       <MyButton @click.native="loginFunc">登陆啊</MyButton>
-      <MyButton @click.native="logoutFunc">注销</MyButton>
     </div>
   </div>
 </template>
 
 <script>
-import { login, logout } from 'api'
+import { login } from 'api'
 import MyButton from '@/stories/button'
-import { mapState, mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
+import { actionTypes } from '@/store/typeNames'
 export default {
   components: {
     MyButton
   },
   computed: {
-    ...mapState('user', {
-      userInfo: 'userInfo'
-    })
+    ...mapState('user', [
+      'userInfo'
+    ])
   },
   methods: {
-    ...mapActions('user', {
-      getUserByToken: 'GET_USER_BY_TOKEN'
-    }),
+    ...mapActions('user', [
+      actionTypes.USER_SET_USER_BY_TOKEN,
+      actionTypes.USER_SET_USER_TOKEN
+    ]),
+
     loginFunc () {
-      if (!web3js.eth.accounts[0]) return
+      const { web3js, address } = this.$parent.web3Opt
+      if (!address) return
       const str = web3js.toHex('lordless')
       // 调起 metamask personal_sign 方法
-      web3js.currentProvider.sendAsync({ id: 1, method: 'personal_sign', params: [web3js.eth.accounts[0], str] }, (err, res) => {
+      web3js.personal.sign(str, web3js.eth.defaultAccount, async (err, result) => {
         if (!err) {
-          if (res.result) this.login(res.result)
+          if (result) this.login(result, address)
         }
       })
     },
-    logoutFunc () {
-      logout()
-    },
-    async login (sigStr) {
-      const res = await login({ sigStr })
-      this.getUserByToken()
+    async login (sigStr, address) {
+      const res = await login({ sigStr, address })
+      if (res.code === 1000) {
+        this.setUserToken({ address, token: res.token })
+        this.setUserByToken()
+      }
       console.log('-----res', res)
     }
   },
   mounted () {
-
+    console.log('actionTypes', actionTypes)
   }
 }
 </script>

@@ -33,7 +33,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin.scss';
+  @import '@/assets/stylus/mixin/class_mixin.scss';
   .image-box {
     position: relative;
     width: inherit;

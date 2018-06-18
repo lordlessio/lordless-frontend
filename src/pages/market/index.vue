@@ -19,12 +19,12 @@
     <el-dialog
       :title="detailLdbInfo.name"
       :visible.sync="ldbDialog"
-      custom-class="dialog-ldb-detail"
+      custom-class="dialog-ldb-detail gray"
       append-to-body
       lock-scroll
       top="20px">
       <div>
-        <ldb-detail dialog :ldbId="detailLdbInfo._id"></ldb-detail>
+        <ldb-detail dialog theme="gray" :ldbId="detailLdbInfo._id"></ldb-detail>
       </div>
     </el-dialog>
   </div>
@@ -32,7 +32,7 @@
 
 <script>
 import { getChainLdbs } from 'api'
-import { objectT } from '@/assets/utils/tool'
+import { objectType } from 'utils/tool'
 import ImgBox from '@/stories/image'
 import LdbDetail from '@/components/ldb/detail'
 export default {
@@ -53,7 +53,7 @@ export default {
 
     // 根据 photos 获取 ldb cover image
     ldbImage (photos) {
-      if (objectT(photos)[0] !== 'array') return photos
+      if (objectType(photos)[0] !== 'array') return photos
       return decodeURIComponent(photos[0].split(',')[0])
     },
 

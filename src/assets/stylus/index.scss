@@ -1,5 +1,5 @@
-@import './element-variables.scss';
-@import './reuse.scss';
-@import './mixin.scss';
-@import './main.scss';
-@import './grid.scss';
+
+@import './mixin/index.scss';
+@import './overlay/index.scss';
+@import './reuse/index.scss';
+@import './layout/index.scss';
