@@ -1,6 +1,6 @@
 import store from '@/store'
 import { getNetwork, getCoinbase } from './utils'
-import { actionTypes } from '@/store/typeNames'
+import { actionTypes } from '@/store/types'
 
 export const monitorWeb3 = () => {
   // const APPROVED_NETWORKID = '5777'

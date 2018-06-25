@@ -1,6 +1,6 @@
 <template>
   <div class="ldb-detail-box">
-    <LdbDetail ref="ldbDetail" theme="gray" :ldbId="$route.params.ldbId"/>
+    <LdbDetail ref="ldbDetail" theme="default" :ldbId="$route.params.ldbId"/>
   </div>
 </template>
 

@@ -4,7 +4,7 @@
 @mixin bg-size($size: cover, $position-x: 50%, $position-y: 30%, $repeat: no-repeat) {
   background-size: $size;
   background-position-x: $position-x;
-  background-position-x: $position-y;
+  background-position-y: $position-y;
   background-repeat: $repeat;
 }
 
@@ -21,4 +21,15 @@
     color: #E6E8EC;
     background-color: #2b2b2b;
   }
+  @if $theme == 'default' {
+    color: #E6E8EC;
+    background-color: $--color-bg-color;
+  }
+}
+
+@mixin bg-img-class($url, $repeat: 'no-repeat', $size: 'cover', $position: '0 0') {
+  background-image: url($url);
+  background-repeat: $repeat;
+  background-size: $size;
+  background-position: $position;
 }

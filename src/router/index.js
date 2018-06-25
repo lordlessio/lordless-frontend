@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import { sync } from 'vuex-router-sync'
 import store from '../store'
 
-import { mutationTypes } from '@/store/typeNames'
+import { mutationTypes } from '@/store/types'
 
 import Login from '@/pages/user/login.vue'
 import Market from '@/pages/market'

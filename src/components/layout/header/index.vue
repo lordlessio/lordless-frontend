@@ -1,5 +1,5 @@
 <template>
-  <header class="ld-header">
+  <header class="ld-header" :class="theme">
     <div class="container d-flex">
       <div class="text-left inline-block header-logo">
         <router-link to="/" class="inline-block">
@@ -34,24 +34,38 @@
 
 <script>
 export default {
-
+  props: {
+    theme: {
+      type: String,
+      default: 'default'
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
+  @import '@/assets/stylus/mixin/color_mixin.scss';
   .ld-header {
     height: 80px;
-    background-color: #0E0F16;
+    &.default {
+      background-color: $--color-bg-color;
+      color: #fff;
+      fill: #fff;
+    }
+    &.dark {
+      background-color: #0E0F16;
+      color: #fff;
+      fill: #fff;
+    }
   }
   .container {
     height: 100%;
     line-height: 80px;
-    color: #fff;
   }
 
   .header-logo {
     svg {
-      fill: #fff;
+      fill: inherit;
       width: 64px;
       height: 45px;
       vertical-align: middle;

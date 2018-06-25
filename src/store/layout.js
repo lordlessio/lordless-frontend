@@ -3,7 +3,7 @@
  * layout store options
  */
 import { objectType } from 'utils/tool'
-import { mutationTypes } from './typeNames/layout'
+import { mutationTypes } from './types'
 export default {
   namespaced: true,
   state: {

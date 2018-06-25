@@ -33,4 +33,7 @@
   &.gray {
     @include dialog-theme('gray');
   }
+  &.default {
+    @include dialog-theme('default');
+  }
 }

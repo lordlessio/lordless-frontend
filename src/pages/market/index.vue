@@ -8,7 +8,7 @@
           <div class="cnt-item" @click.stop="openDetail(item)">
             <figure class="cards">
               <figcaption>
-                <img-box :src="ldbImage(item.photos)" type="span"></img-box>
+                <img-box :src="item.ldbIcon.sourceUrl" type="span"></img-box>
               </figcaption>
             </figure>
             <div>name</div>
@@ -32,14 +32,16 @@
 
 <script>
 import { getChainLdbs } from 'api'
-import { objectType } from 'utils/tool'
-import ImgBox from '@/stories/image'
+// import { objectType } from 'utils/tool'
+import ImgBox from '@/components/stories/image'
 import LdbDetail from '@/components/ldb/detail'
 export default {
   data: () => {
     return {
+
       // ldb 建筑列表
       ldbs: [],
+
       // ldb dialog 显示控制
       ldbDialog: false,
       detailLdbInfo: {}
@@ -52,10 +54,10 @@ export default {
   methods: {
 
     // 根据 photos 获取 ldb cover image
-    ldbImage (photos) {
-      if (objectType(photos)[0] !== 'array') return photos
-      return decodeURIComponent(photos[0].split(',')[0])
-    },
+    // ldbImage (photos) {
+    //   if (objectType(photos)[0] !== 'array') return photos
+    //   return decodeURIComponent(photos[0].split(',')[0])
+    // },
 
     // 打开详情信息页
     openDetail (info) {
@@ -76,7 +78,7 @@ export default {
   },
   watch: {
     ldbDialog (val) {
-      // 如果对话框开启，改变浏览器地址为详情页面地址
+      // 如果对话框关闭，改变浏览器地址为详情页面地址
       if (!val) {
         window.history.pushState(null, null, this.$route.path)
       }

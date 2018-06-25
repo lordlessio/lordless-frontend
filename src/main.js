@@ -7,7 +7,7 @@ import router from './router'
 import store from './store'
 import {
   Col, Row,
-  Tabs, Dialog,
+  Tabs, Dialog, Autocomplete,
   Slider, Carousel, CarouselItem, Collapse, CollapseItem
 } from 'element-ui'
 import VueI18n from 'vue-i18n'
@@ -29,6 +29,8 @@ Vue.use(Row)
 
 Vue.use(Tabs)
 Vue.use(Dialog)
+Vue.use(Autocomplete)
+
 Vue.use(Slider)
 Vue.use(Carousel)
 Vue.use(CarouselItem)

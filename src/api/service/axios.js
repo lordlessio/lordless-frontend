@@ -1,6 +1,6 @@
 import axios from 'axios'
 import store from '@/store'
-import { actionTypes } from '@/store/typeNames'
+import { actionTypes } from '@/store/types'
 
 const instance = axios.create({
   baseURL: process.env.BACKEND_SERVER,

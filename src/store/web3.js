@@ -2,7 +2,7 @@
  * web3 store options
  */
 
-import { mutationTypes, actionTypes } from './typeNames/web3'
+import { mutationTypes, actionTypes } from './types'
 import { objectType, stringifyParse } from 'utils/tool'
 export default {
   namespaced: true,

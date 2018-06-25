@@ -1,41 +1,50 @@
 
 /* 布局样式 */
-.d-flex {
-  display: flex;
+
+@mixin class-vars ($size: '') {
+  .#{$size}d-flex {
+    display: flex;
+  }
+  .#{$size}d-inline-flex {
+    display: inline-flex;
+  }
+  .#{$size}f-align-start {
+    align-items: flex-start;
+  }
+  .#{$size}f-align-center {
+    align-items: center;
+  }
+  .#{$size}f-justify-center {
+    justify-content: center;
+  }
+  .#{$size}f-auto-center {
+    align-items: center;
+    justify-content: center;
+  }
+  .#{$size}col-flex {
+    flex-direction: column;
+  }
+  .#{$size}col-reverse-flex {
+    flex-direction: column-reverse;
+  }
+  .#{$size}row-flex {
+    flex-direction: row;
+  }
+  .#{$size}row-reverse-flex {
+    flex-direction: row-reverse;
+  }
+  .#{$size}v-flex {
+    flex: 1;
+  }
+  .#{$size}inline-block {
+    display: inline-block;
+  }
 }
-.d-inline-flex {
-  display: inline-flex;
-}
-.f-align-start {
-  align-items: flex-start;
-}
-.f-align-center {
-  align-items: center;
-}
-.f-justify-center {
-  justify-content: center;
-}
-.f-auto-center {
-  align-items: center;
-  justify-content: center;
-}
-.col-flex {
-  flex-direction: column;
-}
-.col-reverse-flex {
-  flex-direction: column-reverse;
-}
-.row-flex {
-  flex-direction: row;
-}
-.row-reverse-flex {
-  flex-direction: row-reverse;
-}
-.v-flex {
-  flex: 1;
-}
-.inline-block {
-  display: inline-block;
+
+@include class-vars();
+
+@media screen and (max-width: 768px) {
+  @include class-vars('sm-');
 }
 
 /* 文字布局样式 */
@@ -47,6 +56,9 @@
 }
 .text-center {
   text-align: center;
+}
+.text-nowrap {
+  white-space: nowrap;
 }
 .line-height-1 {
   line-height: 1

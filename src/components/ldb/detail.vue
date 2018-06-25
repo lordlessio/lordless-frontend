@@ -1,41 +1,46 @@
 <template>
   <div class="ldb-detail-main" :class="theme">
     <div class="detail-header">
-      <img-box :src="ldbImage(ldbInfo.photos)" type="span"></img-box>
+      <sketch-fab/>
     </div>
     <div class="detail-cnt-box">
       <div class="container">
         <div class="cnt-item cnt-header">
           <el-row justify="end" align="bottom">
-            <el-col :span="12">
-              <h1 class="ldb-name">{{ ldbInfo.name }}</h1>
+            <el-col :span="24">
+              <h1 class="ldb-name">{{ ldbInfo.name.split(',')[0] }}</h1>
             </el-col>
-            <el-col :span="12">
+            <!-- <el-col :span="12">
               <div class="d-flex f-align-center">
                 <div class="user-info v-flex">
                   <p class="lord-name-box">
-                    <span class="inline-block lord-name-title">领主</span>
-                    <span class="inline-block lord-name">{{ '领主名称' }}</span>
+                    <span class="inline-block lord-name-title">领主: </span>
+                    <span class="inline-block lord-name">{{ 'founy' }}</span>
                   </p>
                   <p class="lord-address">{{ splitAddress(userInfo.address, '******') }}</p>
                 </div>
                 <div class="user-avatar">
-                  <img-box></img-box>
+                  <img-box :src="ldbInfo.ldbIcon.sourceUrl" type="span"></img-box>
                 </div>
               </div>
-            </el-col>
+            </el-col> -->
           </el-row>
           <div class="ldb-msg">
-            <span class="inline-block ldb-location">{{ `${ldbInfo.chainSystem.lat},${ldbInfo.chainSystem.lon}` }}</span>
-            <span class="inline-block ldb-address">{{ ldbInfo.address }}</span>
+            <p>
+              <span class="inline-block ldb-location">{{ `${ldbInfo.chainSystem.lat},${ldbInfo.chainSystem.lon}` }}</span>
+              <span class="inline-block ldb-address">{{ ldbInfo.address }}</span>
+            </p>
+            <p v-if="ldbInfo.category">
+              <span class="inline-block ldb-category" v-for="(category, index) of ldbInfo.category.split(',')" :key="index">{{ category }}</span>
+            </p>
           </div>
         </div>
-        <div class="cnt-item cnt-desc">{{ ldbInfo.desc }}</div>
+        <div class="cnt-item cnt-desc">{{ ldbInfo.desc_zh }}</div>
         <div class="cnt-item cnt-features">
           <div class="d-flex features-container">
             <div class="inline-block features-price features-item">
               <p>Price</p>
-              <div>
+              <div class="ldb-price">
                 <span>{{ ldbInfo.chainSystem.value }}</span>
                 <span>ETH</span>
               </div>
@@ -47,15 +52,15 @@
               </div>
             </div>
             <div class="v-flex features-btn features-item">
-              <my-button theme="buy">购买</my-button>
+              <my-button theme="buy">Sign to Buy</my-button>
             </div>
           </div>
         </div>
-        <div class="cnt-item cnt-tasks">
+        <div class="cnt-item large-margin cnt-tasks">
           <h2>任务</h2>
           <div class="tasks-box">
             <div>
-              <my-button theme="info-1" class="d-inline-flex f-auto-center task-btn">
+              <my-button theme="info" class="d-inline-flex f-auto-center task-btn">
                 <span class="line-height-1">
                   <svg>
                     <use xlink:href="/static/svg/icon.svg#icon-telegram"/>
@@ -63,7 +68,7 @@
                 </span>
                 <span>关注 EOS Telegram</span>
               </my-button>
-              <my-button theme="info-1" class="d-inline-flex f-auto-center task-btn">
+              <my-button theme="info" class="d-inline-flex f-auto-center task-btn">
                 <span class="line-height-1">
                   <svg>
                     <use xlink:href="/static/svg/icon.svg#icon-telegram"/>
@@ -73,7 +78,7 @@
               </my-button>
             </div>
             <div>
-              <my-button theme="info-2" class="d-inline-flex f-auto-center task-btn">
+              <my-button theme="info" class="d-inline-flex f-auto-center task-btn">
                 <span class="line-height-1">
                   <svg>
                     <use xlink:href="/static/svg/icon.svg#icon-medium"/>
@@ -84,10 +89,10 @@
             </div>
           </div>
         </div>
-        <div class="cnt-item cnt-candy">
+        <div class="cnt-item large-margin cnt-candy">
           <h3>已完成</h3>
           <div class="history-box">
-            <el-row class="history-item history-header">
+            <el-row class="history-item history-header finish">
               <el-col :span="6">
                 奖励 Candy
               </el-col>
@@ -101,48 +106,50 @@
                 TO
               </el-col>
             </el-row>
-            <el-row class="history-item history-cnt">
-              <el-col :span="6" class="color-green">
-                <span>20 </span>
-                <span class="text-style-upper">EOS</span>
-              </el-col>
-              <el-col :span="6">
-                <span>1000</span>
-                <span class="text-style-cap">exp</span>
-              </el-col>
-              <el-col :span="6">
-                <span>关注</span>
-                <span class="text-style-upper">Eos</span>
-                <span class="text-style-cap">Telegram</span>
-              </el-col>
-              <el-col :span="6">
-                4 months ago
-              </el-col>
-            </el-row>
-            <el-row class="history-item history-cnt">
-              <el-col :span="6" class="color-green">
-                <span>5 </span>
-                <span class="text-style-upper">NAS</span>
-              </el-col>
-              <el-col :span="6">
-                <span>500</span>
-                <span class="text-style-cap">exp</span>
-              </el-col>
-              <el-col :span="6">
-                <span>关注</span>
-                <span class="text-style-upper">Nebulas</span>
-                <span class="text-style-cap">Twitter</span>
-              </el-col>
-              <el-col :span="6">
-                1 hours ago
-              </el-col>
+            <el-row class="history-cnt-box">
+              <el-row class="history-item history-cnt">
+                <el-col :span="6" class="color-blue">
+                  <span>20 </span>
+                  <span class="text-style-upper">EOS</span>
+                </el-col>
+                <el-col :span="6">
+                  <span>1000</span>
+                  <span class="text-style-cap">exp</span>
+                </el-col>
+                <el-col :span="6">
+                  <span>关注</span>
+                  <span class="text-style-upper">Eos</span>
+                  <span class="text-style-cap">Telegram</span>
+                </el-col>
+                <el-col :span="6">
+                  4 months ago
+                </el-col>
+              </el-row>
+              <el-row class="history-item history-cnt">
+                <el-col :span="6" class="color-blue">
+                  <span>5 </span>
+                  <span class="text-style-upper">NAS</span>
+                </el-col>
+                <el-col :span="6">
+                  <span>500</span>
+                  <span class="text-style-cap">exp</span>
+                </el-col>
+                <el-col :span="6" class="text-nowrap">
+                  <span>关注</span>
+                  <span class="text-style-upper">Nebulas</span>
+                  <span class="text-style-cap">Twitter</span>
+                </el-col>
+                <el-col :span="6">
+                  1 hours ago
+                </el-col>
+              </el-row>
             </el-row>
           </div>
         </div>
-        <div class="cnt-item cnt-history">
+        <div class="cnt-item large-margin cnt-history">
           <h2>交易历史</h2>
           <div class="history-box">
-            <el-row class="history-item history-header">
+            <el-row class="history-item history-header deal">
               <el-col :span="6">
                 PRICE
               </el-col>
@@ -156,35 +163,37 @@
                 TO
               </el-col>
             </el-row>
-            <el-row class="history-item history-cnt">
-              <el-col :span="6" class="color-green">
-                <span>1000</span>
-                <span class="text-style-upper">ETH</span>
-              </el-col>
-              <el-col :span="6" class="color-red">
-                2 days ago
-              </el-col>
-              <el-col :span="6">
-                {{ splitAddress(userInfo.address) }}
-              </el-col>
-              <el-col :span="6">
-                {{ splitAddress(userInfo.address) }}
-              </el-col>
-            </el-row>
-            <el-row class="history-item history-cnt">
-              <el-col :span="6" class="color-green">
-                <span>800</span>
-                <span class="text-style-upper">ETH</span>
-              </el-col>
-              <el-col :span="6">
-                15 days ago
-              </el-col>
-              <el-col :span="6">
-                {{ splitAddress(userInfo.address) }}
-              </el-col>
-              <el-col :span="6">
-                {{ splitAddress(userInfo.address) }}
-              </el-col>
+            <el-row class="history-cnt-box">
+              <el-row class="history-item history-cnt">
+                <el-col :span="6" class="color-blue">
+                  <span>1000</span>
+                  <span class="text-style-upper">ETH</span>
+                </el-col>
+                <el-col :span="6" class="color-red">
+                  2 days ago
+                </el-col>
+                <el-col :span="6">
+                  {{ splitAddress(userInfo.address) }}
+                </el-col>
+                <el-col :span="6">
+                  {{ splitAddress(userInfo.address) }}
+                </el-col>
+              </el-row>
+              <el-row class="history-item history-cnt">
+                <el-col :span="6" class="color-blue">
+                  <span>800</span>
+                  <span class="text-style-upper">ETH</span>
+                </el-col>
+                <el-col :span="6">
+                  15 days ago
+                </el-col>
+                <el-col :span="6">
+                  {{ splitAddress(userInfo.address) }}
+                </el-col>
+                <el-col :span="6">
+                  {{ splitAddress(userInfo.address) }}
+                </el-col>
+              </el-row>
             </el-row>
           </div>
         </div>
@@ -194,8 +203,9 @@
 </template>
 
 <script>
-import ImgBox from '@/stories/image'
-import MyButton from '@/stories/button'
+import ImgBox from '@/components/stories/image'
+import MyButton from '@/components/stories/button'
+import SketchFab from '@/components/sketchfab'
 import { getLdbById } from 'api'
 import { objectType, splitAddress } from 'utils/tool'
 import { mapState } from 'vuex'
@@ -223,9 +233,11 @@ export default {
       loading: false,
       // ldb 建筑信息
       ldbInfo: {
+        name: '',
         userId: {},
         chainSystem: {},
-        levelSystem: {}
+        levelSystem: {},
+        ldbIcon: {}
       },
       // 错误信息
       errorMsg: null
@@ -238,7 +250,8 @@ export default {
   },
   components: {
     ImgBox,
-    MyButton
+    MyButton,
+    SketchFab
   },
   methods: {
 
@@ -255,7 +268,7 @@ export default {
     // 获取 ldb 建筑详情
     async getLdbInfo (id) {
       this.loading = true
-      const res = await getLdbById({ id })
+      const res = await getLdbById({ id, pula: 'ldbIcon' })
       if (res.code === 1000) this.ldbInfo = res.data
       else this.errorMsg = res.errorMsg || '未知错误'
       this.loading = false
@@ -282,6 +295,7 @@ export default {
 
 <style lang="scss" scoped>
   @import '@/assets/stylus/mixin/color_mixin.scss';
+  @import '@/assets/stylus/mixin/class_mixin.scss';
 
   @mixin detail-theme($theme: 'light') {
     @if $theme == 'light' {
@@ -301,6 +315,13 @@ export default {
         color: #E6E8EC;
       }
     }
+    @if $theme == 'default' {
+      color: #E6E8EC;
+      background-color: $--color-bg-color;
+      .lord-name {
+        color: #E6E8EC;
+      }
+    }
   }
   .ldb-detail-main {
     padding-bottom: 60px;
@@ -315,28 +336,36 @@ export default {
     &.light {
       @include detail-theme('light');
     }
+    &.default {
+      @include detail-theme('default');
+    }
   }
+
   .detail-header {
-    height: 300px;
+    height: calc((100vh / 3 * 2) + 50px);
+    min-height: 300px;
   }
 
   .detail-cnt-box {
     font-size: 16px;
     .container {
       max-width: 1000px;
+      @include bg-img-class('~/static/img/utils/lordless-map-bg.png', 'repeat', '200%');
     }
   }
 
   .cnt-item {
     margin-top: 40px;
-    >h2 {
-      font-size: 35px;
+    &.large-margin {
+      margin-top: 80px;
     }
     >h2 {
-      font-size: 24px;
+      margin-bottom: 25px;
+      font-size: 30px;
     }
     >h3 {
-      font-size: 18px;
+      margin-bottom: 20px;
+      font-size: 24px;
     }
   }
   .cnt-header {
@@ -346,7 +375,7 @@ export default {
     }
   }
   .ldb-name {
-    font-size: 35px;
+    font-size: 30px;
   }
   .user-info {
     font-weight: 500;
@@ -354,14 +383,15 @@ export default {
   }
 
   .lord-name-box {
+    font-size: 20px;
     line-height: 1.8;
   }
   .lord-name {
-    font-size: 16px;
+    // font-size: 20px;
   }
   .lord-name-title {
     margin-right: 6px;
-    font-size: 14px;
+    // font-size: 14px;
     color: #E6E8EC;
   }
   .lord-address {
@@ -372,10 +402,34 @@ export default {
     margin-left: 15px;
     width: 56px;
     height: 56px;
-    background-color: #ed5736;
+    // background-color: #ed5736;
     border-radius: 100%;
+    overflow: hidden;
   }
+
+  .ldb-msg {
+    font-size: 20px;
+    span {
+      padding: 0 5px;
+      height: 30px;
+      line-height: 30px;
+      border-radius: 5px;
+      vertical-align: middle;
+      background-color: $--color-btn-purple;
+      color: #fff;
+      &:not(:first-of-type) {
+        margin-left: 30px;
+      }
+    }
+    >p {
+      &:not(:first-of-type) {
+        margin-top: 15px;
+      }
+    }
+  }
+
   .cnt-desc {
+    font-size: 18px;
     // margin: 30px 0;
   }
 
@@ -387,68 +441,91 @@ export default {
     min-width: 150px;
     font-weight: 500;
     >p {
-      font-size: 16px;
+      font-size: 24px;
     }
     >div {
       margin-top: 10px;
-      font-size: 20px;
+      font-size: 26px;
     }
   }
   .features-btn {
     text-align: right;
     button {
-      font-size: 22px;
+      padding: 12px 25px;
+      font-size: 24px;
+      border-radius: 8px;
     }
+  }
+  .ldb-price {
+    color: #EE4CF1;
   }
 
   .cnt-tasks {
-
   }
   .tasks-box {
+    // margin-top: 15px;
     margin-left: -10px;
+    >div {
+      margin-bottom: 20px;
+      .task-btn {
+        &:not(:first-of-type) {
+          margin-left: 30px;
+        }
+      }
+    }
   }
   .task-btn {
-    padding: 15px 30px 15px 20px;
-    font-size: 16px;
+    margin: 0;
+    padding: 12px 40px 12px 30px;
+    font-size: 22px;
     font-weight: 500;
+    border-radius: 8px;
     svg {
-      width: 24px;
-      height: 24px;
+      width: 30px;
+      height: 30px;
     }
     >span {
       margin-left: 10px;
     }
   }
 
-  .ldb-msg {
-    >span {
-      padding: 8px 10px;
-      border-radius: 5px;
-      vertical-align: middle;
-      background-color: $--color-btn-yellow;
-      color: #fff;
-      &:not(:first-of-type) {
-        margin-left: 30px;
-      }
-    }
-  }
-
+  // history box
   .history-box {
-    margin-top: 10px;
+    // margin-top: 10px;
     font-weight: 500;
+    font-size: 20px;
+    border-radius: 8px;
+    overflow: hidden;
   }
   .history-item {
-    height: 50px;
-    color: #fff;
-    line-height: 50px;
+    padding: 20px 0;
+    // height: 50px;
+    // line-height: 50px;
     text-indent: 45px;
     overflow: hidden;
   }
   .history-header {
-    color: #696B74;
-    background-color: #2B2C2C;
+    color: #fff;
+    &.finish {
+      background-color: #B6A5FF;
+    }
+    &.deal {
+      background-color: #F6A5FF;
+    }
+  }
+  .history-cnt-box {
+    padding: 15px 0;
+    background-color: #fff;
+    color: #373737;
   }
   .history-cnt {
-    background-color: #44424D;
+
+  }
+
+  @media screen and (max-width: 768px) {
+    .detail-header {
+      height: calc((100vh / 2) + 50px);
+      min-height: 350px;
+    }
   }
 </style>

@@ -13,9 +13,9 @@
 
 <script>
 import { login } from 'api'
-import MyButton from '@/stories/button'
+import MyButton from '@/components/stories/button'
 import { mapActions, mapState } from 'vuex'
-import { actionTypes } from '@/store/typeNames'
+import { actionTypes } from '@/store/types'
 export default {
   components: {
     MyButton
@@ -45,8 +45,8 @@ export default {
     async login (sigStr, address) {
       const res = await login({ sigStr, address })
       if (res.code === 1000) {
-        this.setUserToken({ address, token: res.token })
-        this.setUserByToken()
+        this[actionTypes.USER_SET_USER_TOKEN]({ address, token: res.token })
+        this[actionTypes.USER_SET_USER_BY_TOKEN]()
       }
       console.log('-----res', res)
     }

@@ -1,11 +1,11 @@
 import store from '@/store'
 import { getNetwork, getCoinbase } from './utils'
 import { monitorWeb3 } from './monitorWeb3'
-import { actionTypes } from '@/store/typeNames'
+import { actionTypes } from '@/store/types'
 // 初始化 web3js
 export const initWeb3 = async (callback) => {
   const res = await checkWeb3()
-  console.log('init web3 web3Opt:', res)
+  console.log('init web3 web3Opt:', res, store)
   // 注册 web3 状态
   await store.dispatch(`web3/${actionTypes.WEB3_SET_WEB3_INFO}`, res)
 

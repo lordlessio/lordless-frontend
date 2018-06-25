@@ -26,12 +26,14 @@ module.exports = {
     // allow async-await
     'generator-star-spacing': 'off',
     // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'camelcase': 'off'
   },
   globals: {
     web3: true,
     Web3: true,
     web3js: true,
-    AMap: true
+    AMap: true,
+    Sketchfab: true,
   }
 }
