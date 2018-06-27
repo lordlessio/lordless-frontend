@@ -1,5 +1,5 @@
 <template>
-  <div class="image-box">
+  <div class="image-box" :class="sType">
     <img v-if="type === 'img'" :src="src"/>
     <span v-else :style="`background-image: url('${src}')`"></span>
   </div>
@@ -22,6 +22,11 @@ export default {
     type: {
       type: String,
       default: 'img'
+    },
+
+    sType: {
+      type: String,
+      default: 'width'
     }
   },
   methods: {
@@ -38,14 +43,21 @@ export default {
     position: relative;
     width: inherit;
     height: inherit;
-    > img {
-      width: 100%;
-    }
     > span {
       position: absolute;
       width: 100%;
       height: 100%;
       @include bg-size();
+    }
+    &.width {
+      >img {
+        width: 100%;
+      }
+    }
+    &.height {
+      >img {
+        height: 100%;
+      }
     }
   }
 </style>

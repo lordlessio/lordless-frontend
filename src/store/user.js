@@ -4,8 +4,9 @@
  */
 
 import { mutationTypes, actionTypes } from './types'
-import { getUserById, getUserByToken } from 'api'
+import { getUserById, getUserByToken, login } from 'api'
 import { stringifyParse, getObjStorage } from 'utils/tool'
+import web3Store from './web3'
 export default {
   namespaced: true,
   state: {
@@ -17,7 +18,10 @@ export default {
     userInfo: { default: true },
 
     // uid 用户信息
-    uidInfo: {}
+    uidInfo: {},
+
+    // 用户是否过期
+    userExpired: false
   },
   mutations: {
 
@@ -45,16 +49,50 @@ export default {
       const tokenObj = getObjStorage()
       tokenObj[address] = token
       window.localStorage.setItem('lordless_tokens', JSON.stringify(tokenObj))
+    },
+
+    // 改变 userExpired 状态
+    [mutationTypes.USER_SET_USER_EXPIRED]: (state, payload = true) => {
+      state.userExpired = Boolean(payload)
     }
   },
   actions: {
-    // 根据用户id获取用户信息
+    /**
+     * 根据用户id获取用户信息
+     */
     [actionTypes.USER_SET_USER_BY_ID]: async ({ commit }, { uid, address }) => {
       const res = await getUserById({ uid, address })
       if (res.code === 1000) commit(mutationTypes.USER_SET_USERID_INFO, res.data)
       else {
         commit(mutationTypes.USER_SET_USER_INFO, {})
       }
+    },
+
+    /**
+     * metaMask login
+     */
+    [actionTypes.USER_META_LOGIN]: ({ commit, dispatch }) => {
+      const { web3js, address } = web3Store.state.web3Opt
+      if (!address) return
+
+      // 登陆
+      const loginFunc = async (sigStr, addr) => {
+        const res = await login({ sigStr, address: addr })
+        if (res.code === 1000) {
+          dispatch(actionTypes.USER_SET_USER_TOKEN, ({ address: addr, token: res.token }))
+          dispatch(actionTypes.USER_SET_USER_BY_TOKEN)
+        }
+      }
+      // 取消 expired 状态
+      commit(mutationTypes.USER_SET_USER_EXPIRED, false)
+      const str = web3js.toHex('lordless')
+
+      // 调起 metamask personal_sign 方法
+      web3js.personal.sign(str, web3js.eth.defaultAccount, async (err, result) => {
+        if (!err) {
+          if (result) loginFunc(result, address)
+        }
+      })
     },
 
     /**
@@ -75,7 +113,9 @@ export default {
       if (res.code === 1000) {
         commit(mutationTypes.USER_SET_USERS, res.data)
         commit(mutationTypes.USER_SET_USER_INFO, res.data)
+        if (state.userExpired) commit(mutationTypes.USER_SET_USER_EXPIRED, false)
       } else {
+        if (res.code === 9001) commit(mutationTypes.USER_SET_USER_EXPIRED, true)
         commit(mutationTypes.USER_SET_USER_INFO, { default: true })
       }
       return true
@@ -86,12 +126,12 @@ export default {
       commit(mutationTypes.USER_SET_USER_INFO, { default: true })
     },
 
-    // 获取本地用户 sigs
+    // 获取本地用户tokens
     [actionTypes.USER_GET_TOKEN_BY_ADDRESS]: ({ state }, address) => {
       return getObjStorage()[address]
     },
 
-    // 存储 localUserSig
+    // 存储 用户 token 到本地
     [actionTypes.USER_SET_USER_TOKEN]: ({ commit }, payload) => {
       commit(mutationTypes.USER_SET_USER_TOKEN, payload)
     }

@@ -1,7 +1,10 @@
 
 /* 布局样式 */
 
-@mixin class-vars ($size: '') {
+@mixin layout-vars ($size: '') {
+  .#{$size}hidden {
+    display: none;
+  }
   .#{$size}d-flex {
     display: flex;
   }
@@ -41,40 +44,200 @@
   }
 }
 
-@include class-vars();
+@include layout-vars();
 
-@media screen and (max-width: 768px) {
-  @include class-vars('sm-');
+/* 工具布局样式 */
+@mixin tool-vars ($size: '') {
+  // margin
+  .#{size}mar-1 {
+    margin: 5px;
+  }
+  .#{size}mar-2 {
+    margin: 10px;
+  }
+  .#{size}mar-3 {
+    margin: 15px;
+  }
+  .#{size}mar-4 {
+    margin: 20px;
+  }
+  .#{size}mar-5 {
+    margin: 25px;
+  }
+  .#{size}mar-l1 {
+    margin-left: 5px;
+  }
+  .#{size}mar-l2 {
+    margin-left: 10px;
+  }
+  .#{size}mar-l3 {
+    margin-left: 15px;
+  }
+  .#{size}mar-l4 {
+    margin-left: 20px;
+  }
+  .#{size}mar-l5 {
+    margin-left: 25px;
+  }
+  .#{size}mar-r1 {
+    margin-right: 5px;
+  }
+  .#{size}mar-r2 {
+    margin-right: 10px;
+  }
+  .#{size}mar-r3 {
+    margin-right: 15px;
+  }
+  .#{size}mar-r4 {
+    margin-right: 20px;
+  }
+  .#{size}mar-r5 {
+    margin-right: 25px;
+  }
+  .#{size}mar-t1 {
+    margin-top: 5px;
+  }
+  .#{size}mar-t2 {
+    margin-top: 10px;
+  }
+  .#{size}mar-t3 {
+    margin-top: 15px;
+  }
+  .#{size}mar-t4 {
+    margin-top: 20px;
+  }
+  .#{size}mar-t5 {
+    margin-top: 25px;
+  }
+  .#{size}mar-b1 {
+    margin-bottom: 5px;
+  }
+  .#{size}mar-b2 {
+    margin-bottom: 10px;
+  }
+  .#{size}mar-b3 {
+    margin-bottom: 15px;
+  }
+  .#{size}mar-b4 {
+    margin-bottom: 20px;
+  }
+  .#{size}mar-b5 {
+    margin-bottom: 25px;
+  }
+
+  // padding
+  .#{size}pad-1 {
+    padding: 5px;
+  }
+  .#{size}pad-2 {
+    padding: 10px;
+  }
+  .#{size}pad-3 {
+    padding: 15px;
+  }
+  .#{size}pad-4 {
+    padding: 20px;
+  }
+  .#{size}pad-5 {
+    padding: 25px;
+  }
+  .#{size}pad-l1 {
+    padding-left: 5px;
+  }
+  .#{size}pad-l2 {
+    padding-left: 10px;
+  }
+  .#{size}pad-l3 {
+    padding-left: 15px;
+  }
+  .#{size}pad-l4 {
+    padding-left: 20px;
+  }
+  .#{size}pad-l5 {
+    padding-left: 25px;
+  }
+  .#{size}pad-r1 {
+    padding-right: 5px;
+  }
+  .#{size}pad-r2 {
+    padding-right: 10px;
+  }
+  .#{size}pad-r3 {
+    padding-right: 15px;
+  }
+  .#{size}pad-r4 {
+    padding-right: 20px;
+  }
+  .#{size}pad-r5 {
+    padding-right: 25px;
+  }
+  .#{size}pad-t1 {
+    padding-top: 5px;
+  }
+  .#{size}pad-t2 {
+    padding-top: 10px;
+  }
+  .#{size}pad-t3 {
+    padding-top: 15px;
+  }
+  .#{size}pad-t4 {
+    padding-top: 20px;
+  }
+  .#{size}pad-t5 {
+    padding-top: 25px;
+  }
+  .#{size}pad-b1 {
+    padding-bottom: 5px;
+  }
+  .#{size}pad-b2 {
+    padding-bottom: 10px;
+  }
+  .#{size}pad-b3 {
+    padding-bottom: 15px;
+  }
+  .#{size}pad-b4 {
+    padding-bottom: 20px;
+  }
+  .#{size}pad-b5 {
+    padding-bottom: 25px;
+  }
 }
+@include tool-vars();
 
 /* 文字布局样式 */
-.text-left {
-  text-align: left;
+@mixin text-vars ($size: '') {
+  .#{$size}text-left {
+    text-align: left;
+  }
+  .#{$size}text-right {
+    text-align: right;
+  }
+  .#{$size}text-center {
+    text-align: center;
+  }
+  .#{$size}text-nowrap {
+    white-space: nowrap;
+  }
+  .#{$size}text-style-cap {
+    text-transform: capitalize;
+  }
+  .#{$size}text-style-lower {
+    text-transform: lowercase;
+  }
+  .#{$size}text-style-upper {
+    text-transform: uppercase;
+  }
+  .#{$size}line-height-1 {
+    line-height: 1
+  }
+  .#{$size}line-height-0 {
+    line-height: 0;
+  }
 }
-.text-right {
-  text-align: right;
-}
-.text-center {
-  text-align: center;
-}
-.text-nowrap {
-  white-space: nowrap;
-}
-.line-height-1 {
-  line-height: 1
-}
-.line-height-0 {
-  line-height: 0;
-}
-.text-style-cap {
-  text-transform: capitalize;
-}
-.text-style-lower {
-  text-transform: lowercase;
-}
-.text-style-upper {
-  text-transform: uppercase;
-}
+
+@include text-vars();
+
+/* color class */
 .color-green {
   color: $--color-btn-green;
 }
@@ -86,4 +249,18 @@
 }
 .color-blue {
   color: $--color-btn-blue;
+}
+.color-pink {
+  color: $--color-btn-pink;
+}
+
+@media screen and (min-width: 769px) {
+  @include layout-vars('md-');
+  @include text-vars('md-');
+  @include tool-vars('md-');
+}
+@media screen and (max-width: 768px) {
+  @include layout-vars('sm-');
+  @include text-vars('sm-');
+  @include tool-vars('sm-');
 }

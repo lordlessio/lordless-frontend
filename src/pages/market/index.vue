@@ -16,25 +16,20 @@
         </el-col>
       </el-row>
     </div>
-    <el-dialog
-      :title="detailLdbInfo.name"
-      :visible.sync="ldbDialog"
-      custom-class="dialog-ldb-detail gray"
-      append-to-body
-      lock-scroll
-      top="20px">
-      <div>
-        <ldb-detail dialog theme="gray" :ldbId="detailLdbInfo._id"></ldb-detail>
-      </div>
-    </el-dialog>
+    <detail-dialog
+      ref="ldbDetail"
+      theme="default"
+      :ldbId="detailLdbInfo._id"
+      @close="dialogClose">
+    </detail-dialog>
   </div>
 </template>
 
 <script>
 import { getChainLdbs } from 'api'
-// import { objectType } from 'utils/tool'
+import DetailDialog from '@/components/reuse/detailDialog'
+import { historyState } from 'utils/tool'
 import ImgBox from '@/components/stories/image'
-import LdbDetail from '@/components/ldb/detail'
 export default {
   data: () => {
     return {
@@ -49,7 +44,7 @@ export default {
   },
   components: {
     ImgBox,
-    LdbDetail
+    DetailDialog
   },
   methods: {
 
@@ -59,16 +54,28 @@ export default {
     //   return decodeURIComponent(photos[0].split(',')[0])
     // },
 
-    // 打开详情信息页
+    /**
+     * 打开详情信息页
+     */
     openDetail (info) {
+      this.$refs.ldbDetail.open()
       this.ldbDialog = true
       this.$nextTick(() => {
         this.detailLdbInfo = info
-        window.history.pushState(null, null, `/ldb/${info._id}`)
+        historyState(`/ldb/${info._id}`)
       })
     },
 
-    // 获取 ldb 列表信息
+    /**
+     * 对话框关闭触发函数
+     */
+    dialogClose () {
+      historyState(this.$route.path)
+    },
+
+    /**
+     * 获取 ldb 列表信息
+     */
     async getLdbs () {
       const res = await getChainLdbs()
       if (res.code === 1000) {

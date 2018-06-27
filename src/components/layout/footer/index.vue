@@ -1,7 +1,7 @@
 <template>
   <footer class="ld-footer" :class="theme">
     <div class="container">
-      <div class="d-flex footer-top">
+      <div class="d-flex sm-col-flex sm-f-align-center footer-top">
         <div class="v-flex text-left footer-logo">
           <router-link to="/" class="inline-block" v-if="theme !== 'default'">
             <svg class="inline-block logo-img">
@@ -116,5 +116,14 @@ export default {
   }
   .footer-copyright {
     font-weight: 500;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ld-footer {
+      padding-top: 50px ;
+    }
+    .footer-icons-box {
+      margin-top: 30px;
+    }
   }
 </style>

@@ -85,3 +85,107 @@ export const getObjStorage = (key = 'lordless_tokens', type = 'object') => {
 export const historyState = (hash) => {
   window.history.pushState(null, null, hash)
 }
+
+export const hasClass = (name, dom) => {
+  if (!dom || typeof dom !== 'object' || !name) return false
+  if (!dom.className) return false
+  const classNames = dom.className.split(' ')
+  if (classNames.indexOf(name) === -1) return false
+  return true
+}
+
+export const addClass = (name, dom) => {
+  if (!dom || typeof dom !== 'object') return
+  let className = dom.className
+  if (!className) {
+    dom.className = name
+    return
+  }
+  let classNames = className.split(' ')
+  if (classNames.indexOf(name) !== -1) return
+  dom.className += ` ${name}`
+}
+export const removeClass = (name, dom) => {
+  if (!dom || typeof dom !== 'object') return
+  let className = dom.className
+  if (!className) return
+  let classNames = className.split(' ')
+  if (classNames.indexOf(name) === -1) return
+  dom.className = classNames.filter((item) => item !== name).join(' ')
+}
+export const toggleClass = (name, dom) => {
+  if (!dom || typeof dom !== 'object') return
+  let classNames = (dom.className || '').split(' ')
+  if (classNames.indexOf(name) !== -1) removeClass(name, dom)
+  else addClass(name, dom)
+}
+export const getOffset = (el) => {
+  let offsetTop = 0
+  let offsetLeft = 0
+  do {
+    if (!isNaN(el.offsetTop)) {
+      offsetTop += el.offsetTop
+    }
+    if (!isNaN(el.offsetLeft)) {
+      offsetLeft += el.offsetLeft
+    }
+    el = el.offsetParent
+  } while (el)
+
+  return {
+    top: offsetTop,
+    left: offsetLeft
+  }
+}
+export const getViewportH = () => {
+  let client = window.document.documentElement['clientHeight']
+  let inner = window['innerHeight']
+
+  if (client < inner) { return inner } else { return client }
+}
+export const scrollY = () => {
+  return window.pageYOffset || window.document.documentElement.scrollTop
+}
+export const inViewport = (el, fixH = 0, h = 0) => {
+  // let docElem = window.document.documentElement
+  let elH = el.offsetHeight
+  let scrolled = scrollY()
+  let viewed = scrolled + getViewportH()
+  let elTop = getOffset(el).top
+  let elBottom = elTop + elH
+  // if 0, the element is considered in the viewport as soon as it enters.
+  // if 1, the element is considered in the viewport only when it's fully inside
+  // value in percentage (1 >= h >= 0)
+
+  return (elTop + elH * h + fixH) <= viewed && (elBottom) >= scrolled
+}
+export const offsetParent = (current, parent, type) => {
+  parent = type === 'tag' ? parent.toUpperCase() : parent
+  let dom = current
+  while (parent) {
+    if (type === 'tag') {
+      if (current.tagName === parent) parent = null
+      else dom = dom.offsetParent
+    } else {
+      if (dom.className.indexOf(parent) !== -1) parent = null
+      else dom = dom.offsetParent
+    }
+  }
+  return dom
+}
+export const transitionEvent = () => {
+  const el = document.createElement('surface')
+  const transitions = {
+    'transition': 'transitionend',
+    'OTransition': 'oTransitionEnd',
+    'MozTransition': 'transitionend',
+    'WebkitTransition': 'webkitTransitionEnd'
+  }
+  for (const t in transitions) {
+    if (el.style[t] !== undefined) return transitions[t]
+  }
+}
+
+export const historyState = (hash) => {
+  window.history.pushState(null, null, hash)
+}

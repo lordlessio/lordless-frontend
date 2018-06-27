@@ -11,25 +11,18 @@
         @handleSelect="handleSelect">
       </AutoComplete>
     </div>
-    <el-dialog
-      :title="ldbDetail.name"
-      :visible.sync="ldbDialog"
-      custom-class="dialog-ldb-detail default"
-      append-to-body
-      lock-scroll
-      top="20px"
-      @open="dialogOpen"
-      @close="dialogClose">
-      <div>
-        <ldb-detail dialog theme="default" :ldbId="ldbDetail._id"></ldb-detail>
-      </div>
-    </el-dialog>
+    <detail-dialog
+      ref="ldbDetail"
+      theme="default"
+      :ldbId="ldbDetail._id"
+      @close="dialogClose"
+    ></detail-dialog>
   </div>
 </template>
 
 <script>
 import Mapbox from '@/components/lbs/mapbox'
-import LdbDetail from '@/components/ldb/detail'
+import DetailDialog from '@/components/reuse/detailDialog'
 import AutoComplete from '@/components/stories/autoComplete'
 import { getPoiInfos, getChainLdbs } from 'api'
 import { historyState } from 'utils/tool'
@@ -55,7 +48,7 @@ export default {
   components: {
     Mapbox,
     AutoComplete,
-    LdbDetail
+    DetailDialog
   },
   computed: {
     ...mapState('ldb', [
@@ -153,20 +146,13 @@ export default {
      * 打开详情信息页
      */
     openDetail (info) {
-      this.ldbDialog = true
+      this.$refs.ldbDetail.open()
       this.$nextTick(() => {
         this.ldbDetail = info
         const { lat, lon } = info.chainSystem
         this.coordsPath = `${this.$route.path}?coords=${[lat, lon].toString()}`
         historyState(`/ldb/${info._id}`)
       })
-    },
-
-    /**
-     * 对话框打开后触发
-     */
-    dialogOpen () {
-
     },
 
     /**
@@ -193,6 +179,14 @@ export default {
     position: absolute;
     top: 30px;
     left: 30px;
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
+  }
+  @media screen and (max-width: 768px) {
+    .lbs-search {
+      padding: 0 20px;
+      left: 0;
+      box-sizing: border-box;
+    }
   }
 </style>

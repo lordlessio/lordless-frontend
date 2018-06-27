@@ -1,19 +1,30 @@
 <template>
-  <div style="position: relative;width: inherit;height: inherit">
-    <iframe src="" width="100%" height="100%" ref="sketch_frame" id="sketch_frame" frameborder="0" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
-    <div class="sketch-bottom-cnt">
-      <div class="d-flex">
-        <div class="lord-avatar">
-          <Blockies ref="lordAvatar" :autoInit="false" :seed="lordInfo.address" :size="10"/>
+  <div class="fab-main-box" :class="{ 'show-fab': is3D }" style="position: relative;width: inherit;height: inherit">
+    <Loading :loading="loadFab" :index="10" position="absolute" class="d-flex f-auto-center fab-loading-box">
+      <img src="/static/svg/animation.svg"/>
+      <!-- <svg>
+        <use xlink:href="/static/svg/animation.svg#animation-bars"/>
+      </svg> -->
+    </Loading>
+    <span class="inline-block switch-btn" @click.stop="switchFab">{{ this.is3D ? '2D' : '3D' }}</span>
+    <div class="fab-poster">
+      <img-box sType="height" :src="'/static/img/test/fandian-2d.jpg'"></img-box>
+    </div>
+    <div class="fab-content">
+      <iframe src="" width="100%" height="100%" ref="sketch_frame" id="sketch_frame" frameborder="0" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+      <!-- <div class="sketch-bottom-cnt">
+        <div class="d-flex">
+          <div class="lord-avatar">
+            <Blockies ref="lordAvatar" :autoInit="false" :seed="lordInfo.address" :size="10"/>
+          </div>
+          <div class="v-flex" v-if="viewerReady">
+            <p class="lord-name-box">
+              <span class="inline-block lord-name">{{ lordInfo.name }}</span>
+            </p>
+            <p class="lord-address">{{ splitAddress(lordInfo.address, '******') }}</p>
+          </div>
         </div>
-        <div class="v-flex" v-if="viewerReady">
-          <p class="lord-name-box">
-            <span class="inline-block lord-name-title">领主: </span>
-            <span class="inline-block lord-name">{{ lordInfo.name }}</span>
-          </p>
-          <p class="lord-address">{{ splitAddress(lordInfo.address, '******') }}</p>
-        </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -21,6 +32,7 @@
 <script>
 import ImgBox from '@/components/stories/image'
 import Blockies from '@/components/stories/blockies'
+import Loading from '@/components/stories/loading'
 import { splitAddress } from 'utils/tool'
 export default {
   props: {
@@ -32,6 +44,11 @@ export default {
           address: '0xc7dc18f76c110f8426466ccc2c1c97f7dfc2e2a0'
         }
       }
+    },
+    poster: String,
+    urlId: {
+      type: String,
+      default: 'd02b032cb4b04e75b5d71dd8808d13a9'
     },
     autostart: {
       type: Number,
@@ -100,17 +117,28 @@ export default {
   },
   data: () => {
     return {
-      viewerReady: false
+      is3D: false,
+      viewerReady: false,
+      loadFab: false
     }
   },
   components: {
     ImgBox,
-    Blockies
+    Blockies,
+    Loading
   },
   methods: {
-    init () {
+    switchFab () {
+      if (this.viewerReady) {
+        this.is3D = !this.is3D
+        return
+      }
+      this.loadFab = true
+      this.initFab()
+    },
+
+    initFab () {
       const iframe = this.$refs.sketch_frame
-      const urlid = '621fc1f1e7f142dab3f7d48c9e6feff1'
 
       // By default, the latest version of the viewer API will be used.
       const client = new Sketchfab(iframe)
@@ -118,12 +146,13 @@ export default {
       // Alternatively, you can request a specific version.
       // var client = new Sketchfab( '1.2.1', iframe );
       const {
-        autostart,
+        autostart, urlId,
         ui_stop, ui_animations, ui_annotations, ui_controls, ui_fullscreen,
         ui_general_controls, ui_help, ui_hint, ui_infos, ui_inspector, ui_inspector_open,
         ui_settings, ui_vr, ui_watermark, ui_watermark_link
       } = this
-      client.init(urlid, {
+
+      client.init(urlId, {
         autostart,
         ui_stop,
         ui_animations,
@@ -145,8 +174,10 @@ export default {
           // fab.setFov(50)
           // fab.lookat([0, 13, 10], [0, 10, 0], 4.3)
           fab.addEventListener('viewerready', () => {
-            this.$refs.lordAvatar.init()
+            // this.$refs.lordAvatar.init()
+            this.is3D = true
             this.viewerReady = true
+            this.loadFab = false
           })
         },
         error: () => {
@@ -157,24 +188,83 @@ export default {
     splitAddress (address) {
       return splitAddress(address)
     }
-  },
-  mounted () {
-    this.$nextTick(() => this.init())
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  .fab-main-box {
+    margin: 0 auto;
+    max-width: 1600px;
+    &.show-fab {
+      .fab-poster {
+        visibility: hidden;
+        transition: all .35s ease, visibility 0s .35s;
+      }
+      .fab-content {
+        opacity: 1;
+        visibility: visible;
+        z-index: 2;
+      }
+    }
+  }
+  .fab-loading-box {
+    background-color: rgba(78, 78, 78, .9);
+    >img {
+      width: 80px;
+    }
+  }
   .sketch-bottom-cnt {
     position: absolute;
     left: 0;
     bottom: 15px;
+    color: #fff;
+    font-weight: bold;
+    // background-color: #6e53ff;
+  }
+  .switch-btn {
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    color: #373737;
+    font-weight: 500;
+    font-size: 20px;
+    background-color: #F6D242;
+    text-align: center;
+    line-height: 50px;
+    z-index: 9;
+    visibility: visible;
+    opacity: 1;
+    cursor: pointer;
+  }
+  .fab-poster {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: all .35s ease, visibility 0s 0s;
+  }
+  .fab-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .35s ease, visibility 0s 0s, z-index 0s 0s;
+  }
+=======
     width: 100%;
     height: 40px;
     color: #4c4c4c;
     font-weight: bold;
     // background-color: #6e53ff;
   }
+>>>>>>> lordless/master
   .lord-avatar {
     margin-right: 10px;
     width: 50px;

@@ -1,25 +1,29 @@
 <template>
   <div class="ldb-detail-main" :class="theme">
+    <ld-loading :loading="loading"></ld-loading>
     <div class="detail-header">
-      <sketch-fab/>
+      <sketch-fab class="detail-fab"/>
     </div>
     <div class="detail-cnt-box">
       <div class="container">
         <div class="cnt-item cnt-header">
           <el-row justify="end" align="bottom">
-            <el-col :span="24">
-              <h1 class="ldb-name">{{ ldbInfo.name.split(',')[0] }}</h1>
+            <el-col :span="12">
+              <h1 class="ldb-name">
+                <span>{{ ldbInfo.name.split(',')[0] }}</span>
+                <span class="ldb-category">{{ ldbInfo.category.split(',')[0] }}</span>
+              </h1>
             </el-col>
             <!-- <el-col :span="12">
               <div class="d-flex f-align-center">
                 <div class="user-info v-flex">
-                  <p class="lord-name-box">
-                    <span class="inline-block lord-name-title">领主: </span>
-                    <span class="inline-block lord-name">{{ 'founy' }}</span>
+                  <p class="lord-name">
+                    {{ 'founy' }}
                   </p>
                   <p class="lord-address">{{ splitAddress(userInfo.address, '******') }}</p>
                 </div>
                 <div class="user-avatar">
+                  <Blockies radius="6px" :seed="userInfo.address" :scale="8"></Blockies>
                   <img-box :src="ldbInfo.ldbIcon.sourceUrl" type="span"></img-box>
                 </div>
               </div>
@@ -27,20 +31,25 @@
           </el-row>
           <div class="ldb-msg">
             <p>
+              <span>
+                <i class="el-icon-location-outline"></i>
+              </span>
               <span class="inline-block ldb-location">{{ `${ldbInfo.chainSystem.lat},${ldbInfo.chainSystem.lon}` }}</span>
-              <span class="inline-block ldb-address">{{ ldbInfo.address }}</span>
+              <span>·</span>
+              <span class="inline-block">{{ ldbInfo.address }}</span>
+              <!-- <span class="inline-block ldb-address">{{ ldbInfo.address }}</span> -->
             </p>
-            <p v-if="ldbInfo.category">
+            <!-- <p v-if="ldbInfo.category">
               <span class="inline-block ldb-category" v-for="(category, index) of ldbInfo.category.split(',')" :key="index">{{ category }}</span>
-            </p>
+            </p> -->
           </div>
         </div>
-        <div class="cnt-item cnt-desc">{{ ldbInfo.desc_zh }}</div>
+        <div class="cnt-item ldb-desc">{{ ldbInfo.desc_zh }}</div>
         <div class="cnt-item cnt-features">
-          <div class="d-flex features-container">
-            <div class="inline-block features-price features-item">
+          <div class="d-flex sm-col-flex features-container">
+            <div class="d-inline-flex md-col-flex sm-row-flex sm-f-align-center features-price features-item">
               <p>Price</p>
-              <div class="ldb-price">
+              <div class="ldb-price text-nowrap">
                 <span>{{ ldbInfo.chainSystem.value }}</span>
                 <span>ETH</span>
               </div>
@@ -51,7 +60,7 @@
                 <p>Expires in 30 days</p>
               </div>
             </div>
-            <div class="v-flex features-btn features-item">
+            <div class="v-flex md-text-right sm-text-left features-btn features-item">
               <my-button theme="buy">Sign to Buy</my-button>
             </div>
           </div>
@@ -59,8 +68,8 @@
         <div class="cnt-item large-margin cnt-tasks">
           <h2>任务</h2>
           <div class="tasks-box">
-            <div>
-              <my-button theme="info" class="d-inline-flex f-auto-center task-btn">
+            <div class="d-flex sm-col-flex">
+              <my-button theme="info" class="d-inline-flex f-auto-center ldb-task-btn">
                 <span class="line-height-1">
                   <svg>
                     <use xlink:href="/static/svg/icon.svg#icon-telegram"/>
@@ -68,7 +77,7 @@
                 </span>
                 <span>关注 EOS Telegram</span>
               </my-button>
-              <my-button theme="info" class="d-inline-flex f-auto-center task-btn">
+              <my-button theme="info" class="d-inline-flex f-auto-center ldb-task-btn">
                 <span class="line-height-1">
                   <svg>
                     <use xlink:href="/static/svg/icon.svg#icon-telegram"/>
@@ -78,7 +87,7 @@
               </my-button>
             </div>
             <div>
-              <my-button theme="info" class="d-inline-flex f-auto-center task-btn">
+              <my-button theme="info" class="d-inline-flex f-auto-center ldb-task-btn">
                 <span class="line-height-1">
                   <svg>
                     <use xlink:href="/static/svg/icon.svg#icon-medium"/>
@@ -89,112 +98,116 @@
             </div>
           </div>
         </div>
-        <div class="cnt-item large-margin cnt-candy">
+        <div class="cnt-item middle-margin cnt-candy">
           <h3>已完成</h3>
           <div class="history-box">
-            <el-row class="history-item history-header finish">
-              <el-col :span="6">
-                奖励 Candy
-              </el-col>
-              <el-col :span="6">
-                WHEN
-              </el-col>
-              <el-col :span="6">
-                FROM
-              </el-col>
-              <el-col :span="6">
-                TO
-              </el-col>
-            </el-row>
-            <el-row class="history-cnt-box">
-              <el-row class="history-item history-cnt">
-                <el-col :span="6" class="color-blue">
-                  <span>20 </span>
-                  <span class="text-style-upper">EOS</span>
+            <div class="history-container text-nowrap">
+              <el-row class="history-item history-header finish">
+                <el-col :span="6">
+                  奖励 Candy
                 </el-col>
                 <el-col :span="6">
-                  <span>1000</span>
-                  <span class="text-style-cap">exp</span>
+                  WHEN
                 </el-col>
                 <el-col :span="6">
-                  <span>关注</span>
-                  <span class="text-style-upper">Eos</span>
-                  <span class="text-style-cap">Telegram</span>
+                  FROM
                 </el-col>
                 <el-col :span="6">
-                  4 months ago
+                  TO
                 </el-col>
               </el-row>
-              <el-row class="history-item history-cnt">
-                <el-col :span="6" class="color-blue">
-                  <span>5 </span>
-                  <span class="text-style-upper">NAS</span>
-                </el-col>
-                <el-col :span="6">
-                  <span>500</span>
-                  <span class="text-style-cap">exp</span>
-                </el-col>
-                <el-col :span="6" class="text-nowrap">
-                  <span>关注</span>
-                  <span class="text-style-upper">Nebulas</span>
-                  <span class="text-style-cap">Twitter</span>
-                </el-col>
-                <el-col :span="6">
-                  1 hours ago
-                </el-col>
+              <el-row class="history-cnt-box">
+                <el-row class="history-item history-cnt">
+                  <el-col :span="6" class="color-pink">
+                    <span>20 </span>
+                    <span class="text-style-upper">EOS</span>
+                  </el-col>
+                  <el-col :span="6">
+                    <span>1000</span>
+                    <span class="text-style-cap">exp</span>
+                  </el-col>
+                  <el-col :span="6">
+                    <span>关注</span>
+                    <span class="text-style-upper">Eos</span>
+                    <span class="text-style-cap">Telegram</span>
+                  </el-col>
+                  <el-col :span="6">
+                    4 months ago
+                  </el-col>
+                </el-row>
+                <el-row class="history-item history-cnt">
+                  <el-col :span="6" class="color-pink">
+                    <span>5 </span>
+                    <span class="text-style-upper">NAS</span>
+                  </el-col>
+                  <el-col :span="6">
+                    <span>500</span>
+                    <span class="text-style-cap">exp</span>
+                  </el-col>
+                  <el-col :span="6" class="text-nowrap">
+                    <span>关注</span>
+                    <span class="text-style-upper">Nebulas</span>
+                    <span class="text-style-cap">Twitter</span>
+                  </el-col>
+                  <el-col :span="6">
+                    1 hours ago
+                  </el-col>
+                </el-row>
               </el-row>
-            </el-row>
+            </div>
           </div>
         </div>
         <div class="cnt-item large-margin cnt-history">
           <h2>交易历史</h2>
           <div class="history-box">
-            <el-row class="history-item history-header deal">
-              <el-col :span="6">
-                PRICE
-              </el-col>
-              <el-col :span="6">
-                WHEN
-              </el-col>
-              <el-col :span="6">
-                FROM
-              </el-col>
-              <el-col :span="6">
-                TO
-              </el-col>
-            </el-row>
-            <el-row class="history-cnt-box">
-              <el-row class="history-item history-cnt">
-                <el-col :span="6" class="color-blue">
-                  <span>1000</span>
-                  <span class="text-style-upper">ETH</span>
-                </el-col>
-                <el-col :span="6" class="color-red">
-                  2 days ago
+            <div class="history-container text-nowrap">
+              <el-row class="history-item history-header deal">
+                <el-col :span="6">
+                  PRICE
                 </el-col>
                 <el-col :span="6">
-                  {{ splitAddress(userInfo.address) }}
+                  WHEN
                 </el-col>
                 <el-col :span="6">
-                  {{ splitAddress(userInfo.address) }}
+                  FROM
+                </el-col>
+                <el-col :span="6">
+                  TO
                 </el-col>
               </el-row>
-              <el-row class="history-item history-cnt">
-                <el-col :span="6" class="color-blue">
-                  <span>800</span>
-                  <span class="text-style-upper">ETH</span>
-                </el-col>
-                <el-col :span="6">
-                  15 days ago
-                </el-col>
-                <el-col :span="6">
-                  {{ splitAddress(userInfo.address) }}
-                </el-col>
-                <el-col :span="6">
-                  {{ splitAddress(userInfo.address) }}
-                </el-col>
+              <el-row class="history-cnt-box">
+                <el-row class="history-item history-cnt">
+                  <el-col :span="6" class="color-pink">
+                    <span>1000</span>
+                    <span class="text-style-upper">ETH</span>
+                  </el-col>
+                  <el-col :span="6">
+                    2 days ago
+                  </el-col>
+                  <el-col :span="6">
+                    {{ splitAddress(userInfo.address) }}
+                  </el-col>
+                  <el-col :span="6">
+                    {{ splitAddress(userInfo.address) }}
+                  </el-col>
+                </el-row>
+                <el-row class="history-item history-cnt">
+                  <el-col :span="6" class="color-pink">
+                    <span>800</span>
+                    <span class="text-style-upper">ETH</span>
+                  </el-col>
+                  <el-col :span="6">
+                    15 days ago
+                  </el-col>
+                  <el-col :span="6">
+                    {{ splitAddress(userInfo.address) }}
+                  </el-col>
+                  <el-col :span="6">
+                    {{ splitAddress(userInfo.address) }}
+                  </el-col>
+                </el-row>
               </el-row>
-            </el-row>
+            </div>
           </div>
         </div>
       </div>
@@ -204,8 +217,10 @@
 
 <script>
 import ImgBox from '@/components/stories/image'
+import Blockies from '@/components/stories/blockies'
 import MyButton from '@/components/stories/button'
 import SketchFab from '@/components/sketchfab'
+import LdLoading from '@/components/stories/loading'
 import { getLdbById } from 'api'
 import { objectType, splitAddress } from 'utils/tool'
 import { mapState } from 'vuex'
@@ -237,7 +252,8 @@ export default {
         userId: {},
         chainSystem: {},
         levelSystem: {},
-        ldbIcon: {}
+        ldbIcon: {},
+        category: ''
       },
       // 错误信息
       errorMsg: null
@@ -251,7 +267,9 @@ export default {
   components: {
     ImgBox,
     MyButton,
-    SketchFab
+    SketchFab,
+    LdLoading,
+    Blockies
   },
   methods: {
 
@@ -317,16 +335,16 @@ export default {
     }
     @if $theme == 'default' {
       color: #E6E8EC;
-      background-color: $--color-bg-color;
+      background-color: $--default-bg-color;
       .lord-name {
         color: #E6E8EC;
       }
     }
   }
   .ldb-detail-main {
-    padding-bottom: 60px;
     width: inherit;
     height: inherit;
+    overflow: hidden;
     &.dark {
       @include detail-theme('dark');
     }
@@ -344,28 +362,60 @@ export default {
   .detail-header {
     height: calc((100vh / 3 * 2) + 50px);
     min-height: 300px;
+    position: relative;
+    &::before, &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      z-index: 0;
+    }
+    &::before {
+      left: 0;
+      @include bg-img-class('~/static/img/test/fandian-left.png', repeat-x, contain);
+    }
+    &::after {
+      right: 0;
+      @include bg-img-class('~/static/img/test/fandian-right.png', repeat-x, contain);
+    }
+    >div {
+      position: relative;
+      z-index: 1;
+    }
   }
+  // .detail-fab {
+  //   width: 100%;
+  // }
 
   .detail-cnt-box {
+    padding-top: 80px;
+    padding-bottom: 100px;
     font-size: 16px;
+    background-image: linear-gradient(top, #240864, #4D33A7);
     .container {
       max-width: 1000px;
-      @include bg-img-class('~/static/img/utils/lordless-map-bg.png', 'repeat', '200%');
+      @include bg-img-class('~/static/img/utils/lordless-map-bg.png', repeat, auto);
     }
   }
 
   .cnt-item {
-    margin-top: 40px;
+    &:not(:first-of-type) {
+      margin-top: 40px;
+    }
     &.large-margin {
-      margin-top: 80px;
+      margin-top: 100px;
+    }
+    &.middle-margin {
+      margin-top: 60px;
     }
     >h2 {
       margin-bottom: 25px;
-      font-size: 30px;
+      font-size: 38px;
     }
     >h3 {
       margin-bottom: 20px;
-      font-size: 24px;
+      font-size: 28px;
     }
   }
   .cnt-header {
@@ -375,60 +425,59 @@ export default {
     }
   }
   .ldb-name {
-    font-size: 30px;
+    font-size: 54px;
+  }
+  .ldb-category {
+    color: #373737;
+    font-size: 14px;
+    padding: 5px;
+    background-color: #EEC75E;
+    border-radius: 3px;
   }
   .user-info {
     font-weight: 500;
     text-align: right;
   }
 
-  .lord-name-box {
-    font-size: 20px;
-    line-height: 1.8;
-  }
   .lord-name {
-    // font-size: 20px;
-  }
-  .lord-name-title {
-    margin-right: 6px;
-    // font-size: 14px;
-    color: #E6E8EC;
+    margin-bottom: 5px;
+    font-size: 24px;
   }
   .lord-address {
-    font-size: 14px;
-    color: #aaa;
+    font-size: 16px;
+    color: #d6d6d6;
   }
   .user-avatar {
     margin-left: 15px;
-    width: 56px;
-    height: 56px;
+    // width: 56px;
+    // height: 56px;
     // background-color: #ed5736;
-    border-radius: 100%;
+    border-radius: 8px;
     overflow: hidden;
   }
 
   .ldb-msg {
-    font-size: 20px;
-    span {
-      padding: 0 5px;
-      height: 30px;
-      line-height: 30px;
-      border-radius: 5px;
-      vertical-align: middle;
-      background-color: $--color-btn-purple;
-      color: #fff;
-      &:not(:first-of-type) {
-        margin-left: 30px;
-      }
-    }
-    >p {
-      &:not(:first-of-type) {
-        margin-top: 15px;
-      }
-    }
+    font-size: 24px;
+    // span {
+    //   padding: 0 5px;
+    //   height: 30px;
+    //   line-height: 30px;
+    //   border-radius: 5px;
+    //   vertical-align: middle;
+    //   background-color: $--color-btn-purple;
+    //   color: #fff;
+    //   &:not(:first-of-type) {
+    //     margin-left: 30px;
+    //   }
+    // }
+    // >p {
+    //   &:not(:first-of-type) {
+    //     margin-top: 15px;
+    //   }
+    // }
   }
 
-  .cnt-desc {
+  .ldb-desc {
     font-size: 18px;
     // margin: 30px 0;
   }
@@ -442,18 +491,19 @@ export default {
     font-weight: 500;
     >p {
       font-size: 24px;
+      line-height: 200%;
     }
     >div {
-      margin-top: 10px;
       font-size: 26px;
     }
   }
   .features-btn {
-    text-align: right;
+    // text-align: right;
     button {
+      margin: 0;
       padding: 12px 25px;
       font-size: 24px;
-      border-radius: 8px;
+      border-radius: 25px;
     }
   }
   .ldb-price {
@@ -464,17 +514,19 @@ export default {
   }
   .tasks-box {
     // margin-top: 15px;
-    margin-left: -10px;
+    // margin-left: -10px;
     >div {
-      margin-bottom: 20px;
-      .task-btn {
-        &:not(:first-of-type) {
-          margin-left: 30px;
-        }
+      &:not(:first-of-type) {
+        margin-top: 40px;
+      }
+    }
+    .ldb-task-btn {
+      &:not(:first-of-type) {
+        margin-left: 40px;
       }
     }
   }
-  .task-btn {
+  .ldb-task-btn {
     margin: 0;
     padding: 12px 40px 12px 30px;
     font-size: 22px;
@@ -485,7 +537,7 @@ export default {
       height: 30px;
     }
     >span {
-      margin-left: 10px;
+      margin-left: 15px;
     }
   }
 
@@ -495,7 +547,11 @@ export default {
     font-weight: 500;
     font-size: 20px;
     border-radius: 8px;
-    overflow: hidden;
+    overflow: auto;
+  }
+  .history-container {
+    width: 100%;
+    min-width: 600px;
   }
   .history-item {
     padding: 20px 0;
@@ -505,18 +561,19 @@ export default {
     overflow: hidden;
   }
   .history-header {
-    color: #fff;
-    &.finish {
-      background-color: #B6A5FF;
-    }
-    &.deal {
-      background-color: #F6A5FF;
-    }
+    color: #715CB7;
+    background-color: #270F72;
+    // &.finish {
+    //   background-color: #B6A5FF;
+    // }
+    // &.deal {
+    //   background-color: #F6A5FF;
+    // }
   }
   .history-cnt-box {
     padding: 15px 0;
-    background-color: #fff;
-    color: #373737;
+    background-color: #31187F;
+    color: #fff;
   }
   .history-cnt {
 
@@ -526,6 +583,24 @@ export default {
     .detail-header {
       height: calc((100vh / 2) + 50px);
       min-height: 350px;
+    }
+    .features-item {
+      &:not(:first-of-type) {
+        margin-top: 30px;
+      }
+    }
+    .tasks-box {
+      >div {
+        &:not(:first-of-type) {
+          margin-top: 30px;
+        }
+      }
+      .ldb-task-btn {
+        &:not(:first-of-type) {
+          margin-left: 0;
+          margin-top: 15px;
+        }
+      }
     }
   }
 </style>

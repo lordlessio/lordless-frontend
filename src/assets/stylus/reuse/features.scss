@@ -2,12 +2,14 @@
 /* 功能性复用样式 */
 
 .dialog-ldb-detail {
-  padding: 15px 20px 0;
+  padding: 0;
   margin: 0 auto 60px;
-  width: 90%;
+  top: 20px;
+  width: 100%;
   max-width: 1000px;
   min-height: 100%;
   background-color: #f4f4f4;
+  border-radius: 3px;
   box-shadow: 0 15px 30px 0 rgba(0, 0, 0, .5);
   .el-dialog__title {
     font-size: 30px;
@@ -35,5 +37,45 @@
   }
   &.default {
     @include dialog-theme('default');
+  }
+  .el-dialog__header {
+    padding: 0;
+  }
+  .el-dialog__body {
+    padding: 0 0 30px;
+  }
+  .dialog-ldb-close {
+    position: fixed;
+    right: 30px;
+    top: 15px;
+    font-size: 30px;
+    color: #ccc;
+    z-index: 3002;
+    cursor: pointer;
+  }
+  .ldb-detail-main {
+    border-radius: 3px;
+  }
+  .detail-cnt-box {
+    .container {
+      padding: 0 30px;
+    }
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .dialog-ldb-detail {
+    margin: 0;
+    top: 0px;
+    border-radius: 0;
+    .dialog-ldb-close {
+      top: 10px;
+      right: 10px;
+      font-size: 35px;
+    }
+    .ldb-detail-main {
+      border-radius: 0px;
+    }
   }
 }

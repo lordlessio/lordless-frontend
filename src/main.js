@@ -8,7 +8,7 @@ import store from './store'
 import {
   Col, Row,
   Tabs, Dialog, Autocomplete,
-  Slider, Carousel, CarouselItem, Collapse, CollapseItem
+  Collapse, CollapseItem
 } from 'element-ui'
 import VueI18n from 'vue-i18n'
 
@@ -31,9 +31,9 @@ Vue.use(Tabs)
 Vue.use(Dialog)
 Vue.use(Autocomplete)
 
-Vue.use(Slider)
-Vue.use(Carousel)
-Vue.use(CarouselItem)
+// Vue.use(Slider)
+// Vue.use(Carousel)
+// Vue.use(CarouselItem)
 Vue.use(Collapse)
 Vue.use(CollapseItem)
 

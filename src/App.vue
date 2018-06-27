@@ -7,6 +7,7 @@
         <h1>出错啦！</h1>
         <p>{{ web3Opt.error }}</p>
       </div>
+      <Relogin :address="web3Opt.address" :expired="userExpired"></Relogin>
     </div>
     <Footer v-if="footerOptions.show"/>
   </div>
@@ -15,6 +16,7 @@
 <script>
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
+import Relogin from '@/components/reuse/relogin'
 import { initWeb3 } from '@/assets/utils/web3/initWeb3'
 import { mapState } from 'vuex'
 import { erc20Token } from '@/api/service/contract.js'
@@ -30,9 +32,15 @@ export default {
   async created () {
     if (this.web3Opt.web3js.default) initWeb3()
   },
+  data: () => {
+    return {
+      reloginDialog: false
+    }
+  },
   components: {
     Header,
-    Footer
+    Footer,
+    Relogin
   },
   computed: {
     ...mapState('layout', [
@@ -41,6 +49,9 @@ export default {
     ]),
     ...mapState('web3', [
       'web3Opt'
+    ]),
+    ...mapState('user', [
+      'userExpired'
     ]),
 
     // 是否登陆了 metamask

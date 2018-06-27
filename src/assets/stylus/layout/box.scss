@@ -24,9 +24,11 @@
   padding: 0;
   width: 100%;
   max-width: 1140px;
+  box-sizing: border-box;
 }
 .page-container {
   padding-top: 50px;
+  padding: 0 10px;
 }
 .page-guide {
   padding: 50px 30px 30px;
@@ -40,6 +42,9 @@
 }
 
 @media (max-width: 768px) {
+  .ld-main {
+    margin-top: 0;
+  }
   .container {
     padding: 0 20px;
   }

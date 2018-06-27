@@ -19,7 +19,7 @@ export default {
     }
   },
   mounted () {
-    this.$refs.ldbDetail.init()
+    this.$nextTick(() => this.$refs.ldbDetail.init())
   }
 }
 </script>

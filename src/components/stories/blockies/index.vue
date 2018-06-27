@@ -20,23 +20,23 @@ export default {
     },
     size: {
       type: Number,
-      default: 10
+      default: 6
     },
     scale: {
       type: Number,
-      default: 4
+      default: 6
     },
     color: {
       type: String,
-      default: '#e563ff'
+      default: '#993399'
     },
     bgcolor: {
       type: String,
-      default: '#6e53ff'
+      default: '#ea4c88'
     },
     spotcolor: {
       type: String,
-      default: '-1'
+      default: '#fdadc7'
     }
   },
   data: () => {

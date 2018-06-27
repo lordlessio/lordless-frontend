@@ -23,11 +23,11 @@
   }
   @if $theme == 'default' {
     color: #E6E8EC;
-    background-color: $--color-bg-color;
+    background-color: $--default-bg-color;
   }
 }
 
-@mixin bg-img-class($url, $repeat: 'no-repeat', $size: 'cover', $position: '0 0') {
+@mixin bg-img-class($url, $repeat: no-repeat, $size: cover, $position: 0 0) {
   background-image: url($url);
   background-repeat: $repeat;
   background-size: $size;

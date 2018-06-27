@@ -59,17 +59,17 @@
       fill: #fff;
     }
     &.theme-info {
-      color: #fff;
+      color: #6732F4;
       border: none;
       // background-image: linear-gradient(-90deg, #BB9BF1 0%, #887BF2 100%);
-      background-color: #887BF2;
-      box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
-      fill: #fff;
+      // background-color: #fff;
+      box-shadow: 8px 12px 52px 0 rgba(255, 255, 255, 0.25);
+      fill: #724AF9;
     }
     &.theme-buy {
       color: #fff;
       border: none;
-      background-image: linear-gradient(45deg, #B24AFF 0%, #F956E8 100%);
+      background-image: linear-gradient(-45deg, #B24AFF 0%, #F956E8 100%);
       box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
       fill: #fff;
     }
