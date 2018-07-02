@@ -7,21 +7,52 @@ import { mutationTypes } from './types'
 export default {
   namespaced: true,
   state: {
-    headerOptions: {
+    header: {
+      show: true,
+
+      // header is fixed position
+      fixed: true,
+
+      // header is transparent default
+      transparent: false,
+
+      // header is listener scroll
+      scroll: false
+    },
+
+    // default options for header
+    dHeader: {
+      show: true,
+      fixed: true,
+      transparent: false,
+      scroll: false
+    },
+
+    footer: {
       show: true
     },
-    footerOptions: {
+
+    // default options for footer
+    dFooter: {
       show: true
     }
   },
   mutations: {
-    [mutationTypes.LAYOUT_SET_HEADER_OPTIONS] (state, payload) {
-      if (!checkOptions(payload)) return false
-      state.headerOptions = payload
+    [mutationTypes.LAYOUT_SET_HEADER_OPTIONS] (state, _header) {
+      if (!checkOptions(_header)) {
+        state.header = state.dHeader
+        return false
+      }
+      console.log('------------- _header', _header, Object.assign({}, state.dHeader, _header))
+      state.header = Object.assign({}, state.dHeader, _header)
     },
-    [mutationTypes.LAYOUT_SET_FOOTER_OPTIONS] (state, payload) {
-      if (!checkOptions(payload)) return false
-      state.footerOptions = payload
+    [mutationTypes.LAYOUT_SET_FOOTER_OPTIONS] (state, _footer) {
+      if (!checkOptions(_footer)) {
+        state.footer = state.dFooter
+        return false
+      }
+      console.log('--------- _footer', _footer, Object.assign({}, state.Footer, _footer))
+      state.footer = Object.assign({}, state.dFooter, _footer)
     }
   },
   actions: {}

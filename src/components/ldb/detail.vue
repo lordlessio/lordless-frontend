@@ -8,13 +8,13 @@
       <div class="container">
         <div class="cnt-item cnt-header">
           <el-row justify="end" align="bottom">
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
               <h1 class="ldb-name">
                 <span>{{ ldbInfo.name.split(',')[0] }}</span>
-                <span class="ldb-category">{{ ldbInfo.category.split(',')[0] }}</span>
+                <span class="ldb-category" v-for="(category, index) of ldbInfo.category.split(',')" :key="index">{{ category }}</span>
               </h1>
             </el-col>
-            <!-- <el-col :span="12">
+            <el-col :md="12" :sm="24">
               <div class="d-flex f-align-center">
                 <div class="user-info v-flex">
                   <p class="lord-name">
@@ -27,7 +27,7 @@
                   <img-box :src="ldbInfo.ldbIcon.sourceUrl" type="span"></img-box>
                 </div>
               </div>
-            </el-col> -->
+            </el-col>
           </el-row>
           <div class="ldb-msg">
             <p>
@@ -389,10 +389,10 @@ export default {
   // }
 
   .detail-cnt-box {
-    padding-top: 80px;
-    padding-bottom: 100px;
-    font-size: 16px;
     background-image: linear-gradient(top, #240864, #4D33A7);
+    @include padding('top', 80px, 1.25);
+    @include padding('bottom', 100px, 1.25);
+    @include fontSize(16px, 1);
     .container {
       max-width: 1000px;
       @include bg-img-class('~/static/img/utils/lordless-map-bg.png', repeat, auto);
@@ -401,38 +401,35 @@ export default {
 
   .cnt-item {
     &:not(:first-of-type) {
-      margin-top: 40px;
+      @include margin('top', 40px, 1);
     }
     &.large-margin {
-      margin-top: 100px;
+      @include margin('top', 100px, 1);
     }
     &.middle-margin {
-      margin-top: 60px;
+      @include margin('top', 60px, 1);
     }
     >h2 {
-      margin-bottom: 25px;
-      font-size: 38px;
+      @include margin('bottom', 25px, 1);
+      @include fontSize(38px, 1);
     }
     >h3 {
-      margin-bottom: 20px;
-      font-size: 28px;
-    }
-  }
-  .cnt-header {
-    // margin-top: 45px;
-    .el-row {
-      margin-bottom: 10px;
+      @include margin('bottom', 20px, 1);
+      @include fontSize(28px, 1);
     }
   }
   .ldb-name {
-    font-size: 54px;
+    @include fontSize(54px, 1.75);
   }
   .ldb-category {
     color: #373737;
-    font-size: 14px;
-    padding: 5px;
     background-color: #EEC75E;
     border-radius: 3px;
+    @include padding(-1, 5px, 1);
+    @include fontSize(14px, 1);
+    &:not(:last-of-type) {
+      @include margin('right', 10px, 1);
+    }
   }
   .user-info {
     font-weight: 500;
@@ -440,46 +437,29 @@ export default {
   }
 
   .lord-name {
-    margin-bottom: 5px;
-    font-size: 24px;
+    @include margin('bottom', 5px, 1);
+    @include fontSize(24px, 1);
   }
   .lord-address {
-    font-size: 16px;
     color: #d6d6d6;
+    @include fontSize(16px, 1);
   }
   .user-avatar {
-    margin-left: 15px;
     // width: 56px;
     // height: 56px;
     // background-color: #ed5736;
     border-radius: 8px;
     overflow: hidden;
+    @include margin('left', 15px, 1);
   }
 
   .ldb-msg {
-    font-size: 24px;
-    // span {
-    //   padding: 0 5px;
-    //   height: 30px;
-    //   line-height: 30px;
-    //   border-radius: 5px;
-    //   vertical-align: middle;
-    //   background-color: $--color-btn-purple;
-    //   color: #fff;
-    //   &:not(:first-of-type) {
-    //     margin-left: 30px;
-    //   }
-    // }
-    // >p {
-    //   &:not(:first-of-type) {
-    //     margin-top: 15px;
-    //   }
-    // }
+    @include margin('top', 10px, 1);
+    @include fontSize(24px, 1);
   }
 
   .ldb-desc {
-    font-size: 18px;
-    // margin: 30px 0;
+    @include fontSize(18px, 1);
   }
 
   // cnt-features
@@ -490,20 +470,23 @@ export default {
     min-width: 150px;
     font-weight: 500;
     >p {
-      font-size: 24px;
       line-height: 200%;
+      @include fontSize(24px, 1);
     }
     >div {
-      font-size: 26px;
+      @include fontSize(26px, 1);
+    }
+    &:not(:first-of-type) {
+      @include margin('top', 30px, 1, -1);
     }
   }
   .features-btn {
     // text-align: right;
     button {
-      margin: 0;
-      padding: 12px 25px;
-      font-size: 24px;
       border-radius: 25px;
+      @include margin(-1, 0, -1, -1);
+      @include padding-around(12px, 25px, 12px, 25px, 1);
+      @include fontSize(24px, 1);
     }
   }
   .ldb-price {
@@ -513,52 +496,51 @@ export default {
   .cnt-tasks {
   }
   .tasks-box {
-    // margin-top: 15px;
-    // margin-left: -10px;
     >div {
       &:not(:first-of-type) {
-        margin-top: 40px;
+        @include margin('top', 40px, 1.3);
       }
     }
     .ldb-task-btn {
       &:not(:first-of-type) {
-        margin-left: 40px;
+        @include margin('left', 40px, -1);
+        @include margin('top', 40px, 1.3, -1);
       }
     }
   }
   .ldb-task-btn {
-    margin: 0;
-    padding: 12px 40px 12px 30px;
-    font-size: 22px;
     font-weight: 500;
     border-radius: 8px;
+    @include margin(-1, 0, -1, -1);
+    @include padding-around(12px, 40px, 12px, 30px, 1);
+    @include fontSize(22px, 1);
     svg {
       width: 30px;
       height: 30px;
     }
     >span {
-      margin-left: 15px;
+      @include margin('left', 15px, 1);
     }
   }
 
   // history box
   .history-box {
-    // margin-top: 10px;
     font-weight: 500;
-    font-size: 20px;
     border-radius: 8px;
     overflow: auto;
+    @include fontSize(20px, 1);
   }
   .history-container {
     width: 100%;
     min-width: 600px;
   }
   .history-item {
-    padding: 20px 0;
     // height: 50px;
     // line-height: 50px;
     text-indent: 45px;
     overflow: hidden;
+    @include padding('top', 20px, 1);
+    @include padding('bottom', 20px, 1);
   }
   .history-header {
     color: #715CB7;
@@ -574,6 +556,8 @@ export default {
     padding: 15px 0;
     background-color: #31187F;
     color: #fff;
+    @include padding('top', 15px, 1);
+    @include padding('bottom', 15px, 1);
   }
   .history-cnt {
 

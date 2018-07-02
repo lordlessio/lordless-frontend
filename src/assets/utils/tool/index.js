@@ -186,6 +186,29 @@ export const transitionEvent = () => {
   }
 }
 
-export const historyState = (hash) => {
-  window.history.pushState(null, null, hash)
+export const hasContent = (child, parent, deep = false) => {
+  const parentType = objectType(parent)
+  if (parentType[0] !== 'object' && parent.indexOf(child) !== -1) return true
+
+  let bool = false
+  if (deep && parentType[1] === 'object') {
+    let arr = []
+    if (parentType[0] === 'array') {
+      arr = parent
+    } else if (parentType[0] === 'object') {
+      arr = Object.keys(parent)
+    } else arr = []
+
+    for (const item of arr) {
+      if (parentType[0] === 'array' && item.indexOf(child) !== -1) {
+        bool = true
+        break
+      }
+      if (parentType[0] === 'object' && parent[item].indexOf(child) !== -1) {
+        bool = true
+        break
+      }
+    }
+  }
+  return bool
 }

@@ -42,14 +42,25 @@ const router = new Router({
       name: 'MapBox',
       component: MapBox,
       meta: {
-        showHeader: false,
-        showFooter: false
+        header: {
+          show: false
+        },
+        footer: {
+          show: false
+        }
       }
     },
     {
       path: '/ldb/:ldbId',
       name: 'ldbDetail',
-      component: LdbDetail
+      component: LdbDetail,
+      meta: {
+        header: {
+          fixed: true,
+          scroll: true,
+          transparent: true
+        }
+      }
     },
     {
       path: '*',
@@ -63,9 +74,9 @@ const router = new Router({
  * router loading status
  */
 router.beforeEach((to, from, next) => {
-  const { showHeader = true, showFooter = true } = to.meta
-  store.commit(`layout/${mutationTypes.LAYOUT_SET_HEADER_OPTIONS}`, { show: showHeader })
-  store.commit(`layout/${mutationTypes.LAYOUT_SET_FOOTER_OPTIONS}`, { show: showFooter })
+  const { header, footer } = to.meta
+  store.commit(`layout/${mutationTypes.LAYOUT_SET_HEADER_OPTIONS}`, header)
+  store.commit(`layout/${mutationTypes.LAYOUT_SET_FOOTER_OPTIONS}`, footer)
   next()
 })
 

@@ -11,6 +11,11 @@
         @handleSelect="handleSelect">
       </AutoComplete>
     </div>
+    <div class="lbs-tx-box">
+      <TxCarousel
+        ref="txCarousel"
+        @logoEvt="$router.push('/market')"></TxCarousel>
+    </div>
     <detail-dialog
       ref="ldbDetail"
       theme="default"
@@ -23,6 +28,7 @@
 <script>
 import Mapbox from '@/components/lbs/mapbox'
 import DetailDialog from '@/components/reuse/detailDialog'
+import TxCarousel from '@/components/reuse/txCarousel'
 import AutoComplete from '@/components/stories/autoComplete'
 import { getPoiInfos, getChainLdbs } from 'api'
 import { historyState } from 'utils/tool'
@@ -48,6 +54,7 @@ export default {
   components: {
     Mapbox,
     AutoComplete,
+    TxCarousel,
     DetailDialog
   },
   computed: {
@@ -137,6 +144,7 @@ export default {
     mapLoad () {
       const coords = this.$route.query.coords
       this.getLdbs()
+      this.$refs.txCarousel.init()
       if (coords) {
         this.$refs.myMap.flyToCoords({ center: coords.split(','), zoom: 14 })
       }
@@ -171,6 +179,7 @@ export default {
 </script>
 
 <style lang="scss">
+  @import '@/assets/stylus/mixin/class_mixin.scss';
   .ld-lbs-main {
     position: relative;
     height: 100vh;
@@ -181,12 +190,24 @@ export default {
     left: 30px;
     width: 100%;
     max-width: 400px;
+    @include padding(-1, 20px, 1, -2);
+  }
+  .lbs-tx-box {
+    position: absolute;
+    bottom: 50px;
+    left: 50px;
+    width: 100%;
+    max-width: 750px;
+    box-sizing: border-box;
+    @include padding(-1, 20px, 1, -2);
   }
   @media screen and (max-width: 768px) {
     .lbs-search {
-      padding: 0 20px;
       left: 0;
       box-sizing: border-box;
+    }
+    .lbs-tx-box {
+      left: 0;
     }
   }
 </style>

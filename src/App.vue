@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <Header v-if="headerOptions.show"/>
-    <div class="ld-main" :class="{ 'full': !headerOptions.show }">
+    <Header :options="headerOpt"/>
+    <div class="ld-main" :class="[{ 'no-header': !headerOpt.show || (headerOpt.show && headerOpt.scroll) }, { 'no-footer': !footerOpt.show }]">
       <router-view/>
       <div class="d-flex col-flex f-auto-center ld-error" v-if="web3Opt.error">
         <h1>出错啦！</h1>
@@ -9,7 +9,7 @@
       </div>
       <Relogin :address="web3Opt.address" :expired="userExpired"></Relogin>
     </div>
-    <Footer v-if="footerOptions.show"/>
+    <Footer :options="footerOpt"/>
   </div>
 </template>
 
@@ -22,11 +22,9 @@ import { mapState } from 'vuex'
 import { erc20Token } from '@/api/service/contract.js'
 if (erc20Token && erc20Token()) {
   erc20Token().then(ins => {
-  // console.log('---------', ins, ins.totalSupply().then(d => console.log(web3js.fromWei(d.toNumber(), 'finney'))))
     ins.balanceOf('0x4cD98f82DeCaDe2d152E256efd1f8d5a334a3E28').then(console.log)
   })
 }
-
 export default {
   name: 'App',
   async created () {
@@ -43,10 +41,10 @@ export default {
     Relogin
   },
   computed: {
-    ...mapState('layout', [
-      'headerOptions',
-      'footerOptions'
-    ]),
+    ...mapState('layout', {
+      headerOpt: 'header',
+      footerOpt: 'footer'
+    }),
     ...mapState('web3', [
       'web3Opt'
     ]),
@@ -97,6 +95,8 @@ export default {
       })
     }
   },
-  mounted () {}
+  mounted () {
+    console.log('----footerOpt', this.footerOpt)
+  }
 }
 </script>

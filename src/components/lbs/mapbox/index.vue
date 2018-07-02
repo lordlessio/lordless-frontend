@@ -80,7 +80,7 @@ export default {
         }, false)
         const marker = new MapBox.Marker(markerDom)
           .setLngLat(coords)
-          .setOffset([50, -50])
+          .setOffset([-50, -50])
           .addTo(map)
 
         marker.remove()
@@ -116,7 +116,7 @@ export default {
       box.className = `marker _marker--ldb-box _marker--level-${level}`
       box.style.width = 'inherit'
       box.style.height = 'inherit'
-      const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}" style="width: 100px;"/><div class="_marker--lord-box"><div class="_marker--lord-cnt"><img data-attr="avatar" src="https://s.gravatar.com/avatar/7680a5a89452076e5ab340bf74a2a786?s=80"/><span>${name}</span></div></div></div>`
+      const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}" style="width: 200px;"/><div class="_marker--lord-box"><div class="_marker--lord-cnt"><img data-attr="avatar" src="https://s.gravatar.com/avatar/7680a5a89452076e5ab340bf74a2a786?s=80"/><span>${name}</span></div></div></div>`
       box.innerHTML = boxHtml
       return box
     },
@@ -329,16 +329,16 @@ export default {
     >img {
       display: inline-block;
       vertical-align: middle;
-      width: 100px;
+      width: 200px;
       border-radius: 100%;
     }
     >span {
-      margin-left: 10px;
       display: inline-block;
       vertical-align: middle;
       color: #fff;
-      font-size: 16px;
       font-weight: bold;
+      // @include margin('left', 10px, 1);
+      // @include fontSize(16px, 1);
     }
   }
 </style>

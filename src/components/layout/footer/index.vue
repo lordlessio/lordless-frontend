@@ -1,5 +1,5 @@
 <template>
-  <footer class="ld-footer" :class="theme">
+  <footer class="ld-footer" :class="theme" v-if="options.show">
     <div class="container">
       <div class="d-flex sm-col-flex sm-f-align-center footer-top">
         <div class="v-flex text-left footer-logo">
@@ -58,6 +58,14 @@
 <script>
 export default {
   props: {
+    options: {
+      type: Object,
+      default: () => {
+        return {
+          show: true
+        }
+      }
+    },
     theme: {
       type: String,
       default: 'default'
@@ -67,11 +75,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  @import '@/assets/stylus/mixin/class_mixin.scss';
   .ld-footer {
-    margin-top: -230px;
-    padding-top: 80px;
-    padding-bottom: 100px;
     height: 130px;
+    @include margin('top', -230px, 1);
+    @include padding('top', 80px, 1.34);
+    @include padding('bottom', 100px, 1.34);
     &.default {
       background-color: #fff;
       color: #373737;
@@ -87,7 +96,7 @@ export default {
     height: 100%;
   }
   .footer-top {
-    margin-bottom: 70px;
+    @include margin('bottom', 70px, 2);
   }
   .footer-logo {
     .footer-logo-png {
@@ -98,14 +107,18 @@ export default {
       height: 45px;
     }
     .logo-text {
-      margin-left: 10px;
       width: 119px;
       height: 32px;
+      @include margin('left', 10px, 1);
     }
+  }
+  .footer-icons-box {
+    @include margin('top', 30px, 1, -1);
   }
   .footer-icons-item {
     display: inline-block;
-    margin: 0 23px;
+    @include margin('left', 23px, 1);
+    @include margin('right', 23px, 1);
     svg {
       fill: inherit;
     }
@@ -118,12 +131,4 @@ export default {
     font-weight: 500;
   }
 
-  @media screen and (max-width: 768px) {
-    .ld-footer {
-      padding-top: 50px ;
-    }
-    .footer-icons-box {
-      margin-top: 30px;
-    }
-  }
 </style>

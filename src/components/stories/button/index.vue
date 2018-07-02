@@ -32,6 +32,7 @@
     border-style: solid;
     font-weight: inherit;
     cursor: pointer;
+    white-space: nowrap;
     svg {
       fill: inherit;
     }

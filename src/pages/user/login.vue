@@ -6,7 +6,7 @@
       <div>address:{{ userInfo.address }}</div>
     </div>
     <div class="btn">
-      <!-- <MyButton @click.native="loginFunc">登陆啊</MyButton> -->
+      <MyButton @click.native="metaLogin">登陆啊</MyButton>
     </div>
   </div>
 </template>
@@ -27,8 +27,7 @@ export default {
   },
   methods: {
     ...mapActions('user', [
-      actionTypes.USER_SET_USER_BY_TOKEN,
-      actionTypes.USER_SET_USER_TOKEN
+      actionTypes.USER_META_LOGIN
     ])
 
     // loginFunc () {

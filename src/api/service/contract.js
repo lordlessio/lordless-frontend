@@ -1,5 +1,6 @@
 import contract from 'truffle-contract'
-console.log('ldf', process.env.contract.ldbNFTCrowdsale.address, process.env.contract.erc20.address, process.env.contract.erc20)
+// console.log('ldf', process.env.contract.ldbNFTCrowdsale.address, process.env.contract.erc20.address, process.env.contract.erc20)
+console.log('process.env.contract.erc20', process.env.contract)
 export const ldbNFTCrowdsale = () => {
   if (typeof web3 === 'undefined') return
   const _contract = contract({

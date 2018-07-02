@@ -33,3 +33,145 @@
   background-size: $size;
   background-position: $position;
 }
+
+// @mixin margin-vars ($cardinal: 5px) {
+//   @mixin margin ($direction: '', $size: 2) {
+//     @if ($direction) {
+//       margin: $size * $cardinal;
+//     } @else {
+//       margin-#{$direction}: $size * $cardinal;
+//     }
+//   }
+// }
+
+/* 边距计算 */
+@mixin distance-vars ($noun, $direction: -1, $size: 10px) {
+  @if ($direction != -1) {
+    #{$noun}-#{$direction}: $size;
+  } @else {
+    #{$noun}: $size;
+  }
+}
+
+/**
+ *  margin 或 padding 边距通用 css minix
+ *  $noun: 边距类别
+ *  $direction: 边距方向，默认为空
+ *  $size: 边距尺寸大小
+ *  $multiple: md 及 sm 屏幕尺寸下边距比例, 值为 -1 的时候，在 sm 尺寸下为0
+ *  $md: 在 md 尺寸下是否显示，1：显示，-1：不显示，默认：1
+ */
+@mixin distance ($noun: 'margin', $direction: -1, $size: 10px, $multiple: 2, $md: 1) {
+  @media screen and (min-width: 769px) {
+    $md_size: $size;
+    @if ($md == -1) {
+      $md_size: 0px;
+    }
+    @if ($md != -2) {
+      @include distance-vars($noun, $direction, $md_size);
+    }
+  }
+  @media screen and (max-width: 768px) {
+    $sm_size: $size;
+    @if ($multiple != -2) {
+      @if ($multiple == -1) {
+        $sm_size: 0px;
+      } @else {
+        $sm_size: $sm_size / $multiple
+      }
+      @include distance-vars($noun, $direction, $sm_size);
+    }
+  }
+}
+
+@mixin distance-around ($noun: 'margin', $top: 0, $right: 0, $bottom: 0, $left: 0, $multiple: 2, $md: 1) {
+  @media screen and (min-width: 769px) {
+    $md_top: $top;
+    $md_right: $right;
+    $md_bottom: $bottom;
+    $md_left: $left;
+    @if ($md == -1) {
+      #{$noun}: 0;
+    }
+    @if ($md != -2) {
+      #{$noun}: $md_top $md_right $md_bottom $md_left;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    $sm_top: $top;
+    $sm_right: $right;
+    $sm_bottom: $bottom;
+    $sm_left: $left;
+    @if ($multiple != -2) {
+      @if ($multiple == -1) {
+        $sm_top: 0;
+        $sm_right: 0;
+        $sm_bottom: 0;
+        $sm_left: 0;
+      } @else {
+        $sm_top: $sm_top / $multiple;
+        $sm_right: $sm_right / $multiple;
+        $sm_bottom: $sm_bottom / $multiple;
+        $sm_left: $sm_left / $multiple;
+      }
+      #{$noun}: $sm_top $sm_right $sm_bottom $sm_left;
+    }
+  }
+}
+
+@mixin margin ($direction: -1, $size: 10px, $multiple: 2, $md: 1) {
+  @include distance('margin', $direction, $size, $multiple, $md)
+}
+
+@mixin margin-around ($top: 0, $right: 0, $bottom: 0, $left: 0, $multiple: 2, $md: 1) {
+  @include distance-around('margin', $top, $right, $bottom, $left, $multiple, $md);
+}
+
+@mixin padding ($direction: -1, $size: 10px, $multiple: 2, $md: 1) {
+  @include distance('padding', $direction, $size, $multiple, $md)
+}
+
+@mixin padding-around ($top: 0, $right: 0, $bottom: 0, $left: 0, $multiple: 2, $md: 1) {
+  @include distance-around('padding', $top, $right, $bottom, $left, $multiple, $md);
+}
+
+@mixin dimension($noum: 'width', $size: 20px, $multiple: 2, $md: 1) {
+  @media screen and (min-width: 769px) {
+    $md_size: $size;
+    @if ($md == -1) {
+      $md_size: 0px;
+    }
+    @if ($md != -2) {
+      #{$noum}: $md_size;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    $sm_size: $size;
+    @if ($multiple != -2) {
+      @if ($multiple == -1) {
+        $sm_size: 0px;
+      } @else {
+        $sm_size: $sm_size / $multiple
+      }
+      #{$noum}: $sm_size;
+    }
+  }
+}
+
+@mixin width ($size: 20px, $multiple: 2, $md: 1) {
+  @include dimension('width', $size, $multiple, $md)
+}
+
+@mixin height ($size: 20px, $multiple: 2, $md: 1) {
+  @include dimension('height', $size, $multiple, $md)
+}
+
+@mixin fontSize ($size: 10px, $multiple: 2) {
+  @media screen and (min-width: 769px) {
+    font-size: $size;
+  }
+  @media screen and (max-width: 768px) {
+    font-size: $size / $multiple;
+  }
+}
+

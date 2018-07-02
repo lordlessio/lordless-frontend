@@ -115,7 +115,7 @@ export default {
         commit(mutationTypes.USER_SET_USER_INFO, res.data)
         if (state.userExpired) commit(mutationTypes.USER_SET_USER_EXPIRED, false)
       } else {
-        if (res.code === 9001) commit(mutationTypes.USER_SET_USER_EXPIRED, true)
+        if (res.code === 9001 && res.errorMsg === 'jwt expired') commit(mutationTypes.USER_SET_USER_EXPIRED, true)
         commit(mutationTypes.USER_SET_USER_INFO, { default: true })
       }
       return true

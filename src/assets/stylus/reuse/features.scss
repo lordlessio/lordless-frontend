@@ -3,7 +3,6 @@
 
 .dialog-ldb-detail {
   padding: 0;
-  margin: 0 auto 60px;
   top: 20px;
   width: 100%;
   max-width: 1000px;
@@ -11,16 +10,17 @@
   background-color: #f4f4f4;
   border-radius: 3px;
   box-shadow: 0 15px 30px 0 rgba(0, 0, 0, .5);
-  .el-dialog__title {
-    font-size: 30px;
-    color: inherit;
-  }
-  .el-dialog__headerbtn, .el-dialog__close {
-    color: inherit;
-  }
-  .el-dialog__headerbtn {
-    font-size: 35px;
-  }
+  @include margin(-1, 0, 1, -2);
+  // .el-dialog__title {
+  //   font-size: 30px;
+  //   color: inherit;
+  // }
+  // .el-dialog__headerbtn, .el-dialog__close {
+  //   color: inherit;
+  // }
+  // .el-dialog__headerbtn {
+  //   font-size: 35px;
+  // }
   &.no-header {
     .el-dialog__header {
       display: none;
@@ -42,16 +42,16 @@
     padding: 0;
   }
   .el-dialog__body {
-    padding: 0 0 30px;
+    padding: 0;
   }
   .dialog-ldb-close {
     position: fixed;
     right: 30px;
     top: 15px;
-    font-size: 30px;
     color: #ccc;
     z-index: 3002;
     cursor: pointer;
+    @include fontSize(30px, 0.85);
   }
   .ldb-detail-main {
     border-radius: 3px;
@@ -66,13 +66,11 @@
 
 @media screen and (max-width: 768px) {
   .dialog-ldb-detail {
-    margin: 0;
     top: 0px;
     border-radius: 0;
     .dialog-ldb-close {
       top: 10px;
       right: 10px;
-      font-size: 35px;
     }
     .ldb-detail-main {
       border-radius: 0px;

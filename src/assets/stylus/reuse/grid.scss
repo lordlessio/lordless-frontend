@@ -1,236 +1,240 @@
 
 /* 布局样式 */
 
-@mixin layout-vars ($size: '') {
-  .#{$size}hidden {
+@mixin layout-vars ($media: '') {
+  .#{$media}hidden {
     display: none;
   }
-  .#{$size}d-flex {
+  .#{$media}d-flex {
     display: flex;
   }
-  .#{$size}d-inline-flex {
+  .#{$media}d-inline-flex {
     display: inline-flex;
   }
-  .#{$size}f-align-start {
+  .#{$media}f-align-start {
     align-items: flex-start;
   }
-  .#{$size}f-align-center {
+  .#{$media}f-align-center {
     align-items: center;
   }
-  .#{$size}f-justify-center {
+  .#{$media}f-justify-center {
     justify-content: center;
   }
-  .#{$size}f-auto-center {
+  .#{$media}f-auto-center {
     align-items: center;
     justify-content: center;
   }
-  .#{$size}col-flex {
+  .#{$media}col-flex {
     flex-direction: column;
   }
-  .#{$size}col-reverse-flex {
+  .#{$media}col-reverse-flex {
     flex-direction: column-reverse;
   }
-  .#{$size}row-flex {
+  .#{$media}row-flex {
     flex-direction: row;
   }
-  .#{$size}row-reverse-flex {
+  .#{$media}row-reverse-flex {
     flex-direction: row-reverse;
   }
-  .#{$size}v-flex {
+  .#{$media}v-flex {
     flex: 1;
   }
-  .#{$size}inline-block {
+  .#{$media}inline-block {
     display: inline-block;
+  }
+  .#{$media}block {
+    display: block;
   }
 }
 
 @include layout-vars();
 
 /* 工具布局样式 */
-@mixin tool-vars ($size: '') {
+@mixin tool-vars ($media: '', $size: 2) {
+
   // margin
-  .#{size}mar-1 {
-    margin: 5px;
+  .#{$media}mar-1 {
+    margin: $size * 5px;
   }
-  .#{size}mar-2 {
-    margin: 10px;
+  .#{$media}mar-2 {
+    margin: $size * 10px;
   }
-  .#{size}mar-3 {
-    margin: 15px;
+  .#{$media}mar-3 {
+    margin: $size * 15px;
   }
-  .#{size}mar-4 {
-    margin: 20px;
+  .#{$media}mar-4 {
+    margin: $size * 20px;
   }
-  .#{size}mar-5 {
-    margin: 25px;
+  .#{$media}mar-5 {
+    margin: $size * 25px;
   }
-  .#{size}mar-l1 {
-    margin-left: 5px;
+  .#{$media}mar-l1 {
+    margin-left: $size * 5px;
   }
-  .#{size}mar-l2 {
-    margin-left: 10px;
+  .#{$media}mar-l2 {
+    margin-left: $size * 10px;
   }
-  .#{size}mar-l3 {
-    margin-left: 15px;
+  .#{$media}mar-l3 {
+    margin-left: $size * 15px;
   }
-  .#{size}mar-l4 {
-    margin-left: 20px;
+  .#{$media}mar-l4 {
+    margin-left: $size * 20px;
   }
-  .#{size}mar-l5 {
-    margin-left: 25px;
+  .#{$media}mar-l5 {
+    margin-left: $size * 25px;
   }
-  .#{size}mar-r1 {
-    margin-right: 5px;
+  .#{$media}mar-r1 {
+    margin-right: $size * 5px;
   }
-  .#{size}mar-r2 {
-    margin-right: 10px;
+  .#{$media}mar-r2 {
+    margin-right: $size * 10px;
   }
-  .#{size}mar-r3 {
-    margin-right: 15px;
+  .#{$media}mar-r3 {
+    margin-right: $size * 15px;
   }
-  .#{size}mar-r4 {
-    margin-right: 20px;
+  .#{$media}mar-r4 {
+    margin-right: $size * 20px;
   }
-  .#{size}mar-r5 {
-    margin-right: 25px;
+  .#{$media}mar-r5 {
+    margin-right: $size * 25px;
   }
-  .#{size}mar-t1 {
-    margin-top: 5px;
+  .#{$media}mar-t1 {
+    margin-top: $size * 5px;
   }
-  .#{size}mar-t2 {
-    margin-top: 10px;
+  .#{$media}mar-t2 {
+    margin-top: $size * 10px;
   }
-  .#{size}mar-t3 {
-    margin-top: 15px;
+  .#{$media}mar-t3 {
+    margin-top: $size * 15px;
   }
-  .#{size}mar-t4 {
-    margin-top: 20px;
+  .#{$media}mar-t4 {
+    margin-top: $size * 20px;
   }
-  .#{size}mar-t5 {
-    margin-top: 25px;
+  .#{$media}mar-t5 {
+    margin-top: $size * 25px;
   }
-  .#{size}mar-b1 {
-    margin-bottom: 5px;
+  .#{$media}mar-b1 {
+    margin-bottom: $size * 5px;
   }
-  .#{size}mar-b2 {
-    margin-bottom: 10px;
+  .#{$media}mar-b2 {
+    margin-bottom: $size * 10px;
   }
-  .#{size}mar-b3 {
-    margin-bottom: 15px;
+  .#{$media}mar-b3 {
+    margin-bottom: $size * 15px;
   }
-  .#{size}mar-b4 {
-    margin-bottom: 20px;
+  .#{$media}mar-b4 {
+    margin-bottom: $size * 20px;
   }
-  .#{size}mar-b5 {
-    margin-bottom: 25px;
+  .#{$media}mar-b5 {
+    margin-bottom: $size * 25px;
   }
 
   // padding
-  .#{size}pad-1 {
-    padding: 5px;
+  .#{$media}pad-1 {
+    padding: $size * 5px;
   }
-  .#{size}pad-2 {
-    padding: 10px;
+  .#{$media}pad-2 {
+    padding: $size * 10px;
   }
-  .#{size}pad-3 {
-    padding: 15px;
+  .#{$media}pad-3 {
+    padding: $size * 15px;
   }
-  .#{size}pad-4 {
-    padding: 20px;
+  .#{$media}pad-4 {
+    padding: $size * 20px;
   }
-  .#{size}pad-5 {
-    padding: 25px;
+  .#{$media}pad-5 {
+    padding: $size * 25px;
   }
-  .#{size}pad-l1 {
-    padding-left: 5px;
+  .#{$media}pad-l1 {
+    padding-left: $size * 5px;
   }
-  .#{size}pad-l2 {
-    padding-left: 10px;
+  .#{$media}pad-l2 {
+    padding-left: $size * 10px;
   }
-  .#{size}pad-l3 {
-    padding-left: 15px;
+  .#{$media}pad-l3 {
+    padding-left: $size * 15px;
   }
-  .#{size}pad-l4 {
-    padding-left: 20px;
+  .#{$media}pad-l4 {
+    padding-left: $size * 20px;
   }
-  .#{size}pad-l5 {
-    padding-left: 25px;
+  .#{$media}pad-l5 {
+    padding-left: $size * 25px;
   }
-  .#{size}pad-r1 {
-    padding-right: 5px;
+  .#{$media}pad-r1 {
+    padding-right: $size * 5px;
   }
-  .#{size}pad-r2 {
-    padding-right: 10px;
+  .#{$media}pad-r2 {
+    padding-right: $size * 10px;
   }
-  .#{size}pad-r3 {
-    padding-right: 15px;
+  .#{$media}pad-r3 {
+    padding-right: $size * 15px;
   }
-  .#{size}pad-r4 {
-    padding-right: 20px;
+  .#{$media}pad-r4 {
+    padding-right: $size * 20px;
   }
-  .#{size}pad-r5 {
-    padding-right: 25px;
+  .#{$media}pad-r5 {
+    padding-right: $size * 25px;
   }
-  .#{size}pad-t1 {
-    padding-top: 5px;
+  .#{$media}pad-t1 {
+    padding-top: $size * 5px;
   }
-  .#{size}pad-t2 {
-    padding-top: 10px;
+  .#{$media}pad-t2 {
+    padding-top: $size * 10px;
   }
-  .#{size}pad-t3 {
-    padding-top: 15px;
+  .#{$media}pad-t3 {
+    padding-top: $size * 15px;
   }
-  .#{size}pad-t4 {
-    padding-top: 20px;
+  .#{$media}pad-t4 {
+    padding-top: $size * 20px;
   }
-  .#{size}pad-t5 {
-    padding-top: 25px;
+  .#{$media}pad-t5 {
+    padding-top: $size * 25px;
   }
-  .#{size}pad-b1 {
-    padding-bottom: 5px;
+  .#{$media}pad-b1 {
+    padding-bottom: $size * 5px;
   }
-  .#{size}pad-b2 {
-    padding-bottom: 10px;
+  .#{$media}pad-b2 {
+    padding-bottom: $size * 10px;
   }
-  .#{size}pad-b3 {
-    padding-bottom: 15px;
+  .#{$media}pad-b3 {
+    padding-bottom: $size * 15px;
   }
-  .#{size}pad-b4 {
-    padding-bottom: 20px;
+  .#{$media}pad-b4 {
+    padding-bottom: $size * 20px;
   }
-  .#{size}pad-b5 {
-    padding-bottom: 25px;
+  .#{$media}pad-b5 {
+    padding-bottom: $size * 25px;
   }
 }
-@include tool-vars();
+// @include tool-vars();
 
 /* 文字布局样式 */
-@mixin text-vars ($size: '') {
-  .#{$size}text-left {
+@mixin text-vars ($media: '') {
+  .#{$media}text-left {
     text-align: left;
   }
-  .#{$size}text-right {
+  .#{$media}text-right {
     text-align: right;
   }
-  .#{$size}text-center {
+  .#{$media}text-center {
     text-align: center;
   }
-  .#{$size}text-nowrap {
+  .#{$media}text-nowrap {
     white-space: nowrap;
   }
-  .#{$size}text-style-cap {
+  .#{$media}text-style-cap {
     text-transform: capitalize;
   }
-  .#{$size}text-style-lower {
+  .#{$media}text-style-lower {
     text-transform: lowercase;
   }
-  .#{$size}text-style-upper {
+  .#{$media}text-style-upper {
     text-transform: uppercase;
   }
-  .#{$size}line-height-1 {
+  .#{$media}line-height-1 {
     line-height: 1
   }
-  .#{$size}line-height-0 {
+  .#{$media}line-height-0 {
     line-height: 0;
   }
 }
@@ -258,9 +262,11 @@
   @include layout-vars('md-');
   @include text-vars('md-');
   @include tool-vars('md-');
+  @include tool-vars('', 2);
 }
 @media screen and (max-width: 768px) {
   @include layout-vars('sm-');
   @include text-vars('sm-');
-  @include tool-vars('sm-');
+  @include tool-vars('sm-', 1);
+  @include tool-vars('', 1);
 }

@@ -214,14 +214,14 @@ export default {
       width: 80px;
     }
   }
-  .sketch-bottom-cnt {
-    position: absolute;
-    left: 0;
-    bottom: 15px;
-    color: #fff;
-    font-weight: bold;
-    // background-color: #6e53ff;
-  }
+  // .sketch-bottom-cnt {
+  //   position: absolute;
+  //   left: 0;
+  //   bottom: 15px;
+  //   color: #fff;
+  //   font-weight: bold;
+  //   // background-color: #6e53ff;
+  // }
   .switch-btn {
     position: absolute;
     left: 5px;
@@ -257,29 +257,21 @@ export default {
     opacity: 0;
     transition: opacity .35s ease, visibility 0s 0s, z-index 0s 0s;
   }
-=======
-    width: 100%;
-    height: 40px;
-    color: #4c4c4c;
-    font-weight: bold;
-    // background-color: #6e53ff;
-  }
->>>>>>> lordless/master
-  .lord-avatar {
-    margin-right: 10px;
-    width: 50px;
-    height: 50px;
-    border-radius: 100px;
-    overflow: hidden;
-  }
-  .lord-name-box {
-    font-size: 16px;
-    line-height: 1.8;
-  }
-  .lord-name-title {
-    margin-right: 6px;
-  }
-  .lord-address {
-    font-size: 14px;
-  }
+  // .lord-avatar {
+  //   margin-right: 10px;
+  //   width: 50px;
+  //   height: 50px;
+  //   border-radius: 100px;
+  //   overflow: hidden;
+  // }
+  // .lord-name-box {
+  //   font-size: 16px;
+  //   line-height: 1.8;
+  // }
+  // .lord-name-title {
+  //   margin-right: 6px;
+  // }
+  // .lord-address {
+  //   font-size: 14px;
+  // }
 </style>

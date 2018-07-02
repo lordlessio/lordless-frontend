@@ -67,17 +67,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  @import '@/assets/stylus/mixin/class_mixin.scss';
   .ld-relogin-input {
     input {
-      margin-top: 15px;
       width: 100%;
       line-height: 30px;
-      font-size: 14px;
       border: none;
       outline: none;
       background-color: #ddd;
       border-radius: 3px;
       text-indent: 8px;
+      @include margin('top', 15px, 1);
+      @include fontSize(14px, 1);
     }
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="image-box" :class="sType">
+  <div class="image-box" :class="[sType, { 'd-flex f-justify-center': center }]">
     <img v-if="type === 'img'" :src="src"/>
     <span v-else :style="`background-image: url('${src}')`"></span>
   </div>
@@ -27,6 +27,11 @@ export default {
     sType: {
       type: String,
       default: 'width'
+    },
+
+    center: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {
@@ -58,6 +63,9 @@ export default {
       >img {
         height: 100%;
       }
+    }
+    &.center {
+
     }
   }
 </style>
