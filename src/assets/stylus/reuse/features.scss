@@ -1,6 +1,25 @@
 
 /* 功能性复用样式 */
 
+.lordless-dialog {
+  &.no-header {
+    .el-dialog__header {
+      display: none;
+    }
+  }
+  &.dark {
+    @include dialog-theme('dark');
+  }
+  &.light {
+    @include dialog-theme('light');
+  }
+  &.gray {
+    @include dialog-theme('gray');
+  }
+  &.default {
+    @include dialog-theme('default');
+  }
+}
 .dialog-ldb-detail {
   padding: 0;
   top: 20px;
@@ -21,23 +40,6 @@
   // .el-dialog__headerbtn {
   //   font-size: 35px;
   // }
-  &.no-header {
-    .el-dialog__header {
-      display: none;
-    }
-  }
-  &.dark {
-    @include dialog-theme('dark');
-  }
-  &.light {
-    @include dialog-theme('light');
-  }
-  &.gray {
-    @include dialog-theme('gray');
-  }
-  &.default {
-    @include dialog-theme('default');
-  }
   .el-dialog__header {
     padding: 0;
   }
@@ -61,6 +63,11 @@
       padding: 0 30px;
     }
   }
+}
+
+.authorize-dialog {
+  margin-left: 50%;
+  transform: translateX(-50%);
 }
 
 

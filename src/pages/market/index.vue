@@ -80,6 +80,7 @@ export default {
       const res = await getChainLdbs()
       if (res.code === 1000) {
         this.ldbs = res.data.list
+        window.ldbs = this.ldbs
       }
     }
   },

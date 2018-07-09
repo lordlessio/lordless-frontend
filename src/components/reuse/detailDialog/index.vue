@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="ldbDialog"
-    :custom-class="`dialog-ldb-detail ${theme}`"
+    :custom-class="`lordless-dialog dialog-ldb-detail ${theme}`"
     lock-scroll
     append-to-body
     :top="top"
@@ -12,7 +12,7 @@
       <span @click.stop="ldbDialog = false" class="inline-block dialog-ldb-close">
         <i class="el-icon-close"></i>
       </span>
-      <ldb-detail dialog :theme="theme" :ldbId="ldbId"></ldb-detail>
+      <ldb-detail ref="ldbDetail" dialog :theme="theme" :ldbId="ldbId"></ldb-detail>
     </div>
   </el-dialog>
 </template>

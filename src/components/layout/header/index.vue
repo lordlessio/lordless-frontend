@@ -32,9 +32,7 @@
           </router-link>
         </span>
         <span class="inline-block header-right-item" data-type="link">
-          <router-link to="/">
-            Sign in
-          </router-link>
+          <user-avatar class="user-avatar"></user-avatar>
         </span>
       </div>
     </div>
@@ -44,6 +42,7 @@
 <script>
 import { addClass, removeClass, toggleClass } from 'utils/tool'
 import throttle from 'lodash/throttle'
+import UserAvatar from '@/components/reuse/userAvatar'
 export default {
   props: {
     options: {
@@ -58,6 +57,9 @@ export default {
       type: String,
       default: 'default'
     }
+  },
+  components: {
+    UserAvatar
   },
   methods: {
     toggleHeader () {
@@ -206,6 +208,10 @@ export default {
       text-decoration: none;
       @include fontSize(20px, 1);
     }
+  }
+  .user-avatar {
+    display: inline-block;
+    transform: translateY(30%);
   }
 
   .header-mask {

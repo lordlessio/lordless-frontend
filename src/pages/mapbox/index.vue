@@ -186,9 +186,9 @@ export default {
 
         // 调整地图显示视图
         const { lat, lng } = item.chainSystem
-        this.$refs.lordMap.flyToCoords({ center: [lat, lng], zoom: 14 }, () => {
+        this.$refs.lordMap.flyToCoords({ center: [lng, lat], zoom: 14 }, () => {
           console.log('this.$route', this.$route)
-          historyState(`${this.$route.path}?coords=${[lat, lng].toString()}`)
+          historyState(`${this.$route.path}?coords=${[lng, lat].toString()}`)
         })
       }
     },
@@ -235,7 +235,7 @@ export default {
       this.$nextTick(() => {
         this.ldbDetail = info
         const { lat, lng } = info.chainSystem
-        this.coordsPath = `${this.$route.path}?coords=${[lat, lng].toString()}`
+        this.coordsPath = `${this.$route.path}?coords=${[lng, lat].toString()}`
         historyState(`/ldb/${info._id}`)
       })
     },

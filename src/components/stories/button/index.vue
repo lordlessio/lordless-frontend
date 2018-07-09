@@ -5,6 +5,8 @@
 </template>
 
 <script>
+  import { mapState, mapActions } from 'vuex'
+  import { actionTypes } from '@/store/types'
   export default {
     name: 'my-button',
 
@@ -12,10 +14,28 @@
       theme: {
         type: String,
         default: 'default'
+      },
+
+      // 是否需要调用合约
+      contract: {
+        type: Boolean,
+        default: false
       }
     },
+    computed: {
+      ...mapState('user', [
+        'userInfo'
+      ])
+    },
     methods: {
+      ...mapActions('user', [
+        actionTypes.USER_META_LOGIN
+      ]),
       onClick () {
+        if (this.contract && !this.userInfo.address) {
+          this[actionTypes.USER_META_LOGIN]()
+          return
+        }
         this.$emit('click')
       }
     }

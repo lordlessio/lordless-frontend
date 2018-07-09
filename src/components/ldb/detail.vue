@@ -11,20 +11,21 @@
             <el-col :md="12" :sm="24">
               <h1 class="ldb-name">
                 <span>{{ ldbInfo.name.zh }}</span>
-                <span class="ldb-category" v-for="(category, index) of ldbInfo.mapbox.category.split(',')" :key="index">{{ category }}</span>
+                <span class="ldb-category" v-for="(category, index) of ldbInfo.origin.category.split(',')" :key="index">{{ category }}</span>
               </h1>
             </el-col>
             <el-col :md="12" :sm="24">
               <div class="d-flex f-align-center">
                 <div class="user-info v-flex">
-                  <p class="lord-name">
-                    {{ 'founy' }}
-                  </p>
-                  <p class="lord-address">{{ splitAddress(userInfo.address, '******') }}</p>
+                  <div v-if="userInfo.address">
+                    <p class="lord-name">
+                      {{ 'LORDLESS' }}
+                    </p>
+                    <p class="lord-address">{{ splitAddress(userInfo.address, '******') }}</p>
+                  </div>
                 </div>
                 <div class="user-avatar">
-                  <Blockies radius="6px" :seed="userInfo.address" :scale="8"></Blockies>
-                  <img-box :src="ldbInfo.ldbIcon.sourceUrl" type="span"></img-box>
+                  <user-avatar :fontSize="'24px'"></user-avatar>
                 </div>
               </div>
             </el-col>
@@ -61,9 +62,10 @@
               </div>
             </div>
             <div class="v-flex md-text-right sm-text-left features-btn features-item">
-              <my-button theme="default" @click="pushChain">push chain</my-button>
-              <my-button theme="info" @click="sell">Sell</my-button>
-              <my-button theme="buy" @click="buy">Sign to Buy</my-button>
+              <my-button theme="default" @click="pushChain" v-if="unOnChain">push chain</my-button>
+              <my-button theme="info" :contract="true" @click="sell" v-if="showSell">Sell</my-button>
+              <my-button theme="info" :contract="true" @click="unsell" v-if="showUnSell">Un Sell</my-button>
+              <my-button theme="buy" :contract="true" @click="buy" v-if="showBuy"><span v-if="!userInfo.address">Sign to Buy</span><span v-if="userInfo.address">Buy</span></my-button>
             </div>
           </div>
         </div>
@@ -214,15 +216,17 @@
         </div>
       </div>
     </div>
+    <Authorize ref="authorize" :address="userInfo.address"></Authorize>
   </div>
 </template>
 
 <script>
 import ImgBox from '@/components/stories/image'
-import Blockies from '@/components/stories/blockies'
+import UserAvatar from '@/components/reuse/userAvatar'
 import MyButton from '@/components/stories/button'
 import SketchFab from '@/components/sketchfab'
 import LdLoading from '@/components/stories/loading'
+import Authorize from '@/components/reuse/authorize'
 import { getLdbById } from 'api'
 import { objectType, splitAddress } from 'utils/tool'
 import { mapState } from 'vuex'
@@ -253,15 +257,18 @@ export default {
       ldbInfo: {
         name: {},
         desc: {},
-        origin: {},
+        origin: {
+          category: ''
+        },
         userId: {},
         chainSystem: {},
         levelSystem: {},
-        ldbIcon: {}
+        ldbIcon: {},
+        user: {}
       },
       // 错误信息
       errorMsg: null,
-      tokenId: null
+      tokenId: 0
     }
   },
   computed: {
@@ -272,14 +279,31 @@ export default {
       'ldbNFTContract',
       'buildingContract',
       'ldbNFTCrowdsaleContract'
-    ])
+    ]),
+    unOnChain () {
+      const ldbInfo = this.ldbInfo
+      return ldbInfo.ocs === 1
+    },
+    showSell () {
+      const ldbInfo = this.ldbInfo
+      return this.userInfo.address && ldbInfo.user.address === this.userInfo.address && ldbInfo.chainSystem.sellStatus === 0 && ldbInfo.ocs === 2
+    },
+    showUnSell () {
+      const ldbInfo = this.ldbInfo
+      return this.userInfo.address && ldbInfo.user.address === this.userInfo.address && ldbInfo.chainSystem.sellStatus === 1 && ldbInfo.ocs === 2
+    },
+    showBuy () {
+      const ldbInfo = this.ldbInfo
+      return !this.userInfo.address || (ldbInfo.user.address !== this.userInfo.address && ldbInfo.chainSystem.sellStatus === 1 && ldbInfo.ocs === 2)
+    }
   },
   components: {
     ImgBox,
     MyButton,
     SketchFab,
     LdLoading,
-    Blockies
+    UserAvatar,
+    Authorize
   },
   methods: {
 
@@ -297,7 +321,7 @@ export default {
     async getLdbInfo (id) {
       this.loading = true
       const res = await getLdbById({ id, pula: 'ldbIcon' })
-      if (res.code === 1000) this.ldbInfo = Object.assign({}, this.ldbInfo, res.data)
+      if (res.code === 1000) this.ldbInfo = Object.assign({}, this.ldbInfo, { user: this.userInfo }, res.data, { ocs: 1 })
       else this.errorMsg = res.errorMsg || '未知错误'
       this.loading = false
     },
@@ -313,9 +337,12 @@ export default {
       this.getLdbInfo(this.ldbId)
     },
 
+    // 购买建筑
     async buy () {
       try {
-        const tokenId = this.tokenId
+        const authorize = await this.$refs.authorize.checkoutAuthorize()
+        if (!authorize) return
+        const tokenId = this.ldbInfo.tokenID
         const ldbNFTCrowdsaleContract = this.ldbNFTCrowdsaleContract
         window.ldbNFTCrowdsaleContract = ldbNFTCrowdsaleContract
 
@@ -339,7 +366,9 @@ export default {
 
     async sell () {
       try {
-        const tokenId = this.tokenId
+        const authorize = await this.$refs.authorize.checkoutAuthorize()
+        if (!authorize) return
+        const tokenId = this.ldbInfo.tokenID
         const buildingContract = this.buildingContract
         const building = await buildingContract.building(tokenId)
         console.log('building', building)
@@ -348,7 +377,28 @@ export default {
         const { value } = this.ldbInfo.chainSystem
         ldbNFTCrowdsaleContract.newAuction(web3js.toWei(value), tokenId, Math.floor(new Date().getTime() / 1000) + 3600, { from: address })
           .then(ntfCrowdsaleTx => {
-            console.log('ntfCrowdsaleTx', ntfCrowdsaleTx)
+            console.log('sell ntfCrowdsaleTx', ntfCrowdsaleTx)
+            this.ldbInfo.chainSystem.sellStatus = 1
+          })
+        console.log('ldbNFTCrowdsaleContract', ldbNFTCrowdsaleContract)
+      } catch (err) {
+        console.log('err', err)
+      }
+    },
+
+    async unsell () {
+      try {
+        const authorize = await this.$refs.authorize.checkoutAuthorize()
+        if (!authorize) return
+        const tokenId = this.ldbInfo.tokenID
+        const buildingContract = this.buildingContract
+        const building = await buildingContract.building(tokenId)
+        console.log('building', building)
+        const ldbNFTCrowdsaleContract = this.ldbNFTCrowdsaleContract
+        ldbNFTCrowdsaleContract.cancelAution(tokenId)
+          .then(ntfCrowdsaleTx => {
+            console.log('unsell ntfCrowdsaleTx', ntfCrowdsaleTx)
+            this.ldbInfo.chainSystem.sellStatus = 0
           })
         console.log('ldbNFTCrowdsaleContract', ldbNFTCrowdsaleContract)
       } catch (err) {
@@ -365,17 +415,20 @@ export default {
         const buildingContract = this.buildingContract
         console.log('ldbNFTContract', ldbNFTContract, buildingContract)
         const tokenId = (await ldbNFTContract.totalSupply()).toNumber()
-        this.tokenId = tokenId
+        console.log('--- tokenId', tokenId)
+        this.ldbInfo.tokenID = tokenId
+        window.ldbInfo = this.ldbInfo
         ldbNFTContract.mint(address, tokenId)
           .then(ldfTx => {
             console.log('ldfTx', ldfTx)
 
             // 坐标转换为整数
-            console.log('---', this.getFullCoord(lat), this.getFullCoord(lng), tokenId)
+            console.log('---', this.getFullCoord(lat), this.getFullCoord(lng), tokenId, this.ldbInfo)
             // 如果是正式环境，合约不会立即执行完成，需要等待合约结果之后才可以赋值
-            buildingContract.build(tokenId, 12148185700000, 31197048000000, level)
+            buildingContract.build(tokenId, this.getFullCoord(lng, 10), this.getFullCoord(lat, 10), level)
               .then(buildTx => {
                 console.log('buildTx', buildTx)
+                this.ldbInfo.ocs = 2
               })
           })
       } catch (err) {
@@ -541,6 +594,11 @@ export default {
     border-radius: 8px;
     overflow: hidden;
     @include margin('left', 15px, 1);
+    >svg {
+      fill: #fff;
+      width: 56px;
+      height: 56px;
+    }
   }
 
   .ldb-msg {

@@ -82,7 +82,7 @@ export default {
     createMarkers (list, map = this.map) {
       list.map(item => {
         const { _id, name, chainSystem, levelSystem, ldbIcon } = item
-        const coords = [chainSystem.lat, chainSystem.lng]
+        const coords = [chainSystem.lng, chainSystem.lat]
         const imgSrc = ldbIcon.sourceUrl
         const markerDom = this.createMarkerDom({ name, imgSrc, level: levelSystem.level })
         markerDom.addEventListener('click', () => {
