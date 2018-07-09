@@ -1,5 +1,5 @@
 <template>
-  <div :id="container" style="position: relative;width: 100%;height: 100%;"></div>
+  <div :id="container" class="mapbox-main-box" :class="{ 'sm-marker': !isMaxZoom }" style="position: relative;width: 100%;height: 100%;"></div>
 </template>
 
 <script>
@@ -7,6 +7,16 @@ import MapBox from 'mapbox-gl/dist/mapbox-gl.js'
 export default {
   name: 'mapbox',
   props: {
+    markerShowZoom: {
+      type: Number,
+      default: 14
+    },
+    scrollZooms: {
+      type: Array,
+      default: () => {
+        return [10, 14, 16]
+      }
+    },
     container: {
       type: String,
       default: 'ld-map'
@@ -45,10 +55,10 @@ export default {
   data: () => {
     return {
       map: null,
-      mapZoom: 10,
       markers: {},
-      markerShowZoom: 14,
-      lngLat: null
+      lngLat: null,
+      isMaxZoom: false,
+      isMinZoom: false
     }
   },
   methods: {
@@ -72,7 +82,7 @@ export default {
     createMarkers (list, map = this.map) {
       list.map(item => {
         const { _id, name, chainSystem, levelSystem, ldbIcon } = item
-        const coords = [chainSystem.lat, chainSystem.lon]
+        const coords = [chainSystem.lat, chainSystem.lng]
         const imgSrc = ldbIcon.sourceUrl
         const markerDom = this.createMarkerDom({ name, imgSrc, level: levelSystem.level })
         markerDom.addEventListener('click', () => {
@@ -91,14 +101,21 @@ export default {
 
       let startTime = new Date()
       const checkMarker = (delay = 300) => {
-        if (new Date() - startTime < delay) return
+        // 如果map 的 zoom正在变化或者相邻事件执行时间少于300毫秒,return
+        if (new Date() - startTime < delay || map.isZooming()) return
         startTime = new Date()
         this.checkMarkerIsInView()
       }
       this.checkMarkerIsInView()
+
+      // map move 之后，check marker Inview
       this.mapMoveEvent(checkMarker)
+
+      // 每次zoom变化前，remove marker
+      this.mapZoomStartEvent(() => this.checkMarkerIsInView(undefined, true))
+
+      // 每次zoom变化后，check marker Inview
       this.mapZoomEndEvent(this.checkMarkerIsInView)
-      this.mapZoomEvent(checkMarker)
     },
 
     /**
@@ -116,7 +133,7 @@ export default {
       box.className = `marker _marker--ldb-box _marker--level-${level}`
       box.style.width = 'inherit'
       box.style.height = 'inherit'
-      const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}" style="width: 200px;"/><div class="_marker--lord-box"><div class="_marker--lord-cnt"><img data-attr="avatar" src="https://s.gravatar.com/avatar/7680a5a89452076e5ab340bf74a2a786?s=80"/><span>${name}</span></div></div></div>`
+      const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}" style="width: 100%"/><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>800 / 1000</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${600 / 1000 * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
       box.innerHTML = boxHtml
       return box
     },
@@ -131,13 +148,13 @@ export default {
     /**
      * 获取当前鼠标所处位置
      * @param {Obejct} map 地图对象
-     * @returns {Object} Returns LngLonLike 数据
+     * @returns {Object} Returns LngLatLike 数据
      */
     getMouseCenter (delay = 300, map = this.map) {
       let mousemoveEvt = null
       let startTime = new Date()
       const func = (e) => {
-        // 去抖限制, 因为 mapbox 监听事件不能使用 _.debounce
+        // 去抖限制, mapbox 监听事件不能使用 _.debounce
         if (new Date() - startTime < delay) return
         startTime = new Date()
         this.lngLat = e.lngLat
@@ -169,6 +186,7 @@ export default {
       })
       map.scrollZoom.disable()
       map.touchZoomRotate.disable()
+      map.doubleClickZoom.disable()
       this.map = map
 
       map.on('load', () => {
@@ -178,6 +196,8 @@ export default {
         this.getMouseCenter()
 
         this.mapWheel(map)
+
+        this.checkMapZoom(map)
 
         this.$emit('load')
       })
@@ -202,6 +222,7 @@ export default {
     mapZoomEndEvent (cb, map = this.map) {
       let zoomEndEvent = null
       const func = () => {
+        this.checkMapZoom(map)
         if (cb) cb()
       }
       if (zoomEndEvent) return
@@ -237,28 +258,68 @@ export default {
      */
     mapWheel (map = this.map) {
       let bool = false
-      let myIndex = 0
-      let zooms = [10, 14, 15]
       // let center
       const wheelFunc = (e) => {
         if (bool) return
         if (e.originalEvent.deltaY < 5 && e.originalEvent.deltaY > -5) return
 
-        // deltaY 大于0，代表向下滚动,zoom 放大，反之缩小
-        if (e.originalEvent.deltaY >= 5) --myIndex
-        else if (e.originalEvent.deltaY <= -5) ++myIndex
-
-        // 如果 myIndex 不在规定范围，重置其属性并return
-        if (myIndex < 0 || myIndex > zooms.length - 1) {
-          myIndex = myIndex < 0 ? 0 : zooms.length - 1
-          return
-        }
         bool = true
-        this.flyToCoords({ zoom: zooms[myIndex] }, () => {
-          bool = false
-        })
+        // deltaY 大于0，代表向下滚动,zoom 放大，反之缩小
+        if (e.originalEvent.deltaY >= 5) {
+          this.plusMapZoom(this.lngLat, map, () => {
+            bool = false
+          })
+        } else if (e.originalEvent.deltaY <= -5) {
+          this.minusMapZoom(this.lngLat, map, () => {
+            bool = false
+          })
+        }
       }
       map.on('wheel', wheelFunc)
+    },
+
+    /**
+     * 根据 scrollZooms 放大地图 zoom
+     */
+    plusMapZoom (center, map = this.map, cb) {
+      const zooms = this.scrollZooms
+      if (!zooms || !zooms.length) return
+      const currentZoom = map.getZoom()
+      let currentIndex = zooms.indexOf(currentZoom)
+
+      // 如果当前zoom是最后一级，return
+      if (currentIndex === zooms.length - 1) {
+        if (cb) cb()
+        return
+      }
+
+      // 如果没找到当前zoom，currentIndex 重置为倒数第二级
+      if (currentIndex === -1) currentIndex = zooms.length - 2
+      this.flyToCoords({ center, zoom: zooms[currentIndex + 1] }, () => {
+        if (cb) cb()
+      })
+    },
+
+    /**
+     * 根据 scrollZooms 缩小地图 zoom
+     */
+    minusMapZoom (center, map = this.map, cb) {
+      const zooms = this.scrollZooms
+      if (!zooms || !zooms.length) return
+      const currentZoom = map.getZoom()
+      let currentIndex = zooms.indexOf(currentZoom)
+
+      // 如果当前zoom是第一级，return
+      if (currentIndex === 0) {
+        if (cb) cb()
+        return
+      }
+
+      // 如果没找到当前zoom，currentIndex 重置为第二级
+      if (currentIndex === -1) currentIndex = 1
+      this.flyToCoords({ center, zoom: zooms[currentIndex - 1] }, () => {
+        if (cb) cb()
+      })
     },
 
     /**
@@ -267,7 +328,11 @@ export default {
      * @param {Function} cb 动画执行完毕的回调
      * @param {Map} map 地图实例，默认为当前实例
      */
-    flyToCoords ({ center = this.lngLat, zoom = 14, duration = 1000 } = {}, cb, map = this.map) {
+    flyToCoords ({ center = this.map.getCenter(), zoom = 14, duration = 1000 } = {}, cb, map = this.map) {
+      if (map.isZooming()) {
+        if (cb) cb()
+        return
+      }
       map.flyTo({
         center,
         zoom,
@@ -280,17 +345,36 @@ export default {
     },
 
     /**
+     * check map current zoom is maxZoom or minZoom
+     */
+    checkMapZoom (map = this.map) {
+      if (!this.mapControl) this.mapControl = true
+      const maxZoom = map.getMaxZoom()
+      const minZoom = map.getMinZoom()
+      const currentZoom = map.getZoom()
+      const srollZooms = this.scrollZooms
+      if (currentZoom === maxZoom || currentZoom === srollZooms[srollZooms.length - 1]) {
+        this.isMaxZoom = true
+      } else if (currentZoom === minZoom || currentZoom === srollZooms[0]) {
+        this.isMinZoom = true
+      } else {
+        this.isMaxZoom = false
+        this.isMinZoom = false
+      }
+    },
+
+    /**
      * check marker is inView
      * @param {Object} map map instence
      */
-    checkMarkerIsInView (map = this.map) {
+    checkMarkerIsInView (map = this.map, remove = false) {
       const bounds = map.getBounds()
       const markers = this.markers
-      const mapZoom = map.getZoom()
+      const mapZoom = Math.round(map.getZoom())
       const markerShowZoom = this.markerShowZoom
       console.time('check marker')
       for (const mk in markers) {
-        if (this.inBounds(markers[mk].getLngLat(), bounds) && mapZoom >= markerShowZoom) markers[mk].addTo(map)
+        if (this.inBounds(markers[mk].getLngLat(), bounds) && mapZoom >= markerShowZoom && !remove) markers[mk].addTo(map)
         else markers[mk].remove()
       }
       console.timeEnd('check marker')
@@ -301,44 +385,95 @@ export default {
       var lat = (point.lat - bounds._ne.lat) * (point.lat - bounds._sw.lat) <= 0
       return lng && lat
     }
-  },
-  mounted () {
-    this.$nextTick(() => this.init())
   }
 }
 </script>
 
 <style lang="scss">
+
+  .mapbox-main-box {
+    &.sm-marker {
+      ._marker--ldb-container, .info-progress-main {
+        width: 100px;
+      }
+      ._marker--info-top {
+        margin-bottom: 0;
+        height: 0;
+        opacity: 0;
+        visibility: hidden;
+        transition: height .35s ease, opacity .35s ease 0s, visibility 0s .35s;
+      }
+      ._marker--info-bottom {
+        height: 6px;
+      }
+    }
+  }
+
+  @mixin progress-gradient-bg($start: #FFBB17, $end: #FFED38, $duration: to right) {
+    .info-progress-main {
+      background-image: linear-gradient($duration, $start, $end);
+    }
+  }
+  ._marker--ldb-box {
+    &._marker--level-1 {
+      @include progress-gradient-bg();
+    }
+    &._marker--level-2 {
+      @include progress-gradient-bg();
+    }
+    &._marker--level-3 {
+      @include progress-gradient-bg();
+    }
+    &._marker--level-4 {
+      @include progress-gradient-bg();
+    }
+    &._marker--level-5 {
+      @include progress-gradient-bg();
+    }
+  }
+
   ._marker--ldb-container {
+    width: 150px;
+    line-height: 1;
     // height: 100%;
     // transform-origin: center;
     // transform: scale(.5);
-    // transition: transform linear .15s;
+    transition: width .35s ease-in-out;
   }
 
-  ._marker--lord-box {
-    display: none;
-    height: 35px;
+  ._marker--info-box {
+    color: #fff;
     overflow: hidden;
   }
-  ._marker--lord-cnt {
-    // height: 100%;
-    // opacity: 0;
-    // transform: translateY(-100%);
-    // transition: all ease-in .15s;
-    >img {
-      display: inline-block;
-      vertical-align: middle;
-      width: 200px;
-      border-radius: 100%;
-    }
-    >span {
-      display: inline-block;
-      vertical-align: middle;
-      color: #fff;
-      font-weight: bold;
-      // @include margin('left', 10px, 1);
-      // @include fontSize(16px, 1);
-    }
+  ._marker--info-container {
+    margin-top: 10px;
+  }
+  ._marker--info-top {
+    margin-bottom: 8px;
+    font-size: 18px;
+    height: 22px;
+    transition: height .35s ease, opacity .15s ease .15s, visibility 0s 0s;
+  }
+
+  ._marker--info-bottom {
+    height: 15px;
+    border-radius: 10px;
+    background-color: #fff;
+    overflow: hidden;
+    transition: height .35s ease-in-out;
+  }
+  ._marker--info-progress {
+    position: relative;
+    height: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .info-progress-main {
+    width: 150px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    transition: width .35s ease-in-out;
   }
 </style>

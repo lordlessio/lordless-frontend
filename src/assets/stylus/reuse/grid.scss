@@ -257,6 +257,10 @@
 .color-pink {
   color: $--color-btn-pink;
 }
+.color-secondary {
+  color: $--secondary-color;
+  fill: $--secondary-color;
+}
 
 @media screen and (min-width: 769px) {
   @include layout-vars('md-');

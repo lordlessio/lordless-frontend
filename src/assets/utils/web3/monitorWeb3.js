@@ -45,8 +45,17 @@ export const monitorWeb3 = () => {
       store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { coinbase: newCoinbase.toString(), address: newCoinbase.toString() })
       store.dispatch(`user/${actionTypes.USER_LOGOUT}`)
 
-      // 如果 newCoinbase 存在，则证明是切换账号，或重新登陆，重新获取用户信息
-      if (newCoinbase) store.dispatch(`user/${actionTypes.USER_SET_USER_BY_TOKEN}`)
+      // 如果 newCoinbase 存在，则证明是切换账号，或重新登陆
+      if (newCoinbase) {
+        // 重新获取用户信息
+        store.dispatch(`user/${actionTypes.USER_SET_USER_BY_TOKEN}`)
+
+        // 重新初始化合约
+        store.dispatch(`contract/${actionTypes.CONTRACT_INIT_INSTANCE}`)
+      } else {
+        // 如果退出登陆，重置合约
+        store.dispatch(`contract/${actionTypes.CONTRACT_RESET_INSTANCE}`)
+      }
     }
 
     // 如果流程完成，但是 error 还存在，清除 error

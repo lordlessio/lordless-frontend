@@ -10,8 +10,8 @@
           <el-row justify="end" align="bottom">
             <el-col :md="12" :sm="24">
               <h1 class="ldb-name">
-                <span>{{ ldbInfo.name.split(',')[0] }}</span>
-                <span class="ldb-category" v-for="(category, index) of ldbInfo.category.split(',')" :key="index">{{ category }}</span>
+                <span>{{ ldbInfo.name.zh }}</span>
+                <span class="ldb-category" v-for="(category, index) of ldbInfo.mapbox.category.split(',')" :key="index">{{ category }}</span>
               </h1>
             </el-col>
             <el-col :md="12" :sm="24">
@@ -34,7 +34,7 @@
               <span>
                 <i class="el-icon-location-outline"></i>
               </span>
-              <span class="inline-block ldb-location">{{ `${ldbInfo.chainSystem.lat},${ldbInfo.chainSystem.lon}` }}</span>
+              <span class="inline-block ldb-location">{{ `${ldbInfo.chainSystem.lat},${ldbInfo.chainSystem.lng}` }}</span>
               <span>·</span>
               <span class="inline-block">{{ ldbInfo.address }}</span>
               <!-- <span class="inline-block ldb-address">{{ ldbInfo.address }}</span> -->
@@ -44,7 +44,7 @@
             </p> -->
           </div>
         </div>
-        <div class="cnt-item ldb-desc">{{ ldbInfo.desc_zh }}</div>
+        <div class="cnt-item ldb-desc">{{ ldbInfo.desc.zh }}</div>
         <div class="cnt-item cnt-features">
           <div class="d-flex sm-col-flex features-container">
             <div class="d-inline-flex md-col-flex sm-row-flex sm-f-align-center features-price features-item">
@@ -61,7 +61,9 @@
               </div>
             </div>
             <div class="v-flex md-text-right sm-text-left features-btn features-item">
-              <my-button theme="buy">Sign to Buy</my-button>
+              <my-button theme="default" @click="pushChain">push chain</my-button>
+              <my-button theme="info" @click="sell">Sell</my-button>
+              <my-button theme="buy" @click="buy">Sign to Buy</my-button>
             </div>
           </div>
         </div>
@@ -224,6 +226,7 @@ import LdLoading from '@/components/stories/loading'
 import { getLdbById } from 'api'
 import { objectType, splitAddress } from 'utils/tool'
 import { mapState } from 'vuex'
+// import lordContract from '@/contract'
 export default {
   props: {
 
@@ -248,21 +251,28 @@ export default {
       loading: false,
       // ldb 建筑信息
       ldbInfo: {
-        name: '',
+        name: {},
+        desc: {},
+        origin: {},
         userId: {},
         chainSystem: {},
         levelSystem: {},
-        ldbIcon: {},
-        category: ''
+        ldbIcon: {}
       },
       // 错误信息
-      errorMsg: null
+      errorMsg: null,
+      tokenId: null
     }
   },
   computed: {
-    ...mapState('user', {
-      userInfo: 'userInfo'
-    })
+    ...mapState('user', [
+      'userInfo'
+    ]),
+    ...mapState('contract', [
+      'ldbNFTContract',
+      'buildingContract',
+      'ldbNFTCrowdsaleContract'
+    ])
   },
   components: {
     ImgBox,
@@ -287,7 +297,7 @@ export default {
     async getLdbInfo (id) {
       this.loading = true
       const res = await getLdbById({ id, pula: 'ldbIcon' })
-      if (res.code === 1000) this.ldbInfo = res.data
+      if (res.code === 1000) this.ldbInfo = Object.assign({}, this.ldbInfo, res.data)
       else this.errorMsg = res.errorMsg || '未知错误'
       this.loading = false
     },
@@ -301,6 +311,86 @@ export default {
     // 初始化组件
     init () {
       this.getLdbInfo(this.ldbId)
+    },
+
+    async buy () {
+      try {
+        const tokenId = this.tokenId
+        const ldbNFTCrowdsaleContract = this.ldbNFTCrowdsaleContract
+        window.ldbNFTCrowdsaleContract = ldbNFTCrowdsaleContract
+
+        // 根据 tokenID 获取建筑链上信息
+        const ldb = await ldbNFTCrowdsaleContract.getAuction(tokenId)
+        const { address } = this.$root.$children[0].web3Opt
+        console.log('ldb', address, ldb[1].toNumber(), address, tokenId)
+
+        // 根据链上信息购买建筑
+        ldbNFTCrowdsaleContract.payByEth(tokenId, {
+          from: address,
+          value: ldb[1]
+        })
+          .then(crowdsaleTx => {
+            console.log('crowdsaleTx', crowdsaleTx)
+          })
+      } catch (err) {
+        console.log('err', err)
+      }
+    },
+
+    async sell () {
+      try {
+        const tokenId = this.tokenId
+        const buildingContract = this.buildingContract
+        const building = await buildingContract.building(tokenId)
+        console.log('building', building)
+        const ldbNFTCrowdsaleContract = this.ldbNFTCrowdsaleContract
+        const { address, web3js } = this.$root.$children[0].web3Opt
+        const { value } = this.ldbInfo.chainSystem
+        ldbNFTCrowdsaleContract.newAuction(web3js.toWei(value), tokenId, Math.floor(new Date().getTime() / 1000) + 3600, { from: address })
+          .then(ntfCrowdsaleTx => {
+            console.log('ntfCrowdsaleTx', ntfCrowdsaleTx)
+          })
+        console.log('ldbNFTCrowdsaleContract', ldbNFTCrowdsaleContract)
+      } catch (err) {
+        console.log('err', err)
+      }
+    },
+
+    async pushChain () {
+      try {
+        const { address } = this.$root.$children[0].web3Opt
+        const { lat, lng } = this.ldbInfo.chainSystem
+        const { level } = this.ldbInfo.levelSystem
+        const ldbNFTContract = this.ldbNFTContract
+        const buildingContract = this.buildingContract
+        console.log('ldbNFTContract', ldbNFTContract, buildingContract)
+        const tokenId = (await ldbNFTContract.totalSupply()).toNumber()
+        this.tokenId = tokenId
+        ldbNFTContract.mint(address, tokenId)
+          .then(ldfTx => {
+            console.log('ldfTx', ldfTx)
+
+            // 坐标转换为整数
+            console.log('---', this.getFullCoord(lat), this.getFullCoord(lng), tokenId)
+            // 如果是正式环境，合约不会立即执行完成，需要等待合约结果之后才可以赋值
+            buildingContract.build(tokenId, 12148185700000, 31197048000000, level)
+              .then(buildTx => {
+                console.log('buildTx', buildTx)
+              })
+          })
+      } catch (err) {
+        console.log('err', err)
+      }
+    },
+
+    /**
+     * 传入小数，返回对应位数的字符串小数
+     */
+    getFullCoord (coord, bit = 14) {
+      // 直接 toFixed 会造成小数改变,所以需要分解之后
+      let [ int, decimal ] = coord.toString().split('.')
+      decimal = parseFloat(`0.${decimal}`).toFixed(bit).slice(2)
+      return parseInt(int + decimal)
     }
   },
   watch: {

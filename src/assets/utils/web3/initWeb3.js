@@ -9,6 +9,9 @@ export const initWeb3 = async (callback) => {
   // 注册 web3 状态
   await store.dispatch(`web3/${actionTypes.WEB3_SET_WEB3_INFO}`, res)
 
+  // 注册合约
+  store.dispatch(`contract/${actionTypes.CONTRACT_INIT_INSTANCE}`)
+
   if (res.error) return callback ? callback(res) : res
 
   // 获取本地用户
@@ -40,7 +43,7 @@ const checkWeb3 = async () => {
     res.address = web3js.eth.defaultAccount
 
     // 测试使用
-    // window.web3js = web3js
+    window.web3js = web3js
   } else {
     res.error = 'Unable to connect to Web3'
     return res

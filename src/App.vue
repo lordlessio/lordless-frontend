@@ -2,11 +2,11 @@
   <div id="app">
     <Header :options="headerOpt"/>
     <div class="ld-main" :class="[{ 'no-header': !headerOpt.show || (headerOpt.show && headerOpt.scroll) }, { 'no-footer': !footerOpt.show }]">
-      <router-view/>
       <div class="d-flex col-flex f-auto-center ld-error" v-if="web3Opt.error">
         <h1>出错啦！</h1>
         <p>{{ web3Opt.error }}</p>
       </div>
+      <router-view/>
       <Relogin :address="web3Opt.address" :expired="userExpired"></Relogin>
     </div>
     <Footer :options="footerOpt"/>
@@ -19,12 +19,6 @@ import Footer from '@/components/layout/footer'
 import Relogin from '@/components/reuse/relogin'
 import { initWeb3 } from '@/assets/utils/web3/initWeb3'
 import { mapState } from 'vuex'
-import { erc20Token } from '@/api/service/contract.js'
-if (erc20Token && erc20Token()) {
-  erc20Token().then(ins => {
-    ins.balanceOf('0x4cD98f82DeCaDe2d152E256efd1f8d5a334a3E28').then(console.log)
-  })
-}
 export default {
   name: 'App',
   async created () {

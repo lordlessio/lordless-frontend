@@ -3,6 +3,7 @@
     <div class="auto-complete-container">
       <div class="complete-input">
         <el-autocomplete
+          ref="ld_autocomplete"
           v-model="searchText"
           popper-class="lordless-autocomplete hide-arrow redius-bottom"
           :fetch-suggestions="handleSearch"
@@ -11,7 +12,8 @@
           @blur="inputBlur"
           @focus="inputFocus">
           <i
-            class="el-icon-search el-input__icon"
+            class="el-input__icon ld-auto-icon color-secondary"
+            :class="`el-icon-${searchText ? 'close' : 'search'}`"
             slot="suffix"
             @click="iconClick">
           </i>
@@ -24,7 +26,7 @@
             <div class="popper-trending" v-if="false">
               <div class="d-flex popper-record-icon">
                 <span>
-                  <i :class="`el-icon-${item._id ? 'location' : 'location-outline'}`"></i>
+                  <i :class="`el-icon-${item._id ? 'location' : 'location-outline'} color-secondary`"></i>
                 </span>
               </div>
               <div class="popper-record-text">
@@ -33,10 +35,10 @@
             </div>
             <div class="d-flex popper-record" :class="item._id ? '' : 'theme-gray'" v-if="true">
               <div class="d-inline-flex f-auto-center popper-record-icon">
-                <i :class="`el-icon-${item._id ? (item.history ? 'time' : 'location') : 'location-outline'}`"></i>
+                <i :class="`el-icon-${item._id ? (item.history ? 'time' : 'location') : 'location-outline'} color-secondary`"></i>
               </div>
               <div class="v-flex popper-record-text">
-                <span class="d-inline-block record-name">{{ item.name.split(',')[0] }}</span>
+                <span class="d-inline-block record-name">{{ item.name.zh.split(',')[0] }}</span>
                 <span class="d-inline-block record-area">{{ item.area }}</span>
               </div>
             </div>
@@ -83,6 +85,8 @@ export default {
     },
 
     iconClick () {
+      if (this.searchText) this.searchText = ''
+      else this.$refs.ld_autocomplete.focus()
       this.$emit('iconClick')
     }
   }
@@ -122,11 +126,14 @@ export default {
       }
     }
   }
+  .ld-auto-icon {
+    cursor: pointer;
+  }
   .complete-icon {
     margin-left: 5px;
     width: 40px;
     height: 40px;
-    background-color: #111;
+    background-color: #776AFF;
     border-radius: 5px;
     >svg {
       fill: #fff;
