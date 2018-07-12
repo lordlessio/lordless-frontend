@@ -292,7 +292,10 @@ export default {
           category: ''
         },
         userId: {},
-        chainSystem: {},
+        chainSystem: {
+          lng: '',
+          lat: ''
+        },
         levelSystem: {},
         ldbIcon: {},
         user: {}
