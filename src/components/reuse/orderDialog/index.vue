@@ -15,10 +15,10 @@
         <div class="order-header-icon">
           <img-box sType="height" src="/static/img/test/congratulation.png"></img-box>
         </div>
-        <h1 class="color-main">Congratulations</h1>
+        <h1 class="color-main TTNormsBold">Congratulations</h1>
       </div>
       <div class="order-markline text-center">
-        <span class="inline-block">You've got</span>
+        <span class="inline-block TTNormsBold">You've got</span>
       </div>
       <div class="d-flex row-flex order-container">
         <div class="order-cnt-left">
@@ -28,8 +28,8 @@
         </div>
         <div class="v-flex d-flex col-flex order-cnt-right">
           <div class="d-flex col-flex order-ldb-info">
-            <p class="d-flex f-align-center">
-              <span class="inline-block">
+            <p class="d-flex f-align-baseline">
+              <span class="inline-block line-height-1">
                 <svg class="order-crown-svg">
                   <use :xlink:href="`#icon-crown-l${ldbInfo.levelSystem.level}`"/>
                 </svg>
@@ -57,7 +57,7 @@
         </div>
       </div>
       <div class="d-flex f-align-center f-justify-center order-footer">
-        <ld-button theme="pink-gray" class="d-flex f-align-center order-share-btn">
+        <ld-button theme="pink-gray" class="d-flex f-align-center order-share-btn TTNormsBold">
           <span>SHARE</span>
           <span class="mar-l1 line-height-0">
             <svg>
@@ -181,7 +181,7 @@ export default {
     @include margin('bottom', 60px, 1);
     >span {
       font-weight: 500;
-      color: #606060;
+      color: #909090;
       background-color: #fff;
       transform: translateY(-50%);
       @include padding-around(0, 15px, 0, 15px, 1);
@@ -204,9 +204,10 @@ export default {
     position: relative;
     border-radius: 100%;
     // overflow: hidden;
-    box-shadow: 5px 6px 15px 0px rgba(33, 33, 33, .3);
-    @include padding('top', 120px, 1.5);
-    @include width(120px, 1.5);
+    box-shadow: 5px 6px 20px 0px rgba(33, 33, 33, .2);
+    background-color: #f5f5f5;
+    @include padding('top', 100px, 1.5);
+    @include width(100px, 1.5);
   }
   .order-poster {
     position: absolute;
@@ -218,8 +219,8 @@ export default {
     @include padding(-1, 10px, 1.5);
   }
   .order-crown-svg {
-    @include width(30px, 1);
-    @include height(30px, 1);
+    @include width(25px, 1);
+    @include height(18px, 1);
   }
   .order-ldb-name {
     @include margin('left', 10px, 1);
@@ -237,8 +238,8 @@ export default {
     @include fontSize(22px, 1);
   }
   .order-tx-img {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     @include margin('right', 10px, 1);
   }
   .order-reward-symbol {
@@ -253,7 +254,6 @@ export default {
     @include margin('top', 35px, 1);
   }
   .order-share-btn {
-    font-weight: 500;
     border-radius: 100px;
     @include padding-around(10px, 23px, 10px, 23px, 1);
     svg {

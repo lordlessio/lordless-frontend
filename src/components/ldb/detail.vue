@@ -536,7 +536,7 @@ export default {
     /**
      * 传入小数，返回对应位数的字符串小数
      */
-    getFullCoord (coord, bit = 14) {
+    getFullCoord (coord = '', bit = 14) {
       // 直接 toFixed 会造成小数改变,所以需要分解之后
       let [ int, decimal ] = coord.toString().split('.')
       decimal = parseFloat(`0.${decimal}`).toFixed(bit).slice(2)
