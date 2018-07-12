@@ -41,7 +41,7 @@
               <span>
                 <i class="el-icon-location-outline"></i>
               </span>
-              <span class="inline-block ldb-location">{{ `${ldbInfo.chainSystem.lat},${ldbInfo.chainSystem.lng}` }}</span>
+              <span class="inline-block ldb-location">{{ `${ldbInfo.chainSystem.lng.toString().slice(0, 10)},  ${ldbInfo.chainSystem.lat.toString().slice(0, 9)}` }}</span>
               <!-- <span class="inline-block"> · {{ ldbInfo.address }}</span> -->
               <!-- <span class="inline-block ldb-address">{{ ldbInfo.address }}</span> -->
             </p>
@@ -74,7 +74,7 @@
                   <input class="lordless-input" v-model="sellModel" placeholder="ETH"/>
                 </div> -->
               </div>
-              <ld-button theme="info" :disabled="contractLoading" shadow contract @click="unsell" v-if="showUnSell">Un Sell</ld-button>
+              <!-- <ld-button theme="info" :disabled="contractLoading" shadow contract @click="unsell" v-if="showUnSell">Un Sell</ld-button> -->
               <ld-button theme="purple" :disabled="contractLoading" shadow contract @click="buy" v-if="showBuy"><span v-if="!userInfo.address">Sign to {{ this.isOwner ? 'Sell' : 'Buy' }}</span><span v-if="userInfo.address">Buy</span></ld-button>
             </div>
           </div>
