@@ -23,23 +23,35 @@
             </svg>
           </div>
           <template slot-scope="{ item }">
-            <div class="popper-trending" v-if="false">
-              <div class="d-flex popper-record-icon">
-                <span>
-                  <i :class="`el-icon-${item._id ? 'location' : 'location-outline'} color-secondary`"></i>
-                </span>
-              </div>
-              <div class="popper-record-text">
-                <span>{{ item.name }}</span>
+            <div class="d-flex f-align-center popper-trending" v-if="item.trending">
+              <div class="v-flex d-flex col-flex popper-trending-item"
+                v-for="(trend, index) of item.list"
+                :key="index">
+                <div class="popper-trending-container">
+                  <div class="popper-trending-poster">
+                    <img-box
+                      type="span"
+                      absolute
+                      :src="trend.ldbIcon.sourceUrl"></img-box>
+                  </div>
+                  <div class="d-flex f-align-center popper-trending-text">
+                    <span>
+                      <svg class="popper-trending-svg">
+                        <use xlink:href="/static/svg/icon.svg#icon-hot"/>
+                      </svg>
+                    </span>
+                    <span class="popper-trending-name">{{ trend.name.zh }}</span>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="d-flex popper-record" :class="item._id ? '' : 'theme-gray'" v-if="true">
+            <div class="d-flex popper-record" :class="item._id ? '' : 'theme-gray'" v-if="!item.trending">
               <div class="d-inline-flex f-auto-center popper-record-icon">
                 <i :class="`el-icon-${item._id ? (item.history ? 'time' : 'location') : 'location-outline'} color-secondary`"></i>
               </div>
               <div class="v-flex popper-record-text">
-                <span class="d-inline-block record-name">{{ item.name.zh.split(',')[0] }}</span>
-                <span class="d-inline-block record-area">{{ item.area }}</span>
+                <span class="d-inline-block record-name">{{ item.name.zh }}</span>
+                <span class="d-inline-block record-area">{{ item.address }}</span>
               </div>
             </div>
           </template>
@@ -53,12 +65,20 @@
 </template>
 
 <script>
+import ImgBox from '@/components/stories/image'
 export default {
   props: {
 
     placeholder: {
       type: String,
       default: 'Search Somthing'
+    },
+
+    trendings: {
+      type: Array,
+      default: () => {
+        return []
+      }
     }
   },
   data: () => {
@@ -66,6 +86,14 @@ export default {
       searchText: '',
       isSelect: false
     }
+  },
+  computed: {
+    trendingLdbs () {
+      return this.trendings.slice(0, 3)
+    }
+  },
+  components: {
+    ImgBox
   },
   methods: {
     inputBlur () {
@@ -144,7 +172,35 @@ export default {
 
   // popper-trending
   .popper-trending {
-    padding-bottom: 1px dashed #aaa;
+    border-bottom: 1px solid #eee;
+  }
+  .popper-trending-container {
+    padding: 0 10px 10px;
+  }
+  .popper-trending-poster {
+    margin-bottom: 10px;
+    position: relative;
+    width: 100%;
+    padding-top: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .popper-trending-text {
+    font-size: 14px;
+    max-width: 96px;
+    overflow: hidden;
+  }
+  .popper-trending-svg {
+    margin-right: 6px;
+    width: 16px;
+    height: 16px;
+    fill: #FAD054;
+  }
+  .popper-trending-name {
+    display: inline-block;
+    width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   // popper-record

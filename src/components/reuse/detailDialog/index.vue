@@ -12,7 +12,12 @@
       <span @click.stop="ldbDialog = false" class="inline-block dialog-ldb-close">
         <i class="el-icon-close"></i>
       </span>
-      <ldb-detail ref="ldbDetail" dialog :theme="theme" :ldbId="ldbId"></ldb-detail>
+      <ldb-detail
+        ref="ldbDetail"
+        dialog
+        :theme="theme"
+        :ldbId="ldbId"
+        @initInfo="initDetailInfo"></ldb-detail>
     </div>
   </el-dialog>
 </template>
@@ -24,7 +29,7 @@ export default {
     ldbId: String,
     theme: {
       type: String,
-      default: 'default'
+      default: 'light'
     },
     top: {
       type: String,
@@ -57,6 +62,16 @@ export default {
      */
     dialogClose () {
       this.$emit('close')
+    },
+
+    initDetailInfo () {
+      const detail = this.$refs.ldbDetail
+      if (detail) detail.checkOwner()
+    }
+  },
+  watch: {
+    ldbDialog (val) {
+      if (val && this.$refs.ldbDetail) this.$refs.ldbDetail.checkOwner()
     }
   }
 }

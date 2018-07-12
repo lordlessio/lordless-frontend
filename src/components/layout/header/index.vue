@@ -1,5 +1,5 @@
 <template>
-  <header id="ld-header" class="ld-header" :class="[{ 'fixed': options.fixed }, { 'inverse': !options.scroll }, theme]" v-if="options.show">
+  <header id="ld-header" class="ld-header" :class="[{ 'fixed': options.fixed }, { 'inverse': !options.scroll }, { 'transparent': options.transparent }, theme]" v-if="options.show">
     <div class="container d-flex">
       <div class="text-left inline-block header-logo">
         <router-link to="/" class="inline-block">
@@ -22,6 +22,11 @@
           </router-link>
         </span>
         <span class="inline-block header-right-item" data-type="link">
+          <router-link to="/mapbox">
+            Map
+          </router-link>
+        </span>
+        <span class="inline-block header-right-item" data-type="link">
           <router-link to="/">
             Marketplace
           </router-link>
@@ -31,8 +36,8 @@
             FAQs
           </router-link>
         </span>
-        <span class="inline-block header-right-item" data-type="link">
-          <user-avatar class="user-avatar"></user-avatar>
+        <span class="inline-block header-right-item user-item" data-type="link">
+          <user-avatar class="user-avatar" :header="true"></user-avatar>
         </span>
       </div>
     </div>
@@ -104,13 +109,13 @@ export default {
     // overflow: hidden;
     z-index: 9;
     transition: all .3s ease;
+    background-color: #4D33A7;
     &.fixed {
       position: fixed;
       top: 0;
       left: 0;
     }
     &.default {
-      background-color: transparent;
       color: #fff;
       fill: #fff;
     }
@@ -118,6 +123,9 @@ export default {
       background-color: #0E0F16;
       color: #fff;
       fill: #fff;
+    }
+    &.transparent {
+      background-color: transparent;
     }
     &.inverse {
       background-color: #4D33A7;
@@ -208,10 +216,12 @@ export default {
       text-decoration: none;
       @include fontSize(20px, 1);
     }
-  }
-  .user-avatar {
-    display: inline-block;
-    transform: translateY(30%);
+    &.user-item {
+      height: 100%;
+      .user-avatar {
+        height: 48px;
+      }
+    }
   }
 
   .header-mask {

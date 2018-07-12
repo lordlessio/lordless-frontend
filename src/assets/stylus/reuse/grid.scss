@@ -14,6 +14,9 @@
   .#{$media}f-align-start {
     align-items: flex-start;
   }
+  .#{$media}f-align-baseline {
+    align-items: baseline;
+  }
   .#{$media}f-align-center {
     align-items: center;
   }
@@ -205,6 +208,24 @@
   .#{$media}pad-b5 {
     padding-bottom: $size * 25px;
   }
+
+  // input
+  .#{$media}lordless-input {
+    display: inline-block;
+    padding: 0 15px;
+    width: 100%;
+    color: #606266;
+    font-size: inherit;
+    height: inherit;
+    line-height: inherit;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #fff;
+    outline: none;
+    -webkit-appearance: none;
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+  }
 }
 // @include tool-vars();
 
@@ -237,6 +258,21 @@
   .#{$media}line-height-0 {
     line-height: 0;
   }
+  .#{$media}font-bold {
+    font-weight: bold;
+  }
+  .#{$media}font-bolder {
+    font-weight: bolder;
+  }
+  .#{$media}TTNormsBold {
+    font-family: 'TTNormsBold';
+  }
+  .#{$media}TTNormsRegular {
+    font-family: 'TTNormsRegular';
+  }
+  .#{$media}TTNormsBlack {
+    font-family: 'TTNormsBlack';
+  }
 }
 
 @include text-vars();
@@ -263,6 +299,12 @@
 .color-secondary {
   color: $--secondary-color;
   fill: $--secondary-color;
+}
+.text-color-main {
+  color: $--text-main-color;
+}
+.text-color-secondary {
+  color: $--text-secondary-color;
 }
 
 @media screen and (min-width: 769px) {

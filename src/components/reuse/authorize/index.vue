@@ -8,7 +8,7 @@
     :show-close="false">
     <div class="authorize-box">
       <div class="d-flex authorize-container">
-        <span @click.stop="ldbDialog = false" class="inline-block authorize-close">
+        <span @click.stop="authorizeDialog = false" class="inline-block authorize-close">
           <i class="el-icon-close"></i>
         </span>
         <div>
@@ -77,7 +77,9 @@ export default {
     async checkoutAuthorize () {
       if (!this.address) return false
       const ldbNFTContract = this.ldbNFTContract
-      const isApproved = await ldbNFTContract.isApprovedForAll(this.address, ldbNFTContract.address)
+      const ldbNFTCrowdsaleContract = this.ldbNFTCrowdsaleContract
+      const isApproved = await ldbNFTContract.isApprovedForAll(this.address, ldbNFTCrowdsaleContract.address)
+      console.log('authorize isApproved', isApproved)
       if (!isApproved) this.authorizeDialog = true
       else this.authorizeDialog = false
       this.isApproved = isApproved
@@ -86,12 +88,17 @@ export default {
     },
     authorizeFunc (cb) {
       const isApproved = this.isApproved
-      const address = this.address
       const ldbNFTContract = this.ldbNFTContract
+      const ldbNFTCrowdsaleContract = this.ldbNFTCrowdsaleContract
       if (!isApproved) {
-        ldbNFTContract.setApprovalForAll(ldbNFTContract.address, address).then(d => {
-          cb()
-        })
+        ldbNFTContract.setApprovalForAll(ldbNFTCrowdsaleContract.address, true)
+          .then(d => {
+            cb()
+            this.$emit('success', d)
+          })
+          .catch(err => {
+            this.$emit('error', err)
+          })
       }
     }
   }
@@ -113,6 +120,7 @@ export default {
     top: 15px;
     right: 15px;
     font-size: 30px;
+    cursor: pointer;
   }
   .authorize-cnt-box {
     margin-left: 20px;

@@ -13,6 +13,9 @@
   @if $theme == 'light' {
     background-color: #f4f4f4;
   }
+  @if $theme == 'white' {
+    background-color: #fff;
+  }
   @if $theme == 'dark' {
     color: #E6E8EC;
     background-color: #101010;

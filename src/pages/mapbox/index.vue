@@ -12,18 +12,19 @@
         @handleSelect="handleSelect">
       </AutoComplete>
     </div>
-    <div class="lbs-tx-box">
+    <div class="lbs-tx-box font-bold">
       <TxCarousel
         ref="txCarousel"
         :direction="-1"
         @logoEvt="$router.push('/market')"></TxCarousel>
     </div>
-    <div class="lbs-user-box">
-      <Blockies
+    <div class="lbs-user-box" :class="{ 'shadow': userInfo.address }">
+      <user-avatar :scale="9"></user-avatar>
+      <!-- <Blockies
         radius="6px"
         :seed="userInfo.address"
         :scale="9"
-        @click.native="$router.push('/login')"></Blockies>
+        @click.native="$router.push('/login')"></Blockies> -->
     </div>
     <div class="lbs-control-box" v-if="mapControl">
       <div class="d-flex col-flex lbs-control-container">
@@ -41,7 +42,8 @@
             <use xlink:href="static/svg/icon.svg#icon-search-minus"/>
           </svg>
         </span>
-        <span class="inline-block color-secondary">
+        <span class="inline-block color-secondary"
+          @click.stop="$router.push('/market')">
           <svg>
             <use xlink:href="static/svg/icon.svg#icon-map"/>
           </svg>
@@ -50,7 +52,7 @@
     </div>
     <detail-dialog
       ref="ldbDetail"
-      theme="default"
+      theme="light"
       :ldbId="ldbDetail._id"
       @close="dialogClose"
     ></detail-dialog>
@@ -63,7 +65,8 @@ import DetailDialog from '@/components/reuse/detailDialog'
 import TxCarousel from '@/components/reuse/txCarousel'
 import AutoComplete from '@/components/stories/autoComplete'
 import Blockies from '@/components/stories/blockies'
-import { getGoogleInfos, getChainLdbs } from 'api'
+import UserAvatar from '@/components/reuse/userAvatar'
+// import { getGoogleInfos, getChainLdbs } from 'api'
 import { historyState } from 'utils/tool'
 import { mapActions, mapState } from 'vuex'
 import { actionTypes } from '@/store/types'
@@ -95,7 +98,8 @@ export default {
     AutoComplete,
     TxCarousel,
     DetailDialog,
-    Blockies
+    Blockies,
+    UserAvatar
   },
   computed: {
     ...mapState('ldb', [
@@ -109,6 +113,9 @@ export default {
     },
     isMapMinZoom () {
       return this.$refs.lordMap.isMinZoom
+    },
+    trendings () {
+      return this.$root.$children[0].ldbs.slice(0, 3)
     }
   },
   methods: {
@@ -118,12 +125,15 @@ export default {
     ]),
 
     async getLdbs () {
-      const result = await getChainLdbs({ extensions: 'base' })
-      if (result.code === 1000) {
-        const ldbs = result.data.list
-        console.log('ldbs', ldbs)
-        this.$refs.lordMap.createMarkers(ldbs)
-      }
+      const ldbs = this.$root.$children[0].ldbs
+      this.ldbs = ldbs
+      this.$refs.lordMap.createMarkers([ldbs[0], ldbs[1]])
+      // const result = await getChainLdbs({ extensions: 'base' })
+      // if (result.code === 1000) {
+      //   const ldbs = result.data.list
+      //   console.log('ldbs', ldbs)
+      //   this.$refs.lordMap.createMarkers(ldbs)
+      // }
     },
 
     /**
@@ -132,26 +142,28 @@ export default {
      * 主体为 接口数据
      */
     restructurSearchLdbs (ldbs, localLdbs, query) {
-      localLdbs = localLdbs.filter(item => item.name.zh.toLowerCase().indexOf(query.toLowerCase()) !== -1)
-      const localLdbIds = localLdbs.map(item => item._id)
+      ldbs = ldbs.filter(item => item.name.zh.toLowerCase().indexOf(query.toLowerCase()) !== -1)
+      // localLdbs = localLdbs.filter(item => item.name.zh.toLowerCase().indexOf(query.toLowerCase()) !== -1)
+      // const localLdbIds = localLdbs.map(item => item._id)
 
-      const b = []
-      const c = []
+      // const b = []
+      // const c = []
 
       // 存在于数据库中，但是没有记录的
-      const a = ldbs.filter((item) => {
-        // 没有存在于数据库中的
-        if (!item._id) b.push(item)
+      // const a = ldbs.filter((item) => {
+      //   // 没有存在于数据库中的
+      //   if (!item._id) b.push(item)
 
-        const sIndex = localLdbIds.indexOf(item._id)
+      //   const sIndex = localLdbIds.indexOf(item._id)
 
-        // 存在于记录中的
-        if (item._id && sIndex !== -1) c.push(localLdbs[sIndex])
+      //   // 存在于记录中的
+      //   if (item._id && sIndex !== -1) c.push(localLdbs[sIndex])
 
-        return item._id && sIndex === -1
-      })
+      //   return item._id && sIndex === -1
+      // })
 
-      return [].concat(c, a, b)
+      // return [].concat(c, a, b)
+      return ldbs
     },
 
     /**
@@ -160,20 +172,23 @@ export default {
      */
     filterComplete (query, list) {
       const localLdbs = this.historySearchLdbs
-      return query ? this.restructurSearchLdbs(list, localLdbs, query) : localLdbs
+      return query ? this.restructurSearchLdbs(list, localLdbs, query) : [].concat([{
+        trending: 1,
+        list: this.trendings
+      }], localLdbs)
     },
 
     /**
      * auto complete search event
      */
     async handleSearch (string = '', cb) {
-      let result = []
+      // let result = []
       const input = string.trim()
-      if (input) {
-        result = await getGoogleInfos({ input })
-        if (result.code === 1000) result = result.data.list
-      }
-      this.$nextTick(() => cb(this.filterComplete(input, result)))
+      // if (input) {
+      //   result = await getGoogleInfos({ input })
+      //   if (result.code === 1000) result = result.data.list
+      // }
+      this.$nextTick(() => cb(this.filterComplete(input, this.ldbs)))
     },
 
     /**
@@ -186,8 +201,7 @@ export default {
 
         // 调整地图显示视图
         const { lat, lng } = item.chainSystem
-        this.$refs.lordMap.flyToCoords({ center: [lng, lat], zoom: 14 }, () => {
-          console.log('this.$route', this.$route)
+        this.$refs.lordMap.flyToCoords({ center: [lng, lat], zoom: this.mapScrollZooms[this.mapScrollZooms.length - 1] }, () => {
           historyState(`${this.$route.path}?coords=${[lng, lat].toString()}`)
         })
       }
@@ -205,7 +219,7 @@ export default {
 
       this.$refs.txCarousel.init()
       if (coords) {
-        this.$refs.lordMap.flyToCoords({ center: coords.split(','), zoom: 14 })
+        this.$refs.lordMap.flyToCoords({ center: coords.split(','), zoom: this.mapScrollZooms[this.mapScrollZooms.length - 1] })
       }
     },
 
@@ -252,6 +266,9 @@ export default {
       this[actionTypes.LDB_GET_HISTORY_SEARCH_LDBS]()
       this.$refs.lordMap.init()
     })
+  },
+  beforeDestroy () {
+    this.$refs.txCarousel.destroy()
   }
 }
 </script>
@@ -285,9 +302,14 @@ export default {
     top: 50px;
     width: 54px;
     height: 54px;
-    box-shadow: 2px 4px 8px 0 rgba(12, 0, 42, .5);
     border-radius: 6px;
+    color: #fff;
+    white-space: nowrap;
+    font-weight: bold;
     cursor: pointer;
+    &.shadow {
+      box-shadow: 2px 4px 8px 0 rgba(12, 0, 42, .5);
+    }
   }
   .lbs-control-box {
     position: absolute;
@@ -314,6 +336,7 @@ export default {
       }
       &.is-disabled {
         fill: #ccc;
+        stroke: #ccc;
         cursor: no-drop;
       }
     }

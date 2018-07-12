@@ -1,6 +1,6 @@
 <template>
   <div class="ldb-detail-box">
-    <LdbDetail ref="ldbDetail" theme="default" :ldbId="$route.params.ldbId"/>
+    <LdbDetail ref="ldbDetail" theme="light" :ldbId="$route.params.ldbId"/>
   </div>
 </template>
 
@@ -23,9 +23,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-  .ldb-detail-box {
-    // padding-bottom: 120px;
-  }
-</style>

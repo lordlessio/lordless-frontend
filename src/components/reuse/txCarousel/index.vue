@@ -7,34 +7,34 @@
             <div class="v-flex d-flex f-justify-center sm-hidden">
               <span class="inline-block md-mar-r1">
                 <svg>
-                  <use xlink:href="static/svg/icon.svg#icon-ethereum"/>
+                  <use xlink:href="static/svg/icon.svg#icon-hourglass"/>
                 </svg>
               </span>
-              <span class="d-inline-flex col-flex">
+              <span class="d-inline-flex col-flex f-justify-center loop-item-text">
                 <span class="inline-block">transactions</span>
-                <span class="inline-block mar-t1">40 sceonds ago</span>
+                <span class="inline-block">40 sceonds ago</span>
               </span>
             </div>
             <div class="v-flex d-flex f-justify-center">
               <span class="inline-block md-mar-r1 sm-hidden">
                 <svg>
-                  <use xlink:href="static/svg/icon.svg#icon-ethereum"/>
+                  <use xlink:href="static/svg/icon.svg#icon-tx"/>
                 </svg>
               </span>
-              <span class="d-inline-flex col-flex">
+              <span class="d-inline-flex col-flex f-justify-center loop-item-text">
                 <span class="inline-block">Address</span>
-                <span class="inline-block mar-t1">0x5cF5...305ABB</span>
+                <span class="inline-block">0x5cF5...305ABB</span>
               </span>
             </div>
             <div class="v-flex d-flex f-justify-center">
               <span class="inline-block md-mar-r1 sm-hidden">
                 <svg>
-                  <use xlink:href="static/svg/icon.svg#icon-ethereum"/>
+                  <use xlink:href="static/svg/icon.svg#icon-price"/>
                 </svg>
               </span>
-              <span class="d-inline-flex col-flex">
+              <span class="d-inline-flex col-flex f-justify-center loop-item-text">
                 <span class="inline-block">Price</span>
-                <span class="inline-block mar-t1">1.1ETH</span>
+                <span class="inline-block">1.1ETH</span>
               </span>
             </div>
           </div>
@@ -42,34 +42,34 @@
             <div class="v-flex d-flex f-justify-center sm-hidden">
               <span class="inline-block md-mar-r1">
                 <svg>
-                  <use xlink:href="static/svg/icon.svg#icon-ethereum"/>
+                  <use xlink:href="static/svg/icon.svg#icon-hourglass"/>
                 </svg>
               </span>
-              <span class="d-inline-flex col-flex">
+              <span class="d-inline-flex col-flex f-justify-center loop-item-text">
                 <span class="inline-block">transactions</span>
-                <span class="inline-block mar-t1">40 sceonds ago</span>
+                <span class="inline-block">40 sceonds ago</span>
               </span>
             </div>
             <div class="v-flex d-flex f-justify-center">
               <span class="inline-block md-mar-r1 sm-hidden">
                 <svg>
-                  <use xlink:href="static/svg/icon.svg#icon-ethereum"/>
+                  <use xlink:href="static/svg/icon.svg#icon-tx"/>
                 </svg>
               </span>
-              <span class="d-inline-flex col-flex">
+              <span class="d-inline-flex col-flex f-justify-center loop-item-text">
                 <span class="inline-block">Address</span>
-                <span class="inline-block mar-t1">0x5cF5...305ABB</span>
+                <span class="inline-block">0x5cF5...305ABB</span>
               </span>
             </div>
             <div class="v-flex d-flex f-justify-center">
               <span class="inline-block md-mar-r1 sm-hidden">
                 <svg>
-                  <use xlink:href="static/svg/icon.svg#icon-ethereum"/>
+                  <use xlink:href="static/svg/icon.svg#icon-price"/>
                 </svg>
               </span>
-              <span class="d-inline-flex col-flex">
+              <span class="d-inline-flex col-flex f-justify-center loop-item-text">
                 <span class="inline-block">Price</span>
-                <span class="inline-block mar-t1">2.2ETH</span>
+                <span class="inline-block">2.2ETH</span>
               </span>
             </div>
           </div>
@@ -77,34 +77,34 @@
             <div class="v-flex d-flex f-justify-center sm-hidden">
               <span class="inline-block md-mar-r1">
                 <svg>
-                  <use xlink:href="static/svg/icon.svg#icon-ethereum"/>
+                  <use xlink:href="static/svg/icon.svg#icon-hourglass"/>
                 </svg>
               </span>
-              <span class="d-inline-flex col-flex">
+              <span class="d-inline-flex col-flex f-justify-center loop-item-text">
                 <span class="inline-block">transactions</span>
-                <span class="inline-block mar-t1">40 sceonds ago</span>
+                <span class="inline-block">40 sceonds ago</span>
               </span>
             </div>
             <div class="v-flex d-flex f-justify-center">
               <span class="inline-block md-mar-r1 sm-hidden">
                 <svg>
-                  <use xlink:href="static/svg/icon.svg#icon-ethereum"/>
+                  <use xlink:href="static/svg/icon.svg#icon-tx"/>
                 </svg>
               </span>
-              <span class="d-inline-flex col-flex">
+              <span class="d-inline-flex col-flex f-justify-center loop-item-text">
                 <span class="inline-block">Address</span>
-                <span class="inline-block mar-t1">0x5cF5...305ABB</span>
+                <span class="inline-block">0x5cF5...305ABB</span>
               </span>
             </div>
             <div class="v-flex d-flex f-justify-center">
               <span class="inline-block md-mar-r1 sm-hidden">
                 <svg>
-                  <use xlink:href="static/svg/icon.svg#icon-ethereum"/>
+                  <use xlink:href="static/svg/icon.svg#icon-price"/>
                 </svg>
               </span>
-              <span class="d-inline-flex col-flex">
+              <span class="d-inline-flex col-flex f-justify-center loop-item-text">
                 <span class="inline-block">Price</span>
-                <span class="inline-block mar-t1">3.3ETH</span>
+                <span class="inline-block">3.3ETH</span>
               </span>
             </div>
           </div>
@@ -112,46 +112,46 @@
             <div class="v-flex d-flex f-justify-center sm-hidden">
               <span class="inline-block md-mar-r1">
                 <svg>
-                  <use xlink:href="static/svg/icon.svg#icon-ethereum"/>
+                  <use xlink:href="static/svg/icon.svg#icon-hourglass"/>
                 </svg>
               </span>
-              <span class="d-inline-flex col-flex">
+              <span class="d-inline-flex col-flex f-justify-center loop-item-text">
                 <span class="inline-block">transactions</span>
-                <span class="inline-block mar-t1">40 sceonds ago</span>
+                <span class="inline-block">40 sceonds ago</span>
               </span>
             </div>
             <div class="v-flex d-flex f-justify-center">
               <span class="inline-block md-mar-r1 sm-hidden">
                 <svg>
-                  <use xlink:href="static/svg/icon.svg#icon-ethereum"/>
+                  <use xlink:href="static/svg/icon.svg#icon-tx"/>
                 </svg>
               </span>
-              <span class="d-inline-flex col-flex">
+              <span class="d-inline-flex col-flex f-justify-center loop-item-text">
                 <span class="inline-block">Address</span>
-                <span class="inline-block mar-t1">0x5cF5...305ABB</span>
+                <span class="inline-block">0x5cF5...305ABB</span>
               </span>
             </div>
             <div class="v-flex d-flex f-justify-center">
               <span class="inline-block md-mar-r1 sm-hidden">
                 <svg>
-                  <use xlink:href="static/svg/icon.svg#icon-ethereum"/>
+                  <use xlink:href="static/svg/icon.svg#icon-price"/>
                 </svg>
               </span>
-              <span class="d-inline-flex col-flex">
+              <span class="d-inline-flex col-flex f-justify-center loop-item-text">
                 <span class="inline-block">Price</span>
-                <span class="inline-block mar-t1">4.4ETH</span>
+                <span class="inline-block">4.4ETH</span>
               </span>
             </div>
           </div>
         </div>
       </div>
-      <div class="d-flex f-align-center carousel-logo" @click.stop="logoEvt">
+      <div class="d-flex f-align-center carousel-logo color-main" @click.stop="logoEvt">
         <span class="block">
           <svg>
-            <use xlink:href="static/svg/icon.svg#icon-bitcoin"/>
+            <use xlink:href="static/svg/icon.svg#icon-marketplace"/>
           </svg>
         </span>
-        <span class="block sm-hidden">Marketplace</span>
+        <span class="block sm-hidden"> Marketplace</span>
       </div>
     </div>
   </div>
@@ -178,7 +178,8 @@ export default {
   },
   data: () => {
     return {
-      loop: true
+      loop: true,
+      instance: null
     }
   },
   methods: {
@@ -255,10 +256,13 @@ export default {
      */
     loopFunc (height) {
       const func = () => {
-        return setTimeout(() => {
+        let instance = this.instance
+        if (instance) this.destroy()
+        instance = setTimeout(() => {
           this.change(height)
           return func()
         }, this.dulation)
+        return instance
       }
       func()
     },
@@ -282,6 +286,11 @@ export default {
      */
     logoEvt () {
       this.$emit('logoEvt')
+    },
+
+    destroy () {
+      clearTimeout(this.instance)
+      this.instance = null
     }
   }
 }
@@ -319,15 +328,23 @@ export default {
     height: 100%;
     z-index: 1;
     background-color: inherit;
+    @include fontSize(15px, 1);
     svg {
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 50px;
     }
     &.animating {
       transition: transform .35s ease-in-out;
     }
     &.is-active {
       z-index: 2;
+    }
+  }
+  .loop-item-text {
+    >span {
+      &:not(:first-of-type) {
+        margin-top: 8px;
+      }
     }
   }
   .carousel-logo {

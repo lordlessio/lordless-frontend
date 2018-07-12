@@ -4,7 +4,7 @@
  */
 
 import { mutationTypes, actionTypes } from './types'
-import { getUserById, getUserByToken, login } from 'api'
+import { getUserById } from 'api'
 import { stringifyParse, getObjStorage } from 'utils/tool'
 import web3Store from './web3'
 export default {
@@ -12,7 +12,22 @@ export default {
   state: {
 
     // 当前所有登陆过的用户
-    users: {},
+    users: {
+      '0x4cd98f82decade2d152e256efd1f8d5a334a3e28': {
+        address: '0x4cd98f82decade2d152e256efd1f8d5a334a3e28',
+        created_at: '2018-06-12T08:54:13.426Z',
+        nickName: 'LORD',
+        update_at: '2018-06-12T08:54:13.426Z',
+        _id: '5b1f8a352b97c33ed98d64e6'
+      },
+      '0xe4e891aa1ab36661fcfff8062267787ccaacd8af': {
+        address: '0xe4e891aa1ab36661fcfff8062267787ccaacd8af',
+        created_at: '2018-06-12T08:54:13.426Z',
+        nickName: 'LESS',
+        update_at: '2018-06-12T08:54:13.426Z',
+        _id: '5b1f8a352b97c33ed98d64e6'
+      }
+    },
 
     // 当前用户
     userInfo: { default: true },
@@ -36,6 +51,9 @@ export default {
     // 存储 userInfo
     [mutationTypes.USER_SET_USER_INFO]: (state, payload = {}) => {
       state.userInfo = stringifyParse(payload)
+
+      // 测试
+      window.userInfo = stringifyParse(payload)
     },
 
     // 存储 uidInfo
@@ -71,18 +89,18 @@ export default {
     /**
      * metaMask login
      */
-    [actionTypes.USER_META_LOGIN]: ({ commit, dispatch }) => {
+    [actionTypes.USER_META_LOGIN]: ({ state, commit, dispatch }) => {
       const { web3js, address } = web3Store.state.web3Opt
       if (!address) return
 
       // 登陆
-      const loginFunc = async (sigStr, addr) => {
-        const res = await login({ sigStr, address: addr })
-        if (res.code === 1000) {
-          dispatch(actionTypes.USER_SET_USER_TOKEN, ({ address: addr, token: res.token }))
-          dispatch(actionTypes.USER_SET_USER_BY_TOKEN)
-        }
-      }
+      // const loginFunc = async (sigStr, addr) => {
+      //   const res = await login({ sigStr, address: addr })
+      //   if (res.code === 1000) {
+      //     dispatch(actionTypes.USER_SET_USER_TOKEN, ({ address: addr, token: res.token }))
+      //     dispatch(actionTypes.USER_SET_USER_BY_TOKEN)
+      //   }
+      // }
       // 取消 expired 状态
       commit(mutationTypes.USER_SET_USER_EXPIRED, false)
       const str = web3js.toHex('lordless')
@@ -90,7 +108,9 @@ export default {
       // 调起 metamask personal_sign 方法
       web3js.personal.sign(str, web3js.eth.defaultAccount, async (err, result) => {
         if (!err) {
-          if (result) loginFunc(result, address)
+          if (result) {
+            dispatch(actionTypes.USER_SET_USER_BY_TOKEN, ({ address }))
+          }
         }
       })
     },
@@ -103,21 +123,21 @@ export default {
      */
     [actionTypes.USER_SET_USER_BY_TOKEN]: async ({ state, commit }, { address, update } = {}) => {
       // 如果 state[address], 代表此用户数据已存在，不需要继续请求接口
-      if (!update && state[address]) {
-        commit(mutationTypes.USER_SET_USER_INFO, state[address])
+      if (!update && state.users[address]) {
+        commit(mutationTypes.USER_SET_USER_INFO, state.users[address])
         return
       }
 
       // 根据token请求用户信息
-      const res = await getUserByToken()
-      if (res.code === 1000) {
-        commit(mutationTypes.USER_SET_USERS, res.data)
-        commit(mutationTypes.USER_SET_USER_INFO, res.data)
-        if (state.userExpired) commit(mutationTypes.USER_SET_USER_EXPIRED, false)
-      } else {
-        if (res.code === 9001 && res.errorMsg === 'jwt expired') commit(mutationTypes.USER_SET_USER_EXPIRED, true)
-        commit(mutationTypes.USER_SET_USER_INFO, { default: true })
-      }
+      // const res = await getUserByToken()
+      // if (res.code === 1000) {
+      //   commit(mutationTypes.USER_SET_USERS, res.data)
+      //   commit(mutationTypes.USER_SET_USER_INFO, res.data)
+      //   if (state.userExpired) commit(mutationTypes.USER_SET_USER_EXPIRED, false)
+      // } else {
+      //   if (res.code === 9001 && res.errorMsg === 'jwt expired') commit(mutationTypes.USER_SET_USER_EXPIRED, true)
+      //   commit(mutationTypes.USER_SET_USER_INFO, { default: true })
+      // }
       return true
     },
 

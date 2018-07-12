@@ -75,6 +75,8 @@ const router = new Router({
  */
 router.beforeEach((to, from, next) => {
   const { header, footer } = to.meta
+  console.log('header', header)
+  console.log('footer', footer)
   store.commit(`layout/${mutationTypes.LAYOUT_SET_HEADER_OPTIONS}`, header)
   store.commit(`layout/${mutationTypes.LAYOUT_SET_FOOTER_OPTIONS}`, footer)
   next()

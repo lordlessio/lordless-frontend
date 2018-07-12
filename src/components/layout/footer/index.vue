@@ -85,11 +85,13 @@ export default {
       background-color: #fff;
       color: #373737;
       fill: #fff;
+      border-top: 1px solid #E1E1E2;
     }
     &.dark {
       background-color: #000;
       color: #fff;
       fill: #fff;
+      border-top: 1px solid #373737;
     }
   }
   .container {

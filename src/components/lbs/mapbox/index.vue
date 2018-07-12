@@ -83,14 +83,14 @@ export default {
       list.map(item => {
         const { _id, name, chainSystem, levelSystem, ldbIcon } = item
         const coords = [chainSystem.lng, chainSystem.lat]
-        const imgSrc = ldbIcon.sourceUrl
+        const imgSrc = ldbIcon.mapImg
         const markerDom = this.createMarkerDom({ name, imgSrc, level: levelSystem.level })
         markerDom.addEventListener('click', () => {
           this.markerClick(item)
         }, false)
         const marker = new MapBox.Marker(markerDom)
           .setLngLat(coords)
-          .setOffset([-50, -50])
+          .setOffset([50, -100])
           .addTo(map)
 
         marker.remove()
@@ -351,12 +351,15 @@ export default {
       if (!this.mapControl) this.mapControl = true
       const maxZoom = map.getMaxZoom()
       const minZoom = map.getMinZoom()
-      const currentZoom = map.getZoom()
+      const currentZoom = Math.round(map.getZoom())
+      console.log('currentZoom', currentZoom)
       const srollZooms = this.scrollZooms
       if (currentZoom === maxZoom || currentZoom === srollZooms[srollZooms.length - 1]) {
         this.isMaxZoom = true
+        this.isMinZoom = false
       } else if (currentZoom === minZoom || currentZoom === srollZooms[0]) {
         this.isMinZoom = true
+        this.isMaxZoom = false
       } else {
         this.isMaxZoom = false
         this.isMinZoom = false
@@ -394,7 +397,7 @@ export default {
   .mapbox-main-box {
     &.sm-marker {
       ._marker--ldb-container, .info-progress-main {
-        width: 100px;
+        width: 60px;
       }
       ._marker--info-top {
         margin-bottom: 0;
@@ -433,7 +436,7 @@ export default {
   }
 
   ._marker--ldb-container {
-    width: 150px;
+    width: 100px;
     line-height: 1;
     // height: 100%;
     // transform-origin: center;

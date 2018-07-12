@@ -1,5 +1,8 @@
 <template>
-  <div ref="blockies" class="d-flex f-auto-center blockies" :style="`border-radius: ${radius}`"></div>
+  <div
+    ref="blockies"
+    class="d-flex f-auto-center blockies"
+    :style="`border-radius: ${radius}`"></div>
 </template>
 
 <script>

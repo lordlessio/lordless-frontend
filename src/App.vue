@@ -1,11 +1,12 @@
 <template>
   <div id="app">
     <Header :options="headerOpt"/>
+    <GradientSvg/>
     <div class="ld-main" :class="[{ 'no-header': !headerOpt.show || (headerOpt.show && headerOpt.scroll) }, { 'no-footer': !footerOpt.show }]">
-      <div class="d-flex col-flex f-auto-center ld-error" v-if="web3Opt.error">
+      <!-- <div class="d-flex col-flex f-auto-center ld-error" v-if="web3Opt.error">
         <h1>出错啦！</h1>
         <p>{{ web3Opt.error }}</p>
-      </div>
+      </div> -->
       <router-view/>
       <Relogin :address="web3Opt.address" :expired="userExpired"></Relogin>
     </div>
@@ -14,6 +15,7 @@
 </template>
 
 <script>
+import GradientSvg from '@/components/reuse/gradientSvg'
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
 import Relogin from '@/components/reuse/relogin'
@@ -32,7 +34,8 @@ export default {
   components: {
     Header,
     Footer,
-    Relogin
+    Relogin,
+    GradientSvg
   },
   computed: {
     ...mapState('layout', {
@@ -44,6 +47,9 @@ export default {
     ]),
     ...mapState('user', [
       'userExpired'
+    ]),
+    ...mapState('ldb', [
+      'ldbs'
     ]),
 
     // 是否登陆了 metamask

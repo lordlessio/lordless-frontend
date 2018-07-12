@@ -13,7 +13,7 @@ export default {
     }
   },
   data: (vm) => {
-    const choose = this.default
+    const choose = vm.default
     return {
       choose
     }
@@ -38,19 +38,19 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
-    background-color: $--main-color;
+    background-color: $--secondary-color;
     &::after {
       content: "";
       box-sizing: content-box;
-      border: 1px solid #fff;
+      border: 2px solid #fff;
       border-left: 0;
       border-top: 0;
-      height: 50%;
-      left: 25%;
+      height: 60%;
+      left: 50%;
       position: absolute;
-      top: 1px;
-      transform: rotate(45deg);
-      width: 3px;
+      top: 16%;
+      transform: rotate(40deg) translateX(-50%);
+      width: 25%;
       visibility: hidden;
     }
     &.choose {
