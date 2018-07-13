@@ -178,8 +178,7 @@ export default {
   },
   data: () => {
     return {
-      loop: true,
-      instance: null
+      loop: true
     }
   },
   methods: {
@@ -255,16 +254,20 @@ export default {
      * 循环执行
      */
     loopFunc (height) {
+      let instance
       const func = () => {
-        let instance = this.instance
-        if (instance) this.destroy()
+        if (instance) this.destroy(instance)
         instance = setTimeout(() => {
           this.change(height)
+          this.destroy(instance)
           return func()
         }, this.dulation)
         return instance
       }
       func()
+      this.$once('hook:beforeDestroy', () => {
+        this.destroy(instance)
+      })
     },
 
     /**
@@ -288,9 +291,9 @@ export default {
       this.$emit('logoEvt')
     },
 
-    destroy () {
-      clearTimeout(this.instance)
-      this.instance = null
+    destroy (instance) {
+      clearTimeout(instance)
+      instance = null
     }
   }
 }
