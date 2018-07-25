@@ -17,6 +17,12 @@
   .#{$media}f-align-baseline {
     align-items: baseline;
   }
+  .#{$media}f-align-end {
+    align-items: flex-end;
+  }
+  .#{$media}f-align-start {
+    align-items: flex-start;
+  }
   .#{$media}f-align-center {
     align-items: center;
   }
@@ -212,19 +218,21 @@
   // input
   .#{$media}lordless-input {
     display: inline-block;
-    padding: 0 15px;
     width: 100%;
-    color: #606266;
+    color: inherit;
     font-size: inherit;
     height: inherit;
     line-height: inherit;
-    border: 1px solid #dcdfe6;
+    border: none;
     border-radius: 4px;
     box-sizing: border-box;
-    background-color: #fff;
+    background-color: transparent;
     outline: none;
     -webkit-appearance: none;
-    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+    &::placeholder {
+      color: inherit;
+    }
   }
 }
 // @include tool-vars();
@@ -243,13 +251,13 @@
   .#{$media}text-nowrap {
     white-space: nowrap;
   }
-  .#{$media}text-style-cap {
+  .#{$media}text-cap {
     text-transform: capitalize;
   }
-  .#{$media}text-style-lower {
+  .#{$media}text-lower {
     text-transform: lowercase;
   }
-  .#{$media}text-style-upper {
+  .#{$media}text-upper {
     text-transform: uppercase;
   }
   .#{$media}line-height-1 {
@@ -264,14 +272,17 @@
   .#{$media}font-bolder {
     font-weight: bolder;
   }
-  .#{$media}TTNormsBold {
-    font-family: 'TTNormsBold';
+  .#{$media}TTFontNormal {
+    font-family: $--font-TTNormsRegular;
   }
-  .#{$media}TTNormsRegular {
-    font-family: 'TTNormsRegular';
+  .#{$media}TTFontBold {
+    font-family: $--font-TTNormsMedium;
   }
-  .#{$media}TTNormsBlack {
-    font-family: 'TTNormsBlack';
+  .#{$media}TTFontBolder {
+    font-family: $--font-TTNormsBold;
+  }
+  .#{$media}TTFontBlack {
+    font-family: $--font-TTNormsBlack;
   }
 }
 
@@ -305,6 +316,12 @@
 }
 .text-color-secondary {
   color: $--text-secondary-color;
+}
+.text-color-third {
+  color: $--text-third-color;
+}
+.lordless-shadow {
+  box-shadow: 2.5px 5px 10px 0 rgba(0, 0, 0, .25);
 }
 
 @media screen and (min-width: 769px) {

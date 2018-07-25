@@ -1,12 +1,21 @@
 import store from '@/store'
-import { getNetwork, getCoinbase } from './utils'
+import { getNetwork, getCoinbase, getBalance } from './utils'
 import { actionTypes } from '@/store/types'
 
 export const monitorWeb3 = () => {
   // const APPROVED_NETWORKID = '5777'
   const { web3Opt } = store.state.web3
-  let { coinbase, networkId, web3js, error } = web3Opt
+  let { balance, coinbase, networkId, web3js, error } = web3Opt
   return setInterval(async () => {
+    /**
+     * check balance
+     */
+    const balanceRes = (await getBalance(web3js, coinbase)) || {}
+    if (balanceRes.balance !== balance) {
+      balance = balanceRes.balance
+      store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { balance: balanceRes.balance || 0 })
+    }
+
     /**
      * check network
      */
@@ -48,7 +57,7 @@ export const monitorWeb3 = () => {
       // 如果 newCoinbase 存在，则证明是切换账号，或重新登陆
       if (newCoinbase) {
         // 重新获取用户信息
-        store.dispatch(`user/${actionTypes.USER_SET_USER_BY_TOKEN}`, { address: newCoinbase })
+        store.dispatch(`user/${actionTypes.USER_SET_USER_BY_TOKEN}`)
 
         // 重新初始化合约
         store.dispatch(`contract/${actionTypes.CONTRACT_INIT_INSTANCE}`)
@@ -60,6 +69,7 @@ export const monitorWeb3 = () => {
 
     // 如果流程完成，但是 error 还存在，清除 error
     if (error) {
+      error = null
       store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { error: null })
     }
   }, 600)

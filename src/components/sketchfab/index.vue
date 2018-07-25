@@ -21,7 +21,7 @@
             <p class="lord-name-box">
               <span class="inline-block lord-name">{{ lordInfo.name }}</span>
             </p>
-            <p class="lord-address">{{ splitAddress(lordInfo.address, '******') }}</p>
+            <p class="lord-address">{{ lordInfo.address | splitAddress({ symbol: '******' }) }}</p>
           </div>
         </div>
       </div> -->
@@ -33,7 +33,6 @@
 import ImgBox from '@/components/stories/image'
 import Blockies from '@/components/stories/blockies'
 import Loading from '@/components/stories/loading'
-import { splitAddress } from 'utils/tool'
 export default {
   props: {
     lordInfo: {
@@ -184,9 +183,6 @@ export default {
           console.log('Viewer error')
         }
       })
-    },
-    splitAddress (address) {
-      return splitAddress(address)
     }
   }
 }

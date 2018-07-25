@@ -1,7 +1,7 @@
 <template>
   <el-dialog
-    :visible.sync="ldbDialog"
-    :custom-class="`lordless-dialog dialog-ldb-detail ${theme}`"
+    :visible.sync="detailModel"
+    :custom-class="`lordless-dialog dialog-ldb-detail ${theme} ${(blurs[1] && value) ? 'blur' : ''}`"
     lock-scroll
     append-to-body
     :top="top"
@@ -9,7 +9,7 @@
     @open="dialogOpen"
     @close="dialogClose">
     <div>
-      <span @click.stop="ldbDialog = false" class="inline-block dialog-ldb-close">
+      <span @click.stop="$emit('input', false)" class="inline-block dialog-ldb-close">
         <i class="el-icon-close"></i>
       </span>
       <ldb-detail
@@ -24,8 +24,15 @@
 
 <script>
 import LdbDetail from '@/components/ldb/detail'
+
+import { mutationTypes } from '@/store/types'
+import { mapMutations } from 'vuex'
 export default {
   props: {
+    value: {
+      type: Boolean,
+      default: false
+    },
     ldbId: String,
     theme: {
       type: String,
@@ -38,17 +45,22 @@ export default {
   },
   data: () => {
     return {
-      ldbDialog: false
+      detailModel: false,
+      tokenId: null
+    }
+  },
+  computed: {
+    blurs () {
+      return this.$root.$children[0].blurs
     }
   },
   components: {
     LdbDetail
   },
   methods: {
-
-    open () {
-      this.ldbDialog = true
-    },
+    ...mapMutations('layout', [
+      mutationTypes.LAYOUT_SET_BLURS
+    ]),
 
     /**
      * 对话框打开事件
@@ -61,17 +73,24 @@ export default {
      * 对话框关闭事件
      */
     dialogClose () {
+      this.$emit('input', false)
       this.$emit('close')
     },
 
-    initDetailInfo () {
+    initDetailInfo ({ tokenId } = {}) {
+      this.tokenId = tokenId
       const detail = this.$refs.ldbDetail
-      if (detail) detail.checkOwner()
+      if (detail) detail.checkOwner(tokenId)
     }
   },
   watch: {
-    ldbDialog (val) {
-      if (val && this.$refs.ldbDetail) this.$refs.ldbDetail.checkOwner()
+    value (val) {
+      this.detailModel = val
+      this[mutationTypes.LAYOUT_SET_BLURS](val ? 1 : 0)
+      if (val && this.$refs.ldbDetail) this.$refs.ldbDetail.checkOwner(this.tokenId)
+    },
+    detailModel (val) {
+      this.$emit('input', val)
     }
   }
 }

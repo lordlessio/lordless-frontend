@@ -1,42 +1,49 @@
 <template>
   <el-dialog
     :visible.sync="authorizeDialog"
-    custom-class="inline-block lordless-dialog authorize-dialog no-header light"
-    width="initial"
+    custom-class="inline-block lordless-dialog message-dialog no-header no-header transparent center"
+    width="100%"
     append-to-body
-    :center="true"
-    :show-close="false">
-    <div class="authorize-box">
-      <div class="d-flex authorize-container">
-        <span @click.stop="authorizeDialog = false" class="inline-block authorize-close">
-          <i class="el-icon-close"></i>
-        </span>
-        <div>
-          <Blockies :scale="avatar.scale" :radius="avatar.radius" :seed="address"/>
-        </div>
-        <div class="v-flex authorize-cnt-box">
-          <div class="authorize-cnt-top">
-            <p>钱包地址</p>
-            <p>{{ address }}</p>
-          </div>
-          <div class="d-flex">
-            <div class="authorize-choose">
-              <check-box @click="authorizeFunc" :default="isApproved"></check-box>
-            </div>
-            <div class="v-flex authorize-text">
-              授权<span class="color-main">虚拟市场合约</span>代您操作土地
-            </div>
-          </div>
-        </div>
-      </div>
+    center
+    top="0"
+    :show-close="false"
+    @open="$emit('open')"
+    @close="$emit('close')">
+    <div class="lordless-message-box">
+      <span
+        @click.stop="authorizeDialog = false"
+        class="inline-block line-height-1 lordless-message-close"
+        :class="closeTheme">
+        <i class="el-icon-close"></i>
+      </span>
+      <Crowdsale
+        v-if="showCrowsale"
+        ref="crowdsale"
+        v-model="authorizeDialog"
+        :avatar="avatar"
+        :address="address"
+        @pending="crowdsalePending"></Crowdsale>
+
+      <Status
+        v-if="showStatus"
+        :type="statusType">
+      </Status>
+
+      <Sign
+        v-if="showSign"
+        v-model="authorizeDialog"
+        >
+      </Sign>
     </div>
   </el-dialog>
 </template>
 
 <script>
-import CheckBox from '@/components/stories/checkbox'
-import Blockies from '@/components/stories/blockies'
-import { splitAddress } from 'utils/tool'
+import Crowdsale from './crowdsale'
+import Status from './status'
+import Sign from './sign'
+
+// import { mutationTypes } from '@/store/types'
 import { mapState } from 'vuex'
 export default {
   props: {
@@ -56,87 +63,117 @@ export default {
   },
   data: () => {
     return {
-      authorizeDialog: false,
-      isApproved: false
+      authorizeDialog: false
+
+      // crowdsale options
+      // crowdsaleModel: false,
+      // crowdsaleInterval: null,
+      // crowdsaleTx: null
     }
   },
   computed: {
+    ...mapState('status', [
+      'browser'
+    ]),
     ...mapState('contract', [
       'ldbNFTContract',
       'ldbNFTCrowdsaleContract'
-    ])
+    ]),
+
+    unBrowser () {
+      return !this.browser.Chrome && !this.browser.Firefox
+    },
+
+    unMetamask () {
+      const web3Opt = this.$root.$children[0].web3Opt
+      return !web3Opt.web3js || !web3Opt.networkId || !web3Opt.isInjected
+    },
+
+    lockedMetamask () {
+      const web3Opt = this.$root.$children[0].web3Opt
+      return !web3Opt.address
+    },
+
+    statusType () {
+      if (this.unBrowser) return 'browser'
+      else if (this.unMetamask) return 'missing'
+      else if (this.lockedMetamask) return 'locked'
+      else return null
+    },
+
+    showStatus () {
+      return this.statusType
+    },
+
+    showCrowsale () {
+      return this.address && !this.statusType
+    },
+
+    showSign () {
+      return !this.lockedMetamask && !this.address
+    },
+
+    closeTheme () {
+      return this.showCrowsale ? 'dark' : 'light'
+    },
+
+    account () {
+      return this.$root.$children[0].web3Opt.address
+    }
   },
   components: {
-    Blockies,
-    CheckBox
+    Crowdsale,
+    Status,
+    Sign
   },
   methods: {
-    splitAddress (address, { before = 8, end = 6, symbox = '******' } = {}) {
-      return splitAddress(address, { before: 8, end: 6, symbox: '******' })
-    },
+    // ...mapMutations('layout', [
+    //   mutationTypes.LAYOUT_SET_BLURS
+    // ]),
     async checkoutAuthorize () {
-      if (!this.address) return false
-      const ldbNFTContract = this.ldbNFTContract
-      const ldbNFTCrowdsaleContract = this.ldbNFTCrowdsaleContract
-      const isApproved = await ldbNFTContract.isApprovedForAll(this.address, ldbNFTCrowdsaleContract.address)
-      console.log('authorize isApproved', isApproved)
-      if (!isApproved) this.authorizeDialog = true
-      else this.authorizeDialog = false
-      this.isApproved = isApproved
+      console.log('---- this.statusType', this.statusType)
 
-      return isApproved
+      // 检查用户状态是否ok
+      if (this.statusType || !this.address) {
+        this.authorizeDialog = true
+        return false
+      }
+
+      console.log('---- authorize crowdsale', this.$refs.crowdsale)
+      // 检查市场合约权限
+      const crowdsaleBool = await this.checkCrowdsale()
+      return crowdsaleBool
     },
-    authorizeFunc (cb) {
-      const isApproved = this.isApproved
+
+    crowdsalePending (data) {
+      this.$emit('pending', data)
+    },
+
+    /**
+     * 检查是否授权了市场合约
+     */
+    async checkCrowdsale () {
       const ldbNFTContract = this.ldbNFTContract
       const ldbNFTCrowdsaleContract = this.ldbNFTCrowdsaleContract
-      if (!isApproved) {
-        ldbNFTContract.setApprovalForAll(ldbNFTCrowdsaleContract.address, true)
-          .then(d => {
-            cb()
-            this.$emit('success', d)
-          })
-          .catch(err => {
-            this.$emit('error', err)
-          })
-      }
+      const crowdsaleModel = await ldbNFTContract.isApprovedForAll(this.address, ldbNFTCrowdsaleContract.address)
+
+      if (!crowdsaleModel) this.authorizeDialog = true
+      else this.authorizeDialog = false
+      // this.crowdsaleModel = crowdsaleModel
+
+      return crowdsaleModel
+    }
+  },
+  watch: {
+    authorizeDialog (val) {
+      this.$emit('blurs', val)
+      // this[mutationTypes.LAYOUT_SET_BLURS](val ? 2 : 1)
+    },
+
+    // 如果改变了地址，关闭对话框
+    account (val) {
+      this.authorizeDialog = false
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-  .authorize-box {
-    margin: -25px -25px -30px;
-    width: inherit;
-    height: inherit;
-  }
-  .authorize-container {
-    padding: 50px 35px 30px;
-    position: relative;
-  }
-  .authorize-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    font-size: 30px;
-    cursor: pointer;
-  }
-  .authorize-cnt-box {
-    margin-left: 20px;
-  }
-  .authorize-cnt-top {
-    margin-bottom: 30px;
-    font-size: 18px;
-  }
-  .authorize-choose {
-    width: 26px;
-    height: 26px;
-    border-radius: 5px;
-    overflow: hidden;
-  }
-  .authorize-text {
-    margin-left: 10px;
-    font-size: 18px;
-  }
-</style>

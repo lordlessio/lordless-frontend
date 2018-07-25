@@ -8,6 +8,7 @@ export default {
   namespaced: true,
   state: {
     web3Opt: {
+      balance: 0,
       address: null,
       coinbase: null,
       error: null,
@@ -16,6 +17,9 @@ export default {
       networkId: null
     },
     defaultWeb3Opt: {
+
+      // eth 余额
+      balance: 0,
 
       // 地址
       address: null,
@@ -42,6 +46,7 @@ export default {
     [mutationTypes.WEB3_SET_WEB3_INFO] (state, payload = {}) {
       if (objectType(payload)[0] !== 'object') return
       state.web3Opt = Object.assign({}, state.web3Opt, payload)
+      window.web3Opt = Object.assign({}, state.web3Opt, payload)
     }
   },
   actions: {

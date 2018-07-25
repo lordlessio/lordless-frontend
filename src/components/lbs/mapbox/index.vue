@@ -9,12 +9,12 @@ export default {
   props: {
     markerShowZoom: {
       type: Number,
-      default: 14
+      default: 12
     },
     scrollZooms: {
       type: Array,
       default: () => {
-        return [10, 14, 16]
+        return [10, 14, 18]
       }
     },
     container: {
@@ -41,7 +41,7 @@ export default {
     },
     maxZoom: {
       type: Number,
-      default: 16
+      default: 20
     },
     zoom: {
       type: Number,
@@ -83,14 +83,19 @@ export default {
       list.map(item => {
         const { _id, name, chainSystem, levelSystem, ldbIcon } = item
         const coords = [chainSystem.lng, chainSystem.lat]
-        const imgSrc = ldbIcon.mapImg
+        const imgSrc = ldbIcon.sourceUrl
         const markerDom = this.createMarkerDom({ name, imgSrc, level: levelSystem.level })
+        // const { id, fields } = item
+        // const _id = id
+        // const coords = fields.location.split(',')
+        // const imgSrc = '/static/img/test/mingzhu.png'
+        // const markerDom = this.createMarkerDom({ name: fields.name, imgSrc, level: 3 })
         markerDom.addEventListener('click', () => {
           this.markerClick(item)
         }, false)
         const marker = new MapBox.Marker(markerDom)
           .setLngLat(coords)
-          .setOffset([50, -100])
+          .setOffset([0, 0])
           .addTo(map)
 
         marker.remove()
@@ -133,6 +138,7 @@ export default {
       box.className = `marker _marker--ldb-box _marker--level-${level}`
       box.style.width = 'inherit'
       box.style.height = 'inherit'
+      // const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}" style="width: 100%"/><p>${name}</p><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>800 / 1000</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${600 / 1000 * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
       const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}" style="width: 100%"/><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>800 / 1000</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${600 / 1000 * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
       box.innerHTML = boxHtml
       return box

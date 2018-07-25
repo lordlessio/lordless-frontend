@@ -1,5 +1,5 @@
 <template>
-  <header id="ld-header" class="ld-header" :class="[{ 'fixed': options.fixed }, { 'inverse': !options.scroll }, { 'transparent': options.transparent }, theme]" v-if="options.show">
+  <header id="ld-header" class="ld-header" :class="[{ 'fixed': fixed }, { 'inverse': !scroll }, { 'transparent': transparent }, theme]" v-if="show">
     <div class="container d-flex">
       <div class="text-left inline-block header-logo">
         <router-link to="/" class="inline-block">
@@ -12,7 +12,7 @@
         </router-link>
       </div>
       <div @click.stop="toggleHeader" id="header-mask" class="header-mask"></div>
-      <div @click.stop="headerItemClick" class="v-flex text-right header-text navbar-sidebar">
+      <div @click.stop="headerItemClick" class="v-flex TTFontBold text-right header-text navbar-sidebar">
         <span class="uppercase md-hidden header-right-item header-close-item sm-text-center">
           <span @click.stop="toggleHeader" class="ld-close-icon"></span>
           <router-link to="/" class="header-sm-logo">
@@ -50,14 +50,32 @@ import throttle from 'lodash/throttle'
 import UserAvatar from '@/components/reuse/userAvatar'
 export default {
   props: {
-    options: {
-      type: Object,
-      default: () => {
-        return {
-          show: true
-        }
-      }
+
+    // 显示选项
+    show: {
+      type: Boolean,
+      default: false
     },
+
+    // position fixed
+    fixed: {
+      type: Boolean,
+      default: false
+    },
+
+    // 是否跟随界面滚动
+    scroll: {
+      type: Boolean,
+      default: false
+    },
+
+    // 背景透明
+    transparent: {
+      type: Boolean,
+      default: false
+    },
+
+    // header 主题
     theme: {
       type: String,
       default: 'default'
@@ -77,7 +95,7 @@ export default {
       }
     },
     headerScroll () {
-      if (!this.options.scroll) return
+      if (!this.scroll) return
       // const header = document.getElementById('ld-header')
       let navbarInverse = false
       const func = () => {

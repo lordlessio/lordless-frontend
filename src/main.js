@@ -2,9 +2,10 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import App from './App.vue'
+import Lordless from './App.vue'
 import router from './router'
 import store from './store'
+import './plugins'
 import {
   Col, Row,
   Tabs, Dialog, Autocomplete, Pagination,
@@ -68,10 +69,10 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
+  el: '#lordless',
   router,
   store,
   i18n,
-  components: { App },
-  template: '<App/>'
-}).$mount('#app')
+  components: { Lordless },
+  template: '<Lordless/>'
+}).$mount('#lordless')

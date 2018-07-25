@@ -17,7 +17,8 @@ const actionTypes = {
   USER_SET_USER_BY_ID: 'setUserById',
   USER_SET_USER_TOKEN: 'setUserToken',
   USER_GET_TOKEN_BY_ADDRESS: 'getTokenByAddress',
-  USER_LOGOUT: 'userLogout'
+  USER_LOGOUT: 'userLogout',
+  USER_SET_USER_EXPIRED: 'setUserExpired'
 }
 
 module.exports = {

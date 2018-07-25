@@ -7,7 +7,15 @@
           <input class="lordless-input market-search-input" type="text" placeholder="搜索" v-model="marketSearch"/>
         </span>
       </div>
-      <el-row :gutter="20" class="market-cnt-box">
+      <el-row :gutter="20" v-if="!ldbsLoading">
+        <el-col
+          v-for="(item, index) of skeletionLdbs" :key="index"
+          :sm="12" :md="8" :lg="6"
+          >
+          <skeletion-list class="skeletion-item"></skeletion-list>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20" class="market-cnt-box" v-if="ldbsLoading">
         <el-col
           v-for="item of ldbs" :key="item._id"
           :sm="12" :md="8" :lg="6">
@@ -43,33 +51,42 @@
         </el-col>
       </el-row>
       <div class="d-flex f-align-center market-pagination-box">
-        <div class="v-flex market-pagination-pages">
+        <skeletion-pager v-if="!ldbsLoading"></skeletion-pager>
+        <div
+          v-if="ldbsLoading"
+          class="v-flex market-pagination-pages">
           <el-pagination
             background
             layout="pager"
             :total="1000">
           </el-pagination>
         </div>
-        <div class="market-pagination-switch">
+        <div
+          v-if="ldbsLoading"
+          class="market-pagination-switch">
           <span>上一页</span>
           <span>下一页</span>
         </div>
       </div>
     </div>
     <detail-dialog
-      ref="ldbDetail"
+      v-model="detailModel"
       theme="light"
-      :ldbId="detailLdbInfo._id"
+      :ldbId="detailInfo._id"
       @close="dialogClose">
     </detail-dialog>
   </div>
 </template>
 
 <script>
-// import { getChainLdbs } from 'api'
-import DetailDialog from '@/components/reuse/detailDialog'
+import { getChainLdbs } from 'api'
+import DetailDialog from '@/components/reuse/ldb/detailDialog'
 import { historyState } from 'utils/tool'
 import ImgBox from '@/components/stories/image'
+
+import SkeletionList from '@/components/skeletion/market_list'
+import SkeletionPager from '@/components/skeletion/pagination'
+
 export default {
   data: () => {
     return {
@@ -78,14 +95,26 @@ export default {
       ldbs: [],
 
       // ldb dialog 显示控制
-      ldbDialog: false,
-      detailLdbInfo: {},
-      marketSearch: ''
+      detailModel: false,
+
+      // ldb current detail Info
+      detailInfo: {},
+
+      // market search model
+      marketSearch: '',
+
+      // skeletion options
+      skeletionLdbs: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+
+      // loading options
+      ldbsLoading: true
     }
   },
   components: {
     ImgBox,
-    DetailDialog
+    DetailDialog,
+    SkeletionList,
+    SkeletionPager
   },
   methods: {
 
@@ -99,10 +128,9 @@ export default {
      * 打开详情信息页
      */
     openDetail (info) {
-      this.$refs.ldbDetail.open()
-      this.ldbDialog = true
+      this.detailModel = true
       this.$nextTick(() => {
-        this.detailLdbInfo = info
+        this.detailInfo = info
         historyState(`/ldb/${info._id}`)
       })
     },
@@ -118,16 +146,16 @@ export default {
      * 获取 ldb 列表信息
      */
     async getLdbs () {
-      this.ldbs = this.$root.$children[0].ldbs
-      window.ldbs = this.ldbs
-      // const res = await getChainLdbs()
-      // if (res.code === 1000) {
-      //   this.ldbs = res.data.list
-      // }
+      this.ldbsLoading = false
+      const res = await getChainLdbs()
+      if (res.code === 1000) {
+        this.ldbs = res.data.list
+      }
+      this.ldbsLoading = true
     }
   },
   watch: {
-    ldbDialog (val) {
+    detailModel (val) {
       // 如果对话框关闭，改变浏览器地址为详情页面地址
       if (!val) {
         window.history.pushState(null, null, this.$route.path)
@@ -161,6 +189,16 @@ export default {
   }
 
   /*
+   * skeletion style -- begin
+   */
+  .skeletion-item {
+    @include margin-around(0, 20px, 50px, 20px, 1.5);
+  }
+  /*
+   * skeletion style -- end
+   */
+
+  /*
    * market-search-box -- begin
    */
   .market-search-box {
@@ -172,6 +210,7 @@ export default {
   .market-search-input {
     color: $--text-main-color;
     border: none;
+    @include padding('left', 15px, 1.5);
     &::placeholder {
       color: #C9C9C9;
     }
@@ -204,7 +243,7 @@ export default {
     top: 10px;
     left: 10px;
     border-radius: 20px;
-    color: $--text-secondary-color;
+    color: $--text-main-color;
     background-color: rgba(255, 255, 255, .4);
     @include fontSize(14px, 1);
     >span {

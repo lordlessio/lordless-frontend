@@ -12,6 +12,8 @@ import MapBox from '@/pages/mapbox'
 
 import LdbDetail from '@/pages/ldb/_detail.vue'
 
+import Status from '@/pages/help/status'
+
 Vue.use(Router)
 
 const router = new Router({
@@ -63,6 +65,16 @@ const router = new Router({
       }
     },
     {
+      path: '/status',
+      name: 'status',
+      component: Status,
+      meta: {
+        fixed: true,
+        scroll: true,
+        transparent: false
+      }
+    },
+    {
       path: '*',
       name: 'other',
       redirect: '/market'
@@ -75,10 +87,9 @@ const router = new Router({
  */
 router.beforeEach((to, from, next) => {
   const { header, footer } = to.meta
-  console.log('header', header)
-  console.log('footer', footer)
   store.commit(`layout/${mutationTypes.LAYOUT_SET_HEADER_OPTIONS}`, header)
   store.commit(`layout/${mutationTypes.LAYOUT_SET_FOOTER_OPTIONS}`, footer)
+  store.commit(`layout/${mutationTypes.LAYOUT_SET_BLURS}`, 0)
   next()
 })
 

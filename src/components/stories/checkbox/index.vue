@@ -1,28 +1,34 @@
 <template>
   <div class="checkbox-box">
-    <span class="inline-block checkbox-inner" :class="{ 'choose': choose }" @click.stop="toggleChoose"></span>
+    <span class="inline-block checkbox-inner" :class="{ 'choose': value }" @click.stop="toggleChoose"></span>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    default: {
+    value: {
+      type: Boolean,
+      default: false
+    },
+    sync: {
       type: Boolean,
       default: false
     }
   },
-  data: (vm) => {
-    const choose = vm.default
-    return {
-      choose
-    }
+  data: () => {
+    return {}
   },
   methods: {
     toggleChoose () {
-      this.$emit('click', () => {
-        this.choose = !this.choose
-      })
+      if (this.sync) {
+        this.$emit('click', () => {
+          this.$emit('input', !this.value)
+        })
+      } else {
+        this.$emit('click')
+        this.$emit('input', !this.value)
+      }
     }
   }
 }
@@ -33,22 +39,25 @@ export default {
   .checkbox-box {
     width: inherit;
     height: inherit;
+    line-height: 1;
   }
   .checkbox-inner {
     position: relative;
     width: 100%;
     height: 100%;
-    background-color: $--secondary-color;
+    background-color: inherit;
+    cursor: pointer;
     &::after {
       content: "";
       box-sizing: content-box;
-      border: 2px solid #fff;
+      border: 2px solid;
+      border-color: #fff;
       border-left: 0;
       border-top: 0;
       height: 60%;
       left: 50%;
       position: absolute;
-      top: 16%;
+      top: 17%;
       transform: rotate(40deg) translateX(-50%);
       width: 25%;
       visibility: hidden;

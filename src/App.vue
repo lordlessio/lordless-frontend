@@ -1,16 +1,16 @@
 <template>
-  <div id="app">
-    <Header :options="headerOpt"/>
+  <div id="lordless" :class="{ 'blur': blurs[0] }">
+    <Header v-bind="headerOpt"/>
     <GradientSvg/>
     <div class="ld-main" :class="[{ 'no-header': !headerOpt.show || (headerOpt.show && headerOpt.scroll) }, { 'no-footer': !footerOpt.show }]">
-      <!-- <div class="d-flex col-flex f-auto-center ld-error" v-if="web3Opt.error">
+      <div class="d-flex col-flex f-auto-center ld-error" v-if="web3Opt.error">
         <h1>出错啦！</h1>
         <p>{{ web3Opt.error }}</p>
-      </div> -->
+      </div>
       <router-view/>
-      <Relogin :address="web3Opt.address" :expired="userExpired"></Relogin>
+      <!-- <Relogin v-model="userExpired" :address="web3Opt.address"></Relogin> -->
     </div>
-    <Footer :options="footerOpt"/>
+    <Footer v-bind="footerOpt"/>
   </div>
 </template>
 
@@ -20,7 +20,8 @@ import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
 import Relogin from '@/components/reuse/relogin'
 import { initWeb3 } from '@/assets/utils/web3/initWeb3'
-import { mapState } from 'vuex'
+import { actionTypes } from '@/store/types'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'App',
   async created () {
@@ -40,16 +41,14 @@ export default {
   computed: {
     ...mapState('layout', {
       headerOpt: 'header',
-      footerOpt: 'footer'
+      footerOpt: 'footer',
+      blurs: 'blurs'
     }),
     ...mapState('web3', [
       'web3Opt'
     ]),
     ...mapState('user', [
       'userExpired'
-    ]),
-    ...mapState('ldb', [
-      'ldbs'
     ]),
 
     // 是否登陆了 metamask
@@ -68,6 +67,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions('status', [
+      actionTypes.STATUS_INIT_BROSWER
+    ]),
 
     // 监听主网络环境
     listenNetWork () {
@@ -96,6 +98,7 @@ export default {
     }
   },
   mounted () {
+    this.$nextTick(() => this[actionTypes.STATUS_INIT_BROSWER]())
     console.log('----footerOpt', this.footerOpt)
   }
 }
