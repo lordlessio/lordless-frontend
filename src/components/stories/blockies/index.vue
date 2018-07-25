@@ -1,5 +1,8 @@
 <template>
-  <div ref="blockies" class="d-flex f-auto-center blockies" :style="`border-radius: ${radius}`"></div>
+  <div
+    ref="blockies"
+    class="d-flex f-auto-center blockies"
+    :style="`border-radius: ${radius}`"></div>
 </template>
 
 <script>
@@ -26,25 +29,31 @@ export default {
       type: Number,
       default: 6
     },
-    color: {
+    theme: {
       type: String,
-      default: '#993399'
-    },
-    bgcolor: {
-      type: String,
-      default: '#ea4c88'
-    },
-    spotcolor: {
-      type: String,
-      default: '#fdadc7'
+      default: 'dark'
     }
   },
   data: () => {
-    return {}
+    return {
+      themes: {
+        dark: {
+          color: '#993399',
+          bgcolor: '#ea4c88',
+          spotcolor: '#fdadc7'
+        },
+        light: {
+          color: '#fff',
+          bgcolor: '#ea4c88',
+          spotcolor: '#993399'
+        }
+      }
+    }
   },
   methods: {
     init () {
-      const { seed, size, scale, color, bgcolor, spotcolor } = this
+      const { color, bgcolor, spotcolor } = this.themes[this.theme]
+      const { seed, size, scale } = this
       const icon = Blockies.create({
         seed,
         size,

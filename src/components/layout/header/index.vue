@@ -1,5 +1,5 @@
 <template>
-  <header id="ld-header" class="ld-header" :class="[{ 'fixed': options.fixed }, { 'inverse': !options.scroll }, theme]" v-if="options.show">
+  <header id="ld-header" class="ld-header" :class="[{ 'fixed': fixed }, { 'inverse': !scroll }, { 'transparent': transparent }, theme]" v-if="show">
     <div class="container d-flex">
       <div class="text-left inline-block header-logo">
         <router-link to="/" class="inline-block">
@@ -12,13 +12,18 @@
         </router-link>
       </div>
       <div @click.stop="toggleHeader" id="header-mask" class="header-mask"></div>
-      <div @click.stop="headerItemClick" class="v-flex text-right header-text navbar-sidebar">
+      <div @click.stop="headerItemClick" class="v-flex TTFontBold text-right header-text navbar-sidebar">
         <span class="uppercase md-hidden header-right-item header-close-item sm-text-center">
           <span @click.stop="toggleHeader" class="ld-close-icon"></span>
           <router-link to="/" class="header-sm-logo">
             <svg class="inline-block">
               <use xlink:href="/static/svg/icon.svg#icon-logo-image"/>
             </svg>
+          </router-link>
+        </span>
+        <span class="inline-block header-right-item" data-type="link">
+          <router-link to="/mapbox">
+            Map
           </router-link>
         </span>
         <span class="inline-block header-right-item" data-type="link">
@@ -31,8 +36,8 @@
             FAQs
           </router-link>
         </span>
-        <span class="inline-block header-right-item" data-type="link">
-          <user-avatar class="user-avatar"></user-avatar>
+        <span class="inline-block header-right-item user-item" data-type="link">
+          <user-avatar class="user-avatar" :header="true"></user-avatar>
         </span>
       </div>
     </div>
@@ -45,14 +50,32 @@ import throttle from 'lodash/throttle'
 import UserAvatar from '@/components/reuse/userAvatar'
 export default {
   props: {
-    options: {
-      type: Object,
-      default: () => {
-        return {
-          show: true
-        }
-      }
+
+    // 显示选项
+    show: {
+      type: Boolean,
+      default: false
     },
+
+    // position fixed
+    fixed: {
+      type: Boolean,
+      default: false
+    },
+
+    // 是否跟随界面滚动
+    scroll: {
+      type: Boolean,
+      default: false
+    },
+
+    // 背景透明
+    transparent: {
+      type: Boolean,
+      default: false
+    },
+
+    // header 主题
     theme: {
       type: String,
       default: 'default'
@@ -72,7 +95,7 @@ export default {
       }
     },
     headerScroll () {
-      if (!this.options.scroll) return
+      if (!this.scroll) return
       // const header = document.getElementById('ld-header')
       let navbarInverse = false
       const func = () => {
@@ -104,13 +127,13 @@ export default {
     // overflow: hidden;
     z-index: 9;
     transition: all .3s ease;
+    background-color: #4D33A7;
     &.fixed {
       position: fixed;
       top: 0;
       left: 0;
     }
     &.default {
-      background-color: transparent;
       color: #fff;
       fill: #fff;
     }
@@ -118,6 +141,9 @@ export default {
       background-color: #0E0F16;
       color: #fff;
       fill: #fff;
+    }
+    &.transparent {
+      background-color: transparent;
     }
     &.inverse {
       background-color: #4D33A7;
@@ -208,10 +234,12 @@ export default {
       text-decoration: none;
       @include fontSize(20px, 1);
     }
-  }
-  .user-avatar {
-    display: inline-block;
-    transform: translateY(30%);
+    &.user-item {
+      height: 100%;
+      .user-avatar {
+        height: 48px;
+      }
+    }
   }
 
   .header-mask {

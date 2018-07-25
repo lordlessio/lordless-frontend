@@ -9,12 +9,12 @@ export default {
   props: {
     markerShowZoom: {
       type: Number,
-      default: 14
+      default: 12
     },
     scrollZooms: {
       type: Array,
       default: () => {
-        return [10, 14, 16]
+        return [10, 14, 18]
       }
     },
     container: {
@@ -41,7 +41,7 @@ export default {
     },
     maxZoom: {
       type: Number,
-      default: 16
+      default: 20
     },
     zoom: {
       type: Number,
@@ -85,12 +85,17 @@ export default {
         const coords = [chainSystem.lng, chainSystem.lat]
         const imgSrc = ldbIcon.sourceUrl
         const markerDom = this.createMarkerDom({ name, imgSrc, level: levelSystem.level })
+        // const { id, fields } = item
+        // const _id = id
+        // const coords = fields.location.split(',')
+        // const imgSrc = '/static/img/test/mingzhu.png'
+        // const markerDom = this.createMarkerDom({ name: fields.name, imgSrc, level: 3 })
         markerDom.addEventListener('click', () => {
           this.markerClick(item)
         }, false)
         const marker = new MapBox.Marker(markerDom)
           .setLngLat(coords)
-          .setOffset([-50, -50])
+          .setOffset([0, 0])
           .addTo(map)
 
         marker.remove()
@@ -133,6 +138,7 @@ export default {
       box.className = `marker _marker--ldb-box _marker--level-${level}`
       box.style.width = 'inherit'
       box.style.height = 'inherit'
+      // const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}" style="width: 100%"/><p>${name}</p><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>800 / 1000</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${600 / 1000 * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
       const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}" style="width: 100%"/><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>800 / 1000</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${600 / 1000 * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
       box.innerHTML = boxHtml
       return box
@@ -351,12 +357,15 @@ export default {
       if (!this.mapControl) this.mapControl = true
       const maxZoom = map.getMaxZoom()
       const minZoom = map.getMinZoom()
-      const currentZoom = map.getZoom()
+      const currentZoom = Math.round(map.getZoom())
+      console.log('currentZoom', currentZoom)
       const srollZooms = this.scrollZooms
       if (currentZoom === maxZoom || currentZoom === srollZooms[srollZooms.length - 1]) {
         this.isMaxZoom = true
+        this.isMinZoom = false
       } else if (currentZoom === minZoom || currentZoom === srollZooms[0]) {
         this.isMinZoom = true
+        this.isMaxZoom = false
       } else {
         this.isMaxZoom = false
         this.isMinZoom = false
@@ -394,7 +403,7 @@ export default {
   .mapbox-main-box {
     &.sm-marker {
       ._marker--ldb-container, .info-progress-main {
-        width: 100px;
+        width: 60px;
       }
       ._marker--info-top {
         margin-bottom: 0;
@@ -433,7 +442,7 @@ export default {
   }
 
   ._marker--ldb-container {
-    width: 150px;
+    width: 100px;
     line-height: 1;
     // height: 100%;
     // transform-origin: center;

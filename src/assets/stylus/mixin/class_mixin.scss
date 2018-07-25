@@ -13,6 +13,9 @@
   @if $theme == 'light' {
     background-color: #f4f4f4;
   }
+  @if $theme == 'white' {
+    background-color: #fff;
+  }
   @if $theme == 'dark' {
     color: #E6E8EC;
     background-color: #101010;
@@ -173,5 +176,19 @@
   @media screen and (max-width: 768px) {
     font-size: $size / $multiple;
   }
+}
+
+/* 字体 */
+@mixin TTFontNormal () {
+  font-family: $--font-TTNormsRegular;
+}
+@mixin TTFontBold () {
+  font-family: $--font-TTNormsMedium;
+}
+@mixin TTFontBolder () {
+  font-family: $--font-TTNormsBold;
+}
+@mixin TTFontBlack () {
+  font-family: $--font-TTNormsBlack;
 }
 

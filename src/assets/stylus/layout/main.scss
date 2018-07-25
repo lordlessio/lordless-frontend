@@ -4,18 +4,40 @@ body, html {
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+  font-family: $--font-TTNormsRegular;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  box-sizing: border-box;
+  color: #373737;
+  line-height: 1.4;
 }
 
 h1, h2, h3, h4, h5, h6, p, figure, figcaption, ul, li, ol, table, thead, tbody, tr, th, td {
   margin: 0;
   padding: 0;
+  font-weight: normal;
+}
+h1, h2, h3, h4 {
+  font-family: $--font-TTNormsMedium;
+  font-weight: bold;
+}
+strong {
+  font-family: $--font-TTNormsBold;
+}
+a {
+  text-decoration: none;
+}
+
+ul, li {
+  list-style: none;
 }
 
 svg {
+  width: inherit;
+  height: inherit;
   fill: inherit;
+  stroke: inherit;
 }
 

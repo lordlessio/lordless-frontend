@@ -1,4 +1,3 @@
-
 /**
  * user store options
  */
@@ -57,6 +56,7 @@ export default {
     }
   },
   actions: {
+
     /**
      * 根据用户id获取用户信息
      */
@@ -71,16 +71,17 @@ export default {
     /**
      * metaMask login
      */
-    [actionTypes.USER_META_LOGIN]: ({ commit, dispatch }) => {
+    [actionTypes.USER_META_LOGIN]: ({ state, commit, dispatch }, { email, nickName, cb } = {}) => {
       const { web3js, address } = web3Store.state.web3Opt
       if (!address) return
 
       // 登陆
       const loginFunc = async (sigStr, addr) => {
-        const res = await login({ sigStr, address: addr })
+        const res = await login({ sigStr, address: addr, email, nickName })
         if (res.code === 1000) {
           dispatch(actionTypes.USER_SET_USER_TOKEN, ({ address: addr, token: res.token }))
           dispatch(actionTypes.USER_SET_USER_BY_TOKEN)
+          if (cb) cb()
         }
       }
       // 取消 expired 状态
@@ -88,7 +89,7 @@ export default {
       const str = web3js.toHex('lordless')
 
       // 调起 metamask personal_sign 方法
-      web3js.personal.sign(str, web3js.eth.defaultAccount, async (err, result) => {
+      web3js.personal.sign(str, web3js.eth.defaultAccount, (err, result) => {
         if (!err) {
           if (result) loginFunc(result, address)
         }
@@ -98,13 +99,14 @@ export default {
     /**
      * 根据token获取用户信息
      * @param {Object} obejct 包含两个参数：address, update
-     * @param address: 代表当前请求用户的address
-     * @param update: 代表当前请求是否属于更新用户信息
+     * @param {String} address: 代表当前请求用户的address
+     * @param {Boolean} update: 代表当前请求是否属于更新用户信息
      */
     [actionTypes.USER_SET_USER_BY_TOKEN]: async ({ state, commit }, { address, update } = {}) => {
       // 如果 state[address], 代表此用户数据已存在，不需要继续请求接口
-      if (!update && state[address]) {
-        commit(mutationTypes.USER_SET_USER_INFO, state[address])
+      // 如果token过期？
+      if (!update && state.users[address]) {
+        commit(mutationTypes.USER_SET_USER_INFO, state.users[address])
         return
       }
 
@@ -121,7 +123,7 @@ export default {
       return true
     },
 
-    // user logout
+    // 用户 logout
     [actionTypes.USER_LOGOUT]: async ({ commit }) => {
       commit(mutationTypes.USER_SET_USER_INFO, { default: true })
     },
@@ -134,6 +136,12 @@ export default {
     // 存储 用户 token 到本地
     [actionTypes.USER_SET_USER_TOKEN]: ({ commit }, payload) => {
       commit(mutationTypes.USER_SET_USER_TOKEN, payload)
+    },
+
+    // 改变 user expired
+    [actionTypes.USER_SET_USER_EXPIRED]: ({ commit }, payload) => {
+      payload = Boolean(payload)
+      commit(mutationTypes.USER_SET_USER_EXPIRED, payload)
     }
   }
 }

@@ -6,9 +6,9 @@
         <use xlink:href="/static/svg/animation.svg#animation-bars"/>
       </svg> -->
     </Loading>
-    <span class="inline-block switch-btn" @click.stop="switchFab">{{ this.is3D ? '2D' : '3D' }}</span>
+    <!-- <span class="inline-block switch-btn" @click.stop="switchFab">{{ this.is3D ? '2D' : '3D' }}</span> -->
     <div class="fab-poster">
-      <img-box sType="height" :src="'/static/img/test/fandian-2d.jpg'"></img-box>
+      <img-box sType="height" bottom :src="poster" type="span"></img-box>
     </div>
     <div class="fab-content">
       <iframe src="" width="100%" height="100%" ref="sketch_frame" id="sketch_frame" frameborder="0" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
@@ -21,7 +21,7 @@
             <p class="lord-name-box">
               <span class="inline-block lord-name">{{ lordInfo.name }}</span>
             </p>
-            <p class="lord-address">{{ splitAddress(lordInfo.address, '******') }}</p>
+            <p class="lord-address">{{ lordInfo.address | splitAddress({ symbol: '******' }) }}</p>
           </div>
         </div>
       </div> -->
@@ -33,7 +33,6 @@
 import ImgBox from '@/components/stories/image'
 import Blockies from '@/components/stories/blockies'
 import Loading from '@/components/stories/loading'
-import { splitAddress } from 'utils/tool'
 export default {
   props: {
     lordInfo: {
@@ -184,9 +183,6 @@ export default {
           console.log('Viewer error')
         }
       })
-    },
-    splitAddress (address) {
-      return splitAddress(address)
     }
   }
 }

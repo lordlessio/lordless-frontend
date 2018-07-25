@@ -1,6 +1,6 @@
 /* 改变主题色变量 */
 $--color-white: #fff !default;
-$--color-primary: #409EFF !default;
+$--color-primary: $--secondary-color !default;
 $--color-primary-light-1: mix($--color-white, $--color-primary, 10%) !default; /* 53a8ff */
 $--color-primary-light-2: mix($--color-white, $--color-primary, 20%) !default; /* 66b1ff */
 $--color-primary-light-3: mix($--color-white, $--color-primary, 30%) !default; /* 79bbff */
@@ -26,7 +26,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 // 覆盖初始样式
 .v-modal {
   opacity: 1;
-  background-color: rgba(43, 43, 43, 0.9);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .lordless-autocomplete {
@@ -43,5 +43,19 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
   }
   li {
     line-height: inherit;
+  }
+}
+
+.el-pager {
+  li {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 18px;
+  }
+  .more {
+    &::before {
+      line-height: 40px;
+    }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <footer class="ld-footer" :class="theme" v-if="options.show">
+  <footer class="ld-footer" :class="theme" v-if="show">
     <div class="container">
       <div class="d-flex sm-col-flex sm-f-align-center footer-top">
         <div class="v-flex text-left footer-logo">
@@ -58,14 +58,14 @@
 <script>
 export default {
   props: {
-    options: {
-      type: Object,
-      default: () => {
-        return {
-          show: true
-        }
-      }
+
+    // 是否显示
+    show: {
+      type: Boolean,
+      default: true
     },
+
+    // footer 主题
     theme: {
       type: String,
       default: 'default'
@@ -85,11 +85,13 @@ export default {
       background-color: #fff;
       color: #373737;
       fill: #fff;
+      border-top: 1px solid #E1E1E2;
     }
     &.dark {
       background-color: #000;
       color: #fff;
       fill: #fff;
+      border-top: 1px solid #373737;
     }
   }
   .container {

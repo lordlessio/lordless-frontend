@@ -1,7 +1,7 @@
 <template>
-  <div class="image-box" :class="[sType, { 'd-flex f-justify-center': center }]">
+  <div class="image-box" :class="[sType, { 'd-flex f-justify-center': center, 'absolute': absolute }]">
     <img v-if="type === 'img'" :src="src"/>
-    <span v-else :style="`background-image: url('${src}')`"></span>
+    <span v-else :class="{ 'contain': contain, 'bottom': bottom }" :style="`background-image: url('${src}')`"></span>
   </div>
 </template>
 
@@ -32,6 +32,21 @@ export default {
     center: {
       type: Boolean,
       default: true
+    },
+
+    contain: {
+      type: Boolean,
+      default: false
+    },
+
+    bottom: {
+      type: Boolean,
+      default: false
+    },
+
+    absolute: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -53,6 +68,19 @@ export default {
       width: 100%;
       height: 100%;
       @include bg-size();
+      &.contain {
+        background-size: contain;
+      }
+      &.bottom{
+        background-position-y: 100%;
+      }
+    }
+    &.absolute {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
     }
     &.width {
       >img {

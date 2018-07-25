@@ -1,3 +1,4 @@
+// import moment from 'moment'
 /**
  * 获取 data 数据类型
  * @param {Object} data 需要分析的数据
@@ -28,6 +29,28 @@ export const stringifyParse = (data) => {
 export const splitAddress = (address, { before = 8, end = 6, symbol = '...' } = {}) => {
   if (typeof address !== 'string') return address
   return address.slice(0, before) + symbol + address.slice(-end)
+}
+
+/**
+ * 格式化日期
+ */
+export const dateFormat = (date, { format = 'YYYY-MM-DD' } = {}) => {
+  date = Math.round(new Date(date).getTime() / 1000)
+
+  const time = Math.round(new Date().getTime() / 1000) - date
+  if (Math.floor(time / (365 * 24 * 3600))) {
+    return `${Math.floor(time / (365 * 24 * 3600))}年前`
+  } else if (Math.floor(time / (30 * 24 * 3600))) {
+    return `${Math.floor(time / (30 * 24 * 3600))}个月前`
+  } else if (Math.floor(time / (24 * 3600))) {
+    return `${Math.floor(time / (24 * 3600))}天前`
+  } else if (Math.floor(time / 3600)) {
+    return `${Math.floor(time / 3600)}小时前`
+  } else if (Math.floor(time / 60)) {
+    return `${Math.floor(time / 60)}分钟前`
+  } else if (Math.floor(time)) {
+    return `${Math.round(time)}秒前`
+  }
 }
 
 /**
@@ -211,4 +234,25 @@ export const hasContent = (child, parent, deep = false) => {
     }
   }
   return bool
+}
+
+/**
+ * 获取浏览器型号
+ */
+export const getBrowser = () => {
+  if (typeof window === 'undefined') return {}
+  const ua = window.navigator.userAgent
+  const isIE = window.ActiveXObject !== undefined && ua.indexOf('MSIE') !== -1
+  const isFirefox = ua.indexOf('Firefox') !== -1
+  const isOpera = window.opr !== undefined
+  const isChrome = Boolean(ua.indexOf('Chrome') && window.chrome)
+  const isSafari = ua.indexOf('Safari') !== -1 && ua.indexOf('Version') !== -1
+  return {
+    IE: isIE,
+    Firefox: isFirefox,
+    Opera: isOpera,
+    Chrome: isChrome,
+    Safari: isSafari,
+    unknow: !isIE && !isFirefox && !isOpera && !isChrome && !isSafari
+  }
 }

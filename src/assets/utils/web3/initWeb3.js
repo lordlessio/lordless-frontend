@@ -1,5 +1,7 @@
+'use strict'
+
 import store from '@/store'
-import { getNetwork, getCoinbase } from './utils'
+import { getNetwork, getCoinbase, getBalance } from './utils'
 import { monitorWeb3 } from './monitorWeb3'
 import { actionTypes } from '@/store/types'
 // 初始化 web3js
@@ -70,5 +72,10 @@ const checkWeb3 = async () => {
     res.coinbase = coinbaseRes.coinbase
     res.address = res.address || res.web3js.eth.defaultAccount
   }
+
+  // check balance
+  const balanceRes = await getBalance(res.web3js, res.address)
+  res.balance = balanceRes.balance
+
   return res
 }

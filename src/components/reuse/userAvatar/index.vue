@@ -1,7 +1,10 @@
 <template>
-  <div class="user-avatar-box" :style="`font-size: ${fontSize};`">
+  <div
+    class="user-avatar-box"
+    :class="{ 'has-canvas': header && userInfo.address, 'shadow': shadow && userInfo.address }"
+    :style="`font-size: ${fontSize};border-radius: ${radius};`">
     <Blockies v-if="userInfo.address" :radius="radius" :seed="userInfo.address" :scale="scale"></Blockies>
-    <span v-if="!userInfo.address" @click.stop="sign" class="user-sign">Sign in</span>
+    <span v-if="!userInfo.address && showText" @click.stop="sign" class="user-sign">Sign in</span>
   </div>
 </template>
 
@@ -12,6 +15,14 @@ import Blockies from '@/components/stories/blockies'
 export default {
   name: 'user-avatar',
   props: {
+    header: {
+      type: Boolean,
+      default: false
+    },
+    shadow: {
+      type: Boolean,
+      default: false
+    },
     scale: {
       type: Number,
       default: 8
@@ -23,6 +34,10 @@ export default {
     fontSize: {
       type: String,
       default: '20px'
+    },
+    showText: {
+      type: Boolean,
+      default: true
     }
   },
   components: {
@@ -50,6 +65,14 @@ export default {
   .user-avatar-box {
     width: inherit;
     height: inherit;
+    &.has-canvas {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    &.shadow {
+      box-shadow: 2px 4px 8px 0 rgba(12, 0, 42, .5);
+    }
   }
   .user-sign {
     cursor: pointer;
