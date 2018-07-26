@@ -15,6 +15,9 @@ export default {
     header: {
       show: true,
 
+      // header logo is show
+      showLogo: true,
+
       // header is fixed position
       fixed: true,
 
@@ -28,6 +31,7 @@ export default {
     // default options for header
     dHeader: {
       show: true,
+      showLogo: true,
       fixed: true,
       transparent: false,
       scroll: false

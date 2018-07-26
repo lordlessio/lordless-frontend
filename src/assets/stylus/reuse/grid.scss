@@ -29,6 +29,9 @@
   .#{$media}f-justify-center {
     justify-content: center;
   }
+  .#{$media}f-justify-around {
+    justify-content: space-around;
+  }
   .#{$media}f-auto-center {
     align-items: center;
     justify-content: center;
@@ -250,6 +253,11 @@
   }
   .#{$media}text-nowrap {
     white-space: nowrap;
+  }
+  .#{$media}text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .#{$media}text-cap {
     text-transform: capitalize;

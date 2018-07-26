@@ -8,7 +8,7 @@
         <p>{{ web3Opt.error }}</p>
       </div>
       <router-view/>
-      <!-- <Relogin v-model="userExpired" :address="web3Opt.address"></Relogin> -->
+      <Relogin v-model="userExpired" :address="web3Opt.address"></Relogin>
     </div>
     <Footer v-bind="footerOpt"/>
   </div>
@@ -99,7 +99,6 @@ export default {
   },
   mounted () {
     this.$nextTick(() => this[actionTypes.STATUS_INIT_BROSWER]())
-    console.log('----footerOpt', this.footerOpt)
   }
 }
 </script>

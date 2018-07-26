@@ -1,5 +1,5 @@
 <template>
-  <button :disabled="disabled" class="button-styles" :class="`${theme} ${shadow ? 'shadow' : ''}`" @click.stop="onClick">
+  <button :disabled="disabled" class="button-styles" :class="[`${theme}`, { 'shadow': shadow, 'inverse': inverse }]" @click.stop="onClick">
     <slot></slot>
   </button>
 </template>
@@ -15,6 +15,11 @@
       },
 
       shadow: {
+        type: Boolean,
+        default: false
+      },
+
+      inverse: {
         type: Boolean,
         default: false
       },
@@ -73,6 +78,18 @@
         background-color: #f1f1f1;
         box-shadow: 1.25px 2.5px 5px 0 rgba(0, 0, 0, .25);
         // box-shadow: 4px 8px 11px 0 rgba(87, 14, 192, 0.25);
+      }
+      &.inverse {
+        color: #fff;
+        background-color: #724AF9;
+        fill: #fff;
+        &:disabled {
+          color: #ddd;
+          fill: #ddd;
+          background-color: #a386f0;
+          box-shadow: 1.25px 2.5px 5px 0 rgba(0, 0, 0, .25);
+          // box-shadow: 4px 8px 11px 0 rgba(87, 14, 192, 0.25);
+        }
       }
     }
     &.pink {
