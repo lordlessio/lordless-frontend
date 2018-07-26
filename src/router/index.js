@@ -14,6 +14,9 @@ import LdbDetail from '@/pages/ldb/_detail.vue'
 
 import Status from '@/pages/help/status'
 
+import User from '@/pages/user'
+import UserInfo from '@/pages/user/children/info'
+
 Vue.use(Router)
 
 const router = new Router({
@@ -73,6 +76,25 @@ const router = new Router({
         scroll: true,
         transparent: false
       }
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: User,
+      meta: {
+        showLogo: false
+      },
+      children: [
+        {
+          path: '/info',
+          name: 'userInfo',
+          component: UserInfo
+        },
+        {
+          path: '*',
+          redirect: '/info'
+        }
+      ]
     },
     {
       path: '*',

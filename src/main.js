@@ -7,7 +7,9 @@ import router from './router'
 import store from './store'
 import './plugins'
 import {
+  Container, Header, Main, Aside,
   Col, Row,
+  Tooltip, Progress,
   Tabs, Dialog, Autocomplete, Pagination,
   Collapse, CollapseItem
 } from 'element-ui'
@@ -25,9 +27,16 @@ import ElementLocale from 'element-ui/lib/locale'
 import 'stylus/index.scss'
 
 // 使用 element-ui 组件
+Vue.use(Container)
+Vue.use(Header)
+Vue.use(Main)
+Vue.use(Aside)
+
 Vue.use(Col)
 Vue.use(Row)
 
+Vue.use(Tooltip)
+Vue.use(Progress)
 Vue.use(Tabs)
 Vue.use(Dialog)
 Vue.use(Autocomplete)

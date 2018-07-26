@@ -1,7 +1,7 @@
 <template>
   <header id="ld-header" class="ld-header" :class="[{ 'fixed': fixed }, { 'inverse': !scroll }, { 'transparent': transparent }, theme]" v-if="show">
     <div class="container d-flex">
-      <div class="text-left inline-block header-logo">
+      <div class="text-left inline-block header-logo" v-if="showLogo">
         <router-link to="/" class="inline-block">
           <svg class="inline-block">
             <use xlink:href="/static/svg/icon.svg#icon-logo-image"/>
@@ -55,6 +55,12 @@ export default {
     show: {
       type: Boolean,
       default: false
+    },
+
+    // logo 显示参数
+    showLogo: {
+      type: Boolean,
+      default: true
     },
 
     // position fixed
@@ -125,7 +131,7 @@ export default {
     width: 100%;
     height: 80px;
     // overflow: hidden;
-    z-index: 9;
+    z-index: 999;
     transition: all .3s ease;
     background-color: #4D33A7;
     &.fixed {

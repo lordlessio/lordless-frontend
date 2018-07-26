@@ -14,6 +14,10 @@ body, html {
   line-height: 1.4;
 }
 
+div {
+  box-sizing: border-box;
+}
+
 h1, h2, h3, h4, h5, h6, p, figure, figcaption, ul, li, ol, table, thead, tbody, tr, th, td {
   margin: 0;
   padding: 0;
@@ -35,8 +39,8 @@ ul, li {
 }
 
 svg {
-  width: inherit;
-  height: inherit;
+  width: 100%;
+  height: 100%;
   fill: inherit;
   stroke: inherit;
 }
