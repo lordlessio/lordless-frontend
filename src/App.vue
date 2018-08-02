@@ -8,7 +8,7 @@
         <p>{{ web3Opt.error }}</p>
       </div>
       <router-view/>
-      <!-- <Relogin v-model="userExpired" :address="web3Opt.address"></Relogin> -->
+      <Relogin v-model="userExpired" :address="web3Opt.address"></Relogin>
     </div>
     <Footer v-bind="footerOpt"/>
   </div>
