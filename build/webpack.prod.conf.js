@@ -10,9 +10,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const HtmlWebpackAssetPlugin = require('html-webpack-include-assets-plugin')
+
+const AliOssPlugin = require('webpack-alioss-plugin')
 
 const env = process.env.NODE_ENV === 'testing'
-  ? require('../config/test.env')
+  ? require('../config/ropsten.env')
   : require('../config/prod.env')
 
 const webpackConfig = merge(baseWebpackConfig, {
@@ -26,10 +29,34 @@ const webpackConfig = merge(baseWebpackConfig, {
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
   output: {
     path: config.build.assetsRoot,
+    publicPath: config.build.assetsPublicPath,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
   plugins: [
+    // dll options
+    new webpack.DllReferencePlugin({
+      context: path.join(__dirname, '../dist_dll/manifest'),
+      manifest: require("../dist_dll/manifest/vue-manifest.json")
+    }),
+    new webpack.DllReferencePlugin({
+      context: path.join(__dirname, '../dist_dll/manifest'),
+      manifest: require("../dist_dll/manifest/utils-manifest.json")
+    }),
+    new webpack.DllReferencePlugin({
+      context: path.join(__dirname, '../dist_dll/manifest'),
+      manifest: require("../dist_dll/manifest/mapbox-manifest.json")
+    }),
+    new webpack.DllReferencePlugin({
+      context: path.join(__dirname, '../dist_dll/manifest'),
+      manifest: require("../dist_dll/manifest/ethereum-manifest.json")
+    }),
+    new HtmlWebpackAssetPlugin({
+      assets: ['static/dll/vue.dll.js', 'static/dll/utils.dll.js', 'static/dll/mapbox.dll.js', 'static/dll/ethereum.dll.js'],
+      files: ['index.html'],
+      append: false,
+      hash: true
+    }),
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
       'process.env': env
@@ -48,7 +75,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       filename: utils.assetsPath('css/[name].[contenthash].css'),
       // Setting the following option to `false` will not extract CSS from codesplit chunks.
       // Their CSS will instead be inserted dynamically with style-loader when the codesplit chunk has been loaded by webpack.
-      // It's currently set to `true` because we are seeing that sourcemaps are included in the codesplit bundle as well when it's `false`, 
+      // It's currently set to `true` because we are seeing that sourcemaps are included in the codesplit bundle as well when it's `false`,
       // increasing file size: https://github.com/vuejs-templates/webpack/issues/1110
       allChunks: true,
     }),
@@ -118,8 +145,22 @@ const webpackConfig = merge(baseWebpackConfig, {
         from: path.resolve(__dirname, '../static'),
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
+      },
+      {
+        from: path.resolve(__dirname, '../dist_dll/js'),
+        to: config.build.assetsDllDirectory,
+        ignore: ['.*']
       }
-    ])
+    ]),
+    new AliOssPlugin({
+      accessKeyId: process.env.LORDLESS_OSS_AK,
+      accessKeySecret: process.env.LORDLESS_OSS_SK,
+      bucket: process.env.LORDLESS_OSS_BUCKET,
+      prefix: config.build.ossPublicPath,
+      region: process.env.LORDLESS_OSS_REGION,
+      exclude: /.*\.html$/,
+      enableLog: false,
+    })
   ]
 })
 
