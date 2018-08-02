@@ -3,6 +3,35 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
+const fs = require('fs')
+
+const moment = require('moment')
+const argv = require('yargs').argv
+let env = require('./prod.env')
+
+const assetsRoot = path.resolve(__dirname, '../dist')
+
+// 读取 dist/ossPublicPath.json 文件，获得其中的地址
+// const txtPath = path.resolve(__dirname, '../dist/ossPath.json')
+
+// console.log('===', fs.existsSync(txtPath), txtPath)
+// if (!fs.existsSync(txtPath)) {
+//   fs.mkdirSync(txtPath)
+// }
+
+// const oss = fs.readFileSync(txtPath)
+// console.log('oss', oss)
+
+const timeStr = `${moment().format('YYYY-MM-DD')}_${new Date().getTime()}`
+
+if (argv.env === 'testing') {
+  env = require('./ropsten.env')
+}
+
+const ossPublicPath = `frontend/${env.ossFolderPath}/${timeStr}`
+
+// 重写 ossPublic.json 内容，如果没有该文件，则创建新文件并插入内容
+// fs.writeFileSync(txtPath, JSON.stringify({ _ossPublicPath: ossPublicPath, assetsRoot }))
 
 module.exports = {
   dev: {
@@ -54,9 +83,11 @@ module.exports = {
     index: path.resolve(__dirname, '../dist/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsRoot,
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsDllDirectory: 'static/dll',
+    ossPublicPath,
+    assetsPublicPath: `http://lordless.oss-cn-hongkong.aliyuncs.com/${ossPublicPath}`,
 
     /**
      * Source Maps
