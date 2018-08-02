@@ -63,6 +63,10 @@ export default {
     },
     pitch: {
       type: Number,
+      default: 0
+    },
+    mPitch: {
+      type: Number,
       default: 15
     }
   },
@@ -205,7 +209,7 @@ export default {
         const poster = ldbIcon.source.map
         const pointDom = this.createPointMarker({ name, poster, level: levelSystem.level })
         pointDom.addEventListener('click', () => {
-          this.flyToCoords({ center: coords, zoom: this.scrollZooms[this.scrollZooms.length - 1] })
+          this.flyToCoords({ center: coords, pitch: this.mPitch, zoom: this.scrollZooms[this.scrollZooms.length - 1] })
         }, false)
 
         pointDom.addEventListener('mouseenter', () => {
@@ -294,6 +298,8 @@ export default {
       map.scrollZoom.disable()
       map.touchZoomRotate.disable()
       map.doubleClickZoom.disable()
+      map.dragRotate.disable()
+      // map.dragPan.disable()
       this.map = map
 
       map.on('load', () => {
@@ -402,7 +408,7 @@ export default {
 
       // 如果没找到当前zoom，currentIndex 重置为倒数第二级
       if (currentIndex === -1) currentIndex = zooms.length - 2
-      this.flyToCoords({ center, zoom: zooms[currentIndex + 1] }, () => {
+      this.flyToCoords({ center, pitch: this.mPitch, zoom: zooms[currentIndex + 1] }, () => {
         if (cb) cb()
       })
     },
@@ -424,7 +430,7 @@ export default {
 
       // 如果没找到当前zoom，currentIndex 重置为第二级
       if (currentIndex === -1) currentIndex = 1
-      this.flyToCoords({ center, zoom: zooms[currentIndex - 1] }, () => {
+      this.flyToCoords({ center, pitch: currentIndex === 1 ? this.pitch : this.mPitch, zoom: zooms[currentIndex - 1] }, () => {
         if (cb) cb()
       })
     },
@@ -435,7 +441,7 @@ export default {
      * @param {Function} cb 动画执行完毕的回调
      * @param {Map} map 地图实例，默认为当前实例
      */
-    flyToCoords ({ center = this.map.getCenter(), zoom = 14, duration = 300 } = {}, cb, map = this.map) {
+    flyToCoords ({ center = this.map.getCenter(), zoom = 14, duration = 300, pitch = this.pitch } = {}, cb, map = this.map) {
       if (map.isZooming()) {
         if (cb) cb()
         return
@@ -443,7 +449,8 @@ export default {
       map.flyTo({
         center,
         zoom,
-        duration
+        duration,
+        pitch
       })
       const timeOut = setTimeout(() => {
         clearTimeout(timeOut)

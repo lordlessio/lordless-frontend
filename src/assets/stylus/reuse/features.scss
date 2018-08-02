@@ -155,6 +155,34 @@
   background-color: $--color-btn-red;
 }
 
+/**
+ *  no-asset-box
+ */
+ .no-asset-box {
+  color: #777777;
+  fill: #bbb;
+  font-size: 16px;
+  >svg {
+    width: 180px;
+    height: 180px;
+  }
+  >p {
+    margin-top: 15px;
+    color: #bbb;
+    font-size: 24px;
+  }
+  >div {
+    margin-top: 25px;
+  }
+  .no-asset-btn {
+    margin: 0 15px;
+    padding: 10px 16px;
+    font-size: 16px;
+    color: #4E47D3;
+    border-radius: 5px;
+  }
+}
+
 /* skeletion -- begin */
 .skeletion-split {
   position: absolute;

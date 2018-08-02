@@ -22,8 +22,8 @@
           </router-link>
         </span>
         <span class="inline-block header-right-item" data-type="link">
-          <router-link to="/mapbox">
-            Map
+          <router-link to="/lbs">
+            LBS
           </router-link>
         </span>
         <span class="inline-block header-right-item" data-type="link">

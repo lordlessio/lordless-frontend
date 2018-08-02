@@ -4,7 +4,7 @@
       <h1 class="text-cap user-candy-title">Candy</h1>
       <div
         v-if="!userAssets.length && !userRecords.length"
-        class="d-flex v-flex col-flex f-auto-center text-center user-no-asset">
+        class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
         <svg>
           <use xlink:href="/static/svg/icon.svg#icon-dropbox"/>
         </svg>
@@ -332,39 +332,6 @@ export default {
     left: 0;
     bottom: -70px;
   }
-
-  /**
-   *  user-no-asset  --- begin
-   */
-
-  .user-no-asset {
-    color: #777777;
-    fill: #777777;
-    font-size: 16px;
-    >svg {
-      width: 180px;
-      height: 180px;
-    }
-    >p {
-      margin-top: 15px;
-      color: #bbb;
-      font-size: 24px;
-    }
-    >div {
-      margin-top: 25px;
-    }
-  }
-  .no-asset-btn {
-    margin: 0 15px;
-    padding: 10px 16px;
-    font-size: 16px;
-    color: #4E47D3;
-    border-radius: 5px;
-  }
-
-  /**
-   *  user-no-asset  --- end
-   */
 
   .user-candy-tabs {
     position: relative;

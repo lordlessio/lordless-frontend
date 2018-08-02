@@ -18,8 +18,8 @@
  *   @include viewport-unit(height, 50vh);
  *   @include viewport-unit(font-size, 5vmin);
  */
- @mixin viewport-unit($property, $value) {
-  #{$property}: $value;
+ @mixin viewport-unit($property, $value, $minus: 0px) {
+  #{$property}: calc(#{$value} - #{$minus});
 
   $unit: unit($value);
 
@@ -40,8 +40,8 @@
 
       $percent: $value / ($value * 0 + 1); // see https://github.com/sass/sass/issues/533
 
-      $percent-width: $device-width * $percent / 100;
-      $percent-height: $device-height * $percent / 100;
+      $percent-width: $device-width * $percent / 100 - $minus;
+      $percent-height: $device-height * $percent / 100 - $minus;
 
       @if ($unit == vmin or $unit == vmax) {
         @media #{$device-query} {

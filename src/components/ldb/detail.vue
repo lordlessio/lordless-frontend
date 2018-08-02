@@ -265,7 +265,7 @@ import OrderDialog from '@/components/reuse/ldb/order'
 import LdbBuy from '@/components/reuse/ldb/buy'
 
 import { contractMixins, dialogMixins } from '@/mixins'
-import { getLdbById, getTxsByTokenId, getTxStatus } from 'api'
+import { getLdbById, getLdbRecords, getTxStatus } from 'api'
 
 export default {
   mixins: [ contractMixins, dialogMixins ],
@@ -466,7 +466,7 @@ export default {
       const params = {
         tokenId: ldbInfo.tokenId
       }
-      const res = await getTxsByTokenId(params)
+      const res = await getLdbRecords(params)
       if (res.code === 1000) {
         this.ldbRecords = res.data.list
       } else {

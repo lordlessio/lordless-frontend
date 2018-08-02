@@ -6,7 +6,7 @@
 .ld-main {
   // margin-bottom: -150px;
   // padding: 80px 0 230px;
-  height: 100%;
+  min-height: 100%;
   box-sizing: border-box;
   @include padding('top', 80px, 1);
   @include padding('bottom', 230px, 1);

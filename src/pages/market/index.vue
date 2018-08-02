@@ -8,6 +8,20 @@
         </span>
       </div>
       <div class="d-flex col-flex v-flex market-bottom">
+        <div
+          v-if="!ldbs.length && ldbsLoading"
+          class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
+          <svg>
+            <use xlink:href="/static/svg/icon.svg#icon-dropbox"/>
+          </svg>
+          <p>Market have no building now.</p>
+          <div class="d-flex f-auto-center TTFontBolder">
+            <span>See all ldbs in</span>
+            <span class="inline-block">
+              <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('mapbox')">Map</ld-btn>
+            </span>
+          </div>
+        </div>
         <el-row :gutter="20" v-if="!ldbsLoading">
           <el-col
             v-for="(item, index) of skeletionLdbs" :key="index"
@@ -15,7 +29,7 @@
             <skeletion-list class="skeletion-item"></skeletion-list>
           </el-col>
         </el-row>
-        <el-row :gutter="20" class="v-flex market-cnt-box" v-if="ldbsLoading">
+        <el-row :gutter="20" class="v-flex market-cnt-box" v-if="ldbs.length && ldbsLoading">
           <el-col
             v-for="ldb of ldbs" :key="ldb._id"
             :xs="12" :sm="8" :lg="6">
@@ -58,7 +72,7 @@
         <div class="market-pagination-box">
           <skeletion-pager v-if="!ldbsLoading"></skeletion-pager>
           <Pagination
-            v-if="ldbs.length > pageSize"
+            v-if="ldbs.length"
             class="market-pagination-pages"
             background
             :page-size="pageSize"
@@ -85,6 +99,7 @@ import { historyState } from 'utils/tool'
 import ImgBox from '@/components/stories/image'
 import Pagination from '@/components/stories/pagination'
 import BuildingCard from '@/components/reuse/ldb/building'
+import LdBtn from '@/components/stories/button'
 
 import SkeletionList from '@/components/skeletion/market_list'
 import SkeletionPager from '@/components/skeletion/pagination'
@@ -114,6 +129,7 @@ export default {
     }
   },
   components: {
+    LdBtn,
     BuildingCard,
     Pagination,
     ImgBox,
@@ -122,16 +138,6 @@ export default {
     SkeletionPager
   },
   methods: {
-
-    // 根据 photos 获取 ldb cover image
-    // ldbImage (photos) {
-    //   if (objectType(photos)[0] !== 'array') return photos
-    //   return decodeURIComponent(photos[0].split(',')[0])
-    // },
-
-    chooseBuilding (ldb) {
-      console.log('-------- chooseBuilding', ldb)
-    },
 
     /**
      * 打开详情信息页
@@ -197,14 +203,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/class_mixin.scss';
-  @import '@/assets/stylus/mixin/color_mixin.scss';
+  @import '@/assets/stylus/mixin/index.scss';
   .ld-market {
-    height: 100%;
     background-color: #f8f8f8;
   }
   .market-container {
-    height: 100%;
+    // min-height: 100%;
+    @include viewport-unit(min-height, 100vh, 80px);
   }
   .market-cnt-box {
 
