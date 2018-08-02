@@ -7,7 +7,7 @@
       <skeletion-box v-model="detailLoading" absolute></skeletion-box>
 
       <!-- sketch fab -->
-      <sketch-fab v-if="!detailLoading" :poster="ldbInfo.ldbIcon.sourceUrl" class="detail-fab"/>
+      <sketch-fab v-if="!detailLoading" :poster="ldbInfo.ldbIcon.source.detail" class="detail-fab"/>
     </div>
 
     <!-- detail cnt 骨架 -->
@@ -17,13 +17,26 @@
         <div class="cnt-item cnt-header">
           <el-row justify="end" align="bottom">
             <el-col :md="12" :sm="24">
-              <h1 class="d-flex row-flex f-align-baseline ldb-name">
+              <h1 class="d-flex lg-row-flex sm-col-flex f-align-baseline ldb-name">
                 <span>{{ ldbInfo.name.zh }}</span>
-                <span class="mar-l1 TTFontNormal ldb-category">{{ ldbInfo.origin.category[0] }}</span>
+                <span class="lg-mar-l1 TTFontNormal ldb-category">{{ ldbInfo.origin.category[0] }}</span>
                 <!-- <span class="ldb-category" v-for="(category, index) of ldbInfo.origin.category.split(',')" :key="index">{{ category }}</span> -->
               </h1>
+              <div class="ldb-msg">
+                <p class="TTFontNormal">
+                  <span>
+                    <i class="el-icon-location-outline"></i>
+                  </span>
+                  <span class="inline-block ldb-location">{{ ldbInfo.chainSystem.lng | sliceStr}}, {{ ldbInfo.chainSystem.lat | sliceStr }}</span>
+                  <!-- <span class="inline-block"> · {{ ldbInfo.address }}</span> -->
+                  <!-- <span class="inline-block ldb-address">{{ ldbInfo.address }}</span> -->
+                </p>
+                <!-- <p v-if="ldbInfo.category">
+                  <span class="inline-block ldb-category" v-for="(category, index) of ldbInfo.category.split(',')" :key="index">{{ category }}</span>
+                </p> -->
+              </div>
             </el-col>
-            <el-col :md="12" :sm="24">
+            <el-col :md="12" :sm="24" class="sm-hidden">
               <div class="d-flex f-align-center">
                 <div class="user-info v-flex">
                   <div v-if="userInfo.address">
@@ -44,24 +57,11 @@
               </div>
             </el-col>
           </el-row>
-          <div class="ldb-msg">
-            <p class="TTFontNormal">
-              <span>
-                <i class="el-icon-location-outline"></i>
-              </span>
-              <span class="inline-block ldb-location">{{ ldbInfo.chainSystem.lng | sliceStr}}, {{ ldbInfo.chainSystem.lat | sliceStr }}</span>
-              <!-- <span class="inline-block"> · {{ ldbInfo.address }}</span> -->
-              <!-- <span class="inline-block ldb-address">{{ ldbInfo.address }}</span> -->
-            </p>
-            <!-- <p v-if="ldbInfo.category">
-              <span class="inline-block ldb-category" v-for="(category, index) of ldbInfo.category.split(',')" :key="index">{{ category }}</span>
-            </p> -->
-          </div>
         </div>
         <div class="TTFontNormal cnt-item ldb-desc">{{ ldbInfo.desc.zh }}</div>
         <div class="cnt-item cnt-features">
           <div class="d-flex sm-col-flex features-container">
-            <div class="d-inline-flex md-col-flex sm-row-flex sm-f-align-center features-price features-item">
+            <div class="d-inline-flex lg-col-flex sm-row-flex sm-f-align-center features-price features-item">
               <p>Price</p>
               <div class="ldb-price text-nowrap">
                 <span>{{ ldbInfo.chainSystem.value }}</span>
@@ -74,7 +74,7 @@
                 <p class="TTFontBolder">Expires in 30 days</p>
               </div>
             </div>
-            <div class="v-flex md-text-right sm-text-left features-btn features-item">
+            <div class="v-flex lg-text-right sm-text-left features-btn features-item">
               <!-- <ld-button theme="default" @click="pushChain" v-if="unOnChain">push chain</ld-button> -->
               <div v-if="showSell">
                 <ld-button theme="info" :disabled="contractPending || ldbPendings.selling" shadow :contract="true" @click="sell">Sell</ld-button>
@@ -125,53 +125,53 @@
           <div class="history-box">
             <div class="history-container text-nowrap">
               <el-row class="history-item history-header finish">
-                <el-col :span="6">
+                <el-col :span="5">
                   奖励 Candy
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="5">
                   WHEN
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="7">
                   FROM
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="7">
                   TO
                 </el-col>
               </el-row>
               <el-row class="history-cnt-box">
                 <el-row class="history-item history-cnt">
-                  <el-col :span="6" class="color-pink">
+                  <el-col :span="5" class="color-pink">
                     <span>20 </span>
                     <span class="text-upper">EOS</span>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col :span="5">
                     <span>1000</span>
                     <span class="text-cap">exp</span>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col :span="7" class="sm-text-ellipsis">
                     <span>关注</span>
                     <span class="text-upper">Eos</span>
                     <span class="text-cap">Telegram</span>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col :span="7" class="sm-text-ellipsis">
                     4 months ago
                   </el-col>
                 </el-row>
                 <el-row class="history-item history-cnt">
-                  <el-col :span="6" class="color-pink">
+                  <el-col :span="5" class="color-pink">
                     <span>5 </span>
                     <span class="text-upper">NAS</span>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col :span="5">
                     <span>500</span>
                     <span class="text-cap">exp</span>
                   </el-col>
-                  <el-col :span="6" class="text-nowrap">
+                  <el-col :span="7" class="sm-text-ellipsis">
                     <span>关注</span>
                     <span class="text-upper">Nebulas</span>
                     <span class="text-cap">Twitter</span>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col :span="7" class="sm-text-ellipsis">
                     1 hours ago
                   </el-col>
                 </el-row>
@@ -184,16 +184,16 @@
           <div class="history-box">
             <div class="history-container text-nowrap">
               <el-row class="history-item history-header deal">
-                <el-col :span="6">
+                <el-col :span="5">
                   PRICE
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="5">
                   WHEN
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="7">
                   FROM
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="7">
                   TO
                 </el-col>
               </el-row>
@@ -208,18 +208,18 @@
                     v-for="record of ldbRecords"
                     :key="record._id"
                     class="history-item history-cnt">
-                  <el-col :span="6" class="color-pink">
+                  <el-col :span="5" class="color-pink">
                     <span>{{ record.request.value }}</span>
                     <span class="text-upper">ETH</span>
                   </el-col>
-                  <el-col :span="6">
-                    {{ record.created_at | dateFormat }}
+                  <el-col :span="5">
+                    {{ record.created_at | timeFormat }}
                   </el-col>
-                  <el-col :span="6">
-                    {{ record.request.from | splitAddress }}
+                  <el-col :span="7" class="sm-text-ellipsis">
+                    {{ record.request.from | splitAddress({ before: 10 }) }}
                   </el-col>
-                  <el-col :span="6">
-                    {{ record.request.to | splitAddress }}
+                  <el-col :span="7" class="sm-text-ellipsis">
+                    {{ record.request.to | splitAddress({ before: 10 }) }}
                   </el-col>
                 </el-row>
               </el-row>
@@ -230,20 +230,22 @@
     </div>
     <Authorize
       ref="authorize"
-      :address="userInfo.address"
       @pending="authorizePending"
-      @blurs="setBlurs"></Authorize>
+      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)">
+    </Authorize>
 
     <order-dialog
       v-model="orderModel"
       :ldbInfo="ldbInfo"
-      @blurs="setBlurs"></order-dialog>
+      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)">
+    </order-dialog>
 
     <ldb-buy
       v-model="buyModel"
       :ldbInfo="ldbInfo"
       @pending="ldbBuyPending"
-      @blurs="setBlurs"></ldb-buy>
+      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)">
+    </ldb-buy>
   </div>
 </template>
 
@@ -257,18 +259,16 @@ import LdButton from '@/components/stories/button'
 import LdLoading from '@/components/stories/loading'
 
 import SketchFab from '@/components/sketchfab'
-import Authorize from '@/components/reuse/authorize'
 
+import Authorize from '@/components/reuse/authorize'
 import OrderDialog from '@/components/reuse/ldb/order'
 import LdbBuy from '@/components/reuse/ldb/buy'
 
-import { contractMixins } from '@/mixins'
+import { contractMixins, dialogMixins } from '@/mixins'
 import { getLdbById, getTxsByTokenId, getTxStatus } from 'api'
 
-import { mutationTypes } from '@/store/types'
-import { mapMutations } from 'vuex'
 export default {
-  mixins: [contractMixins],
+  mixins: [ contractMixins, dialogMixins ],
   props: {
 
     // ldb 建筑id
@@ -310,7 +310,9 @@ export default {
           lat: ''
         },
         levelSystem: {},
-        ldbIcon: {}
+        ldbIcon: {
+          source: {}
+        }
       },
 
       recordsLoading: false,
@@ -397,15 +399,6 @@ export default {
     LdbBuy
   },
   methods: {
-    ...mapMutations('layout', [
-      mutationTypes.LAYOUT_SET_BLURS
-    ]),
-
-    // dialog setBlurs 监听
-    setBlurs (val) {
-      const blursNum = (val ? 1 : 0) + (this.dialog ? 1 : 0)
-      this[mutationTypes.LAYOUT_SET_BLURS](blursNum)
-    },
 
     /**
      * 获取 ldb 建筑详情
@@ -583,28 +576,28 @@ export default {
      * 购买建筑之后触发的合约 pending 状态
      */
     async ldbBuyPending ({ tx } = {}) {
-      // const tokenId = this.ldbInfo.tokenId
-      // this.contractPending = true
+      const tokenId = this.ldbInfo.tokenId
+      this.contractPending = true
 
       // 修改 isBuying 状态
       this.$set(this.ldbPendings, 'isBuying', true)
 
       // 轮询 tx 状态
-      // this.checkTxEvent(tx, (err) => {
-      //   // 关闭 buy dialog
-      //   this.buyModel = false
-      //   this.contractPending = false
-      //   if (err) {
-      //     this.errorMsg = err
-      //     console.log('err', err)
-      //     return
-      //   }
-      //   this.$set(this.ldbPendings, 'isBuying', false)
-      //   this.checkOwner(tokenId)
-      //   this.$nextTick(() => {
-      //     this.orderModel = true
-      //   })
-      // })
+      this.checkTxEvent(tx, (err) => {
+        // 关闭 buy dialog
+        this.buyModel = false
+        this.contractPending = false
+        if (err) {
+          this.errorMsg = err
+          console.log('err', err)
+          return
+        }
+        this.$set(this.ldbPendings, 'isBuying', false)
+        this.$nextTick(() => {
+          this.orderModel = true
+          this.checkOwner(tokenId)
+        })
+      })
     },
 
     /**

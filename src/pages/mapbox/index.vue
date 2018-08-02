@@ -3,7 +3,8 @@
     <Mapbox
       ref="lordMap"
       :scrollZooms="mapScrollZooms"
-      @markerClick="openDetail"
+      :pitch="45"
+      @imageMarkerClick="openDetail"
       @load="mapLoad"/>
     <div class="lbs-search">
       <AutoComplete
@@ -18,10 +19,10 @@
         :direction="-1"
         @logoEvt="$router.push('/market')"></TxCarousel>
     </div>
-    <div class="lbs-user-box text-nowrap font-bold" :class="{ 'shadow': userInfo.address }">
+    <div class="sm-hidden lbs-user-box text-nowrap font-bold" :class="{ 'shadow': userInfo.address }">
       <user-avatar :scale="9"></user-avatar>
     </div>
-    <div class="lbs-control-box" v-if="mapControl">
+    <div class="sm-hidden lbs-control-box" v-if="mapControl">
       <div class="d-flex col-flex lbs-control-container">
         <span class="inline-block color-secondary"
           :class="{ 'is-disabled': isMapMaxZoom }"
@@ -87,7 +88,7 @@ export default {
       mapControl: false,
 
       // lordMap options
-      mapScrollZooms: [10, 13, 16],
+      mapScrollZooms: [11, 17],
       test_ldbs: [
         {
           'id': 'rectLBJ0ALHhlp0WZ',
@@ -364,7 +365,8 @@ export default {
         const ldbs = result.data.list
         this.ldbs = ldbs
         console.log('ldbs', ldbs)
-        this.$refs.lordMap.createMarkers(ldbs)
+        this.$refs.lordMap.createImageMarkers(ldbs)
+        this.$refs.lordMap.createPointMarkers(ldbs)
         // this.$refs.lordMap.createMarkers(this.test_ldbs)
       }
     },
@@ -505,10 +507,10 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '@/assets/stylus/mixin/class_mixin.scss';
+  @import '@/assets/stylus/mixin/index.scss';
   .ld-lbs-main {
     position: relative;
-    height: 100vh;
+    height: 100%;
   }
   .lbs-search {
     position: absolute;

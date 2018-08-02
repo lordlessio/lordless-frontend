@@ -1,5 +1,6 @@
 module.exports = axios => {
   return {
+
     // 根据条件获取链上的建筑信息
     getChainLdbs: (params) => {
       return axios.get('/api/ldbs/on', { params })

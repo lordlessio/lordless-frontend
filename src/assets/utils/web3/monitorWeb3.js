@@ -51,7 +51,11 @@ export const monitorWeb3 = () => {
     if ((newCoinbase !== coinbase)) {
       console.log('coinbase', coinbase, newCoinbase)
       coinbase = newCoinbase
+
+      // 修改 web3Opt
       store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { coinbase: newCoinbase.toString(), address: newCoinbase.toString() })
+
+      // 用户登出
       store.dispatch(`user/${actionTypes.USER_LOGOUT}`)
 
       // 如果 newCoinbase 存在，则证明是切换账号，或重新登陆
@@ -60,7 +64,7 @@ export const monitorWeb3 = () => {
         store.dispatch(`user/${actionTypes.USER_SET_USER_BY_TOKEN}`)
 
         // 重新初始化合约
-        store.dispatch(`contract/${actionTypes.CONTRACT_INIT_INSTANCE}`)
+        store.dispatch(`contract/${actionTypes.CONTRACT_INIT_INSTANCE}`, { monitor: true })
       } else {
         // 如果退出登陆，重置合约
         store.dispatch(`contract/${actionTypes.CONTRACT_RESET_INSTANCE}`)

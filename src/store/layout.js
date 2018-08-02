@@ -25,7 +25,10 @@ export default {
       transparent: false,
 
       // header is listener scroll
-      scroll: false
+      scroll: false,
+
+      // font color is inherit
+      inherit: false
     },
 
     // default options for header
@@ -34,7 +37,8 @@ export default {
       showLogo: true,
       fixed: true,
       transparent: false,
-      scroll: false
+      scroll: false,
+      inherit: false
     },
 
     footer: {
@@ -81,7 +85,7 @@ export default {
         state.header = stringifyParse(state.dHeader)
         return false
       }
-      console.log('------------- _header', _header, Object.assign({}, state.dHeader, _header))
+      // console.log('------------- _header', _header, Object.assign({}, state.dHeader, _header))
       state.header = Object.assign({}, state.dHeader, _header)
     },
 
@@ -93,7 +97,7 @@ export default {
         state.footer = stringifyParse(state.dFooter)
         return false
       }
-      console.log('--------- _footer', _footer, Object.assign({}, state.Footer, _footer))
+      // console.log('--------- _footer', _footer, Object.assign({}, state.Footer, _footer))
       state.footer = Object.assign({}, state.dFooter, _footer)
     }
   },

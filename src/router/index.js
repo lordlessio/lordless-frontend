@@ -16,6 +16,8 @@ import Status from '@/pages/help/status'
 
 import User from '@/pages/user'
 import UserInfo from '@/pages/user/children/info'
+import UserCandy from '@/pages/user/children/candy'
+import UserBuildings from '@/pages/user/children/building'
 
 Vue.use(Router)
 
@@ -72,23 +74,59 @@ const router = new Router({
       name: 'status',
       component: Status,
       meta: {
-        fixed: true,
-        scroll: true,
-        transparent: false
+        header: {
+          fixed: true,
+          scroll: true,
+          transparent: false
+        }
       }
     },
     {
       path: '/user',
       name: 'user',
       component: User,
-      meta: {
-        showLogo: false
-      },
       children: [
         {
-          path: '/info',
+          path: 'info',
           name: 'userInfo',
-          component: UserInfo
+          component: UserInfo,
+          meta: {
+            navgation: 'overview',
+            header: {
+              show: false
+            },
+            footer: {
+              show: false
+            }
+          }
+        },
+        {
+          path: 'candy',
+          name: 'user-candy',
+          component: UserCandy,
+          meta: {
+            navgation: 'candy',
+            header: {
+              show: false
+            },
+            footer: {
+              show: false
+            }
+          }
+        },
+        {
+          path: 'buildings',
+          name: 'user-buildings',
+          component: UserBuildings,
+          meta: {
+            navgation: 'buildings',
+            header: {
+              show: false
+            },
+            footer: {
+              show: false
+            }
+          }
         },
         {
           path: '*',

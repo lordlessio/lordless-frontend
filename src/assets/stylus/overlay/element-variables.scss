@@ -46,16 +46,28 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
   }
 }
 
-.el-pager {
-  li {
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    font-size: 18px;
+// building-sort-options
+
+.building-sort-options {
+  margin-top: 10px;
+  border: none;
+  background-color: transparent;
+  .el-select-dropdown__list {
+    padding: 0;
   }
-  .more {
-    &::before {
-      line-height: 40px;
+  .el-select-dropdown__item {
+    font-size: 16px;
+    color: #fff;
+    background-color: #1A6AFF;
+    border-radius: 5px;
+    &:not(:first-of-type) {
+      margin-top: 2px;
     }
+    &.select, &.hover {
+      background-color: #4586FC;
+    }
+  }
+  .popper__arrow {
+    display: none;
   }
 }

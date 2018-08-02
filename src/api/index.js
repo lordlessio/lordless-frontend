@@ -9,6 +9,8 @@ const ldb = require('./ldb')
 const ldbIcon = require('./ldbIcon')
 const taskType = require('./taskType')
 const user = require('./user')
+const userAsset = require('./userAsset')
+const userRecord = require('./userRecord')
 
 module.exports = merge(
   aMap(axios),
@@ -19,5 +21,7 @@ module.exports = merge(
   mapbox(axios),
   google(axios),
   taskType(axios),
-  user(axios)
+  user(axios),
+  userAsset(axios),
+  userRecord(axios)
 )

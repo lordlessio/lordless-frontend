@@ -8,7 +8,7 @@
         <p>{{ web3Opt.error }}</p>
       </div>
       <router-view/>
-      <Relogin v-model="userExpired" :address="web3Opt.address"></Relogin>
+      <!-- <Relogin v-model="userExpired" :address="web3Opt.address"></Relogin> -->
     </div>
     <Footer v-bind="footerOpt"/>
   </div>
@@ -49,6 +49,9 @@ export default {
     ]),
     ...mapState('user', [
       'userExpired'
+    ]),
+    ...mapState('contract', [
+      'isCrowdsaleApproved'
     ]),
 
     // 是否登陆了 metamask

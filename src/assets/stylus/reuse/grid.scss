@@ -3,7 +3,7 @@
 
 @mixin layout-vars ($media: '') {
   .#{$media}hidden {
-    display: none;
+    display: none !important;
   }
   .#{$media}d-flex {
     display: flex;
@@ -32,9 +32,15 @@
   .#{$media}f-justify-around {
     justify-content: space-around;
   }
+  .#{$media}f-justify-between {
+    justify-content: space-between;
+  }
   .#{$media}f-auto-center {
     align-items: center;
     justify-content: center;
+  }
+  .#{$media}f-wrap {
+    flex-wrap: wrap;
   }
   .#{$media}col-flex {
     flex-direction: column;
@@ -268,6 +274,9 @@
   .#{$media}text-upper {
     text-transform: uppercase;
   }
+  .#{$media}cursor-pointer {
+    cursor: pointer;
+  }
   .#{$media}line-height-1 {
     line-height: 1
   }
@@ -333,6 +342,12 @@
 }
 
 @media screen and (min-width: 769px) {
+  @include layout-vars('lg-');
+  @include text-vars('lg-');
+  @include tool-vars('lg-');
+  @include tool-vars('', 2);
+}
+@media screen and (max-width: 992px) {
   @include layout-vars('md-');
   @include text-vars('md-');
   @include tool-vars('md-');

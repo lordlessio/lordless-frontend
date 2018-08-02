@@ -1,12 +1,12 @@
 <template>
   <div class="fab-main-box" :class="{ 'show-fab': is3D }" style="position: relative;width: inherit;height: inherit">
-    <Loading :loading="loadFab" :index="10" position="absolute" class="d-flex f-auto-center fab-loading-box">
-      <img src="/static/svg/animation.svg"/>
+    <!-- <Loading :loading="loadFab" :index="10" position="absolute" class="d-flex f-auto-center fab-loading-box"> -->
+      <!-- <img src="/static/svg/animation.svg"/> -->
       <!-- <svg>
         <use xlink:href="/static/svg/animation.svg#animation-bars"/>
       </svg> -->
-    </Loading>
-    <!-- <span class="inline-block switch-btn" @click.stop="switchFab">{{ this.is3D ? '2D' : '3D' }}</span> -->
+    <!-- </Loading> -->
+    <span class="inline-block switch-btn" @click.stop="switchFab">{{ this.is3D ? '2D' : '3D' }}</span>
     <div class="fab-poster">
       <img-box sType="height" bottom :src="poster" type="span"></img-box>
     </div>
@@ -137,6 +137,7 @@ export default {
     },
 
     initFab () {
+      this.is3D = true
       const iframe = this.$refs.sketch_frame
 
       // By default, the latest version of the viewer API will be used.
@@ -170,9 +171,11 @@ export default {
         ui_watermark_link,
         success: (fab) => {
           fab.start()
+          console.log('------ start', fab)
           // fab.setFov(50)
           // fab.lookat([0, 13, 10], [0, 10, 0], 4.3)
           fab.addEventListener('viewerready', () => {
+            console.log('viewerready')
             // this.$refs.lordAvatar.init()
             this.is3D = true
             this.viewerReady = true

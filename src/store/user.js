@@ -3,7 +3,7 @@
  */
 
 import { mutationTypes, actionTypes } from './types'
-import { getUserById, getUserByToken, login } from 'api'
+import { getUserById, getUserByToken, login, logout } from 'api'
 import { stringifyParse, getObjStorage } from 'utils/tool'
 import web3Store from './web3'
 export default {
@@ -43,7 +43,7 @@ export default {
     },
 
     // 存储用户sigStr信息
-    [mutationTypes.USER_SET_USER_TOKEN]: (state, { address, token = '' } = {}) => {
+    [mutationTypes.USER_SET_USER_TOKEN]: (state, { address = state.userInfo.address, token = '' } = {}) => {
       if (!address) return
       const tokenObj = getObjStorage()
       tokenObj[address] = token
@@ -104,10 +104,10 @@ export default {
      */
     [actionTypes.USER_SET_USER_BY_TOKEN]: async ({ state, commit }, { address, update } = {}) => {
       // 如果 state[address], 代表此用户数据已存在，不需要继续请求接口
-      // 如果token过期？
+      // 如果token过期？to do ...
       if (!update && state.users[address]) {
         commit(mutationTypes.USER_SET_USER_INFO, state.users[address])
-        return
+        return true
       }
 
       // 根据token请求用户信息
@@ -116,16 +116,22 @@ export default {
         commit(mutationTypes.USER_SET_USERS, res.data)
         commit(mutationTypes.USER_SET_USER_INFO, res.data)
         if (state.userExpired) commit(mutationTypes.USER_SET_USER_EXPIRED, false)
-      } else {
-        if (res.code === 9001 && res.errorMsg === 'jwt expired') commit(mutationTypes.USER_SET_USER_EXPIRED, true)
-        commit(mutationTypes.USER_SET_USER_INFO, { default: true })
+        return true
       }
-      return true
+      if (res.code === 9001 && res.errorMsg === 'jwt expired') commit(mutationTypes.USER_SET_USER_EXPIRED, true)
+      commit(mutationTypes.USER_SET_USER_INFO)
+      // commit(mutationTypes.USER_SET_USER_INFO, { default: true })
+      return false
     },
 
     // 用户 logout
-    [actionTypes.USER_LOGOUT]: async ({ commit }) => {
-      commit(mutationTypes.USER_SET_USER_INFO, { default: true })
+    [actionTypes.USER_LOGOUT]: async ({ commit }, { reset = false } = {}) => {
+      // commit(mutationTypes.USER_SET_USER_INFO, { default: true })
+      commit(mutationTypes.USER_SET_USER_INFO)
+      if (reset) {
+        commit(mutationTypes.USER_SET_USER_TOKEN)
+        await logout()
+      }
     },
 
     // 获取本地用户tokens

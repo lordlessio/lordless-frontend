@@ -59,7 +59,7 @@
       background-color: #FFFFFF;
       fill: #373737;
       &.shadow {
-        box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
+        box-shadow: 2.5px 5px 10px 0 rgba(0, 0, 0, .25);
       }
     }
     &.info {
@@ -87,6 +87,66 @@
           color: #ddd;
           fill: #ddd;
           background-color: #a386f0;
+          box-shadow: 1.25px 2.5px 5px 0 rgba(0, 0, 0, .25);
+          // box-shadow: 4px 8px 11px 0 rgba(87, 14, 192, 0.25);
+        }
+      }
+    }
+    &.green {
+      color: #69D1C3;
+      border: none;
+      // background-image: linear-gradient(-90deg, #BB9BF1 0%, #887BF2 100%);
+      background-color: #fff;
+      fill: #69D1C3;
+      &.shadow {
+        box-shadow: 2.5px 5px 10px 0 rgba(0, 0, 0, .25);
+        // box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
+      }
+      &:disabled {
+        color: #96D4CC;
+        fill: #96D4CC;
+        background-color: #f1f1f1;
+        box-shadow: 1.25px 2.5px 5px 0 rgba(0, 0, 0, .25);
+        // box-shadow: 4px 8px 11px 0 rgba(87, 14, 192, 0.25);
+      }
+      &.inverse {
+        color: #fff;
+        background-color: #69D1C3;
+        fill: #fff;
+        &:disabled {
+          color: #ddd;
+          fill: #ddd;
+          background-color: #96D4CC;
+          box-shadow: 1.25px 2.5px 5px 0 rgba(0, 0, 0, .25);
+          // box-shadow: 4px 8px 11px 0 rgba(87, 14, 192, 0.25);
+        }
+      }
+    }
+    &.red {
+      color: #EB8785;
+      border: none;
+      // background-image: linear-gradient(-90deg, #BB9BF1 0%, #887BF2 100%);
+      background-color: #fff;
+      fill: #EB8785;
+      &.shadow {
+        box-shadow: 2.5px 5px 10px 0 rgba(0, 0, 0, .25);
+        // box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
+      }
+      &:disabled {
+        color: #E4A6A5;
+        fill: #E4A6A5;
+        background-color: #f1f1f1;
+        box-shadow: 1.25px 2.5px 5px 0 rgba(0, 0, 0, .25);
+        // box-shadow: 4px 8px 11px 0 rgba(87, 14, 192, 0.25);
+      }
+      &.inverse {
+        color: #fff;
+        background-color: #EB8785;
+        fill: #fff;
+        &:disabled {
+          color: #ddd;
+          fill: #ddd;
+          background-color: #EB8785;
           box-shadow: 1.25px 2.5px 5px 0 rgba(0, 0, 0, .25);
           // box-shadow: 4px 8px 11px 0 rgba(87, 14, 192, 0.25);
         }
