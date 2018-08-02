@@ -12,6 +12,11 @@ body, html {
   box-sizing: border-box;
   color: #373737;
   line-height: 1.4;
+  @include viewport-unit(width, 100vw);
+}
+
+div {
+  box-sizing: border-box;
 }
 
 div {

@@ -3,18 +3,29 @@
     <div class="user-info-container">
       <div class="user-info-section">
         <h2 class="info-cnt-title">Info Card</h2>
-        <div class="d-flex f-align-center info-item-container user-info-header">
+        <div class="d-flex f-align-center sm-col-flex user-info-header">
           <div class="user-avatar">
             <blockies
               :scale="18"
               radius="20px"
               :seed="user.address"></blockies>
           </div>
-          <div class="d-flex f-align-end v-flex info-header-cnt">
+          <div class="v-flex d-flex lg-f-align-end sm-col-reverse-flex info-header-cnt">
             <div class="v-flex header-cnt-text">
-              <h2>{{ user.nickName }}</h2>
+              <h2>
+                <span>{{ user.nickName }}</span>
+                <span>
+                  <ld-btn
+                    class="TTFontBold user-Authorize-btn"
+                    :theme="isCrowdsaleApproved ? 'green' : 'red'"
+                    inverse
+                    @click="userAuthorize">
+                    {{ isCrowdsaleApproved ? 'Authorized' : 'Unauthorized' }}
+                  </ld-btn>
+                </span>
+              </h2>
               <p class="d-flex f-align-center">
-                <span id="user-address">
+                <span id="user-address" class="text-ellipsis">
                   {{ user.address }}
                 </span>
                 <el-tooltip class="item" effect="dark" :content="clipBool ? 'Copied!' : 'Copy to clipboard'" placement="bottom-start">
@@ -31,14 +42,14 @@
               </p>
               <p class="user-eamil">{{ user.email }}</p>
             </div>
-            <div class="text-right header-cnt-balance">
+            <div class="lg-text-right header-cnt-balance sm-hidden">
               <p>ETH Balance in wallet</p>
               <p class="eth-balance">{{ balance }} ETH</p>
             </div>
           </div>
         </div>
       </div>
-      <div class="d-flex f-align-center user-info-section info-cnt-one">
+      <div class="d-flex f-align-center sm-col-flex user-info-section info-cnt-one">
         <div class="v-flex info-item-container info-prestige-section">
           <h2 class="info-cnt-title">Prestige Value</h2>
           <div class="d-flex f-align-center info-cnt-box info-prestige-box">
@@ -61,12 +72,12 @@
               </div>
               <p class="exp-tip-text">You still need to earn 1200 to level up.</p>
             </div>
-            <div class="exp-recived-box">
+            <div class="exp-recived-box sm-hidden">
               <span
                 class="exp-recived-item"
                 v-for="(n, index) of [1,2,3,4]"
                 :key="n"
-                :style="`filter: grayscale(${index * 20}%);z-index: ${10 - n}`">
+                :style="`filter: grayscale(${index * 20}%) sepia(${index * 20}%);z-index: ${-n}`">
                 +{{n}}
               </span>
             </div>
@@ -89,7 +100,7 @@
               </div>
               <div class="info-home-know" v-if="true">
                 <h2>上海和平饭店</h2>
-                <p>上海黄浦区外滩南京东路20号</p>
+                <p class="text-ellipsis">上海黄浦区外滩南京东路20号</p>
                 <div class="d-flex f-align-baseline TTFontBold info-home-status">
                   <p class="v-flex">0.3 ETH remaining</p>
                   <ld-btn class="user-info-btn" theme="info" inverse shadow>Go</ld-btn>
@@ -101,7 +112,7 @@
       </div>
       <div class="info-item-container user-info-section info-task-section">
         <h2 class="info-cnt-title">Task</h2>
-        <div class="d-flex f-align-center text-center">
+        <div class="d-flex f-align-center sm-col-flex text-center">
           <div class="info-cnt-box info-card-cnt task-candy-box" style="z-index: 3;">
             <h2 class="card-cnt-title">Candy claiming count</h2>
             <div class="task-candy-cnt">
@@ -181,7 +192,7 @@
       </div>
       <div class="info-item-container user-info-section info-assets-section">
         <h2 class="info-cnt-title">Assets</h2>
-        <div class="d-flex f-align-center text-center">
+        <div class="d-flex f-align-center sm-col-flex text-center">
           <div class="v-flex d-flex col-flex info-cnt-box info-card-cnt assets-estimated-box" style="z-index: 3;">
             <h2 class="card-cnt-title">Estimated Value</h2>
             <div class="v-flex d-flex col-flex assets-estimated-cnt">
@@ -309,19 +320,31 @@
         </div>
       </div>
     </div>
+    <Authorize
+      ref="authorize"
+      :address="userInfo.address"
+      @pending="authorizePending"
+      @blurs="dialogSetBlurs">
+    </Authorize>
   </div>
 </template>
 
 <script>
 import Clipboard from 'clipboard'
 
+import Authorize from '@/components/reuse/authorize'
+
 import LdProgress from '@/components/stories/progress'
 import Blockies from '@/components/stories/blockies'
 import LdImg from '@/components/stories/image'
 import LdBtn from '@/components/stories/button'
 
-import { mapState } from 'vuex'
+import { contractMixins, dialogMixins } from '@/mixins'
+
+import { actionTypes } from '@/store/types'
+import { mapState, mapActions } from 'vuex'
 export default {
+  mixins: [ contractMixins, dialogMixins ],
   data: () => {
     return {
       clipBool: false,
@@ -351,15 +374,26 @@ export default {
 
     balance () {
       return this.$root.$children[0].web3Opt.balance
+    },
+
+    isCrowdsaleApproved () {
+      return this.$root.$children[0].isCrowdsaleApproved
     }
   },
   components: {
+    Authorize,
+
     LdProgress,
     Blockies,
     LdImg,
     LdBtn
   },
   methods: {
+    ...mapActions('contract', [
+      actionTypes.CONTRACT_CHECK_CROWDSALE
+    ]),
+
+    // 初始化 黏贴板
     initClipboard () {
       const clip = new Clipboard('#copy-address')
       clip.on('success', (e) => {
@@ -369,6 +403,25 @@ export default {
     },
     clipLeave () {
       this.clipBool = false
+    },
+
+    userAuthorize () {
+      this.$refs.authorize.checkoutAuthorize()
+    },
+
+    authorizePending ({ tx } = {}) {
+      const finishTx = async (err) => {
+        if (err) {
+          console.log('err', err)
+          return
+        }
+        const bool = await this[actionTypes.CONTRACT_CHECK_CROWDSALE](this.userInfo.address)
+        if (!bool) {
+          // 轮询 tx 状态
+          this.checkTxEvent(tx, finishTx)
+        }
+      }
+      this.checkTxEvent(tx, finishTx)
     }
   },
   mounted () {
@@ -390,10 +443,10 @@ export default {
   }
 
   .user-info-box {
-    background-color: #f2f2f2;
+    @include padding(-1, 30px, 1);
   }
   .user-info-container {
-    @include padding(-1, 30px, 1);
+    @include padding('bottom', 35px, 1);
   }
   .user-info-header {
     color: #fff;
@@ -401,7 +454,14 @@ export default {
     @include padding(-1, 25px, 1);
   }
   .info-header-cnt {
-    @include margin('left', 25px, 1);
+    width: 100%;
+    @include margin('left', 25px, -1);
+    @include margin('top', 20px, 1, -2);
+  }
+  .user-Authorize-btn {
+    padding: 4px 6px;
+    font-size: 14px;
+    @include margin('left', 6px, 1);
   }
   .header-cnt-text {
     >h2 {
@@ -433,20 +493,24 @@ export default {
 
 
   .info-prestige-section {
-    margin-right: 15px;
+    @include margin('right', 15px, -2);
   }
   .info-home-section {
-    margin-left: 15px;
+    @include margin('left', 15px, -2);
   }
   .info-prestige-box, .info-home-box {
-    height: 135px;
+    @include height(135px, -2);
   }
 
   .user-info-section {
-    @include margin('top', 25px, 1);
-    @include margin('bottom', 20px, 1);
+    @include margin('bottom', 20px, -2);
+    &:not(:first-of-type) {
+      @include margin('top', 25px, -2);
+    }
   }
   .info-item-container {
+    @include margin('top', 35px, 1, -2);
+    @include width(100%, 1, -2);
   }
   .info-cnt-title {
     font-size: 20px;
@@ -458,6 +522,7 @@ export default {
     border-radius: 5px;
     box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, .1);
     @include padding-around(20px, 25px, 20px, 25px);
+    @include width(100%, 1, -2);
   }
   .exp-progress-box {
 
@@ -485,6 +550,8 @@ export default {
     font-size: 14px;
   }
   .exp-recived-box {
+    position: relative;
+    z-index: 1;
     @include margin('left', 20px, 1);
   }
   .exp-recived-item {
@@ -537,8 +604,8 @@ export default {
     }
   }
   .info-home-status {
-    font-size: 20px;
     color: #4E47D3;
+    @include fontSize(20px, 1.2);
   }
 
   // info-card-cnt
@@ -548,8 +615,9 @@ export default {
     height: 250px;
     font-family: $--font-TTNormsRegular;
     &:not(:first-of-type) {
-      @include margin('left', -8px, -1);
-      @include padding('left', 33px, -1);
+      @include margin('top', 20px, 1, -2);
+      @include margin('left', -8px, -2);
+      @include padding('left', 33px, -2);
     }
   }
   .card-cnt-title {

@@ -3,7 +3,7 @@
     <div v-if="!circle" class="ld-progress-line" :class="{ 'shadow': shadow }" :style="`background-color: ${underColor};`">
       <div
         class="ld-progress-bar"
-        :style="`width: ${current / max * 100}%;background-image: linear-gradient(${gradient.direction}, ${gradient.start}, ${gradient.end});`"></div>
+        :style="`width: ${current / max * 100}%;background-image: linear-gradient(${gradient.direction || 'to bottom'}, ${gradient.start}, ${gradient.end});`"></div>
     </div>
     <div
       v-if="circle"

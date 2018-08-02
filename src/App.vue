@@ -50,6 +50,9 @@ export default {
     ...mapState('user', [
       'userExpired'
     ]),
+    ...mapState('contract', [
+      'isCrowdsaleApproved'
+    ]),
 
     // 是否登陆了 metamask
     web3Login () {

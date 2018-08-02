@@ -9,8 +9,8 @@ import './plugins'
 import {
   Container, Header, Main, Aside,
   Col, Row,
-  Tooltip, Progress,
-  Tabs, Dialog, Autocomplete, Pagination,
+  Tooltip, Progress, Select, Option,
+  Tabs, TabPane, Dialog, Autocomplete, Pagination,
   Collapse, CollapseItem
 } from 'element-ui'
 import VueI18n from 'vue-i18n'
@@ -37,7 +37,10 @@ Vue.use(Row)
 
 Vue.use(Tooltip)
 Vue.use(Progress)
+Vue.use(Select)
+Vue.use(Option)
 Vue.use(Tabs)
+Vue.use(TabPane)
 Vue.use(Dialog)
 Vue.use(Autocomplete)
 Vue.use(Pagination)

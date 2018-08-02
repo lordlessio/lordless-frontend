@@ -49,7 +49,7 @@ export default {
     height: 100%;
     opacity: 0;
     visibility: hidden;
-    transition: opacity .3s ease, visibility 0s .3s;
+    transition: opacity .3s ease 1s, visibility 0s 1s;
     // el-popup-parent--hidden
     &.fixed {
       position: fixed;

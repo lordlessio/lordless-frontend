@@ -1,8 +1,9 @@
 <template>
   <div
-    class="user-avatar-box"
+    class="cursor-pointer user-avatar-box"
     :class="{ 'has-canvas': header && userInfo.address, 'shadow': shadow && userInfo.address }"
-    :style="`font-size: ${fontSize};border-radius: ${radius};`">
+    :style="`font-size: ${fontSize};border-radius: ${radius};`"
+    @click="$router.push(`user/info`)">
     <Blockies v-if="userInfo.address" :radius="radius" :seed="userInfo.address" :scale="scale"></Blockies>
     <span v-if="!userInfo.address && showText" @click.stop="sign" class="user-sign">Sign in</span>
   </div>

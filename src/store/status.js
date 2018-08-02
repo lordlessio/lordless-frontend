@@ -7,7 +7,7 @@ import { actionTypes, mutationTypes } from './types'
 export default {
   namespaced: true,
   state: {
-    browser: {}
+    browser: { default: true }
   },
   mutations: {
 

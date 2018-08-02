@@ -1,9 +1,17 @@
 import Vue from 'vue'
-import { splitAddress, dateFormat } from 'utils/tool'
+import moment from 'moment'
+import { splitAddress } from 'utils/tool'
+window.moment = moment
 
 Vue.filter('splitAddress', splitAddress)
 
-Vue.filter('dateFormat', dateFormat)
+Vue.filter('dateFormat', (date, format = 'MMMM Do YYYY, HH:mm:ss') => {
+  return moment(date).format(format)
+})
+
+Vue.filter('timeFormat', date => {
+  return moment(date).startOf('minute').fromNow()
+})
 
 Vue.filter('sliceStr', (str, { start = 0, end = 10 } = {}) => {
   if (!str) return str

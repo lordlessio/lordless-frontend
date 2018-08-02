@@ -1,71 +1,71 @@
 <template>
   <div class="ld-market">
-    <div class="page-container">
+    <div class="d-flex col-flex page-container market-container">
       <div class="d-flex f-align-center market-search-box">
         <span class="el-input__icon el-icon-search ld-auto-icon"></span>
         <span class="v-flex">
           <input class="lordless-input market-search-input" type="text" placeholder="搜索" v-model="marketSearch"/>
         </span>
       </div>
-      <el-row :gutter="20" v-if="!ldbsLoading">
-        <el-col
-          v-for="(item, index) of skeletionLdbs" :key="index"
-          :sm="12" :md="8" :lg="6"
-          >
-          <skeletion-list class="skeletion-item"></skeletion-list>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20" class="market-cnt-box" v-if="ldbsLoading">
-        <el-col
-          v-for="item of ldbs" :key="item._id"
-          :sm="12" :md="8" :lg="6">
-          <div class="market-cnt-item" @click.stop="openDetail(item)">
-            <figure class="item-cards">
-              <figcaption>
-                <img-box absolute :src="item.ldbIcon.sourceUrl" type="span"></img-box>
-              </figcaption>
-              <div class="d-inline-flex f-align-center auction-box">
-                <span class="icon-auction">
+      <div class="d-flex col-flex v-flex market-bottom">
+        <el-row :gutter="20" v-if="!ldbsLoading">
+          <el-col
+            v-for="(item, index) of skeletionLdbs" :key="index"
+            :sm="12" :md="8" :lg="6">
+            <skeletion-list class="skeletion-item"></skeletion-list>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" class="v-flex market-cnt-box" v-if="ldbsLoading">
+          <el-col
+            v-for="ldb of ldbs" :key="ldb._id"
+            :xs="12" :sm="8" :lg="6">
+            <building-card
+              :sale="ldb.chainSystem.sellStatus !== 0"
+              :ldbInfo="ldb"
+              @choose="openDetail">
+            </building-card>
+            <!-- <div class="market-cnt-item" @click.stop="openDetail(item)">
+              <figure class="item-cards">
+                <figcaption>
+                  <img-box absolute :src="item.ldbIcon.sourceUrl" type="span"></img-box>
+                </figcaption>
+                <div class="d-inline-flex f-align-center auction-box">
+                  <span class="icon-auction">
+                    <svg>
+                      <use xlink:href="static/svg/icon.svg#icon-auction"/>
+                    </svg>
+                  </span>
+                  <span class="icon-sale-unit">
+                    <svg>
+                      <use xlink:href="static/svg/icon.svg#icon-sale-unit"/>
+                    </svg>
+                  </span>
+                  <span>{{ item.chainSystem.value }}</span>
+                </div>
+              </figure>
+              <div class="d-flex f-align-center text-color-main item-desc">
+                <span class="crown-span">
                   <svg>
-                    <use xlink:href="static/svg/icon.svg#icon-auction"/>
+                    <use :xlink:href="`#icon-crown-l${item.levelSystem.level}`"/>
                   </svg>
                 </span>
-                <span class="icon-sale-unit">
-                  <svg>
-                    <use xlink:href="static/svg/icon.svg#icon-sale-unit"/>
-                  </svg>
-                </span>
-                <span>{{ item.chainSystem.value }}</span>
+                <span class="text-ellipsis">{{ item.name.zh }}</span>
+                <span class="item-desc-level text-color-secondary">· {{ item.levelSystem.level }}段</span>
               </div>
-            </figure>
-            <div class="d-flex f-align-center text-color-main item-desc">
-              <span class="crown-span">
-                <svg>
-                  <use :xlink:href="`#icon-crown-l${item.levelSystem.level}`"/>
-                </svg>
-              </span>
-              <span>{{ item.name.zh }}</span>
-              <span class="item-desc-level text-color-secondary">· {{ item.levelSystem.level }}段</span>
-            </div>
-          </div>
-        </el-col>
-      </el-row>
-      <div class="d-flex f-align-center market-pagination-box">
-        <skeletion-pager v-if="!ldbsLoading"></skeletion-pager>
-        <div
-          v-if="ldbsLoading"
-          class="v-flex market-pagination-pages">
-          <el-pagination
+            </div> -->
+          </el-col>
+        </el-row>
+        <div class="market-pagination-box">
+          <skeletion-pager v-if="!ldbsLoading"></skeletion-pager>
+          <Pagination
+            v-if="ldbs.length > pageSize"
+            class="market-pagination-pages"
             background
-            layout="pager"
-            :total="1000">
-          </el-pagination>
-        </div>
-        <div
-          v-if="ldbsLoading"
-          class="market-pagination-switch">
-          <span>上一页</span>
-          <span>下一页</span>
+            :page-size="pageSize"
+            @prev="paginationPrev"
+            @next="paginationNext"
+            @currentChange="paginationCurrent">
+          </Pagination>
         </div>
       </div>
     </div>
@@ -83,6 +83,8 @@ import { getChainLdbs } from 'api'
 import DetailDialog from '@/components/reuse/ldb/detailDialog'
 import { historyState } from 'utils/tool'
 import ImgBox from '@/components/stories/image'
+import Pagination from '@/components/stories/pagination'
+import BuildingCard from '@/components/reuse/ldb/building'
 
 import SkeletionList from '@/components/skeletion/market_list'
 import SkeletionPager from '@/components/skeletion/pagination'
@@ -90,6 +92,7 @@ import SkeletionPager from '@/components/skeletion/pagination'
 export default {
   data: () => {
     return {
+      pageSize: 10,
 
       // ldb 建筑列表
       ldbs: [],
@@ -104,13 +107,15 @@ export default {
       marketSearch: '',
 
       // skeletion options
-      skeletionLdbs: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      skeletionLdbs: [1, 2, 3, 4],
 
       // loading options
       ldbsLoading: true
     }
   },
   components: {
+    BuildingCard,
+    Pagination,
     ImgBox,
     DetailDialog,
     SkeletionList,
@@ -123,6 +128,10 @@ export default {
     //   if (objectType(photos)[0] !== 'array') return photos
     //   return decodeURIComponent(photos[0].split(',')[0])
     // },
+
+    chooseBuilding (ldb) {
+      console.log('-------- chooseBuilding', ldb)
+    },
 
     /**
      * 打开详情信息页
@@ -147,11 +156,20 @@ export default {
      */
     async getLdbs () {
       this.ldbsLoading = false
-      const res = await getChainLdbs()
+      const res = await getChainLdbs({ sellStatus: 1 })
       if (res.code === 1000) {
         this.ldbs = res.data.list
       }
       this.ldbsLoading = true
+    },
+    paginationPrev (e) {
+      console.log('paginationPrev', e)
+    },
+    paginationNext (e) {
+      console.log('paginationNext', e)
+    },
+    paginationCurrent (e) {
+      console.log('paginationCurrent', e)
     }
   },
   watch: {
@@ -182,7 +200,11 @@ export default {
   @import '@/assets/stylus/mixin/class_mixin.scss';
   @import '@/assets/stylus/mixin/color_mixin.scss';
   .ld-market {
-
+    height: 100%;
+    background-color: #f8f8f8;
+  }
+  .market-container {
+    height: 100%;
   }
   .market-cnt-box {
 
@@ -277,6 +299,7 @@ export default {
   }
   .item-desc-level {
     margin-left: 5px;
+    width: 50px;
   }
 
   /*

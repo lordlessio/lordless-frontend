@@ -5,7 +5,7 @@
         <div class="carousel-loop-box">
           <div class="d-flex f-align-center carousel-loop-item animating is-active">
             <div class="v-flex d-flex f-justify-center sm-hidden">
-              <span class="inline-block md-mar-r1">
+              <span class="inline-block lg-mar-r1">
                 <svg>
                   <use xlink:href="static/svg/color_icon.svg#icon-hourglass"/>
                 </svg>
@@ -16,7 +16,7 @@
               </span>
             </div>
             <div class="v-flex d-flex f-justify-center">
-              <span class="inline-block md-mar-r1 sm-hidden">
+              <span class="inline-block lg-mar-r1 sm-hidden">
                 <svg>
                   <use xlink:href="static/svg/color_icon.svg#icon-tx"/>
                 </svg>
@@ -27,7 +27,7 @@
               </span>
             </div>
             <div class="v-flex d-flex f-justify-center">
-              <span class="inline-block md-mar-r1 sm-hidden">
+              <span class="inline-block lg-mar-r1 sm-hidden">
                 <svg>
                   <use xlink:href="static/svg/color_icon.svg#icon-price"/>
                 </svg>
@@ -40,7 +40,7 @@
           </div>
           <div class="d-flex f-align-center carousel-loop-item">
             <div class="v-flex d-flex f-justify-center sm-hidden">
-              <span class="inline-block md-mar-r1">
+              <span class="inline-block lg-mar-r1">
                 <svg>
                   <use xlink:href="static/svg/color_icon.svg#icon-hourglass"/>
                 </svg>
@@ -51,7 +51,7 @@
               </span>
             </div>
             <div class="v-flex d-flex f-justify-center">
-              <span class="inline-block md-mar-r1 sm-hidden">
+              <span class="inline-block lg-mar-r1 sm-hidden">
                 <svg>
                   <use xlink:href="static/svg/color_icon.svg#icon-tx"/>
                 </svg>
@@ -62,7 +62,7 @@
               </span>
             </div>
             <div class="v-flex d-flex f-justify-center">
-              <span class="inline-block md-mar-r1 sm-hidden">
+              <span class="inline-block lg-mar-r1 sm-hidden">
                 <svg>
                   <use xlink:href="static/svg/color_icon.svg#icon-price"/>
                 </svg>
@@ -75,7 +75,7 @@
           </div>
           <div class="d-flex f-align-center carousel-loop-item">
             <div class="v-flex d-flex f-justify-center sm-hidden">
-              <span class="inline-block md-mar-r1">
+              <span class="inline-block lg-mar-r1">
                 <svg>
                   <use xlink:href="static/svg/color_icon.svg#icon-hourglass"/>
                 </svg>
@@ -86,7 +86,7 @@
               </span>
             </div>
             <div class="v-flex d-flex f-justify-center">
-              <span class="inline-block md-mar-r1 sm-hidden">
+              <span class="inline-block lg-mar-r1 sm-hidden">
                 <svg>
                   <use xlink:href="static/svg/color_icon.svg#icon-tx"/>
                 </svg>
@@ -97,7 +97,7 @@
               </span>
             </div>
             <div class="v-flex d-flex f-justify-center">
-              <span class="inline-block md-mar-r1 sm-hidden">
+              <span class="inline-block lg-mar-r1 sm-hidden">
                 <svg>
                   <use xlink:href="static/svg/color_icon.svg#icon-price"/>
                 </svg>
@@ -110,7 +110,7 @@
           </div>
           <div class="d-flex f-align-center carousel-loop-item">
             <div class="v-flex d-flex f-justify-center sm-hidden">
-              <span class="inline-block md-mar-r1">
+              <span class="inline-block lg-mar-r1">
                 <svg>
                   <use xlink:href="static/svg/color_icon.svg#icon-hourglass"/>
                 </svg>
@@ -121,7 +121,7 @@
               </span>
             </div>
             <div class="v-flex d-flex f-justify-center">
-              <span class="inline-block md-mar-r1 sm-hidden">
+              <span class="inline-block lg-mar-r1 sm-hidden">
                 <svg>
                   <use xlink:href="static/svg/color_icon.svg#icon-tx"/>
                 </svg>
@@ -132,7 +132,7 @@
               </span>
             </div>
             <div class="v-flex d-flex f-justify-center">
-              <span class="inline-block md-mar-r1 sm-hidden">
+              <span class="inline-block lg-mar-r1 sm-hidden">
                 <svg>
                   <use xlink:href="static/svg/color_icon.svg#icon-price"/>
                 </svg>

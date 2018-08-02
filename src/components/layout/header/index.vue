@@ -1,5 +1,5 @@
 <template>
-  <header id="ld-header" class="ld-header" :class="[{ 'fixed': fixed }, { 'inverse': !scroll }, { 'transparent': transparent }, theme]" v-if="show">
+  <header id="ld-header" class="ld-header" :class="[{ 'fixed': fixed }, { 'inverse': inverse && !scroll }, { 'transparent': transparent }, { 'inherit': inherit }, theme]" v-if="show">
     <div class="container d-flex">
       <div class="text-left inline-block header-logo" v-if="showLogo">
         <router-link to="/" class="inline-block">
@@ -12,8 +12,8 @@
         </router-link>
       </div>
       <div @click.stop="toggleHeader" id="header-mask" class="header-mask"></div>
-      <div @click.stop="headerItemClick" class="v-flex TTFontBold text-right header-text navbar-sidebar">
-        <span class="uppercase md-hidden header-right-item header-close-item sm-text-center">
+      <div @click.stop="headerItemClick" class="v-flex TTFontBold lg-text-right header-text navbar-sidebar">
+        <span class="uppercase lg-hidden header-right-item header-close-item sm-text-center">
           <span @click.stop="toggleHeader" class="ld-close-icon"></span>
           <router-link to="/" class="header-sm-logo">
             <svg class="inline-block">
@@ -36,7 +36,7 @@
             FAQs
           </router-link>
         </span>
-        <span class="inline-block header-right-item user-item" data-type="link">
+        <span class="inline-block header-right-item user-item sm-hidden" data-type="link">
           <user-avatar class="user-avatar" :header="true"></user-avatar>
         </span>
       </div>
@@ -69,8 +69,19 @@ export default {
       default: false
     },
 
+    inverse: {
+      type: Boolean,
+      default: true
+    },
+
     // 是否跟随界面滚动
     scroll: {
+      type: Boolean,
+      default: false
+    },
+
+    // 字体颜色 inherit
+    inherit: {
       type: Boolean,
       default: false
     },
@@ -151,6 +162,9 @@ export default {
     &.transparent {
       background-color: transparent;
     }
+    &.inherit {
+      color: inherit;
+    }
     &.inverse {
       background-color: #4D33A7;
     }
@@ -214,6 +228,8 @@ export default {
     background-color: inherit;
     @include padding(-1, 5px, 1);
     &::before, &::after {
+      content: '';
+      position: absolute;
       left: 50%;
       top: 50%;
       width: 60%;
@@ -235,7 +251,7 @@ export default {
     // @include distance('margin', 'bottom', 1, 1, -1);
     // @include distance('margin', 'left', 2.5, 1);
     a {
-      color: #fff;
+      color: inherit;
       // font-weight: bold;
       text-decoration: none;
       @include fontSize(20px, 1);
@@ -276,83 +292,6 @@ export default {
     flex: 1;
     text-align: right;
     // font-weight: bold;
-  }
-
-  @media screen and (min-width: 769px) {
-    .container {
-      line-height: 80px;
-    }
-  }
-
-  @media screen and (max-width: 768px) {
-    .ld-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 99;
-    }
-    .header-logo {
-      line-height: 80px;
-    }
-    .navbar-sidebar {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 60%;
-      max-width: 300px;
-      height: 100vh;
-      text-align: left;
-      background-color: #4f53d6;
-      z-index: 1000;
-      transform: translateX(100%);
-      transition: transform .3s ease-in-out .15s;
-      // .overflow();
-      .header-right-item {
-        // margin: 10px 0 10px 25px;
-        display: block;
-        @include margin-around(10px, 0, 10px, 25px, 1);
-        >a {
-          display: inline-block;
-          // padding: 5px 10px;
-        }
-      }
-      .header-close-item {
-        position: relative;
-        height: 80px;
-        border-bottom: 1px solid #393b7e;
-        @include margin-around(0, 0, 10px, 0, 1);
-      }
-      .ld-close-icon {
-        position: absolute;
-        left: -50px;
-        top: 50%;
-        transform: translateY(-50%);
-        &::before, &::after {
-          background-color: #fff;
-          transition: transform .3s ease-out 0s;
-        }
-        &::before {
-          transform: translate(-50%, -150%) rotate(0deg);
-        }
-        &::after {
-          transform: translate(-50%, 150%) rotate(0deg);
-        }
-      }
-      .header-sm-logo {
-        @include padding('top', 20px, 1, -2);
-        svg {
-          width: 50px;
-          height: 40px;
-          fill: #fff;
-        }
-      }
-    }
-    .header-logo {
-      .logo-text {
-        display: none;
-      }
-    }
   }
 
   .header-mask {
@@ -404,20 +343,19 @@ export default {
     }
     .navbar-sidebar {
       margin: 0;
-      position: absolute;
+      position: fixed;
       top: 0;
       right: 0;
       width: 60%;
       max-width: 300px;
-      height: 100vh;
-      text-align: left;
+      height: 100%;
       background-color: #4f53d6;
       z-index: 1000;
       transform: translateX(100%);
       transition: transform .3s ease-in-out .15s;
       // .overflow();
       .header-right-item {
-        margin: 10px 0 10px 25px;
+        margin: 20px 0 10px 25px;
         display: block;
         font-size: 16px;
         >a {
