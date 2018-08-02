@@ -7,8 +7,8 @@ module.exports = axios => {
     },
 
     // 根据 tokenId 获取交易记录
-    getTxsByTokenId: (params) => {
-      return axios.get(`/api/tx/${params.tokenId}/records`, { params })
+    getLdbRecords: (params) => {
+      return axios.get(`/api/tx/ldbRecords`, { params })
     },
 
     // 根据参数获取 用户 tx 状态

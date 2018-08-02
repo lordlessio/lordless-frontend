@@ -8,7 +8,6 @@ import { mutationTypes } from '@/store/types'
 import Login from '@/pages/user/login.vue'
 import Market from '@/pages/market'
 import Lbs from '@/pages/lbs'
-import MapBox from '@/pages/mapbox'
 
 import LdbDetail from '@/pages/ldb/_detail.vue'
 
@@ -42,12 +41,7 @@ const router = new Router({
     {
       path: '/lbs',
       name: 'Lbs',
-      component: Lbs
-    },
-    {
-      path: '/mapbox',
-      name: 'MapBox',
-      component: MapBox,
+      component: Lbs,
       meta: {
         header: {
           show: false

@@ -3,8 +3,8 @@
     <div class="d-flex v-flex col-flex user-candy-container">
       <h1 class="text-cap user-building-title">LDB</h1>
       <div
-        v-if="!buildings.length && !saleBuildings.length"
-        class="d-flex v-flex col-flex f-auto-center text-center building-no-asset">
+        v-if="!buildings.length && !saleBuildings.length && !loading"
+        class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
         <svg>
           <use xlink:href="/static/svg/icon.svg#icon-dropbox"/>
         </svg>
@@ -18,7 +18,7 @@
       </div>
       <div
         v-if="buildings.length || saleBuildings.length"
-        class="v-flex user-candy-tabs">
+        class="v-flex user-building-tabs">
         <el-tabs
           v-model="buildingTab"
           @tab-click="chooseTab">
@@ -57,6 +57,20 @@
           <el-tab-pane
             label="For sale"
             name="sale">
+            <div
+              v-if="!saleBuildings.length && !loading"
+              class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-buildings">
+              <svg>
+                <use xlink:href="/static/svg/icon.svg#icon-dropbox"/>
+              </svg>
+              <p>You have nothing on sale now.</p>
+              <div class="d-flex f-auto-center TTFontBolder">
+                <span>Make the first selling transaction for your</span>
+                <span class="inline-block">
+                  <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="buildingTab = 'all'">LDB</ld-btn>
+                </span>
+              </div>
+            </div>
             <el-row :gutter="20" class="user-buildings-cnt">
               <el-col
                 :xs="24" :sm="12" :lg="8"
@@ -102,6 +116,8 @@ import { mapState } from 'vuex'
 export default {
   data: () => {
     return {
+
+      loading: false,
 
       // 当前 tab 区域
       buildingTab: 'all',
@@ -170,7 +186,6 @@ export default {
       if (this.currentTab === this.buildingTab) return
       this.currentTab = this.buildingTab
 
-      this.loading = true
       if (this.buildingTab === 'all') this.getAllBuilding()
       else this.getSaleBuilding()
     },
@@ -185,6 +200,7 @@ export default {
     },
 
     async getAllBuilding ({ address = this.userInfo.address, sort = this.buildingSort, page = 1, offset = 10 } = {}) {
+      this.loading = true
       const params = {
         page,
         offset,
@@ -201,6 +217,7 @@ export default {
     },
 
     async getSaleBuilding ({ address = this.userInfo.address, page = 1, offset = 10 } = {}) {
+      this.loading = true
       const params = {
         page,
         offset,
@@ -210,7 +227,7 @@ export default {
       const res = await getChainLdbs(params)
       if (res.code === 1000) {
         const { list, total } = res.data
-        this.saleBuildings = [].concat(list, list)
+        this.saleBuildings = list
         this.saleBTotal = total
       }
       this.loading = false
@@ -265,6 +282,7 @@ export default {
       margin: 0;
     }
     /deep/ .el-tabs__content {
+      position: static;
       overflow: initial;
     }
     /deep/ .el-tabs__item {
@@ -304,43 +322,16 @@ export default {
     }
   }
 
-  /**
-   *  building-no-asset  --- begin
-   */
-
-  .building-no-asset {
-    color: #777777;
-    fill: #777777;
-    font-size: 16px;
-    >svg {
-      width: 180px;
-      height: 180px;
-    }
-    >p {
-      margin-top: 15px;
-      color: #bbb;
-      font-size: 24px;
-    }
-    >div {
-      margin-top: 25px;
-    }
-  }
-  .no-asset-btn {
-    margin: 0 15px;
-    padding: 10px 16px;
-    font-size: 16px;
-    color: #4E47D3;
-    border-radius: 5px;
-  }
-
-  /**
-   *  building-no-asset  --- end
-   */
-
-   .user-candy-tabs {
+   .user-building-tabs {
     position: relative;
     @include margin('top', 35px, 1);
     @include margin('bottom', 150px, 1);
+  }
+  .user-no-sale-buildings {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
   .building-item {
     @include margin('top', 60px, 1);

@@ -1,9 +1,13 @@
 <template>
-  <div class="carousel-box">
+  <div class="carousel-box" :class="{ 'shadow': shadow, 'hidden': !txs.length }">
     <div class="d-flex carousel-container">
       <div class="v-flex carousel-content">
         <div class="carousel-loop-box">
-          <div class="d-flex f-align-center carousel-loop-item animating is-active">
+          <div
+            v-for="(tx, index) of txs"
+            :key="index"
+            class="d-flex f-align-center text-nowrap carousel-loop-item"
+            :class="{ 'animation is-active': index === 0 }">
             <div class="v-flex d-flex f-justify-center sm-hidden">
               <span class="inline-block lg-mar-r1">
                 <svg>
@@ -12,7 +16,7 @@
               </span>
               <span class="d-inline-flex col-flex f-justify-center loop-item-text">
                 <span class="inline-block">transactions</span>
-                <span class="inline-block">40 sceonds ago</span>
+                <span class="inline-block">{{ tx.created_at | timeFormat }}</span>
               </span>
             </div>
             <div class="v-flex d-flex f-justify-center">
@@ -23,7 +27,7 @@
               </span>
               <span class="d-inline-flex col-flex f-justify-center loop-item-text">
                 <span class="inline-block">Address</span>
-                <span class="inline-block">0x5cF5...305ABB</span>
+                <span class="inline-block">{{ tx.transactionHash | splitAddress({ before: 7, end: 5 }) }}</span>
               </span>
             </div>
             <div class="v-flex d-flex f-justify-center">
@@ -34,11 +38,11 @@
               </span>
               <span class="d-inline-flex col-flex f-justify-center loop-item-text">
                 <span class="inline-block">Price</span>
-                <span class="inline-block">1.1ETH</span>
+                <span class="inline-block">{{ tx.request.value }} ETH</span>
               </span>
             </div>
           </div>
-          <div class="d-flex f-align-center carousel-loop-item">
+          <!-- <div class="d-flex f-align-center carousel-loop-item">
             <div class="v-flex d-flex f-justify-center sm-hidden">
               <span class="inline-block lg-mar-r1">
                 <svg>
@@ -142,7 +146,7 @@
                 <span class="inline-block">4.4ETH</span>
               </span>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="d-flex f-align-center carousel-logo color-main" @click.stop="logoEvt">
@@ -159,6 +163,7 @@
 
 <script>
 import { hasClass, addClass, removeClass, hasContent } from 'utils/tool'
+import { getLdbRecords } from 'api'
 export default {
   props: {
     list: {
@@ -174,20 +179,33 @@ export default {
     direction: {
       type: Number,
       default: 1
+    },
+    shadow: {
+      type: Boolean,
+      default: true
     }
   },
   data: () => {
     return {
-      loop: true
+      loop: true,
+      txs: []
     }
   },
   methods: {
 
+    async getTxs () {
+      const res = await getLdbRecords()
+      if (res.code === 1000) {
+        this.txs = res.data.list
+      }
+    },
+
     /**
      * 初始化
      */
-    init () {
-      const height = document.querySelector('.carousel-loop-item').offsetHeight
+    async init () {
+      await this.getTxs()
+      const height = document.querySelector('.carousel-loop-box').offsetHeight
       const loops = document.querySelectorAll('.carousel-loop-item')
       let aIndex = 0
       for (let i = 0; i < loops.length; i++) {
@@ -308,6 +326,9 @@ export default {
     background-color: #fff;
     border-radius: 5px;
     overflow: hidden;
+    &.shadow {
+      box-shadow: 2.5px 5px 20px 0 rgba(0, 0, 0, .25);
+    }
     // @include padding(-1, 20px, 1);
   }
   .carousel-container {
