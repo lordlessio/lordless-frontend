@@ -70,7 +70,7 @@
         </ul>
         <div class="text-center status-start-box" v-if="finishStatus">
           <h2>It seems that you're fully prepared!</h2>
-          <ld-button class="text-upper start-btn" @click="$router.push('market')">START</ld-button>
+          <ld-button class="TTFontBolder text-upper start-btn" @click="$router.push('market')">START</ld-button>
         </div>
       </div>
       <div class="text-center lordless-status-questions">
@@ -228,11 +228,11 @@ export default {
       position: absolute;
       left: 50%;
       top: 0;
-      width: 100vw;
       height: 100%;
       background-color: #4E47D3;
       transform: translateX(-50%);
       z-index: -1;
+      @include viewport-unit(width, 100vw);
     }
     >h2 {
       font-family: inherit;
@@ -241,7 +241,6 @@ export default {
   }
   .start-btn {
     color: #4E47D3;
-    font-weight: bold;
     @include fontSize(24px, 1);
     @include margin('top', 30px, 1);
     @include padding-around(10px, 30px, 10px, 30px, 1);

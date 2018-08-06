@@ -69,7 +69,7 @@
 
 <script>
 import LdHeader from '@/components/layout/header'
-import Authorize from '@/components/reuse/authorize'
+import Authorize from '@/components/reuse/dialog/authorize'
 import Loading from '@/components/stories/loading'
 
 import { dialogMixins } from '@/mixins'
@@ -92,14 +92,14 @@ export default {
           path: '/user/buildings'
         },
         {
-          name: 'candy',
+          name: 'candies',
           icon: 'reddit',
-          path: '/user/candy'
+          path: '/user/candies'
         },
         {
           name: 'tasks',
           icon: 'reddit',
-          path: '/user/info'
+          path: '/user/tasks'
         },
         {
           name: 'authorization',
@@ -190,6 +190,24 @@ export default {
     }
   }
 
+  @keyframes fillGradient {
+    0% {
+      fill: $--text-red-color;
+    }
+    20% {
+      fill: $--text-blue-color;
+    }
+    40% {
+      fill: $--text-green-color;
+    }
+    60% {
+      fill: $--text-yellow-color;
+    }
+    80% {
+      fill: $--text-pink-color;
+    }
+  }
+
   .ld-user-loading {
     // filter: grayscale(30%) sepia(30%);
     background-color: #fff;
@@ -200,11 +218,16 @@ export default {
       width: 150px;
       height: 100px;
 
-      fill: rgba(202, 202, 202, .5);
-      stroke: #332C2B;
-      stroke-dasharray: 205px;
+      // fill: rgba(202, 202, 202, .5);
+      // stroke: #332C2B;
+      // stroke-dasharray: 205px;
+      // animation-fill-mode: both;
+      // animation: outline 5s ease-in-out infinite alternate;
+      fill: $--text-red-color;
+      stroke: none;
+      // stroke-dasharray: 205px;
       animation-fill-mode: both;
-      animation: outline 5s ease-in-out infinite alternate;
+      animation: fillGradient 5s ease-in-out infinite alternate;
     }
   }
 
@@ -290,6 +313,7 @@ export default {
   .user-content-container {
     margin: 0 auto;
     max-width: 1000px;
+    @include viewport-unit(width, 100vw);
   }
 
   @media screen and (min-width: 992px) {

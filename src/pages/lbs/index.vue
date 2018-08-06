@@ -57,7 +57,7 @@
 
 <script>
 import Mapbox from '@/components/lbs/mapbox'
-import DetailDialog from '@/components/reuse/ldb/detailDialog'
+import DetailDialog from '@/components/reuse/dialog/ldb/detail'
 import TxCarousel from '@/components/reuse/txCarousel'
 import AutoComplete from '@/components/stories/autoComplete'
 import Blockies from '@/components/stories/blockies'
@@ -89,7 +89,7 @@ export default {
 
       // lordMap options
       lbsMPitch: 45,
-      mapScrollZooms: [11, 17],
+      mapScrollZooms: [12, 17],
       test_ldbs: [
         {
           'id': 'rectLBJ0ALHhlp0WZ',
@@ -434,7 +434,7 @@ export default {
         this[actionTypes.LDB_SET_HISTORY_SEARCH_LDB](item)
 
         // 调整地图显示视图
-        const { lat, lng } = item.chainSystem
+        const { lat, lng } = item.chain
         this.$refs.lordMap.flyToCoords({ center: [lng, lat], zoom: this.mapScrollZooms[this.mapScrollZooms.length - 1] }, () => {
           historyState(`${this.$route.path}?coords=${[lng, lat].toString()}`)
         })
@@ -482,7 +482,7 @@ export default {
       this.detailModel = true
       this.$nextTick(() => {
         this.ldbDetail = info
-        const { lat, lng } = info.chainSystem
+        const { lat, lng } = info.chain
         this.coordsPath = `${this.$route.path}?coords=${[lng, lat].toString()}`
         historyState(`/ldb/${info._id}`)
       })
@@ -511,7 +511,7 @@ export default {
   @import '@/assets/stylus/mixin/index.scss';
   .ld-lbs-main {
     position: relative;
-    height: 100%;
+    @include viewport-unit(height, 100vh);
   }
   .lbs-search {
     position: absolute;
@@ -519,7 +519,6 @@ export default {
     left: 60px;
     width: 100%;
     max-width: 400px;
-    box-shadow: 2.5px 5px 20px 0 rgba(0, 0, 0, .25);
     @include padding(-1, 20px, 1, -2);
   }
   .lbs-tx-box {

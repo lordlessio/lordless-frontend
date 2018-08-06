@@ -9,6 +9,15 @@ export default {
   namespaced: true,
   state: {
 
+    messageTip: {
+      show: false,
+      theme: 'default',
+      text: 'Message Tip'
+    },
+
+    // metamask 是否有合约待执行
+    metaOpen: false,
+
     // blur 状态集合，多级状态使用追加形式
     blurs: [],
     app: {},
@@ -31,6 +40,12 @@ export default {
       inherit: false
     },
 
+    dMessageTip: {
+      show: false,
+      theme: 'default',
+      text: 'Message Tip'
+    },
+
     // default options for header
     dHeader: {
       show: true,
@@ -51,6 +66,24 @@ export default {
     }
   },
   mutations: {
+
+    /**
+     * 修改 metaOpen 配置参数
+     */
+    [mutationTypes.LAYOUT_SET_META_OPEN] (state, bool = false) {
+      state.metaOpen = !!bool
+    },
+
+    /**
+     * 修改 messageTip 配置参数
+     */
+    [mutationTypes.LAYOUT_SET_MESSAGE_TIP] (state, _msg) {
+      if (!checkOptions(_msg)) {
+        state.messageTip = stringifyParse(state.dMessageTip)
+        return false
+      }
+      state.messageTip = Object.assign({}, state.messageTip, _msg)
+    },
 
     /**
      * 修改 blur 配置参数
@@ -115,6 +148,20 @@ export default {
      */
     [actionTypes.LAYOUT_SET_BLURS] ({ commit }, _blur) {
       commit(mutationTypes.LAYOUT_SET_BLURS, _blur)
+    },
+
+    /**
+     * 修改 messageTip layout opts
+     */
+    [actionTypes.LAYOUT_SET_MESSAGE_TIP] ({ commit }, _msg) {
+      commit(mutationTypes.LAYOUT_SET_MESSAGE_TIP, _msg)
+    },
+
+    /**
+     * 修改 metaTip layout opts
+     */
+    [actionTypes.LAYOUT_SET_META_OPEN] ({ commit }, bool) {
+      commit(mutationTypes.LAYOUT_SET_META_OPEN, bool)
     }
   }
 }

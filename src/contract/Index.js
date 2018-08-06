@@ -14,20 +14,20 @@ module.exports = (web3js, account) => {
   }
 
   return {
-    ldbNFT: () => {
-      return initContract(process.env.contract.ldbNFT)
+    LDBNFTs: () => {
+      return initContract(process.env.contract.LDBNFTs)
     },
 
-    ldbNFTCrowdsale: () => {
-      return initContract(process.env.contract.ldbNFTCrowdsale)
+    NFTsCrowdsale: () => {
+      return initContract(process.env.contract.NFTsCrowdsale)
     },
 
-    erc20Token: () => {
-      return initContract(process.env.contract.erc20)
+    Power: () => {
+      return initContract(process.env.contract.Power)
     },
 
-    building: () => {
-      return initContract(process.env.contract.building)
+    Building: () => {
+      return initContract(process.env.contract.Building)
     }
   }
 }

@@ -16,12 +16,11 @@ export default {
     isCrowdsaleApproved: false,
 
     // 合约
-    ldbNFTContract: null,
-    ldbNFTCrowdsaleContract: null,
-    erc20Contract: null,
+    LDBNFTs: null,
+    NFTsCrowdsale: null,
 
     // 测试使用
-    buildingContract: null
+    Building: null
   },
 
   mutations: {
@@ -41,10 +40,10 @@ export default {
      * check crowdsale by address
      */
     [actionTypes.CONTRACT_CHECK_CROWDSALE]: async ({ state, commit }, address) => {
-      const { ldbNFTContract, ldbNFTCrowdsaleContract } = state
+      const { LDBNFTs, NFTsCrowdsale } = state
       let isCrowdsaleApproved
       if (!address) isCrowdsaleApproved = false
-      else isCrowdsaleApproved = await ldbNFTContract.isApprovedForAll(address, ldbNFTCrowdsaleContract.address)
+      else isCrowdsaleApproved = await LDBNFTs.isApprovedForAll(address, NFTsCrowdsale.address)
 
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'isCrowdsaleApproved', value: isCrowdsaleApproved })
       return isCrowdsaleApproved
@@ -59,11 +58,10 @@ export default {
 
       // 如果是 monitor 的状态，不重置合约文件
       if (!monitor) {
-        const { ldbNFTCrowdsale, erc20Token, building, ldbNFT } = lordContract(web3js, address)
-        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'ldbNFTCrowdsaleContract', value: await ldbNFTCrowdsale() })
-        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'erc20Contract', value: await erc20Token() })
-        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'buildingContract', value: await building() })
-        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'ldbNFTContract', value: await ldbNFT() })
+        const { NFTsCrowdsale, Building, LDBNFTs } = lordContract(web3js, address)
+        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'NFTsCrowdsale', value: await NFTsCrowdsale() })
+        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Building', value: await Building() })
+        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'LDBNFTs', value: await LDBNFTs() })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'contractReady', value: true })
       }
 
@@ -77,10 +75,9 @@ export default {
     [actionTypes.CONTRACT_RESET_INSTANCE]: ({ commit }) => {
       console.log('reset contract')
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'address', value: null })
-      // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'ldbNFTCrowdsaleContract', value: null })
-      // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'erc20Contract', value: null })
+      // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'NFTsCrowdsale', value: null })
       // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'buildingContract', value: null })
-      // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'ldbNFTContract', value: null })
+      // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'LDBNFTs', value: null })
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'isCrowdsaleApproved', value: false })
     }
   }

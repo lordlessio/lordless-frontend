@@ -97,7 +97,7 @@
     position: fixed;
     right: 30px;
     top: 15px;
-    color: #ccc;
+    color: #fff;
     z-index: 3002;
     cursor: pointer;
     @include fontSize(30px, 0.85);
@@ -181,6 +181,12 @@
     color: #4E47D3;
     border-radius: 5px;
   }
+}
+
+.contract-pending-tip {
+  font-family: $--font-TTNormsMedium;
+  font-size: 14px;
+  @include margin('top', 20px, 1);
 }
 
 /* skeletion -- begin */

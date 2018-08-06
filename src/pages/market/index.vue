@@ -12,7 +12,7 @@
           v-if="!ldbs.length && ldbsLoading"
           class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
           <svg>
-            <use xlink:href="/static/svg/icon.svg#icon-dropbox"/>
+            <use xlink:href="/static/svg/user/building.svg#icon-no-selling-ldb"/>
           </svg>
           <p>Market have no building now.</p>
           <div class="d-flex f-auto-center TTFontBolder">
@@ -23,18 +23,18 @@
           </div>
         </div>
         <el-row :gutter="20" v-if="!ldbsLoading">
-          <el-col
+          <!-- <el-col
             v-for="(item, index) of skeletionLdbs" :key="index"
-            :sm="12" :md="8" :lg="6">
+            :sm="24" :md="8" :lg="6">
             <skeletion-list class="skeletion-item"></skeletion-list>
-          </el-col>
+          </el-col> -->
         </el-row>
         <el-row :gutter="20" class="v-flex market-cnt-box" v-if="ldbs.length && ldbsLoading">
           <el-col
             v-for="ldb of ldbs" :key="ldb._id"
-            :xs="12" :sm="8" :lg="6">
+            :xs="24" :sm="8" :lg="6">
             <building-card
-              :sale="ldb.chainSystem.sellStatus !== 0"
+              :sale="ldb.chain.auction.isOnAuction"
               :ldbInfo="ldb"
               @choose="openDetail">
             </building-card>
@@ -54,17 +54,17 @@
                       <use xlink:href="static/svg/icon.svg#icon-sale-unit"/>
                     </svg>
                   </span>
-                  <span>{{ item.chainSystem.value }}</span>
+                  <span>{{ item.chain.auction.price }}</span>
                 </div>
               </figure>
               <div class="d-flex f-align-center text-color-main item-desc">
                 <span class="crown-span">
                   <svg>
-                    <use :xlink:href="`#icon-crown-l${item.levelSystem.level}`"/>
+                    <use :xlink:href="`#icon-crown-l${item.chain.level}`"/>
                   </svg>
                 </span>
                 <span class="text-ellipsis">{{ item.name.zh }}</span>
-                <span class="item-desc-level text-color-secondary">· {{ item.levelSystem.level }}段</span>
+                <span class="item-desc-level text-color-secondary">· {{ item.chain.level }}段</span>
               </div>
             </div> -->
           </el-col>
@@ -94,14 +94,15 @@
 
 <script>
 import { getChainLdbs } from 'api'
-import DetailDialog from '@/components/reuse/ldb/detailDialog'
 import { historyState } from 'utils/tool'
+
+import DetailDialog from '@/components/reuse/dialog/ldb/detail'
 import ImgBox from '@/components/stories/image'
 import Pagination from '@/components/stories/pagination'
-import BuildingCard from '@/components/reuse/ldb/building'
+import BuildingCard from '@/components/reuse/card/building'
 import LdBtn from '@/components/stories/button'
 
-import SkeletionList from '@/components/skeletion/market_list'
+// import SkeletionList from '@/components/skeletion/market_list'
 import SkeletionPager from '@/components/skeletion/pagination'
 
 export default {
@@ -122,7 +123,7 @@ export default {
       marketSearch: '',
 
       // skeletion options
-      skeletionLdbs: [1, 2, 3, 4],
+      // skeletionLdbs: [1, 2, 3, 4],
 
       // loading options
       ldbsLoading: true
@@ -134,7 +135,7 @@ export default {
     Pagination,
     ImgBox,
     DetailDialog,
-    SkeletionList,
+    // SkeletionList,
     SkeletionPager
   },
   methods: {
@@ -162,17 +163,11 @@ export default {
      */
     async getLdbs () {
       this.ldbsLoading = false
-      const res = await getChainLdbs({ sellStatus: 1 })
+      const res = await getChainLdbs({ isOnAuction: true })
       if (res.code === 1000) {
         this.ldbs = res.data.list
       }
       this.ldbsLoading = true
-    },
-    paginationPrev (e) {
-      console.log('paginationPrev', e)
-    },
-    paginationNext (e) {
-      console.log('paginationNext', e)
     },
     paginationCurrent (e) {
       console.log('paginationCurrent', e)
@@ -211,16 +206,17 @@ export default {
     // min-height: 100%;
     @include viewport-unit(min-height, 100vh, 80px);
   }
-  .market-cnt-box {
-
+  .market-bottom {
+    @include padding('left', 20px, 1, -2);
+    @include padding('right', 20px, 1, -2);
   }
 
   /*
    * skeletion style -- begin
    */
-  .skeletion-item {
-    @include margin-around(0, 20px, 50px, 20px, 1.5);
-  }
+  // .skeletion-item {
+  //   @include margin-around(0, 20px, 50px, 20px, 1.5);
+  // }
   /*
    * skeletion style -- end
    */
@@ -282,12 +278,12 @@ export default {
       height: 15px;
       fill: $--main-color;
     }
-    .icon-sale-unit {
-      margin-right: 2px;
-      width: 6px;
-      height: 8px;
-      line-height: 0;
-    }
+    // .icon-sale-unit {
+    //   margin-right: 2px;
+    //   width: 6px;
+    //   height: 8px;
+    //   line-height: 0;
+    // }
   }
   .item-desc {
     @include margin('top', 12px, 1);

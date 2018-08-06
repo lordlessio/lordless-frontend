@@ -4,23 +4,28 @@
       <div class="building-top">
         <div class="building-header">
           <ld-img type="span" :src="ldbInfo.ldbIcon.source.market"></ld-img>
-          <p class="building-sale-tag">
-            <span></span>
-            <span class="building-sale-price">{{ ldbInfo.chainSystem.value }} ETH</span>
+          <span class="building-sale-bg"></span>
+          <p class="d-flex f-auto-center building-sale-tag">
+            <span class="building-sale-svg">
+              <svg>
+                <use xlink:href="#icon-gradient-ldb-sale"/>
+              </svg>
+            </span>
+            <span class="building-sale-price">{{ ldbInfo.chain.auction.price }} ETH</span>
           </p>
         </div>
         <div class="building-main-cnt">
           <h2 class="building-name">{{ ldbInfo.name.zh }}</h2>
-          <p class="building-tokenId">#{{ ldbInfo.tokenId }}</p>
+          <p class="building-tokenId">#{{ ldbInfo.chain.tokenId }}</p>
           <p class="d-flex f-auto-center building-coords">
             <span>
               <i class="el-icon-location"></i>
             </span>
-            <span>&nbsp;{{ ldbInfo.chainSystem.lng | sliceStr }}, {{ ldbInfo.chainSystem.lat | sliceStr }}</span>
+            <span>&nbsp;{{ ldbInfo.chain.lng / 1e14 | sliceStr }}, {{ ldbInfo.chain.lat / 1e14 | sliceStr }}</span>
           </p>
           <ul class="d-flex f-align-center building-data">
             <li class="v-flex building-data-item">
-              <p>41</p>
+              <p>{{ ldbInfo.chain.influence }}</p>
               <p>Influence</p>
             </li>
             <li class="v-flex building-data-item">
@@ -106,6 +111,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  @import '@/assets/stylus/mixin/index.scss';
   .ld-building-card {
     background-color: #fff;
     border-radius: 5px;
@@ -123,16 +129,41 @@ export default {
   .building-header {
     position: relative;
     height: 250px;
+    background-color: $--text-green-color;
+    >.image-box {
+      z-index: 2;
+    }
+  }
+  .building-sale-bg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-image: url('/static/svg/single/sale-bg.svg');
+    background-size: 200%;
+    background-position-x: 50%;
+    background-position-y: 45%;
+    opacity: .3;
+    background-repeat: no-repeat;
   }
   .building-sale-tag {
     position: absolute;
     left: 0;
-    top: 25px;
+    top: 15px;
     width: 100%;
     visibility: hidden;
+    z-index: 3;
+  }
+  .building-sale-svg {
+    margin-right: 5px;
+    display: inline-block;
+    width: 44px;
+    height: 44px;
   }
   .building-sale-price {
-    padding: 6px 12px;
+    padding: 4px 12px;
     color: #fff;
     font-size: 16px;
     background-image: linear-gradient(to bottom, #16222A, #3A6073);
