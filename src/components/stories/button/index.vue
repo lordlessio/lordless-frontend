@@ -1,6 +1,9 @@
 <template>
   <button :disabled="disabled" class="button-styles" :class="[`${theme}`, { 'shadow': shadow, 'inverse': inverse }]" @click.stop="onClick">
-    <slot></slot>
+    <slot v-if="!loading"></slot>
+    <span v-if="loading">
+      <i class="el-icon-loading"></i>
+    </span>
   </button>
 </template>
 
@@ -27,6 +30,11 @@
       disabled: {
         type: Boolean,
         default: false
+      },
+
+      loading: {
+        type: Boolean,
+        default: false
       }
     },
     methods: {
@@ -40,8 +48,7 @@
 <style lang="scss">
   @import '@/assets/stylus/mixin/color_mixin.scss';
   .button-styles {
-    border-radius: 3px;
-    font-size: 15pt;
+    border-radius: 5px;
     border-width: 1px;
     border-style: solid;
     font-weight: inherit;
@@ -51,8 +58,10 @@
     svg {
       fill: inherit;
     }
-    &:disabled {
-      cursor: no-drop;
+    &.inherit {
+      &.shadow {
+        box-shadow: 2.5px 5px 10px 0 rgba(0, 0, 0, .25);
+      }
     }
     &.default {
       border-color: #eee;
@@ -63,33 +72,19 @@
       }
     }
     &.info {
-      color: #6732F4;
+      color: #4E47D3;
       border: none;
       // background-image: linear-gradient(-90deg, #BB9BF1 0%, #887BF2 100%);
       background-color: #fff;
-      fill: #724AF9;
+      fill: #4E47D3;
       &.shadow {
         box-shadow: 2.5px 5px 10px 0 rgba(0, 0, 0, .25);
         // box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
       }
-      &:disabled {
-        color: #a386f0;
-        fill: #a386f0;
-        background-color: #f1f1f1;
-        box-shadow: 1.25px 2.5px 5px 0 rgba(0, 0, 0, .25);
-        // box-shadow: 4px 8px 11px 0 rgba(87, 14, 192, 0.25);
-      }
       &.inverse {
         color: #fff;
-        background-color: #724AF9;
+        background-color: #4E47D3;
         fill: #fff;
-        &:disabled {
-          color: #ddd;
-          fill: #ddd;
-          background-color: #a386f0;
-          box-shadow: 1.25px 2.5px 5px 0 rgba(0, 0, 0, .25);
-          // box-shadow: 4px 8px 11px 0 rgba(87, 14, 192, 0.25);
-        }
       }
     }
     &.green {
@@ -102,24 +97,10 @@
         box-shadow: 2.5px 5px 10px 0 rgba(0, 0, 0, .25);
         // box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
       }
-      &:disabled {
-        color: #96D4CC;
-        fill: #96D4CC;
-        background-color: #f1f1f1;
-        box-shadow: 1.25px 2.5px 5px 0 rgba(0, 0, 0, .25);
-        // box-shadow: 4px 8px 11px 0 rgba(87, 14, 192, 0.25);
-      }
       &.inverse {
         color: #fff;
         background-color: #69D1C3;
         fill: #fff;
-        &:disabled {
-          color: #ddd;
-          fill: #ddd;
-          background-color: #96D4CC;
-          box-shadow: 1.25px 2.5px 5px 0 rgba(0, 0, 0, .25);
-          // box-shadow: 4px 8px 11px 0 rgba(87, 14, 192, 0.25);
-        }
       }
     }
     &.red {
@@ -132,24 +113,10 @@
         box-shadow: 2.5px 5px 10px 0 rgba(0, 0, 0, .25);
         // box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
       }
-      &:disabled {
-        color: #E4A6A5;
-        fill: #E4A6A5;
-        background-color: #f1f1f1;
-        box-shadow: 1.25px 2.5px 5px 0 rgba(0, 0, 0, .25);
-        // box-shadow: 4px 8px 11px 0 rgba(87, 14, 192, 0.25);
-      }
       &.inverse {
         color: #fff;
         background-color: #EB8785;
         fill: #fff;
-        &:disabled {
-          color: #ddd;
-          fill: #ddd;
-          background-color: #EB8785;
-          box-shadow: 1.25px 2.5px 5px 0 rgba(0, 0, 0, .25);
-          // box-shadow: 4px 8px 11px 0 rgba(87, 14, 192, 0.25);
-        }
       }
     }
     &.pink {
@@ -178,10 +145,6 @@
       &.shadow {
         box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
       }
-      &:disabled {
-        background-image: linear-gradient(to right, #d7c3f8 0%, #bab2f6 100%);
-        box-shadow: 4px 8px 11px 0 rgba(87, 14, 192, 0.25);
-      }
     }
     &.purple {
       color: #fff;
@@ -191,10 +154,10 @@
       &.shadow {
         box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
       }
-      &:disabled {
-        background-color: #bcb5ff;
-        box-shadow: 4px 8px 11px 0 rgba(87, 14, 192, 0.25);
-      }
+    }
+    &:disabled {
+      opacity: .5;
+      cursor: no-drop;
     }
   }
 </style>

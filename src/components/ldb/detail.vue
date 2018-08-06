@@ -23,11 +23,11 @@
                 <!-- <span class="ldb-category" v-for="(category, index) of ldbInfo.origin.category.split(',')" :key="index">{{ category }}</span> -->
               </h1>
               <div class="ldb-msg">
-                <p class="TTFontNormal">
-                  <span>
+                <p class="TTFontNormal d-flex f-align-center">
+                  <span class="line-height-1">
                     <i class="el-icon-location-outline"></i>
                   </span>
-                  <span class="inline-block ldb-location">{{ ldbInfo.chainSystem.lng | sliceStr}}, {{ ldbInfo.chainSystem.lat | sliceStr }}</span>
+                  <span class="inline-block ldb-location">{{ ldbInfo.chain.lng / 1e14 | sliceStr}}, {{ ldbInfo.chain.lat / 1e14 | sliceStr }}</span>
                   <!-- <span class="inline-block"> · {{ ldbInfo.address }}</span> -->
                   <!-- <span class="inline-block ldb-address">{{ ldbInfo.address }}</span> -->
                 </p>
@@ -64,7 +64,7 @@
             <div class="d-inline-flex lg-col-flex sm-row-flex sm-f-align-center features-price features-item">
               <p>Price</p>
               <div class="ldb-price text-nowrap">
-                <span>{{ ldbInfo.chainSystem.value }}</span>
+                <span>{{ ldbInfo.chain.auction.price }}</span>
                 <span>ETH</span>
               </div>
             </div>
@@ -246,6 +246,13 @@
       @pending="ldbBuyPending"
       @blurs="dialogSetBlurs($event, dialog ? 1 : 0)">
     </ldb-buy>
+
+    <ldb-sell
+      v-model="sellModel"
+      :ldbInfo="ldbInfo"
+      @pending="ldbSellPending"
+      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)">
+    </ldb-sell>
   </div>
 </template>
 
@@ -260,9 +267,10 @@ import LdLoading from '@/components/stories/loading'
 
 import SketchFab from '@/components/sketchfab'
 
-import Authorize from '@/components/reuse/authorize'
-import OrderDialog from '@/components/reuse/ldb/order'
-import LdbBuy from '@/components/reuse/ldb/buy'
+import Authorize from '@/components/reuse/dialog/authorize'
+import OrderDialog from '@/components/reuse/dialog/ldb/order'
+import LdbBuy from '@/components/reuse/dialog/ldb/buy'
+import LdbSell from '@/components/reuse/dialog/ldb/sell'
 
 import { contractMixins, dialogMixins } from '@/mixins'
 import { getLdbById, getLdbRecords, getTxStatus } from 'api'
@@ -305,11 +313,11 @@ export default {
         origin: {
           category: []
         },
-        chainSystem: {
+        chain: {
           lng: '',
-          lat: ''
+          lat: '',
+          auction: {}
         },
-        levelSystem: {},
         ldbIcon: {
           source: {}
         }
@@ -322,8 +330,11 @@ export default {
       // 购买弹窗状态
       buyModel: false,
 
-      // 订单状态
-      orderModel: true,
+      // 订单弹窗状态
+      orderModel: false,
+
+      // 挂单弹窗状态
+      sellModel: false,
 
       // contract options ----
 
@@ -346,8 +357,8 @@ export default {
     //   'userInfo'
     // ]),
     // ...mapState('contract', [
-    //   'ldbNFTContract',
-    //   'ldbNFTCrowdsaleContract'
+    //   'LDBNFTs',
+    //   'NFTsCrowdsale'
     // ]),
     // account () {
     //   return this.userInfo.address || this.$root.$children[0].web3Opt.address
@@ -356,19 +367,19 @@ export default {
     showSell () {
       const { init, isSell } = this.contractStatus
       const ldbInfo = this.ldbInfo
-      return init && !this.showSign && this.isOwner && !isSell && ldbInfo.ocs === 2
+      return init && !this.showSign && this.isOwner && !isSell && ldbInfo.chain.mintStatus === 2 && !ldbInfo.chain.auction.isOnAuction
     },
 
     showUnSell () {
       const { init, isSell } = this.contractStatus
       const ldbInfo = this.ldbInfo
-      return init && !this.showSign && this.isOwner && isSell && ldbInfo.ocs === 2
+      return init && !this.showSign && this.isOwner && isSell && ldbInfo.chain.mintStatus === 2 && ldbInfo.chain.auction.isOnAuction
     },
 
     showBuy () {
       const { init, isSell } = this.contractStatus
       const ldbInfo = this.ldbInfo
-      return init && (this.showSign || (isSell && ldbInfo.ocs === 2))
+      return init && (this.showSign || (isSell && ldbInfo.chain.mintStatus === 2))
     },
 
     showSign () {
@@ -376,7 +387,8 @@ export default {
     },
 
     isOwner () {
-      return this.contractStatus.ldbNFTOwner || this.contractStatus.crowdsaleOwner
+      const ldbInfo = this.ldbInfo
+      return (!this.showSign && ldbInfo.lord.address === this.userInfo.address) && (this.contractStatus.ldbNFTOwner || this.contractStatus.crowdsaleOwner)
     },
 
     web3js () {
@@ -396,7 +408,8 @@ export default {
     Authorize,
     OrderDialog,
 
-    LdbBuy
+    LdbBuy,
+    LdbSell
   },
   methods: {
 
@@ -424,7 +437,7 @@ export default {
       if (!this.account) return
       const params = {
         from: this.account,
-        tokenId: ldbInfo.tokenId,
+        tokenId: ldbInfo.chain.tokenId,
         offset: 1
       }
       const res = await getTxStatus(params)
@@ -464,7 +477,7 @@ export default {
     async getLdbRecords (ldbInfo = this.ldbInfo) {
       this.recordsLoading = true
       const params = {
-        tokenId: ldbInfo.tokenId
+        tokenId: ldbInfo.chain.tokenId
       }
       const res = await getLdbRecords(params)
       if (res.code === 1000) {
@@ -512,23 +525,23 @@ export default {
         const authorize = await this.$refs.authorize.checkoutAuthorize()
         console.log('authorize', authorize)
 
-        const tokenId = this.ldbInfo.tokenId
+        const tokenId = this.ldbInfo.chain.tokenId
         if (!authorize || !tokenId) return
 
         this.buyModel = true
 
-        // const ldbNFTCrowdsaleContract = this.ldbNFTCrowdsaleContract
-        // window.ldbNFTCrowdsaleContract = ldbNFTCrowdsaleContract
+        // const NFTsCrowdsale = this.NFTsCrowdsale
+        // window.NFTsCrowdsale = NFTsCrowdsale
 
         // // 根据 tokenId 获取建筑链上信息
-        // const ldb = await ldbNFTCrowdsaleContract.getAuction(tokenId)
+        // const ldb = await NFTsCrowdsale.getAuction(tokenId)
         // const { address } = this.$root.$children[0].web3Opt
         // console.log('ldb', address, ldb[1].toNumber(), address, tokenId)
 
         // this.contractPending = true
 
         // // 根据链上信息购买建筑
-        // ldbNFTCrowdsaleContract.payByEth(tokenId, {
+        // NFTsCrowdsale.payByEth(tokenId, {
         //   from: address,
         //   value: ldb[1]
         // })
@@ -537,7 +550,7 @@ export default {
         //       this.contractPending = false
         //       this.orderModel = true
 
-        //       this.ldbInfo.chainSystem.sellStatus = 0
+        //       this.ldbInfo.chain.auction.isOnAcution = false
 
         //       this.checkOwner()
         //     })
@@ -576,7 +589,7 @@ export default {
      * 购买建筑之后触发的合约 pending 状态
      */
     async ldbBuyPending ({ tx } = {}) {
-      const tokenId = this.ldbInfo.tokenId
+      const tokenId = this.ldbInfo.chain.tokenId
       this.contractPending = true
 
       // 修改 isBuying 状态
@@ -605,55 +618,91 @@ export default {
      */
     async sell () {
       try {
-        const authorize = await this.$refs.authorize.checkoutAuthorize()
-        const tokenId = this.ldbInfo.tokenId
+        // 检查市场权限
+        const authorize = await this.$refs.authorize.checkoutAuthorize({ isSell: true })
         console.log('authorize', authorize)
+
+        const tokenId = this.ldbInfo.chain.tokenId
         if (!authorize || !tokenId) return
-        // const buildingContract = this.buildingContract
-        // const building = await buildingContract.building(tokenId)
-        // console.log('building', building)
-        const ldbNFTCrowdsaleContract = this.ldbNFTCrowdsaleContract
-        const { web3js } = this.$root.$children[0].web3Opt
-        const { value } = this.ldbInfo.chainSystem
-        console.log('--- sell value', value, tokenId)
 
-        this.contractPending = true
-        ldbNFTCrowdsaleContract.newAuction(web3js.toWei(value), tokenId, Math.floor(new Date().getTime() / 1000) + 3600)
-          .then(data => {
-            this.checkTxEvent(data.tx, () => {
-              this.contractPending = false
+        this.sellModel = true
 
-              this.ldbInfo.chainSystem.sellStatus = 1
+        // const authorize = await this.$refs.authorize.checkoutAuthorize()
+        // const tokenId = this.ldbInfo.chain.tokenId
+        // console.log('authorize', authorize)
+        // if (!authorize || !tokenId) return
+        // // const buildingContract = this.buildingContract
+        // // const building = await buildingContract.building(tokenId)
+        // // console.log('building', building)
+        // const NFTsCrowdsale = this.NFTsCrowdsale
+        // const { web3js } = this.$root.$children[0].web3Opt
+        // const { price } = this.ldbInfo.chain.auction
+        // console.log('--- sale price', price, tokenId)
 
-              this.checkOwner(tokenId)
-            })
-          })
-          .catch(() => {
-            this.contractPending = false
-          })
-        console.log('ldbNFTCrowdsaleContract', ldbNFTCrowdsaleContract)
+        // this.contractPending = true
+        // NFTsCrowdsale.newAuction(web3js.toWei(price), tokenId, Math.floor(new Date().getTime() / 1000) + 3600)
+        //   .then(data => {
+        //     this.checkTxEvent(data.tx, () => {
+        //       this.contractPending = false
+
+        //       this.ldbInfo.chain.auction.isOnAuction = false
+
+        //       this.checkOwner(tokenId)
+        //     })
+        //   })
+        //   .catch(() => {
+        //     this.contractPending = false
+        //   })
+        // console.log('NFTsCrowdsale', NFTsCrowdsale)
       } catch (err) {
         console.log('err', err)
         this.contractPending = false
       }
     },
 
+    /**
+     * 挂售建筑之后触发的合约 pending 状态
+     */
+    async ldbSellPending ({ tx } = {}) {
+      const tokenId = this.ldbInfo.chain.tokenId
+      this.contractPending = true
+
+      // 修改 isSelling 状态
+      this.$set(this.ldbPendings, 'isSelling', true)
+
+      // 轮询 tx 状态
+      this.checkTxEvent(tx, (err) => {
+        // 关闭 buy dialog
+        this.sellModel = false
+        this.contractPending = false
+        if (err) {
+          this.errorMsg = err
+          console.log('err', err)
+          return
+        }
+        this.$set(this.ldbPendings, 'isSelling', false)
+        this.$nextTick(() => {
+          this.checkOwner(tokenId)
+        })
+      })
+    },
+
     async unsell () {
       try {
         const authorize = await this.$refs.authorize.checkoutAuthorize()
-        const tokenId = this.ldbInfo.tokenId
+        const tokenId = this.ldbInfo.chain.tokenId
         if (!authorize || !tokenId) return
         const buildingContract = this.buildingContract
         const building = await buildingContract.building(tokenId)
         console.log('building', building)
-        const ldbNFTCrowdsaleContract = this.ldbNFTCrowdsaleContract
+        const NFTsCrowdsale = this.NFTsCrowdsale
 
         this.contractPending = true
-        ldbNFTCrowdsaleContract.cancelAution(tokenId)
+        NFTsCrowdsale.cancelAution(tokenId)
           .then(data => {
             console.log('unsell tx', data)
             this.checkTxEvent(data.tx, () => {
-              this.ldbInfo.chainSystem.sellStatus = 0
+              this.ldbInfo.chain.auction.isOnAuction = false
               this.contractPending = false
 
               this.checkOwner(tokenId)
@@ -662,7 +711,7 @@ export default {
           .catch(() => {
             this.contractPending = false
           })
-        console.log('ldbNFTCrowdsaleContract', ldbNFTCrowdsaleContract)
+        console.log('NFTsCrowdsale', NFTsCrowdsale)
       } catch (err) {
         console.log('err', err)
         this.contractPending = false
@@ -684,21 +733,21 @@ export default {
     ldbId (val) {
       if (val) this.getLdbInfo(val)
     },
-    ldbNFTContract (val) {
+    LDBNFTs (val) {
       if (val) {
-        this.checkLdbNFT(this.ldbInfo.tokenId, val)
+        this.checkLdbNFT(this.ldbInfo.chain.tokenId, val)
       }
     },
-    ldbNFTCrowdsaleContract (val) {
+    NFTsCrowdsale (val) {
       if (val) {
-        this.checkCrowdsale(this.ldbInfo.tokenId, val)
+        this.checkCrowdsale(this.ldbInfo.chain.tokenId, val)
       }
     },
     account (val) {
       this.initContractStatus()
       if (val) {
         console.log('---------account', val)
-        this.checkOwner(this.ldbInfo.tokenId)
+        this.checkOwner(this.ldbInfo.chain.tokenId)
         this.getUserLastPending()
       }
     }
@@ -875,7 +924,7 @@ export default {
 
   .ldb-msg {
     @include margin('top', 10px, 1);
-    @include fontSize(24px, 1);
+    @include fontSize(24px, 1.2);
   }
 
   .ldb-desc {

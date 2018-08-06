@@ -36,6 +36,7 @@ Vue.use(Col)
 Vue.use(Row)
 
 Vue.use(Tooltip)
+// Vue.use(Message)
 Vue.use(Progress)
 Vue.use(Select)
 Vue.use(Option)

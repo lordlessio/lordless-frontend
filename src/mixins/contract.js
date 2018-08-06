@@ -29,8 +29,8 @@ export default {
       'userInfo'
     ]),
     ...mapState('contract', [
-      'ldbNFTContract',
-      'ldbNFTCrowdsaleContract'
+      'LDBNFTs',
+      'NFTsCrowdsale'
     ]),
     account () {
       return this.userInfo.address || this.$root.$children[0].web3Opt.address
@@ -48,11 +48,11 @@ export default {
     /**
      * 合约检查 721 资产状态
      */
-    checkLdbNFT (tokenId, ldbNFTContract = this.ldbNFTContract) {
-      if (!ldbNFTContract || !tokenId) return false
+    checkLdbNFT (tokenId, LDBNFTs = this.LDBNFTs) {
+      if (!LDBNFTs || !tokenId) return false
 
       // 检查该 721 资产是否属于当前 metamask 用户
-      ldbNFTContract.ownerOf(tokenId)
+      LDBNFTs.ownerOf(tokenId)
         .then(d => {
           this.contractStatus = Object.assign({}, this.contractStatus, {
             ldbNFTOwner: d === this.account
@@ -69,11 +69,11 @@ export default {
     /**
      * 合约检查 721 资产市场状态
      */
-    checkCrowdsale (tokenId, ldbNFTCrowdsaleContract = this.ldbNFTCrowdsaleContract) {
-      if (!ldbNFTCrowdsaleContract || !tokenId) return false
+    checkCrowdsale (tokenId, NFTsCrowdsale = this.NFTsCrowdsale) {
+      if (!NFTsCrowdsale || !tokenId) return false
 
       // 合约检查该 721 资产是否在市场出售
-      ldbNFTCrowdsaleContract.isOnAuction(tokenId)
+      NFTsCrowdsale.isOnAuction(tokenId)
         .then(d => {
           this.contractStatus = Object.assign({}, this.contractStatus, {
             isSell: d,
@@ -88,7 +88,7 @@ export default {
         })
 
       // 合约检查该 721 资产是否属于当前 metamask 用户出售
-      ldbNFTCrowdsaleContract.getAuction(tokenId)
+      NFTsCrowdsale.getAuction(tokenId)
         .then(d => {
           this.contractStatus.crowdsaleOwner = d[0] === this.account
           console.log('crowdsaleOwner:', d[0] === this.account)
@@ -117,6 +117,9 @@ export default {
           this.clearCInterval(interval)
         } else if (res.code !== 1000) {
           if (cb) cb(res.errorMsg)
+          this.clearCInterval(interval)
+        } else {
+          if (cb) cb()
           this.clearCInterval(interval)
         }
       }, 5000)

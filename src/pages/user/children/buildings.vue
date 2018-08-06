@@ -6,7 +6,7 @@
         v-if="!buildings.length && !saleBuildings.length && !loading"
         class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
         <svg>
-          <use xlink:href="/static/svg/icon.svg#icon-dropbox"/>
+          <use xlink:href="/static/svg/user/building.svg#icon-no-ldb"/>
         </svg>
         <p>You have no building now.</p>
         <div class="d-flex f-auto-center TTFontBolder">
@@ -47,7 +47,7 @@
                 v-for="(building, index) of buildings"
                 :key="index">
                 <building-card
-                  :sale="building.chainSystem.sellStatus !== 0"
+                  :sale="building.chain.auction.isOnAuction"
                   :ldbInfo="building"
                   @choose="chooseBuilding">
                 </building-card>
@@ -61,7 +61,7 @@
               v-if="!saleBuildings.length && !loading"
               class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-buildings">
               <svg>
-                <use xlink:href="/static/svg/icon.svg#icon-dropbox"/>
+                <use xlink:href="/static/svg/user/building.svg#icon-no-selling-ldb"/>
               </svg>
               <p>You have nothing on sale now.</p>
               <div class="d-flex f-auto-center TTFontBolder">
@@ -78,7 +78,7 @@
                 v-for="(building, index) of saleBuildings"
                 :key="index">
                 <building-card
-                  :sale="building.chainSystem.sellStatus !== 0"
+                  :sale="building.chain.auction.isOnAuction"
                   :ldbInfo="building"
                   @choose="chooseBuilding">
                 </building-card>
@@ -87,6 +87,7 @@
           </el-tab-pane>
         </el-tabs>
         <Pagination
+          v-if="showPagination"
           class="ld-building-pagination"
           :total="pageTotal"
           background
@@ -104,8 +105,8 @@
 </template>
 
 <script>
-import DetailDialog from '@/components/reuse/ldb/detailDialog'
-import BuildingCard from '@/components/reuse/ldb/building'
+import DetailDialog from '@/components/reuse/dialog/ldb/detail'
+import BuildingCard from '@/components/reuse/card/building'
 import Pagination from '@/components/stories/pagination'
 import LdBtn from '@/components/stories/button'
 
@@ -173,6 +174,12 @@ export default {
         return this.bTotal
       }
       return this.saleBTotal
+    },
+    showPagination () {
+      if (this.buildingTab === 'all') {
+        return this.buildings.length
+      }
+      return this.saleBuildings.length
     }
   },
   components: {
@@ -222,7 +229,7 @@ export default {
         page,
         offset,
         user: address,
-        sellStatus: 1
+        isOnAuction: true
       }
       const res = await getChainLdbs(params)
       if (res.code === 1000) {
@@ -322,7 +329,7 @@ export default {
     }
   }
 
-   .user-building-tabs {
+  .user-building-tabs {
     position: relative;
     @include margin('top', 35px, 1);
     @include margin('bottom', 150px, 1);

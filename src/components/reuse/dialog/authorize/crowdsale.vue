@@ -23,9 +23,13 @@
             class="TTFontBolder lordless-message-btn crowdsale-btn"
             theme="info"
             shadow
+            :loading="crowdsalePending"
             :disabled="crowdsalePending"
             @click="chooseCrowdsale">Go</ld-btn>
         </div>
+      </div>
+      <div class="contract-pending-tip" v-if="crowdsalePending">
+        <p>contract is pending, waiting for few minutes</p>
       </div>
     </div>
   </div>
@@ -36,8 +40,11 @@ import Blockies from '@/components/stories/blockies'
 import CheckBox from '@/components/stories/checkbox'
 import LdBtn from '@/components/stories/button'
 
+import { metamaskMixins } from '@/mixins'
+
 import { mapState } from 'vuex'
 export default {
+  mixins: [metamaskMixins],
   props: {
     value: {
       type: Boolean,
@@ -68,8 +75,8 @@ export default {
   },
   computed: {
     ...mapState('contract', [
-      'ldbNFTContract',
-      'ldbNFTCrowdsaleContract'
+      'LDBNFTs',
+      'NFTsCrowdsale'
     ])
   },
   components: {
@@ -83,9 +90,9 @@ export default {
      * 检查是否 授权了市场合约
      */
     // async checkCrowdsale () {
-    //   const ldbNFTContract = this.ldbNFTContract
-    //   const ldbNFTCrowdsaleContract = this.ldbNFTCrowdsaleContract
-    //   const crowdsaleModel = await ldbNFTContract.isApprovedForAll(this.address, ldbNFTCrowdsaleContract.address)
+    //   const LDBNFTs = this.LDBNFTs
+    //   const NFTsCrowdsale = this.NFTsCrowdsale
+    //   const crowdsaleModel = await LDBNFTs.isApprovedForAll(this.address, NFTsCrowdsale.address)
     //   console.log('authorize crowdsaleModel', crowdsaleModel)
     //   if (!crowdsaleModel) this.$emit('input', true)
     //   else this.$emit('input', false)
@@ -99,16 +106,19 @@ export default {
      */
     chooseCrowdsale () {
       const crowdsaleModel = this.crowdsaleModel
-      const ldbNFTContract = this.ldbNFTContract
-      const ldbNFTCrowdsaleContract = this.ldbNFTCrowdsaleContract
+      const LDBNFTs = this.LDBNFTs
+      const NFTsCrowdsale = this.NFTsCrowdsale
       if (!crowdsaleModel) {
-        this.crowdsalePending = true
-        ldbNFTContract.setApprovalForAll(ldbNFTCrowdsaleContract.address, true)
-          .then(d => {
-            this.$emit('pending', d)
+        // metamask 是否被打开
+        this.metamaskChoose = true
+        LDBNFTs.setApprovalForAll(NFTsCrowdsale.address, true)
+          .then(data => {
+            this.crowdsalePending = true
+            this.metamaskChoose = false
+            this.$emit('pending', data)
           })
           .catch(err => {
-            this.crowdsalePending = false
+            this.metamaskChoose = false
             this.$emit('error', err)
           })
       }

@@ -12,7 +12,12 @@
           </div>
           <div class="v-flex d-flex lg-f-align-end sm-col-reverse-flex info-header-cnt">
             <div class="v-flex header-cnt-text">
-              <h2>
+              <h2 class="d-flex f-align-center">
+                <span class="header-crown-svg">
+                  <svg>
+                    <use xlink:href="#icon-crown-l5"/>
+                  </svg>
+                </span>
                 <span>{{ user.nickName }}</span>
                 <span>
                   <ld-btn
@@ -332,7 +337,7 @@
 <script>
 import Clipboard from 'clipboard'
 
-import Authorize from '@/components/reuse/authorize'
+import Authorize from '@/components/reuse/dialog/authorize'
 
 import LdProgress from '@/components/stories/progress'
 import Blockies from '@/components/stories/blockies'
@@ -472,10 +477,16 @@ export default {
       line-height: 1.6;
     }
   }
+  .header-crown-svg {
+    margin-right: 6px;
+    width: 30px;
+    height: 30px;
+  }
   .paste-icon {
     width: 20px;
     height: 20px;
-    fill: #fff;
+    stroke: #fff;
+    fill: none;
     cursor: pointer;
     @include margin('left', 8px, 1);
   }
@@ -493,6 +504,7 @@ export default {
 
 
   .info-prestige-section {
+    @include width(100%, 1, -2);
     @include margin('right', 15px, -2);
   }
   .info-home-section {
@@ -510,7 +522,7 @@ export default {
   }
   .info-item-container {
     @include margin('top', 35px, 1, -2);
-    @include width(100%, 1, -2);
+    // @include width(100vw, 1, -2);
   }
   .info-cnt-title {
     font-size: 20px;
@@ -538,7 +550,6 @@ export default {
     font-size: 18px;
   }
   .exp-progress {
-    width: inherit;
     height: 27px;
     border-radius: 5px;
     overflow: hidden;

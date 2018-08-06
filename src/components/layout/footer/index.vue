@@ -1,8 +1,8 @@
 <template>
   <footer class="ld-footer" :class="theme" v-if="show">
     <div class="container">
-      <div class="d-flex sm-col-flex sm-f-align-center footer-top">
-        <div class="v-flex text-left footer-logo">
+      <div class="d-flex sm-col-flex lg-f-align-center sm-text-center footer-top">
+        <div class="v-flex lg-text-left footer-logo">
           <router-link to="/" class="inline-block" v-if="theme !== 'default'">
             <svg class="inline-block logo-img">
               <use xlink:href="/static/svg/icon.svg#icon-logo-image"/>
@@ -15,8 +15,8 @@
             <img class="footer-logo-png" src="~static/img/footer/ld-footer-logo.png"/>
           </router-link>
         </div>
-        <div class="v-flex text-right footer-icons-box">
-          <div class="footer-icons-item">
+        <div class="sm-d-flex sm-f-justify-around lg-text-right footer-icons-box">
+          <div class="sm-v-flex footer-icons-item">
             <a class="inline-block" target="__blank" href="https://twitter.com/LordLessIo">
               <svg v-if="theme !== 'default'">
                 <use xlink:href="/static/svg/icon.svg#icon-twitter"/>
@@ -24,7 +24,7 @@
               <img v-if="theme === 'default'" src="~static/img/footer/ld-Twitter-icon.png"/>
             </a>
           </div>
-          <div class="footer-icons-item">
+          <div class="sm-v-flex footer-icons-item">
             <a class="inline-block" target="_blank" href="https://github.com/lordlessio">
               <svg v-if="theme !== 'default'">
                 <use xlink:href="/static/svg/icon.svg#icon-github"/>
@@ -32,7 +32,7 @@
               <img v-if="theme === 'default'" src="~static/img/footer/ld-Github-icon.png"/>
             </a>
           </div>
-          <div class="footer-icons-item">
+          <div class="sm-v-flex footer-icons-item">
             <a class="inline-block" target="_blank" href="https://medium.com/@LordLessIo">
               <svg v-if="theme !== 'default'">
                 <use xlink:href="/static/svg/icon.svg#icon-medium"/>
@@ -40,7 +40,7 @@
               <img v-if="theme === 'default'" src="~static/img/footer/ld-Medium-icon.png"/>
             </a>
           </div>
-          <div class="footer-icons-item">
+          <div class="sm-v-flex footer-icons-item">
             <a class="inline-block" target="_blank" href="https://t.me/lordlessio">
               <svg v-if="theme !== 'default'">
                 <use xlink:href="/static/svg/icon.svg#icon-telegram"/>
@@ -119,8 +119,8 @@ export default {
   }
   .footer-icons-item {
     display: inline-block;
-    @include margin('left', 23px, 1);
-    @include margin('right', 23px, 1);
+    @include margin('left', 23px, -2);
+    @include margin('right', 23px, -2);
     svg {
       fill: inherit;
     }

@@ -13,10 +13,13 @@ import LdbDetail from '@/pages/ldb/_detail.vue'
 
 import Status from '@/pages/help/status'
 
+import TaskDetail from '@/pages/task/_detail.vue'
+
 import User from '@/pages/user'
 import UserInfo from '@/pages/user/children/info'
-import UserCandy from '@/pages/user/children/candy'
-import UserBuildings from '@/pages/user/children/building'
+import UserCandies from '@/pages/user/children/candies'
+import UserBuildings from '@/pages/user/children/buildings'
+import UserTasks from '@/pages/user/children/tasks'
 
 Vue.use(Router)
 
@@ -64,6 +67,18 @@ const router = new Router({
       }
     },
     {
+      path: '/task/:taskId',
+      name: 'taskDetail',
+      component: TaskDetail,
+      meta: {
+        header: {
+          fixed: true,
+          scroll: true,
+          transparent: true
+        }
+      }
+    },
+    {
       path: '/status',
       name: 'status',
       component: Status,
@@ -95,11 +110,11 @@ const router = new Router({
           }
         },
         {
-          path: 'candy',
-          name: 'user-candy',
-          component: UserCandy,
+          path: 'candies',
+          name: 'user-candies',
+          component: UserCandies,
           meta: {
-            navgation: 'candy',
+            navgation: 'candies',
             header: {
               show: false
             },
@@ -114,6 +129,20 @@ const router = new Router({
           component: UserBuildings,
           meta: {
             navgation: 'buildings',
+            header: {
+              show: false
+            },
+            footer: {
+              show: false
+            }
+          }
+        },
+        {
+          path: 'tasks',
+          name: 'user-tasks',
+          component: UserTasks,
+          meta: {
+            navgation: 'tasks',
             header: {
               show: false
             },

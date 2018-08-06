@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="detailModel"
-    :custom-class="`lordless-dialog dialog-ldb-detail ${theme} ${(blurs[1] && value) ? 'blur' : ''}`"
+    :custom-class="`lordless-dialog dialog-ldb-detail transparent ${(blurs[1] && value) ? 'blur' : ''}`"
     lock-scroll
     append-to-body
     :top="top"
@@ -12,18 +12,17 @@
       <span @click.stop="$emit('input', false)" class="inline-block dialog-ldb-close">
         <i class="el-icon-close"></i>
       </span>
-      <ldb-detail
-        ref="ldbDetail"
+      <task-detail
+        ref="taskDetail"
         dialog
-        :theme="theme"
-        :ldbId="ldbId"
-        @initInfo="initDetailInfo"></ldb-detail>
+        :taskId="taskId">
+      </task-detail>
     </div>
   </el-dialog>
 </template>
 
 <script>
-import LdbDetail from '@/components/ldb/detail'
+import TaskDetail from '@/components/reuse/task/detail'
 
 import { mutationTypes } from '@/store/types'
 import { mapMutations } from 'vuex'
@@ -33,11 +32,7 @@ export default {
       type: Boolean,
       default: false
     },
-    ldbId: String,
-    theme: {
-      type: String,
-      default: 'light'
-    },
+    taskId: String,
     top: {
       type: String,
       default: '0px'
@@ -45,8 +40,7 @@ export default {
   },
   data: () => {
     return {
-      detailModel: false,
-      tokenId: null
+      detailModel: false
     }
   },
   computed: {
@@ -55,7 +49,7 @@ export default {
     }
   },
   components: {
-    LdbDetail
+    TaskDetail
   },
   methods: {
     ...mapMutations('layout', [
@@ -75,19 +69,12 @@ export default {
     dialogClose () {
       this.$emit('input', false)
       this.$emit('close')
-    },
-
-    initDetailInfo ({ tokenId } = {}) {
-      this.tokenId = tokenId
-      const detail = this.$refs.ldbDetail
-      if (detail) detail.checkOwner(tokenId)
     }
   },
   watch: {
     value (val) {
       this.detailModel = val
       this[mutationTypes.LAYOUT_SET_BLURS](val ? 1 : 0)
-      if (val && this.$refs.ldbDetail) this.$refs.ldbDetail.checkOwner(this.tokenId)
     },
     detailModel (val) {
       this.$emit('input', val)

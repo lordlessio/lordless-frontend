@@ -3,14 +3,25 @@
     <Header v-bind="headerOpt"/>
     <GradientSvg/>
     <div class="ld-main" :class="[{ 'no-header': !headerOpt.show || (headerOpt.show && headerOpt.scroll) }, { 'no-footer': !footerOpt.show }]">
-      <div class="d-flex col-flex f-auto-center ld-error" v-if="web3Opt.error">
+      <!-- <div class="d-flex col-flex f-auto-center ld-error" v-if="web3Opt.error">
         <h1>出错啦！</h1>
         <p>{{ web3Opt.error }}</p>
-      </div>
+      </div> -->
       <router-view/>
       <!-- <Relogin v-model="userExpired" :address="web3Opt.address"></Relogin> -->
     </div>
     <Footer v-bind="footerOpt"/>
+    <div class="message-tip">
+      <msg-tip
+        v-model="msgTip.show"
+        :text="msgTip.text"
+        :theme="msgTip.theme"
+        closeSync
+        @close="closeTip">
+      </msg-tip>
+    </div>
+    <meta-tip v-model="metaOpen">
+    </meta-tip>
   </div>
 </template>
 
@@ -19,7 +30,11 @@ import GradientSvg from '@/components/reuse/gradientSvg'
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
 import Relogin from '@/components/reuse/relogin'
+import MsgTip from '@/components/stories/messageTip'
+import MetaTip from '@/components/reuse/dialog/metaTip'
+
 import { initWeb3 } from '@/assets/utils/web3/initWeb3'
+
 import { actionTypes } from '@/store/types'
 import { mapState, mapActions } from 'vuex'
 export default {
@@ -35,6 +50,8 @@ export default {
   components: {
     Header,
     Footer,
+    MsgTip,
+    MetaTip,
     Relogin,
     GradientSvg
   },
@@ -42,7 +59,9 @@ export default {
     ...mapState('layout', {
       headerOpt: 'header',
       footerOpt: 'footer',
-      blurs: 'blurs'
+      blurs: 'blurs',
+      msgTip: 'messageTip',
+      metaOpen: 'metaOpen'
     }),
     ...mapState('web3', [
       'web3Opt'
@@ -73,6 +92,14 @@ export default {
     ...mapActions('status', [
       actionTypes.STATUS_INIT_BROSWER
     ]),
+    ...mapActions('layout', [
+      actionTypes.LAYOUT_SET_MESSAGE_TIP,
+      actionTypes.LAYOUT_SET_META_OPEN
+    ]),
+
+    closeTip () {
+      this[actionTypes.LAYOUT_SET_MESSAGE_TIP]({ show: false })
+    },
 
     // 监听主网络环境
     listenNetWork () {
@@ -101,7 +128,18 @@ export default {
     }
   },
   mounted () {
+    document.getElementById('outside-loading').style = 'display: none'
     this.$nextTick(() => this[actionTypes.STATUS_INIT_BROSWER]())
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .message-tip {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+</style>
+

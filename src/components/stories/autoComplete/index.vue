@@ -1,5 +1,5 @@
 <template>
-  <div :class="`auto-complete-box ${isSelect ? 'redius-top' : ''}`">
+  <div class="auto-complete-box" :class="{ 'redius-top': isSelect, 'shadow': shadow }">
     <div class="auto-complete-container">
       <div class="complete-input">
         <el-autocomplete
@@ -79,6 +79,11 @@ export default {
       default: () => {
         return []
       }
+    },
+
+    shadow: {
+      type: Boolean,
+      default: true
     }
   },
   data: () => {
@@ -132,6 +137,9 @@ export default {
     &.redius-top {
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
+    }
+    &.shadow {
+      box-shadow: 2.5px 5px 20px 0 rgba(0, 0, 0, .25);
     }
   }
   .auto-complete-container {

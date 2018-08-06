@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="authorizeDialog"
-    custom-class="inline-block lordless-dialog message-dialog no-header no-header transparent center"
+    :custom-class="`inline-block lordless-dialog message-dialog no-header no-header transparent center ${metaOpen ? 'blur' : ''}`"
     width="100%"
     append-to-body
     center
@@ -156,6 +156,10 @@ export default {
 
     account () {
       return this.$root.$children[0].web3Opt.address
+    },
+
+    metaOpen () {
+      return this.$root.$children[0].metaOpen
     }
   },
   components: {
@@ -169,7 +173,7 @@ export default {
       this.authorizeDialog = false
     },
 
-    checkoutAuthorize () {
+    checkoutAuthorize ({ isSell = false } = {}) {
       if (!this.isInit) return false
       console.log('---- this.statusType', this.statusType)
 
@@ -179,7 +183,7 @@ export default {
         return false
       }
 
-      if (!this.crowdsale) {
+      if (!this.crowdsale || !isSell) {
         this.authorizeDialog = false
         return true
       }

@@ -19,7 +19,7 @@
                 <span class="inline-block">{{ tx.created_at | timeFormat }}</span>
               </span>
             </div>
-            <div class="v-flex d-flex f-justify-center">
+            <div class="v-flex d-flex f-justify-center text-ellipsis">
               <span class="inline-block lg-mar-r1 sm-hidden">
                 <svg>
                   <use xlink:href="static/svg/color_icon.svg#icon-tx"/>
@@ -30,7 +30,7 @@
                 <span class="inline-block">{{ tx.transactionHash | splitAddress({ before: 7, end: 5 }) }}</span>
               </span>
             </div>
-            <div class="v-flex d-flex f-justify-center">
+            <div class="v-flex d-flex f-justify-center text-ellipsis">
               <span class="inline-block lg-mar-r1 sm-hidden">
                 <svg>
                   <use xlink:href="static/svg/color_icon.svg#icon-price"/>

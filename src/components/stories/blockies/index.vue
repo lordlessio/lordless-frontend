@@ -2,7 +2,8 @@
   <div
     ref="blockies"
     class="d-flex f-auto-center blockies"
-    :style="`border-radius: ${radius}`"></div>
+    :style="`border-radius: ${radius}`">
+  </div>
 </template>
 
 <script>
@@ -15,7 +16,7 @@ export default {
     },
     radius: {
       type: String,
-      default: '100px'
+      default: '15px'
     },
     seed: {
       type: String,

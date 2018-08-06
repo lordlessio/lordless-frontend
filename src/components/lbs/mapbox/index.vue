@@ -11,7 +11,7 @@ export default {
       type: Object,
       default: () => {
         return {
-          min: 12,
+          min: 13,
           max: 18
         }
       }
@@ -20,15 +20,15 @@ export default {
       type: Object,
       default: () => {
         return {
-          min: 11,
-          max: 11
+          min: 12,
+          max: 12
         }
       }
     },
     scrollZooms: {
       type: Array,
       default: () => {
-        return [11, 16]
+        return [12, 16]
       }
     },
     container: {
@@ -51,7 +51,7 @@ export default {
     },
     minZoom: {
       type: Number,
-      default: 11
+      default: 12
     },
     maxZoom: {
       type: Number,
@@ -59,7 +59,7 @@ export default {
     },
     zoom: {
       type: Number,
-      default: 11
+      default: 12
     },
     pitch: {
       type: Number,
@@ -124,12 +124,12 @@ export default {
      */
     createImageMarkers (list, map = this.map) {
       list.map(item => {
-        const { _id, name, chainSystem, levelSystem, ldbIcon } = item
-        const coords = [chainSystem.lng, chainSystem.lat]
+        const { _id, name, chain, ldbIcon } = item
+        const coords = [chain.lng / 1e14, chain.lat / 1e14]
 
         // 创建 Image markers
         const imgSrc = ldbIcon.source.map
-        const markerDom = this.createImageMarker({ name, imgSrc, level: levelSystem.level })
+        const markerDom = this.createImageMarker({ name, imgSrc, level: chain.level })
         // const { id, fields } = item
         // const _id = id
         // const coords = fields.location.split(',')
@@ -202,12 +202,12 @@ export default {
      */
     createPointMarkers (list, map = this.map) {
       list.map(item => {
-        const { _id, name, chainSystem, levelSystem, ldbIcon } = item
-        const coords = [chainSystem.lng, chainSystem.lat]
+        const { _id, name, chain, ldbIcon } = item
+        const coords = [chain.lng / 1e14, chain.lat / 1e14]
 
         // 创建 markers
         const poster = ldbIcon.source.map
-        const pointDom = this.createPointMarker({ name, poster, level: levelSystem.level })
+        const pointDom = this.createPointMarker({ name, poster, level: chain.level })
         pointDom.addEventListener('click', () => {
           this.flyToCoords({ center: coords, pitch: this.mPitch, zoom: this.scrollZooms[this.scrollZooms.length - 1] })
         }, false)
@@ -441,7 +441,7 @@ export default {
      * @param {Function} cb 动画执行完毕的回调
      * @param {Map} map 地图实例，默认为当前实例
      */
-    flyToCoords ({ center = this.map.getCenter(), zoom = 14, duration = 300, pitch = this.pitch } = {}, cb, map = this.map) {
+    flyToCoords ({ center = this.map.getCenter(), zoom = 14, duration = 500, pitch = this.pitch } = {}, cb, map = this.map) {
       if (map.isZooming()) {
         if (cb) cb()
         return

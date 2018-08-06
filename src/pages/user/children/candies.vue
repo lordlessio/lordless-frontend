@@ -1,12 +1,29 @@
 <template>
   <div class="d-flex TTFontBold user-candy-box">
     <div class="d-flex v-flex col-flex user-candy-container">
-      <h1 class="text-cap user-candy-title">Candy</h1>
+      <h1 class="d-flex f-align-baseline text-cap user-candy-title">
+        <span class="v-flex">Candy</span>
+        <el-tooltip class="item" effect="dark" content="Coming soon" placement="left">
+          <span>
+            <ld-btn
+              class="d-flex f-align-center user-withdraw-btn"
+              theme="info"
+              disabled
+              shadow
+              inverse>
+              <svg>
+                <use xlink:href="/static/svg/user/candy.svg#icon-withdraw"/>
+              </svg>
+              <span>Withdraw</span>
+            </ld-btn>
+          </span>
+        </el-tooltip>
+      </h1>
       <div
         v-if="!userAssets.length && !userRecords.length"
         class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
         <svg>
-          <use xlink:href="/static/svg/icon.svg#icon-dropbox"/>
+          <use xlink:href="/static/svg/user/candy.svg#icon-no-candy"/>
         </svg>
         <p>You have no candy now.</p>
         <div class="d-flex f-auto-center TTFontBolder">
@@ -325,6 +342,15 @@ export default {
   .user-candy-title {
     font-size: 36px;
     color: #999;
+  }
+  .user-withdraw-btn {
+    padding: 10px 15px;
+    font-size: 16px;
+    >svg {
+      margin-right: 5px;
+      width: 25px;
+      height: 25px;
+    }
   }
 
   .ld-candy-pagination {

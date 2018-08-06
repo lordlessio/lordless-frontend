@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="orderModel"
-    custom-class="inline-block lordless-dialog message-dialog no-header center white"
+    :custom-class="`inline-block lordless-dialog message-dialog no-header center white ${metaOpen ? 'blur' : ''}`"
     width="100%"
     append-to-body
     center
@@ -18,7 +18,7 @@
       <div class="ldb-order-box">
         <div class="text-center order-header">
           <div class="order-header-icon">
-            <img-box sType="height" src="/static/img/test/congratulation.png"></img-box>
+            <img-box sType="height" src="/static/svg/single/congra.svg"></img-box>
           </div>
           <h1 class="TTNormsBold">Congratulations</h1>
           <p>You've got</p>
@@ -32,7 +32,7 @@
                   <img-box
                     sType="height"
                     type="span"
-                    src="/static/img/test/fandian-png-3.png">
+                    :src="ldbInfo.ldbIcon.source.market">
                   </img-box>
                 </div>
               </div>
@@ -42,7 +42,7 @@
                 <p class="d-flex f-align-center">
                   <span class="inline-block line-height-1">
                     <svg class="order-crown-svg">
-                      <use :xlink:href="`#icon-crown-l${ldbInfo.levelSystem.level}`"/>
+                      <use :xlink:href="`#icon-crown-l${ldbInfo.chain.level}`"/>
                     </svg>
                   </span>
                   <span class="order-ldb-name">{{ ldbInfo.name.zh }}</span>
@@ -62,7 +62,7 @@
                 </p>
                 <p class="d-flex f-align-center color-main">
                   <span class="order-reward-symbol">x</span>
-                  <span class="order-reward-unit">{{ ldbInfo.chainSystem.value * 0.02 * 41666 }} LESS</span>
+                  <span class="order-reward-unit">{{ ldbInfo.chain.auction.price * 0.02 * 41666 }} LESS</span>
                 </p>
               </div> -->
             </div>
@@ -76,19 +76,19 @@
                 </svg>
               </span>
             </ld-button>
-            <ld-button theme="info" shadow class="order-footer-btn line-height-0">
+            <ld-button theme="inherit" shadow class="order-footer-btn line-height-0">
               <svg>
                 <use xlink:href="/static/svg/icon.svg#icon-facebook"/>
               </svg>
             </ld-button>
-            <ld-button theme="info" shadow class="order-footer-btn line-height-0">
+            <ld-button theme="inherit" shadow class="order-footer-btn line-height-0">
               <svg>
                 <use xlink:href="/static/svg/icon.svg#icon-twitter"/>
               </svg>
             </ld-button>
-            <ld-button theme="info" shadow class="order-footer-btn line-height-0">
+            <ld-button theme="inherit" shadow class="order-footer-btn fill line-height-0">
               <svg>
-                <use xlink:href="/static/svg/icon.svg#icon-telegram"/>
+                <use xlink:href="/static/svg/icon.svg#icon-google+"/>
               </svg>
             </ld-button>
           </div>
@@ -120,14 +120,18 @@ export default {
       }
     }
   },
-  data: () => {
+  data: (vm) => {
     return {
-      orderModel: false
+      orderModel: vm.value
     }
   },
   computed: {
     account () {
       return this.$root.$children[0].web3Opt.address
+    },
+
+    metaOpen () {
+      return this.$root.$children[0].metaOpen
     }
   },
   components: {
@@ -170,7 +174,7 @@ export default {
     }
   }
   .order-header-icon {
-    @include height(250px, 1);
+    @include height(260px, 1);
     @include margin('bottom', 25px, 1);
   }
   .order-markline {
@@ -255,6 +259,7 @@ export default {
     }
   }
   .order-footer-btn {
+    border: none;
     border-radius: 100%;
     margin: 0;
     @include margin('left', 25px, 1);
@@ -262,6 +267,15 @@ export default {
     svg {
       width: 20px;
       height: 20px;
+    }
+    &:not(.fill) {
+      fill: none;
+      stroke: $--text-deep-blue-color;
+      stroke-width: 1.5;
+    }
+    &.fill {
+      fill: $--text-deep-blue-color;
+      stroke: none;
     }
   }
 </style>

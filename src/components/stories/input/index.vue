@@ -3,14 +3,16 @@
     <div class="lordless-input-container" :class="requiredTheme || theme">
       <label
         class="lordless-input-tip inline-block"
-        :class="{ 'small': inputModel || focused }">{{ placeholder }}</label>
+        :class="{ 'small': inputModel || focused || inputModel === 0 }"><span v-if="!regexError || isRequired">{{ placeholder }}</span><span v-if="!isRequired && regexError">{{ regexError }}</span></label>
       <input
         v-model="inputModel"
         class="lordless-input"
         :type="type"
         :maxlength="maxlength"
+        :pattern="pattern"
         @focus="textFocus"
         @blur="textBlur"/>
+      <span v-if="symbol" class="lordless-input-symbol">{{ symbol }}</span>
     </div>
   </div>
 </template>
@@ -19,12 +21,16 @@
 export default {
   props: {
     value: {
-      type: String,
+      type: [String, Number],
       default: ''
     },
     type: {
       type: String,
       default: 'text'
+    },
+    number: {
+      type: Boolean,
+      default: false
     },
     theme: {
       type: String,
@@ -38,6 +44,10 @@ export default {
       type: Number,
       default: -1
     },
+    pattern: {
+      type: String,
+      default: ''
+    },
     required: {
       type: Boolean,
       default: false
@@ -45,6 +55,14 @@ export default {
     regex: {
       type: RegExp,
       default: null
+    },
+    regexError: {
+      type: String,
+      default: ''
+    },
+    symbol: {
+      type: String,
+      default: ''
     }
   },
   data: (vm) => {
@@ -55,7 +73,8 @@ export default {
   },
   computed: {
     isRequired () {
-      if (!this.required || (this.required && this.inputModel.match(this.regex))) return true
+      console.log('-----', this.regex, this.inputModel, this.regex.test(this.inputModel))
+      if (!this.required || (this.required && this.regex.test(this.inputModel + ''))) return true
       return false
     },
 
@@ -140,5 +159,12 @@ export default {
       transform: translateY(-16px) scale(.75);
       transition-timing-function: ease-out;
     }
+  }
+  .lordless-input-symbol {
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    font-size: 14px;
+    color: #f8f8f8;
   }
 </style>

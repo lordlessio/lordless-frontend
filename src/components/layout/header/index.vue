@@ -136,8 +136,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/color_mixin.scss';
-  @import '@/assets/stylus/mixin/class_mixin.scss';
+  @import '@/assets/stylus/mixin/index.scss';
   .ld-header {
     width: 100%;
     height: 80px;
@@ -145,6 +144,8 @@ export default {
     z-index: 999;
     transition: all .3s ease;
     background-color: #4D33A7;
+    @include height(80px, -2);
+    @include height(60px, 1, -2);
     &.fixed {
       position: fixed;
       top: 0;
@@ -202,6 +203,8 @@ export default {
   }
 
   .header-logo {
+    // height: 80px;
+    // line-height: 80px;
     transition: all .15s ease-out .15s;
     svg {
       fill: inherit;
@@ -337,9 +340,14 @@ export default {
       left: 0;
       width: 100%;
       z-index: 99;
+      line-height: 60px;
     }
     .header-logo {
-      line-height: 80px;
+      line-height: 60px;
+      svg {
+        width: 54px;
+        height: 40px;
+      }
     }
     .navbar-sidebar {
       margin: 0;
@@ -355,9 +363,10 @@ export default {
       transition: transform .3s ease-in-out .15s;
       // .overflow();
       .header-right-item {
-        margin: 20px 0 10px 25px;
+        margin: 15px 0 10px 25px;
         display: block;
         font-size: 16px;
+        line-height: 1.4;
         >a {
           display: inline-block;
           // padding: 5px 10px;
@@ -366,7 +375,7 @@ export default {
       .header-close-item {
         position: relative;
         margin: 0 0 10px;
-        height: 80px;
+        height: 60px;
         border-bottom: 1px solid #393b7e;
       }
       .ld-close-icon {
@@ -386,9 +395,9 @@ export default {
         }
       }
       .header-sm-logo {
-        padding-top: 20px;
+        padding-top: 10px;
         svg {
-          width: 50px;
+          width: 54px;
           height: 40px;
           fill: #fff;
         }
