@@ -436,6 +436,7 @@ export default {
       const res = await getLdbById({ id, pula: 'ldbIcon' })
       if (res.code === 1000) {
         this.getLdbRecords(res.data)
+        this.getUserPendings(res.data)
         this.ldbInfo = Object.assign({}, this.ldbInfo, res.data)
       } else this.errorMsg = res.errorMsg || '未知错误'
       this.detailLoading = false

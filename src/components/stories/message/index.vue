@@ -92,6 +92,7 @@ export default {
       bottom: 0;
       left: 0;
       height: initial;
+      z-index: 99999;
     }
   }
 </style>

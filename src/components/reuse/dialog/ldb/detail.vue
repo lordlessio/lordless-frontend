@@ -11,6 +11,7 @@
         :index="99">
       </Loading>
       <ldb-detail
+        v-if="value"
         v-show="!loading"
         :class="{ 'blur': blurs[1] }"
         ref="ldbDetail"

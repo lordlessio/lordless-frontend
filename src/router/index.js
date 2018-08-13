@@ -123,7 +123,7 @@ const router = new Router({
           name: 'Owner-candy',
           component: OwnerCandies,
           meta: {
-            navgation: 'candy',
+            navgation: 'candies',
             header: {
               show: false
             },

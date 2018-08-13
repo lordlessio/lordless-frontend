@@ -112,9 +112,9 @@ export default {
 <style lang="scss" scoped>
   @import '@/assets/stylus/mixin/index.scss';
   .ld-task-card {
+    padding: 30px 45px;
     background-color: #fff;
     border-radius: 5px;
-    @include padding-around(30px, 45px, 30px, 45px, 1);
     &.shadow {
       box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, .1);
     }
@@ -128,20 +128,20 @@ export default {
   }
 
   .task-tip {
+    margin-left: 15px;
     display: inline-block;
     padding: 4px 5px;
     font-size: 12px;
     color: #fff;
     background-color: $--text-blue-color;
     border-radius: 5px;
-    @include margin('left', 15px, 1);
   }
 
   .task-tool-box {
 
   }
   .task-tool-top {
-    @include margin('bottom', 25px, 1);
+    margin-bottom: 25px;
   }
   .task-tool-status {
     color: #999;
@@ -162,9 +162,9 @@ export default {
   }
 
   .task-play-svg {
+    margin-right: 15px;
     width: 26px;
     height: 26px;
-    @include margin('right', 15px, 1);
   }
 
   /**
@@ -185,12 +185,12 @@ export default {
     }
   }
   .task-status-serial {
+    margin-top: 8px;
     font-size: 18px;
     color: #999;
-    @include margin('top', 8px, 1);
   }
   .task-status-reward {
-    @include margin('top', 17px, 1);
+    margin-top: 17px;
     >h2 {
       margin-right: 10px;
     }
@@ -214,7 +214,7 @@ export default {
 
   }
   .task-reward-cnt {
-    @include margin('top', 35px, 1);
+    margin-top: 35px;
   }
   .reward-cnt-item {
     >p {
@@ -223,9 +223,9 @@ export default {
         color: #777;
       }
       &:nth-of-type(2) {
+        margin-top: 6px;
         font-size: 16px;
         color: #bbb;
-        @include margin('top', 6px, 1);
       }
       &:nth-of-type(3) {
         font-size: 16px;
@@ -233,7 +233,7 @@ export default {
       }
     }
     >h2 {
-      @include margin('top', 6px, 1);
+      margin-top: 6px;
     }
   }
   .reward-cnt-left {

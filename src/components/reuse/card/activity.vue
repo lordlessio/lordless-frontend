@@ -65,7 +65,7 @@ export default {
       if (this.type === 'NEWAUCTION') {
         return 'icon-sale'
       }
-      if (this.type === 'PAYBYETHSUCCESS') {
+      if (this.type === 'PAYBYETHSUCCESS' || this.type === 'PAYBYETH') {
         return 'icon-auction'
       }
     },

@@ -134,13 +134,3 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  .message-tip {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 99999;
-  }
-</style>
-
