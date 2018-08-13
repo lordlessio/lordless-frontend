@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex TTFontBold user-building-box">
+  <div class="d-flex user-building-box">
     <div class="d-flex v-flex col-flex user-candy-container">
       <h1 class="text-cap user-building-title">LDB</h1>
       <div
@@ -40,7 +40,7 @@
                 </el-option>
               </el-select>
             </div>
-            <el-row :gutter="20" class="user-buildings-cnt">
+            <el-row :gutter="30" class="user-buildings-cnt">
               <el-col
                 :xs="24" :sm="12" :lg="8"
                 class="building-item"
@@ -49,6 +49,7 @@
                 <building-card
                   :sale="building.chain.auction.isOnAuction"
                   :ldbInfo="building"
+                  shadow
                   @choose="chooseBuilding">
                 </building-card>
               </el-col>
@@ -80,6 +81,7 @@
                 <building-card
                   :sale="building.chain.auction.isOnAuction"
                   :ldbInfo="building"
+                  shadow
                   @choose="chooseBuilding">
                 </building-card>
               </el-col>
@@ -140,10 +142,10 @@ export default {
       sortItems: [
         {
           value: 'influence',
-          label: 'Influence'
+          label: 'Most influential'
         }, {
-          value: 'newest',
-          label: 'Newest'
+          value: 'popular',
+          label: 'Most popular'
         }
       ],
 
@@ -206,7 +208,7 @@ export default {
       this.getAllBuilding(params)
     },
 
-    async getAllBuilding ({ address = this.userInfo.address, sort = this.buildingSort, page = 1, offset = 10 } = {}) {
+    async getAllBuilding ({ address = this.userInfo.address, sort = this.buildingSort, page = 1, offset = 9 } = {}) {
       this.loading = true
       const params = {
         page,
@@ -223,7 +225,7 @@ export default {
       this.loading = false
     },
 
-    async getSaleBuilding ({ address = this.userInfo.address, page = 1, offset = 10 } = {}) {
+    async getSaleBuilding ({ address = this.userInfo.address, page = 1, offset = 9 } = {}) {
       this.loading = true
       const params = {
         page,
@@ -318,7 +320,7 @@ export default {
   .building-sort-select {
     margin-left: 10px;
     /deep/ .el-input__inner {
-      width: 120px;
+      width: 160px;
       height: 34px;
       line-height: 34px;
       font-size: 16px;
@@ -326,6 +328,12 @@ export default {
       background-color: #4586FC;
       border-radius: 20px;
       border: none;
+    }
+    /deep/ .el-input {
+      .el-select__caret {
+        font-weight: bolder;
+        color: #fff;
+      }
     }
   }
 

@@ -1,6 +1,6 @@
 <template>
   <div class="ldb-detail-box">
-    <LdbDetail ref="ldbDetail" theme="light" :ldbId="$route.params.ldbId"/>
+    <LdbDetail ref="ldbDetail" theme="light"/>
   </div>
 </template>
 
@@ -19,7 +19,8 @@ export default {
     }
   },
   mounted () {
-    this.$nextTick(() => this.$refs.ldbDetail.init())
+    const { ldbId } = this.$route.params
+    this.$nextTick(() => this.$refs.ldbDetail.init(ldbId))
   }
 }
 </script>

@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <div class="authorize-sign-container" v-if="newUser && newUser">
+    <div class="authorize-sign-container" v-if="newUser">
       <h1 class="TTFontBolder">Create Account</h1>
       <div class="text-left authorize-sign-cnt">
         <p>We use your email to send you notifications around collectible activity such as ones you buy and sell. We'll never share your email with anyone else.</p>
@@ -95,9 +95,12 @@ import Blockies from '@/components/stories/blockies'
 
 import { getUserById } from 'api'
 
+import { metamaskMixins } from '@/mixins'
+
 import { actionTypes } from '@/store/types'
 import { mapActions } from 'vuex'
 export default {
+  mixins: [metamaskMixins],
   props: {
     value: {
       type: Boolean,
@@ -165,8 +168,13 @@ export default {
     ]),
 
     relogin () {
+      // metamask 是否被打开
+      this.metamaskChoose = true
       this[actionTypes.USER_META_LOGIN]({ cb: () => {
         this.$emit('input', false)
+        this.$nextTick(() => {
+          this.metamaskChoose = false
+        })
       }})
     },
 
@@ -200,7 +208,15 @@ export default {
     signUp () {
       if (!this.signRequired) return
       const { email, nickName } = this.signInputs
-      this[actionTypes.USER_META_LOGIN]({ nickName: nickName.model, email: email.model })
+
+      // metamask 是否被打开
+      this.metamaskChoose = true
+      this[actionTypes.USER_META_LOGIN]({
+        nickName: nickName.model,
+        email: email.model,
+        cb: () => {
+          this.metamaskChoose = false
+        }})
     }
   },
   watch: {

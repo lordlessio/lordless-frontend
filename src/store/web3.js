@@ -9,6 +9,7 @@ export default {
   state: {
     web3Opt: {
       balance: 0,
+      gasPrice: 0,
       address: null,
       coinbase: null,
       error: null,

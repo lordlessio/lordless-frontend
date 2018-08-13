@@ -5,7 +5,7 @@ import store from '../store'
 
 import { mutationTypes } from '@/store/types'
 
-import Login from '@/pages/user/login.vue'
+import Sign from '@/pages/user/sign.vue'
 import Market from '@/pages/market'
 import Lbs from '@/pages/lbs'
 
@@ -15,11 +15,15 @@ import Status from '@/pages/help/status'
 
 import TaskDetail from '@/pages/task/_detail.vue'
 
-import User from '@/pages/user'
-import UserInfo from '@/pages/user/children/info'
-import UserCandies from '@/pages/user/children/candies'
-import UserBuildings from '@/pages/user/children/buildings'
-import UserTasks from '@/pages/user/children/tasks'
+import UserDetail from '@/pages/user/_detail'
+
+import Owner from '@/pages/user'
+import OwnerInfo from '@/pages/user/children/info'
+import OwnerCandies from '@/pages/user/children/candies'
+import OwnerBuildings from '@/pages/user/children/buildings'
+import OwnerTasks from '@/pages/user/children/tasks'
+import OwnerAuthorization from '@/pages/user/children/authorization'
+import OwnerActivity from '@/pages/user/children/activity'
 
 Vue.use(Router)
 
@@ -30,11 +34,6 @@ const router = new Router({
       path: '/',
       name: 'Market-index',
       component: Market
-    },
-    {
-      path: '/login',
-      name: 'Login',
-      component: Login
     },
     {
       path: '/market',
@@ -91,14 +90,24 @@ const router = new Router({
       }
     },
     {
-      path: '/user',
-      name: 'user',
-      component: User,
+      path: '/sign',
+      name: 'lordless-sign',
+      component: Sign
+    },
+    {
+      path: '/user/:address',
+      name: 'userDetail',
+      component: UserDetail
+    },
+    {
+      path: '/owner',
+      name: 'owner',
+      component: Owner,
       children: [
         {
           path: 'info',
-          name: 'userInfo',
-          component: UserInfo,
+          name: 'OwnerInfo',
+          component: OwnerInfo,
           meta: {
             navgation: 'overview',
             header: {
@@ -110,11 +119,11 @@ const router = new Router({
           }
         },
         {
-          path: 'candies',
-          name: 'user-candies',
-          component: UserCandies,
+          path: 'candy',
+          name: 'Owner-candy',
+          component: OwnerCandies,
           meta: {
-            navgation: 'candies',
+            navgation: 'candy',
             header: {
               show: false
             },
@@ -124,11 +133,11 @@ const router = new Router({
           }
         },
         {
-          path: 'buildings',
-          name: 'user-buildings',
-          component: UserBuildings,
+          path: 'ldb',
+          name: 'Owner-ldbs',
+          component: OwnerBuildings,
           meta: {
-            navgation: 'buildings',
+            navgation: 'ldb',
             header: {
               show: false
             },
@@ -139,10 +148,38 @@ const router = new Router({
         },
         {
           path: 'tasks',
-          name: 'user-tasks',
-          component: UserTasks,
+          name: 'Owner-tasks',
+          component: OwnerTasks,
           meta: {
             navgation: 'tasks',
+            header: {
+              show: false
+            },
+            footer: {
+              show: false
+            }
+          }
+        },
+        {
+          path: 'authorization',
+          name: 'Owner-authorization',
+          component: OwnerAuthorization,
+          meta: {
+            navgation: 'authorization',
+            header: {
+              show: false
+            },
+            footer: {
+              show: false
+            }
+          }
+        },
+        {
+          path: 'activity',
+          name: 'Owner-activity',
+          component: OwnerActivity,
+          meta: {
+            navgation: 'activity',
             header: {
               show: false
             },

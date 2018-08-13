@@ -26,7 +26,7 @@
             <div class="v-flex d-flex col-flex confirm-ldb-value">
               <p>{{ ldbInfo.chain.level }}</p>
               <p>{{ ldbInfo.chain.lng }}, {{ ldbInfo.chain.lat }}</p>
-              <p>{{ ldbInfo.chain.auction.price }}</p>
+              <p>{{ ldbInfo.chain.auction.price | weiToEth }}</p>
             </div>
           </div>
         </div>

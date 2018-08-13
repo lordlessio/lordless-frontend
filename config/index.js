@@ -35,7 +35,7 @@ const ossPublicPath = `frontend/${env.ossFolderPath}/${timeStr}`
 
 module.exports = {
   dev: {
-
+    env: require('./dev.env'),
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
@@ -79,6 +79,7 @@ module.exports = {
   },
 
   build: {
+    env,
     // Template for index.html
     index: path.resolve(__dirname, '../dist/index.html'),
 

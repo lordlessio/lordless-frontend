@@ -20,6 +20,8 @@ export default {
 
     // blur 状态集合，多级状态使用追加形式
     blurs: [],
+
+    // app 状态集合
     app: {},
     header: {
       show: true,

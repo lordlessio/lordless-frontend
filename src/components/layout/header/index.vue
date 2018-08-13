@@ -12,7 +12,7 @@
         </router-link>
       </div>
       <div @click.stop="toggleHeader" id="header-mask" class="header-mask"></div>
-      <div @click.stop="headerItemClick" class="v-flex TTFontBold lg-text-right header-text navbar-sidebar">
+      <div @click.stop="headerItemClick" class="v-flex lg-text-right header-text navbar-sidebar">
         <span class="uppercase lg-hidden header-right-item header-close-item sm-text-center">
           <span @click.stop="toggleHeader" class="ld-close-icon"></span>
           <router-link to="/" class="header-sm-logo">

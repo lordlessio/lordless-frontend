@@ -1,7 +1,7 @@
 'use strict'
 
 import store from '@/store'
-import { getNetwork, getCoinbase, getBalance } from './utils'
+import { getNetwork, getCoinbase, getBalance, getGasPrice } from './utils'
 import { monitorWeb3 } from './monitorWeb3'
 import { actionTypes } from '@/store/types'
 // 初始化 web3js
@@ -30,6 +30,8 @@ const checkWeb3 = async () => {
     error: null,
     web3js: null,
     isInjected: false,
+    balance: 0,
+    gasPrice: 0,
     networkId: '',
     coinbase: '',
     address: ''
@@ -54,8 +56,10 @@ const checkWeb3 = async () => {
     // window.web3js = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
   }
 
+  console.time('net word')
   // check network
   const networkRes = await getNetwork(res.web3js)
+  console.timeEnd('net word')
   if (networkRes.error) {
     res.error = networkRes.error
     return res
@@ -63,8 +67,10 @@ const checkWeb3 = async () => {
     res.networkId = networkRes.networkId
   }
 
+  console.time('coinbaseRes word')
   // check coinbase
   const coinbaseRes = await getCoinbase(res.web3js)
+  console.timeEnd('coinbaseRes word')
   if (coinbaseRes.error) {
     res.error = coinbaseRes.error
     return res
@@ -73,9 +79,17 @@ const checkWeb3 = async () => {
     res.address = res.address || res.web3js.eth.defaultAccount
   }
 
+  console.time('gasPriceRes word')
+  // check gasPrice
+  const gasPriceRes = await getGasPrice(res.web3js)
+  console.timeEnd('gasPriceRes word')
+  res.gasPrice = gasPriceRes.gasPrice
+
+  console.time('balance word')
   // check balance
   const balanceRes = await getBalance(res.web3js, res.address)
   res.balance = balanceRes.balance
+  console.timeEnd('balance word')
 
   return res
 }

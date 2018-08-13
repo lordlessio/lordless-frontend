@@ -80,11 +80,9 @@ export default {
       // 点标记 marker 集合
       pointMarkers: {},
 
-      // 点标记 popups 集合
-      pointPopups: {},
-
       // 点标记 popup 实例
       pointPopup: null,
+
       lngLat: null,
       isMaxZoom: false,
       isMinZoom: false
@@ -124,11 +122,12 @@ export default {
      */
     createImageMarkers (list, map = this.map) {
       list.map(item => {
-        const { _id, name, chain, ldbIcon } = item
-        const coords = [chain.lng / 1e14, chain.lat / 1e14]
+        const { _id, name, chain } = item
+        const coords = [chain.lng / 1e16, chain.lat / 1e16]
 
         // 创建 Image markers
-        const imgSrc = ldbIcon.source.map
+        // const imgSrc = ldbIcon.source.map
+        const imgSrc = 'http://lordless.oss-cn-hongkong.aliyuncs.com/console/ldbIcon/2018-08-04/1533395070990.png'
         const markerDom = this.createImageMarker({ name, imgSrc, level: chain.level })
         // const { id, fields } = item
         // const _id = id
@@ -149,17 +148,17 @@ export default {
         this.imageMarkers[_id] = imageMarker
       })
 
-      let startTime = new Date()
-      const checkImageMarker = (delay = 300) => {
-        // 如果map 的 zoom正在变化或者相邻事件执行时间少于300毫秒,return
-        if (new Date() - startTime < delay || map.isZooming()) return
-        startTime = new Date()
-        this.checkMarkerIsInView({ type: 'image' })
-      }
-      this.checkMarkerIsInView({ type: 'image' })
+      // let startTime = new Date()
+      // const checkImageMarker = (delay = 300) => {
+      //   // 如果map 的 zoom正在变化或者相邻事件执行时间少于300毫秒,return
+      //   if (new Date() - startTime < delay || map.isZooming()) return
+      //   startTime = new Date()
+      //   this.checkMarkerIsInView({ type: 'image' })
+      // }
+      // this.checkMarkerIsInView({ type: 'image' })
 
       // map move 之后，check image marker is Inview
-      this.mapMoveEvent(checkImageMarker)
+      // this.mapMoveEvent(checkImageMarker)
 
       // 每次zoom变化前，remove marker
       this.mapZoomStartEvent(() => this.checkMarkerIsInView({ type: 'image', remove: true }))
@@ -171,30 +170,105 @@ export default {
     /**
      * 创建 point marker
      */
-    createPointMarker ({ level } = {}) {
+    createPointMarker ({ _id, level } = {}) {
       const point = document.createElement('div')
       point.className = `marker _point_marker--ldb-box _point_marker--level-${level}`
+      point.setAttribute('data-id', _id)
       return point
+    },
+
+    createPointLayer (list, map = this.map) {
+      const features = (size) => {
+        list.map(item => {
+          const { name, chain } = item
+          const coords = [chain.lng / 1e16, chain.lat / 1e16]
+          return {
+            'type': 'Feature',
+            'geometry': {
+              'type': 'Point',
+              'coordinates': coords
+            },
+            'properties': {
+              'title': name.zh,
+              'icon': 'harbor',
+              'size': size
+            }
+          }
+        })
+      }
+
+      map.loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png', function (error, image) {
+        if (error) throw error
+        map.addImage('cat', image)
+        map.addSource('lordless_pointer', {
+          'type': 'geojson',
+          'data': {
+            'type': 'FeatureCollection',
+            'features': features(0.1)
+          }
+        })
+        const layer = {
+          'id': 'points',
+          'type': 'symbol',
+          'source': 'lordless_pointer',
+          'layout': {
+            'icon-image': 'cat',
+            'icon-size': {
+              'property': 'size',
+              'type': 'identity'
+            },
+            'text-field': '{title}',
+            'text-offset': [0, 0.6],
+            'text-anchor': 'top'
+          }
+        }
+        map.addLayer(layer)
+
+        function animateMarker () {
+        // Update the data to a new position based on the animation timestamp. The
+        // divisor in the expression `timestamp / 1000` controls the animation speed.
+          map.getSource('lordless_pointer').setData({
+            'type': 'geojson',
+            'data': {
+              'type': 'FeatureCollection',
+              'features': features(Math.random * 3 * 0.1)
+            }
+          })
+
+          // Request the next frame of the animation.
+          requestAnimationFrame(animateMarker)
+        }
+
+        // Start the animation.
+        setTimeout(() => {
+          animateMarker()
+        }, 10000)
+        // map.on('mouseenter', 'points', function (e) {
+        //   console.log('---- layer popup', e.features[0].geometry.coordinates)
+        //   new MapBox.Popup()
+        //     .setLngLat(e.features[0].geometry.coordinates)
+        //     .setHTML(e.features[0].properties.title)
+        //     .addTo(map)
+        // })
+      })
     },
 
     /**
      * 创建 point popup 对象
      */
     createPointPopup ({ _id, poster, name, coords, popup = this.pointPopup, map = this.map } = {}) {
-      console.log('this.pointPopups[_id].addTo(map)', this.pointPopups[_id])
       if (!popup) {
         popup = new MapBox.Popup({
           closeButton: false,
           closeOnClick: false
         })
-        this.pointPopup = popup
       }
       const desc = `<div class="d-flex f-align-center TTFontBolder font-bold _point_marker-container"><span class="inline-block _point_marker-poster" style="background-image: url(${poster})"></span><span>${name.zh}</span></div>`
-      const pointPopup = popup.setLngLat(coords)
+      popup.setLngLat(coords)
         .setHTML(desc)
         .addTo(map)
 
-      this.pointPopups['popup' + _id] = pointPopup
+      this.pointPopup = popup
     },
 
     /**
@@ -202,12 +276,13 @@ export default {
      */
     createPointMarkers (list, map = this.map) {
       list.map(item => {
-        const { _id, name, chain, ldbIcon } = item
-        const coords = [chain.lng / 1e14, chain.lat / 1e14]
+        const { _id, name, chain } = item
+        const coords = [chain.lng / 1e16, chain.lat / 1e16]
 
         // 创建 markers
-        const poster = ldbIcon.source.map
-        const pointDom = this.createPointMarker({ name, poster, level: chain.level })
+        // const poster = ldbIcon.source.map
+        const poster = 'http://lordless.oss-cn-hongkong.aliyuncs.com/console/ldbIcon/2018-08-04/1533395070990.png'
+        const pointDom = this.createPointMarker({ _id, name, poster, level: chain.level })
         pointDom.addEventListener('click', () => {
           this.flyToCoords({ center: coords, pitch: this.mPitch, zoom: this.scrollZooms[this.scrollZooms.length - 1] })
         }, false)
@@ -216,31 +291,31 @@ export default {
           this.createPointPopup({ _id, coords, name, poster })
         })
         pointDom.addEventListener('mouseleave', () => {
-          this.pointPopups['popup' + _id].remove()
+          this.pointPopup.remove()
         })
 
         const point = new MapBox.Marker(pointDom)
           .setLngLat(coords)
-          .setOffset([0, 5])
+          .setOffset([0, 15])
           .addTo(map)
 
-        point.remove()
+        // point.remove()
 
         // set marker to markers by _id
         this.pointMarkers[_id] = point
       })
 
-      let startTime = new Date()
-      const checkMarker = (delay = 300) => {
-        // 如果map 的 zoom正在变化或者相邻事件执行时间少于300毫秒,return
-        if (new Date() - startTime < delay || map.isZooming()) return
-        startTime = new Date()
-        this.checkMarkerIsInView({ type: 'point' })
-      }
-      this.checkMarkerIsInView({ type: 'point' })
+      // let startTime = new Date()
+      // const checkMarker = (delay = 300) => {
+      //   // 如果map 的 zoom正在变化或者相邻事件执行时间少于300毫秒,return
+      //   if (new Date() - startTime < delay || map.isZooming()) return
+      //   startTime = new Date()
+      //   this.checkMarkerIsInView({ type: 'point' })
+      // }
+      // this.checkMarkerIsInView({ type: 'point' })
 
       // map move 之后，check marker Inview
-      this.mapMoveEvent(checkMarker)
+      // this.mapMoveEvent(checkMarker)
 
       // 每次zoom变化前，remove marker
       this.mapZoomStartEvent(() => this.checkMarkerIsInView({ type: 'point', remove: true }))
@@ -301,6 +376,10 @@ export default {
       map.dragRotate.disable()
       // map.dragPan.disable()
       this.map = map
+
+      map.on('click', (e) => {
+        console.log('------e', e)
+      })
 
       map.on('load', () => {
         // 添加marker
@@ -498,10 +577,7 @@ export default {
         maxZoom = this.pointZooms.max
 
         // 如果视图发生变化，remove popups
-        const popups = this.pointPopups
-        for (const popup in popups) {
-          popups[popup].remove()
-        }
+        this.pointPopup.remove()
       }
 
       const bounds = map.getBounds()
@@ -525,7 +601,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '@/assets/stylus/mapbox/index.scss';
+  // @import '@/assets/stylus/mapbox/index.scss';
 
   .mapbox-main-box {
     &.sm-marker {
@@ -632,7 +708,7 @@ export default {
   }
 
   ._point_marker--ldb-box {
-    position: relative;
+    // position: relative;
     border: none;
     height: 6px;
     width: 8px;
@@ -649,17 +725,14 @@ export default {
       left: -12px;
       top: -8px;
       opacity: .2;
-      background-color: #E47172;
+      background-color: inherit;
       border-radius: 50%;
       transform: scale(.25);
       padding: 0;
       animation: pulse 2s ease-in-out infinite;
     }
     &:hover {
-      ._point_marker-container {
-        opacity: 1;
-        visibility: visible;
-      }
+      background-color: #4586FC;
     }
   }
   ._point_marker-container {

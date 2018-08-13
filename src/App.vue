@@ -1,7 +1,7 @@
 <template>
-  <div id="lordless" :class="{ 'blur': blurs[0] }">
-    <Header v-bind="headerOpt"/>
+  <div id="lordless" :class="{ 'blur': blurs[0], 'transform': appOpt.transform, 'no-transform': !appOpt.transform }">
     <GradientSvg/>
+    <Header v-bind="headerOpt"/>
     <div class="ld-main" :class="[{ 'no-header': !headerOpt.show || (headerOpt.show && headerOpt.scroll) }, { 'no-footer': !footerOpt.show }]">
       <!-- <div class="d-flex col-flex f-auto-center ld-error" v-if="web3Opt.error">
         <h1>出错啦！</h1>
@@ -11,15 +11,14 @@
       <!-- <Relogin v-model="userExpired" :address="web3Opt.address"></Relogin> -->
     </div>
     <Footer v-bind="footerOpt"/>
-    <div class="message-tip">
-      <msg-tip
-        v-model="msgTip.show"
-        :text="msgTip.text"
-        :theme="msgTip.theme"
-        closeSync
-        @close="closeTip">
-      </msg-tip>
-    </div>
+    <msg-tip
+      v-model="msgTip.show"
+      :text="msgTip.text"
+      :theme="msgTip.theme"
+      fixed
+      closeSync
+      @close="closeTip">
+    </msg-tip>
     <meta-tip v-model="metaOpen">
     </meta-tip>
   </div>
@@ -30,7 +29,7 @@ import GradientSvg from '@/components/reuse/gradientSvg'
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
 import Relogin from '@/components/reuse/relogin'
-import MsgTip from '@/components/stories/messageTip'
+import MsgTip from '@/components/stories/message'
 import MetaTip from '@/components/reuse/dialog/metaTip'
 
 import { initWeb3 } from '@/assets/utils/web3/initWeb3'
@@ -61,7 +60,8 @@ export default {
       footerOpt: 'footer',
       blurs: 'blurs',
       msgTip: 'messageTip',
-      metaOpen: 'metaOpen'
+      metaOpen: 'metaOpen',
+      appOpt: 'app'
     }),
     ...mapState('web3', [
       'web3Opt'
@@ -140,6 +140,7 @@ export default {
     bottom: 0;
     left: 0;
     width: 100%;
+    z-index: 99999;
   }
 </style>
 

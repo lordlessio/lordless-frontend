@@ -1,11 +1,23 @@
 import store from '@/store'
-import { getNetwork, getCoinbase, getBalance } from './utils'
+import { getNetwork, getCoinbase, getBalance, getGasPrice } from './utils'
 import { actionTypes } from '@/store/types'
 
 export const monitorWeb3 = () => {
   // const APPROVED_NETWORKID = '5777'
   const { web3Opt } = store.state.web3
-  let { balance, coinbase, networkId, web3js, error } = web3Opt
+  let { balance, gasPrice, coinbase, networkId, web3js, error } = web3Opt
+
+  setInterval(async () => {
+    /**
+     * check gasPrice
+     */
+    const gasPriceRes = (await getGasPrice(web3js)) || {}
+    if (gasPriceRes.gasPrice !== gasPrice) {
+      gasPrice = gasPriceRes.gasPrice
+      store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { gasPrice: gasPriceRes.gasPrice || 0 })
+    }
+  }, 3000)
+
   return setInterval(async () => {
     /**
      * check balance

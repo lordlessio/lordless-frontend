@@ -1,6 +1,6 @@
 <template>
   <div class="ld-market">
-    <div class="d-flex col-flex page-container market-container">
+    <div class="d-flex col-flex page-container market-container md">
       <div class="d-flex f-align-center market-search-box">
         <span class="el-input__icon el-icon-search ld-auto-icon"></span>
         <span class="v-flex">
@@ -22,17 +22,18 @@
             </span>
           </div>
         </div>
-        <el-row :gutter="20" v-if="!ldbsLoading">
+        <el-row :gutter="40" v-if="!ldbsLoading">
           <!-- <el-col
             v-for="(item, index) of skeletionLdbs" :key="index"
             :sm="24" :md="8" :lg="6">
             <skeletion-list class="skeletion-item"></skeletion-list>
           </el-col> -->
         </el-row>
-        <el-row :gutter="20" class="v-flex market-cnt-box" v-if="ldbs.length && ldbsLoading">
+        <el-row :gutter="40" class="v-flex market-cnt-box" v-if="ldbs.length && ldbsLoading">
           <el-col
+            class="market-cnt-item"
             v-for="ldb of ldbs" :key="ldb._id"
-            :xs="24" :sm="8" :lg="6">
+            :xs="24" :sm="12" :lg="8">
             <building-card
               :sale="ldb.chain.auction.isOnAuction"
               :ldbInfo="ldb"
@@ -74,11 +75,9 @@
           <Pagination
             v-if="ldbs.length"
             class="market-pagination-pages"
+            :total="total"
             background
-            :page-size="pageSize"
-            @prev="paginationPrev"
-            @next="paginationNext"
-            @currentChange="paginationCurrent">
+            @currentChange="pageChange">
           </Pagination>
         </div>
       </div>
@@ -108,10 +107,10 @@ import SkeletionPager from '@/components/skeletion/pagination'
 export default {
   data: () => {
     return {
-      pageSize: 10,
-
       // ldb 建筑列表
       ldbs: [],
+
+      total: 0,
 
       // ldb dialog 显示控制
       detailModel: false,
@@ -161,16 +160,23 @@ export default {
     /**
      * 获取 ldb 列表信息
      */
-    async getLdbs () {
+    async getLdbs ({ page = 1, offset = 9 } = {}) {
       this.ldbsLoading = false
-      const res = await getChainLdbs({ isOnAuction: true })
+      const params = {
+        isOnAuction: true,
+        page,
+        offset
+      }
+      const res = await getChainLdbs(params)
       if (res.code === 1000) {
-        this.ldbs = res.data.list
+        const { list, total } = res.data
+        this.ldbs = list
+        this.total = total
       }
       this.ldbsLoading = true
     },
-    paginationCurrent (e) {
-      console.log('paginationCurrent', e)
+    pageChange (e) {
+      this.getLdbs({ page: e })
     }
   },
   watch: {

@@ -140,7 +140,6 @@ export default {
 
     // 合约内部状态初始化状态
     authorizeInit () {
-      console.log('this.browser', this.browser)
       if (this.isInit) return true
       const browserInit = !this.browser.default
       const web3Init = !this.$root.$children[0].web3Opt.web3js.default
@@ -173,7 +172,7 @@ export default {
       this.authorizeDialog = false
     },
 
-    checkoutAuthorize ({ isSell = false } = {}) {
+    checkoutAuthorize ({ crowdsale = false } = {}) {
       if (!this.isInit) return false
       console.log('---- this.statusType', this.statusType)
 
@@ -183,7 +182,7 @@ export default {
         return false
       }
 
-      if (!this.crowdsale || !isSell) {
+      if (!this.crowdsale || !crowdsale) {
         this.authorizeDialog = false
         return true
       }

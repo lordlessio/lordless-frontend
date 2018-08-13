@@ -39,14 +39,16 @@
             </div>
             <div class="v-flex d-flex col-flex order-cnt-right">
               <div class="d-flex col-flex order-ldb-info">
-                <p class="d-flex f-align-center">
-                  <span class="inline-block line-height-1">
+                <p class="d-flex f-align-center order-ldb-name">
+                  <!-- <span class="inline-block line-height-1">
                     <svg class="order-crown-svg">
                       <use :xlink:href="`#icon-crown-l${ldbInfo.chain.level}`"/>
                     </svg>
-                  </span>
-                  <span class="order-ldb-name">{{ ldbInfo.name.zh }}</span>
+                  </span> -->
+                  <!-- <span class="order-ldb-name">{{ ldbInfo.name.zh }}</span> -->
+                  {{ ldbInfo.name.zh }}
                 </p>
+                <p class="order-ldb-tokenId">#{{ ldbInfo.chain.tokenId }}</p>
                 <p class="order-ldb-address">{{ ldbInfo.address }}</p>
                 <!-- <p class="d-flex row-flex f-align-center color-main">
                   <span class="order-reward-symbol">x </span>
@@ -68,7 +70,7 @@
             </div>
           </div>
           <div class="d-flex f-align-center order-footer">
-            <ld-button theme="info" shadow class="d-flex f-align-center TTFontBolder lordless-message-btn order-share-btn">
+            <ld-button theme="blue" shadow class="d-flex f-align-center TTFontBolder lordless-message-btn order-share-btn">
               <span>Copy link</span>
               <span class="mar-l1 line-height-0">
                 <svg>
@@ -76,17 +78,17 @@
                 </svg>
               </span>
             </ld-button>
-            <ld-button theme="inherit" shadow class="order-footer-btn line-height-0">
+            <ld-button theme="blue" shadow class="order-footer-btn line-height-0">
               <svg>
                 <use xlink:href="/static/svg/icon.svg#icon-facebook"/>
               </svg>
             </ld-button>
-            <ld-button theme="inherit" shadow class="order-footer-btn line-height-0">
+            <ld-button theme="blue" shadow class="order-footer-btn line-height-0">
               <svg>
                 <use xlink:href="/static/svg/icon.svg#icon-twitter"/>
               </svg>
             </ld-button>
-            <ld-button theme="inherit" shadow class="order-footer-btn fill line-height-0">
+            <ld-button theme="blue" shadow class="order-footer-btn fill line-height-0">
               <svg>
                 <use xlink:href="/static/svg/icon.svg#icon-google+"/>
               </svg>
@@ -162,39 +164,35 @@ export default {
 <style lang="scss" scoped>
   @import '@/assets/stylus/mixin/index.scss';
   .lordless-message-box {
-    @include padding('bottom', 80px, 1);
+    // @include padding('bottom', 60px, 1);
   }
   .order-header {
     >h1 {
       @include fontSize(36px, 1.2);
     }
     >p {
-      @include margin('top', 3px);
+      margin-top: 3px;
       @include fontSize(18px, 1.2);
     }
   }
   .order-header-icon {
-    @include height(260px, 1);
-    @include margin('bottom', 25px, 1);
+    margin-bottom: 25px;
+    height: 260px;
   }
   .order-markline {
+    margin: 15px auto 30px;
+    width: 50%;
     height: 0;
     border-bottom: 1px dashed #fff;
-    @include width(50%, 1);
-    @include margin-around(15px, auto, 30px, auto, 1);
   }
   .order-container {
     position: relative;
-    @include padding-around(0, 50px, 0, 50px, 1);
+    padding: 0 50px;
   }
   .order-cnt-right {
-    @include margin('left', 30px, 1);
-    @include fontSize(18px, 1);
-    p {
-      &:not(:first-of-type) {
-        @include margin('top', 10px, 1);
-      }
-    }
+    margin-left: 30px;
+    font-family: $--font-TTNormsRegular;
+    font-size: 18px;
   }
   .order-cnt-poster {
     position: relative;
@@ -216,66 +214,70 @@ export default {
     @include padding(-1, 12px, 1.5);
   }
   .order-crown-svg {
-    @include width(30px, 1);
-    @include height(20px, 1);
+    width: 30px;
+    height: 20px;
   }
   .order-ldb-name {
-    @include margin('left', 10px, 1);
+    font-size: 18px;
+    // @include margin('left', 10px, 1);
+  }
+  .order-ldb-tokenId {
+    font-size: 14px;
   }
   .order-ldb-address {
+    margin-top: 8px;
+    font-size: 16px;
     // @include fontSize(18px, 1);
   }
 
   .order-ldb-reward {
-    @include margin('top', 30px, 1);
+    margin-top: 30px;
   }
   .order-tx-title {
-    @include fontSize(22px, 1);
+    font-size: 22px;
   }
   .order-tx-img {
+    margin-right: 10px;
     width: 16px;
     height: 16px;
-    @include margin('right', 10px, 1);
   }
   .order-reward-symbol {
-    @include fontSize(14px, 1);
+    font-size: 14px;
   }
   .order-reward-unit {
-    font-weight: 400;
-    @include margin('left', 6px, 1);
+    margin-left: 6px;
   }
 
   .order-footer {
-    @include margin('top', 50px, 1);
+    margin-top: 50px;
   }
   .order-share-btn {
+    padding: 12px 15px;
     margin: 0;
+    font-size: 16px;
     border-radius: 5px;
-    @include padding-around(12px, 15px, 12px, 15px, 1);
-    @include fontSize(16px, 1);
     svg {
       width: 20px;
       height: 20px;
     }
   }
   .order-footer-btn {
+    margin-left: 25px;
+    padding: 12px;
     border: none;
     border-radius: 100%;
-    margin: 0;
-    @include margin('left', 25px, 1);
-    @include padding(-1, 12px, 1);
     svg {
       width: 20px;
       height: 20px;
     }
-    &:not(.fill) {
-      fill: none;
-      stroke: $--text-deep-blue-color;
-      stroke-width: 1.5;
-    }
-    &.fill {
-      fill: $--text-deep-blue-color;
-      stroke: none;
-    }
+    // &:not(.fill) {
+    //   fill: none;
+    //   stroke: $--text-deep-blue-color;
+    //   stroke-width: 1.5;
+    // }
+    // &.fill {
+    //   fill: $--text-deep-blue-color;
+    //   stroke: none;
+    // }
   }
 </style>

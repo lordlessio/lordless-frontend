@@ -9,7 +9,7 @@
               <use xlink:href="/static/svg/coin.svg#icon-ethereum"/>
             </svg>
           </div>
-          <div class="v-flex TTFontBold inline-block header-coin-desc">
+          <div class="v-flex inline-block header-coin-desc">
             <p>The most powerful infrastructure for decentralized applications</p>
             <p class="coin-href">https://eos.io</p>
           </div>
@@ -19,7 +19,7 @@
     <div class="task-detail-cnt">
       <div class="container md">
         <div class="task-status-box">
-          <div class="TTFontBold task-cnt-section task-status-top">
+          <div class="task-cnt-section task-status-top">
             <h1>Follow EOS Telegram</h1>
             <p class="d-flex f-align-center task-status-serial">
               <span>#67854</span>
@@ -36,10 +36,12 @@
               Getting started
             </ld-btn>
           </div>
-          <div class="d-flex sm-f-align-center sm-col-flex TTFontBold task-cnt-section task-status-bottom">
+          <div class="d-flex sm-f-align-center sm-col-flex task-cnt-section task-status-bottom">
             <div class="v-flex task-status-remaining">
               <p>Time remaining</p>
-              <p class="task-status-time">1d : 23h : 59m : 51 s</p>
+              <countdown class="task-status-time" :time="new Date() - new Date('2018-08-04T15:57:51.269Z')" :interval="1000" tag="p">
+                <template slot-scope="props">{{ parseInt(props.days) }}d : {{ props.hours }}h : {{ props.minutes }}m : {{ props.seconds }}s</template>
+              </countdown>
             </div>
             <div class="task-status-date">
               <p>Create on</p>
@@ -72,18 +74,20 @@
                       <use xlink:href="/static/svg/user/task.svg#icon-sword"/>
                     </svg>
                   </span>
-                  <div class="rewards-user-avatar">
-                    <blockies
-                      :scale="12"
-                      theme="light"
-                      seed="0x4cd98f82decade2d152e256efd1f8d5a334a3e28">
-                    </blockies>
-                  </div>
-                  <p>Swordsman</p>
-                  <p>{{ '0x4cd98f82decade2d152e256efd1f8d5a334a3e28' | splitAddress }}</p>
-                  <div class="card-user-level">
-                    <p class="text-upper">LEVEL 14</p>
-                    <strong>50.4<span>%</span></strong>
+                  <div class="card-top-cnt">
+                    <div class="rewards-user-avatar">
+                      <blockies
+                        :scale="12"
+                        theme="light"
+                        seed="0x4cd98f82decade2d152e256efd1f8d5a334a3e28">
+                      </blockies>
+                    </div>
+                    <p>Swordsman</p>
+                    <p>{{ '0x4cd98f82decade2d152e256efd1f8d5a334a3e28' | splitAddress }}</p>
+                    <div class="card-user-level">
+                      <p class="text-upper">LEVEL 14</p>
+                      <strong>50.4<span>%</span></strong>
+                    </div>
                   </div>
                 </div>
                 <div class="big-card-bottom">
@@ -102,18 +106,20 @@
                       <use xlink:href="#icon-crown"/>
                     </svg>
                   </span>
-                  <div class="rewards-user-avatar">
-                    <blockies
-                      :scale="12"
-                      theme="light"
-                      seed="0x4cd98f82decade2d152e256efd1f8d5a334a3e28">
-                    </blockies>
-                  </div>
-                  <p>LORD</p>
-                  <p>{{ '0x4cd98f82decade2d152e256efd1f8d5a334a3e28' | splitAddress }}</p>
-                  <div class="card-user-level">
-                    <p class="text-upper">LEVEL 14</p>
-                    <strong>49.6<span>%</span></strong>
+                  <div class="card-top-cnt">
+                    <div class="rewards-user-avatar">
+                      <blockies
+                        :scale="12"
+                        theme="light"
+                        seed="0x4cd98f82decade2d152e256efd1f8d5a334a3e28">
+                      </blockies>
+                    </div>
+                    <p>LORD</p>
+                    <p>{{ '0x4cd98f82decade2d152e256efd1f8d5a334a3e28' | splitAddress }}</p>
+                    <div class="card-user-level">
+                      <p class="text-upper">LEVEL 14</p>
+                      <strong>49.6<span>%</span></strong>
+                    </div>
                   </div>
                 </div>
                 <div class="big-card-bottom">
@@ -452,6 +458,10 @@ export default {
         @include margin('top', 5px, 1);
       }
     }
+  }
+  .card-top-cnt {
+    position: relative;
+    z-index: 1;
   }
   .big-card-svg {
     position: absolute;

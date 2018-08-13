@@ -25,22 +25,22 @@
           <p class="ldb-coords color-yellow">{{ ldbInfo.chain.lng | sliceStr }}, {{ ldbInfo.chain.lat | sliceStr }}</p>
         </div> -->
         <div class="text-left ldb-buy-top">
-          <div class="TTFontBold text-nowrap ldb-info-box">
+          <div class="text-nowrap ldb-info-box">
             <p>You are going to <span class="font-bold">BUY</span></p>
             <h2>{{ ldbInfo.name.zh }}</h2>
             <div class="d-flex ldb-influence-box">
               <div class="v-flex ldb-influence">
                 <p class="TTFontNormal">Influence</p>
-                <p>{{ ldbInfo.chain.influence }}</p>
+                <p>{{ ldbInfo.chain.influence || 0 }}</p>
               </div>
               <div class="v-flex ldb-level">
                 <p class="TTFontNormal">Level</p>
-                <p>{{ ldbInfo.chain.level }}</p>
+                <p>{{ ldbInfo.chain.level || 0 }}</p>
               </div>
             </div>
             <div class="ldb-price">
               <p class="TTFontNormal">Price</p>
-              <h2>{{ ldbInfo.chain.auction.price }} <span class="text-upper">ETH</span></h2>
+              <h2>{{ ldbInfo.chain.auction.price | weiToEth }} <span class="text-upper">ETH</span></h2>
             </div>
           </div>
           <div class="ldb-poster-box">
@@ -58,7 +58,7 @@
               shadow
               :loading="buyPending"
               :disabled="metamaskChoose || buyPending || !enoughBalance"
-              @click="buyLdb">
+              @click="submitBuy">
               <span class="buy-confirm" v-if="enoughBalance && !buyPending">Confirm</span>
               <span class="d-inline-flex f-align-center buy-no-balance" v-if="!enoughBalance && !buyPending">
                 <span class="inline-block buy-warning-svg">
@@ -116,12 +116,16 @@ export default {
       return parseFloat(this.$root.$children[0].web3Opt.balance) >= parseFloat(this.ldbInfo.chain.auction.price)
     },
 
+    metaOpen () {
+      return this.$root.$children[0].metaOpen
+    },
+
     account () {
       return this.$root.$children[0].web3Opt.address
     },
 
-    metaOpen () {
-      return this.$root.$children[0].metaOpen
+    web3Opt () {
+      return this.$root.$children[0].web3Opt
     }
   },
   components: {
@@ -129,30 +133,40 @@ export default {
     LdBtn
   },
   methods: {
-    async buyLdb () {
-      const tokenId = this.ldbInfo.chain.tokenId
+    async submitBuy ({ ldbInfo = this.ldbInfo, web3Opt = this.web3Opt, NFTsCrowdsale = this.NFTsCrowdsale } = {}) {
+      const tokenId = ldbInfo.chain.tokenId
       if (!tokenId) return
 
-      console.log('this.ldbInfo', this.ldbInfo)
-      const NFTsCrowdsale = this.NFTsCrowdsale
+      console.log('buy => submitBuy --- ldbInfo:', ldbInfo)
 
       // 根据 tokenId 获取建筑链上信息
-      const ldb = await NFTsCrowdsale.getAuction(tokenId)
-      console.log('ldb', ldb[1].toNumber(), tokenId)
+      const ldb = await NFTsCrowdsale.methods('getAuction', [tokenId])
+      console.log('buy => submitBuy --- getAuction:', ldb[2].toNumber(), tokenId)
 
       this.metamaskChoose = true
 
+      const { gasPrice } = web3Opt
+
+      // 传输的合约参数
+      const payByEth = {
+        name: 'payByEth',
+        values: [ tokenId ]
+      }
+
+      // 估算 gas
+      // const gas = await NFTsCrowdsale.payByEth.estimateGas(tokenId)
+      const gas = (await NFTsCrowdsale.estimateGas(payByEth.name, payByEth.values)) || 300000
+
       // 根据链上信息购买建筑
-      NFTsCrowdsale.payByEth(tokenId, {
-        // from,
-        value: ldb[1]
-      })
-        .then(data => {
+      NFTsCrowdsale.methods(payByEth.name, payByEth.values.concat([{ gas, gasPrice, value: ldb[2] }]))
+        .then(tx => {
+          console.log('-----tex', tx)
           this.buyPending = true
           this.metamaskChoose = false
-          this.$emit('pending', data)
+          this.$emit('pending', { tx, tokenId, action: payByEth.name })
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log('err', err)
           this.metamaskChoose = false
         })
     }
@@ -161,6 +175,7 @@ export default {
     value (val) {
       this.buyModel = val
       this.$emit('blurs', val)
+      if (!val) this.buyModel = false
     },
     buyModel (val) {
       this.$emit('input', val)
@@ -177,7 +192,6 @@ export default {
 
   .lordless-message-box {
     position: relative;
-    margin: 0;
     padding: 0 0 60px;
   }
   .dialog-buy-cnt {
@@ -195,8 +209,8 @@ export default {
   .ldb-info-box {
     display: inline-block;
     margin: 30px 0;
-    padding: 40px 30px 40px 60px;
-    width: 330px;
+    padding: 40px 30px 40px 45px;
+    width: 345px;
     position: relative;
     z-index: 1;
     >p {
@@ -251,9 +265,10 @@ export default {
     height: 100%;
     margin-left: 80px;
     padding-left: 200px;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-    background-color: #fff;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-color: transparent;
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, .6), #fff);
     /deep/ .image-box {
       width: 100%;
       height: 100%;

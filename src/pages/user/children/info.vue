@@ -1,5 +1,5 @@
 <template>
-  <div class="TTFontBold user-info-box">
+  <div class="user-info-box">
     <div class="user-info-container">
       <div class="user-info-section">
         <h2 class="info-cnt-title">Info Card</h2>
@@ -8,7 +8,7 @@
             <blockies
               :scale="18"
               radius="20px"
-              :seed="user.address"></blockies>
+              :seed="userInfo.address"></blockies>
           </div>
           <div class="v-flex d-flex lg-f-align-end sm-col-reverse-flex info-header-cnt">
             <div class="v-flex header-cnt-text">
@@ -18,10 +18,10 @@
                     <use xlink:href="#icon-crown-l5"/>
                   </svg>
                 </span>
-                <span>{{ user.nickName }}</span>
+                <span>{{ userInfo.nickName }}</span>
                 <span>
                   <ld-btn
-                    class="TTFontBold user-Authorize-btn"
+                    class="user-Authorize-btn"
                     :theme="isCrowdsaleApproved ? 'green' : 'red'"
                     inverse
                     @click="userAuthorize">
@@ -31,7 +31,7 @@
               </h2>
               <p class="d-flex f-align-center">
                 <span id="user-address" class="text-ellipsis">
-                  {{ user.address }}
+                  {{ userInfo.address }}
                 </span>
                 <el-tooltip class="item" effect="dark" :content="clipBool ? 'Copied!' : 'Copy to clipboard'" placement="bottom-start">
                   <span
@@ -45,11 +45,11 @@
                   </span>
                 </el-tooltip>
               </p>
-              <p class="user-eamil">{{ user.email }}</p>
+              <p class="user-eamil">{{ userInfo.email }}</p>
             </div>
             <div class="lg-text-right header-cnt-balance sm-hidden">
               <p>ETH Balance in wallet</p>
-              <p class="eth-balance">{{ balance }} ETH</p>
+              <p class="eth-balance">{{ balance | weiToEth }} ETH</p>
             </div>
           </div>
         </div>
@@ -60,29 +60,29 @@
           <div class="d-flex f-align-center info-cnt-box info-prestige-box">
             <div class="v-flex exp-progress-box">
               <div class="d-flex f-align-end exp-progress-top">
-                <span class="v-flex text-left">EXP</span>
+                <span class="v-flex text-left">LEVEL {{ userLevel }}</span>
                 <span class="exp-text-progress">
-                  <span class="exp-current">20</span>
+                  <span class="exp-current">{{ userInfo.activeness }}</span>
                   <span>&nbsp;/&nbsp;</span>
-                  <span>1200</span>
+                  <span>{{ nextActiveness }}</span>
                 </span>
               </div>
               <div class="exp-progress">
                 <ld-progress
                   shadow
-                  :current="200"
-                  :max="1200"
+                  :current="userInfo.activeness - currentActiveness"
+                  :max="nextActiveness"
                   :gradient="progressOpts.exp.gradient">
                 </ld-progress>
               </div>
-              <p class="exp-tip-text">You still need to earn 1200 to level up.</p>
+              <p class="exp-tip-text">You still need to earn {{ nextActiveness - userInfo.activeness }} to level up.</p>
             </div>
             <div class="exp-recived-box sm-hidden">
               <span
                 class="exp-recived-item"
                 v-for="(n, index) of [1,2,3,4]"
-                :key="n"
-                :style="`filter: grayscale(${index * 20}%) sepia(${index * 20}%);z-index: ${-n}`">
+                :key="index"
+                :style="`color: rgba(78, 71, 211, ${1 - 0.2 * index});border-color: rgba(78, 71, 211, ${1 - 0.2 * index});z-index: ${-n}`">
                 +{{n}}
               </span>
             </div>
@@ -104,9 +104,9 @@
                 <ld-btn class="user-info-btn" theme="info" inverse shadow>View map now</ld-btn>
               </div>
               <div class="info-home-know" v-if="true">
-                <h2>上海和平饭店</h2>
-                <p class="text-ellipsis">上海黄浦区外滩南京东路20号</p>
-                <div class="d-flex f-align-baseline TTFontBold info-home-status">
+                <p class="info-ldb-name">上海和平饭店</p>
+                <p class="text-ellipsis info-ldb-influence">87 influence</p>
+                <div class="d-flex f-align-baseline info-home-status">
                   <p class="v-flex">0.3 ETH remaining</p>
                   <ld-btn class="user-info-btn" theme="info" inverse shadow>Go</ld-btn>
                 </div>
@@ -119,14 +119,14 @@
         <h2 class="info-cnt-title">Task</h2>
         <div class="d-flex f-align-center sm-col-flex text-center">
           <div class="info-cnt-box info-card-cnt task-candy-box" style="z-index: 3;">
-            <h2 class="card-cnt-title">Candy claiming count</h2>
+            <h2 class="card-cnt-title">Action point</h2>
             <div class="task-candy-cnt">
-              <p class="card-cnt-tip">10 times left</p>
+              <p class="card-cnt-tip">{{ userInfo.ap }} Points left</p>
               <div class="inline-block card-cnt-box task-candy-progress">
                 <ld-progress
                   circle
-                  :current="1"
-                  :max="10"
+                  :current="userInfo.ap"
+                  :max="50"
                   :width="140"
                   :circleWidth="progressOpts.candy.circleWidth"
                   :color="progressOpts.candy.color">
@@ -144,7 +144,7 @@
             </div>
             <div class="v-flex d-flex col-flex task-current-know" v-if="true">
               <p class="card-cnt-tip">A task from LDB <a href="#">#88888</a> in progress</p>
-              <div class="v-flex d-flex col-flex f-justify-center task-current-cnt">
+              <div class="v-flex d-flex col-flex task-current-cnt">
                 <p>Join the telegram of LORDLESS</p>
                 <ul class="d-flex task-current-data">
                   <li class="v-flex task-current-symbol">
@@ -165,7 +165,7 @@
           </div>
           <div class="v-flex d-flex col-flex info-cnt-box info-card-cnt task-completed-box" style="z-index: 1;">
             <h2 class="card-cnt-title">Completed tasks</h2>
-            <div class="v-flex d-flex col-flex task-completed-unknow" v-if="false">
+            <div class="v-flex d-flex col-flex f-justify-center task-completed-unknow" v-if="false">
               <p class="card-cnt-tip">Recent rewarded tasks</p>
               <div class="v-flex d-flex f-auto-center card-cnt-box">
                 <p>You have no tasks completed</p>
@@ -173,7 +173,7 @@
             </div>
             <div class="v-flex d-flex col-flex task-completed-know" v-if="true">
               <p class="card-cnt-tip">Recent rewarded tasks</p>
-              <ul class="v-flex d-flex col-flex f-justify-center text-left task-completed-cnt">
+              <ul class="v-flex d-flex col-flex text-left task-completed-cnt">
                 <li class="d-flex f-justify-around task-completed-item">
                   <span class="v-flex text-ellipsis">Join the telegram of LORDLESS</span>
                   <span class="task-completed-reward">+0.001 LESS</span>
@@ -219,7 +219,7 @@
             </div>
             <div class="v-flex d-flex col-flex assets-earnings-know" v-if="true">
               <p class="card-cnt-tip">Rewards from LDB</p>
-              <div class="v-flex d-flex col-flex f-justify-center assets-earnings-list">
+              <div class="v-flex d-flex col-flex assets-earnings-list">
                 <ul class="text-left">
                   <li class="d-flex f-align-center earnings-list-item">
                     <div class="v-flex d-flex f-align-center text-ellipsis">
@@ -228,7 +228,8 @@
                         class="inline-block line-height-0 mar-l1"
                         :scale="3"
                         radius="3px"
-                        :seed="user.address"></blockies>
+                        jump
+                        seed="0x4cd98f82decade2d152e256efd1f8d5a334a3e28"></blockies>
                     </div>
                     <span class="earnings-item-reward">+0.001LESS</span>
                   </li>
@@ -239,7 +240,8 @@
                         class="inline-block line-height-0 mar-l1"
                         :scale="3"
                         radius="3px"
-                        :seed="user.address"></blockies>
+                        jump
+                        seed="0xe4e891aa1ab36661fcfff8062267787ccaacd8af"></blockies>
                     </div>
                     <span class="earnings-item-reward">+0.001LESS</span>
                   </li>
@@ -250,7 +252,8 @@
                         class="inline-block line-height-0 mar-l1"
                         :scale="3"
                         radius="3px"
-                        :seed="user.address"></blockies>
+                        jump
+                        seed="0x4c3b08fc010ba8f2f948b605b5fb69db49b1c644"></blockies>
                     </div>
                     <span class="earnings-item-reward">+0.001LESS</span>
                   </li>
@@ -261,7 +264,8 @@
                         class="inline-block line-height-0 mar-l1"
                         :scale="3"
                         radius="3px"
-                        :seed="user.address"></blockies>
+                        jump
+                        :seed="userInfo.address"></blockies>
                     </div>
                     <span class="earnings-item-reward">+0.001LESS</span>
                   </li>
@@ -271,52 +275,38 @@
           </div>
           <div class="v-flex d-flex col-flex info-cnt-box info-card-cnt assets-recent-box" style="z-index: 1;">
             <h2 class="card-cnt-title">Recent transactions</h2>
-            <div class="v-flex d-flex col-flex assets-recent-unknow" v-if="false">
+            <div class="v-flex d-flex col-flex assets-recent-unknow" v-if="!recentData.total">
               <p class="card-cnt-tip">Rewards from LDB</p>
               <div class="v-flex d-flex f-auto-center col-flex card-cnt-box">
                 <p>You have no transactions</p>
                 <ld-btn class="user-info-btn" theme="info" inverse shadow>Marketplace</ld-btn>
               </div>
             </div>
-            <div class="v-flex d-flex col-flex assets-recent-know" v-if="true">
+            <div class="v-flex d-flex col-flex assets-recent-know" v-if="recentData.total">
               <p class="card-cnt-tip">Rewards from LDB</p>
-              <div class="v-flex d-flex col-flex f-justify-center assets-recent-list">
+              <div class="v-flex d-flex col-flex assets-recent-list">
                 <ul class="text-left">
-                  <li class="d-flex f-align-center recent-list-item">
+                  <li
+                    class="d-flex recent-list-item"
+                    v-for="(recent, index) of recentData.list"
+                    :key="index">
                     <p class="v-flex text-ellipsis">
                       Bought
-                      <a href="#"> #8989 </a>
+                      <a href="#"> #{{ recent.market[0].tokenId }} </a>
                       for
-                      <span> 0.1 ETH</span>
+                      <span> {{ recent.market[0].price | weiToEth }} ETH</span>
                     </p>
-                    <span class="recent-item-reward">1 min ago</span>
+                    <span class="recent-item-date">{{ recent.created_at | timeFormat }}</span>
                   </li>
-                  <li class="d-flex f-align-center recent-list-item">
-                    <p class="v-flex text-ellipsis">
-                      Bought
-                      <a href="#"> #8989 </a>
-                      for
-                      <span> 0.1 ETH</span>
-                    </p>
-                    <span class="recent-item-reward">1 min ago</span>
-                  </li>
-                  <li class="d-flex f-align-center recent-list-item">
-                    <p class="v-flex text-ellipsis">
-                      Bought
-                      <a href="#"> #8989 </a>
-                      for
-                      <span> 0.1 ETH</span>
-                    </p>
-                    <span class="recent-item-reward">1 min ago</span>
-                  </li>
-                  <li class="d-flex f-align-center recent-list-item">
-                    <p class="v-flex text-ellipsis">
-                      Bought
-                      <a href="#"> #8989 </a>
-                      for
-                      <span> 0.1 ETH</span>
-                    </p>
-                    <span class="recent-item-reward">1 min ago</span>
+                  <li
+                    v-if="recentData.total > recentData.ps"
+                    class="info-more">
+                    <router-link class="d-flex f-align-baseline" to="/owner/activity">
+                      <span>More </span>
+                      <span data-type="icon">
+                        <i class="el-icon-d-arrow-right"></i>
+                      </span>
+                    </router-link>
                   </li>
                 </ul>
               </div>
@@ -346,6 +336,8 @@ import LdBtn from '@/components/stories/button'
 
 import { contractMixins, dialogMixins } from '@/mixins'
 
+import { getActivitysByUser } from 'api'
+
 import { actionTypes } from '@/store/types'
 import { mapState, mapActions } from 'vuex'
 export default {
@@ -365,6 +357,20 @@ export default {
           circleWidth: 15,
           color: '#5961F9'
         }
+      },
+
+      // userExps data
+      expData: {
+        ps: 4,
+        list: [],
+        total: 0
+      },
+
+      // recent transactions data
+      recentData: {
+        ps: 4,
+        list: [],
+        total: 0
       }
     }
   },
@@ -373,16 +379,26 @@ export default {
       'userInfo'
     ]),
 
-    user () {
-      return this.userInfo
-    },
-
     balance () {
       return this.$root.$children[0].web3Opt.balance
     },
 
     isCrowdsaleApproved () {
       return this.$root.$children[0].isCrowdsaleApproved
+    },
+
+    userLevel () {
+      return Math.floor(Math.sqrt(this.userInfo.activeness / 10 * Math.pow(108, 2)) / 108) + 1
+    },
+
+    currentActiveness () {
+      const level = Math.floor(Math.sqrt(this.userInfo.activeness / 10 * Math.pow(108, 2)) / 108)
+      return Math.ceil(Math.pow(level * 108, 2) / Math.pow(108, 2) * 10)
+    },
+
+    nextActiveness () {
+      const level = Math.floor(Math.sqrt(this.userInfo.activeness / 10 * Math.pow(108, 2)) / 108) + 1
+      return Math.ceil(Math.pow(level * 108, 2) / Math.pow(108, 2) * 10)
     }
   },
   components: {
@@ -411,7 +427,7 @@ export default {
     },
 
     userAuthorize () {
-      this.$refs.authorize.checkoutAuthorize()
+      this.$refs.authorize.checkoutAuthorize({ crowdsale: true })
     },
 
     authorizePending ({ tx } = {}) {
@@ -423,15 +439,35 @@ export default {
         const bool = await this[actionTypes.CONTRACT_CHECK_CROWDSALE](this.userInfo.address)
         if (!bool) {
           // 轮询 tx 状态
-          this.checkTxEvent(tx, finishTx)
+          this.checkTxEvent({ tx }, finishTx)
         }
       }
-      this.checkTxEvent(tx, finishTx)
+      this.checkTxEvent({ tx }, finishTx)
+    },
+
+    initInfo () {
+      this.getUserTransactions()
+    },
+
+    async getUserTransactions ({ user = this.userInfo.address, ps = this.recentData.ps } = {}) {
+      const params = {
+        user,
+        opt: {
+          type: 'buy',
+          ps
+        }
+      }
+      const res = await getActivitysByUser(params)
+      if (res.code === 1000) {
+        this.recentData = Object.assign({}, this.recentData, res.data)
+      }
     }
   },
   mounted () {
     this.$nextTick(() => {
+      console.log('this.userInfo.address', this.userInfo.address)
       this.initClipboard()
+      this.initInfo()
     })
   }
 }
@@ -443,7 +479,6 @@ export default {
   .user-info-btn {
     padding: 8px 15px;
     font-size: 16px;
-    font-family: $--font-TTNormsBold;
     @include margin('top', 15px, 1);
   }
 
@@ -572,8 +607,8 @@ export default {
     height: 40px;
     line-height: 40px;
     text-align: center;
-    color: #5961F9;
-    border: 3px solid #5961F9;
+    color: rgb(78, 71, 211);
+    border: 3px solid rgb(78, 71, 211);
     border-radius: 100%;
     background-color: #fff;
     white-space: nowrap;
@@ -606,14 +641,16 @@ export default {
     font-size: 14px;
   }
 
-  .info-home-know {
-    >h2 {
-      font-size: 20px;
-    }
-    >p {
-      font-size: 14px;
-    }
+  .info-ldb-name {
+    font-size: 20px;
+    font-weight: 400;
   }
+  .info-ldb-influence {
+    margin-top: 6px;
+    font-size: 16px;
+    color: #999999;
+  }
+
   .info-home-status {
     color: #4E47D3;
     @include fontSize(20px, 1.2);
@@ -759,12 +796,25 @@ export default {
     >p {
       max-width: 190px;
     }
+    .recent-item-date {
+      color: #bbb;
+    }
   }
-  .recent-item-reward {
+  .recent-item-date {
     display: inline-block;
     font-family: $--font-TTNormsMedium;
-    color: #4E47D3;
     text-align: right;
     @include width(120px, 1.2);
+  }
+  .info-more {
+    transform: translateY(5px);
+    >a {
+      font-size: 14px;
+      color: #4E47D3;
+      >[data-type="icon"] {
+        margin-left: 3px;
+        font-size: 12px;
+      }
+    }
   }
 </style>

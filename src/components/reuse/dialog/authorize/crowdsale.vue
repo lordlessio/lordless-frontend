@@ -77,7 +77,11 @@ export default {
     ...mapState('contract', [
       'LDBNFTs',
       'NFTsCrowdsale'
-    ])
+    ]),
+
+    web3Opt () {
+      return this.$root.$children[0].web3Opt
+    }
   },
   components: {
     Blockies,
@@ -104,20 +108,33 @@ export default {
     /**
      * 授权市场合约
      */
-    chooseCrowdsale () {
+    async chooseCrowdsale ({ LDBNFTs = this.LDBNFTs, web3Opt = this.web3Opt, NFTsCrowdsale = this.NFTsCrowdsale } = {}) {
       const crowdsaleModel = this.crowdsaleModel
-      const LDBNFTs = this.LDBNFTs
-      const NFTsCrowdsale = this.NFTsCrowdsale
+
       if (!crowdsaleModel) {
         // metamask 是否被打开
         this.metamaskChoose = true
-        LDBNFTs.setApprovalForAll(NFTsCrowdsale.address, true)
-          .then(data => {
+
+        const { gasPrice } = web3Opt
+
+        // 传输的合约参数
+        const setApprovalForAll = {
+          name: 'setApprovalForAll',
+          values: [ NFTsCrowdsale.address, true ]
+        }
+
+        // 估算 gas
+        const gas = (await LDBNFTs.estimateGas(setApprovalForAll.name, setApprovalForAll.values)) || 80000
+
+        // 执行合约
+        LDBNFTs.methods(setApprovalForAll.name, setApprovalForAll.values.concat([{ gas, gasPrice }]))
+          .then(tx => {
             this.crowdsalePending = true
             this.metamaskChoose = false
-            this.$emit('pending', data)
+            this.$emit('pending', { tx })
           })
           .catch(err => {
+            console.log('err', err)
             this.metamaskChoose = false
             this.$emit('error', err)
           })

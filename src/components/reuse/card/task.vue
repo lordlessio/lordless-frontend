@@ -1,5 +1,5 @@
 <template>
-  <div class="TTFontBold ld-task-card" :class="{ 'shadow': shadow }">
+  <div class="ld-task-card" :class="{ 'shadow': shadow }">
     <div class="ld-task-container">
       <div
         v-if="!reward"
@@ -11,7 +11,7 @@
           </h2>
           <div class="ld-task-status">
             <p class="d-flex f-align-center task-status-serial">
-              <span class="TTFontBold line-height-0">#67854</span>
+              <span class="line-height-0">#67854</span>
               <span class="text-cap task-tip">Telegram</span>
             </p>
             <div class="d-flex f-align-center task-status-reward">
@@ -31,12 +31,12 @@
           <p>
             <span class="inline-block task-svg task-play-svg" @click="$emit('play', taskInfo)">
               <svg>
-                <use xlink:href="/static/svg/icon.svg#icon-play"/>
+                <use xlink:href="/static/svg/user/task.svg#icon-play"/>
               </svg>
             </span>
             <span class="inline-block task-svg" @click="$emit('choose', taskInfo)">
               <svg>
-                <use xlink:href="/static/svg/icon.svg#icon-eye"/>
+                <use xlink:href="/static/svg/user/task.svg#icon-eye"/>
               </svg>
             </span>
           </p>
@@ -50,7 +50,7 @@
           <span class="task-tip">Daily</span>
         </h2>
         <div class="d-flex task-reward-cnt">
-          <div class="v-flex d-flex text-center TTFontBold reward-cnt-left">
+          <div class="v-flex d-flex text-center reward-cnt-left">
             <div class="reward-cnt-item">
               <p>Task</p>
               <p>#67823</p>
@@ -77,7 +77,7 @@
             <p>
               <span class="inline-block task-svg" @click="$emit('choose', taskInfo)">
                 <svg>
-                  <use xlink:href="/static/svg/icon.svg#icon-eye"/>
+                  <use xlink:href="/static/svg/user/task.svg#icon-eye"/>
                 </svg>
               </span>
             </p>

@@ -7,7 +7,6 @@ import web3 from './web3'
 import ldb from './ldb'
 import contract from './contract'
 import status from './status'
-
 Vue.use(Vuex)
 
 const store = new Vuex.Store({

@@ -5,55 +5,21 @@ import Vue from 'vue'
 import Lordless from './App.vue'
 import router from './router'
 import store from './store'
+
 import './plugins'
-import {
-  Container, Header, Main, Aside,
-  Col, Row,
-  Tooltip, Progress, Select, Option,
-  Tabs, TabPane, Dialog, Autocomplete, Pagination,
-  Collapse, CollapseItem
-} from 'element-ui'
-import VueI18n from 'vue-i18n'
 
 // 项目国际化文件
 import enLocale from '@/assets/locales/en.json'
 import zhLocale from '@/assets/locales/zh-cn.json'
 
 // element 国际化文件
+import VueI18n from 'vue-i18n'
+
 import eleEnLocale from 'element-ui/lib/locale/lang/en'
 import eleZhLocale from 'element-ui/lib/locale/lang/zh-CN'
 import ElementLocale from 'element-ui/lib/locale'
 
 import 'stylus/index.scss'
-
-// 使用 element-ui 组件
-Vue.use(Container)
-Vue.use(Header)
-Vue.use(Main)
-Vue.use(Aside)
-
-Vue.use(Col)
-Vue.use(Row)
-
-Vue.use(Tooltip)
-// Vue.use(Message)
-Vue.use(Progress)
-Vue.use(Select)
-Vue.use(Option)
-Vue.use(Tabs)
-Vue.use(TabPane)
-Vue.use(Dialog)
-Vue.use(Autocomplete)
-Vue.use(Pagination)
-
-// Vue.use(Slider)
-// Vue.use(Carousel)
-// Vue.use(CarouselItem)
-Vue.use(Collapse)
-Vue.use(CollapseItem)
-
-// 配置 element 默认参数
-Vue.prototype.$ELEMENT = { size: 'large', zIndex: 3000 }
 
 // 使用 vueI18n 国际化插件
 Vue.use(VueI18n)
