@@ -3,7 +3,7 @@
  */
 
 import { mutationTypes, actionTypes } from './types'
-import { getUserById, getUserByToken, login, logout } from 'api'
+import { getUserById, getUserByToken, login, logout } from '../api'
 import { stringifyParse, getObjStorage } from 'utils/tool'
 import web3Store from './web3'
 export default {
@@ -29,7 +29,7 @@ export default {
       const address = payload.address
       if (!address) return
 
-      state.users[address] = stringifyParse(payload)
+      state.users[address.toLocaleLowerCase()] = stringifyParse(payload)
     },
 
     // 存储 userInfo
@@ -45,6 +45,9 @@ export default {
     // 存储用户sigStr信息
     [mutationTypes.USER_SET_USER_TOKEN]: (state, { address = state.userInfo.address, token = '' } = {}) => {
       if (!address) return
+
+      address = address.toLocaleLowerCase()
+
       const tokenObj = getObjStorage()
       tokenObj[address] = token
       window.localStorage.setItem('lordless_tokens', JSON.stringify(tokenObj))
@@ -60,7 +63,8 @@ export default {
     /**
      * 根据用户id获取用户信息
      */
-    [actionTypes.USER_SET_USER_BY_ID]: async ({ commit }, { uid, address }) => {
+    [actionTypes.USER_SET_USER_BY_ID]: async ({ commit }, { uid, address = '' }) => {
+      address = address.toLocaleLowerCase()
       const res = await getUserById({ uid, address })
       if (res.code === 1000) commit(mutationTypes.USER_SET_USERID_INFO, res.data)
       else {
@@ -77,7 +81,7 @@ export default {
 
       // 登陆
       const loginFunc = async (sigStr, addr) => {
-        const res = await login({ sigStr, address: addr, email, nickName })
+        const res = await login({ sigStr, address: addr.toLocaleLowerCase(), email, nickName })
         if (res.code === 1000) {
           dispatch(actionTypes.USER_SET_USER_TOKEN, ({ address: addr, token: res.token }))
           dispatch(actionTypes.USER_SET_USER_BY_TOKEN)
@@ -102,9 +106,10 @@ export default {
      * @param {String} address: 代表当前请求用户的address
      * @param {Boolean} update: 代表当前请求是否属于更新用户信息
      */
-    [actionTypes.USER_SET_USER_BY_TOKEN]: async ({ state, commit }, { address, update } = {}) => {
+    [actionTypes.USER_SET_USER_BY_TOKEN]: async ({ state, commit }, { update, address = '' } = {}) => {
       // 如果 state[address], 代表此用户数据已存在，不需要继续请求接口
       // 如果token过期？to do ...
+      address = address.toLocaleLowerCase()
       if (!update && state.users[address]) {
         commit(mutationTypes.USER_SET_USER_INFO, state.users[address])
         return true
@@ -118,9 +123,13 @@ export default {
         if (state.userExpired) commit(mutationTypes.USER_SET_USER_EXPIRED, false)
         return true
       }
-      if (res.code === 9001 && res.errorMsg === 'jwt expired') commit(mutationTypes.USER_SET_USER_EXPIRED, true)
+      if (res.code === 9001 && res.errorMsg === 'jwt expired') {
+        commit(mutationTypes.USER_SET_USER_EXPIRED, true)
+        commit(mutationTypes.USER_SET_USER_INFO, {})
+      } else {
+        commit(mutationTypes.USER_SET_USER_INFO, { default: true })
+      }
       commit(mutationTypes.USER_SET_USER_INFO)
-      // commit(mutationTypes.USER_SET_USER_INFO, { default: true })
       return false
     },
 
@@ -136,6 +145,9 @@ export default {
 
     // 获取本地用户tokens
     [actionTypes.USER_GET_TOKEN_BY_ADDRESS]: ({ state }, address) => {
+      if (!address) return null
+
+      address = address.toLocaleLowerCase()
       return getObjStorage()[address]
     },
 

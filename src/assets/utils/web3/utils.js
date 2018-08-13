@@ -26,13 +26,27 @@ export const getCoinbase = (web3js) => {
   })
 }
 
+// generator getGasPrice func
+export const getGasPrice = (web3js) => {
+  return new Promise((resolve, reject) => {
+    try {
+      web3js.eth.getGasPrice((err, res) => {
+        if (err) reject(err)
+        else resolve({ gasPrice: Number(res) })
+      })
+    } catch (err) {
+      resolve({ error: err.message || 'getGasPrice error', gasPrice: 0 })
+    }
+  })
+}
+
 // get eth balance
 export const getBalance = (web3js, address) => {
   return new Promise((resolve, reject) => {
     try {
       web3js.eth.getBalance(address, (error, balance) => {
         if (error) resolve({ balance: 0 })
-        else resolve({ balance: parseInt(web3js.fromWei(balance.toNumber())) || 0 })
+        else resolve({ balance: balance.toNumber() || 0 })
       })
     } catch (err) {
       resolve({ balance: 0 })

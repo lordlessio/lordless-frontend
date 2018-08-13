@@ -11,7 +11,7 @@
       <img-box sType="height" bottom :src="poster" type="span"></img-box>
     </div>
     <div class="fab-content">
-      <iframe src="" width="100%" height="100%" ref="sketch_frame" id="sketch_frame" frameborder="0" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+      <iframe src="" @load="sketchLoad" width="100%" height="100%" ref="sketch_frame" id="sketch_frame" frameborder="0" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
       <!-- <div class="sketch-bottom-cnt">
         <div class="d-flex">
           <div class="lord-avatar">
@@ -186,6 +186,10 @@ export default {
           console.log('Viewer error')
         }
       })
+    },
+
+    sketchLoad () {
+      console.log('------ sketchLoad')
     }
   }
 }

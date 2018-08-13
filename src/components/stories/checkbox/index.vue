@@ -1,6 +1,6 @@
 <template>
   <div class="checkbox-box">
-    <span class="inline-block checkbox-inner" :class="{ 'choose': value }" @click.stop="toggleChoose"></span>
+    <span class="inline-block checkbox-inner" :class="{ 'choose': value || choose }" @click.stop="toggleChoose"></span>
   </div>
 </template>
 
@@ -12,6 +12,10 @@ export default {
       default: false
     },
     sync: {
+      type: Boolean,
+      default: false
+    },
+    choose: {
       type: Boolean,
       default: false
     }

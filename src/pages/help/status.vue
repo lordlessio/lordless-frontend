@@ -3,7 +3,7 @@
     <div class="page-container md">
       <div class="lordless-status-header text-center">
         <h1 class="TTFontBolder">Getting started</h1>
-        <p class="TTFontBold text-color-secondary">Unsure how to get going on EVERMORE? WE'll help you out.</p>
+        <p class="text-color-secondary">Unsure how to get going on EVERMORE? WE'll help you out.</p>
       </div>
       <div class="lordless-status-content">
         <ul>

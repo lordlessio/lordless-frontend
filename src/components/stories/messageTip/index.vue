@@ -1,5 +1,8 @@
 <template>
-  <div class="TTFontBold tip-main-box" :class="[{ 'show': value }, theme]">
+  <div
+    class="tip-main-box"
+    :class="[{ 'hidden': !value, 'show': value },{ 'fixed': fixed }, theme]"
+    v-dom-portal="fixed">
     <div class="container">
       <span class="tip-close" @click="close">
         <i class="el-icon-close"></i>
@@ -26,6 +29,10 @@ export default {
       default: 'default'
     },
     closeSync: {
+      type: Boolean,
+      default: false
+    },
+    fixed: {
       type: Boolean,
       default: false
     }
@@ -79,6 +86,12 @@ export default {
       right: 35px;
       font-size: 20px;
       cursor: pointer;
+    }
+    &.fixed {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      height: initial;
     }
   }
 </style>

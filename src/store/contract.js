@@ -2,7 +2,7 @@
 /**
  * contract store options
  */
-import lordContract from '@/contract'
+import { NFTsCrowdsale, Building, LDBNFTs } from '@/contract'
 import { mutationTypes, actionTypes } from './types'
 import web3Store from './web3'
 export default {
@@ -43,7 +43,7 @@ export default {
       const { LDBNFTs, NFTsCrowdsale } = state
       let isCrowdsaleApproved
       if (!address) isCrowdsaleApproved = false
-      else isCrowdsaleApproved = await LDBNFTs.isApprovedForAll(address, NFTsCrowdsale.address)
+      else isCrowdsaleApproved = await LDBNFTs.methods('isApprovedForAll', [address, NFTsCrowdsale.address])
 
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'isCrowdsaleApproved', value: isCrowdsaleApproved })
       return isCrowdsaleApproved
@@ -52,16 +52,15 @@ export default {
     /**
      * init contrcat instance
      */
-    [actionTypes.CONTRACT_INIT_INSTANCE]: async ({ state, commit, dispatch }, { monitor = false } = {}) => {
+    [actionTypes.CONTRACT_INIT_INSTANCE]: ({ state, commit, dispatch }, { monitor = false } = {}) => {
       console.log('init contract')
       const { web3js, address } = web3Store.state.web3Opt
 
       // 如果是 monitor 的状态，不重置合约文件
       if (!monitor) {
-        const { NFTsCrowdsale, Building, LDBNFTs } = lordContract(web3js, address)
-        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'NFTsCrowdsale', value: await NFTsCrowdsale() })
-        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Building', value: await Building() })
-        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'LDBNFTs', value: await LDBNFTs() })
+        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'NFTsCrowdsale', value: NFTsCrowdsale(web3js) })
+        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Building', value: Building(web3js) })
+        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'LDBNFTs', value: LDBNFTs(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'contractReady', value: true })
       }
 

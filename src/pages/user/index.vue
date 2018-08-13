@@ -1,12 +1,10 @@
 <template>
   <el-container class="ld-user-box">
     <Loading
-      class="ld-user-loading"
       :loading="loading"
+      crown
+      position="fixed"
       :index="99">
-      <svg>
-        <use xlink:href="/static/svg/icon.svg#icon-logo-image"/>
-      </svg>
     </Loading>
     <aside class="d-flex lg-col-flex sm-row-flex ld-user-navgation">
       <div class="d-flex f-auto-center user-navgation-logo sm-hidden" @click="$router.push('/')">
@@ -20,15 +18,15 @@
       <div class="d-flex col-flex v-flex">
         <ul class="d-flex v-flex sm-row-flex lg-col-flex user-navgation-list">
           <li
-            class="TTFontBolder user-navgation-item"
-            :class="{ 'active': $route.meta.navgation === nav.name }"
+            class="user-navgation-item"
+            :class="{ 'active': $route.meta.navgation === nav.name.toLowerCase() }"
             v-for="(nav, index) of navgations"
             :key="index"
             @click="$router.push(nav.path)">
-            <div class="d-flex f-align-center sm-f-justify-center navgation-item-cnt">
+            <div class="d-flex f-align-center sm-f-justify-center TTFontBolder navgation-item-cnt">
               <span class="navgation-item-icon">
                 <svg>
-                  <use :xlink:href="`/static/svg/icon.svg#icon-${nav.icon}`"/>
+                  <use :xlink:href="`/static/svg/user/icon.svg#icon-${nav.icon}_${$route.meta.navgation === nav.name.toLowerCase() ? 'selected' : 'unselected'}`"/>
                 </svg>
               </span>
               <span class="text-cap">{{ nav.name }}</span>
@@ -39,7 +37,7 @@
           <div class="d-flex f-align-center cursor-pointer navgation-item-cnt">
             <span class="navgation-item-icon">
               <svg>
-                <use xlink:href="/static/svg/icon.svg#icon-reddit"/>
+                <use xlink:href="/static/svg/user/icon.svg#icon-logout"/>
               </svg>
             </span>
             <span class="text-cap" @click="logout">Logout</span>
@@ -52,7 +50,11 @@
         <ld-header v-bind="headerOpt"></ld-header>
       </div>
       <el-main class="d-flex ld-user-content">
-        <router-view class="v-flex user-content-container"></router-view>
+        <div class="v-flex d-flex user-content-container">
+          <transition name="owner-cnt-fade">
+            <router-view class="owner-cnt-box" v-if="!loading"></router-view>
+          </transition>
+        </div>
       </el-main>
     </el-container>
     <Authorize
@@ -83,28 +85,33 @@ export default {
       navgations: [
         {
           name: 'overview',
-          icon: 'reddit',
-          path: '/user/info'
+          icon: 'overview',
+          path: '/owner/info'
         },
         {
-          name: 'buildings',
-          icon: 'reddit',
-          path: '/user/buildings'
+          name: 'LDB',
+          icon: 'building',
+          path: '/owner/ldb'
         },
         {
-          name: 'candies',
-          icon: 'reddit',
-          path: '/user/candies'
+          name: 'candy',
+          icon: 'candy',
+          path: '/owner/candy'
         },
         {
           name: 'tasks',
-          icon: 'reddit',
-          path: '/user/tasks'
+          icon: 'task',
+          path: '/owner/tasks'
+        },
+        {
+          name: 'activity',
+          icon: 'authorization',
+          path: '/owner/activity'
         },
         {
           name: 'authorization',
-          icon: 'reddit',
-          path: '/user/info'
+          icon: 'authorization',
+          path: '/owner/authorization'
         }
       ],
       headerOpt: {
@@ -135,7 +142,7 @@ export default {
     ]),
 
     authorizeInit () {
-      console.log('-------init')
+      console.log('-------authorizeInit')
       this.checkUser()
     },
 
@@ -174,61 +181,21 @@ export default {
 <style lang="scss" scoped>
   @import '@/assets/stylus/mixin/index.scss';
 
+  .owner-cnt-fade-enter-active {
+    opacity: 1;
+    z-index: 1;
+    transition: opacity .4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .owner-cnt-fade-leave-active {
+    transition-duration: 0s;
+  }
+  .owner-cnt-fade-enter, .owner-cnt-fade-leave-to {
+    opacity: 0;
+  }
+
   .ld-user-box {
     height: 100vh;
     min-height: 500px;
-  }
-  // ld-user-loading
-  @keyframes outline {
-    0% {
-      stroke-dashoffset: 205px;
-      fill: rgba(202, 202, 202, .5);
-    }
-    100% {
-      stroke-dashoffset: 0;
-      fill: rgba(202, 202, 202, .1);
-    }
-  }
-
-  @keyframes fillGradient {
-    0% {
-      fill: $--text-red-color;
-    }
-    20% {
-      fill: $--text-blue-color;
-    }
-    40% {
-      fill: $--text-green-color;
-    }
-    60% {
-      fill: $--text-yellow-color;
-    }
-    80% {
-      fill: $--text-pink-color;
-    }
-  }
-
-  .ld-user-loading {
-    // filter: grayscale(30%) sepia(30%);
-    background-color: #fff;
-    text-align: center;
-    svg {
-      position: relative;
-      top: 35%;
-      width: 150px;
-      height: 100px;
-
-      // fill: rgba(202, 202, 202, .5);
-      // stroke: #332C2B;
-      // stroke-dasharray: 205px;
-      // animation-fill-mode: both;
-      // animation: outline 5s ease-in-out infinite alternate;
-      fill: $--text-red-color;
-      stroke: none;
-      // stroke-dasharray: 205px;
-      animation-fill-mode: both;
-      animation: fillGradient 5s ease-in-out infinite alternate;
-    }
   }
 
   // ld-user-navgation
@@ -258,6 +225,7 @@ export default {
     }
     &.active {
       color: #4E47D3;
+      fill: #4E47D3;
       background-color: rgba(77, 70, 210, 0.05);
       .navgation-item-cnt {
         &::before {
@@ -311,9 +279,17 @@ export default {
     -webkit-overflow-scrolling: touch;
   }
   .user-content-container {
+    position: relative;
     margin: 0 auto;
     max-width: 1000px;
     @include viewport-unit(width, 100vw);
+  }
+  .owner-cnt-box {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    min-height: 100%;
   }
 
   @media screen and (min-width: 992px) {

@@ -1,7 +1,11 @@
 <template>
-  <div style="width: 0;height: 0;overflow: hidden;visibility: hidden;">
+  <div v-dom-portal style="width: 0;height: 0;overflow: hidden;visibility: hidden;">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 320 320">
       <defs>
+        <linearGradient id="RedGradient" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0%" stop-color="#FF9E7A"/>
+          <stop offset="100%" stop-color="#FF66A1"/>
+        </linearGradient>
         <linearGradient id="OrangeGradient" x1="0" x2="1" y1="0" y2="1">
           <stop offset="9%" stop-color="#FCCDA7"/>
           <stop offset="28%" stop-color="#FBBD9C"/>
@@ -33,6 +37,10 @@
         <symbol id="icon-crown" viewBox="0 0 28 18">
           <title>icon-crown</title>
           <path d="M2.246 5.609c-0.173 0.059-0.359 0.092-0.553 0.092-0.935 0-1.693-0.753-1.693-1.683s0.758-1.683 1.693-1.683c0.935 0 1.693 0.753 1.693 1.683 0 0.324-0.092 0.627-0.252 0.884l5.978 4.062 3.745-5.861c-0.472-0.299-0.785-0.823-0.785-1.421 0-0.929 0.758-1.683 1.693-1.683s1.693 0.753 1.693 1.683c0 0.597-0.313 1.122-0.785 1.421l3.745 5.861 5.977-4.061c-0.16-0.257-0.253-0.56-0.253-0.885 0-0.929 0.758-1.683 1.693-1.683s1.693 0.753 1.693 1.683-0.758 1.683-1.693 1.683c-0.193 0-0.379-0.032-0.551-0.091l-3.258 9.934v2.383h-16.522v-2.383l-3.258-9.934z"></path>
+        </symbol>
+        <symbol id="icon-crown-red" viewBox="0 0 28 18">
+          <title>icon-crown-red</title>
+          <path fill="url(#RedGradient)" d="M2.246 5.609c-0.173 0.059-0.359 0.092-0.553 0.092-0.935 0-1.693-0.753-1.693-1.683s0.758-1.683 1.693-1.683c0.935 0 1.693 0.753 1.693 1.683 0 0.324-0.092 0.627-0.252 0.884l5.978 4.062 3.745-5.861c-0.472-0.299-0.785-0.823-0.785-1.421 0-0.929 0.758-1.683 1.693-1.683s1.693 0.753 1.693 1.683c0 0.597-0.313 1.122-0.785 1.421l3.745 5.861 5.977-4.061c-0.16-0.257-0.253-0.56-0.253-0.885 0-0.929 0.758-1.683 1.693-1.683s1.693 0.753 1.693 1.683-0.758 1.683-1.693 1.683c-0.193 0-0.379-0.032-0.551-0.091l-3.258 9.934v2.383h-16.522v-2.383l-3.258-9.934z"></path>
         </symbol>
         <symbol id="icon-crown-l5" viewBox="0 0 28 18">
           <title>icon-crown</title>

@@ -2,12 +2,15 @@
   <div
     ref="blockies"
     class="d-flex f-auto-center blockies"
-    :style="`border-radius: ${radius}`">
+    :class="{ 'cursor-pointer': jump }"
+    :style="`border-radius: ${radius}`"
+    @click="jumpFunc">
   </div>
 </template>
 
 <script>
 import Blockies from 'ethereum-blockies'
+import { mapState } from 'vuex'
 export default {
   props: {
     autoInit: {
@@ -33,6 +36,10 @@ export default {
     theme: {
       type: String,
       default: 'dark'
+    },
+    jump: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => {
@@ -51,6 +58,16 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState('user', [
+      'userInfo'
+    ])
+  },
+  watch: {
+    seed (val) {
+      if (val) this.reset()
+    }
+  },
   methods: {
     init () {
       const { color, bgcolor, spotcolor } = this.themes[this.theme]
@@ -64,6 +81,22 @@ export default {
         spotcolor
       })
       this.$refs.blockies.appendChild(icon)
+    },
+    reset () {
+      while (this.$refs.blockies.firstChild) {
+        this.$refs.blockies.removeChild(this.$refs.blockies.firstChild)
+      }
+      this.init()
+    },
+    jumpFunc () {
+      if (!this.jump) return
+      if (!this.userInfo.address) {
+        this.$router.push(`/user/${this.seed}`)
+      } else if (this.userInfo.address.toLowerCase() === this.seed.toLowerCase()) {
+        this.$router.push('/owner/info')
+      } else {
+        this.$router.push(`/user/${this.seed}`)
+      }
     }
   },
   mounted () {

@@ -73,7 +73,6 @@ export default {
   },
   computed: {
     isRequired () {
-      console.log('-----', this.regex, this.inputModel, this.regex.test(this.inputModel))
       if (!this.required || (this.required && this.regex.test(this.inputModel + ''))) return true
       return false
     },

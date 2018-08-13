@@ -7,9 +7,8 @@ const path = require('path');
 module.exports = {
   entry: {
     vue: ['vue', 'vue-router', 'vuex-router-sync', 'vuex', 'vue-i18n'],
-    utils: ['moment', 'axios', 'lodash', 'clipboard', 'ethereum-blockies'],
-    mapbox: ['mapbox-gl'],
-    ethereum: ['truffle-contract']
+    utils: ['date-fns', 'axios', 'lodash', 'clipboard', 'ethereum-blockies'],
+    mapbox: ['mapbox-gl']
   },
   output: {
     path: path.join(__dirname, '../dist_dll/'),

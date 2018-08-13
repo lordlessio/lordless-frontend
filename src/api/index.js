@@ -11,6 +11,7 @@ const taskType = require('./taskType')
 const user = require('./user')
 const userAsset = require('./userAsset')
 const userRecord = require('./userRecord')
+const activity = require('./activity')
 
 module.exports = merge(
   aMap(axios),
@@ -23,5 +24,6 @@ module.exports = merge(
   taskType(axios),
   user(axios),
   userAsset(axios),
-  userRecord(axios)
+  userRecord(axios),
+  activity(axios)
 )

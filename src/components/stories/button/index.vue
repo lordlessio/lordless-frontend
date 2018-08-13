@@ -46,15 +46,17 @@
 </script>
 
 <style lang="scss">
-  @import '@/assets/stylus/mixin/color_mixin.scss';
+  @import '@/assets/stylus/mixin/index.scss';
   .button-styles {
-    border-radius: 5px;
-    border-width: 1px;
+    font-size: 16px;
     border-style: solid;
+    font-family: $--font-TTNormsBold;
     font-weight: inherit;
-    cursor: pointer;
     white-space: nowrap;
     outline: none;
+    border-radius: 5px;
+    border-width: 1px;
+    cursor: pointer;
     svg {
       fill: inherit;
     }
@@ -84,6 +86,22 @@
       &.inverse {
         color: #fff;
         background-color: #4E47D3;
+        fill: #fff;
+      }
+    }
+    &.blue {
+      color: $--text-blue-color;
+      border: none;
+      // background-image: linear-gradient(-90deg, #BB9BF1 0%, #887BF2 100%);
+      background-color: #fff;
+      fill: $--text-blue-color;
+      &.shadow {
+        box-shadow: 2.5px 5px 10px 0 rgba(0, 0, 0, .25);
+        // box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
+      }
+      &.inverse {
+        color: #fff;
+        background-color: $--text-blue-color;
         fill: #fff;
       }
     }

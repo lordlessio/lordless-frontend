@@ -28,14 +28,14 @@
           :class="{ 'is-disabled': isMapMaxZoom }"
           @click.stop="changeMapZoom('plus', isMapMaxZoom)">
           <svg>
-            <use xlink:href="static/svg/icon.svg#icon-search-plus"/>
+            <use xlink:href="static/svg/map/index.svg#icon-search-plus"/>
           </svg>
         </span>
         <span class="inline-block color-secondary"
           :class="{ 'is-disabled': isMapMinZoom }"
           @click.stop="changeMapZoom('minus', isMapMinZoom)">
           <svg>
-            <use xlink:href="static/svg/icon.svg#icon-search-minus"/>
+            <use xlink:href="static/svg/map/index.svg#icon-search-minus"/>
           </svg>
         </span>
         <span class="inline-block color-secondary"
@@ -361,12 +361,13 @@ export default {
     ]),
 
     async getLdbs () {
-      const result = await getChainLdbs({ extensions: 'base' })
+      const result = await getChainLdbs({ extensions: 'base', offset: -1 })
       if (result.code === 1000) {
         const ldbs = result.data.list
         this.ldbs = ldbs
         console.log('ldbs', ldbs)
         this.$refs.lordMap.createImageMarkers(ldbs)
+        // this.$refs.lordMap.createPointLayer(ldbs)
         this.$refs.lordMap.createPointMarkers(ldbs)
         // this.$refs.lordMap.createMarkers(this.test_ldbs)
       }
@@ -435,8 +436,8 @@ export default {
 
         // 调整地图显示视图
         const { lat, lng } = item.chain
-        this.$refs.lordMap.flyToCoords({ center: [lng, lat], zoom: this.mapScrollZooms[this.mapScrollZooms.length - 1] }, () => {
-          historyState(`${this.$route.path}?coords=${[lng, lat].toString()}`)
+        this.$refs.lordMap.flyToCoords({ center: [lng / 1e16, lat / 1e16], zoom: this.mapScrollZooms[this.mapScrollZooms.length - 1] }, () => {
+          historyState(`${this.$route.path}?coords=${[lng / 1e16, lat / 1e16].toString()}`)
         })
       }
     },

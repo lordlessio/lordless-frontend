@@ -28,8 +28,8 @@
             :symbol="sellInputs.price.symbol"
             :regex="sellInputs.price.regex"
             :regexError="sellInputs.price.regexError"
-            @change="priceChange"
-            @blur="priceBlur">
+            @change="priceHandle"
+            @blur="priceHandle">
           </ld-input>
           <ld-input
             v-model="sellInputs.duration.model"
@@ -40,8 +40,8 @@
             :symbol="sellInputs.duration.symbol"
             :regex="sellInputs.duration.regex"
             :regexError="sellInputs.duration.regexError"
-            @change="durationChange"
-            @blur="durationBlur">
+            @change="durationHandle"
+            @blur="durationHandle">
           </ld-input>
         </div>
         <div class="TTFontBolder ldb-sell-bottom">
@@ -52,7 +52,7 @@
               shadow
               :loading="sellPending"
               :disabled="metamaskChoose || sellPending"
-              @click="sellLdb">
+              @click="submitSell">
               <span class="sell-confirm" v-if="!sellPending">Sell</span>
             </ld-btn>
           </div>
@@ -116,21 +116,21 @@ export default {
       'NFTsCrowdsale'
     ]),
 
-    enoughBalance () {
-      return parseFloat(this.$root.$children[0].web3Opt.balance) >= parseFloat(this.ldbInfo.chain.auction.price)
+    sellRequired () {
+      const { price, duration } = this.sellInputs
+      return price.required && duration.required
     },
 
     account () {
       return this.$root.$children[0].web3Opt.address
     },
 
-    sellRequired () {
-      const { price, duration } = this.sellInputs
-      return price.required && duration.required
-    },
-
     metaOpen () {
       return this.$root.$children[0].metaOpen
+    },
+
+    web3Opt () {
+      return this.$root.$children[0].web3Opt
     }
   },
   components: {
@@ -138,37 +138,58 @@ export default {
     LdInput
   },
   methods: {
-    priceChange ({ required }) {
+
+    /**
+     * price 表单事件
+     */
+    priceHandle ({ required }) {
       this.$set(this.sellInputs.price, 'required', required)
     },
-    priceBlur ({ required }) {
-      this.$set(this.sellInputs.price, 'required', required)
-    },
-    durationChange ({ required }) {
+
+    /**
+     * duration 表单事件
+     */
+    durationHandle ({ required }) {
       this.$set(this.sellInputs.duration, 'required', required)
     },
-    durationBlur ({ required }) {
-      this.$set(this.sellInputs.duration, 'required', required)
-    },
-    async sellLdb () {
-      const tokenId = this.ldbInfo.chain.tokenId
+
+    /**
+     * 挂售提交
+     */
+    async submitSell ({ ldbInfo = this.ldbInfo, sellInputs = this.sellInputs, web3Opt = this.web3Opt, NFTsCrowdsale = this.NFTsCrowdsale } = {}) {
+      const tokenId = ldbInfo.chain.tokenId
       if (!tokenId || !this.sellRequired) return
 
-      const NFTsCrowdsale = this.NFTsCrowdsale
-      const { web3js } = this.$root.$children[0].web3Opt
-      const price = parseFloat(this.sellInputs.price.model)
-      const duration = parseFloat(this.sellInputs.duration.model)
+      const { web3js, gasPrice } = web3Opt
+
+      // 获取表单信息
+      const price = parseFloat(sellInputs.price.model)
+      const duration = parseFloat(sellInputs.duration.model)
+
       const endTime = Math.floor(new Date().getTime() / 1000) + duration * 3600 * 24
       console.log('--- sale price', price, tokenId, endTime)
 
       this.metamaskChoose = true
-      NFTsCrowdsale.newAuction(web3js.toWei(price), tokenId, endTime)
-        .then(data => {
+
+      // 传输的合约参数
+      const newAuction = {
+        name: 'newAuction',
+        values: [ web3js.toWei(price), tokenId, endTime ]
+      }
+
+      // 估算 gas
+      const gas = (await NFTsCrowdsale.estimateGas(newAuction.name, newAuction.values)) || 180000
+      console.log('sale -- gas', gas)
+
+      // 执行合约操作
+      NFTsCrowdsale.methods(newAuction.name, newAuction.values.concat([{ gas, gasPrice }]))
+        .then(tx => {
           this.sellPending = true
           this.metamaskChoose = false
-          this.$emit('pending', data)
+          this.$emit('pending', { tx, tokenId, action: newAuction.name })
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log('err', err)
           this.metamaskChoose = false
         })
     }
@@ -177,6 +198,7 @@ export default {
     value (val) {
       this.sellModel = val
       this.$emit('blurs', val)
+      if (!val) this.sellPending = false
     },
     sellModel (val) {
       this.$emit('input', val)
@@ -191,7 +213,7 @@ export default {
 <style lang="scss" scoped>
   @import '@/assets/stylus/mixin/index.scss';
   .lordless-message-box {
-    padding-bottom: 60px;
+    // padding-bottom: 60px;
   }
   .dialog-sell-cnt {
     // transform: translateY(-150px);

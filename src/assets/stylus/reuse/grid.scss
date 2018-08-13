@@ -2,9 +2,6 @@
 /* 布局样式 */
 
 @mixin layout-vars ($media: '') {
-  .#{$media}hidden {
-    display: none !important;
-  }
   .#{$media}d-flex {
     display: flex;
   }
@@ -62,6 +59,9 @@
   }
   .#{$media}block {
     display: block;
+  }
+  .#{$media}hidden {
+    display: none !important;
   }
 }
 
@@ -242,6 +242,22 @@
     &::placeholder {
       color: inherit;
     }
+  }
+
+  .#{$media}blur {
+    filter: blur(10px);
+  }
+  .#{$media}transform {
+    will-change: transform;
+    transform: translateX(-25%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .#{$media}no-transform {
+    will-change: transform;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .#{$media}overflow-hidden {
+    overflow: hidden;
   }
 }
 // @include tool-vars();

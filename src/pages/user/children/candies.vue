@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex TTFontBold user-candy-box">
+  <div class="d-flex user-candy-box">
     <div class="d-flex v-flex col-flex user-candy-container">
       <h1 class="d-flex f-align-baseline text-cap user-candy-title">
         <span class="v-flex">Candy</span>

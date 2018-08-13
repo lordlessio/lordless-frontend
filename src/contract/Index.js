@@ -1,33 +1,39 @@
-const contract = require('truffle-contract')
-// console.log('ldf', process.env.contract.ldbNFTCrowdsale.address, process.env.contract.erc20.address, process.env.contract.erc20)
-console.log('process.env.contract', process.env.contract)
-module.exports = (web3js, account) => {
-  // 公用 contract 函数
-  const initContract = (json) => {
-    if (!web3js) return
-    const _contract = contract(json)
-    _contract.defaults({
-      from: account
-    })
-    _contract.setProvider(web3js.currentProvider)
-    return _contract.at(json.address)
-  }
 
-  return {
-    LDBNFTs: () => {
-      return initContract(process.env.contract.LDBNFTs)
-    },
+// 公用 contract 函数
+const initContract = (json, web3js) => {
+  if (!web3js) return
+  // const _contract = contract(json)
+  // _contract.defaults({
+  //   from: account
+  // })
+  // _contract.setProvider(web3js.currentProvider)
+  const _contract = web3js.eth.contract(json.abi)
+  const contract = _contract.at(json.address)
 
-    NFTsCrowdsale: () => {
-      return initContract(process.env.contract.NFTsCrowdsale)
-    },
-
-    Power: () => {
-      return initContract(process.env.contract.Power)
-    },
-
-    Building: () => {
-      return initContract(process.env.contract.Building)
+  Object.defineProperty(contract, 'estimateGas', {
+    value: (name, values) => {
+      return new Promise((resolve, reject) => {
+        contract[name].estimateGas(...values, (err, res) => {
+          if (err) return resolve(0)
+          return resolve(res)
+        })
+      })
     }
-  }
+  })
+  Object.defineProperty(contract, 'methods', {
+    value: (name, values) => {
+      return new Promise((resolve, reject) => {
+        contract[name](...values, (err, res) => {
+          if (err) return reject(err)
+          return resolve(res)
+        })
+      })
+    }
+  })
+  return contract
 }
+
+export const LDBNFTs = (web3js) => initContract(process.env.contract.LDBNFTs, web3js)
+export const NFTsCrowdsale = (web3js) => initContract(process.env.contract.NFTsCrowdsale, web3js)
+export const Power = (web3js) => initContract(process.env.contract.Power, web3js)
+export const Building = (web3js) => initContract(process.env.contract.Building, web3js)

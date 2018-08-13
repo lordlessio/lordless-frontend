@@ -1,7 +1,7 @@
 <template>
-  <div class="text-center cursor-pointer ld-building-card" :class="{ 'sale': sale }">
+  <div class="text-center cursor-pointer ld-building-card" :class="{ 'sale': sale, 'shadow': shadow }">
     <figure @click="$emit('choose', ldbInfo)">
-      <div class="building-top">
+      <div class="building-card-top">
         <div class="building-header">
           <ld-img type="span" :src="ldbInfo.ldbIcon.source.market"></ld-img>
           <span class="building-sale-bg"></span>
@@ -11,7 +11,7 @@
                 <use xlink:href="#icon-gradient-ldb-sale"/>
               </svg>
             </span>
-            <span class="building-sale-price">{{ ldbInfo.chain.auction.price }} ETH</span>
+            <span class="building-sale-price">{{ ldbInfo.chain.auction.price | weiToEth }} ETH</span>
           </p>
         </div>
         <div class="building-main-cnt">
@@ -21,12 +21,16 @@
             <span>
               <i class="el-icon-location"></i>
             </span>
-            <span>&nbsp;{{ ldbInfo.chain.lng / 1e14 | sliceStr }}, {{ ldbInfo.chain.lat / 1e14 | sliceStr }}</span>
+            <span>&nbsp;{{ ldbInfo.chain.lng | transferCoords | sliceStr }}, {{ ldbInfo.chain.lat | transferCoords | sliceStr }}</span>
           </p>
           <ul class="d-flex f-align-center building-data">
             <li class="v-flex building-data-item">
-              <p>{{ ldbInfo.chain.influence }}</p>
-              <p>Influence</p>
+              <p>{{ ldbInfo.chain.level || 0 }}</p>
+              <p>Level</p>
+            </li>
+            <li class="v-flex building-data-item">
+              <p>{{ ldbInfo.chain.popularity || 0 }}</p>
+              <p>Popularity</p>
             </li>
             <li class="v-flex building-data-item">
               <p>99</p>
@@ -39,30 +43,30 @@
         <ul class="text-left">
           <li class="d-flex col-flex">
             <p class="d-flex f-align-center">
-              <span class="v-flex">Capacity</span>
-              <span>3169</span>
+              <span class="v-flex">AP</span>
+              <span>{{ ldbInfo.apLeft }}</span>
             </p>
             <p class="building-progress">
               <ld-progress
-                :current="1800"
-                :max="3169"
+                :current="ldbInfo.apLeft"
+                :max="ldbInfo.ap"
                 :gradient="progressOpts.capacity.gradient">
               </ld-progress>
             </p>
           </li>
-          <li class="d-flex col-flex">
+          <!-- <li class="d-flex col-flex">
             <p class="d-flex f-align-center">
               <span class="v-flex">Activeness</span>
-              <span>1267</span>
+              <span>{{ ldbInfo.chain.activeness }}</span>
             </p>
             <p class="building-progress">
               <ld-progress
-                :current="200"
+                :current="ldbInfo.chain.activeness"
                 :max="1267"
                 :gradient="progressOpts.activeness.gradient">
               </ld-progress>
             </p>
-          </li>
+          </li> -->
         </ul>
       </figcaption>
     </figure>
@@ -83,6 +87,10 @@ export default {
       default: () => {
         return {}
       }
+    },
+    shadow: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => {
@@ -117,8 +125,13 @@ export default {
     border-radius: 5px;
     transition: all .15s ease;
     &.sale {
-      .building-sale-tag {
+      .building-sale-tag, .building-sale-bg {
         visibility: visible;
+      }
+    }
+    &.shadow {
+      .building-card-bottom {
+        box-shadow: 0px 20px 25px -15px rgba(0, 0, 0, 0.25);
       }
     }
   }
@@ -128,7 +141,9 @@ export default {
    */
   .building-header {
     position: relative;
-    height: 250px;
+    height: 300px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     background-color: $--text-green-color;
     >.image-box {
       z-index: 2;
@@ -147,6 +162,7 @@ export default {
     background-position-y: 45%;
     opacity: .3;
     background-repeat: no-repeat;
+    visibility: hidden;
   }
   .building-sale-tag {
     position: absolute;
@@ -199,18 +215,9 @@ export default {
   .building-data {
     position: relative;
     margin-top: 25px;
-    &::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 1px;
-      height: 50%;
-      background-color: #AAAAAA;
-      transform: translateY(-50%);
-    }
   }
   .building-data-item {
+    position: relative;
     >p {
       font-size: 14px;
       color: #999;
@@ -220,6 +227,18 @@ export default {
         color: #373737;
       }
     }
+    // &:not(:first-of-type) {
+    //   &::before {
+    //     content: '';
+    //     position: absolute;
+    //     top: 50%;
+    //     left: 0;
+    //     width: 1px;
+    //     height: 50%;
+    //     background-color: #AAAAAA;
+    //     transform: translate(-50%, -50%);
+    //   }
+    // }
   }
 
   /**
@@ -236,7 +255,8 @@ export default {
     color: #999;
     background-color: #fff;
     border-top: 1px solid #DDDDDD;
-    box-shadow: 0px 20px 25px -15px rgba(0, 0, 0, 0.25);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
     transition: all .15s ease;
     li {
       &:not(:first-of-type) {
