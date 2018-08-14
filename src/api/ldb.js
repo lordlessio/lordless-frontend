@@ -6,6 +6,11 @@ module.exports = axios => {
       return axios.get('/api/ldbs/on', { params })
     },
 
+    // 根据名字搜索建筑
+    getAutoLdbs: (params) => {
+      return axios.get('/api/ldb/auto', { params })
+    },
+
     // 根据 aMapid 或 id 查询建筑详细信息
     getLdbById: (params) => {
       return axios.get('/api/ldb/detail', { params })

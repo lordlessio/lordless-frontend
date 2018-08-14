@@ -3,7 +3,7 @@
  */
 
 import { mutationTypes, actionTypes } from './types'
-import { getUserById, getUserByToken, login, logout } from '../api'
+import { getUserByAddress, getUserByToken, login, logout } from '../api'
 import { stringifyParse, getObjStorage } from 'utils/tool'
 import web3Store from './web3'
 export default {
@@ -16,8 +16,8 @@ export default {
     // 当前用户
     userInfo: { default: true },
 
-    // uid 用户信息
-    uidInfo: {},
+    // user single 用户信息
+    uSingleInfo: {},
 
     // 用户是否过期
     userExpired: false
@@ -37,9 +37,9 @@ export default {
       state.userInfo = stringifyParse(payload)
     },
 
-    // 存储 uidInfo
-    [mutationTypes.USER_SET_USERID_INFO]: (state, payload = {}) => {
-      state.uidInfo = stringifyParse(payload)
+    // 存储 single user Info
+    [mutationTypes.USER_SET_SINGLE_USER_INFO]: (state, payload = {}) => {
+      state.uSingleInfo = stringifyParse(payload)
     },
 
     // 存储用户sigStr信息
@@ -63,9 +63,9 @@ export default {
     /**
      * 根据用户id获取用户信息
      */
-    [actionTypes.USER_SET_USER_BY_ID]: async ({ commit }, { uid, address = '' }) => {
+    [actionTypes.USER_SET_USER_BY_ADDRESS]: async ({ commit }, { address = '' }) => {
       address = address.toLocaleLowerCase()
-      const res = await getUserById({ uid, address })
+      const res = await getUserByAddress(address)
       if (res.code === 1000) commit(mutationTypes.USER_SET_USERID_INFO, res.data)
       else {
         commit(mutationTypes.USER_SET_USER_INFO, {})
@@ -96,6 +96,8 @@ export default {
       web3js.personal.sign(str, web3js.eth.defaultAccount, (err, result) => {
         if (!err) {
           if (result) loginFunc(result, address)
+        } else {
+          if (cb) cb(err)
         }
       })
     },
@@ -127,7 +129,7 @@ export default {
         commit(mutationTypes.USER_SET_USER_EXPIRED, true)
         commit(mutationTypes.USER_SET_USER_INFO, {})
       } else {
-        commit(mutationTypes.USER_SET_USER_INFO, { default: true })
+        commit(mutationTypes.USER_SET_USER_INFO, { default: false })
       }
       commit(mutationTypes.USER_SET_USER_INFO)
       return false

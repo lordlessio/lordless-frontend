@@ -70,7 +70,7 @@
               <div class="exp-progress">
                 <ld-progress
                   shadow
-                  :current="userInfo.activeness - currentActiveness"
+                  :current="userInfo.activeness"
                   :max="nextActiveness"
                   :gradient="progressOpts.exp.gradient">
                 </ld-progress>
@@ -80,10 +80,10 @@
             <div class="exp-recived-box sm-hidden">
               <span
                 class="exp-recived-item"
-                v-for="(n, index) of [1,2,3,4]"
+                v-for="(item, index) of overviews.activeness.list"
                 :key="index"
-                :style="`color: rgba(78, 71, 211, ${1 - 0.2 * index});border-color: rgba(78, 71, 211, ${1 - 0.2 * index});z-index: ${-n}`">
-                +{{n}}
+                :style="`color: rgba(78, 71, 211, ${1 - 0.2 * index});border-color: rgba(78, 71, 211, ${1 - 0.2 * index});z-index: ${-index};`">
+                +{{ item.activeness }}
               </span>
             </div>
           </div>
@@ -136,24 +136,24 @@
           </div>
           <div class="v-flex d-flex col-flex info-cnt-box info-card-cnt task-current-box" style="z-index: 2;">
             <h2 class="card-cnt-title">Current task</h2>
-            <div class="v-flex d-flex col-flex task-current-unknow" v-if="false">
+            <div class="v-flex d-flex col-flex task-current-unknow" v-if="!overviews.currentTask">
               <p class="card-cnt-tip">Task in progress</p>
               <div class="v-flex d-flex f-auto-center card-cnt-box">
                 <p>You have no tasks</p>
               </div>
             </div>
-            <div class="v-flex d-flex col-flex task-current-know" v-if="true">
-              <p class="card-cnt-tip">A task from LDB <a href="#">#88888</a> in progress</p>
+            <div class="v-flex d-flex col-flex task-current-know" v-if="overviews.currentTask">
+              <p class="card-cnt-tip">A task from LDB <a href="#">#{{ overviews.currentTask.ldb.info.chain.tokenId }}</a> in progress</p>
               <div class="v-flex d-flex col-flex task-current-cnt">
-                <p>Join the telegram of LORDLESS</p>
+                <p>{{ overviews.currentTask.ldbTaskType.name }}</p>
                 <ul class="d-flex task-current-data">
                   <li class="v-flex task-current-symbol">
                     <h3>Symbol</h3>
-                    <p>LESS</p>
+                    <p class="text-upper">{{ overviews.currentTask.reward.candy.symbol }}</p>
                   </li>
                   <li class="v-flex task-current-reward">
                     <h3>Reward</h3>
-                    <p>0.02</p>
+                    <p>{{ overviews.currentTask.executor.reward.count }}</p>
                   </li>
                   <li class="v-flex task-current-due">
                     <h3>Due</h3>
@@ -165,30 +165,21 @@
           </div>
           <div class="v-flex d-flex col-flex info-cnt-box info-card-cnt task-completed-box" style="z-index: 1;">
             <h2 class="card-cnt-title">Completed tasks</h2>
-            <div class="v-flex d-flex col-flex f-justify-center task-completed-unknow" v-if="false">
+            <div class="v-flex d-flex col-flex f-justify-center task-completed-unknow" v-if="!overviews.completeTasks.total">
               <p class="card-cnt-tip">Recent rewarded tasks</p>
               <div class="v-flex d-flex f-auto-center card-cnt-box">
                 <p>You have no tasks completed</p>
               </div>
             </div>
-            <div class="v-flex d-flex col-flex task-completed-know" v-if="true">
+            <div class="v-flex d-flex col-flex task-completed-know" v-if="overviews.completeTasks.total">
               <p class="card-cnt-tip">Recent rewarded tasks</p>
               <ul class="v-flex d-flex col-flex text-left task-completed-cnt">
-                <li class="d-flex f-justify-around task-completed-item">
-                  <span class="v-flex text-ellipsis">Join the telegram of LORDLESS</span>
-                  <span class="task-completed-reward">+0.001 LESS</span>
-                </li>
-                <li class="d-flex f-justify-around task-completed-item">
-                  <span class="v-flex text-ellipsis">Follow the twitter of Nabulas</span>
-                  <span class="task-completed-reward">+0.001 NAS</span>
-                </li>
-                <li class="d-flex f-justify-around task-completed-item">
-                  <span class="v-flex text-ellipsis">Follow the Facebook of IOST</span>
-                  <span class="task-completed-reward">+0.09 IOST</span>
-                </li>
-                <li class="d-flex f-justify-around task-completed-item">
-                  <span class="v-flex text-ellipsis">Join the telegram of Omisgo</span>
-                  <span class="task-completed-reward">+1.3 OMG</span>
+                <li
+                  v-for="item of overviews.completeTasks.list"
+                  :key="item._id"
+                  class="d-flex f-justify-around task-completed-item">
+                  <span class="v-flex text-ellipsis">{{ item.ldbTaskType.name }}</span>
+                  <span class="task-completed-reward">+{{ item.executor.reward.count | sliceStr({ end: 6 }) }} <span>{{ item.reward.candy.symbol }}</span></span>
                 </li>
               </ul>
             </div>
@@ -210,18 +201,21 @@
           </div>
           <div class="v-flex d-flex col-flex info-cnt-box info-card-cnt assets-earnings-box" style="z-index: 2;">
             <h2 class="card-cnt-title">LDB earnings</h2>
-            <div class="v-flex d-flex col-flex assets-earnings-unknow" v-if="false">
+            <div class="v-flex d-flex col-flex assets-earnings-unknow" v-if="!overviews.ldbEarnings.total">
               <p class="card-cnt-tip">Rewards from LDB</p>
-              <div class="v-flex d-flex col-flex f-justify-center card-cnt-box">
+              <div class="v-flex d-flex col-flex f-auto-center card-cnt-box">
                 <p>You have no transactions</p>
                 <ld-btn class="user-info-btn" theme="info" inverse shadow>Buy a LDB</ld-btn>
               </div>
             </div>
-            <div class="v-flex d-flex col-flex assets-earnings-know" v-if="true">
+            <div class="v-flex d-flex col-flex assets-earnings-know" v-if="overviews.ldbEarnings.total">
               <p class="card-cnt-tip">Rewards from LDB</p>
               <div class="v-flex d-flex col-flex assets-earnings-list">
                 <ul class="text-left">
-                  <li class="d-flex f-align-center earnings-list-item">
+                  <li
+                    v-for="item of overviews.ldbEarnings.list"
+                    :key="item._id"
+                    class="d-flex f-align-center earnings-list-item">
                     <div class="v-flex d-flex f-align-center text-ellipsis">
                       <span>Reward from</span>
                       <blockies
@@ -229,45 +223,9 @@
                         :scale="3"
                         radius="3px"
                         jump
-                        seed="0x4cd98f82decade2d152e256efd1f8d5a334a3e28"></blockies>
+                        :seed="item.executor.info"></blockies>
                     </div>
-                    <span class="earnings-item-reward">+0.001LESS</span>
-                  </li>
-                  <li class="d-flex f-align-center earnings-list-item">
-                    <div class="v-flex d-flex f-align-center text-ellipsis">
-                      <span>Reward from</span>
-                      <blockies
-                        class="inline-block line-height-0 mar-l1"
-                        :scale="3"
-                        radius="3px"
-                        jump
-                        seed="0xe4e891aa1ab36661fcfff8062267787ccaacd8af"></blockies>
-                    </div>
-                    <span class="earnings-item-reward">+0.001LESS</span>
-                  </li>
-                  <li class="d-flex f-align-center earnings-list-item">
-                    <div class="v-flex d-flex f-align-center text-ellipsis">
-                      <span>Reward from</span>
-                      <blockies
-                        class="inline-block line-height-0 mar-l1"
-                        :scale="3"
-                        radius="3px"
-                        jump
-                        seed="0x4c3b08fc010ba8f2f948b605b5fb69db49b1c644"></blockies>
-                    </div>
-                    <span class="earnings-item-reward">+0.001LESS</span>
-                  </li>
-                  <li class="d-flex f-align-center earnings-list-item">
-                    <div class="v-flex d-flex f-align-center text-ellipsis">
-                      <span>Reward from</span>
-                      <blockies
-                        class="inline-block line-height-0 mar-l1"
-                        :scale="3"
-                        radius="3px"
-                        jump
-                        :seed="userInfo.address"></blockies>
-                    </div>
-                    <span class="earnings-item-reward">+0.001LESS</span>
+                    <span class="earnings-item-reward">+{{ item.lord.reward.count | sliceStr({ end: 6 }) }} <span>{{ item.reward.candy.symbol }}</span></span>
                   </li>
                 </ul>
               </div>
@@ -336,7 +294,7 @@ import LdBtn from '@/components/stories/button'
 
 import { contractMixins, dialogMixins } from '@/mixins'
 
-import { getActivitysByUser } from 'api'
+import { getActivitysByUser, getUserOverview } from 'api'
 
 import { actionTypes } from '@/store/types'
 import { mapState, mapActions } from 'vuex'
@@ -371,6 +329,24 @@ export default {
         ps: 4,
         list: [],
         total: 0
+      },
+
+      overviews: {
+        pn: 1,
+        ps: 4,
+        ldbEarnings: {
+          list: [],
+          total: 0
+        },
+        completeTasks: {
+          list: [],
+          total: 0
+        },
+        activeness: {
+          list: [],
+          total: 0
+        },
+        currentTask: null
       }
     }
   },
@@ -447,8 +423,19 @@ export default {
 
     initInfo () {
       this.getUserTransactions()
+      this.getUserOverview()
     },
 
+    // 获取用户 overview 信息
+    async getUserOverview () {
+      const { pn, ps } = this.overviews
+      const res = await getUserOverview({ pn, ps })
+      if (res.code === 1000) {
+        this.overviews = Object.assign({}, this.overviews, res.data)
+      }
+    },
+
+    // 获取用户交易记录
     async getUserTransactions ({ user = this.userInfo.address, ps = this.recentData.ps } = {}) {
       const params = {
         user,

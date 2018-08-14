@@ -63,18 +63,12 @@
                 <div class="v-flex">{{ total }} LDBs</div>
                 <div>
                   <span>Sort by</span>
-                  <el-select
+                  <ld-select
                     class="building-sort-select"
-                    popper-class="building-sort-options"
                     v-model="ldbSort"
+                    :items="sortItems"
                     @change="sortChange">
-                    <el-option
-                      v-for="sort in sortItems"
-                      :key="sort.value"
-                      :label="sort.label"
-                      :value="sort.value">
-                    </el-option>
-                  </el-select>
+                  </ld-select>
                   <div class="order-switch-input">
                     <switch-input
                       v-model="ldbOrder"
@@ -113,18 +107,12 @@
                 <div class="v-flex">{{ total }} LDBs</div>
                 <div>
                   <span>Sort by</span>
-                  <el-select
+                  <ld-select
                     class="building-sort-select"
-                    popper-class="building-sort-options"
                     v-model="ldbSort"
+                    :items="sortItems"
                     @change="sortChange">
-                    <el-option
-                      v-for="sort in sortItems"
-                      :key="sort.value"
-                      :label="sort.label"
-                      :value="sort.value">
-                    </el-option>
-                  </el-select>
+                  </ld-select>
                   <div class="order-switch-input">
                     <switch-input
                       v-model="ldbOrder"
@@ -134,9 +122,9 @@
                   </div>
                 </div>
               </div>
-              <el-row :gutter="20" class="user-buildings-cnt">
+              <el-row :gutter="40" class="user-buildings-cnt">
                 <el-col
-                  :xs="24" :sm="8" :lg="6"
+                  :xs="24" :sm="12" :lg="8"
                   class="building-item"
                   v-for="(ldb, index) of userLdbs"
                   :key="index">
@@ -169,12 +157,13 @@
 </template>
 
 <script>
-import { getUserById, getChainLdbs } from 'api'
+import { getUserByAddress, getChainLdbs } from 'api'
 
 import { historyState } from 'utils/tool'
 
 import Clipboard from 'clipboard'
 
+import LdSelect from '@/components/stories/select'
 import SwitchInput from '@/components/stories/switchInput'
 import Pagination from '@/components/stories/pagination'
 import DetailDialog from '@/components/reuse/dialog/ldb/detail'
@@ -197,10 +186,10 @@ export default {
       sortItems: [
         {
           value: 'influence',
-          label: 'Influence'
+          label: 'Most influential'
         }, {
-          value: 'newest',
-          label: 'Newest'
+          value: 'popular',
+          label: 'Most popular'
         }
       ],
 
@@ -228,7 +217,8 @@ export default {
     BuildingCard,
     Blockies,
     Pagination,
-    SwitchInput
+    SwitchInput,
+    LdSelect
   },
   methods: {
 
@@ -238,9 +228,10 @@ export default {
       this.getUserLdbs({ address })
     },
     async getUserInfo ({ address = this.user.address } = {}) {
-      const res = await getUserById({ address })
+      const res = await getUserByAddress(address)
       this.loading = false
       if (res.code === 1000) {
+        if (!res.data) console.log('用户不存在')
         this.user = res.data
       }
     },
@@ -397,27 +388,6 @@ export default {
   }
   .building-sort-select {
     margin-left: 20px;
-    /deep/ .el-input__inner {
-      width: 120px;
-      height: 34px;
-      line-height: 34px;
-      font-size: 16px;
-      color: #fff;
-      background-color: #4586FC;
-      border-radius: 20px;
-      border: none;
-    }
-    /deep/ .el-input {
-      .el-select__caret {
-        font-weight: bolder;
-        color: #fff;
-      }
-    }
-    &.lg {
-      /deep/ .el-input__inner {
-        width: 140px;
-      }
-    }
   }
   .order-switch-input {
     display: inline-block;

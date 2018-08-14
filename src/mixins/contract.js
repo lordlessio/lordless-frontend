@@ -125,15 +125,33 @@ export default {
         })
     },
 
+    async checkCrowdsaleEvent ({ address, LDBNFTs = this.LDBNFTs, NFTsCrowdsale = this.NFTsCrowdsale } = {}, cb) {
+      if (!address) return
+      const index = this.intervals.length
+      let interval = this.intervals[index]
+      // 初始化实例
+      if (interval) this.clearCInterval({ index })
+      // 创建新定时器实例
+      interval = setInterval(async () => {
+        const bool = await LDBNFTs.methods('isApprovedForAll', [address, NFTsCrowdsale.address])
+        if (bool) {
+          if (cb) cb()
+          this.clearCInterval({ index })
+        }
+      }, 5000)
+
+      this.intervals[index] = interval
+    },
+
     /**
      * 检查 contract event 状态
      * @param {String} tx 合约地址
      * @param {Function} cb 需要执行的回调函数
      */
-    async checkTxEvent ({ tx, action } = {}, cb) {
+    async checkTxEvent ({ tx, action, tokenId } = {}, cb) {
       if (!tx) return
       if (action) {
-        await postActivity({ tx, action })
+        await postActivity({ tx, action, tokenId })
       }
       const index = this.intervals.length
       let interval = this.intervals[index]
@@ -145,7 +163,7 @@ export default {
         const res = await getActivityByTx({ tx })
 
         // 如果当前合约执行完毕，清除定时器，执行回调
-        if (res.code === 1000 && !res.data.isPending) {
+        if (res.code === 1000 && res.data && !res.data.isPending) {
           if (cb) cb()
           this.clearCInterval({ index })
         } else if (res.code !== 1000) {

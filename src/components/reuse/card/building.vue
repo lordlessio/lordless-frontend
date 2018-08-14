@@ -1,9 +1,10 @@
 <template>
-  <div class="text-center cursor-pointer ld-building-card" :class="{ 'sale': sale, 'shadow': shadow }">
+  <div class="text-center cursor-pointer ld-building-card" :class="[{ 'sale': sale, 'shadow': shadow }, `popularity-${ldbInfo.chain.popularity}`]">
     <figure @click="$emit('choose', ldbInfo)">
       <div class="building-card-top">
         <div class="building-header">
-          <ld-img type="span" :src="ldbInfo.ldbIcon.source.market"></ld-img>
+          <img class="building-curve" src="/static/svg/single/curve.svg">
+          <ld-img :src="ldbInfo.ldbIcon.source.preview | reldbIcon"></ld-img>
           <span class="building-sale-bg"></span>
           <p class="d-flex f-auto-center building-sale-tag">
             <span class="building-sale-svg">
@@ -90,7 +91,7 @@ export default {
     },
     shadow: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   data: () => {
@@ -120,6 +121,14 @@ export default {
 
 <style lang="scss" scoped>
   @import '@/assets/stylus/mixin/index.scss';
+  @mixin header-bg($outside, $inside, $direction: to bottom) {
+    .building-header {
+      background-image: -moz-radial-gradient($inside, $outside); /* new syntax */
+      background-image: -webkit-radial-gradient($inside, $outside); /* new syntax */
+      background-image: radial-gradient($inside, $outside);
+    }
+  }
+
   .ld-building-card {
     background-color: #fff;
     border-radius: 5px;
@@ -134,6 +143,21 @@ export default {
         box-shadow: 0px 20px 25px -15px rgba(0, 0, 0, 0.25);
       }
     }
+    &.popularity-1 {
+      @include header-bg(#8BC1FF, #C3DEFC);
+    }
+    &.popularity-2 {
+      @include header-bg(#97DBD9, #E7FDE1);
+    }
+    &.popularity-3 {
+      @include header-bg(#C0C0FF, #F2F1FD);
+    }
+    &.popularity-4 {
+      @include header-bg(#FFC3AE, #FDF1E1);
+    }
+    &.popularity-5 {
+      @include header-bg(#FFDA99, #FFE7C7);
+    }
   }
 
   /**
@@ -144,7 +168,6 @@ export default {
     height: 300px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    background-color: $--text-green-color;
     >.image-box {
       z-index: 2;
     }
@@ -170,7 +193,7 @@ export default {
     top: 15px;
     width: 100%;
     visibility: hidden;
-    z-index: 3;
+    z-index: 5;
   }
   .building-sale-svg {
     margin-right: 5px;
@@ -184,6 +207,14 @@ export default {
     font-size: 16px;
     background-image: linear-gradient(to bottom, #16222A, #3A6073);
     border-radius: 20px;
+  }
+
+  .building-curve {
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    z-index: 3;
   }
 
   /**

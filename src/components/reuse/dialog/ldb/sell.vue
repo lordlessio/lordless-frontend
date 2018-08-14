@@ -178,7 +178,7 @@ export default {
       }
 
       // 估算 gas
-      const gas = (await NFTsCrowdsale.estimateGas(newAuction.name, newAuction.values)) || 180000
+      const gas = (await NFTsCrowdsale.estimateGas(newAuction.name, newAuction.values)) || 400000
       console.log('sale -- gas', gas)
 
       // 执行合约操作

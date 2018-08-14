@@ -14,10 +14,10 @@ export const initWeb3 = async (callback) => {
   // 注册合约
   store.dispatch(`contract/${actionTypes.CONTRACT_INIT_INSTANCE}`)
 
-  if (res.error) return callback ? callback(res) : res
-
   // 获取本地用户
   store.dispatch(`user/${actionTypes.USER_SET_USER_BY_TOKEN}`)
+
+  if (res.error) return callback ? callback(res) : res
 
   // 监听 web3 动态
   monitorWeb3()
@@ -28,7 +28,7 @@ export const initWeb3 = async (callback) => {
 const checkWeb3 = async () => {
   const res = {
     error: null,
-    web3js: null,
+    web3js: { default: true },
     isInjected: false,
     balance: 0,
     gasPrice: 0,
@@ -49,6 +49,7 @@ const checkWeb3 = async () => {
     // 测试使用
     window.web3js = web3js
   } else {
+    res.web3js = { default: false }
     res.error = 'Unable to connect to Web3'
     return res
     // console.log('No web3? You should consider trying MetaMask!')

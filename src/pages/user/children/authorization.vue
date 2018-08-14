@@ -10,7 +10,7 @@
             v-for="(authorization, index) of authorizations"
             :key="index">
             <authorization-card
-              :active="models[authorization.symbol]"
+              :active="authorization.active"
               :info="authorization"
               @click="authorizeFunc($event, index)">
             </authorization-card>
@@ -18,12 +18,26 @@
         </el-row>
       </div>
     </div>
+    <Authorize
+      ref="authorize"
+      @pending="authorizePending"
+      @blurs="dialogSetBlurs($event, 0)">
+    </Authorize>
   </div>
 </template>
 
 <script>
 import AuthorizationCard from '@/components/reuse/card/authorization'
+import Authorize from '@/components/reuse/dialog/authorize'
+
+import { putUserTgAuth } from 'api'
+
+import { contractMixins, dialogMixins } from '@/mixins'
+import { actionTypes } from '@/store/types'
+import { mapState, mapActions } from 'vuex'
 export default {
+  name: 'owner-authorization',
+  mixins: [contractMixins, dialogMixins],
   data: (vm) => {
     return {
       authorizations: [
@@ -31,35 +45,116 @@ export default {
           symbol: 'marketplace',
           title: 'Marketplace contract',
           desc: 'Authorized the marketplace contract to operate LDB',
-          icon: 'icon-marketplace'
+          icon: 'icon-marketplace',
+          active: false
         }, {
           symbol: 'telegram',
           title: 'Telegram',
           desc: 'Authorize the Telegram to apply tasks',
-          icon: 'icon-telegram'
+          icon: 'icon-telegram',
+          customize: true,
+          active: false
         }
-      ]
+      ],
+      authModels: {}
     }
   },
   computed: {
-    user () {
-      console.log('this.$parent.$children', this.$parent.$children)
-      return this.$parent.$children[0].userInfo
-    },
-    models () {
-      const marketplace = this.$root.$children[0].isCrowdsaleApproved
-      return { marketplace }
+    ...mapState('user', [
+      'userInfo'
+    ]),
+    marketModel () {
+      return this.$root.$children[0].isCrowdsaleApproved
     }
   },
   components: {
-    AuthorizationCard
+    AuthorizationCard,
+    Authorize
   },
   methods: {
-    authorizeFunc (e, index) {
-      console.log('---', index)
-      this.$set(this.models, index, true)
-      console.log('models', this.models)
+    ...mapActions('contract', [
+      actionTypes.CONTRACT_CHECK_CROWDSALE
+    ]),
+    ...mapActions('user', [
+      actionTypes.USER_SET_USER_BY_TOKEN
+    ]),
+
+    initModels (userInfo = this.userInfo) {
+      if (this.marketModel) {
+        this.rewriteAuthorizations('marketplace')
+      }
+      if (userInfo.telegram && userInfo.telegram.id) {
+        this.rewriteAuthorizations('telegram')
+      }
+    },
+
+    // marketplace authorization
+    /**
+     * 授权市场权限的合约 pending 状态
+     */
+    async authorizePending ({ tx }) {
+      const address = this.userInfo.address
+      this.checkCrowdsaleEvent({ address }, () => {
+        this.$refs.authorize.checkoutAuthorize()
+        this[actionTypes.CONTRACT_CHECK_CROWDSALE](address)
+        this.rewriteAuthorizations('marketplace')
+      })
+    },
+
+    // 点击认证执行事件
+    authorizeFunc (symbol) {
+      switch (symbol) {
+        case 'marketplace': this.$refs.authorize.checkoutAuthorize({ crowdsale: true })
+          break
+        default: break
+      }
+    },
+
+    // 重写 authorizations
+    rewriteAuthorizations (symbol = 'telegram') {
+      const authorizations = this.authorizations
+      authorizations.map(item => {
+        if (item.symbol === symbol) item.active = true
+      })
+      this.authorizations = authorizations
+    },
+
+    // 初始化 tg 授权状态
+    initTelegram () {
+      const isTelegram = this.userInfo.telegram && this.userInfo.telegram.id
+      // const isTelegram = false
+      if (isTelegram) return
+      // const tgCode = '<script async src="https://telegram.org/js/telegram-widget.js?4" data-telegram-login="samplebot" data-size="large" data-userpic="false" data-onauth="onTelegramAuth(user)" data-request-access="write"><\/script>'
+      // document.getElementById('telegram').innerHTML = tgCode
+      const el = document.createElement('script')
+      el.src = 'https://telegram.org/js/telegram-widget.js?4'
+      el.async = true
+      el.setAttribute('data-telegram-login', 'ldbbot')
+      el.setAttribute('data-size', 'large')
+      el.setAttribute('data-userpic', false)
+      el.setAttribute('data-onauth', 'onTelegramAuth(user)')
+      el.setAttribute('data-request-access', 'write')
+      // document.body.appendChild(el)
+      document.getElementById('telegram').appendChild(el)
+      window.onTelegramAuth = async (user) => {
+        const res = await putUserTgAuth(user)
+        if (res.code === 1000) {
+          this[actionTypes.USER_SET_USER_BY_TOKEN]({ update: true })
+          this.rewriteAuthorizations('telegram')
+        }
+      }
     }
+  },
+  watch: {
+    marketModel (val) {
+      if (val) this.rewriteAuthorizations('marketplace')
+    }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.initModels()
+      this.initTelegram()
+    })
   }
 }
 </script>

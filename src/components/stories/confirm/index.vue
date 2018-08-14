@@ -13,7 +13,7 @@
           <i class="el-icon-close"></i>
         </span>
         <div class="confirm-cnt-left">
-          <img-box class="confirm-poster" :src="ldbInfo.ldbIcon.sourceUrl" type="span"></img-box>
+          <img-box class="confirm-poster" :src="ldbInfo.ldbIcon.source.preview | reldbIcon" type="span"></img-box>
         </div>
         <div class="v-flex confirm-cnt-box">
           <h3>{{ ldbInfo.name.zh }}</h3>

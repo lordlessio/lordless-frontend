@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import MapBox from 'mapbox-gl/dist/mapbox-gl.js'
+import { reldbIcon } from 'utils/tool'
+// import MapBox from 'mapbox-gl/dist/mapbox-gl.js'
 export default {
   name: 'mapbox',
   props: {
@@ -12,7 +13,7 @@ export default {
       default: () => {
         return {
           min: 13,
-          max: 18
+          max: 20
         }
       }
     },
@@ -37,11 +38,13 @@ export default {
     },
     token: {
       type: String,
-      default: 'pk.eyJ1IjoiZXVyeWNoZW4iLCJhIjoiY2ppMWc4MXd2MGVhNjNwb2Examk1a2hneiJ9.fbBmKer4pBqIm8gng008yA'
+      // default: 'pk.eyJ1IjoiZXVyeWNoZW4iLCJhIjoiY2ppMWc4MXd2MGVhNjNwb2Examk1a2hneiJ9.fbBmKer4pBqIm8gng008yA'
+      default: 'pk.eyJ1Ijoiam9lLWhpbGwiLCJhIjoiY2ppMWVldDIyMDlvcTNxcXAyZ3RuMmJ0YyJ9.4zH2xLDDfAmYp0k91-KOIA'
     },
     mapStyle: {
       type: String,
-      default: 'mapbox://styles/eurychen/cjk80nmg27whb2rscsg8rgud9'
+      // default: 'mapbox://styles/eurychen/cjkje3xmq4lur2spivw4p4fbg'
+      default: 'mapbox://styles/joe-hill/cjifv0uhy0ag62rn3zk2tqh0b'
     },
     center: {
       type: Array,
@@ -94,7 +97,7 @@ export default {
      * 根据 center 及 radius 获取 bounds 坐标对象
      */
     getBounds (center = [], radius = 100) {
-      const bounds = new MapBox.LngLat(...center).toBounds(radius)
+      const bounds = new mapboxgl.LngLat(...center).toBounds(radius)
       const nw = bounds.getNorthWest().toArray()
       const ne = bounds.getNorthEast().toArray()
       const se = bounds.getSouthEast().toArray()
@@ -122,12 +125,12 @@ export default {
      */
     createImageMarkers (list, map = this.map) {
       list.map(item => {
-        const { _id, name, chain } = item
+        const { _id, name, chain, ldbIcon } = item
         const coords = [chain.lng / 1e16, chain.lat / 1e16]
 
         // 创建 Image markers
-        // const imgSrc = ldbIcon.source.map
-        const imgSrc = 'http://lordless.oss-cn-hongkong.aliyuncs.com/console/ldbIcon/2018-08-04/1533395070990.png'
+        const imgSrc = reldbIcon(ldbIcon.source.map, 'map')
+        // const imgSrc = 'http://lordless.oss-cn-hongkong.aliyuncs.com/console/ldbIcon/2018-08-04/1533395070990.png'
         const markerDom = this.createImageMarker({ name, imgSrc, level: chain.level })
         // const { id, fields } = item
         // const _id = id
@@ -137,7 +140,7 @@ export default {
         markerDom.addEventListener('click', () => {
           this.$emit('imageMarkerClick', item)
         }, false)
-        const imageMarker = new MapBox.Marker(markerDom)
+        const imageMarker = new mapboxgl.Marker(markerDom)
           .setLngLat(coords)
           .setOffset([0, 0])
           .addTo(map)
@@ -148,17 +151,17 @@ export default {
         this.imageMarkers[_id] = imageMarker
       })
 
-      // let startTime = new Date()
-      // const checkImageMarker = (delay = 300) => {
-      //   // 如果map 的 zoom正在变化或者相邻事件执行时间少于300毫秒,return
-      //   if (new Date() - startTime < delay || map.isZooming()) return
-      //   startTime = new Date()
-      //   this.checkMarkerIsInView({ type: 'image' })
-      // }
-      // this.checkMarkerIsInView({ type: 'image' })
+      let startTime = new Date()
+      const checkImageMarker = (delay = 300) => {
+        // 如果map 的 zoom正在变化或者相邻事件执行时间少于300毫秒,return
+        if (new Date() - startTime < delay || map.isZooming()) return
+        startTime = new Date()
+        this.checkMarkerIsInView({ type: 'image' })
+      }
+      this.checkMarkerIsInView({ type: 'image' })
 
       // map move 之后，check image marker is Inview
-      // this.mapMoveEvent(checkImageMarker)
+      this.mapMoveEvent(checkImageMarker)
 
       // 每次zoom变化前，remove marker
       this.mapZoomStartEvent(() => this.checkMarkerIsInView({ type: 'image', remove: true }))
@@ -258,7 +261,7 @@ export default {
      */
     createPointPopup ({ _id, poster, name, coords, popup = this.pointPopup, map = this.map } = {}) {
       if (!popup) {
-        popup = new MapBox.Popup({
+        popup = new mapboxgl.Popup({
           closeButton: false,
           closeOnClick: false
         })
@@ -276,12 +279,12 @@ export default {
      */
     createPointMarkers (list, map = this.map) {
       list.map(item => {
-        const { _id, name, chain } = item
+        const { _id, name, chain, ldbIcon } = item
         const coords = [chain.lng / 1e16, chain.lat / 1e16]
 
         // 创建 markers
-        // const poster = ldbIcon.source.map
-        const poster = 'http://lordless.oss-cn-hongkong.aliyuncs.com/console/ldbIcon/2018-08-04/1533395070990.png'
+        const poster = reldbIcon(ldbIcon.source.map, 'map')
+        // const poster = 'http://lordless.oss-cn-hongkong.aliyuncs.com/console/ldbIcon/2018-08-04/1533395070990.png'
         const pointDom = this.createPointMarker({ _id, name, poster, level: chain.level })
         pointDom.addEventListener('click', () => {
           this.flyToCoords({ center: coords, pitch: this.mPitch, zoom: this.scrollZooms[this.scrollZooms.length - 1] })
@@ -294,9 +297,9 @@ export default {
           this.pointPopup.remove()
         })
 
-        const point = new MapBox.Marker(pointDom)
+        const point = new mapboxgl.Marker(pointDom)
           .setLngLat(coords)
-          .setOffset([0, 15])
+          .setOffset([0, 0])
           .addTo(map)
 
         // point.remove()
@@ -350,13 +353,33 @@ export default {
     },
 
     /**
+     * append mapbox cdn to body
+     */
+    async initMapboxgl () {
+      return new Promise((resolve, reject) => {
+        if (window.mapboxgl) return resolve()
+        const el = document.createElement('script')
+        el.src = 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.45.0/mapbox-gl.js'
+        el.type = 'text/javascript'
+        el.async = true
+        document.head.appendChild(el)
+        el.onload = () => {
+          setTimeout(() => resolve(), 0)
+        }
+        el.onerror = (e) => reject(new Error(e))
+      })
+    },
+
+    /**
      * 初始化地图
      */
-    init () {
+    async init () {
+      await this.initMapboxgl()
+
       const { token, container, mapStyle, center, minZoom, maxZoom, zoom, pitch } = this
-      MapBox.accessToken = token
-      const maxBounds = new MapBox.LngLatBounds([120.849955, 30.682195], [122.007218, 31.870125])
-      const map = new MapBox.Map({
+      mapboxgl.accessToken = token
+      const maxBounds = new mapboxgl.LngLatBounds([120.849955, 30.682195], [122.007218, 31.870125])
+      const map = new mapboxgl.Map({
         container, // container id
         // style: 'mapbox://styles/mapbox/light-v9', // stylesheet location
         style: mapStyle, // stylesheet location
@@ -376,10 +399,6 @@ export default {
       map.dragRotate.disable()
       // map.dragPan.disable()
       this.map = map
-
-      map.on('click', (e) => {
-        console.log('------e', e)
-      })
 
       map.on('load', () => {
         // 添加marker
@@ -577,18 +596,16 @@ export default {
         maxZoom = this.pointZooms.max
 
         // 如果视图发生变化，remove popups
-        this.pointPopup.remove()
+        if (this.pointPopup) this.pointPopup.remove()
       }
 
       const bounds = map.getBounds()
       const mapZoom = Math.round(map.getZoom())
 
-      console.time('check marker')
       for (const mk in markers) {
         if (this.inBounds(markers[mk].getLngLat(), bounds) && mapZoom >= minZoom && mapZoom <= maxZoom && !remove) markers[mk].addTo(map)
         else markers[mk].remove()
       }
-      console.timeEnd('check marker')
     },
 
     inBounds (point, bounds) {
@@ -601,7 +618,7 @@ export default {
 </script>
 
 <style lang="scss">
-  // @import '@/assets/stylus/mapbox/index.scss';
+  @import '@/assets/stylus/mapbox/index.scss';
 
   .mapbox-main-box {
     &.sm-marker {
@@ -652,7 +669,7 @@ export default {
   }
 
   ._marker--ldb-container {
-    width: 150px;
+    width: 250px;
     line-height: 1;
     // height: 100%;
     // transform-origin: center;
@@ -710,20 +727,30 @@ export default {
   ._point_marker--ldb-box {
     // position: relative;
     border: none;
-    height: 6px;
-    width: 8px;
+    height: 9px;
+    width: 12px;
     background-color: #E47172;
     border-radius: 50%;
     cursor: pointer;
+    // &::before {
+    //   content: '';
+    //   position: absolute;
+    //   left: 10px;
+    //   top: 6px;
+    //   height: 9px;
+    //   width: 12px;
+    //   background-color: #E47172;
+    //   border-radius: 50%;
+    // }
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       display: block;
       border: none;
       height: 24px;
       width: 32px;
-      left: -12px;
-      top: -8px;
+      left: -10px;
+      top: -6px;
       opacity: .2;
       background-color: inherit;
       border-radius: 50%;
@@ -732,6 +759,7 @@ export default {
       animation: pulse 2s ease-in-out infinite;
     }
     &:hover {
+      z-index: 1;
       background-color: #4586FC;
     }
   }
@@ -741,9 +769,11 @@ export default {
     border-radius: 50px;
     background-color: #fff;
     white-space: nowrap;
+    transform: translateY(-15px);
     // opacity: 0;
     // visibility: hidden;
     transition: all .15s ease-in-out;
+    z-index: 9;
   }
   ._point_marker-poster {
     margin-right: 6px;

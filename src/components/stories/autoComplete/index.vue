@@ -28,11 +28,11 @@
                 v-for="(trend, index) of item.list"
                 :key="index">
                 <div class="popper-trending-container">
-                  <div class="popper-trending-poster">
+                  <div class="popper-trending-poster" @click.stop="$emit('trend', trend)">
                     <img-box
                       type="span"
                       absolute
-                      :src="trend.ldbIcon.sourceUrl"></img-box>
+                      :src="trend.ldbIcon.source.preview | reldbIcon('map')"></img-box>
                   </div>
                   <div class="d-flex f-align-center popper-trending-text">
                     <span>
@@ -180,10 +180,16 @@ export default {
 
   // popper-trending
   .popper-trending {
+    padding: 0 10px;
     border-bottom: 1px solid #eee;
   }
   .popper-trending-container {
     padding: 0 10px 10px;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    &:hover {
+      background-color: #f5f7fa;
+    }
   }
   .popper-trending-poster {
     margin-bottom: 10px;
@@ -213,7 +219,7 @@ export default {
 
   // popper-record
   .popper-record {
-    margin-left: -20px;
+    padding-right: 20px;
     &.theme-gray {
       .popper-record-icon {
         i {
@@ -223,6 +229,9 @@ export default {
       .record-name {
         color: #aaa;
       }
+    }
+    &:hover {
+      background-color: #f5f7fa;
     }
   }
   .popper-record-icon {

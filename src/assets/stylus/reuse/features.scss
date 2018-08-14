@@ -191,6 +191,22 @@
   }
 }
 
+/**
+ *  vue transtion style -- begin
+ */
+.ld-hide-fade-enter-active, .ld-hide-fade-leave-active {
+  opacity: 1;
+  transition: opacity .4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.ld-hide-fade-enter, .ld-hide-fade-leave-to {
+  opacity: 0;
+}
+
+/**
+ *  vue transtion style -- end
+ */
+
+
 /* skeletion -- begin */
 .skeletion-split {
   position: absolute;

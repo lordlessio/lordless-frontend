@@ -27,18 +27,12 @@
             name="all">
             <div class="building-sort">
               <span>Sort by</span>
-              <el-select
+              <ld-select
                 class="building-sort-select"
-                popper-class="building-sort-options"
                 v-model="buildingSort"
+                :items="sortItems"
                 @change="changeSort">
-                <el-option
-                  v-for="sort in sortItems"
-                  :key="sort.value"
-                  :label="sort.label"
-                  :value="sort.value">
-                </el-option>
-              </el-select>
+              </ld-select>
             </div>
             <el-row :gutter="30" class="user-buildings-cnt">
               <el-col
@@ -107,6 +101,7 @@
 </template>
 
 <script>
+import LdSelect from '@/components/stories/select'
 import DetailDialog from '@/components/reuse/dialog/ldb/detail'
 import BuildingCard from '@/components/reuse/card/building'
 import Pagination from '@/components/stories/pagination'
@@ -188,7 +183,8 @@ export default {
     DetailDialog,
     BuildingCard,
     Pagination,
-    LdBtn
+    LdBtn,
+    LdSelect
   },
   methods: {
     chooseTab () {

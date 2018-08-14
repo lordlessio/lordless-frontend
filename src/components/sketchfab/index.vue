@@ -127,16 +127,28 @@ export default {
     Loading
   },
   methods: {
-    switchFab () {
-      if (this.viewerReady) {
-        this.is3D = !this.is3D
-        return
-      }
-      this.loadFab = true
-      this.initFab()
+
+    /**
+     * append mapbox cdn to body
+     */
+    async initSketchfab () {
+      return new Promise((resolve, reject) => {
+        if (window.Sketchfab) return resolve()
+        const el = document.createElement('script')
+        el.src = 'https://static.sketchfab.com/api/sketchfab-viewer-1.2.1.js'
+        el.type = 'text/javascript'
+        el.async = true
+        document.head.appendChild(el)
+        el.onload = () => {
+          setTimeout(() => resolve(), 0)
+        }
+        el.onerror = (e) => reject(new Error(e))
+      })
     },
 
-    initFab () {
+    async initFab () {
+      await this.initSketchfab()
+
       this.is3D = true
       const iframe = this.$refs.sketch_frame
 
@@ -190,6 +202,14 @@ export default {
 
     sketchLoad () {
       console.log('------ sketchLoad')
+    },
+    switchFab () {
+      if (this.viewerReady) {
+        this.is3D = !this.is3D
+        return
+      }
+      this.loadFab = true
+      this.initFab()
     }
   }
 }

@@ -1,3 +1,14 @@
+import {
+  format as dateFnsFormat,
+  differenceInSeconds,
+  differenceInMinutes,
+  differenceInHours,
+  differenceInCalendarDays,
+  differenceInCalendarISOWeeks,
+  differenceInCalendarMonths,
+  differenceInCalendarISOYears
+} from 'date-fns'
+import store from '@/store'
 /**
  * 获取 data 数据类型
  * @param {Object} data 需要分析的数据
@@ -232,4 +243,64 @@ export const getBrowser = () => {
     Safari: isSafari,
     unknow: !isIE && !isFirefox && !isOpera && !isChrome && !isSafari
   }
+}
+
+export const reldbIcon = (url, type = 'preview') => {
+  if (!url) return url
+  let size = 600
+  if (type === 'map') {
+    size = 400
+  } else if (type === 'detail') {
+    size = 1600
+  }
+  return `${process.env.LDBICON_ORIGIN}${url}?x-oss-process=image/resize,w_${size}`
+}
+
+export const transferCoords = (value) => {
+  if (!value) return value
+  value = parseFloat(value)
+  return value / 1e16
+}
+
+/**
+ * wei to eth
+ */
+export const weiToEth = (value) => {
+  if (!value) return value
+
+  const web3js = store.state.web3.web3Opt.web3js
+  value = parseInt(value)
+
+  if (!web3js.fromWei) {
+    value = value / 1e18
+  } else {
+    value = web3js.fromWei(value)
+  }
+  return parseFloat(parseInt(value).toFixed(4))
+}
+
+export const sliceStr = (str, { start = 0, end = 10 } = {}) => {
+  if (!str) return str
+  return str.toString().slice(start, end)
+}
+
+/**
+ * dateFormat
+ */
+export const dateFormat = (date, format = 'MMMM Do YYYY, HH:mm:ss') => {
+  return dateFnsFormat(date, format)
+}
+
+/**
+ * timeFormat
+ */
+export const timeFormat = date => {
+  const now = new Date()
+  if (differenceInCalendarISOYears(now, new Date(date))) return `${differenceInCalendarISOYears(now, new Date(date))} years ago`
+  else if (differenceInCalendarMonths(now, new Date(date))) return `${differenceInCalendarMonths(now, new Date(date))} months ago`
+  else if (differenceInCalendarISOWeeks(now, new Date(date))) return `${differenceInCalendarISOWeeks(now, new Date(date))} weeks ago`
+  else if (differenceInCalendarDays(now, new Date(date))) return `${differenceInCalendarDays(now, new Date(date))} days ago`
+  else if (differenceInHours(now, new Date(date))) return `${differenceInHours(now, new Date(date))} hours ago`
+  else if (differenceInMinutes(now, new Date(date))) return `${differenceInMinutes(now, new Date(date))} minutes ago`
+  else return `${differenceInSeconds(now, new Date(date))} seconds ago`
 }

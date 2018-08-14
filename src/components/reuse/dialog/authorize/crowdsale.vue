@@ -11,12 +11,12 @@
       <div class="crowdsale-cnt-box">
         <div class="crowdsale-cnt-top">
           <p class="TTFontBolder">Wallet address</p>
-          <p class="crowdsale-info-text">{{ address }}</p>
+          <p class="TTFontNormal crowdsale-info-text">{{ address }}</p>
         </div>
         <p class="crowdsale-markline"></p>
         <div class="crowdsale-cnt-bottom">
           <p class="TTFontBolder">Authorization</p>
-          <p class="crowdsale-info-text">Authorization the <a href="#" class="TTFontBolder">Marketplace contract</a> to operate LDB</p>
+          <p class="TTFontNormal crowdsale-info-text">Authorization the <a href="#" class="TTFontBolder">Marketplace contract</a> to operate LDB</p>
         </div>
         <div>
           <ld-btn
@@ -124,7 +124,7 @@ export default {
         }
 
         // 估算 gas
-        const gas = (await LDBNFTs.estimateGas(setApprovalForAll.name, setApprovalForAll.values)) || 80000
+        const gas = (await LDBNFTs.estimateGas(setApprovalForAll.name, setApprovalForAll.values)) || 300000
 
         // 执行合约
         LDBNFTs.methods(setApprovalForAll.name, setApprovalForAll.values.concat([{ gas, gasPrice }]))
@@ -147,8 +147,8 @@ export default {
 <style lang="scss" scoped>
   @import '@/assets/stylus/mixin/index.scss';
   .crowdsale-box {
+    padding-bottom: 10px;
     border-radius: 5px;
-    @include padding('bottom', 40px, 1);
   }
   .crowdsale-container {
     position: relative;
@@ -177,7 +177,7 @@ export default {
     height: 0;
     border-bottom: 1px dashed #fff;
     @include width(50%, 1);
-    @include margin-around(15px, auto, 30px, auto, 1);
+    @include margin-around(30px, auto, 45px, auto, 1);
   }
   .crowdsale-choose {
     width: 26px;
