@@ -151,17 +151,17 @@ export default {
         this.imageMarkers[_id] = imageMarker
       })
 
-      let startTime = new Date()
-      const checkImageMarker = (delay = 300) => {
-        // 如果map 的 zoom正在变化或者相邻事件执行时间少于300毫秒,return
-        if (new Date() - startTime < delay || map.isZooming()) return
-        startTime = new Date()
-        this.checkMarkerIsInView({ type: 'image' })
-      }
-      this.checkMarkerIsInView({ type: 'image' })
+      // let startTime = new Date()
+      // const checkImageMarker = (delay = 300) => {
+      //   // 如果map 的 zoom正在变化或者相邻事件执行时间少于300毫秒,return
+      //   if (new Date() - startTime < delay || map.isZooming()) return
+      //   startTime = new Date()
+      //   this.checkMarkerIsInView({ type: 'image' })
+      // }
+      // this.checkMarkerIsInView({ type: 'image' })
 
       // map move 之后，check image marker is Inview
-      this.mapMoveEvent(checkImageMarker)
+      // this.mapMoveEvent(checkImageMarker)
 
       // 每次zoom变化前，remove marker
       this.mapZoomStartEvent(() => this.checkMarkerIsInView({ type: 'image', remove: true }))
@@ -400,6 +400,10 @@ export default {
       // map.dragPan.disable()
       this.map = map
 
+      map.on('click', (e) => {
+        console.log('------e', e)
+      })
+
       map.on('load', () => {
         // 添加marker
         // this.createMarker(map)
@@ -618,7 +622,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '@/assets/stylus/mapbox/index.scss';
+  // @import '@/assets/stylus/mapbox/index.scss';
 
   .mapbox-main-box {
     &.sm-marker {
