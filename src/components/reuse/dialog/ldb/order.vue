@@ -32,7 +32,7 @@
                   <img-box
                     sType="height"
                     type="span"
-                    :src="ldbInfo.ldbIcon.source.market">
+                    :src="ldbInfo.ldbIcon.source.preview | reldbIcon">
                   </img-box>
                 </div>
               </div>

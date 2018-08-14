@@ -1,13 +1,52 @@
 <template>
   <div class="ld-market">
     <div class="d-flex col-flex page-container market-container md">
-      <div class="d-flex f-align-center market-search-box">
+      <!-- <div class="d-flex f-align-center market-search-box">
         <span class="el-input__icon el-icon-search ld-auto-icon"></span>
         <span class="v-flex">
           <input class="lordless-input market-search-input" type="text" placeholder="搜索" v-model="marketSearch"/>
         </span>
-      </div>
-      <div class="d-flex col-flex v-flex market-bottom">
+      </div> -->
+      <section class="text-center market-header">
+        <h1>Marketplace</h1>
+        <p>Marketplace is an easy, convenient way to buy and sell your LDB.<br>
+          You can list LDBs in the marketplace to reach thousands of people<br>
+          in LORDLESS and find unique LDBs for sale.
+        </p>
+      </section>
+      <section class="lg-d-flex f-align-center market-sort-bar">
+        <p class="lg-v-flex sm-text-left sm-mar-b4">Total 40 LDBs on sale</p>
+        <div class="d-flex f-align-center">
+          <span>Sort <span class="sm-hidden">by</span></span>
+          <ld-select
+            class="sm-hidden market-sort-select"
+            v-model="ldbSort"
+            :items="sortItems"
+            @change="sortChange">
+          </ld-select>
+          <ld-select
+            class="lg-hidden market-sort-select sm"
+            v-model="ldbSort"
+            :items="smSortItems"
+            @change="sortChange">
+          </ld-select>
+          <div class="market-switch-input">
+            <switch-input
+              class="sm-hidden"
+              v-model="ldbOrder"
+              :items="orderItems"
+              @change="orderChange">
+            </switch-input>
+            <switch-input
+              class="lg-hidden"
+              v-model="ldbOrder"
+              :items="smOrderItems"
+              @change="orderChange">
+            </switch-input>
+          </div>
+        </div>
+      </section>
+      <section class="d-flex col-flex v-flex market-ldbs-box">
         <div
           v-if="!ldbs.length && ldbsLoading"
           class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
@@ -42,7 +81,7 @@
             <!-- <div class="market-cnt-item" @click.stop="openDetail(item)">
               <figure class="item-cards">
                 <figcaption>
-                  <img-box absolute :src="item.ldbIcon.sourceUrl" type="span"></img-box>
+                  <img-box absolute :src="`${process.env.LDBICON_ORIGIN}${ldbInfo.ldbIcon.source.preview}`" type="span"></img-box>
                 </figcaption>
                 <div class="d-inline-flex f-align-center auction-box">
                   <span class="icon-auction">
@@ -76,11 +115,12 @@
             v-if="ldbs.length"
             class="market-pagination-pages"
             :total="total"
+            :currentPage="paginationPage"
             background
             @currentChange="pageChange">
           </Pagination>
         </div>
-      </div>
+      </section>
     </div>
     <detail-dialog
       v-model="detailModel"
@@ -96,6 +136,8 @@ import { getChainLdbs } from 'api'
 import { historyState } from 'utils/tool'
 
 import DetailDialog from '@/components/reuse/dialog/ldb/detail'
+import LdSelect from '@/components/stories/select'
+import SwitchInput from '@/components/stories/switchInput'
 import ImgBox from '@/components/stories/image'
 import Pagination from '@/components/stories/pagination'
 import BuildingCard from '@/components/reuse/card/building'
@@ -112,6 +154,10 @@ export default {
 
       total: 0,
 
+      paginationPage: 1,
+
+      marketPath: null,
+
       // ldb dialog 显示控制
       detailModel: false,
 
@@ -125,10 +171,58 @@ export default {
       // skeletionLdbs: [1, 2, 3, 4],
 
       // loading options
-      ldbsLoading: true
+      ldbsLoading: true,
+
+      // sort model
+      ldbSort: 'influence',
+
+      // sort 列表选项
+      sortItems: [
+        {
+          value: 'influence',
+          label: 'Most influential'
+        }, {
+          value: 'popular',
+          label: 'Most popular'
+        }
+      ],
+
+      smSortItems: [
+        {
+          value: 'influence',
+          label: 'Influential'
+        }, {
+          value: 'popular',
+          label: 'Popular'
+        }
+      ],
+
+      // order model
+      ldbOrder: 'desc',
+
+      orderItems: [
+        {
+          value: 'desc',
+          label: 'High to Low'
+        }, {
+          value: 'asc',
+          label: 'Low to High'
+        }
+      ],
+      smOrderItems: [
+        {
+          value: 'desc',
+          label: 'High'
+        }, {
+          value: 'asc',
+          label: 'Low'
+        }
+      ]
     }
   },
   components: {
+    LdSelect,
+    SwitchInput,
     LdBtn,
     BuildingCard,
     Pagination,
@@ -154,18 +248,20 @@ export default {
      * 对话框关闭触发函数
      */
     dialogClose () {
-      historyState(this.$route.path)
+      historyState(this.marketPath || this.$route.path)
     },
 
     /**
      * 获取 ldb 列表信息
      */
-    async getLdbs ({ page = 1, offset = 9 } = {}) {
+    async getLdbs ({ page = 1, offset = 9, sort = this.ldbSort, order = this.ldbOrder } = {}) {
       this.ldbsLoading = false
       const params = {
         isOnAuction: true,
         page,
-        offset
+        offset,
+        sort,
+        order
       }
       const res = await getChainLdbs(params)
       if (res.code === 1000) {
@@ -175,8 +271,20 @@ export default {
       }
       this.ldbsLoading = true
     },
-    pageChange (e) {
-      this.getLdbs({ page: e })
+
+    sortChange (sort) {
+      this.getLdbs({ sort })
+    },
+
+    orderChange (order) {
+      this.getLdbs({ order })
+    },
+    pageChange (page) {
+      this.getLdbs({ page })
+
+      const path = `${this.$route.path}?page=${page}`
+      this.marketPath = path
+      historyState(path)
     }
   },
   watch: {
@@ -197,7 +305,9 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      this.getLdbs()
+      const page = parseInt(this.$route.query.page || 1)
+      this.paginationPage = page
+      this.getLdbs({ page })
     })
   }
 }
@@ -211,11 +321,51 @@ export default {
   .market-container {
     // min-height: 100%;
     @include viewport-unit(min-height, 100vh, 80px);
-  }
-  .market-bottom {
     @include padding('left', 20px, 1, -2);
     @include padding('right', 20px, 1, -2);
   }
+  // .market-ldbs-box {
+  //   @include padding('left', 20px, 1, -2);
+  //   @include padding('right', 20px, 1, -2);
+  // }
+
+  /**
+   *  market-header --- begin
+   */
+  .market-header {
+    padding: 95px 0;
+    >h1 {
+      font-size: 48px;
+    }
+    >p {
+      margin-top: 25px;
+      font-size: 20px;
+      color: #999;
+    }
+  }
+  .market-sort-select {
+    margin-left: 20px;
+  }
+  .market-switch-input {
+    display: inline-block;
+    margin-left: 20px;
+  }
+  /**
+   *  market-header --- end
+   */
+
+  /**
+   *  market-sort-bar --- begin
+   */
+  .market-sort-bar {
+    padding: 30px 35px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .25);
+    @include padding('left', 35px, 3, -2);
+  }
+  /**
+   *  market-sort-bar --- begin
+   */
 
   /*
    * skeletion style -- begin
@@ -230,24 +380,30 @@ export default {
   /*
    * market-search-box -- begin
    */
-  .market-search-box {
-    margin-bottom: 50px;
-    border-bottom: 1px solid #C9C9C9;
-    color: #C9C9C9;
-    @include fontSize(18px, 1.5);
-  }
-  .market-search-input {
-    color: $--text-main-color;
-    border: none;
-    @include padding('left', 15px, 1.5);
-    &::placeholder {
-      color: #C9C9C9;
-    }
-  }
+  // .market-search-box {
+  //   margin-bottom: 50px;
+  //   border-bottom: 1px solid #C9C9C9;
+  //   color: #C9C9C9;
+  //   @include fontSize(18px, 1.5);
+  // }
+  // .market-search-input {
+  //   color: $--text-main-color;
+  //   border: none;
+  //   @include padding('left', 15px, 1.5);
+  //   &::placeholder {
+  //     color: #C9C9C9;
+  //   }
+  // }
   /*
    * market-search-box -- end
    */
 
+  /**
+   *  market-ldbs-box --- begin
+   */
+  .market-ldbs-box {
+    margin-top: 60px;
+  }
   .market-cnt-item {
     color: #fff;
     cursor: pointer;
@@ -308,6 +464,9 @@ export default {
     margin-left: 5px;
     width: 50px;
   }
+  /**
+   *  market-ldbs-box --- end
+   */
 
   /*
    * market-pagination-box     --begin

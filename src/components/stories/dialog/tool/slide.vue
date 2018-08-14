@@ -5,7 +5,12 @@
       ref="slide"
       class="ld-dialog-slide"
       @click.stop>
-      <slot></slot>
+      <div class="ld-slide-container">
+        <span @click.stop="$emit('update:visible', false)" class="lg-hidden inline-block dialog-ldb-close">
+          <i class="el-icon-close"></i>
+        </span>
+        <slot></slot>
+      </div>
     </div>
   </transition>
 </template>
@@ -75,6 +80,7 @@ export default {
   },
 
   destroyed () {
+    this[actionTypes.LAYOUT_SET_APP_OPTIONS]({ transform: false })
     // if appendToBody is true, remove DOM node after destroy
     if (this.appendToBody && this.$el && this.$el.parentNode) {
       this.$el.parentNode.removeChild(this.$el)
@@ -94,10 +100,25 @@ export default {
     background-color: #fff;
     transform: translateZ(0);
     z-index: 2001;
-    overflow: auto;
     will-change: transform;
     @include width(90%, -2);
-    @include width(95%, 1, -2);
+    @include width(100%, 1, -2);
+  }
+  .ld-slide-container {
+    position: relative;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    @include viewport-unit('height', 100vh);
+  }
+
+  .dialog-ldb-close {
+    position: fixed;
+    left: 30px;
+    top: 15px;
+    color: #555;
+    z-index: 2009;
+    cursor: pointer;
+    @include fontSize(30px, 0.85);
   }
 
   .ld-slide-fade-enter-active, .ld-slide-fade-leave-active {

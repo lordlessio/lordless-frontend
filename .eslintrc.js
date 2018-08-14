@@ -33,7 +33,7 @@ module.exports = {
     web3: true,
     Web3: true,
     web3js: true,
-    AMap: true,
     Sketchfab: true,
+    mapboxgl: true
   }
 }

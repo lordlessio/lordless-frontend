@@ -1,8 +1,9 @@
 <template>
-  <div class="carousel-box" :class="{ 'shadow': shadow, 'hidden': !txs.length }">
+  <div class="carousel-box" :class="{ 'shadow': shadow }">
     <div class="d-flex carousel-container">
       <div class="v-flex carousel-content">
         <div class="carousel-loop-box">
+          <div v-if="!txs.length" class="d-flex f-auto-center carousel-no-records">there has no records</div>
           <div
             v-for="(tx, index) of txs"
             :key="index"
@@ -345,6 +346,10 @@ export default {
     background-color: #fff;
     @include height(100px, 1.25);
     // @include padding-around(15px, 0, 15px, 0, 1);
+  }
+  .carousel-no-records {
+    height: 100%;
+    font-size: 18px;
   }
   .carousel-loop-item {
     position: absolute;

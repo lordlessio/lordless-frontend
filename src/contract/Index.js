@@ -1,7 +1,7 @@
 
 // 公用 contract 函数
 const initContract = (json, web3js) => {
-  if (!web3js) return
+  if (!web3js || !web3js.eth) return
   // const _contract = contract(json)
   // _contract.defaults({
   //   from: account

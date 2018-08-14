@@ -9,10 +9,10 @@ let store
 // request
 instance.interceptors.request.use(async (res) => {
   if (!store) store = require('@/store').default
-  // set lordless_token to headers
+  // set lordless-token to headers
   const address = store.state.user.userInfo.address || store.state.web3.web3Opt.address
   const token = await store.dispatch(`user/${actionTypes.USER_GET_TOKEN_BY_ADDRESS}`, address)
-  res.headers.lordless_token = token
+  res.headers['lordless-token'] = token
   return res
 }, error => {
   return Promise.reject(error)

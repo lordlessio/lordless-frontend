@@ -9,7 +9,7 @@
       </div>
       <div class="text-center ld-authorize-bottom">
         <p class="text-left">{{ info.desc }}</p>
-        <ld-btn class="TTFontBolder ld-authorize-btn" theme="blue" inverse shadow @click="$emit('click')">
+        <ld-btn v-if="active || !info.customize" class="TTFontBolder ld-authorize-btn" theme="blue" inverse shadow @click="$emit('click', info.symbol)">
           <span v-if="!active">Authorize</span>
           <span v-if="active" class="inline-block authorize-check-box">
             <svg>
@@ -17,6 +17,7 @@
             </svg>
           </span>
         </ld-btn>
+        <div v-if="!active && info.customize" class="ld-authorize-btn" :id="info.symbol"></div>
       </div>
     </div>
   </div>

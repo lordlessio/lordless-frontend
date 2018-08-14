@@ -46,9 +46,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
   }
 }
 
-// building-sort-options
+// lordless-sort-options
 
-.building-sort-options {
+.lordless-sort-options {
   margin-top: 10px;
   border: none;
   background-color: transparent;
@@ -69,5 +69,15 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
   }
   .popper__arrow {
     display: none;
+  }
+}
+
+// .el-autocomplete-suggestion li:hover
+.el-autocomplete-suggestion {
+  li {
+    padding: 0;
+    &:hover {
+      background: none;
+    }
   }
 }

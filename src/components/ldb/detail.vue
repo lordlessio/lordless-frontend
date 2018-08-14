@@ -7,245 +7,250 @@
       <skeletion-box v-model="detailLoading" absolute></skeletion-box>
 
       <!-- sketch fab -->
-      <sketch-fab v-if="!detailLoading" :poster="ldbInfo.ldbIcon.source.detail" class="detail-fab"/>
+      <transition name="ld-hide-fade">
+        <sketch-fab v-if="!detailLoading" :poster="ldbInfo.ldbIcon.source.detail | reldbIcon('detail')" class="detail-fab"/>
+      </transition>
     </div>
 
     <!-- detail cnt 骨架 -->
     <skeletion-detail-cnt v-if="detailLoading"></skeletion-detail-cnt>
-    <div v-if="!detailLoading" class="detail-cnt-box">
-      <div class="container">
-        <div class="cnt-item cnt-header">
-          <el-row justify="end" align="bottom">
-            <el-col :md="12" :sm="24">
-              <h1 class="d-flex lg-row-flex sm-col-flex f-align-baseline ldb-name">
-                <span>{{ ldbInfo.name.zh }}</span>
-                <span class="lg-mar-l1 TTFontNormal ldb-category">{{ ldbInfo.origin.category[0] }}</span>
-                <!-- <span class="ldb-category" v-for="(category, index) of ldbInfo.origin.category.split(',')" :key="index">{{ category }}</span> -->
-              </h1>
-              <div class="ldb-msg">
-                <p class="TTFontNormal d-flex f-align-center">
-                  <span class="line-height-1">
-                    <i class="el-icon-location-outline"></i>
-                  </span>
-                  <span class="inline-block ldb-location">{{ ldbInfo.chain.lng | transferCoords | sliceStr}}, {{ ldbInfo.chain.lat | transferCoords | sliceStr }}</span>
-                  <!-- <span class="inline-block"> · {{ ldbInfo.address }}</span> -->
-                  <!-- <span class="inline-block ldb-address">{{ ldbInfo.address }}</span> -->
-                </p>
-                <!-- <p v-if="ldbInfo.category">
-                  <span class="inline-block ldb-category" v-for="(category, index) of ldbInfo.category.split(',')" :key="index">{{ category }}</span>
-                </p> -->
-              </div>
-            </el-col>
-            <el-col :md="12" :sm="24" class="sm-hidden">
-              <div class="d-flex f-align-center">
-                <div class="user-info v-flex">
-                  <div v-if="ldbInfo.lord">
-                    <p class="lord-name">
-                      {{ ldbInfo.lord.nickName || 'LORDLESS' }}
-                    </p>
-                    <p class="TTFontNormal lord-address">{{ ldbInfo.lord.address | splitAddress({ symbol: '******' }) }}</p>
+    <transition name="ld-hide-fade">
+      <div v-if="!detailLoading" class="detail-cnt-box">
+        <div class="container">
+          <div class="cnt-item cnt-header">
+            <el-row justify="end" align="bottom">
+              <el-col :md="12" :sm="24">
+                <h1 class="d-flex lg-row-flex sm-col-flex f-align-baseline ldb-name">
+                  <span>{{ ldbInfo.name.zh }}</span>
+                  <span class="lg-mar-l1 TTFontNormal ldb-category">{{ ldbInfo.origin.category[0] }}</span>
+                  <!-- <span class="ldb-category" v-for="(category, index) of ldbInfo.origin.category.split(',')" :key="index">{{ category }}</span> -->
+                </h1>
+                <div class="ldb-msg">
+                  <p class="TTFontNormal d-flex f-align-center">
+                    <span class="line-height-1">
+                      <i class="el-icon-location-outline"></i>
+                    </span>
+                    <span class="inline-block ldb-location">{{ ldbInfo.chain.lng | transferCoords | sliceStr}}, {{ ldbInfo.chain.lat | transferCoords | sliceStr }}</span>
+                    <!-- <span class="inline-block"> · {{ ldbInfo.address }}</span> -->
+                    <!-- <span class="inline-block ldb-address">{{ ldbInfo.address }}</span> -->
+                  </p>
+                  <!-- <p v-if="ldbInfo.category">
+                    <span class="inline-block ldb-category" v-for="(category, index) of ldbInfo.category.split(',')" :key="index">{{ category }}</span>
+                  </p> -->
+                </div>
+              </el-col>
+              <el-col :md="12" :sm="24" class="sm-hidden">
+                <div class="d-flex f-align-center">
+                  <div class="user-info v-flex">
+                    <div v-if="ldbInfo.lord">
+                      <p class="lord-name">
+                        {{ ldbInfo.lord.nickName || 'LORDLESS' }}
+                      </p>
+                      <p class="TTFontNormal lord-address">{{ ldbInfo.lord.address | splitAddress({ symbol: '******' }) }}</p>
+                    </div>
+                  </div>
+                  <div class="user-avatar">
+                    <blockies
+                      ref="lordBlockies"
+                      jump
+                      :scale="9"
+                      radius='8px'
+                      :fontSize="'24px'"
+                      :seed="ldbInfo.lord.address">
+                    </blockies>
                   </div>
                 </div>
-                <div class="user-avatar">
-                  <blockies
-                    ref="lordBlockies"
-                    :scale="9"
-                    radius='8px'
-                    :fontSize="'24px'"
-                    :seed="ldbInfo.lord.address">
-                  </blockies>
+              </el-col>
+            </el-row>
+          </div>
+          <div class="TTFontNormal cnt-item ldb-desc">{{ ldbInfo.desc.zh }}</div>
+          <div class="cnt-item cnt-features">
+            <div class="d-flex sm-col-flex features-container">
+              <div class="d-inline-flex lg-col-flex sm-row-flex sm-f-align-center features-price features-item">
+                <p>Price</p>
+                <div class="ldb-price text-nowrap">
+                  <span>{{ ldbInfo.chain.auction.price | weiToEth }}</span>
+                  <span>ETH</span>
                 </div>
               </div>
-            </el-col>
-          </el-row>
-        </div>
-        <div class="TTFontNormal cnt-item ldb-desc">{{ ldbInfo.desc.zh }}</div>
-        <div class="cnt-item cnt-features">
-          <div class="d-flex sm-col-flex features-container">
-            <div class="d-inline-flex lg-col-flex sm-row-flex sm-f-align-center features-price features-item">
-              <p>Price</p>
-              <div class="ldb-price text-nowrap">
-                <span>{{ ldbInfo.chain.auction.price | weiToEth }}</span>
-                <span>ETH</span>
+              <div class="inline-block features-time features-item">
+                <p>Time Left</p>
+                <div>
+                  <p class="TTFontBolder">Expires in 30 days</p>
+                </div>
+              </div>
+              <div class="v-flex lg-text-right sm-text-left features-btn features-item">
+                <ld-button
+                  v-if="showSell"
+                  theme="info"
+                  :disabled="ldbPendings.isSelling"
+                  shadow
+                  contract
+                  @click="sell">{{ ldbPendings.isSelling ? 'Selling' : 'Sell'}}</ld-button>
+
+                <ld-button
+                  v-if="showUnSell"
+                  theme="info"
+                  :disabled="ldbPendings.isCanceling"
+                  shadow
+                  contract
+                  @click="unsell">{{ ldbPendings.isCanceling ? 'Un Selling' : 'Un Sell'}}</ld-button>
+
+                <ld-button
+                  v-if="showBuy"
+                  theme="purple"
+                  :disabled="ldbPendings.isBuying"
+                  shadow
+                  contract
+                  @click="buy">
+                  <span v-if="!userInfo.address">Sign to Do</span>
+                  <span v-if="userInfo.address">{{ ldbPendings.isBuying ? 'Buying' : 'Buy' }}</span>
+                </ld-button>
               </div>
             </div>
-            <div class="inline-block features-time features-item">
-              <p>Time Left</p>
+          </div>
+          <div class="cnt-item large-margin cnt-tasks">
+            <h2>任务</h2>
+            <div class="tasks-box">
+              <div class="d-flex sm-col-flex">
+                <ld-button theme="purple-gradient" shadow class="d-inline-flex f-auto-center ldb-task-btn">
+                  <span class="line-height-1">
+                    <svg>
+                      <use xlink:href="/static/svg/icon.svg#icon-telegram"/>
+                    </svg>
+                  </span>
+                  <span>关注 EOS Telegram</span>
+                </ld-button>
+                <ld-button theme="purple-gradient" shadow class="d-inline-flex f-auto-center ldb-task-btn">
+                  <span class="line-height-1">
+                    <svg>
+                      <use xlink:href="/static/svg/icon.svg#icon-telegram"/>
+                    </svg>
+                  </span>
+                  <span>关注 EOS Telegram</span>
+                </ld-button>
+              </div>
               <div>
-                <p class="TTFontBolder">Expires in 30 days</p>
+                <ld-button theme="purple-gradient" shadow class="d-inline-flex f-auto-center ldb-task-btn">
+                  <span class="line-height-1">
+                    <svg>
+                      <use xlink:href="/static/svg/icon.svg#icon-medium"/>
+                    </svg>
+                  </span>
+                  <span>关注 EOS Medium</span>
+                </ld-button>
               </div>
             </div>
-            <div class="v-flex lg-text-right sm-text-left features-btn features-item">
-              <ld-button
-                v-if="showSell"
-                theme="info"
-                :disabled="ldbPendings.isSelling"
-                shadow
-                contract
-                @click="sell">{{ ldbPendings.isSelling ? 'Selling' : 'Sell'}}</ld-button>
-
-              <ld-button
-                v-if="showUnSell"
-                theme="info"
-                :disabled="ldbPendings.isCanceling"
-                shadow
-                contract
-                @click="unsell">{{ ldbPendings.isCanceling ? 'Un Selling' : 'Un Sell'}}</ld-button>
-
-              <ld-button
-                v-if="showBuy"
-                theme="purple"
-                :disabled="ldbPendings.isBuying"
-                shadow
-                contract
-                @click="buy">
-                <span v-if="!userInfo.address">Sign to Do</span>
-                <span v-if="userInfo.address">{{ ldbPendings.isBuying ? 'Buying' : 'Buy' }}</span>
-              </ld-button>
-            </div>
           </div>
-        </div>
-        <div class="cnt-item large-margin cnt-tasks">
-          <h2>任务</h2>
-          <div class="tasks-box">
-            <div class="d-flex sm-col-flex">
-              <ld-button theme="purple-gradient" shadow class="d-inline-flex f-auto-center ldb-task-btn">
-                <span class="line-height-1">
-                  <svg>
-                    <use xlink:href="/static/svg/icon.svg#icon-telegram"/>
-                  </svg>
-                </span>
-                <span>关注 EOS Telegram</span>
-              </ld-button>
-              <ld-button theme="purple-gradient" shadow class="d-inline-flex f-auto-center ldb-task-btn">
-                <span class="line-height-1">
-                  <svg>
-                    <use xlink:href="/static/svg/icon.svg#icon-telegram"/>
-                  </svg>
-                </span>
-                <span>关注 EOS Telegram</span>
-              </ld-button>
-            </div>
-            <div>
-              <ld-button theme="purple-gradient" shadow class="d-inline-flex f-auto-center ldb-task-btn">
-                <span class="line-height-1">
-                  <svg>
-                    <use xlink:href="/static/svg/icon.svg#icon-medium"/>
-                  </svg>
-                </span>
-                <span>关注 EOS Medium</span>
-              </ld-button>
-            </div>
-          </div>
-        </div>
-        <div class="cnt-item middle-margin cnt-candy">
-          <h3>已完成</h3>
-          <div class="history-box">
-            <div class="history-container text-nowrap">
-              <el-row class="history-item history-header finish">
-                <el-col :span="5">
-                  奖励 Candy
-                </el-col>
-                <el-col :span="5">
-                  WHEN
-                </el-col>
-                <el-col :span="7">
-                  FROM
-                </el-col>
-                <el-col :span="7">
-                  TO
-                </el-col>
-              </el-row>
-              <el-row class="history-cnt-box">
-                <el-row class="history-item history-cnt">
-                  <el-col :span="5" class="color-pink">
-                    <span>20 </span>
-                    <span class="text-upper">EOS</span>
+          <div class="cnt-item middle-margin cnt-candy">
+            <h3>已完成</h3>
+            <div class="history-box">
+              <div class="history-container text-nowrap">
+                <el-row class="history-item history-header finish">
+                  <el-col :span="5">
+                    奖励 Candy
                   </el-col>
                   <el-col :span="5">
-                    <span>1000</span>
-                    <span class="text-cap">exp</span>
+                    WHEN
                   </el-col>
-                  <el-col :span="7" class="sm-text-ellipsis">
-                    <span>关注</span>
-                    <span class="text-upper">Eos</span>
-                    <span class="text-cap">Telegram</span>
+                  <el-col :span="7">
+                    FROM
                   </el-col>
-                  <el-col :span="7" class="sm-text-ellipsis">
-                    4 months ago
+                  <el-col :span="7">
+                    TO
                   </el-col>
                 </el-row>
-                <el-row class="history-item history-cnt">
-                  <el-col :span="5" class="color-pink">
-                    <span>5 </span>
-                    <span class="text-upper">NAS</span>
-                  </el-col>
-                  <el-col :span="5">
-                    <span>500</span>
-                    <span class="text-cap">exp</span>
-                  </el-col>
-                  <el-col :span="7" class="sm-text-ellipsis">
-                    <span>关注</span>
-                    <span class="text-upper">Nebulas</span>
-                    <span class="text-cap">Twitter</span>
-                  </el-col>
-                  <el-col :span="7" class="sm-text-ellipsis">
-                    1 hours ago
-                  </el-col>
+                <el-row class="history-cnt-box">
+                  <el-row class="history-item history-cnt">
+                    <el-col :span="5" class="color-pink">
+                      <span>20 </span>
+                      <span class="text-upper">EOS</span>
+                    </el-col>
+                    <el-col :span="5">
+                      <span>1000</span>
+                      <span class="text-cap">exp</span>
+                    </el-col>
+                    <el-col :span="7" class="sm-text-ellipsis">
+                      <span>关注</span>
+                      <span class="text-upper">Eos</span>
+                      <span class="text-cap">Telegram</span>
+                    </el-col>
+                    <el-col :span="7" class="sm-text-ellipsis">
+                      4 months ago
+                    </el-col>
+                  </el-row>
+                  <el-row class="history-item history-cnt">
+                    <el-col :span="5" class="color-pink">
+                      <span>5 </span>
+                      <span class="text-upper">NAS</span>
+                    </el-col>
+                    <el-col :span="5">
+                      <span>500</span>
+                      <span class="text-cap">exp</span>
+                    </el-col>
+                    <el-col :span="7" class="sm-text-ellipsis">
+                      <span>关注</span>
+                      <span class="text-upper">Nebulas</span>
+                      <span class="text-cap">Twitter</span>
+                    </el-col>
+                    <el-col :span="7" class="sm-text-ellipsis">
+                      1 hours ago
+                    </el-col>
+                  </el-row>
                 </el-row>
-              </el-row>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="cnt-item large-margin cnt-history">
-          <h2>交易历史</h2>
-          <div class="history-box">
-            <div class="history-container text-nowrap">
-              <el-row class="history-item history-header deal">
-                <el-col :span="5">
-                  PRICE
-                </el-col>
-                <el-col :span="5">
-                  WHEN
-                </el-col>
-                <el-col :span="7">
-                  FROM
-                </el-col>
-                <el-col :span="7">
-                  TO
-                </el-col>
-              </el-row>
-              <el-row class="history-cnt-box">
-                <el-row
-                  v-if="!recordsLoading && !ldbRecords.length"
-                  class="text-center history-no-records">
-                  <p>暂无交易哦</p>
-                </el-row>
-                <el-row
-                    v-if="ldbRecords.length"
-                    v-for="record of ldbRecords"
-                    :key="record._id"
-                    class="history-item history-cnt">
-                  <el-col :span="5" class="color-pink">
-                    <span>{{ record.market[0].price | weiToEth }}</span>
-                    <span class="text-upper">ETH</span>
+          <div class="cnt-item large-margin cnt-history">
+            <h2>交易历史</h2>
+            <div class="history-box">
+              <div class="history-container text-nowrap">
+                <el-row class="history-item history-header deal">
+                  <el-col :span="5">
+                    PRICE
                   </el-col>
                   <el-col :span="5">
-                    {{ record.created_at | timeFormat }}
+                    WHEN
                   </el-col>
-                  <el-col :span="7" class="sm-text-ellipsis">
-                    {{ record.market[0].seller | splitAddress({ before: 10 }) }}
+                  <el-col :span="7">
+                    FROM
                   </el-col>
-                  <el-col :span="7" class="sm-text-ellipsis">
-                    {{ record.market[0].buyer | splitAddress({ before: 10 }) }}
+                  <el-col :span="7">
+                    TO
                   </el-col>
                 </el-row>
-              </el-row>
+                <el-row class="history-cnt-box">
+                  <el-row
+                    v-if="!recordsLoading && !ldbRecords.length"
+                    class="text-center history-no-records">
+                    <p>暂无交易哦</p>
+                  </el-row>
+                  <el-row
+                      v-if="ldbRecords.length"
+                      v-for="record of ldbRecords"
+                      :key="record._id"
+                      class="history-item history-cnt">
+                    <el-col :span="5" class="color-pink">
+                      <span>{{ record.market[0].price | weiToEth }}</span>
+                      <span class="text-upper">ETH</span>
+                    </el-col>
+                    <el-col :span="5">
+                      {{ record.created_at | timeFormat }}
+                    </el-col>
+                    <el-col :span="7" class="sm-text-ellipsis">
+                      {{ record.market[0].seller | splitAddress({ before: 10 }) }}
+                    </el-col>
+                    <el-col :span="7" class="sm-text-ellipsis">
+                      {{ record.market[0].buyer | splitAddress({ before: 10 }) }}
+                    </el-col>
+                  </el-row>
+                </el-row>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </transition>
     <Authorize
       ref="authorize"
       @pending="authorizePending"
@@ -633,7 +638,7 @@ export default {
         }
 
         // 估算 gas
-        const gas = (await NFTsCrowdsale.estimateGas(cancelAuction.name, cancelAuction.values)) || 150000
+        const gas = (await NFTsCrowdsale.estimateGas(cancelAuction.name, cancelAuction.values)) || 599999
 
         const { gasPrice } = web3Opt
 
@@ -641,7 +646,7 @@ export default {
         NFTsCrowdsale.methods(cancelAuction.name, cancelAuction.values.concat([{ gas, gasPrice }]))
           .then(tx => {
             console.log('unsell tx', tx)
-            this.checkTxEvent({ tx, action: cancelAuction.name }, () => {
+            this.checkTxEvent({ tx, action: cancelAuction.name, tokenId }, () => {
               this.$set(this.ldbPendings, 'isCanceling', false)
 
               // 改变市场状态
@@ -664,19 +669,9 @@ export default {
      * 授权市场权限的合约 pending 状态
      */
     async authorizePending ({ tx }) {
-      const finishTx = async (err) => {
-        if (err) {
-          this.errorMsg = err
-          console.log('err', err)
-          return
-        }
-        const bool = await this.$refs.authorize.checkoutAuthorize()
-        if (!bool) {
-          // 轮询 tx 状态
-          this.checkTxEvent({ tx }, finishTx)
-        }
-      }
-      this.checkTxEvent({ tx }, finishTx)
+      this.checkCrowdsaleEvent({ address: this.userInfo.address }, () => {
+        this.$refs.authorize.checkoutAuthorize()
+      })
     },
 
     /**
@@ -687,7 +682,7 @@ export default {
       this.$set(this.ldbPendings, 'isBuying', true)
 
       // 轮询 tx 状态
-      this.checkTxEvent({ tx, action }, (err) => {
+      this.checkTxEvent({ tx, action, tokenId }, (err) => {
         // 关闭 buy dialog
         this.buyModel = false
         if (err) {
@@ -724,7 +719,7 @@ export default {
       this.$set(this.ldbPendings, 'isSelling', true)
 
       // 轮询 tx 状态
-      this.checkTxEvent({ tx, action }, (err) => {
+      this.checkTxEvent({ tx, action, tokenId }, (err) => {
         // 关闭 buy dialog
         this.sellModel = false
         if (err) {
@@ -840,7 +835,7 @@ export default {
   }
   .ldb-detail-main {
     width: 100%;
-    height: inherit;
+    // height: inherit;
     overflow: hidden;
     &.dark {
       @include detail-theme('dark');

@@ -5,7 +5,7 @@
 const path = require('path')
 const fs = require('fs')
 
-const moment = require('moment')
+const { format } = require('date-fns')
 const argv = require('yargs').argv
 let env = require('./prod.env')
 
@@ -22,13 +22,13 @@ const assetsRoot = path.resolve(__dirname, '../dist')
 // const oss = fs.readFileSync(txtPath)
 // console.log('oss', oss)
 
-const timeStr = `${moment().format('YYYY-MM-DD')}_${new Date().getTime()}`
+const timeStr = `${format(new Date(), 'YYYY-MM-DD')}_${new Date().getTime()}`
 
 if (argv.env === 'testing') {
   env = require('./ropsten.env')
 }
 
-const ossPublicPath = `frontend/${env.ossFolderPath}/${timeStr}`
+const ossPublicPath = `frontend/${env.OSSFOLDERPATH}/${timeStr}`
 
 // 重写 ossPublic.json 内容，如果没有该文件，则创建新文件并插入内容
 // fs.writeFileSync(txtPath, JSON.stringify({ _ossPublicPath: ossPublicPath, assetsRoot }))
@@ -42,7 +42,7 @@ module.exports = {
 
     // Various Dev Server settings
     host: '0.0.0.0', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 80, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,

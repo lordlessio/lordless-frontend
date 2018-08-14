@@ -19,7 +19,7 @@
             class="TTFontBolder lordless-message-btn login-btn"
             theme="info"
             shadow
-            @click="relogin">ReLogin</ld-btn>
+            @click="relogin">Login</ld-btn>
         </div>
       </div>
     </div>
@@ -93,7 +93,9 @@ import LdInput from '@/components/stories/input'
 import CheckBox from '@/components/stories/checkbox'
 import Blockies from '@/components/stories/blockies'
 
-import { getUserById } from 'api'
+import { getUserByAddress } from 'api'
+
+import { metamaskMixins } from '@/mixins'
 
 import { metamaskMixins } from '@/mixins'
 
@@ -170,18 +172,16 @@ export default {
     relogin () {
       // metamask 是否被打开
       this.metamaskChoose = true
-      this[actionTypes.USER_META_LOGIN]({ cb: () => {
-        this.$emit('input', false)
-        this.$nextTick(() => {
-          this.metamaskChoose = false
-        })
+      this[actionTypes.USER_META_LOGIN]({ cb: (err) => {
+        if (!err) this.$emit('input', false)
+        this.metamaskChoose = false
       }})
     },
 
     async checkUser (address = this.account) {
       console.log('check user sign')
       this.userChecking = true
-      const res = await getUserById({ id: address })
+      const res = await getUserByAddress(address)
       if (res.code === 1000 && !res.data) this.newUser = true
       else if (res.code !== 1000) {
         console.log('error ', res.errMsg)

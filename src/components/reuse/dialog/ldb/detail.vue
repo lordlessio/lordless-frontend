@@ -4,15 +4,14 @@
       :visible.sync="detailModel"
       @open="dialogOpen"
       @close="dialogClose">
-      <Loading
+      <!-- <Loading
         :loading="loading"
         crown
         position="absolute"
         :index="99">
-      </Loading>
+      </Loading> -->
       <ldb-detail
         v-if="value"
-        v-show="!loading"
         :class="{ 'blur': blurs[1] }"
         ref="ldbDetail"
         dialog
@@ -27,7 +26,7 @@
 import SlideDialog from '@/components/stories/dialog/slider'
 import LdbDetail from '@/components/ldb/detail'
 
-import Loading from '@/components/stories/loading'
+// import Loading from '@/components/stories/loading'
 
 import { mutationTypes } from '@/store/types'
 import { mapMutations } from 'vuex'
@@ -51,7 +50,7 @@ export default {
     return {
       prevLdbId: null,
       detailModel: false,
-      loading: false,
+      // loading: false,
       tokenId: null
     }
   },
@@ -62,9 +61,9 @@ export default {
   },
   components: {
     SlideDialog,
-    LdbDetail,
+    LdbDetail
 
-    Loading
+    // Loading
   },
   methods: {
     ...mapMutations('layout', [
@@ -77,11 +76,11 @@ export default {
 
     dialogOpen () {
       setTimeout(() => {
-        if (this.prevLdbId && this.prevLdbId === this.ldbId) {
-          this.loading = false
-          this.initLoading()
-          return
-        }
+        // if (this.prevLdbId && this.prevLdbId === this.ldbId) {
+        //   this.loading = false
+        //   this.initLoading()
+        //   return
+        // }
         this.$refs.ldbDetail.init(this.ldbId)
       }, 500)
     },
@@ -91,7 +90,9 @@ export default {
      */
     dialogClose () {
       this.$emit('input', false)
-      this.$refs.ldbDetail.clearCInterval()
+      const ldbDetail = this.$refs.ldbDetail
+      console.log('-----close', ldbDetail, Boolean(ldbDetail))
+      if (ldbDetail) ldbDetail.clearCInterval()
       this[mutationTypes.LAYOUT_SET_BLURS](0)
     },
 
@@ -102,12 +103,13 @@ export default {
 
     initLoading ({ tokenId = this.tokenId }) {
       this.loading = false
-      const detail = this.$refs.ldbDetail
-      if (detail) detail.checkOwner(tokenId)
+      const ldbDetail = this.$refs.ldbDetail
+      if (ldbDetail) ldbDetail.checkOwner(tokenId)
     }
   },
   watch: {
     value (val) {
+      console.log('--------- dialog value', val)
       if (val) {
         this.loading = true
       } else {

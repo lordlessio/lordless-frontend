@@ -54,6 +54,9 @@
   .#{$media}v-flex {
     flex: 1;
   }
+  .#{$media}full-width {
+    width: 100%;
+  }
   .#{$media}inline-block {
     display: inline-block;
   }

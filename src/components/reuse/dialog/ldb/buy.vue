@@ -44,7 +44,7 @@
             </div>
           </div>
           <div class="ldb-poster-box">
-            <img-box type="span" contain :src="ldbInfo.ldbIcon.source.market"></img-box>
+            <img-box type="span" contain :src="ldbInfo.ldbIcon.source.preview | reldbIcon"></img-box>
           </div>
         </div>
         <!-- <p class="ldb-buy-markline"></p> -->
@@ -155,7 +155,7 @@ export default {
 
       // 估算 gas
       // const gas = await NFTsCrowdsale.payByEth.estimateGas(tokenId)
-      const gas = (await NFTsCrowdsale.estimateGas(payByEth.name, payByEth.values)) || 300000
+      const gas = (await NFTsCrowdsale.estimateGas(payByEth.name, payByEth.values)) || 600000
 
       // 根据链上信息购买建筑
       NFTsCrowdsale.methods(payByEth.name, payByEth.values.concat([{ gas, gasPrice, value: ldb[2] }]))
