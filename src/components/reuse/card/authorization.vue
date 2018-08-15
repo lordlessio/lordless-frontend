@@ -3,7 +3,7 @@
     <div class="ld-authorize-container">
       <div class="d-flex col-flex f-auto-center ld-authorize-top">
         <svg>
-          <use :xlink:href="`/static/svg/user/authorization.svg#${info.icon}`"/>
+          <use :xlink:href="`#${info.icon}`"/>
         </svg>
         <p>{{ info.title }}</p>
       </div>
@@ -13,7 +13,7 @@
           <span v-if="!active">Authorize</span>
           <span v-if="active" class="inline-block authorize-check-box">
             <svg>
-              <use xlink:href="/static/svg/user/authorization.svg#icon-ok"/>
+              <use xlink:href="#icon-ok"/>
             </svg>
           </span>
         </ld-btn>

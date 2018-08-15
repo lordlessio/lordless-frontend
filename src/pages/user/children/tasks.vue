@@ -6,7 +6,7 @@
         v-if="!tasks.length && !taskRewards.length && !loading"
         class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
         <svg>
-          <use xlink:href="/static/svg/user/candy.svg#icon-no-candy"/>
+          <use xlink:href="#icon-no-candy"/>
         </svg>
         <p>You have no tasks now.</p>
         <div class="d-flex f-auto-center TTFontBolder">
@@ -46,7 +46,7 @@
               v-if="!taskRewards.length && !loading"
               class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-tasks">
               <svg>
-                <use xlink:href="/static/svg/user/candy.svg#icon-no-candy"/>
+                <use xlink:href="#icon-no-candy"/>
               </svg>
               <p>You have nothing on rewarded now.</p>
               <div class="d-flex f-auto-center TTFontBolder">

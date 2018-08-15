@@ -4,10 +4,10 @@
       <div class="text-left inline-block header-logo" v-if="showLogo">
         <router-link to="/" class="inline-block">
           <svg class="inline-block">
-            <use xlink:href="/static/svg/icon.svg#icon-logo-image"/>
+            <use xlink:href="#icon-logo-image"/>
           </svg>
           <svg class="inline-block logo-text">
-            <use xlink:href="/static/svg/icon.svg#icon-logo-text"/>
+            <use xlink:href="#icon-logo-text"/>
           </svg>
         </router-link>
       </div>
@@ -17,7 +17,7 @@
           <span @click.stop="toggleHeader" class="ld-close-icon"></span>
           <router-link to="/" class="header-sm-logo">
             <svg class="inline-block">
-              <use xlink:href="/static/svg/icon.svg#icon-logo-image"/>
+              <use xlink:href="#icon-logo-image"/>
             </svg>
           </router-link>
         </span>

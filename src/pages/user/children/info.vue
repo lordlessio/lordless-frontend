@@ -40,7 +40,7 @@
                     data-clipboard-target="#user-address"
                     @mouseleave="clipLeave">
                     <svg>
-                      <use xlink:href="/static/svg/icon.svg#icon-paste"/>
+                      <use xlink:href="#icon-paste"/>
                     </svg>
                   </span>
                 </el-tooltip>
@@ -93,7 +93,7 @@
           <div class="d-flex f-align-center info-cnt-box info-home-box">
             <div class="info-home-poster">
               <svg>
-                <use xlink:href="/static/svg/icon.svg#icon-help"/>
+                <use xlink:href="#icon-help"/>
               </svg>
               <!-- <ld-img></ld-img> -->
             </div>

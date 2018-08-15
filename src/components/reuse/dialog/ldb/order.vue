@@ -58,7 +58,7 @@
               <!-- <div class="d-flex col-flex order-ldb-reward">
                 <p class="d-flex f-align-center order-tx-title">
                   <span class="inline-block order-tx-img">
-                    <img-box src="/static/img/test/tx-img.png"></img-box>
+                    <img-box src="~static/img/test/tx-img.png"></img-box>
                   </span>
                   <span>Transaction fee return</span>
                 </p>
@@ -74,23 +74,23 @@
               <span>Copy link</span>
               <span class="mar-l1 line-height-0">
                 <svg>
-                  <use xlink:href="/static/svg/icon.svg#icon-share"/>
+                  <use xlink:href="#icon-share"/>
                 </svg>
               </span>
             </ld-button>
             <ld-button theme="blue" shadow class="order-footer-btn line-height-0">
               <svg>
-                <use xlink:href="/static/svg/icon.svg#icon-facebook"/>
+                <use xlink:href="#icon-facebook"/>
               </svg>
             </ld-button>
             <ld-button theme="blue" shadow class="order-footer-btn line-height-0">
               <svg>
-                <use xlink:href="/static/svg/icon.svg#icon-twitter"/>
+                <use xlink:href="#icon-twitter"/>
               </svg>
             </ld-button>
             <ld-button theme="blue" shadow class="order-footer-btn fill line-height-0">
               <svg>
-                <use xlink:href="/static/svg/icon.svg#icon-google+"/>
+                <use xlink:href="#icon-google+"/>
               </svg>
             </ld-button>
           </div>

@@ -29,20 +29,20 @@
           :class="{ 'is-disabled': isMapMaxZoom }"
           @click.stop="changeMapZoom('plus', isMapMaxZoom)">
           <svg>
-            <use xlink:href="static/svg/map/index.svg#icon-search-plus"/>
+            <use xlink:href="#icon-search-plus"/>
           </svg>
         </span>
         <span class="inline-block color-secondary"
           :class="{ 'is-disabled': isMapMinZoom }"
           @click.stop="changeMapZoom('minus', isMapMinZoom)">
           <svg>
-            <use xlink:href="static/svg/map/index.svg#icon-search-minus"/>
+            <use xlink:href="#icon-search-minus"/>
           </svg>
         </span>
         <span class="inline-block color-secondary"
           @click.stop="$router.push('/market')">
           <svg>
-            <use xlink:href="static/svg/color_icon.svg#icon-map"/>
+            <use xlink:href="#icon-map"/>
           </svg>
         </span>
       </div>

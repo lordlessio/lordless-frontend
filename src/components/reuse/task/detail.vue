@@ -6,7 +6,7 @@
         <div class="d-flex f-align-center header-cnt-desc">
           <div class="inline-block header-coin-svg">
             <svg>
-              <use xlink:href="/static/svg/coin.svg#icon-ethereum"/>
+              <use xlink:href="#icon-ethereum"/>
             </svg>
           </div>
           <div class="v-flex inline-block header-coin-desc">
@@ -71,7 +71,7 @@
                 <div class="big-card-top">
                   <span class="big-card-svg">
                     <svg>
-                      <use xlink:href="/static/svg/user/task.svg#icon-sword"/>
+                      <use xlink:href="#icon-sword"/>
                     </svg>
                   </span>
                   <div class="card-top-cnt">

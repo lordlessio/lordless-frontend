@@ -63,7 +63,7 @@
               <span class="d-inline-flex f-align-center buy-no-balance" v-if="!enoughBalance && !buyPending">
                 <span class="inline-block buy-warning-svg">
                   <svg>
-                    <use xlink:href="/static/svg/icon.svg#icon-warning"/>
+                    <use xlink:href="#icon-warning"/>
                   </svg>
                 </span>
                 <span>Insufficient balance</span>

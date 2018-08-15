@@ -5,7 +5,7 @@
         <div class="v-flex d-flex f-align-center">
           <span class="inline-block line-height-1 activity-status-svg">
             <svg>
-              <use :xlink:href="`/static/svg/user/activity.svg#${statusSvg}`"/>
+              <use :xlink:href="`#${statusSvg}`"/>
             </svg>
           </span>
           <div class="v-flex ld-activity-desc">
@@ -22,7 +22,7 @@
             <a class="d-flex f-align-center" :href="`${ETHERSCANURL}/${tx}`" target="_blank">
               <span class="inline-block activity-view-svg">
                 <svg>
-                  <use xlink:href="/static/svg/icon.svg#icon-etherscan"/>
+                  <use xlink:href="#icon-etherscan"/>
                 </svg>
               </span>
               <span>View Details</span>

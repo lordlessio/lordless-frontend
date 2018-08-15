@@ -116,7 +116,7 @@
                 <ld-button theme="purple-gradient" shadow class="d-inline-flex f-auto-center ldb-task-btn">
                   <span class="line-height-1">
                     <svg>
-                      <use xlink:href="/static/svg/icon.svg#icon-telegram"/>
+                      <use xlink:href="#icon-telegram"/>
                     </svg>
                   </span>
                   <span>关注 EOS Telegram</span>
@@ -124,7 +124,7 @@
                 <ld-button theme="purple-gradient" shadow class="d-inline-flex f-auto-center ldb-task-btn">
                   <span class="line-height-1">
                     <svg>
-                      <use xlink:href="/static/svg/icon.svg#icon-telegram"/>
+                      <use xlink:href="#icon-telegram"/>
                     </svg>
                   </span>
                   <span>关注 EOS Telegram</span>
@@ -134,7 +134,7 @@
                 <ld-button theme="purple-gradient" shadow class="d-inline-flex f-auto-center ldb-task-btn">
                   <span class="line-height-1">
                     <svg>
-                      <use xlink:href="/static/svg/icon.svg#icon-medium"/>
+                      <use xlink:href="#icon-medium"/>
                     </svg>
                   </span>
                   <span>关注 EOS Medium</span>

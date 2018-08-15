@@ -9,6 +9,7 @@ import {
   differenceInCalendarISOYears
 } from 'date-fns'
 import store from '@/store'
+
 /**
  * 获取 data 数据类型
  * @param {Object} data 需要分析的数据

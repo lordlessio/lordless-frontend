@@ -14,9 +14,8 @@ const HtmlWebpackAssetPlugin = require('html-webpack-include-assets-plugin')
 
 const AliOssPlugin = require('webpack-alioss-plugin')
 
-const env = process.env.NODE_ENV === 'ropsten'
-  ? require('../config/ropsten.env')
-  : require('../config/prod.env')
+const env = config.build.env
+console.log(' prod config', config.build.assetsPublicPath)
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -52,7 +51,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     //   manifest: require("../dist_dll/manifest/ethereum-manifest.json")
     // }),
     new HtmlWebpackAssetPlugin({
-      assets: ['static/dll/vue.dll.js', 'static/dll/utils.dll.js', 'static/dll/mapbox.dll.js', 'static/dll/ethereum.dll.js'],
+      assets: ['static/dll/vue.dll.js', 'static/dll/utils.dll.js'],
       files: ['index.html'],
       append: false,
       hash: true
@@ -160,6 +159,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       region: process.env.LORDLESS_OSS_REGION,
       exclude: /.*\.html$/,
       enableLog: false,
+      deleteMode: false,
     })
   ]
 })

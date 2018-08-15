@@ -6,7 +6,7 @@
         v-if="!activities.length && !loading"
         class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
         <svg>
-          <use xlink:href="/static/svg/user/activity.svg#icon-action"/>
+          <use xlink:href="#icon-action"/>
         </svg>
         <p>You have no Activity now.</p>
         <div class="d-flex f-auto-center TTFontBolder">
