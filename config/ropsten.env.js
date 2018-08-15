@@ -7,7 +7,7 @@ module.exports = merge({
   NODE_ENV: '"ropsten"',
   LDBICON_ORIGIN: '"http://lordless.oss-cn-hongkong.aliyuncs.com/"',
   OSSFOLDERPATH: 'ropsten_dist',
-  BACKEND_SERVER: '"//ropstengame.lordless.io"',
+  BACKEND_SERVER: '"//ropgame.lordless.io"',
   ETHERSCANURL: '"https://ropsten.etherscan.io/tx/"',
   APPROVED_NETWORK_ID: 3,
   contract,
