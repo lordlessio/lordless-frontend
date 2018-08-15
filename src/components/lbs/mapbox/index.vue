@@ -622,7 +622,7 @@ export default {
 </script>
 
 <style lang="scss">
-  // @import '@/assets/stylus/mapbox/index.scss';
+  @import '@/assets/stylus/mapbox/index.scss';
 
   .mapbox-main-box {
     &.sm-marker {
