@@ -15,7 +15,6 @@ const HtmlWebpackAssetPlugin = require('html-webpack-include-assets-plugin')
 const AliOssPlugin = require('webpack-alioss-plugin')
 
 const env = config.build.env
-console.log(' prod config', config.build.assetsPublicPath)
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
