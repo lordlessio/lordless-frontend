@@ -6,7 +6,7 @@
         class="d-flex task-status-box">
         <div class="v-flex">
           <h2>
-            Follow EOS Telegram
+            {{ info.ldbTaskType.name }}
             <span v-if="info.status === 0" class="task-status doing">Under way</span>
             <span v-if="info.status === 1" class="task-status">Approved</span>
             <span v-if="info.status === 2" class="task-status reject">Rejected</span>
