@@ -60,7 +60,7 @@
           <div class="d-flex f-align-center info-cnt-box info-prestige-box">
             <div class="v-flex exp-progress-box">
               <div class="d-flex f-align-end exp-progress-top">
-                <span class="v-flex text-left">LEVEL {{ userLevel }}</span>
+                <span class="v-flex text-left">LEVEL {{ userInfo.level }}</span>
                 <span class="exp-text-progress">
                   <span class="exp-current">{{ userInfo.activeness }}</span>
                   <span>&nbsp;/&nbsp;</span>
@@ -101,14 +101,14 @@
               <div class="info-home-unknow" v-if="false">
                 <p>You have no home now.</p>
                 <p>Set a home you will be located there when you login.</p>
-                <ld-btn class="user-info-btn" theme="info" inverse shadow>View map now</ld-btn>
+                <ld-btn class="user-info-btn" theme="blue" inverse shadow>View map now</ld-btn>
               </div>
               <div class="info-home-know" v-if="true">
                 <p class="info-ldb-name">上海和平饭店</p>
                 <p class="text-ellipsis info-ldb-influence">87 influence</p>
                 <div class="d-flex f-align-baseline info-home-status">
                   <p class="v-flex">0.3 ETH remaining</p>
-                  <ld-btn class="user-info-btn" theme="info" inverse shadow>Go</ld-btn>
+                  <ld-btn class="user-info-btn" theme="blue" inverse shadow>Go</ld-btn>
                 </div>
               </div>
             </div>
@@ -157,7 +157,12 @@
                   </li>
                   <li class="v-flex task-current-due">
                     <h3>Due</h3>
-                    <p>10 min</p>
+                    <p>
+                      <countdown class="task-status-time" :time="new Date(overviews.currentTask.roundId.endAt) - new Date()" :interval="3000" tag="p">
+                        <!-- <template slot-scope="props">{{ parseInt(props.days) || props.hours || props.minutes || props.seconds }}{{ parseInt(props.days) ? 'd' : (props.hours ? 'h' : (props.minutes ? 'm' : props.seconds ? 's' : '')) }}</template> -->
+                        <template slot-scope="props">{{ props | formatDue }}</template>
+                      </countdown>
+                    </p>
                   </li>
                 </ul>
               </div>
@@ -180,6 +185,16 @@
                   class="d-flex f-justify-around task-completed-item">
                   <span class="v-flex text-ellipsis">{{ item.ldbTaskType.name }}</span>
                   <span class="task-completed-reward">+{{ item.executor.reward.count | sliceStr({ end: 6 }) }} <span>{{ item.reward.candy.symbol }}</span></span>
+                </li>
+                <li
+                  v-if="overviews.completeTasks.total >= overviews.ps"
+                  class="info-more">
+                  <router-link class="d-flex f-align-baseline" to="/owner/tasks">
+                    <span>More </span>
+                    <span data-type="icon">
+                      <i class="el-icon-d-arrow-right"></i>
+                    </span>
+                  </router-link>
                 </li>
               </ul>
             </div>
@@ -205,7 +220,7 @@
               <p class="card-cnt-tip">Rewards from LDB</p>
               <div class="v-flex d-flex col-flex f-auto-center card-cnt-box">
                 <p>You have no transactions</p>
-                <ld-btn class="user-info-btn" theme="info" inverse shadow>Buy a LDB</ld-btn>
+                <ld-btn class="user-info-btn" theme="blue" inverse shadow>Buy a LDB</ld-btn>
               </div>
             </div>
             <div class="v-flex d-flex col-flex assets-earnings-know" v-if="overviews.ldbEarnings.total">
@@ -227,6 +242,16 @@
                     </div>
                     <span class="earnings-item-reward">+{{ item.lord.reward.count | sliceStr({ end: 6 }) }} <span>{{ item.reward.candy.symbol }}</span></span>
                   </li>
+                  <li
+                    v-if="overviews.ldbEarnings.total >= overviews.ps"
+                    class="info-more">
+                    <router-link class="d-flex f-align-baseline" to="/owner/candy">
+                      <span>More </span>
+                      <span data-type="icon">
+                        <i class="el-icon-d-arrow-right"></i>
+                      </span>
+                    </router-link>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -237,7 +262,7 @@
               <p class="card-cnt-tip">Rewards from LDB</p>
               <div class="v-flex d-flex f-auto-center col-flex card-cnt-box">
                 <p>You have no transactions</p>
-                <ld-btn class="user-info-btn" theme="info" inverse shadow>Marketplace</ld-btn>
+                <ld-btn class="user-info-btn" theme="blue" inverse shadow>Marketplace</ld-btn>
               </div>
             </div>
             <div class="v-flex d-flex col-flex assets-recent-know" v-if="recentData.total">
@@ -257,7 +282,7 @@
                     <span class="recent-item-date">{{ recent.created_at | timeFormat }}</span>
                   </li>
                   <li
-                    v-if="recentData.total > recentData.ps"
+                    v-if="recentData.total >= recentData.ps"
                     class="info-more">
                     <router-link class="d-flex f-align-baseline" to="/owner/activity">
                       <span>More </span>
@@ -363,17 +388,13 @@ export default {
       return this.$root.$children[0].isCrowdsaleApproved
     },
 
-    userLevel () {
-      return Math.floor(Math.sqrt(this.userInfo.activeness / 10 * Math.pow(108, 2)) / 108) + 1
-    },
-
     currentActiveness () {
-      const level = Math.floor(Math.sqrt(this.userInfo.activeness / 10 * Math.pow(108, 2)) / 108)
+      const level = this.userInfo.level
       return Math.ceil(Math.pow(level * 108, 2) / Math.pow(108, 2) * 10)
     },
 
     nextActiveness () {
-      const level = Math.floor(Math.sqrt(this.userInfo.activeness / 10 * Math.pow(108, 2)) / 108) + 1
+      const level = this.userInfo.level
       return Math.ceil(Math.pow(level * 108, 2) / Math.pow(108, 2) * 10)
     }
   },
@@ -713,6 +734,9 @@ export default {
   }
   .task-current-due {
     color: #EB8785;
+    >p {
+      min-width: 110px;
+    }
   }
 
   .task-completed-know {

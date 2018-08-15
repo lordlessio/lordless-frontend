@@ -14,7 +14,7 @@ const HtmlWebpackAssetPlugin = require('html-webpack-include-assets-plugin')
 
 const AliOssPlugin = require('webpack-alioss-plugin')
 
-const env = process.env.NODE_ENV === 'testing'
+const env = process.env.NODE_ENV === 'ropsten'
   ? require('../config/ropsten.env')
   : require('../config/prod.env')
 
@@ -90,7 +90,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: process.env.NODE_ENV === 'testing'
+      filename: process.env.NODE_ENV === 'ropsten'
         ? 'index.html'
         : config.build.index,
       template: 'index.html',

@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
-    "testBuild": "node build/build.js --env testing",
+    "testBuild": "node build/build.js --env ropsten",
     "build": "node build/build.js",
     "build:dll": "npm run del:dll && webpack --config build/webpack._dll.conf.js",
     "del:dll": "rm -rf dist/dll & rm -rf dist_dll",

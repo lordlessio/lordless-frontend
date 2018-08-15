@@ -66,11 +66,11 @@
                 <span class="text-upper">{{ asset.candy.name }}</span>
               </el-col>
               <el-col :span="4">
-                <span>{{ asset.count }}</span>
+                <span>{{ asset.count | formatDecimal }}</span>
                 <span class="text-upper"> {{ asset.candy.name }}</span>
               </el-col>
               <el-col :span="5">
-                <span>{{ 1 / asset.candy.eth2TokenCount | sliceStr }}</span>
+                <span>{{ 1 / asset.candy.eth2TokenCount }}</span>
                 <span class="text-upper"> ETH</span>
               </el-col>
               <el-col :span="5">
@@ -79,7 +79,7 @@
               </el-col>
               <el-col :span="5">
                 <span>$</span>
-                <span> {{ asset.count * 0.002 }}</span>
+                <span> {{ asset.count * 0.002 | formatDecimal }}</span>
               </el-col>
             </div>
           </el-tab-pane>

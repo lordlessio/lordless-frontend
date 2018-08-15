@@ -284,6 +284,13 @@ export const sliceStr = (str, { start = 0, end = 10 } = {}) => {
   return str.toString().slice(start, end)
 }
 
+export const formatDecimal = (str, { len = 4 } = {}) => {
+  if (!str) return str
+  str = str.toString()
+  str = str.split('.')[0] + '.' + str.split('.')[1].slice(0, 4)
+  return parseFloat(str)
+}
+
 /**
  * dateFormat
  */
@@ -303,4 +310,25 @@ export const timeFormat = date => {
   else if (differenceInHours(now, new Date(date))) return `${differenceInHours(now, new Date(date))} hours ago`
   else if (differenceInMinutes(now, new Date(date))) return `${differenceInMinutes(now, new Date(date))} minutes ago`
   else return `${differenceInSeconds(now, new Date(date))} seconds ago`
+}
+
+/**
+ * formatDue
+ */
+
+export const formatDue = (obj) => {
+  const { days, hours, minutes, seconds } = obj
+  const arr = []
+  while (arr.length <= 2) {
+    if (days && days !== '00') arr.push(`${days}d`)
+    if (hours && hours !== '00') arr.push(`${hours}h`)
+    if (arr.length >= 2) break
+
+    if (minutes) arr.push(`${minutes}m`)
+    if (arr.length >= 2) break
+
+    if (seconds) arr.push(`${seconds}s`)
+    if (arr.length >= 2) break
+  }
+  return arr.join(' : ')
 }
