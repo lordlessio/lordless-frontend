@@ -16,6 +16,11 @@ module.exports = axios => {
       return axios.get('/api/user/overview', { params })
     },
 
+    // 获取用户 overview 信息
+    getUserTasks: (params) => {
+      return axios.get('/api/user/tasks', { params })
+    },
+
     // 用户 tg 认证
     putUserTgAuth: (params) => {
       return axios.put('/api/user/tgAuth', params)

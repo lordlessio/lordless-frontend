@@ -19,7 +19,7 @@ import UserDetail from '@/pages/user/_detail'
 
 import Owner from '@/pages/user'
 import OwnerInfo from '@/pages/user/children/info'
-import OwnerCandies from '@/pages/user/children/candies'
+import OwnerCandy from '@/pages/user/children/candy'
 import OwnerBuildings from '@/pages/user/children/buildings'
 import OwnerTasks from '@/pages/user/children/tasks'
 import OwnerAuthorization from '@/pages/user/children/authorization'
@@ -121,9 +121,9 @@ const router = new Router({
         {
           path: 'candy',
           name: 'Owner-candy',
-          component: OwnerCandies,
+          component: OwnerCandy,
           meta: {
-            navgation: 'candies',
+            navgation: 'candy',
             header: {
               show: false
             },

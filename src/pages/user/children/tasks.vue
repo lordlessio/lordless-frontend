@@ -32,7 +32,7 @@
                 v-for="(task, index) of tasks"
                 :key="index">
                 <task-card
-                  :taskInfo="task"
+                  :info="task"
                   @play="playTask"
                   @choose="chooseTask">
                 </task-card>
@@ -60,7 +60,7 @@
                 v-for="(task, index) of taskRewards"
                 :key="index">
                 <task-card
-                  :taskInfo="task"
+                  :info="task"
                   reward
                   @choose="chooseTask">
                 </task-card>
@@ -93,7 +93,7 @@ import LdBtn from '@/components/stories/button'
 
 import { historyState } from 'utils/tool'
 
-import { getChainLdbs } from 'api'
+import { getUserTasks } from 'api'
 import { mapState } from 'vuex'
 export default {
   data: () => {
@@ -164,14 +164,13 @@ export default {
       else this.getTaskRewards()
     },
 
-    async getTasks ({ address = this.userInfo.address, page = 1, offset = 10 } = {}) {
+    async getTasks ({ pn = 1, ps = 10 } = {}) {
       this.loading = true
       const params = {
-        page,
-        offset,
-        user: address
+        pn,
+        ps
       }
-      const res = await getChainLdbs(params)
+      const res = await getUserTasks(params)
       if (res.code === 1000) {
         const { list, total } = res.data
         this.tasks = list
@@ -180,15 +179,13 @@ export default {
       this.loading = false
     },
 
-    async getTaskRewards ({ address = this.userInfo.address, page = 1, offset = 10 } = {}) {
+    async getTaskRewards ({ pn = 1, ps = 10 } = {}) {
       this.loading = true
       const params = {
-        page,
-        offset,
-        user: address,
-        isOnAuction: false
+        pn,
+        ps
       }
-      const res = await getChainLdbs(params)
+      const res = await getUserTasks(params)
       if (res.code === 1000) {
         const { list, total } = res.data
         this.taskRewards = list

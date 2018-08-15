@@ -24,7 +24,7 @@ const assetsRoot = path.resolve(__dirname, '../dist')
 
 const timeStr = `${format(new Date(), 'YYYY-MM-DD')}_${new Date().getTime()}`
 
-if (argv.env === 'testing') {
+if (argv.env === 'ropsten') {
   env = require('./ropsten.env')
 }
 

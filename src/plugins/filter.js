@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import {
+  formatDue,
+  formatDecimal,
   sliceStr,
   splitAddress,
   reldbIcon,
@@ -15,6 +17,8 @@ Vue.filter('dateFormat', dateFormat)
 
 Vue.filter('timeFormat', timeFormat)
 
+Vue.filter('formatDecimal', formatDecimal)
+
 Vue.filter('sliceStr', sliceStr)
 
 Vue.filter('weiToEth', weiToEth)
@@ -22,3 +26,5 @@ Vue.filter('weiToEth', weiToEth)
 Vue.filter('transferCoords', transferCoords)
 
 Vue.filter('reldbIcon', reldbIcon)
+
+Vue.filter('formatDue', formatDue)

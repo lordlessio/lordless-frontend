@@ -7,17 +7,19 @@
         <div class="v-flex">
           <h2>
             Follow EOS Telegram
-            <span class="task-status">Under way</span>
+            <span v-if="info.status === 0" class="task-status doing">Under way</span>
+            <span v-if="info.status === 1" class="task-status">Approved</span>
+            <span v-if="info.status === 2" class="task-status reject">Rejected</span>
           </h2>
           <div class="ld-task-status">
             <p class="d-flex f-align-center task-status-serial">
-              <span class="line-height-0">#67854</span>
+              <span class="line-height-0"># {{ info._id }}</span>
               <span class="text-cap task-tip">Telegram</span>
             </p>
             <div class="d-flex f-align-center task-status-reward">
-              <h2 class="color-blue">+1.2 <span class="text-upper">EOS</span></h2>
+              <h2 class="color-blue">+{{ info.executor.reward.count | formatDecimal }} <span class="text-upper">{{ info.reward.candy.symbol }}</span></h2>
               <span>
-                <span>≈ 0.03</span>
+                <span>≈ {{ info.executor.reward.count / info.reward.candy.USD2TokenCount | formatDecimal }}</span>
                 <span class="text-upper">USD</span>
               </span>
             </div>
@@ -25,16 +27,16 @@
         </div>
         <div class="d-flex col-flex f-justify-between text-right task-tool-box">
           <div class="task-tool-top">
-            <p class="task-tool-status">Completed on</p>
-            <p class="task-tool-date">{{ taskInfo.created_at | dateFormat }}</p>
+            <p class="task-tool-status">{{ info.status === 0 ? 'Due on' : info.status === 1 ? 'Completed on' : 'Over due on' }}</p>
+            <p class="task-tool-date">{{ info.roundId.endAt | dateFormat }}</p>
           </div>
           <p>
-            <span class="inline-block task-svg task-play-svg" @click="$emit('play', taskInfo)">
+            <span v-if="info.status === 0" class="inline-block task-svg task-play-svg" @click="$emit('play', info)">
               <svg>
                 <use xlink:href="/static/svg/user/task.svg#icon-play"/>
               </svg>
             </span>
-            <span class="inline-block task-svg" @click="$emit('choose', taskInfo)">
+            <span class="inline-block task-svg" @click="$emit('choose', info)">
               <svg>
                 <use xlink:href="/static/svg/user/task.svg#icon-eye"/>
               </svg>
@@ -72,10 +74,10 @@
           <div class="d-flex col-flex f-justify-between text-right reward-cnt-right">
             <div class="task-tool-top">
               <p class="task-tool-status">Completed on</p>
-              <p class="task-tool-date">{{ taskInfo.created_at | dateFormat }}</p>
+              <p class="task-tool-date">{{ info.created_at | dateFormat }}</p>
             </div>
             <p>
-              <span class="inline-block task-svg" @click="$emit('choose', taskInfo)">
+              <span class="inline-block task-svg" @click="$emit('choose', info)">
                 <svg>
                   <use xlink:href="/static/svg/user/task.svg#icon-eye"/>
                 </svg>
@@ -99,7 +101,7 @@ export default {
       type: Boolean,
       default: false
     },
-    taskInfo: {
+    info: {
       type: Object,
       default: () => {
         return {}
@@ -186,7 +188,7 @@ export default {
   }
   .task-status-serial {
     margin-top: 8px;
-    font-size: 18px;
+    font-size: 16px;
     color: #999;
   }
   .task-status-reward {

@@ -97,8 +97,6 @@ import { getUserByAddress } from 'api'
 
 import { metamaskMixins } from '@/mixins'
 
-import { metamaskMixins } from '@/mixins'
-
 import { actionTypes } from '@/store/types'
 import { mapActions } from 'vuex'
 export default {
