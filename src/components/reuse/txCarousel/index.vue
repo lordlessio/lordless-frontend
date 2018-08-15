@@ -12,7 +12,7 @@
             <div class="v-flex d-flex f-justify-center sm-hidden">
               <span class="inline-block lg-mar-r1">
                 <svg>
-                  <use xlink:href="static/svg/color_icon.svg#icon-hourglass"/>
+                  <use xlink:href="#icon-hourglass"/>
                 </svg>
               </span>
               <span class="d-inline-flex col-flex f-justify-center loop-item-text">
@@ -23,7 +23,7 @@
             <div class="v-flex d-flex f-justify-center text-ellipsis">
               <span class="inline-block lg-mar-r1 sm-hidden">
                 <svg>
-                  <use xlink:href="static/svg/color_icon.svg#icon-tx"/>
+                  <use xlink:href="#icon-tx"/>
                 </svg>
               </span>
               <span class="d-inline-flex col-flex f-justify-center loop-item-text">
@@ -34,7 +34,7 @@
             <div class="v-flex d-flex f-justify-center text-ellipsis">
               <span class="inline-block lg-mar-r1 sm-hidden">
                 <svg>
-                  <use xlink:href="static/svg/color_icon.svg#icon-price"/>
+                  <use xlink:href="#icon-price"/>
                 </svg>
               </span>
               <span class="d-inline-flex col-flex f-justify-center loop-item-text">
@@ -47,7 +47,7 @@
             <div class="v-flex d-flex f-justify-center sm-hidden">
               <span class="inline-block lg-mar-r1">
                 <svg>
-                  <use xlink:href="static/svg/color_icon.svg#icon-hourglass"/>
+                  <use xlink:href="#icon-hourglass"/>
                 </svg>
               </span>
               <span class="d-inline-flex col-flex f-justify-center loop-item-text">
@@ -58,7 +58,7 @@
             <div class="v-flex d-flex f-justify-center">
               <span class="inline-block lg-mar-r1 sm-hidden">
                 <svg>
-                  <use xlink:href="static/svg/color_icon.svg#icon-tx"/>
+                  <use xlink:href="#icon-tx"/>
                 </svg>
               </span>
               <span class="d-inline-flex col-flex f-justify-center loop-item-text">
@@ -69,7 +69,7 @@
             <div class="v-flex d-flex f-justify-center">
               <span class="inline-block lg-mar-r1 sm-hidden">
                 <svg>
-                  <use xlink:href="static/svg/color_icon.svg#icon-price"/>
+                  <use xlink:href="#icon-price"/>
                 </svg>
               </span>
               <span class="d-inline-flex col-flex f-justify-center loop-item-text">
@@ -82,7 +82,7 @@
             <div class="v-flex d-flex f-justify-center sm-hidden">
               <span class="inline-block lg-mar-r1">
                 <svg>
-                  <use xlink:href="static/svg/color_icon.svg#icon-hourglass"/>
+                  <use xlink:href="#icon-hourglass"/>
                 </svg>
               </span>
               <span class="d-inline-flex col-flex f-justify-center loop-item-text">
@@ -93,7 +93,7 @@
             <div class="v-flex d-flex f-justify-center">
               <span class="inline-block lg-mar-r1 sm-hidden">
                 <svg>
-                  <use xlink:href="static/svg/color_icon.svg#icon-tx"/>
+                  <use xlink:href="#icon-tx"/>
                 </svg>
               </span>
               <span class="d-inline-flex col-flex f-justify-center loop-item-text">
@@ -104,7 +104,7 @@
             <div class="v-flex d-flex f-justify-center">
               <span class="inline-block lg-mar-r1 sm-hidden">
                 <svg>
-                  <use xlink:href="static/svg/color_icon.svg#icon-price"/>
+                  <use xlink:href="#icon-price"/>
                 </svg>
               </span>
               <span class="d-inline-flex col-flex f-justify-center loop-item-text">
@@ -117,7 +117,7 @@
             <div class="v-flex d-flex f-justify-center sm-hidden">
               <span class="inline-block lg-mar-r1">
                 <svg>
-                  <use xlink:href="static/svg/color_icon.svg#icon-hourglass"/>
+                  <use xlink:href="#icon-hourglass"/>
                 </svg>
               </span>
               <span class="d-inline-flex col-flex f-justify-center loop-item-text">
@@ -128,7 +128,7 @@
             <div class="v-flex d-flex f-justify-center">
               <span class="inline-block lg-mar-r1 sm-hidden">
                 <svg>
-                  <use xlink:href="static/svg/color_icon.svg#icon-tx"/>
+                  <use xlink:href="#icon-tx"/>
                 </svg>
               </span>
               <span class="d-inline-flex col-flex f-justify-center loop-item-text">
@@ -139,7 +139,7 @@
             <div class="v-flex d-flex f-justify-center">
               <span class="inline-block lg-mar-r1 sm-hidden">
                 <svg>
-                  <use xlink:href="static/svg/color_icon.svg#icon-price"/>
+                  <use xlink:href="#icon-price"/>
                 </svg>
               </span>
               <span class="d-inline-flex col-flex f-justify-center loop-item-text">
@@ -153,7 +153,7 @@
       <div class="d-flex f-align-center carousel-logo color-main" @click.stop="logoEvt">
         <span class="block">
           <svg>
-            <use xlink:href="static/svg/color_icon.svg#icon-marketplace"/>
+            <use xlink:href="#icon-marketplace"/>
           </svg>
         </span>
         <span class="block sm-hidden"> Marketplace</span>

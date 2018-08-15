@@ -9,10 +9,10 @@
     <aside class="d-flex lg-col-flex sm-row-flex ld-user-navgation">
       <div class="d-flex f-auto-center user-navgation-logo sm-hidden" @click="$router.push('/')">
         <svg class="logo-text">
-          <use xlink:href="/static/svg/icon.svg#icon-logo-text"/>
+          <use xlink:href="#icon-logo-text"/>
         </svg>
         <svg class="logo-image">
-          <use xlink:href="/static/svg/icon.svg#icon-logo-image"/>
+          <use xlink:href="#icon-logo-image"/>
         </svg>
       </div>
       <div class="d-flex col-flex v-flex">
@@ -26,7 +26,7 @@
             <div class="d-flex f-align-center sm-f-justify-center TTFontBolder navgation-item-cnt">
               <span class="navgation-item-icon">
                 <svg>
-                  <use :xlink:href="`/static/svg/user/icon.svg#icon-${nav.icon}_${$route.meta.navgation === nav.name.toLowerCase() ? 'selected' : 'unselected'}`"/>
+                  <use :xlink:href="`#icon-${nav.icon}_${$route.meta.navgation === nav.name.toLowerCase() ? 'selected' : 'unselected'}`"/>
                 </svg>
               </span>
               <span class="text-cap">{{ nav.name }}</span>
@@ -37,7 +37,7 @@
           <div class="d-flex f-align-center cursor-pointer navgation-item-cnt">
             <span class="navgation-item-icon">
               <svg>
-                <use xlink:href="/static/svg/user/icon.svg#icon-logout"/>
+                <use xlink:href="#icon-logout"/>
               </svg>
             </span>
             <span class="text-cap" @click="logout">Logout</span>

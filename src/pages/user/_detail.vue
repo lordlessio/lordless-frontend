@@ -29,7 +29,7 @@
                   :data-clipboard-text="user.address"
                   @mouseleave="clipLeave">
                   <svg>
-                    <use xlink:href="/static/svg/icon.svg#icon-paste"/>
+                    <use xlink:href="#icon-paste"/>
                   </svg>
                 </span>
               </el-tooltip>
@@ -55,7 +55,7 @@
                 v-if="!userLdbs.length && !loading"
                 class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-buildings">
                 <svg>
-                  <use xlink:href="/static/svg/user/building.svg#icon-no-ldb"/>
+                  <use xlink:href="#icon-no-ldb"/>
                 </svg>
                 <p>This have nothing on LDB now.</p>
               </div>
@@ -99,7 +99,7 @@
                 v-if="!userLdbs.length && !loading"
                 class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-buildings">
                 <svg>
-                  <use xlink:href="/static/svg/user/building.svg#icon-no-selling-ldb"/>
+                  <use xlink:href="#icon-no-selling-ldb"/>
                 </svg>
                 <p>There have nothing on sale now.</p>
               </div>

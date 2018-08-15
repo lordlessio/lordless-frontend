@@ -1,6 +1,6 @@
 <template>
   <div id="lordless" :class="{ 'blur': blurs[0], 'transform': appOpt.transform, 'no-transform': !appOpt.transform }">
-    <GradientSvg/>
+    <lordless-svg/>
     <Header v-bind="headerOpt"/>
     <div class="ld-main" :class="[{ 'no-header': !headerOpt.show || (headerOpt.show && headerOpt.scroll) }, { 'no-footer': !footerOpt.show }]">
       <!-- <div class="d-flex col-flex f-auto-center ld-error" v-if="web3Opt.error">
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import GradientSvg from '@/components/reuse/gradientSvg'
+import LordlessSvg from '@/components/lordlessSvg'
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
 import Relogin from '@/components/reuse/relogin'
@@ -52,7 +52,7 @@ export default {
     MsgTip,
     MetaTip,
     Relogin,
-    GradientSvg
+    LordlessSvg
   },
   computed: {
     ...mapState('layout', {

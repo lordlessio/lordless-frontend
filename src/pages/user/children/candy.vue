@@ -12,7 +12,7 @@
               shadow
               inverse>
               <svg>
-                <use xlink:href="/static/svg/user/candy.svg#icon-withdraw"/>
+                <use xlink:href="#icon-withdraw"/>
               </svg>
               <span>Withdraw</span>
             </ld-btn>
@@ -23,7 +23,7 @@
         v-if="!userAssets.length && !userRecords.length"
         class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
         <svg>
-          <use xlink:href="/static/svg/user/candy.svg#icon-no-candy"/>
+          <use xlink:href="#icon-no-candy"/>
         </svg>
         <p>You have no candy now.</p>
         <div class="d-flex f-auto-center TTFontBolder">
@@ -60,7 +60,7 @@
               <el-col :span="4" class="d-flex f-auto-center">
                 <span class="inline-block candy-coin-svg">
                   <svg>
-                    <use xlink:href="/static/svg/coin.svg#icon-ethereum"/>
+                    <use xlink:href="#icon-ethereum"/>
                   </svg>
                 </span>
                 <span class="text-upper">{{ asset.candy.name }}</span>
@@ -105,7 +105,7 @@
                   <el-col :span="4" class="d-flex f-auto-center">
                     <span class="inline-block candy-coin-svg">
                       <svg>
-                        <use xlink:href="/static/svg/coin.svg#icon-ethereum"/>
+                        <use xlink:href="#icon-ethereum"/>
                       </svg>
                     </span>
                     <span>{{ record.candy.name }}</span>
@@ -120,7 +120,7 @@
                   <el-col :span="6" class="d-flex f-align-center candy-quantity">
                     <span class="line-height-0 candy-down-svg">
                       <svg>
-                        <use :xlink:href="`/static/svg/icon.svg#${parseInt(record.status) === 1 ? 'icon-arrow-up' : 'icon-download'}`"/>
+                        <use :xlink:href="`#${parseInt(record.status) === 1 ? 'icon-arrow-up' : 'icon-download'}`"/>
                       </svg>
                     </span>
                     <span>{{ record.count }}</span>

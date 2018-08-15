@@ -28,7 +28,7 @@ if (argv.env === 'ropsten') {
   env = require('./ropsten.env')
 }
 
-const ossPublicPath = `frontend/${env.OSSFOLDERPATH}/${timeStr}`
+const ossPublicPath = `frontend/${env.OSSFOLDERPATH}/${timeStr}/`
 
 // 重写 ossPublic.json 内容，如果没有该文件，则创建新文件并插入内容
 // fs.writeFileSync(txtPath, JSON.stringify({ _ossPublicPath: ossPublicPath, assetsRoot }))

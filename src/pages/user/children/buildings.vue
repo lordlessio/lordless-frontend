@@ -6,7 +6,7 @@
         v-if="!buildings.length && !saleBuildings.length && !loading"
         class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
         <svg>
-          <use xlink:href="/static/svg/user/building.svg#icon-no-ldb"/>
+          <use xlink:href="#icon-no-ldb"/>
         </svg>
         <p>You have no building now.</p>
         <div class="d-flex f-auto-center TTFontBolder">
@@ -56,7 +56,7 @@
               v-if="!saleBuildings.length && !loading"
               class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-buildings">
               <svg>
-                <use xlink:href="/static/svg/user/building.svg#icon-no-selling-ldb"/>
+                <use xlink:href="#icon-no-selling-ldb"/>
               </svg>
               <p>You have nothing on sale now.</p>
               <div class="d-flex f-auto-center TTFontBolder">

@@ -293,6 +293,9 @@
   .#{$media}text-upper {
     text-transform: uppercase;
   }
+  .#{$media}text-line-through {
+    text-decoration: line-through;
+  }
   .#{$media}cursor-pointer {
     cursor: pointer;
   }

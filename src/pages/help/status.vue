@@ -43,7 +43,7 @@
               </div>
               <div class="sm-hidden text-center status-cnt-right">
                 <svg>
-                  <use xlink:href="/static/svg/color_icon.svg#color-icon-metamask"/>
+                  <use xlink:href="#color-icon-metamask"/>
                 </svg>
               </div>
             </div>
@@ -62,7 +62,7 @@
               </div>
               <div class="sm-hidden text-center status-cnt-right">
                 <svg>
-                  <use xlink:href="/static/svg/color_icon.svg#color-icon-ethereum"/>
+                  <use xlink:href="#color-icon-ethereum"/>
                 </svg>
               </div>
             </div>

@@ -7,7 +7,7 @@
       :class="[{ 'crown-loading': crown },  position]"
       :style="`z-index: ${index};`">
       <svg v-show="crown">
-        <use xlink:href="/static/svg/icon.svg#icon-logo-image"/>
+        <use xlink:href="#icon-logo-image"/>
       </svg>
       <slot></slot>
     </div>

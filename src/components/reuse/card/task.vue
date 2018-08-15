@@ -6,11 +6,7 @@
         class="d-flex task-status-box">
         <div class="v-flex">
           <h2>
-<<<<<<< HEAD
             {{ info.ldbTaskType.name }}
-=======
-            Follow EOS Telegram
->>>>>>> 8ade52679cde291f6558d765fd525556cc6cb50f
             <span v-if="info.status === 0" class="task-status doing">Under way</span>
             <span v-if="info.status === 1" class="task-status">Approved</span>
             <span v-if="info.status === 2" class="task-status reject">Rejected</span>
@@ -21,7 +17,7 @@
               <span class="text-cap task-tip">Telegram</span>
             </p>
             <div class="d-flex f-align-center task-status-reward">
-              <h2 class="color-blue">+{{ info.executor.reward.count | formatDecimal }} <span class="text-upper">{{ info.reward.candy.symbol }}</span></h2>
+              <h2 class="color-blue" :class="{ 'text-line-through': info.status === 2 }">+{{ info.executor.reward.count | formatDecimal }} <span class="text-upper">{{ info.reward.candy.symbol }}</span></h2>
               <span>
                 <span>≈ {{ info.executor.reward.count / info.reward.candy.USD2TokenCount | formatDecimal }}</span>
                 <span class="text-upper">USD</span>
@@ -37,12 +33,12 @@
           <p>
             <span v-if="info.status === 0" class="inline-block task-svg task-play-svg" @click="$emit('play', info)">
               <svg>
-                <use xlink:href="/static/svg/user/task.svg#icon-play"/>
+                <use xlink:href="#icon-play"/>
               </svg>
             </span>
             <span class="inline-block task-svg" @click="$emit('choose', info)">
               <svg>
-                <use xlink:href="/static/svg/user/task.svg#icon-eye"/>
+                <use xlink:href="#icon-eye"/>
               </svg>
             </span>
           </p>
@@ -83,7 +79,7 @@
             <p>
               <span class="inline-block task-svg" @click="$emit('choose', info)">
                 <svg>
-                  <use xlink:href="/static/svg/user/task.svg#icon-eye"/>
+                  <use xlink:href="#icon-eye"/>
                 </svg>
               </span>
             </p>

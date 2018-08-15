@@ -51,7 +51,7 @@
           v-if="!ldbs.length && ldbsLoading"
           class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
           <svg>
-            <use xlink:href="/static/svg/user/building.svg#icon-no-selling-ldb"/>
+            <use xlink:href="#icon-no-selling-ldb"/>
           </svg>
           <p>Market have no building now.</p>
           <div class="d-flex f-auto-center TTFontBolder">
@@ -86,12 +86,12 @@
                 <div class="d-inline-flex f-align-center auction-box">
                   <span class="icon-auction">
                     <svg>
-                      <use xlink:href="static/svg/icon.svg#icon-auction"/>
+                      <use xlink:href="#icon-auction"/>
                     </svg>
                   </span>
                   <span class="icon-sale-unit">
                     <svg>
-                      <use xlink:href="static/svg/icon.svg#icon-sale-unit"/>
+                      <use xlink:href="#icon-sale-unit"/>
                     </svg>
                   </span>
                   <span>{{ item.chain.auction.price }}</span>

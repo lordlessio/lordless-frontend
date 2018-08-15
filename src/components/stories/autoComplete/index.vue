@@ -19,7 +19,7 @@
           </i>
           <div class="d-inline-flex f-auto-center complete-icon" slot="prefix">
             <svg>
-              <use xlink:href="static/svg/icon.svg#icon-logo-image"/>
+              <use xlink:href="#icon-logo-image"/>
             </svg>
           </div>
           <template slot-scope="{ item }">
@@ -37,7 +37,7 @@
                   <div class="d-flex f-align-center popper-trending-text">
                     <span>
                       <svg class="popper-trending-svg">
-                        <use xlink:href="/static/svg/icon.svg#icon-hot"/>
+                        <use xlink:href="#icon-hot"/>
                       </svg>
                     </span>
                     <span class="popper-trending-name">{{ trend.name.zh }}</span>
