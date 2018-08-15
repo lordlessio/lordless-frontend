@@ -8,7 +8,7 @@ module.exports = {
   entry: {
     vue: ['vue', 'vue-router', 'vuex-router-sync', 'vuex', 'vue-i18n'],
     utils: ['date-fns', 'axios', 'lodash', 'clipboard', 'ethereum-blockies'],
-    mapbox: ['mapbox-gl']
+    // mapbox: ['mapbox-gl']
   },
   output: {
     path: path.join(__dirname, '../dist_dll/'),
