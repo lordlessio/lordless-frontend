@@ -43,14 +43,14 @@ const webpackConfig = merge(baseWebpackConfig, {
       context: path.join(__dirname, '../dist_dll/manifest'),
       manifest: require("../dist_dll/manifest/utils-manifest.json")
     }),
-    new webpack.DllReferencePlugin({
-      context: path.join(__dirname, '../dist_dll/manifest'),
-      manifest: require("../dist_dll/manifest/mapbox-manifest.json")
-    }),
-    new webpack.DllReferencePlugin({
-      context: path.join(__dirname, '../dist_dll/manifest'),
-      manifest: require("../dist_dll/manifest/ethereum-manifest.json")
-    }),
+    // new webpack.DllReferencePlugin({
+    //   context: path.join(__dirname, '../dist_dll/manifest'),
+    //   manifest: require("../dist_dll/manifest/mapbox-manifest.json")
+    // }),
+    // new webpack.DllReferencePlugin({
+    //   context: path.join(__dirname, '../dist_dll/manifest'),
+    //   manifest: require("../dist_dll/manifest/ethereum-manifest.json")
+    // }),
     new HtmlWebpackAssetPlugin({
       assets: ['static/dll/vue.dll.js', 'static/dll/utils.dll.js', 'static/dll/mapbox.dll.js', 'static/dll/ethereum.dll.js'],
       files: ['index.html'],
