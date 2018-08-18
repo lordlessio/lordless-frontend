@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="orderModel"
-    :custom-class="`inline-block lordless-dialog message-dialog no-header center white ${metaOpen ? 'blur' : ''}`"
+    :custom-class="`inline-block lordless-dialog message-dialog no-header transparent center ${metaOpen ? 'blur' : ''}`"
     width="100%"
     append-to-body
     center

@@ -1,163 +1,166 @@
 <template>
-  <div class="ld-task-box" :class="{ 'dialog': dialog }">
-    <div class="d-flex f-auto-center task-detail-header">
-      <div class="detail-header-cnt">
-        <h2>EOS Task Announcement</h2>
-        <div class="d-flex f-align-center header-cnt-desc">
-          <div class="inline-block header-coin-svg">
-            <svg>
-              <use xlink:href="#icon-ethereum"/>
-            </svg>
-          </div>
-          <div class="v-flex inline-block header-coin-desc">
-            <p>The most powerful infrastructure for decentralized applications</p>
-            <p class="coin-href">https://eos.io</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="task-detail-cnt">
-      <div class="container md">
-        <div class="task-status-box">
-          <div class="task-cnt-section task-status-top">
-            <h1>Follow EOS Telegram</h1>
-            <p class="d-flex f-align-center task-status-serial">
-              <span>#67854</span>
-              <span class="inline-block">·</span>
-              <span>Under way</span>
-            </p>
-            <p>
-              <span>Task detail</span>
-              <span class="task-tip">Telegram</span>
-            </p>
-            <p class="TTFontNormal">Join the Telegram of EOS official</p>
-            <ld-btn
-              class="TTFontBolder task-start-btn">
-              Getting started
-            </ld-btn>
-          </div>
-          <div class="d-flex sm-f-align-center sm-col-flex task-cnt-section task-status-bottom">
-            <div class="v-flex task-status-remaining">
-              <p>Time remaining</p>
-              <countdown class="task-status-time" :time="new Date() - new Date('2018-08-04T15:57:51.269Z')" :interval="1000" tag="p">
-                <template slot-scope="props">{{ parseInt(props.days) }}d : {{ props.hours }}h : {{ props.minutes }}m : {{ props.seconds }}s</template>
-              </countdown>
-            </div>
-            <div class="task-status-date">
-              <p>Create on</p>
-              <p>{{ new Date() | dateFormat }}</p>
-            </div>
-            <div class="task-status-date">
-              <p>Due on</p>
-              <p>{{ new Date() | dateFormat }}</p>
-            </div>
-          </div>
-        </div>
-        <div class="task-cnt-section task-rewards-box">
-          <h1>Rewards</h1>
-          <p class="TTFontBolder">If the swordman wants to claim candy or get rewards of the task from the LDB, you need to battle with the LORD. The final reward is  based on the result of the battle.</p>
-          <div class="d-flex f-justify-between sm-col-flex text-center rewards-cards-box">
-            <span class="rewards-vs-svg sm-hidden">
+  <transition name="ld-hide-fade">
+    <div v-if="taskInfo" class="ld-task-box" :class="{ 'dialog': dialog }">
+      <div class="d-flex f-auto-center task-detail-header">
+        <div class="detail-header-cnt">
+          <h2>{{ taskInfo.reward.candy.symbol }} Task Announcement</h2>
+          <div class="d-flex f-align-center header-cnt-desc">
+            <div class="inline-block header-coin-svg">
               <svg>
-                <use xlink:href="#icon-gradient-vs"/>
+                <use xlink:href="#icon-ethereum"/>
               </svg>
-            </span>
-            <div class="v-flex rewards-cards-item rewards-cards-left">
-              <div class="rewards-small-card blue">
-                <p>Total candy reward</p>
-                <p>3.76 <span class="text-upper">EOS</span></p>
+            </div>
+            <div class="v-flex inline-block header-coin-desc">
+              <p>{{ taskInfo.reward.candy.desc }}</p>
+              <p class="coin-href">{{ taskInfo.reward.candy.website }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="task-detail-cnt">
+        <div class="container md">
+          <div class="task-status-box">
+            <div class="task-cnt-section task-status-top">
+              <h1>{{ taskInfo.reward.candy.website }}</h1>
+              <p class="d-flex f-align-center task-status-serial">
+                <span>#{{ taskInfo._id }}</span>
+                <span class="inline-block">·</span>
+                <span v-if="taskInfo.status === 0">Under way</span>
+                <span v-else-if="taskInfo.status === 1">Completed</span>
+                <span v-else>Over Due</span>
+              </p>
+              <p>
+                <span>Task detail</span>
+                <span class="task-tip">Telegram</span>
+              </p>
+              <p class="TTFontNormal">Join the Telegram of EOS official</p>
+              <ld-btn
+                class="TTFontBolder task-start-btn">
+                Getting started
+              </ld-btn>
+            </div>
+            <div class="d-flex sm-f-align-center sm-col-flex task-cnt-section task-status-bottom">
+              <div class="v-flex task-status-remaining">
+                <p>Time remaining</p>
+                <countdown class="task-status-time" :time="new Date(taskInfo.entAt) - new Date()" :interval="1000" tag="p">
+                  <template slot-scope="props">{{ parseInt(props.days) }}d : {{ props.hours }}h : {{ props.minutes }}m : {{ props.seconds }}s</template>
+                </countdown>
               </div>
-              <div class="rewards-big-card red">
-                <div class="big-card-top">
-                  <span class="big-card-svg">
-                    <svg>
-                      <use xlink:href="#icon-sword"/>
-                    </svg>
-                  </span>
-                  <div class="card-top-cnt">
-                    <div class="rewards-user-avatar">
-                      <blockies
-                        :scale="12"
-                        theme="light"
-                        seed="0x4cd98f82decade2d152e256efd1f8d5a334a3e28">
-                      </blockies>
-                    </div>
-                    <p>Swordsman</p>
-                    <p>{{ '0x4cd98f82decade2d152e256efd1f8d5a334a3e28' | splitAddress }}</p>
-                    <div class="card-user-level">
-                      <p class="text-upper">LEVEL 14</p>
-                      <strong>50.4<span>%</span></strong>
-                    </div>
-                  </div>
-                </div>
-                <div class="big-card-bottom">
-                  <p class="text-upper">EOS</p>
-                  <h1>+{{ 1.89839 | sliceStr({ end: 8 }) }}</h1>
-                  <p>Prestige</p>
-                  <h1>+10</h1>
-                </div>
+              <div class="task-status-date">
+                <p>Create on</p>
+                <p>{{ new Date(taskInfo.created_at) | dateFormat }}</p>
+              </div>
+              <div class="task-status-date">
+                <p>Due on</p>
+                <p>{{ new Date(taskInfo.entAt) | dateFormat }}</p>
               </div>
             </div>
-            <div class="v-flex rewards-cards-item rewards-cards-right">
-              <div class="rewards-big-card yellow">
-                <div class="big-card-top">
-                  <span class="big-card-svg crown">
-                    <svg>
-                      <use xlink:href="#icon-crown"/>
-                    </svg>
-                  </span>
-                  <div class="card-top-cnt">
-                    <div class="rewards-user-avatar">
-                      <blockies
-                        :scale="12"
-                        theme="light"
-                        seed="0x4cd98f82decade2d152e256efd1f8d5a334a3e28">
-                      </blockies>
-                    </div>
-                    <p>LORD</p>
-                    <p>{{ '0x4cd98f82decade2d152e256efd1f8d5a334a3e28' | splitAddress }}</p>
-                    <div class="card-user-level">
-                      <p class="text-upper">LEVEL 14</p>
-                      <strong>49.6<span>%</span></strong>
+          </div>
+          <div class="task-cnt-section task-rewards-box">
+            <h1>Rewards</h1>
+            <p class="TTFontBolder">If the swordman wants to claim candy or get rewards of the task from the LDB, you need to battle with the LORD. The final reward is  based on the result of the battle.</p>
+            <div class="d-flex f-justify-between sm-col-flex text-center rewards-cards-box">
+              <span class="rewards-vs-svg sm-hidden">
+                <svg>
+                  <use xlink:href="#icon-gradient-vs"/>
+                </svg>
+              </span>
+              <div class="v-flex rewards-cards-item rewards-cards-left">
+                <div class="rewards-small-card blue">
+                  <p>Total candy reward</p>
+                  <p>{{ taskInfo.reward.count }} <span class="text-upper">{{ taskInfo.reward.candy.symbol }}</span></p>
+                </div>
+                <div class="rewards-big-card red">
+                  <div class="big-card-top">
+                    <span class="big-card-svg">
+                      <svg>
+                        <use xlink:href="#icon-sword"/>
+                      </svg>
+                    </span>
+                    <div class="card-top-cnt">
+                      <div class="rewards-user-avatar">
+                        <blockies
+                          :scale="12"
+                          theme="light"
+                          :seed="taskInfo.executor.info">
+                        </blockies>
+                      </div>
+                      <p>Swordsman</p>
+                      <p>{{ taskInfo.executor.info | splitAddress }}</p>
+                      <div class="card-user-level">
+                        <p class="text-upper">LEVEL {{ taskInfo.executor.level }}</p>
+                        <strong>{{ taskInfo.executor.reward.percentage * 100 }}<span>%</span></strong>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="big-card-bottom">
-                  <p class="text-upper">EOS</p>
-                  <h1>+{{ 1.89839 | sliceStr({ end: 8 }) }}</h1>
-                  <p>Prestige</p>
-                  <h1>+2</h1>
+                  <div class="big-card-bottom">
+                    <p class="text-upper">{{ taskInfo.reward.candy.symbol }}</p>
+                    <h1>+{{ taskInfo.executor.reward.count | formatDecimal({ len: 6 }) }}</h1>
+                    <p>Prestige</p>
+                    <h1>+{{ taskInfo.executor.activeness }}</h1>
+                  </div>
                 </div>
               </div>
-              <div class="rewards-small-card green">
-                <p>Related LDB</p>
-                <p>+20 act.</p>
+              <div class="v-flex rewards-cards-item rewards-cards-right">
+                <div class="rewards-big-card yellow">
+                  <div class="big-card-top">
+                    <span class="big-card-svg crown">
+                      <svg>
+                        <use xlink:href="#icon-crown"/>
+                      </svg>
+                    </span>
+                    <div class="card-top-cnt">
+                      <div class="rewards-user-avatar">
+                        <blockies
+                          :scale="12"
+                          theme="light"
+                          :seed="taskInfo.lord.info">
+                        </blockies>
+                      </div>
+                      <p>LORD</p>
+                      <p>{{ taskInfo.lord.info | splitAddress }}</p>
+                      <div class="card-user-level">
+                        <p class="text-upper">LEVEL {{ taskInfo.lord.level }}</p>
+                        <strong>{{ taskInfo.lord.reward.percentage * 100 }}<span>%</span></strong>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="big-card-bottom">
+                    <p class="text-upper">EOS</p>
+                    <h1>+{{ taskInfo.lord.reward.count | formatDecimal({ len: 6 }) }}</h1>
+                    <p>Prestige</p>
+                    <h1>+{{ taskInfo.lord.activeness }}</h1>
+                  </div>
+                </div>
+                <div class="rewards-small-card green">
+                  <p>Related LDB</p>
+                  <p>+{{ taskInfo.ldb.activeness }} act.</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
 import LdBtn from '@/components/stories/button'
 import Blockies from '@/components/stories/blockies'
+
+import { getTaskById } from 'api'
 export default {
   props: {
     dialog: {
       type: Boolean,
       default: false
-    },
-    taskId: {
-      type: String,
-      default: null
     }
   },
   data: () => {
     return {
-      loading: false
+      loading: false,
+      taskInfo: null
     }
   },
   components: {
@@ -165,17 +168,20 @@ export default {
     Blockies
   },
   methods: {
-    getTaskInfo ({ id = this.taskId }) {
+    /**
+     * 初始化组件
+     */
+    init (taskId) {
+      this.getTaskInfo({ taskId })
+    },
+    async getTaskInfo ({ taskId = this.taskId } = {}) {
       this.loading = true
-      console.log('--get task Info', id)
-      this.loading = false
-    }
-  },
-  watch: {
-    taskId (val) {
-      if (val) {
-        this.getTaskInfo({ id: val })
+      const res = await getTaskById({ taskId })
+      if (res.code === 1000 && res.data) {
+        this.taskInfo = res.data
       }
+      console.log('--get task Info', taskId)
+      this.loading = false
     }
   }
 }
@@ -402,7 +408,7 @@ export default {
     position: absolute;
     top: 40%;
     left: 50%;
-    transform: translate(-50%, -50%) rotate(-10deg);
+    transform: translate(-50%, -50%) rotate(-5deg);
     z-index: 1;
   }
 

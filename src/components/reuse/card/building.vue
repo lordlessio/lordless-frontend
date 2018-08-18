@@ -179,7 +179,7 @@ export default {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-image: url('~/static/svg/single/sale-bg.svg');
+    background-image: url('~static/svg/single/sale-bg.svg');
     background-size: 200%;
     background-position-x: 50%;
     background-position-y: 45%;

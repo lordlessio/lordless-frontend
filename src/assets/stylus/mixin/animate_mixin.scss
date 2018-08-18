@@ -1,1 +1,14 @@
 /* 动画函数 */
+
+@import "node_modules/mathsass/dist/math";
+
+@function spring-wobbly($t) {
+  @return -0.5 * pow(2.71828, (-6 * $t)) * (-2 * pow(2.71828, (6 * $t)) + sin(12 * $t) + 2 * cos(12 * $t));
+}
+@keyframes springMove {
+  @for $i from 0 through 100 {
+    #{$i}% {
+      left: spring-wobbly($i / 80);
+    }
+  }
+}

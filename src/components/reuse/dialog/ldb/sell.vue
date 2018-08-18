@@ -56,7 +56,7 @@
               <span class="sell-confirm" v-if="!sellPending">Sell</span>
             </ld-btn>
           </div>
-          <div class="contract-pending-tip" v-if="sellPending">
+          <div class="contract-pending-tip" v-show="sellPending">
             <p>contract is pending, waiting for few minutes</p>
           </div>
         </div>
@@ -177,9 +177,9 @@ export default {
         values: [ web3js.toWei(price), tokenId, endTime ]
       }
 
-      // 估算 gas
-      const gas = (await NFTsCrowdsale.estimateGas(newAuction.name, newAuction.values)) || 400000
-      console.log('sale -- gas', gas)
+      // 估算 gas，不准
+      // const gas = (await NFTsCrowdsale.estimateGas(newAuction.name, newAuction.values)) || 400000
+      const gas = 400000
 
       // 执行合约操作
       NFTsCrowdsale.methods(newAuction.name, newAuction.values.concat([{ gas, gasPrice }]))

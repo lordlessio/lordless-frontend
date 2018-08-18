@@ -79,7 +79,7 @@
     </div>
     <task-dialog
       v-model="detailModel"
-      :ldbId="taskInfo._id"
+      :taskId="taskInfo._id"
       @close="dialogClose">
     </task-dialog>
   </div>
@@ -206,7 +206,7 @@ export default {
       console.log('-----chooseTask', item)
       this.detailModel = true
       this.$nextTick(() => {
-        this.taksInfo = item
+        this.taskInfo = item
         historyState(`/task/${item._id}`)
       })
     },

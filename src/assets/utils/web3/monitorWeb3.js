@@ -72,6 +72,7 @@ export const monitorWeb3 = () => {
 
       // 如果 newCoinbase 存在，则证明是切换账号，或重新登陆
       if (newCoinbase) {
+        window.localStorage.setItem('currentAddress', newCoinbase)
         // 重新获取用户信息
         store.dispatch(`user/${actionTypes.USER_SET_USER_BY_TOKEN}`)
 

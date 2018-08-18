@@ -1,6 +1,6 @@
 <template>
   <div class="ldb-detail-box">
-    <LdbDetail ref="ldbDetail" theme="light"/>
+    <ldb-detail ref="ldbDetail" theme="light"/>
   </div>
 </template>
 

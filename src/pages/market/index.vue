@@ -47,70 +47,74 @@
         </div>
       </section>
       <section class="d-flex col-flex v-flex market-ldbs-box">
-        <div
-          v-if="!ldbs.length && ldbsLoading"
-          class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
-          <svg>
-            <use xlink:href="#icon-no-selling-ldb"/>
-          </svg>
-          <p>Market have no building now.</p>
-          <div class="d-flex f-auto-center TTFontBolder">
-            <span>See all ldbs in</span>
-            <span class="inline-block">
-              <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('mapbox')">Map</ld-btn>
-            </span>
-          </div>
-        </div>
-        <el-row :gutter="40" v-if="!ldbsLoading">
-          <!-- <el-col
-            v-for="(item, index) of skeletionLdbs" :key="index"
-            :sm="24" :md="8" :lg="6">
-            <skeletion-list class="skeletion-item"></skeletion-list>
-          </el-col> -->
-        </el-row>
-        <el-row :gutter="40" class="v-flex market-cnt-box" v-if="ldbs.length && ldbsLoading">
+        <el-row :gutter="40" v-if="ldbsLoading">
           <el-col
-            class="market-cnt-item"
-            v-for="ldb of ldbs" :key="ldb._id"
+            v-for="item of [1,2]" :key="item"
             :xs="24" :sm="12" :lg="8">
-            <building-card
-              :sale="ldb.chain.auction.isOnAuction"
-              :ldbInfo="ldb"
-              @choose="openDetail">
-            </building-card>
-            <!-- <div class="market-cnt-item" @click.stop="openDetail(item)">
-              <figure class="item-cards">
-                <figcaption>
-                  <img-box absolute :src="`${process.env.LDBICON_ORIGIN}${ldbInfo.ldbIcon.source.preview}`" type="span"></img-box>
-                </figcaption>
-                <div class="d-inline-flex f-align-center auction-box">
-                  <span class="icon-auction">
-                    <svg>
-                      <use xlink:href="#icon-auction"/>
-                    </svg>
-                  </span>
-                  <span class="icon-sale-unit">
-                    <svg>
-                      <use xlink:href="#icon-sale-unit"/>
-                    </svg>
-                  </span>
-                  <span>{{ item.chain.auction.price }}</span>
-                </div>
-              </figure>
-              <div class="d-flex f-align-center text-color-main item-desc">
-                <span class="crown-span">
-                  <svg>
-                    <use :xlink:href="`#icon-crown-l${item.chain.level}`"/>
-                  </svg>
-                </span>
-                <span class="text-ellipsis">{{ item.name.zh }}</span>
-                <span class="item-desc-level text-color-secondary">· {{ item.chain.level }}段</span>
-              </div>
-            </div> -->
+            <skeletion-building class="skeletion-building-item"></skeletion-building>
           </el-col>
         </el-row>
+        <transition name="ld-hide-fade">
+          <div
+            v-if="!ldbs.length && !ldbsLoading"
+            class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
+            <svg>
+              <use xlink:href="#icon-no-selling-ldb"/>
+            </svg>
+            <p>Market have no building now.</p>
+            <div class="d-flex f-auto-center TTFontBolder">
+              <span>See all ldbs in</span>
+              <span class="inline-block">
+                <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('mapbox')">Map</ld-btn>
+              </span>
+            </div>
+          </div>
+        </transition>
+        <transition name="ld-hide-fade">
+          <el-row v-show="ldbs.length && !ldbsLoading" :gutter="40" class="v-flex market-cnt-box">
+            <el-col
+              class="market-cnt-item"
+              v-for="ldb of ldbs" :key="ldb._id"
+              :xs="24" :sm="12" :lg="8">
+              <building-card
+                :sale="ldb.chain.auction.isOnAuction"
+                :ldbInfo="ldb"
+                @choose="openDetail">
+              </building-card>
+              <!-- <div class="market-cnt-item" @click.stop="openDetail(item)">
+                <figure class="item-cards">
+                  <figcaption>
+                    <img-box absolute :src="`${process.env.LDBICON_ORIGIN}${ldbInfo.ldbIcon.source.preview}`" type="span"></img-box>
+                  </figcaption>
+                  <div class="d-inline-flex f-align-center auction-box">
+                    <span class="icon-auction">
+                      <svg>
+                        <use xlink:href="#icon-auction"/>
+                      </svg>
+                    </span>
+                    <span class="icon-sale-unit">
+                      <svg>
+                        <use xlink:href="#icon-sale-unit"/>
+                      </svg>
+                    </span>
+                    <span>{{ item.chain.auction.price }}</span>
+                  </div>
+                </figure>
+                <div class="d-flex f-align-center text-color-main item-desc">
+                  <span class="crown-span">
+                    <svg>
+                      <use :xlink:href="`#icon-crown-l${item.chain.level}`"/>
+                    </svg>
+                  </span>
+                  <span class="text-ellipsis">{{ item.name.zh }}</span>
+                  <span class="item-desc-level text-color-secondary">· {{ item.chain.level }}段</span>
+                </div>
+              </div> -->
+            </el-col>
+          </el-row>
+        </transition>
         <div class="market-pagination-box">
-          <skeletion-pager v-if="!ldbsLoading"></skeletion-pager>
+          <skeletion-pager v-if="ldbsLoading"></skeletion-pager>
           <Pagination
             v-if="ldbs.length"
             class="market-pagination-pages"
@@ -143,7 +147,7 @@ import Pagination from '@/components/stories/pagination'
 import BuildingCard from '@/components/reuse/card/building'
 import LdBtn from '@/components/stories/button'
 
-// import SkeletionList from '@/components/skeletion/market_list'
+import SkeletionBuilding from '@/components/skeletion/building'
 import SkeletionPager from '@/components/skeletion/pagination'
 
 export default {
@@ -166,9 +170,6 @@ export default {
 
       // market search model
       marketSearch: '',
-
-      // skeletion options
-      // skeletionLdbs: [1, 2, 3, 4],
 
       // loading options
       ldbsLoading: true,
@@ -228,7 +229,9 @@ export default {
     Pagination,
     ImgBox,
     DetailDialog,
+
     // SkeletionList,
+    SkeletionBuilding,
     SkeletionPager
   },
   methods: {
@@ -255,7 +258,7 @@ export default {
      * 获取 ldb 列表信息
      */
     async getLdbs ({ page = 1, offset = 9, sort = this.ldbSort, order = this.ldbOrder } = {}) {
-      this.ldbsLoading = false
+      this.ldbsLoading = true
       const params = {
         isOnAuction: true,
         page,
@@ -269,7 +272,7 @@ export default {
         this.ldbs = list
         this.total = total
       }
-      this.ldbsLoading = true
+      this.ldbsLoading = false
     },
 
     sortChange (sort) {
@@ -370,9 +373,9 @@ export default {
   /*
    * skeletion style -- begin
    */
-  // .skeletion-item {
-  //   @include margin-around(0, 20px, 50px, 20px, 1.5);
-  // }
+  .skeletion-building-item {
+    margin-bottom: 50px;
+  }
   /*
    * skeletion style -- end
    */

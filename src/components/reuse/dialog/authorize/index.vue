@@ -143,9 +143,9 @@ export default {
       if (this.isInit) return true
       const browserInit = !this.browser.default
       const web3Init = !this.$root.$children[0].web3Opt.web3js.default
-      const userInit = !this.userInfo.default
-      console.log('browserInit', browserInit, web3Init, userInit)
-      if (browserInit && web3Init && userInit) {
+      // const userInit = !this.userInfo.default
+      console.log('browserInit', browserInit, web3Init)
+      if (browserInit && web3Init) {
         console.log('----------- authorize init')
         this.isInit = true
         return true

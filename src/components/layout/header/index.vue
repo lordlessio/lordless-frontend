@@ -71,7 +71,7 @@ export default {
 
     inverse: {
       type: Boolean,
-      default: true
+      default: false
     },
 
     // 是否跟随界面滚动

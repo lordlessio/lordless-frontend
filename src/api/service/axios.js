@@ -1,17 +1,15 @@
 import axios from 'axios'
-import { actionTypes } from '@/store/types'
+import { getObjStorage } from 'utils/tool'
 const instance = axios.create({
   baseURL: process.env.BACKEND_SERVER,
   timeout: 30000,
   withCredentials: true
 })
-let store
 // request
 instance.interceptors.request.use(async (res) => {
-  if (!store) store = require('@/store').default
   // set lordless-token to headers
-  const address = store.state.user.userInfo.address || store.state.web3.web3Opt.address
-  const token = await store.dispatch(`user/${actionTypes.USER_GET_TOKEN_BY_ADDRESS}`, address)
+  const address = window.localStorage.getItem('currentAddress').toLocaleLowerCase()
+  const token = getObjStorage()[address]
   res.headers['lordless-token'] = token
   return res
 }, error => {

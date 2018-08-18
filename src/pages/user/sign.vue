@@ -1,5 +1,9 @@
 <template>
-  <ld-sign></ld-sign>
+  <div class="lordless-sign-box">
+    <div class="container sign-container">
+      <ld-sign></ld-sign>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -16,15 +20,25 @@ export default {
   },
   watch: {
     userInfo (val) {
-      if (val._id) this.$router.push('/user/info')
+      // if (val._id) this.$router.push('/owner/info')
     }
   },
   mounted () {
-    if (this.userInfo._id) this.$router.push('/user/info')
+    // if (this.userInfo.address) this.$router.push('/owner/info')
   }
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+  @import '@/assets/stylus/mixin/index.scss';
+  .lordless-sign-box {
+    color: #fff;
+    background-image: linear-gradient(135deg, #5961F9, #EE9AE5);
+    @include viewport-unit('min-height', 100vh, 310px);
+  }
+  .sign-container {
+    max-width: 600px;
+    padding-top: 160px;
+    padding-bottom: 80px;
+  }
 </style>

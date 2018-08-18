@@ -287,8 +287,9 @@ export const sliceStr = (str, { start = 0, end = 10 } = {}) => {
 
 export const formatDecimal = (str, { len = 4 } = {}) => {
   if (!str) return str
+  if (len === 0) return Math.round(str)
   str = str.toString()
-  str = str.split('.')[0] + '.' + str.split('.')[1].slice(0, 4)
+  str = str.split('.')[0] + '.' + str.split('.')[1].slice(0, len)
   return parseFloat(str)
 }
 
@@ -317,19 +318,35 @@ export const timeFormat = date => {
  * formatDue
  */
 
-export const formatDue = (obj) => {
+export const formatDue = (obj, len = 2, type = 'single') => {
   const { days, hours, minutes, seconds } = obj
   const arr = []
-  while (arr.length <= 2) {
-    if (days && days !== '00') arr.push(`${days}d`)
-    if (hours && hours !== '00') arr.push(`${hours}h`)
-    if (arr.length >= 2) break
+  const symbol = {
+    single: {
+      days: 'd',
+      hours: 'h',
+      minutes: 'm',
+      seconds: 's'
+    },
+    plural: {
+      days: ' days',
+      hours: ' hours',
+      minutes: ' minutes',
+      seconds: ' seconds'
+    }
+  }
+  while (arr.length <= len) {
+    if ((days && days !== '00') || len >= 4) arr.push(`${days}${symbol[type]['days']}`)
+    if (arr.length >= len) break
 
-    if (minutes) arr.push(`${minutes}m`)
-    if (arr.length >= 2) break
+    if ((hours && hours !== '00') || len >= 3) arr.push(`${hours}${symbol[type]['hours']}`)
+    if (arr.length >= len) break
 
-    if (seconds) arr.push(`${seconds}s`)
-    if (arr.length >= 2) break
+    if ((minutes && minutes !== '00') || len >= 2) arr.push(`${minutes}${symbol[type]['minutes']}`)
+    if (arr.length >= len) break
+
+    if (seconds) arr.push(`${seconds}${symbol[type]['seconds']}`)
+    if (arr.length >= len) break
   }
   return arr.join(' : ')
 }

@@ -92,7 +92,13 @@ const router = new Router({
     {
       path: '/sign',
       name: 'lordless-sign',
-      component: Sign
+      component: Sign,
+      meta: {
+        header: {
+          fixed: true,
+          transparent: true
+        }
+      }
     },
     {
       path: '/user/:address',

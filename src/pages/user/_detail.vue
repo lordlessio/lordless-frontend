@@ -225,15 +225,17 @@ export default {
     init ({ address } = {}) {
       this.loading = true
       this.getUserInfo({ address })
-      this.getUserLdbs({ address })
     },
     async getUserInfo ({ address = this.user.address } = {}) {
       const res = await getUserByAddress(address)
       this.loading = false
-      if (res.code === 1000) {
-        if (!res.data) console.log('用户不存在')
+      if (res.code === 1000 && res.data) {
         this.user = res.data
+        this.getUserLdbs({ address: res.data.address })
+      } else {
+        this.$router.push('/')
       }
+      if (!res.data) console.log('用户不存在')
     },
     async getUserLdbs ({ address = this.user.address, isOnAuction = this.ldbTab === 'all' ? undefined : true, sort = this.ldbSort, order = this.ldbOrder, page = 1, offset = 9 } = {}) {
       const params = {
