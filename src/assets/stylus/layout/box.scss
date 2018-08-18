@@ -36,6 +36,9 @@
   width: 100%;
   max-width: 1140px;
   box-sizing: border-box;
+  &.lg {
+    max-width: 1600px;
+  }
   &.md {
     max-width: 1000px;
   }

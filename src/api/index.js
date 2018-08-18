@@ -7,6 +7,7 @@ const candy = require('./candy')
 const ethereum = require('./ethereum')
 const ldb = require('./ldb')
 const ldbIcon = require('./ldbIcon')
+const task = require('./task')
 const taskType = require('./taskType')
 const user = require('./user')
 const userAsset = require('./userAsset')
@@ -21,6 +22,7 @@ module.exports = merge(
   ldbIcon(axios),
   mapbox(axios),
   google(axios),
+  task(axios),
   taskType(axios),
   user(axios),
   userAsset(axios),

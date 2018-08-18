@@ -2,22 +2,24 @@
   <div class="d-flex user-building-box">
     <div class="d-flex v-flex col-flex user-candy-container">
       <h1 class="text-cap user-building-title">LDB</h1>
-      <div
-        v-if="!buildings.length && !saleBuildings.length && !loading"
-        class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
-        <svg>
-          <use xlink:href="#icon-no-ldb"/>
-        </svg>
-        <p>You have no building now.</p>
-        <div class="d-flex f-auto-center TTFontBolder">
-          <span>Try to buy a LDB in</span>
-          <span class="inline-block">
-            <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow>Marketplace</ld-btn>
-          </span>
+      <transition name="ld-hide-fade">
+        <div
+          v-if="!buildings.length && !saleBuildings.length && !loading"
+          class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
+          <svg>
+            <use xlink:href="#icon-no-ldb"/>
+          </svg>
+          <p>You have no building now.</p>
+          <div class="d-flex f-auto-center TTFontBolder">
+            <span>Try to buy a LDB in</span>
+            <span class="inline-block">
+              <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow>Marketplace</ld-btn>
+            </span>
+          </div>
         </div>
-      </div>
+      </transition>
       <div
-        v-if="buildings.length || saleBuildings.length"
+        v-if="loading || buildings.length || saleBuildings.length"
         class="v-flex user-building-tabs">
         <el-tabs
           v-model="buildingTab"
@@ -34,52 +36,72 @@
                 @change="changeSort">
               </ld-select>
             </div>
-            <el-row :gutter="30" class="user-buildings-cnt">
+            <el-row class="mar-t3" :gutter="30" v-if="loading">
               <el-col
-                :xs="24" :sm="12" :lg="8"
-                class="building-item"
-                v-for="(building, index) of buildings"
-                :key="index">
-                <building-card
-                  :sale="building.chain.auction.isOnAuction"
-                  :ldbInfo="building"
-                  shadow
-                  @choose="chooseBuilding">
-                </building-card>
+                v-for="item of [1,2]" :key="item"
+                :xs="24" :sm="12" :lg="8">
+                <skeletion-building class="skeletion-building-item"></skeletion-building>
               </el-col>
             </el-row>
+            <transition name="ld-hide-fade">
+              <el-row v-if="buildings.length && !loading" :gutter="30" class="user-buildings-cnt">
+                <el-col
+                  :xs="24" :sm="12" :lg="8"
+                  class="building-item"
+                  v-for="(building, index) of buildings"
+                  :key="index">
+                  <building-card
+                    :sale="building.chain.auction.isOnAuction"
+                    :ldbInfo="building"
+                    shadow
+                    @choose="chooseBuilding">
+                  </building-card>
+                </el-col>
+              </el-row>
+            </transition>
           </el-tab-pane>
           <el-tab-pane
             label="For sale"
             name="sale">
-            <div
-              v-if="!saleBuildings.length && !loading"
-              class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-buildings">
-              <svg>
-                <use xlink:href="#icon-no-selling-ldb"/>
-              </svg>
-              <p>You have nothing on sale now.</p>
-              <div class="d-flex f-auto-center TTFontBolder">
-                <span>Make the first selling transaction for your</span>
-                <span class="inline-block">
-                  <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="buildingTab = 'all'">LDB</ld-btn>
-                </span>
-              </div>
-            </div>
-            <el-row :gutter="20" class="user-buildings-cnt">
+            <el-row class="mar-t3" :gutter="30" v-if="loading">
               <el-col
-                :xs="24" :sm="12" :lg="8"
-                class="building-item"
-                v-for="(building, index) of saleBuildings"
-                :key="index">
-                <building-card
-                  :sale="building.chain.auction.isOnAuction"
-                  :ldbInfo="building"
-                  shadow
-                  @choose="chooseBuilding">
-                </building-card>
+                v-for="item of [1,2]" :key="item"
+                :xs="24" :sm="12" :lg="8">
+                <skeletion-building class="skeletion-building-item"></skeletion-building>
               </el-col>
             </el-row>
+            <transition name="ld-hide-fade">
+              <div
+                v-if="!saleBuildings.length && !loading"
+                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-buildings">
+                <svg>
+                  <use xlink:href="#icon-no-selling-ldb"/>
+                </svg>
+                <p>You have nothing on sale now.</p>
+                <div class="d-flex f-auto-center TTFontBolder">
+                  <span>Make the first selling transaction for your</span>
+                  <span class="inline-block">
+                    <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="buildingTab = 'all'">LDB</ld-btn>
+                  </span>
+                </div>
+              </div>
+            </transition>
+            <transition name="ld-hide-fade">
+              <el-row v-show="saleBuildings.length && loading" :gutter="20" class="user-buildings-cnt">
+                <el-col
+                  :xs="24" :sm="12" :lg="8"
+                  class="building-item"
+                  v-for="(building, index) of saleBuildings"
+                  :key="index">
+                  <building-card
+                    :sale="building.chain.auction.isOnAuction"
+                    :ldbInfo="building"
+                    shadow
+                    @choose="chooseBuilding">
+                  </building-card>
+                </el-col>
+              </el-row>
+            </transition>
           </el-tab-pane>
         </el-tabs>
         <Pagination
@@ -101,6 +123,8 @@
 </template>
 
 <script>
+import SkeletionBuilding from '@/components/skeletion/building'
+
 import LdSelect from '@/components/stories/select'
 import DetailDialog from '@/components/reuse/dialog/ldb/detail'
 import BuildingCard from '@/components/reuse/card/building'
@@ -115,7 +139,7 @@ export default {
   data: () => {
     return {
 
-      loading: false,
+      loading: true,
 
       // 当前 tab 区域
       buildingTab: 'all',
@@ -180,6 +204,8 @@ export default {
     }
   },
   components: {
+    SkeletionBuilding,
+
     DetailDialog,
     BuildingCard,
     Pagination,
@@ -205,6 +231,7 @@ export default {
     },
 
     async getAllBuilding ({ address = this.userInfo.address, sort = this.buildingSort, page = 1, offset = 9 } = {}) {
+      if (!address) return
       this.loading = true
       const params = {
         page,
@@ -222,6 +249,7 @@ export default {
     },
 
     async getSaleBuilding ({ address = this.userInfo.address, page = 1, offset = 9 } = {}) {
+      if (!address) return
       this.loading = true
       const params = {
         page,
@@ -297,6 +325,10 @@ export default {
         color: inherit;
       }
     }
+  }
+
+  .skeletion-building-item {
+    margin-bottom: 50px;
   }
 
   .user-building-title {

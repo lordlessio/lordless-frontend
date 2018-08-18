@@ -108,7 +108,7 @@ export default {
      * @param {String} address: 代表当前请求用户的address
      * @param {Boolean} update: 代表当前请求是否属于更新用户信息
      */
-    [actionTypes.USER_SET_USER_BY_TOKEN]: async ({ state, commit }, { update, address = '' } = {}) => {
+    [actionTypes.USER_SET_USER_BY_TOKEN]: async ({ state, commit }, { update, address = window.localStorage.getItem('currentAddress') || '' } = {}) => {
       // 如果 state[address], 代表此用户数据已存在，不需要继续请求接口
       // 如果token过期？to do ...
       address = address.toLocaleLowerCase()

@@ -1,0 +1,137 @@
+<template>
+  <div class="ldb-tx-history">
+    <div v-if="loading" class="ldb-records-skeletion">
+      <h3 class="skeletion-breath"></h3>
+      <div class="skeletion-breath">
+        <p></p>
+        <div></div>
+      </div>
+    </div>
+    <transition name="ld-hide-fade">
+      <section v-show="!loading && total" class="ldb-left-section">
+        <h3 class="d-flex f-align-baseline">Transaction history<span class="v-flex text-right cursor-pointer" @click="$emit('more')">View more</span></h3>
+        <div class="left-section-cnt ldb-tx-cnt">
+          <el-row class="ldb-tx-header">
+            <el-col :span="5">
+              Price
+            </el-col>
+            <el-col :span="7">
+              When
+            </el-col>
+            <el-col :span="6">
+              From
+            </el-col>
+            <el-col :span="6">
+              To
+            </el-col>
+          </el-row>
+          <el-row class="ldb-tx-list">
+            <!-- <el-row
+              v-if="!total"
+              class="text-center ldb-no-txs">
+              <p>暂无交易哦</p>
+            </el-row> -->
+            <el-row
+                v-if="total"
+                v-for="record of list"
+                :key="record._id"
+                class="ldb-tx-item">
+              <el-col :span="5" class="color-blue">
+                <span>{{ record.market[0].price | weiToEth }}</span>
+                <span class="text-upper">ETH</span>
+              </el-col>
+              <el-col :span="7">
+                {{ record.created_at | timeFormat }}
+              </el-col>
+              <el-col :span="6" class="sm-text-ellipsis">
+                {{ record.market[0].buyer | splitAddress({ before: 6, end: 4 }) }}
+              </el-col>
+              <el-col :span="6" class="sm-text-ellipsis">
+                {{ record.market[0].seller | splitAddress({ before: 6, end: 4 }) }}
+              </el-col>
+            </el-row>
+          </el-row>
+        </div>
+      </section>
+    </transition>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    list: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    },
+    total: {
+      type: Number,
+      default: 0
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+  @import '@/assets/stylus/mixin/index.scss';
+  // ldb-records-skeletion
+  .ldb-records-skeletion {
+    // background-color: $--skeletion-light;
+    >h3 {
+      height: 40px;
+      background-color: $--skeletion-light;
+    }
+    >div {
+      margin-top: 30px;
+      >p {
+        height: 18px;
+        background-color: $--skeletion-light;
+      }
+      >div {
+        margin-top: 15px;
+        height: 60px;
+        border-radius: 5px;
+        background-color: $--skeletion-light;
+      }
+    }
+  }
+
+  // ldb-tx-history
+
+  .ldb-tx-history {
+    margin-top: 100px;
+  }
+  .ldb-tx-cnt {
+
+  }
+  .ldb-tx-header {
+    padding-left: 35px;
+    padding-right: 35px;
+    margin-bottom: 8px;
+    color: #999;
+    font-size: 16px;
+    background-color: transparent;
+  }
+  .ldb-tx-list {
+
+  }
+  .ldb-no-txs {
+    padding: 50px 0;
+  }
+  .ldb-tx-item {
+    padding: 25px 35px;
+    font-size: 18px;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .25);
+    &:not(:first-of-type) {
+      margin-top: 25px;
+    }
+  }
+</style>

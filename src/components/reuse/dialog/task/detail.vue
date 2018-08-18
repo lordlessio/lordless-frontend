@@ -61,6 +61,9 @@ export default {
      */
     dialogOpen () {
       this.$emit('open')
+      setTimeout(() => {
+        this.$refs.taskDetail.init(this.taskId)
+      }, 500)
     },
 
     /**

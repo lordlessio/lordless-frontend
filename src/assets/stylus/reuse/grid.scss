@@ -227,6 +227,10 @@
     padding-bottom: $size * 25px;
   }
 
+  .#{$media}relative {
+    position: relative;
+  }
+
   // input
   .#{$media}lordless-input {
     display: inline-block;

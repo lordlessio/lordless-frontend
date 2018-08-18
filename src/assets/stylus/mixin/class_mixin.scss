@@ -18,7 +18,20 @@
  *   @include viewport-unit(height, 50vh);
  *   @include viewport-unit(font-size, 5vmin);
  */
- @mixin viewport-unit($property, $value, $minus: 0px) {
+@mixin viewport-unit($property, $value, $minus: 0px, $sm: 1, $lg: 1) {
+  @media screen and (max-width: 768px) {
+    @if ($sm != -1) {
+      @include viewport-unit-tool($property, $value, $minus);
+    }
+  }
+  @media screen and (min-width: 769px) {
+    @if ($lg != -1) {
+      @include viewport-unit-tool($property, $value, $minus);
+    }
+  }
+}
+
+@mixin viewport-unit-tool($property, $value, $minus: 0px) {
   #{$property}: calc(#{$value} - #{$minus});
 
   $unit: unit($value);

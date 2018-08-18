@@ -2,7 +2,7 @@
   <div id="lordless" :class="{ 'blur': blurs[0], 'transform': appOpt.transform, 'no-transform': !appOpt.transform }">
     <lordless-svg/>
     <Header v-bind="headerOpt"/>
-    <div class="ld-main" :class="[{ 'no-header': !headerOpt.show || (headerOpt.show && headerOpt.scroll) }, { 'no-footer': !footerOpt.show }]">
+    <div class="ld-main" :class="[{ 'no-header': !headerOpt.show || (headerOpt.show && (headerOpt.scroll || headerOpt.fixed)) }, { 'no-footer': !footerOpt.show }]">
       <!-- <div class="d-flex col-flex f-auto-center ld-error" v-if="web3Opt.error">
         <h1>出错啦！</h1>
         <p>{{ web3Opt.error }}</p>
@@ -39,6 +39,7 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'App',
   async created () {
+    this[actionTypes.USER_SET_USER_BY_TOKEN]()
     if (this.web3Opt.web3js.default) initWeb3()
   },
   data: () => {
@@ -91,6 +92,9 @@ export default {
   methods: {
     ...mapActions('status', [
       actionTypes.STATUS_INIT_BROSWER
+    ]),
+    ...mapActions('user', [
+      actionTypes.USER_SET_USER_BY_TOKEN
     ]),
     ...mapActions('layout', [
       actionTypes.LAYOUT_SET_MESSAGE_TIP,

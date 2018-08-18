@@ -162,15 +162,18 @@ export default {
       interval = setInterval(async () => {
         const res = await getActivityByTx({ tx })
 
+        const cbData = { data: res.data }
+        console.log('cbData', cbData)
         // 如果当前合约执行完毕，清除定时器，执行回调
         if (res.code === 1000 && res.data && !res.data.isPending) {
-          if (cb) cb()
+          if (cb) cb(cbData)
           this.clearCInterval({ index })
         } else if (res.code !== 1000) {
-          if (cb) cb(res.errorMsg)
+          cbData.err = res.errorMsg
+          if (cb) cb(cbData)
           this.clearCInterval({ index })
         } else {
-          if (cb) cb()
+          if (cb) cb(cbData)
           this.clearCInterval({ index })
         }
       }, 5000)

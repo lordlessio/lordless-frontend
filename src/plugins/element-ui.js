@@ -2,7 +2,7 @@ import Vue from 'vue'
 import {
   Container, Header, Main, Aside,
   Col, Row,
-  Tooltip, Progress, Select, Option,
+  Tooltip, Progress, Select, Option, Carousel, CarouselItem,
   Tabs, TabPane, Dialog, Autocomplete, Pagination,
   Collapse, CollapseItem
 } from 'element-ui'
@@ -28,8 +28,8 @@ Vue.use(Autocomplete)
 Vue.use(Pagination)
 
 // Vue.use(Slider)
-// Vue.use(Carousel)
-// Vue.use(CarouselItem)
+Vue.use(Carousel)
+Vue.use(CarouselItem)
 Vue.use(Collapse)
 Vue.use(CollapseItem)
 

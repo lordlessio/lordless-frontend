@@ -1,7 +1,7 @@
 <template>
   <el-container class="ld-user-box">
     <Loading
-      :loading="loading"
+      :loading="false"
       crown
       position="fixed"
       :index="99">
@@ -52,7 +52,7 @@
       <el-main class="d-flex ld-user-content">
         <div class="v-flex d-flex user-content-container">
           <transition name="owner-cnt-fade">
-            <router-view class="owner-cnt-box" v-if="!loading"></router-view>
+            <router-view class="owner-cnt-box" v-if="true"></router-view>
           </transition>
         </div>
       </el-main>
@@ -151,7 +151,7 @@ export default {
     },
 
     async checkUser () {
-      if (this.userInfo._id) {
+      if (this.userInfo.address) {
         this.loading = false
         return
       }

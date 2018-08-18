@@ -22,7 +22,6 @@ div {
 h1, h2, h3, h4, h5, h6, p, figure, figcaption, ul, li, ol, table, thead, tbody, tr, th, td {
   margin: 0;
   padding: 0;
-  font-weight: normal;
 }
 p {
   span {
@@ -30,8 +29,17 @@ p {
   }
 }
 h1, h2, h3, h4 {
-  font-family: $--font-TTNormsMedium;
+  font-family: $--font-TTNormsBold;
   font-weight: bold;
+}
+h1 {
+  @include fontSize(56px, 1.5);
+}
+h2 {
+  @include fontSize(36px, 1.2);
+}
+h3 {
+  @include fontSize(24px, 1.2);
 }
 strong {
   font-family: $--font-TTNormsBold;

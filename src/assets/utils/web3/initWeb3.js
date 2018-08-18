@@ -14,9 +14,6 @@ export const initWeb3 = async (callback) => {
   // 注册合约
   store.dispatch(`contract/${actionTypes.CONTRACT_INIT_INSTANCE}`)
 
-  // 获取本地用户
-  store.dispatch(`user/${actionTypes.USER_SET_USER_BY_TOKEN}`)
-
   if (res.error) return callback ? callback(res) : res
 
   // 监听 web3 动态
@@ -45,6 +42,13 @@ const checkWeb3 = async () => {
     res.web3js = web3js
     res.isInjected = web3js.isConnected()
     res.address = web3js.eth.defaultAccount
+
+    const currentAddress = window.localStorage.getItem('currentAddress')
+    if (currentAddress !== web3js.eth.defaultAccount) {
+      window.localStorage.setItem('currentAddress', web3js.eth.defaultAccount)
+      // 获取本地用户
+      store.dispatch(`user/${actionTypes.USER_SET_USER_BY_TOKEN}`)
+    }
 
     // 测试使用
     window.web3js = web3js

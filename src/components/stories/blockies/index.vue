@@ -19,7 +19,7 @@ export default {
     },
     radius: {
       type: String,
-      default: '15px'
+      default: '20%'
     },
     seed: {
       type: String,

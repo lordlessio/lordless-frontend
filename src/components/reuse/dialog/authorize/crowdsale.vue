@@ -123,8 +123,9 @@ export default {
           values: [ NFTsCrowdsale.address, true ]
         }
 
-        // 估算 gas
-        const gas = (await LDBNFTs.estimateGas(setApprovalForAll.name, setApprovalForAll.values)) || 300000
+        // 估算 gas,不准
+        // const gas = (await LDBNFTs.estimateGas(setApprovalForAll.name, setApprovalForAll.values)) || 300000
+        const gas = 300000
 
         // 执行合约
         LDBNFTs.methods(setApprovalForAll.name, setApprovalForAll.values.concat([{ gas, gasPrice }]))

@@ -70,7 +70,7 @@
               </span>
             </ld-btn>
           </div>
-          <div class="contract-pending-tip" v-if="buyPending">
+          <div class="contract-pending-tip" v-show="buyPending">
             <p>contract is pending, waiting for few minutes</p>
           </div>
         </div>
@@ -175,7 +175,7 @@ export default {
     value (val) {
       this.buyModel = val
       this.$emit('blurs', val)
-      if (!val) this.buyModel = false
+      if (!val) this.buyPending = false
     },
     buyModel (val) {
       this.$emit('input', val)
@@ -193,12 +193,12 @@ export default {
   .lordless-message-box {
     position: relative;
     padding: 0 0 60px;
+    overflow: hidden;
   }
   .dialog-buy-cnt {
     // transform: translateY(-150px);
     // margin-top: 50px;
     padding-top: 80px;
-    overflow: hidden;
   }
 
   /* ldb-buy-top */
