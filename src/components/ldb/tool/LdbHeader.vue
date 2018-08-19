@@ -1,7 +1,7 @@
 <template>
   <div class="ldb-header-box">
     <div v-if="loading" class="ldb-header-skeletion">
-      <div class="relative">
+      <div class="container header-container">
         <div class="header-left-skeletion">
           <div class="header-left-box-skeletion" :class="{ 'dialog': dialog }">
             <div class="header-left-container-skeletion">
@@ -43,6 +43,30 @@
       <section v-show="!loading" class="ldb-detail-header" :class="{ 'is-active': !loading}">
         <div class="absolute-full detail-header-mask"></div>
         <div class="container header-container">
+          <div class="detail-ldb-candies">
+            <div id="ldb-candies-box" class="ldb-candies-container">
+              <span class="inline-block ldb-candies-item"
+                :id="`ldb-candy-${candy.tid}`"
+                :style="`transform: translate(${candyCoords[candy.tid][0]}px, ${candyCoords[candy.tid][1]}px)`"
+                v-for="(candy, index) of candies"
+                :key="candy.tid">
+                <span
+                  class="inline-block ldb-circle-candy"
+                  :style="`animation-delay: ${index * .35}s;`"
+                  :data-num="`≈ ${(candy.ldbTaskType.priceInUSD * candy.ldbTaskType.candyType.USD2TokenCount).toFixed(4)}`"
+                  @click="receiveCandy(candy)">
+                  <svg>
+                    <use xlink:href="#ldb-candy-circle"/>
+                  </svg>
+                  <span class="inline-block ldb-candies-coin">
+                    <svg>
+                      <use :xlink:href="`#coin-${candy.ldbTaskType.candyType.symbol.toLowerCase()}`"/>
+                    </svg>
+                  </span>
+                </span>
+              </span>
+            </div>
+          </div>
           <div class="detail-header-left">
             <div class="header-left-container">
               <span class="header-left-mask"></span>
@@ -79,6 +103,9 @@
               <!-- <img src="http://lordless.oss-cn-hongkong.aliyuncs.com//lordlesstest/ldbicon/!-4-detail.jpg?x-oss-process=image/resize,w_1600"/> -->
               <ld-img absolute type="span" :src="info.ldbIcon.source.detail | reldbIcon('detail')"></ld-img>
             </div>
+            <div class="detail-ldb-level">
+              <img :src="`/static/img/ldb/ldb-level-${info.chain.popularity}.png`"/>
+            </div>
           </div>
         </div>
       </section>
@@ -90,11 +117,20 @@
 import LdBtn from '@/components/stories/button'
 import LdImg from '@/components/stories/image'
 import Blockies from '@/components/stories/blockies'
+
+import { hasClass, removeClass, addClass, transitionEvent } from 'utils/tool'
+// import { receiveTask } from 'api'
 export default {
   props: {
     info: {
       type: Object,
       default: {}
+    },
+    tasks: {
+      type: Array,
+      default: () => {
+        return []
+      }
     },
     loading: {
       type: Boolean,
@@ -105,10 +141,133 @@ export default {
       default: false
     }
   },
+  data: () => {
+    return {
+      candyCoords: {},
+      candies: []
+    }
+  },
+  watch: {
+    tasks (val, oval) {
+      if ((!oval || !oval.length) && val.length) this.getCandies(val)
+    },
+    candies (val) {
+      if (!val.length) this.getCandies()
+    }
+  },
   components: {
     LdBtn,
     LdImg,
     Blockies
+  },
+  methods: {
+    async receiveCandy (task) {
+      if (task.status !== 'processing') return
+      this.$emit('receive', task, ({ errorMsg, data }) => {
+        console.log('-errorMsg', errorMsg)
+        console.log('--- data', data)
+
+        // 获取当前 receive 糖果dom
+        const dom = document.getElementById(`ldb-candy-${task.tid}`)
+        if (!dom) return
+
+        // 获取子元素
+        const children = dom.firstChild
+        if (!children) return
+
+        // 如果接口报错
+        if (errorMsg) {
+          children.setAttribute('data-msg', errorMsg)
+          if (!hasClass('afterAnimate', dom)) {
+            // 执行动画
+            addClass('afterAnimate', dom)
+            setTimeout(() => {
+              removeClass('afterAnimate', dom)
+            }, 1000)
+          }
+          return
+        }
+        if (!data) return
+
+        // 设置当前dom鼠标形态
+        dom.style.cursor = 'no-drop'
+
+        // 屏蔽子元素鼠标事件及暂停动画
+        children.style.pointerEvents = 'none'
+        children.style.animationPlayState = 'paused'
+
+        // set 结果信息
+        children.setAttribute('data-msg', `+ ${data.executor.reward.count.toFixed(4)} ${task.ldbTaskType.candyType.symbol.toUpperCase()}`)
+
+        // 执行动画
+        addClass('animate', dom)
+
+        console.time('animate')
+        const animateFunc = () => {
+          console.timeEnd('animate')
+          setTimeout(() => {
+            // 删除当前dom
+            // dom.parentElement.removeChild(dom)
+            this.candies.map((item, index) => {
+              if (item.tid === task.tid) {
+                this.candies.splice(index, 1)
+              }
+            })
+          }, 500)
+          dom.removeEventListener(transitionEvent(), animateFunc, false)
+        }
+        dom.addEventListener(transitionEvent(), animateFunc, false)
+      })
+    },
+    getCandies (tasks = this.tasks) {
+      let allTasks = JSON.parse(JSON.stringify(tasks))
+      const candies = this.candies
+      if (candies.length) return
+      while (candies.length < 6 || !allTasks.length) {
+        allTasks.map((tasks, index) => {
+          if (candies.length >= 6) return
+          if (!tasks || !tasks.length) {
+            allTasks.splice(index, 1)
+            return false
+          }
+          candies.push(tasks[0])
+          allTasks[index].shift()
+        })
+      }
+      this.candies = candies
+      this.randomCandies(candies)
+      this.$emit('update:tasks', allTasks)
+    },
+
+    // 随机糖果坐标
+    randomCandies (candies = this.candies) {
+      const candyBox = document.getElementById('ldb-candies-box')
+      const w = candyBox.offsetWidth
+      const h = candyBox.offsetHeight
+      const diameter = 54 + 27
+      const radius = 27
+      const row = Math.floor(w / diameter)
+      const col = Math.floor(h / diameter)
+      const arr = []
+      while (arr.length < 6) {
+        const randomX = Math.floor(Math.random() * row + 0.5)
+        const randomY = Math.floor(Math.random() * col + 0.5)
+        const newCoord = [randomX, randomY]
+        arr.map(item => {
+          while (item[0] === newCoord[0] && item[1] === newCoord[1]) {
+            if (item[0] === newCoord[0]) newCoord[0] = Math.floor(Math.random() * row + 0.5)
+            else newCoord[1] = Math.floor(Math.random() * col + 0.5)
+          }
+        })
+        arr.push(newCoord)
+      }
+      const candyCoords = {}
+      arr.map((item, index) => {
+        candyCoords[candies[index].tid] = [item[0] * diameter - Math.floor(Math.random() * 2 - 1) * radius, item[1] * diameter - Math.floor(Math.random() * 2 - 1) * Math.floor(Math.random() * 5) * radius / 5]
+      })
+      console.log('---- candyCoords', candyCoords, candies)
+      this.candyCoords = candyCoords
+    }
   }
 }
 </script>
@@ -316,8 +475,127 @@ export default {
   .header-container {
     position: relative;
     max-width: 1280px;
-    overflow: hidden;
     z-index: 2;
+  }
+
+  // detail-ldb-candies
+  .detail-ldb-candies {
+    position: absolute;
+    top: 50%;
+    right: 20%;
+    width: 40%;
+    height: 25%;
+    transform: translateY(-50%);
+    z-index: 9;
+  }
+  .ldb-candies-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  @keyframes candyAnimate {
+    0% {
+      transform: translateY(-10px);
+      animation-timing-function: ease-in;
+    }
+    50% {
+      transform: translateY(10px);
+      animation-timing-function: ease-out;
+    }
+  }
+
+  @keyframes candyAfterAnimate {
+    0% {
+      transform: translate(-40%, 5px);
+      opacity: 0;
+      animation-timing-function: ease-in;
+    }
+    20% {
+      transform: translate(-40%, 0px);
+      opacity: 1;
+    }
+    50% {
+      animation-timing-function: ease-out;
+    }
+    100% {
+      transform: translate(-40%, -5px);
+      opacity: 0;
+    }
+  }
+  .ldb-candies-item {
+    position: absolute;
+    left: 0;
+    top: 0;
+    &.animate {
+      .ldb-circle-candy {
+        >svg, >span, &::before {
+          opacity: 0;
+          transition: opacity .75s ease-out;
+        }
+        &::after {
+          animation: candyAfterAnimate 1s 1;
+        }
+      }
+    }
+    &.afterAnimate {
+      .ldb-circle-candy {
+        &::after {
+          animation: candyAfterAnimate 1s 1;
+        }
+      }
+    }
+  }
+  .ldb-circle-candy {
+    position: relative;
+    width: 54px;
+    height: 54px;
+    cursor: pointer;
+    transform: translateY(-10px);
+    animation: candyAnimate 5s ease-in-out infinite;
+    will-change: transform;
+    &::before {
+      content: attr(data-num);
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      color: #EA3C53;
+    }
+    &::after {
+      content: attr(data-msg);
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      font-size: 14px;
+      white-space: nowrap;
+      transform: translateX(-40%) translateY(0);
+      opacity: 0;
+      will-change: transform;
+      color: #EA3C53;
+    }
+    >svg {
+      width: 54px;
+      height: 54px;
+    }
+    &:hover {
+      animation-play-state: paused;
+      z-index: 1;
+    }
+  }
+  .ldb-candies-coin {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 30px;
+    line-height: 0;
+    fill: #fff;
+    >svg {
+      width: 30px;
+      height: 30px;
+    }
   }
 
   // detail-header-left
@@ -475,6 +753,16 @@ export default {
     transform: translateX(100%);
     transition: transform .55s spring .25s, opacity .55s spring .25s;
     // height: calc(930px / 4 * 3);
+  }
+  .detail-ldb-level {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 33%;
+    transform: translate(20%, -25%);
+    >img {
+      width: 100%;
+    }
   }
   .detail-ldb-poster {
     position: relative;

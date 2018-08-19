@@ -218,7 +218,7 @@
                     </li>
                     <li class="v-flex task-current-due">
                       <h3>Due</h3>
-                      <p v-if="new Date(overviews.currentTask.roundId.endAt) - new Date() >= 0">
+                      <p v-if="overviews.currentTask.roundId && new Date(overviews.currentTask.roundId.endAt) - new Date() >= 0">
                         <countdown class="task-status-time" :time="new Date(overviews.currentTask.roundId.endAt) - new Date()" :interval="3000" tag="p">
                           <!-- <template slot-scope="props">{{ parseInt(props.days) || props.hours || props.minutes || props.seconds }}{{ parseInt(props.days) ? 'd' : (props.hours ? 'h' : (props.minutes ? 'm' : props.seconds ? 's' : '')) }}</template> -->
                           <template slot-scope="props">{{ props | formatDue }}</template>

@@ -114,7 +114,7 @@
           </el-row>
         </transition>
         <div class="market-pagination-box">
-          <skeletion-pager v-if="ldbsLoading"></skeletion-pager>
+          <skeletion-pager v-if="ldbsLoading && !ldbs.length"></skeletion-pager>
           <Pagination
             v-if="ldbs.length"
             class="market-pagination-pages"

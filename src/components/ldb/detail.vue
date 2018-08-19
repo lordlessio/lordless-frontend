@@ -3,7 +3,9 @@
     <ldb-header-tool
       :info="ldbInfo"
       :dialog="dialog"
-      :loading="infoLoading">
+      :tasks.sync="candyTasks"
+      :loading="infoLoading"
+      @receive="receiveCandy">
     </ldb-header-tool>
     <section class="ldb-detail-content">
       <div class="container md d-flex sm-col-flex">
@@ -98,8 +100,10 @@ import OrderDialog from '@/components/reuse/dialog/ldb/order'
 import LdbBuy from '@/components/reuse/dialog/ldb/buy'
 import LdbSell from '@/components/reuse/dialog/ldb/sell'
 
+import range from 'lodash/range'
+
 import { contractMixins, dialogMixins } from '@/mixins'
-import { getLdbById, getActivitysByTokenId, getUserPendingsByTokenId, getLdb2Round } from 'api'
+import { receiveTask, getLdbById, getActivitysByTokenId, getUserPendingsByTokenId, getLdb2Round } from 'api'
 export default {
   mixins: [ contractMixins, dialogMixins ],
   props: {
@@ -143,6 +147,8 @@ export default {
       recordsLoading: true,
 
       ldbTasks: [],
+
+      candyTasks: [],
 
       ldbTaskLoading: true,
 
@@ -232,7 +238,7 @@ export default {
      * 获取当前用户基于当前建筑的市场合约执行状态
      * @param {Object} ldbInfo 当前建筑对象
      */
-    async getUserPendings ({ ldbInfo = this.ldbIntfo } = {}) {
+    async getUserPendings ({ ldbInfo = this.ldbInfo } = {}) {
       if (!this.account) return
       const res = await getUserPendingsByTokenId({ tokenId: ldbInfo.chain.tokenId })
       if (res.code === 1000) {
@@ -312,6 +318,15 @@ export default {
         // candyLimits.push({ totalAp, limitPreRound, apCost: ldbTaskType.apCost, symbol: ldbTaskType.candyType.symbol })
       }
       this.candies = Array.from(new Set(candies))
+
+      // 过滤糖果任务
+      const filterTasks = tasks.filter(item => item.ldbTaskType.taskType === 1)
+      const candyTasks = filterTasks.map(item => {
+        const apLeft = item.apLeft
+        if (apLeft) return range(apLeft).map((round, index) => Object.assign({}, item, { tid: item._id + '_' + index }))
+        return []
+      })
+      this.candyTasks = candyTasks
       // this.candyLimits = candyLimits
     },
 
@@ -497,6 +512,25 @@ export default {
           this.checkOwner(tokenId)
         })
       })
+    },
+    /**
+     * 领取糖果事件
+     */
+    async receiveCandy ({ _id, apLeft, ldbTaskType } = {}, cb) {
+      if (!apLeft || !_id) return
+
+      // 检查登陆权限状态
+      const authorize = await this.$refs.authorize.checkoutAuthorize()
+      if (!authorize) return
+
+      const cbData = {}
+      const res = await receiveTask({ roundId: _id, ldbId: this.ldbInfo._id, candy: true })
+      if (res.code === 1000) {
+        cbData.data = res.data
+      } else {
+        cbData.errorMsg = res.errorMsg
+      }
+      return cb(cbData)
     }
   },
   mounted () {

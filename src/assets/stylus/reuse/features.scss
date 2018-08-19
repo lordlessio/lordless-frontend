@@ -194,12 +194,21 @@
 /**
  *  vue transtion style -- begin
  */
+ .ld-dialog-hide-fade-enter-active, .ld-dialog-hide-fade-leave-active {
+  opacity: 1;
+  transition: opacity .4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.ld-dialog-hide-fade-enter, .ld-dialog-hide-fade-leave-to {
+  opacity: 0;
+}
+
 .ld-hide-fade-enter-active, .ld-hide-fade-leave-active {
   opacity: 1;
   transition: opacity .4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .ld-hide-fade-enter, .ld-hide-fade-leave-to {
   opacity: 0;
+  transition-duration: 0s;
 }
 
 /**
