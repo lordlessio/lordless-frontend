@@ -62,7 +62,7 @@
               </div>
               <div class="sm-hidden text-center status-cnt-right">
                 <svg>
-                  <use xlink:href="#color-icon-ethereum"/>
+                  <use xlink:href="#color-coin-eth"/>
                 </svg>
               </div>
             </div>

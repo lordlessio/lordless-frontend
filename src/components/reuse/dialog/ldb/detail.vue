@@ -36,7 +36,7 @@ export default {
       type: Boolean,
       default: false
     },
-    ldbId: String,
+    ldbId: [String, Number],
     theme: {
       type: String,
       default: 'light'

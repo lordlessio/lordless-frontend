@@ -64,7 +64,7 @@ export default {
   props: {
 
     ldbId: {
-      type: String,
+      type: [String, Number],
       default: null
     },
 

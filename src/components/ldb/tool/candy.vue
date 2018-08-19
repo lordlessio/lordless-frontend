@@ -22,7 +22,7 @@
             :key="index">
             <span class="inline-block ldb-candy-icon">
               <svg>
-                <use xlink:href="#icon-ethereum"/>
+                <use xlink:href="#coin-eth"/>
               </svg>
             </span>
             <p class="v-flex d-flex col-flex">

@@ -171,7 +171,7 @@ export default {
         ps
       }
       const res = await getUserTasks(params)
-      if (res.code === 1000) {
+      if (res.code === 1000 && res.data) {
         const { list, total } = res.data
         this.tasks = list
         this.tTotal = total
@@ -195,10 +195,10 @@ export default {
     },
 
     pageChange (e) {
-      if (this.taskTab === 'all') {
-        this.getTasks({ page: e })
+      if (this.taskTab === 'tasks') {
+        this.getTasks({ pn: e })
       } else {
-        this.getTaskRewards({ page: e })
+        this.getTaskRewards({ pn: e })
       }
     },
 

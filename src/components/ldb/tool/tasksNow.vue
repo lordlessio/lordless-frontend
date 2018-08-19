@@ -91,7 +91,7 @@ export default {
       default: false
     },
     ldbId: {
-      type: String,
+      type: [String, Number],
       default: null
     }
   },

@@ -4,9 +4,8 @@
       class="d-flex f-align-center"
       :layout="layout"
       :total="total"
-      :current-page.sync="currentPage"
+      :current-page.sync="currentP"
       @size-change="$emit('sizeChange', $event)"
-      @current-change="$emit('currentChange', $event)"
       @prev-click="$emit('prev', $event)"
       @next-click="$emit('next', $event)">
     </el-pagination>
@@ -31,6 +30,16 @@ export default {
     currentPage: {
       type: Number,
       default: 1
+    }
+  },
+  data: (vm) => {
+    return {
+      currentP: vm.currentPage
+    }
+  },
+  watch: {
+    currentP (val) {
+      this.$emit('currentChange', val)
     }
   }
 }

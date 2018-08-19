@@ -60,7 +60,7 @@
               <el-col :span="4" class="d-flex f-auto-center">
                 <span class="inline-block candy-coin-svg">
                   <svg>
-                    <use xlink:href="#icon-ethereum"/>
+                    <use xlink:href="#coin-eth"/>
                   </svg>
                 </span>
                 <span class="text-upper">{{ asset.candy.name }}</span>
@@ -105,7 +105,7 @@
                   <el-col :span="4" class="d-flex f-auto-center">
                     <span class="inline-block candy-coin-svg">
                       <svg>
-                        <use xlink:href="#icon-ethereum"/>
+                        <use xlink:href="#coin-eth"/>
                       </svg>
                     </span>
                     <span>{{ record.candy.name }}</span>

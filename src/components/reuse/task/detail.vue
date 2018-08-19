@@ -7,7 +7,7 @@
           <div class="d-flex f-align-center header-cnt-desc">
             <div class="inline-block header-coin-svg">
               <svg>
-                <use xlink:href="#icon-ethereum"/>
+                <use xlink:href="#coin-eth"/>
               </svg>
             </div>
             <div class="v-flex inline-block header-coin-desc">
