@@ -80,7 +80,7 @@
                     <p class="TTFontNormal detail-ldb-address">{{ info.address }}</p>
                     <p class="detail-ldb-location">{{ info.chain.lng | transferCoords | sliceStr}}, {{ info.chain.lat | transferCoords | sliceStr }}</p>
                     <p class="detail-ldb-desc">静安寺，又称静安古寺，位于上海市静安区，其历史相传最早可追溯至三国孙吴赤乌十年（247年），初名沪渎重玄寺。</p>
-                    <ld-btn class="ldb-home-btn" theme="info" shadow inverse>Set as home</ld-btn>
+                    <ld-btn class="ldb-home-btn" theme="info" shadow inverse @click="setHome">Set as home</ld-btn>
                     <figcaption>
                       <div class="d-flex f-align-center detail-lord-box">
                         <blockies
@@ -119,14 +119,14 @@ import LdImg from '@/components/stories/image'
 import Blockies from '@/components/stories/blockies'
 
 import { hasClass, removeClass, addClass, transitionEvent } from 'utils/tool'
-// import { receiveTask } from 'api'
+import { setHome } from 'api'
 export default {
   props: {
     info: {
       type: Object,
       default: {}
     },
-    tasks: {
+    candyTasks: {
       type: Array,
       default: () => {
         return []
@@ -141,20 +141,20 @@ export default {
       default: false
     }
   },
-  data: () => {
+  data: (vm) => {
     return {
       candyCoords: {},
       candies: [],
-      hideCandies: 1
+      hideCandies: 1,
+      tasks: vm.candyTasks
     }
   },
   watch: {
-    tasks (val, oval) {
-      if ((!oval || !oval.length) && val.length) this.getCandies(val)
+    candyTasks (val, oval) {
+      if (val.toString() !== this.tasks.toString() && val.length) this.getCandies(val)
     },
     candies (val) {
-      console.log('---- candies ', val)
-      if (!val.length) this.getCandies()
+      if (!val.length && this.tasks.length) this.getCandies()
     }
   },
   components: {
@@ -163,6 +163,17 @@ export default {
     Blockies
   },
   methods: {
+    checkHome () {
+
+    },
+    async setHome (ldbInfo = this.info) {
+      const res = await setHome({ ldbId: ldbInfo._id })
+      if (res.code === 1000) {
+        console.log('set success')
+      } else {
+        console.log(res.errorMsg)
+      }
+    },
     async receiveCandy (task) {
       if (task.status !== 'processing') return
       this.$emit('receive', task, ({ errorMsg, data }) => {
@@ -223,21 +234,28 @@ export default {
     },
     getCandies (tasks = this.tasks) {
       let allTasks = JSON.parse(JSON.stringify(tasks))
-      const candies = this.candies
-      if (candies.length) return
-      while (candies.length < 6 || !allTasks.length) {
-        allTasks.map((tasks, index) => {
-          if (candies.length >= 6) return
-          if (!tasks || !tasks.length) {
-            allTasks.splice(index, 1)
-            return false
-          }
-          candies.push(tasks[0])
-          allTasks[index].shift()
-        })
+      const candies = []
+      // if (candies.length) return
+
+      let loop = () => {
+        while (candies.length < 6 && allTasks.length) {
+          allTasks.map((tasks, index) => {
+            if (candies.length >= 6) return
+            if (!tasks || !tasks.length) {
+              allTasks.splice(index, 1)
+              return false
+            }
+            candies.push(tasks[0])
+            allTasks[index].shift()
+          })
+        }
+        loop = null
       }
+      loop()
+      console.log('------------- candies', candies)
       this.randomCandies(candies)
-      this.$emit('update:tasks', allTasks)
+      this.tasks = allTasks
+      this.$emit('update:candyTasks', allTasks)
     },
 
     // 随机糖果坐标
@@ -250,18 +268,26 @@ export default {
       const row = Math.floor(w / diameter)
       const col = Math.floor(h / diameter)
       const arr = []
-      while (arr.length < 6) {
-        const randomX = Math.floor(Math.random() * row + 0.5)
-        const randomY = Math.floor(Math.random() * col + 0.5)
-        const newCoord = [randomX, randomY]
-        arr.map(item => {
-          while (item[0] === newCoord[0] && item[1] === newCoord[1]) {
-            if (item[0] === newCoord[0]) newCoord[0] = Math.floor(Math.random() * row + 0.5)
-            else newCoord[1] = Math.floor(Math.random() * col + 0.5)
-          }
-        })
-        arr.push(newCoord)
+      let loop = () => {
+        while (candies.length && arr.length < candies.length) {
+          const randomX = Math.floor(Math.random() * row + 0.5)
+          const randomY = Math.floor(Math.random() * col + 0.5)
+          const newCoord = [randomX, randomY]
+          arr.map(item => {
+            let cloop = () => {
+              while (item[0] === newCoord[0] && item[1] === newCoord[1]) {
+                if (item[0] === newCoord[0]) newCoord[0] = Math.floor(Math.random() * row + 0.5)
+                else newCoord[1] = Math.floor(Math.random() * col + 0.5)
+              }
+              cloop = null
+            }
+            cloop()
+          })
+          arr.push(newCoord)
+        }
+        loop = null
       }
+      loop()
       const candyCoords = {}
       arr.map((item, index) => {
         candyCoords[candies[index].tid] = [item[0] * diameter - Math.floor(Math.random() * 2 - 1) * radius, item[1] * diameter - Math.floor(Math.random() * 2 - 1) * Math.floor(Math.random() * 5) * radius / 5]
@@ -537,11 +563,22 @@ export default {
       opacity: 0;
     }
   }
+  @keyframes candiesShow {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
   .ldb-candies-item {
     position: absolute;
     left: 0;
     top: 0;
+    opacity: 0;
+    animation: candiesShow 1s 1 forwards;
     &.animate {
+      z-index: -1;
       .ldb-circle-candy {
         >svg, >span, &::before {
           opacity: 0;

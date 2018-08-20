@@ -115,10 +115,16 @@ export default {
       return !web3Opt.address
     },
 
+    unallowMetamask () {
+      const web3Opt = this.$root.$children[0].web3Opt
+      return parseInt(web3Opt.networkId) !== parseInt(process.env.APPROVED_NETWORK_ID)
+    },
+
     statusType () {
       if (this.unBrowser) return 'browser'
       else if (this.unMetamask) return 'missing'
       else if (this.lockedMetamask) return 'locked'
+      else if (this.unallowMetamask) return 'network'
       else return null
     },
 

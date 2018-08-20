@@ -1,7 +1,7 @@
 <template>
   <div class="ldb-approved-tasks">
     <div v-if="loading" class="ldb-approved-skeletion">
-      <h3 class="skeletion-breath"></h3>
+      <!-- <h3 class="skeletion-breath"></h3> -->
       <div class="skeletion-breath">
         <p>
           <span></span>
@@ -21,7 +21,8 @@
             <el-col
               class="sm-mar-t5 text-center approved-tasks-item"
               :span="24">
-              <p class="approved-card-tip" v-if="approvedTask">{{ approvedTask.executor.info.nickName || (approvedTask.executor.info._id | splitAddress({ before: 4, end: 2 })) }} just completed a new task</p>
+              <p class="approved-card-tip" v-if="approvedTask && approvedTask.executor.info.nickName">{{ approvedTask.executor.info.nickName }} just completed a new task</p>
+              <p class="approved-card-tip" v-else-if="approvedTask && !approvedTask.executor.info.nickName">{{ approvedTask.executor.info._id | splitAddress({ before: 4, end: 2 }) }} just completed a new task</p>
               <figure id="approved-item-container" class="approved-item-container">
                 <div class="d-flex f-auto-center approved-task-header">
                   <span class="inline-block">
@@ -91,7 +92,7 @@ export default {
   },
   methods: {
     async getApprovedTask (ldbId = this.ldbId) {
-      if (!ldbId) return
+      if (!ldbId && ldbId !== 0) return
       const res = await getApprovedTaskByLdbId(ldbId, { taskId: this.approvedTask ? this.approvedTask._id : undefined })
       if (res.code === 1000 && res.data) {
         this.approvedTask = res.data
@@ -137,10 +138,10 @@ export default {
   @import '@/assets/stylus/mixin/index.scss';
   // ldb-approved-skeletion
   .ldb-approved-skeletion {
-    >h3 {
-      height: 40px;
-      background-color: $--skeletion-light;
-    }
+    // >h3 {
+    //   height: 40px;
+    //   background-color: $--skeletion-light;
+    // }
     >div {
       padding: 50px 30px 40px;
       margin-top: 30px;

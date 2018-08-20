@@ -140,9 +140,7 @@ export default {
       this.receiveLoading = true
       const res = await receiveTask({ roundId: _id, ldbId })
       if (res.code === 1000 && res.data) {
-        setTimeout(() => {
-          window.open(`${location.origin}/task/${res.data._id}`)
-        })
+        this.$router.push(`/task/${res.data._id}`)
       }
       this.receiveLoading = false
     }
@@ -250,13 +248,15 @@ export default {
   }
   .tasks-now-detail {
     margin-left: 25px;
+    max-width: 150px;
     >p {
       font-size: 18px;
-      word-break: break-all;
+      // word-break: break-all;
     }
   }
   .tasks-now-rewards {
     margin-top: 18px;
+    white-space: nowrap;
     >p {
       font-size: 24px;
       &:first-of-type {

@@ -133,7 +133,7 @@ export default {
   },
   mounted () {
     console.log('this.web3Opt', this.web3Opt)
-    document.getElementById('outside-loading').style = 'display: none'
+    // document.getElementById('outside-loading').style = 'display: none'
     this.$nextTick(() => this[actionTypes.STATUS_INIT_BROSWER]())
   }
 }

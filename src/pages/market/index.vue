@@ -437,12 +437,12 @@ export default {
     >span {
       display: inline-block;
     }
-    .icon-auction {
-      margin-right: 4px;
-      width: 15px;
-      height: 15px;
-      fill: $--main-color;
-    }
+    // .icon-auction {
+    //   margin-right: 4px;
+    //   width: 15px;
+    //   height: 15px;
+    //   fill: $--main-color;
+    // }
     // .icon-sale-unit {
     //   margin-right: 2px;
     //   width: 6px;

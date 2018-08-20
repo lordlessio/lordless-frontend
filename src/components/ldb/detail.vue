@@ -3,7 +3,7 @@
     <ldb-header-tool
       :info="ldbInfo"
       :dialog="dialog"
-      :tasks.sync="candyTasks"
+      :candyTasks.sync="candyTasks"
       :loading="infoLoading"
       @receive="receiveCandy">
     </ldb-header-tool>
@@ -192,9 +192,11 @@ export default {
         this.checkCrowdsale(this.ldbInfo.chain.tokenId, val)
       }
     },
-    account (val) {
+    account (val, oval) {
+      if (!oval) return
       this.initContractStatus()
       if (val) {
+        this.getLdbTasks({ userId: val })
         this.checkOwner(this.ldbInfo.chain.tokenId)
         this.getUserPendings()
       }
@@ -297,7 +299,7 @@ export default {
      */
     async getLdbTasks ({ ldbId = this.ldbInfo._id, userId = this.userInfo.address }) {
       this.ldbTaskLoading = true
-      const res = await getLdb2Round({ ldbId, userId })
+      const res = await getLdb2Round({ ldbId })
       if (res.code === 1000 && res.data) {
         this.ldbTasks = res.data
         this.getCandyByTasks(res.data)
@@ -322,10 +324,11 @@ export default {
       // 过滤糖果任务
       const filterTasks = tasks.filter(item => item.ldbTaskType.taskType === 1)
       const candyTasks = filterTasks.map(item => {
-        const apLeft = item.apLeft
-        if (apLeft) return range(apLeft).map((round, index) => Object.assign({}, item, { tid: item._id + '_' + index }))
+        const countLeft = item.countLeft
+        if (countLeft) return range(countLeft).map((round, index) => Object.assign({}, item, { tid: item._id + '_' + index }))
         return []
       })
+      console.log('candyTasks', candyTasks)
       this.candyTasks = candyTasks
       // this.candyLimits = candyLimits
     },
@@ -516,8 +519,8 @@ export default {
     /**
      * 领取糖果事件
      */
-    async receiveCandy ({ _id, apLeft, ldbTaskType } = {}, cb) {
-      if (!apLeft || !_id) return
+    async receiveCandy ({ _id, countLeft, ldbTaskType } = {}, cb) {
+      if (!countLeft || !_id) return
 
       // 检查登陆权限状态
       const authorize = await this.$refs.authorize.checkoutAuthorize()

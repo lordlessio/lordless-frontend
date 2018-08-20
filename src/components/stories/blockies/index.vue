@@ -83,9 +83,7 @@ export default {
       this.$refs.blockies.appendChild(icon)
     },
     reset () {
-      while (this.$refs.blockies.firstChild) {
-        this.$refs.blockies.removeChild(this.$refs.blockies.firstChild)
-      }
+      this.$refs.blockies.removeChild(this.$refs.blockies.firstChild)
       this.init()
     },
     jumpFunc () {

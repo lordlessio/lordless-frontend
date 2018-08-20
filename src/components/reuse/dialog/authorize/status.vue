@@ -5,7 +5,7 @@
       <p>{{ infos[type].content }}</p>
       <p>New here?Read our guide on getting started.</p>
       <ld-btn theme="info" class="TTFontBolder lordless-message-btn" @click="$router.push('/status')">Read guide</ld-btn>
-      <img-box class="authorize-status-img" :center="false" :src="infos[type].imgUrl"></img-box>
+      <img-box class="authorize-status-img" :sType="infos[type].sType" :center="false" :src="infos[type].imgUrl"></img-box>
     </div>
   </div>
 </template>
@@ -26,17 +26,26 @@ export default {
         missing: {
           title: 'MetaMask is Missing',
           content: 'Install MetaMask in your browser extension market.',
-          imgUrl: '/static/img/status/status-metamask-addon.png'
+          imgUrl: '/static/img/status/status-metamask-addon.png',
+          sType: 'width'
         },
         locked: {
           title: 'Your MetaMask is locked',
           content: 'Open MetaMask and follow the instructions to unlock it.',
-          imgUrl: '/static/img/status/status-metamask-addon.png'
+          imgUrl: '/static/img/status/status-metamask-addon.png',
+          sType: 'width'
+        },
+        network: {
+          title: 'MetaMask network is unallow',
+          content: 'Open MetaMask and Choose right network.',
+          imgUrl: '/static/img/status/status-main-network.png',
+          sType: 'height'
         },
         browser: {
           title: 'Your browser is unsupported',
           content: 'You need to use Chrome or Firefox which allows you to use MetaMask.',
-          imgUrl: '/static/img/status/status-borwser.png'
+          imgUrl: '/static/img/status/status-borwser.png',
+          sType: 'width'
         }
       }
     }
@@ -73,6 +82,7 @@ export default {
     .authorize-status-img {
       margin: 0 auto;
       width: 90%;
+      max-height: 400px;
     }
   }
 </style>

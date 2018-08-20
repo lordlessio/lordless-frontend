@@ -10,7 +10,7 @@ module.exports = axios => {
 
     // 根据 ldbId 或者 userId 获取任务
     getLdb2Round: (params) => {
-      return axios.get('/api/listLdb2Round', params)
+      return axios.get('/api/listLdb2Round', { params })
     },
 
     // 根据 ldbId 获取最近完成的任务

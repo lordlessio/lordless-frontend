@@ -884,9 +884,6 @@ export default {
     box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, .1);
     @include width(100%, 1, -2);
   }
-  .exp-progress-box {
-
-  }
   .exp-progress-top {
     font-size: 20px;
   }
@@ -997,11 +994,6 @@ export default {
 
   // user-task-box
 
-  .info-task-section {
-    // .info-cnt-box {
-    //   height: 250px;
-    // }
-  }
   .task-candy-progress {
     width: 140px;
     height: 140px;
@@ -1045,9 +1037,6 @@ export default {
     }
   }
 
-  .task-completed-know {
-
-  }
   .task-completed-cnt {
     color: #999;
   }
@@ -1066,9 +1055,7 @@ export default {
   }
 
   // info-assets-section
-  .info-assets-section {
 
-  }
   .estimated-cnt-box {
     color: #4E47D3;
     >h1 {
@@ -1079,9 +1066,7 @@ export default {
       @include margin('top', 15px, 1);
     }
   }
-  .assets-earnings-know {
 
-  }
   .earnings-list-item {
     color: #999;
     @include margin('top', 10px, 1);
