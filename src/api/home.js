@@ -12,7 +12,7 @@ module.exports = axios => {
     },
 
     // 根据 user 获取 home
-    home: (params) => {
+    getHome: (params) => {
       return axios.get('/api/home', { params })
     }
   }

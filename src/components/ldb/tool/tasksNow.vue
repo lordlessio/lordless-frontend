@@ -53,10 +53,10 @@
                         class="tasks-now-btn"
                         theme="blue"
                         shadow
-                        :disabled="receiveLoading || !item.apLeft"
+                        :disabled="receiveLoading || !item.countLeft"
                         :loading="receiveLoading"
                         @click="receive(item)">
-                        {{ item.apLeft ? 'Apply' : 'Applied' }}
+                        {{ item.countLeft ? 'Apply' : 'Applied' }}
                       </ld-btn>
                     </div>
                   </div>

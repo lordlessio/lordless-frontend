@@ -1,9 +1,9 @@
 <template>
-  <div class="ldb-header-box">
-    <div v-if="loading" class="ldb-header-skeletion" :class="{ 'dialog': dialog }">
+  <div class="ldb-header-box" :class="{ 'dialog': dialog }">
+    <div v-if="loading" class="ldb-header-skeletion">
       <div class="container header-container">
         <div class="header-left-skeletion">
-          <div class="header-left-box-skeletion" :class="{ 'dialog': dialog }">
+          <div class="header-left-box-skeletion">
             <div class="header-left-container-skeletion">
               <div class="left-skeletion-container">
                 <h1></h1>
@@ -40,7 +40,7 @@
       </div>
     </div>
     <transition name="ld-hide-fade">
-      <section v-if="!loading && info" class="ldb-detail-header" :class="{ 'is-active': !loading, 'dialog': dialog }">
+      <section v-if="!loading && info" class="ldb-detail-header" :class="{ 'is-active': !loading }">
         <div class="absolute-full detail-header-mask"></div>
         <div class="container header-container">
           <div class="detail-ldb-candies">
@@ -70,7 +70,7 @@
           <div class="detail-header-left">
             <div class="header-left-container">
               <span class="header-left-mask"></span>
-              <div class="header-left-cnt-box" :class="{ 'dialog': dialog }">
+              <div class="header-left-cnt-box">
                 <div class="header-left-cnt-container">
                   <figure class="header-left-cnt">
                     <h1 :class="{ 'md': info.name.zh.length > 6, 'sm': info.name.zh.length > 9 }">{{ info.name.zh }}</h1>
@@ -80,7 +80,7 @@
                     <p class="TTFontNormal detail-ldb-address">{{ info.address }}</p>
                     <p class="detail-ldb-location">{{ info.chain.lng | transferCoords | sliceStr}}, {{ info.chain.lat | transferCoords | sliceStr }}</p>
                     <p class="detail-ldb-desc">静安寺，又称静安古寺，位于上海市静安区，其历史相传最早可追溯至三国孙吴赤乌十年（247年），初名沪渎重玄寺。</p>
-                    <ld-btn class="ldb-home-btn" theme="info" shadow inverse @click="setHome">Set as home</ld-btn>
+                    <ld-btn v-if="!isHome" class="ldb-home-btn" theme="info" shadow inverse @click="setHome">Set as home</ld-btn>
                     <figcaption>
                       <div class="d-flex f-align-center detail-lord-box">
                         <blockies
@@ -132,6 +132,10 @@ export default {
         return []
       }
     },
+    isHome: {
+      type: Boolean,
+      default: false
+    },
     loading: {
       type: Boolean,
       default: false
@@ -163,15 +167,10 @@ export default {
     Blockies
   },
   methods: {
-    checkHome () {
-
-    },
     async setHome (ldbInfo = this.info) {
       const res = await setHome({ ldbId: ldbInfo._id })
       if (res.code === 1000) {
-        console.log('set success')
-      } else {
-        console.log(res.errorMsg)
+        this.$emit('update:isHome', true)
       }
     },
     async receiveCandy (task) {
@@ -302,14 +301,37 @@ export default {
 <style lang="scss" scoped>
   @import '@/assets/stylus/mixin/index.scss';
 
+  .ldb-header-box {
+    &.dialog {
+      .ldb-header-skeletion {
+        padding-top: 60px;
+      }
+      .header-left-container-skeletion {
+        padding-top: 40px;
+      }
+      .header-left-box-skeletion {
+        @include viewport-unit('width', 90vw, 0px, -1);
+      }
+      .header-left-cnt {
+        @include viewport-unit('width', 90vw, 0px, -1);
+      }
+      .header-left-cnt-container {
+        padding-top: 40px;
+      }
+      .ldb-detail-header {
+        padding-top: 60px;
+      }
+      .detail-ldb-level {
+        transform: translate(0, -25%);
+      }
+    }
+  }
+
   // ldb-header-skeletion
   .ldb-header-skeletion {
     padding-top: 120px;
     padding-bottom: 150px;
     background-color: #f8f8f8;
-    &.dialog {
-      padding-top: 60px;
-    }
   }
   .header-left-skeletion {
     position: absolute;
@@ -340,9 +362,6 @@ export default {
     max-width: 1280px;
     height: 100%;
     @include viewport-unit('width', 100vw, 0px, 1);
-    &.dialog {
-      @include viewport-unit('width', 90vw, 0px, -1);
-    }
   }
   .header-left-container-skeletion {
     padding: 80px 0 40px;
@@ -465,12 +484,6 @@ export default {
     padding-bottom: 150px;
     padding-top: 120px;
     overflow: hidden;
-    &.dialog {
-      padding-top: 60px;
-      .detail-ldb-level {
-        transform: translate(0, -25%);
-      }
-    }
     &.is-active {
       .detail-header-mask {
         animation: springMove .55s linear 1 forwards;
@@ -719,9 +732,6 @@ export default {
     max-width: 1280px;
     height: 100%;
     @include viewport-unit('width', 100vw, 0px, 1);
-    &.dialog {
-      @include viewport-unit('width', 90vw, 0px, -1);
-    }
   }
   .header-left-cnt-container {
     padding-top: 80px;

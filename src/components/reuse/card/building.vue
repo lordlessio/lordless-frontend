@@ -34,7 +34,7 @@
               <p>Popularity</p>
             </li>
             <li class="v-flex building-data-item">
-              <p>99</p>
+              <p>{{ ldbInfo.members }}</p>
               <p>Members</p>
             </li>
           </ul>

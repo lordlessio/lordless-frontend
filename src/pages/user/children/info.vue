@@ -129,23 +129,23 @@
           <transition name="ld-hide-fade">
             <div v-show="!overviewLoading" class="d-flex f-align-center info-cnt-box info-home-box">
               <div class="info-home-poster">
-                <svg>
+                <svg v-if="!overviews.home">
                   <use xlink:href="#icon-help"/>
                 </svg>
-                <!-- <ld-img></ld-img> -->
+                <img v-else :src="`/static/img/ldb/ldb-level-${overviews.home.ldb.chain.popularity}.png`"/>
               </div>
               <div class="v-flex info-home-cnt">
-                <div class="info-home-unknow" v-if="false">
+                <div class="info-home-unknow" v-if="!overviews.home">
                   <p>You have no home now.</p>
                   <p>Set a home you will be located there when you login.</p>
                   <ld-btn class="user-info-btn" theme="blue" inverse shadow>View map now</ld-btn>
                 </div>
-                <div class="info-home-know" v-if="true">
-                  <p class="info-ldb-name">上海和平饭店</p>
-                  <p class="text-ellipsis info-ldb-influence">87 influence</p>
+                <div class="info-home-know" v-if="overviews.home">
+                  <p class="info-ldb-name">{{ overviews.home.ldb.name.zh }}</p>
+                  <p class="text-ellipsis info-ldb-influence">{{ overviews.home.ldb.chain.influence }} influence</p>
                   <div class="d-flex f-align-baseline info-home-status">
-                    <p class="v-flex">0.3 ETH remaining</p>
-                    <ld-btn class="user-info-btn" theme="blue" inverse shadow>Go</ld-btn>
+                    <p class="v-flex">{{ overviews.home.ldb.apLeft }} AP remaining</p>
+                    <ld-btn class="user-info-btn" theme="blue" inverse shadow @click="$router.push(`/ldb/${overviews.home.ldb._id}`)">Go</ld-btn>
                   </div>
                 </div>
               </div>
@@ -460,6 +460,7 @@ export default {
           list: [],
           total: 0
         },
+        home: null,
         currentTask: null
       }
     }
@@ -498,6 +499,9 @@ export default {
   methods: {
     ...mapActions('contract', [
       actionTypes.CONTRACT_CHECK_CROWDSALE
+    ]),
+    ...mapActions('user', [
+      actionTypes.USER_SET_USER_BY_TOKEN
     ]),
 
     // 初始化 黏贴板
@@ -564,7 +568,8 @@ export default {
       this.recentLoading = false
     }
   },
-  mounted () {
+  async mounted () {
+    await this[actionTypes.USER_SET_USER_BY_TOKEN]()
     this.$nextTick(() => {
       console.log('this.userInfo.address', this.userInfo.address)
       this.initClipboard()
@@ -934,16 +939,24 @@ export default {
     margin-left: 20px;
   }
   .info-home-poster {
+    position: relative;
+    padding: 22px;
     width: 90px;
     height: 90px;
     border-radius: 100%;
     box-sizing: border-box;
     box-shadow: 2.5px 5px 20px 0 rgba(0, 0, 0, .25);
-    @include padding(-1, 22px, 1);
+    // @include padding(-1, 22px, 1);
     svg {
       width: 100%;
       height: 100%;
       fill: #BDB9FD;
+    }
+    >img {
+      position: absolute;
+      left: -10%;
+      top: -5%;
+      width: 120%;
     }
   }
   .info-home-unknow {

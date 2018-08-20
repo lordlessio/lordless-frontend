@@ -65,6 +65,7 @@ export default {
       if (this.type === 'NEWAUCTION') {
         return 'icon-sale'
       }
+      console.log('type', this.type)
       if (this.type === 'PAYBYETHSUCCESS' || this.type === 'PAYBYETH') {
         return 'icon-auction'
       }

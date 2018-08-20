@@ -3,6 +3,7 @@
     <ldb-header-tool
       :info="ldbInfo"
       :dialog="dialog"
+      :isHome.sync="isHome"
       :candyTasks.sync="candyTasks"
       :loading="infoLoading"
       @receive="receiveCandy">
@@ -103,7 +104,7 @@ import LdbSell from '@/components/reuse/dialog/ldb/sell'
 import range from 'lodash/range'
 
 import { contractMixins, dialogMixins } from '@/mixins'
-import { receiveTask, getLdbById, getActivitysByTokenId, getUserPendingsByTokenId, getLdb2Round } from 'api'
+import { getHome, receiveTask, getLdbById, getActivitysByTokenId, getUserPendingsByTokenId, getLdb2Round } from 'api'
 export default {
   mixins: [ contractMixins, dialogMixins ],
   props: {
@@ -172,7 +173,9 @@ export default {
         isBuying: false,
         isSelling: false,
         isCanceling: false
-      }
+      },
+
+      isHome: false
     }
   },
   computed: {
@@ -196,6 +199,7 @@ export default {
       if (!oval) return
       this.initContractStatus()
       if (val) {
+        this.checkHome({ userId: val })
         this.getLdbTasks({ userId: val })
         this.checkOwner(this.ldbInfo.chain.tokenId)
         this.getUserPendings()
@@ -217,6 +221,13 @@ export default {
     LdbSell
   },
   methods: {
+
+    async checkHome ({ ldbId = this.ldbInfo._id, userId = this.userInfo.address } = {}) {
+      const res = await getHome({ userId })
+      if (res.code === 1000 && res.data) {
+        if (res.data._id === ldbId) this.isHome = true
+      }
+    },
     /**
      * 获取 ldb 建筑详情
      * @param {String} id 建筑 _id
@@ -226,6 +237,7 @@ export default {
       this.infoLoading = true
       const res = await getLdbById({ id, pula: 'ldbIcon' })
       if (res.code === 1000) {
+        this.checkHome({ ldbId: res.data._id })
         this.getLdbTasks({ ldbId: res.data._id })
         this.getLdbRecords({ ldbInfo: res.data })
         this.getUserPendings({ ldbInfo: res.data })
