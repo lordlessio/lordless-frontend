@@ -3,7 +3,7 @@ module.exports = axios => {
 
     // 根据 ldbId set home
     setHome: (params) => {
-      return axios.post('/api/home/save', params)
+      return axios.post('/api/home', params)
     },
 
     // 获取 home count
