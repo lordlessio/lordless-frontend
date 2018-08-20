@@ -1,6 +1,6 @@
 <template>
   <div class="ldb-approved-tasks">
-    <div v-if="loading || !approvedTask" class="ldb-approved-skeletion">
+    <div v-if="loading" class="ldb-approved-skeletion">
       <h3 class="skeletion-breath"></h3>
       <div class="skeletion-breath">
         <p>
@@ -14,14 +14,14 @@
       </div>
     </div>
     <transition name="ld-hide-fade">
-      <section v-if="!loading && approvedTask" class="ldb-approved-section">
+      <section v-if="!loading" class="ldb-approved-section">
         <!-- <p class="d-flex f-align-baseline">Approved tasks</p> -->
         <div class="ldb-approved-cnt">
           <el-row class="approved-tasks-list">
             <el-col
               class="sm-mar-t5 text-center approved-tasks-item"
               :span="24">
-              <p class="approved-card-tip">{{ approvedTask.executor.info.nickName || (approvedTask.executor.info._id | splitAddress({ before: 4, end: 2 })) }} just completed a new task</p>
+              <p class="approved-card-tip" v-if="approvedTask">{{ approvedTask.executor.info.nickName || (approvedTask.executor.info._id | splitAddress({ before: 4, end: 2 })) }} just completed a new task</p>
               <figure id="approved-item-container" class="approved-item-container">
                 <div class="d-flex f-auto-center approved-task-header">
                   <span class="inline-block">
