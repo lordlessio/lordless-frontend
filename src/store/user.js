@@ -119,8 +119,8 @@ export default {
 
       // 根据token请求用户信息
       const res = await getUserByToken()
-      if (res.code === 1000) {
-        commit(mutationTypes.USER_SET_USERS, res.data)
+      if (res.code === 1000 && res.data) {
+        // commit(mutationTypes.USER_SET_USERS, res.data)
         commit(mutationTypes.USER_SET_USER_INFO, res.data)
         if (state.userExpired) commit(mutationTypes.USER_SET_USER_EXPIRED, false)
         return true
@@ -129,7 +129,7 @@ export default {
         commit(mutationTypes.USER_SET_USER_EXPIRED, true)
         commit(mutationTypes.USER_SET_USER_INFO, {})
       } else {
-        commit(mutationTypes.USER_SET_USER_INFO, { default: false })
+        commit(mutationTypes.USER_SET_USER_INFO, { default: true })
       }
       commit(mutationTypes.USER_SET_USER_INFO)
       return false

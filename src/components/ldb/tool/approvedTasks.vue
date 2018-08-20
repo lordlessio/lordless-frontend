@@ -14,13 +14,14 @@
       </div>
     </div>
     <transition name="ld-hide-fade">
-      <section v-show="!loading" class="ldb-approved-section">
-        <p class="d-flex f-align-baseline">Approved tasks</p>
+      <section v-if="!loading" class="ldb-approved-section">
+        <!-- <p class="d-flex f-align-baseline">Approved tasks</p> -->
         <div class="ldb-approved-cnt">
           <el-row class="approved-tasks-list">
             <el-col
               class="sm-mar-t5 text-center approved-tasks-item"
               :span="24">
+              <p class="approved-card-tip" v-if="approvedTask">{{ approvedTask.executor.info.nickName || (approvedTask.executor.info._id | splitAddress({ before: 4, end: 2 })) }} just completed a new task</p>
               <figure id="approved-item-container" class="approved-item-container">
                 <div class="d-flex f-auto-center approved-task-header">
                   <span class="inline-block">
@@ -204,6 +205,7 @@ export default {
   }
 
   .approved-tasks-item {
+    position: relative;
     margin-top: 20px;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .25);
     border-radius: 5px;
@@ -214,6 +216,15 @@ export default {
     // &:nth-of-type(2n) {
     //   @include padding('left', 12px, -2);
     // }
+  }
+  .approved-card-tip {
+    position: absolute;
+    left: 0;
+    top: 25px;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    color: #fff;
   }
   .approved-item-container {
     min-height: 300px;
@@ -248,7 +259,7 @@ export default {
   }
   .approved-item-container {
     position: relative;
-    padding: 50px 15px 40px;
+    padding: 60px 15px 40px;
     >figcaption {
       margin-top: 25px;
       margin-bottom: 25px;

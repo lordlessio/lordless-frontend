@@ -534,6 +534,9 @@ export default {
     }
   },
   mounted () {
+    // if (!this.dialog) {
+    //   window.screenTop = '80px'
+    // }
     this.$nextTick(() => this.$emit('mounted'))
   }
 }

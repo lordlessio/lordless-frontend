@@ -1,6 +1,6 @@
 <template>
   <div class="ldb-header-box">
-    <div v-if="loading" class="ldb-header-skeletion">
+    <div v-if="loading" class="ldb-header-skeletion" :class="{ 'dialog': dialog }">
       <div class="container header-container">
         <div class="header-left-skeletion">
           <div class="header-left-box-skeletion" :class="{ 'dialog': dialog }">
@@ -40,7 +40,7 @@
       </div>
     </div>
     <transition name="ld-hide-fade">
-      <section v-show="!loading" class="ldb-detail-header" :class="{ 'is-active': !loading}">
+      <section v-if="!loading && info" class="ldb-detail-header" :class="{ 'is-active': !loading, 'dialog': dialog }">
         <div class="absolute-full detail-header-mask"></div>
         <div class="container header-container">
           <div class="detail-ldb-candies">
@@ -73,7 +73,7 @@
               <div class="header-left-cnt-box" :class="{ 'dialog': dialog }">
                 <div class="header-left-cnt-container">
                   <figure class="header-left-cnt">
-                    <h1>{{ info.name.zh }}</h1>
+                    <h1 :class="{ 'md': info.name.zh.length > 6, 'sm': info.name.zh.length > 9 }">{{ info.name.zh }}</h1>
                     <p class="detail-ldb-tag">
                       <span class="inline-block">Buddhist & Church</span>
                     </p>
@@ -144,7 +144,8 @@ export default {
   data: () => {
     return {
       candyCoords: {},
-      candies: []
+      candies: [],
+      hideCandies: 1
     }
   },
   watch: {
@@ -152,6 +153,7 @@ export default {
       if ((!oval || !oval.length) && val.length) this.getCandies(val)
     },
     candies (val) {
+      console.log('---- candies ', val)
       if (!val.length) this.getCandies()
     }
   },
@@ -206,13 +208,13 @@ export default {
         const animateFunc = () => {
           console.timeEnd('animate')
           setTimeout(() => {
-            // 删除当前dom
-            // dom.parentElement.removeChild(dom)
-            this.candies.map((item, index) => {
-              if (item.tid === task.tid) {
-                this.candies.splice(index, 1)
-              }
-            })
+            // 根据 hideCandies 次数，删除 candies
+            if (this.hideCandies === this.candies.length) {
+              this.$set(this, 'hideCandies', 1)
+              this.$set(this, 'candies', [])
+            } else {
+              this.hideCandies = this.hideCandies + 1
+            }
           }, 500)
           dom.removeEventListener(transitionEvent(), animateFunc, false)
         }
@@ -234,7 +236,6 @@ export default {
           allTasks[index].shift()
         })
       }
-      this.candies = candies
       this.randomCandies(candies)
       this.$emit('update:tasks', allTasks)
     },
@@ -265,8 +266,8 @@ export default {
       arr.map((item, index) => {
         candyCoords[candies[index].tid] = [item[0] * diameter - Math.floor(Math.random() * 2 - 1) * radius, item[1] * diameter - Math.floor(Math.random() * 2 - 1) * Math.floor(Math.random() * 5) * radius / 5]
       })
-      console.log('---- candyCoords', candyCoords, candies)
-      this.candyCoords = candyCoords
+      this.$set(this, 'candyCoords', candyCoords)
+      this.$set(this, 'candies', candies)
     }
   }
 }
@@ -277,9 +278,12 @@ export default {
 
   // ldb-header-skeletion
   .ldb-header-skeletion {
-    padding-top: 100px;
+    padding-top: 120px;
     padding-bottom: 150px;
     background-color: #f8f8f8;
+    &.dialog {
+      padding-top: 60px;
+    }
   }
   .header-left-skeletion {
     position: absolute;
@@ -289,6 +293,7 @@ export default {
     height: 90%;
     transform: translateY(-50%);
     z-index: 1;
+    overflow: hidden;
     &::before {
       content: '';
       position: absolute;
@@ -350,22 +355,22 @@ export default {
       &:nth-of-type(1) {
         margin-top: 10px;
         width: 100px;
-        height: 25px;
+        height: 20px;
         border-radius: 5px;
       }
       &:nth-of-type(2) {
         margin-top: 15px;
-        height: 35px;
+        height: 25px;
         width: 200px;
       }
       &:nth-of-type(3) {
         margin-top: 10px;
-        height: 24px;
+        height: 20px;
         width: 180px;
       }
       &:nth-of-type(4) {
         margin-top: 30px;
-        height: 45px;
+        height: 40px;
         width: 150px;
         border-radius: 5px;
       }
@@ -405,14 +410,15 @@ export default {
   }
 
   .header-right-skeletion {
-    margin-left: 20%;
-    max-width: 930px;
+    margin-left: calc(100% - 30px);
+    max-width: 980px;
     width: 80%;
     border: 15px $--skeletion-light solid;
     box-sizing: border-box;
+    transform: translateX(-100%);
     >div {
       position: relative;
-      padding-top: 75%;
+      padding-top: 63%;
       // background-color: $--skeletion-light;
       // >svg {
       //   position: absolute;
@@ -430,8 +436,15 @@ export default {
    */
   .ldb-detail-header {
     position: relative;
-    padding-top: 100px;
     padding-bottom: 150px;
+    padding-top: 120px;
+    overflow: hidden;
+    &.dialog {
+      padding-top: 60px;
+      .detail-ldb-level {
+        transform: translate(0, -25%);
+      }
+    }
     &.is-active {
       .detail-header-mask {
         animation: springMove .55s linear 1 forwards;
@@ -445,13 +458,14 @@ export default {
       }
       .detail-header-right {
         opacity: 1;
-        transform: translateX(0);
+        // transform: translateX(0);
       }
     }
   }
   .detail-header-mask {
     // left: 65%;
     z-index: 1;
+    overflow: hidden;
     // transition: left .55s spring;
     &::before, &::after {
       content: '';
@@ -689,6 +703,14 @@ export default {
     max-width: 400px;
     height: 100%;
     z-index: 2;
+    >h1 {
+      &.md {
+        font-size: 42px;
+      }
+      &.sm {
+        font-size: 36px;
+      }
+    }
     >figcaption {
       position: absolute;
       left: 0;
@@ -698,7 +720,7 @@ export default {
     }
   }
   .detail-ldb-tag {
-    margin-top: 15px;
+    margin-top: 5px;
     >span {
       padding: 4px 10px;
       font-size: 14px;
@@ -737,7 +759,7 @@ export default {
     }
   }
   .detail-ldb-city {
-    margin-top: 15px;
+    margin-top: 10px;
     font-size: 20px;
   }
 
@@ -745,12 +767,12 @@ export default {
   .detail-header-right {
     position: relative;
     padding: 15px;
-    margin-left: 20%;
-    max-width: 930px;
+    margin-left: calc(100% - 30px);
+    max-width: 980px;
     width: 80%;
     background-color: #fff;
     opacity: 0;
-    transform: translateX(100%);
+    transform: translateX(-100%);
     transition: transform .55s spring .25s, opacity .55s spring .25s;
     // height: calc(930px / 4 * 3);
   }
@@ -759,14 +781,14 @@ export default {
     top: 0;
     right: 0;
     width: 33%;
-    transform: translate(20%, -25%);
+    transform: translate(20%, -20%);
     >img {
       width: 100%;
     }
   }
   .detail-ldb-poster {
     position: relative;
-    padding-top: 75%;
+    padding-top: 63%;
     // position: absolute;
     // top: 0;
     // left: 0;
