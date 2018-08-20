@@ -26,17 +26,17 @@ export default {
         missing: {
           title: 'MetaMask is Missing',
           content: 'Install MetaMask in your browser extension market.',
-          imgUrl: '~static/img/status/status-metamask-addon.png'
+          imgUrl: '/static/img/status/status-metamask-addon.png'
         },
         locked: {
           title: 'Your MetaMask is locked',
           content: 'Open MetaMask and follow the instructions to unlock it.',
-          imgUrl: '~static/img/status/status-metamask-addon.png'
+          imgUrl: '/static/img/status/status-metamask-addon.png'
         },
         browser: {
           title: 'Your browser is unsupported',
           content: 'You need to use Chrome or Firefox which allows you to use MetaMask.',
-          imgUrl: '~static/img/status/status-borwser.png'
+          imgUrl: '/static/img/status/status-borwser.png'
         }
       }
     }
