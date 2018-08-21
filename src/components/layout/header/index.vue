@@ -1,18 +1,18 @@
 <template>
   <header id="ld-header" class="ld-header" :class="[{ 'fixed': fixed }, { 'inverse': inverse && !scroll }, { 'transparent': transparent }, { 'inherit': inherit }, theme]" v-if="show">
-    <div class="container d-flex">
+    <div class="container d-flex f-align-center">
       <div class="text-left inline-block header-logo" v-if="showLogo">
         <router-link to="/" class="inline-block">
           <svg class="inline-block">
             <use xlink:href="#icon-logo-image"/>
           </svg>
-          <svg class="inline-block logo-text">
+          <!-- <svg class="inline-block logo-text">
             <use xlink:href="#icon-logo-text"/>
-          </svg>
+          </svg> -->
         </router-link>
       </div>
       <div @click.stop="toggleHeader" id="header-mask" class="header-mask"></div>
-      <div @click.stop="headerItemClick" class="v-flex lg-text-right header-text navbar-sidebar">
+      <div @click.stop="headerItemClick" class="v-flex lg-d-flex lg-f-align-center lg-f-justify-end header-text navbar-sidebar">
         <span class="uppercase lg-hidden header-right-item header-close-item sm-text-center">
           <span @click.stop="toggleHeader" class="ld-close-icon"></span>
           <router-link to="/" class="header-sm-logo">
@@ -36,9 +36,16 @@
             FAQs
           </router-link>
         </span>
-        <span class="inline-block header-right-item user-item sm-hidden" data-type="link">
-          <user-avatar class="user-avatar" :header="true"></user-avatar>
+        <span class="inline-block header-right-item line-height-0" data-type="link">
+          <router-link to="/">
+            <svg>
+              <use xlink:href="#icon-telegram"/>
+            </svg>
+          </router-link>
         </span>
+        <div class="header-right-item user-item sm-hidden" data-type="link">
+          <user-avatar class="user-avatar" :header="true"></user-avatar>
+        </div>
       </div>
     </div>
   </header>
@@ -250,14 +257,15 @@ export default {
 
   .header-right-item {
     margin-left: 25px;
-    // @include distance('margin', 'top', 1, 1, -1);
-    // @include distance('margin', 'bottom', 1, 1, -1);
-    // @include distance('margin', 'left', 2.5, 1);
     a {
+      font-family: $--font-TTNormsBold;
+      font-size: 18px;
       color: inherit;
-      // font-weight: bold;
       text-decoration: none;
-      @include fontSize(20px, 1);
+    }
+    svg {
+      width: 24px;
+      height: 24px;
     }
     &.user-item {
       height: 100%;
@@ -329,7 +337,7 @@ export default {
 
   @media screen and (min-width: 769px) {
     .container {
-      line-height: 80px;
+      // line-height: 80px;
     }
   }
 
@@ -340,10 +348,10 @@ export default {
       left: 0;
       width: 100%;
       z-index: 99;
-      line-height: 60px;
+      // line-height: 60px;
     }
     .header-logo {
-      line-height: 60px;
+      // line-height: 60px;
       svg {
         width: 54px;
         height: 40px;

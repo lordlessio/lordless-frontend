@@ -20,6 +20,7 @@
           <div v-show="!overviewLoading" class="d-flex f-align-center sm-col-flex user-info-header">
             <div class="user-avatar">
               <blockies
+                theme="light"
                 :scale="18"
                 radius="20px"
                 :seed="userInfo.address"></blockies>

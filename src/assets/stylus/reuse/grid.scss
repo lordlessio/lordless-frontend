@@ -23,6 +23,12 @@
   .#{$media}f-align-center {
     align-items: center;
   }
+  .#{$media}f-justify-start {
+    justify-content: flex-start;
+  }
+  .#{$media}f-justify-end {
+    justify-content: flex-end;
+  }
   .#{$media}f-justify-center {
     justify-content: center;
   }

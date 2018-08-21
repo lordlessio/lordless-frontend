@@ -84,8 +84,10 @@
                     <figcaption>
                       <div class="d-flex f-align-center detail-lord-box">
                         <blockies
+                          theme="light"
                           :scale="6"
-                          :seed="info.lord.address"></blockies>
+                          :seed="info.lord.address">
+                        </blockies>
                         <div class="v-flex d-flex col-flex f-justify-around detail-lord-info">
                           <p>{{ info.lord.nickName || 'LORDLESS' }}</p>
                           <p>{{ info.lord.address | splitAddress({ symbol: '******' }) }}</p>
@@ -307,7 +309,7 @@ export default {
         padding-top: 60px;
       }
       .header-left-container-skeletion {
-        padding-top: 40px;
+        padding-top: 50px;
       }
       .header-left-box-skeletion {
         @include viewport-unit('width', 90vw, 0px, -1);
@@ -315,8 +317,11 @@ export default {
       .header-left-cnt {
         @include viewport-unit('width', 90vw, 0px, -1);
       }
+      .header-left-cnt-box {
+        @include viewport-unit('width', 90vw, 0px, -1);
+      }
       .header-left-cnt-container {
-        padding-top: 40px;
+        padding-top: 50px;
       }
       .ldb-detail-header {
         padding-top: 60px;

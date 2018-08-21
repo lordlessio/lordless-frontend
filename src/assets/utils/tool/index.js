@@ -248,11 +248,11 @@ export const getBrowser = () => {
 
 export const reldbIcon = (url, type = 'preview', percent = 50) => {
   if (!url) return url
-  let size = 600
+  let size = 'w_600'
   if (type === 'map') {
-    size = `w_400`
+    size = 'w_400'
   } else if (type === 'detail') {
-    size = `w_1600`
+    size = 'w_1600'
   } else if (type === 'percent') {
     size = `p_${percent}`
   }

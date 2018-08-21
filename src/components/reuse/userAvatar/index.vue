@@ -1,10 +1,26 @@
 <template>
   <div
-    class="cursor-pointer user-avatar-box"
-    :class="{ 'has-canvas': header && userInfo.address, 'shadow': shadow && userInfo.address }"
+    class="d-flex f-align-center cursor-pointer user-avatar-box"
+    :class="{ 'shadow': shadow && userInfo.address }"
     :style="`font-size: ${fontSize};border-radius: ${radius};`"
     @click="$router.push(`/owner/info`)">
-    <Blockies v-if="userInfo.address" :radius="radius" :seed="userInfo.address" :scale="scale"></Blockies>
+    <div class="text-right user-avatar-info">
+      <p>
+        <span v-if="userInfo.nickName">{{ userInfo.nickName }}</span>
+        <span v-else>{{ userInfo.address | splitAddress({ before: 4, end: 2 }) }}</span>
+      </p>
+      <p>
+        <span></span>
+        <span>AP {{ userInfo.ap }}</span>
+      </p>
+    </div>
+    <Blockies
+      v-if="userInfo.address"
+      :radius="radius"
+      :seed="userInfo.address"
+      :scale="scale"
+      theme="light">
+    </Blockies>
     <span v-if="!userInfo.address && showText" @click.stop="sign" class="user-sign">Sign in</span>
     <authorize
       ref="authorize"
@@ -39,7 +55,7 @@ export default {
     },
     radius: {
       type: String,
-      default: '6px'
+      default: '10px'
     },
     fontSize: {
       type: String,
@@ -79,13 +95,22 @@ export default {
   .user-avatar-box {
     width: inherit;
     height: inherit;
-    &.has-canvas {
-      position: relative;
-      top: 50%;
-      transform: translateY(-50%);
-    }
+    // &.has-canvas {
+    //   position: relative;
+    //   top: 50%;
+    //   transform: translateY(-50%);
+    // }
     &.shadow {
       box-shadow: 2px 4px 8px 0 rgba(12, 0, 42, .5);
+    }
+  }
+  .user-avatar-info {
+    margin-right: 15px;
+    >p {
+      font-size: 18px;
+      &:nth-of-type(2) {
+        font-size: 16px;
+      }
     }
   }
   .user-sign {

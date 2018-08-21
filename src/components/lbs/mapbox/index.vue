@@ -585,6 +585,10 @@ export default {
       let markers = []
       let minZoom = 99
       let maxZoom = 99
+
+      const bounds = map.getBounds()
+      const mapZoom = Math.round(map.getZoom())
+
       if (type === 'image') {
         markers = this.imageMarkers
         minZoom = this.imageZooms.min
@@ -596,10 +600,14 @@ export default {
 
         // 如果视图发生变化，remove popups
         if (this.pointPopup) this.pointPopup.remove()
-      }
 
-      const bounds = map.getBounds()
-      const mapZoom = Math.round(map.getZoom())
+        for (const mk in markers) {
+          if (mapZoom >= minZoom && mapZoom <= maxZoom && !remove) markers[mk].addTo(map)
+          else markers[mk].remove()
+        }
+        return
+      }
+      // if (this.pointPopup) this.pointPopup.remove()
 
       for (const mk in markers) {
         if (this.inBounds(markers[mk].getLngLat(), bounds) && mapZoom >= minZoom && mapZoom <= maxZoom && !remove) markers[mk].addTo(map)
@@ -641,6 +649,8 @@ export default {
     /deep/ .mapboxgl-popup-content {
       padding: 0;
       background-color: transparent;
+      transform: translateY(-20px);
+      border-radius: 50px;
     }
   }
 
@@ -776,11 +786,12 @@ export default {
     border-radius: 50px;
     background-color: #fff;
     white-space: nowrap;
-    transform: translateY(-15px);
+    // transform: translateY(-15px);
     // opacity: 0;
     // visibility: hidden;
-    transition: all .15s ease-in-out;
+    // transition: all .15s ease-in-out;
     z-index: 9;
+    // box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
   ._point_marker-poster {
     margin-right: 6px;
