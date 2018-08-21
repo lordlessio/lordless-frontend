@@ -16,9 +16,19 @@ module.exports = axios => {
       return axios.get('/api/user/overview', { params })
     },
 
-    // 获取用户 overview 信息
+    // 获取用户任务信息
     getUserTasks: (params) => {
       return axios.get('/api/user/tasks', { params })
+    },
+
+    // 获取用户糖果领取信息
+    getUserCandyHistory: (params) => {
+      return axios.get('/api/user/candy/history', { params })
+    },
+
+    // 获取用户账户信息
+    getUserAssets: (params) => {
+      return axios.get('/api/user/assets', { params })
     },
 
     // 用户 tg 认证

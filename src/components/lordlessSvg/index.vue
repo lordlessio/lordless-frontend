@@ -4,6 +4,7 @@
     <map-svg/>
     <icon-svg/>
     <user-svg/>
+    <task-svg/>
   </div>
 </template>
 
@@ -12,12 +13,14 @@ import GradientSvg from './gradient'
 import MapSvg from './map'
 import IconSvg from './icon'
 import UserSvg from './user'
+import TaskSvg from './task'
 export default {
   components: {
     GradientSvg,
     MapSvg,
     IconSvg,
-    UserSvg
+    UserSvg,
+    TaskSvg
   }
 }
 </script>

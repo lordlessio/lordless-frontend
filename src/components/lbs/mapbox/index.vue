@@ -774,6 +774,7 @@ export default {
       transform: scale(.25);
       padding: 0;
       animation: pulse 2s ease-in-out infinite;
+      will-change: transform;
     }
     &:hover {
       z-index: 1;

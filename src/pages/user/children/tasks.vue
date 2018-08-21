@@ -3,21 +3,6 @@
     <div class="d-flex v-flex col-flex user-candy-container">
       <h1 class="text-cap user-tasks-title">Tasks</h1>
       <div
-        v-if="!tasks.length && !taskRewards.length && !loading"
-        class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
-        <svg>
-          <use xlink:href="#icon-no-candy"/>
-        </svg>
-        <p>You have no tasks now.</p>
-        <div class="d-flex f-auto-center TTFontBolder">
-          <span>Try to buy a LDB in</span>
-          <span class="inline-block">
-            <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow>Marketplace</ld-btn>
-          </span>
-        </div>
-      </div>
-      <div
-        v-if="tasks.length || taskRewards.length"
         class="v-flex user-tasks-tabs">
         <el-tabs
           v-model="taskTab"
@@ -25,7 +10,30 @@
           <el-tab-pane
             label="Tasks"
             name="tasks">
-            <el-row :gutter="20" class="user-tasks-cnt">
+            <div class="tasks-sort">
+              <span>Filter by</span>
+              <ld-select
+                class="tasks-sort-select"
+                v-model="tasksSort"
+                :items="sortItems"
+                @change="filterTasks">
+              </ld-select>
+            </div>
+            <div
+              v-if="!tasks.length && !loading"
+              class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-tasks">
+              <svg>
+                <use xlink:href="#icon-no-candy"/>
+              </svg>
+              <p>You have no tasks now.</p>
+              <div class="d-flex f-auto-center TTFontBolder">
+                <span>Try to buy a LDB in</span>
+                <span class="inline-block">
+                  <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/market')">Marketplace</ld-btn>
+                </span>
+              </div>
+            </div>
+            <el-row v-if="tasks.length && !loading" :gutter="20" class="user-tasks-cnt">
               <el-col
                 :xs="24"
                 class="tasks-item"
@@ -89,6 +97,7 @@
 import TaskDialog from '@/components/reuse/dialog/task/detail'
 import TaskCard from '@/components/reuse/card/task'
 import Pagination from '@/components/stories/pagination'
+import LdSelect from '@/components/stories/select'
 import LdBtn from '@/components/stories/button'
 
 import { historyState } from 'utils/tool'
@@ -122,6 +131,22 @@ export default {
       // 建筑总数
       tTotal: 0,
 
+      tasksSort: -2,
+
+      sortItems: [{
+        value: -2,
+        label: 'All'
+      }, {
+        value: 0,
+        label: 'Under way'
+      }, {
+        value: 1,
+        label: 'Approved'
+      }, {
+        value: -1,
+        label: 'Rejected'
+      }],
+
       /**
        * rewarded tasks options
        */
@@ -153,7 +178,8 @@ export default {
     TaskDialog,
     TaskCard,
     Pagination,
-    LdBtn
+    LdBtn,
+    LdSelect
   },
   methods: {
     chooseTab () {
@@ -164,11 +190,17 @@ export default {
       else this.getTaskRewards()
     },
 
-    async getTasks ({ pn = 1, ps = 10 } = {}) {
+    filterTasks (e) {
+      this.getTasks({ status: e })
+    },
+
+    async getTasks ({ pn = 1, ps = 10, status = this.tasksSort } = {}) {
       this.loading = true
       const params = {
         pn,
-        ps
+        ps,
+        type: 'executor',
+        status
       }
       const res = await getUserTasks(params)
       if (res.code === 1000 && res.data) {
@@ -183,7 +215,8 @@ export default {
       this.loading = true
       const params = {
         pn,
-        ps
+        ps,
+        type: 'lord'
       }
       const res = await getUserTasks(params)
       if (res.code === 1000) {
@@ -256,6 +289,29 @@ export default {
       color: #999;
       &.is-active {
         color: inherit;
+      }
+    }
+  }
+
+  .tasks-sort {
+    margin-top: 30px;
+  }
+  .tasks-sort-select {
+    margin-left: 10px;
+    /deep/ .el-input__inner {
+      width: 140px !important;
+      height: 34px;
+      line-height: 34px;
+      font-size: 16px;
+      color: #fff;
+      background-color: #4586FC;
+      border-radius: 20px;
+      border: none;
+    }
+    /deep/ .el-input {
+      .el-select__caret {
+        font-weight: bolder;
+        color: #fff;
       }
     }
   }

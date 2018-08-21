@@ -369,7 +369,7 @@ export default {
     @include viewport-unit('width', 100vw, 0px, 1);
   }
   .header-left-container-skeletion {
-    padding: 80px 0 40px;
+    padding: 90px 0 40px;
     margin-left: 50%;
     width: 100%;
     max-width: 1000px;
@@ -739,7 +739,7 @@ export default {
     @include viewport-unit('width', 100vw, 0px, 1);
   }
   .header-left-cnt-container {
-    padding-top: 80px;
+    padding-top: 90px;
     padding-bottom: 40px;
     margin-left: 50%;
     width: 100%;

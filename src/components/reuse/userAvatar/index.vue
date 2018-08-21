@@ -1,27 +1,39 @@
 <template>
   <div
-    class="d-flex f-align-center cursor-pointer user-avatar-box"
-    :class="{ 'shadow': shadow && userInfo.address }"
+    class="cursor-pointer user-avatar-box"
+    :class="[{ 'shadow': shadow && userInfo.address }, theme]"
     :style="`font-size: ${fontSize};border-radius: ${radius};`"
     @click="$router.push(`/owner/info`)">
-    <div class="text-right user-avatar-info">
-      <p>
-        <span v-if="userInfo.nickName">{{ userInfo.nickName }}</span>
-        <span v-else>{{ userInfo.address | splitAddress({ before: 4, end: 2 }) }}</span>
-      </p>
-      <p>
-        <span></span>
-        <span>AP {{ userInfo.ap }}</span>
-      </p>
+    <div class="d-flex f-align-center" v-if="userInfo.address">
+      <div class="text-right user-avatar-info" v-if="showInfo">
+        <p>
+          <span v-if="userInfo.nickName">{{ userInfo.nickName }}</span>
+          <span v-else>{{ userInfo.address | splitAddress({ before: 4, end: 2 }) }}</span>
+        </p>
+        <p class="d-flex f-align-center">
+          <span class="inline-block line-height-1">
+            <svg>
+              <use xlink:href="#icon-color-star"/>
+            </svg>
+          </span>
+          <span>AP {{ userInfo.ap }}</span>
+        </p>
+      </div>
+      <Blockies
+        class="user-avatar-poster"
+        :radius="radius"
+        :seed="userInfo.address"
+        :scale="scale"
+        :theme="theme">
+      </Blockies>
     </div>
-    <Blockies
-      v-if="userInfo.address"
-      :radius="radius"
-      :seed="userInfo.address"
-      :scale="scale"
-      theme="light">
-    </Blockies>
-    <span v-if="!userInfo.address && showText" @click.stop="sign" class="user-sign">Sign in</span>
+    <ld-btn
+      v-if="!userInfo.address"
+      class="user-getting-start"
+      :theme="theme === 'dark' ? 'blue' : 'deep-blue'"
+      :inverse="theme === 'dark'"
+      @click.native="sign"
+      shadow>{{ loginText }}</ld-btn>
     <authorize
       ref="authorize"
       @blurs="dialogSetBlurs($event, 0)">
@@ -32,6 +44,7 @@
 <script>
 import Authorize from '@/components/reuse/dialog/authorize'
 import Blockies from '@/components/stories/blockies'
+import LdBtn from '@/components/stories/button'
 
 import { dialogMixins } from '@/mixins'
 
@@ -41,10 +54,6 @@ export default {
   name: 'user-avatar',
   mixins: [dialogMixins],
   props: {
-    header: {
-      type: Boolean,
-      default: false
-    },
     shadow: {
       type: Boolean,
       default: false
@@ -61,14 +70,23 @@ export default {
       type: String,
       default: '20px'
     },
-    showText: {
+    loginText: {
+      type: String,
+      default: 'Getting started'
+    },
+    showInfo: {
       type: Boolean,
       default: true
+    },
+    theme: {
+      type: String,
+      default: 'dark'
     }
   },
   components: {
     Blockies,
-    Authorize
+    Authorize,
+    LdBtn
   },
   computed: {
     ...mapState('user', [
@@ -92,6 +110,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  @import '@/assets/stylus/mixin/index.scss';
+
   .user-avatar-box {
     width: inherit;
     height: inherit;
@@ -101,7 +121,28 @@ export default {
     //   transform: translateY(-50%);
     // }
     &.shadow {
-      box-shadow: 2px 4px 8px 0 rgba(12, 0, 42, .5);
+      .user-avatar-poster {
+        box-shadow: 2px 4px 8px 0 rgba(12, 0, 42, .5);
+      }
+    }
+    &.dark {
+      .user-avatar-info {
+        >p {
+          &:nth-of-type(1) {
+            color: #999;
+          }
+          &:nth-of-type(2) {
+            color: #555;
+          }
+        }
+      }
+    }
+    &.light {
+      .user-avatar-info {
+        >p {
+          color: #fff;
+        }
+      }
     }
   }
   .user-avatar-info {
@@ -111,7 +152,15 @@ export default {
       &:nth-of-type(2) {
         font-size: 16px;
       }
+      svg {
+        margin-right: 5px;
+        width: 14px;
+        height: 14px;
+      }
     }
+  }
+  .user-getting-start {
+    padding: 12px 18px;
   }
   .user-sign {
     cursor: pointer;

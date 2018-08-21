@@ -81,3 +81,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     }
   }
 }
+
+.el-tabs__active-bar {
+  background-color: $--text-deep-blue-color;
+}

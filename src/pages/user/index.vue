@@ -7,13 +7,8 @@
       :index="99">
     </Loading>
     <aside class="d-flex lg-col-flex sm-row-flex ld-user-navgation">
-      <div class="d-flex f-auto-center user-navgation-logo sm-hidden" @click="$router.push('/')">
-        <svg class="logo-text">
-          <use xlink:href="#icon-logo-text"/>
-        </svg>
-        <svg class="logo-image">
-          <use xlink:href="#icon-logo-image"/>
-        </svg>
+      <div class="d-flex f-auto-center user-navgation-logo sm-hidden">
+        <header-logo theme="deep-blue"></header-logo>
       </div>
       <div class="d-flex col-flex v-flex">
         <ul class="d-flex v-flex sm-row-flex lg-col-flex user-navgation-list">
@@ -47,7 +42,7 @@
     </aside>
     <el-container class="col-flex ld-user-container">
       <div class="ld-user-header">
-        <ld-header v-bind="headerOpt"></ld-header>
+        <ld-header v-bind="headerOpt" theme="light"></ld-header>
       </div>
       <el-main class="d-flex ld-user-content">
         <div class="v-flex d-flex user-content-container">
@@ -70,6 +65,7 @@
 </template>
 
 <script>
+import HeaderLogo from '@/components/layout/header/logo'
 import LdHeader from '@/components/layout/header'
 import Authorize from '@/components/reuse/dialog/authorize'
 import Loading from '@/components/stories/loading'
@@ -132,6 +128,7 @@ export default {
   components: {
     Loading,
 
+    HeaderLogo,
     LdHeader,
     Authorize
   },
@@ -201,12 +198,14 @@ export default {
   // ld-user-navgation
   .ld-user-navgation {
     width: 250px;
+    z-index: 1;
+    box-shadow: 1px 3px 5px 0 rgba(0, 0, 0, .1);
   }
 
   .user-navgation-logo {
-    height: 80px;
+    height: 90px;
     border-bottom: 1px solid rgba(77, 70, 210, 0.05);
-    fill: #4E47D3;
+    fill: $--text-deep-blue-color;
     cursor: pointer;
     svg {
       width: 150px;
@@ -224,8 +223,8 @@ export default {
       cursor: pointer;
     }
     &.active {
-      color: #4E47D3;
-      fill: #4E47D3;
+      color: $--text-deep-blue-color;
+      fill: $--text-deep-blue-color;
       background-color: rgba(77, 70, 210, 0.05);
       .navgation-item-cnt {
         &::before {
@@ -252,12 +251,13 @@ export default {
   }
   .user-logout {
     height: 100px;
-    color: #EB8785;
-    fill: #EB8785;
+    color: $--text-red-color;
+    fill: $--text-red-color;
   }
 
   .ld-user-container {
     position: relative;
+    z-index: 0;
     @include padding('bottom', 60px, 1, -2);
   }
   .ld-user-header {
@@ -265,15 +265,16 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
-    height: 80px;
+    height: 90px;
     padding: 0 30px;
-    background-color: #4E47D3;
-    color: #fff;
+    background-color: #fff;
+    // color: #fff;
     z-index: 9;
+    box-shadow: 2px 3px 5px 0 rgba(0, 0, 0, .1);
   }
 
   .ld-user-content {
-    padding: 80px 0 0;
+    padding: 90px 0 0;
     background-color: #f4f4f4;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
@@ -291,20 +292,14 @@ export default {
     width: 100%;
     min-height: 100%;
   }
-
-  @media screen and (min-width: 992px) {
-    .logo-image {
-      display: none;
-    }
-  }
   @media screen and (max-width: 991px) {
     .ld-user-navgation {
       width: 100px;
     }
     .user-navgation-logo {
-      .logo-text {
-        display: none;
-      }
+      // .logo-text {
+      //   display: none;
+      // }
       svg {
         width: 50px;
       }
@@ -325,7 +320,7 @@ export default {
         top: 0;
         width: 5px;
         height: 100%;
-        background-color: #4E47D3;
+        background-color: $--text-deep-blue-color;
         visibility: hidden;
       }
     }

@@ -13,7 +13,7 @@
           <div class="d-flex f-auto-center TTFontBolder">
             <span>Try to buy a LDB in</span>
             <span class="inline-block">
-              <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow>Marketplace</ld-btn>
+              <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/market')">Marketplace</ld-btn>
             </span>
           </div>
         </div>

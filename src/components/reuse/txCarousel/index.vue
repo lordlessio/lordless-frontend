@@ -3,46 +3,58 @@
     <div class="d-flex carousel-container">
       <div class="v-flex carousel-content">
         <div class="carousel-loop-box">
-          <div v-if="!txs.length" class="d-flex f-auto-center carousel-no-records">there has no records</div>
-          <div
-            v-for="(tx, index) of txs"
-            :key="index"
-            class="d-flex f-align-center text-nowrap carousel-loop-item"
-            :class="{ 'animation is-active': index === 0 }">
-            <div class="v-flex d-flex f-justify-center sm-hidden">
-              <span class="inline-block lg-mar-r1">
-                <svg>
-                  <use xlink:href="#icon-hourglass"/>
-                </svg>
-              </span>
-              <span class="d-inline-flex col-flex f-justify-center loop-item-text">
-                <span class="inline-block">transactions</span>
-                <span class="inline-block">{{ tx.created_at | timeFormat }}</span>
-              </span>
-            </div>
-            <div class="v-flex d-flex f-justify-center text-ellipsis">
-              <span class="inline-block lg-mar-r1 sm-hidden">
-                <svg>
-                  <use xlink:href="#icon-tx"/>
-                </svg>
-              </span>
-              <span class="d-inline-flex col-flex f-justify-center loop-item-text">
-                <span class="inline-block">Address</span>
-                <span class="inline-block">{{ tx.transactionHash | splitAddress({ before: 7, end: 5 }) }}</span>
-              </span>
-            </div>
-            <div class="v-flex d-flex f-justify-center text-ellipsis">
-              <span class="inline-block lg-mar-r1 sm-hidden">
-                <svg>
-                  <use xlink:href="#icon-price"/>
-                </svg>
-              </span>
-              <span class="d-inline-flex col-flex f-justify-center loop-item-text">
-                <span class="inline-block">Price</span>
-                <span class="inline-block">{{ tx.request.value }} ETH</span>
-              </span>
-            </div>
+          <div v-if="loading" class="d-flex f-auto-center carousel-no-records">
+            <span>has loading records...</span>
+            <span class="inline-block line-height-0 mar-l1" style="font-size: 24px;">
+              <i class="el-icon-loading"></i>
+            </span>
           </div>
+          <transition name="ld-hide-fade">
+            <div v-if="!txs.length && !loading" class="d-flex f-auto-center carousel-no-records">There has no records</div>
+          </transition>
+          <transition name="ld-hide-fade">
+            <div v-if="txs.length && !loading">
+              <div
+                v-for="(tx, index) of txs"
+                :key="index"
+                class="d-flex f-align-center text-nowrap carousel-loop-item"
+                :class="{ 'animation is-active': index === 0 }">
+                <div class="v-flex d-flex f-justify-center sm-hidden">
+                  <span class="inline-block lg-mar-r1">
+                    <svg>
+                      <use xlink:href="#icon-hourglass"/>
+                    </svg>
+                  </span>
+                  <span class="d-inline-flex col-flex f-justify-center loop-item-text">
+                    <span class="inline-block">transactions</span>
+                    <span class="inline-block">{{ tx.market[0].txEndAt | timeFormat }}</span>
+                  </span>
+                </div>
+                <div class="v-flex d-flex f-justify-center text-ellipsis">
+                  <span class="inline-block lg-mar-r1 sm-hidden">
+                    <svg>
+                      <use xlink:href="#icon-tx"/>
+                    </svg>
+                  </span>
+                  <span class="d-inline-flex col-flex f-justify-center loop-item-text">
+                    <span class="inline-block">Address</span>
+                    <span class="inline-block">{{ tx.tx.transactionHash | splitAddress({ before: 7, end: 5 }) }}</span>
+                  </span>
+                </div>
+                <div class="v-flex d-flex f-justify-center text-ellipsis">
+                  <span class="inline-block lg-mar-r1 sm-hidden">
+                    <svg>
+                      <use xlink:href="#icon-price"/>
+                    </svg>
+                  </span>
+                  <span class="d-inline-flex col-flex f-justify-center loop-item-text">
+                    <span class="inline-block">Price</span>
+                    <span class="inline-block">{{ tx.market[0].price | weiToEth }} ETH</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </transition>
         </div>
       </div>
       <div class="d-flex f-align-center carousel-logo color-main" @click.stop="logoEvt">
@@ -59,7 +71,7 @@
 
 <script>
 import { hasClass, addClass, removeClass, hasContent } from 'utils/tool'
-import { getLdbRecords } from 'api'
+import { getRecords } from 'api'
 export default {
   props: {
     list: {
@@ -83,24 +95,40 @@ export default {
   },
   data: () => {
     return {
+      intervalTx: null,
+      loading: true,
       loop: true,
+      loopStart: false,
       txs: []
     }
   },
   methods: {
 
     async getTxs () {
-      const res = await getLdbRecords()
+      const res = await getRecords({ pn: 1, ps: 10 })
       if (res.code === 1000) {
         this.txs = res.data.list
       }
     },
 
+    intervalTxs () {
+      let intervalTx = setInterval(() => {
+        if (!this.loopStart) this.initLoop()
+        else this.getTxs()
+      }, 15000)
+      this.$once('hook:beforeDestroy', () => {
+        clearInterval(intervalTx)
+        intervalTx = null
+      })
+    },
+
     /**
-     * 初始化
+     * 初始化循环
      */
-    async init () {
+    async initLoop () {
       await this.getTxs()
+      if (this.txs.length < 3) return
+      this.loopStart = true
       const height = document.querySelector('.carousel-loop-box').offsetHeight
       const loops = document.querySelectorAll('.carousel-loop-item')
       let aIndex = 0
@@ -116,6 +144,16 @@ export default {
       this.initTransform(height, aIndex)
       this.loopFunc(height)
       this.boxMouseEvt()
+    },
+
+    /**
+     * 初始化
+     */
+    async init () {
+      this.loading = true
+      await this.initLoop()
+      // this.intervalTxs()
+      this.loading = false
     },
 
     /**
@@ -180,7 +218,8 @@ export default {
       }
       func()
       this.$once('hook:beforeDestroy', () => {
-        this.destroy(instance)
+        clearTimeout(instance)
+        instance = null
       })
     },
 
@@ -203,18 +242,13 @@ export default {
      */
     logoEvt () {
       this.$emit('logoEvt')
-    },
-
-    destroy (instance) {
-      clearTimeout(instance)
-      instance = null
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/class_mixin.scss';
+  @import '@/assets/stylus/mixin/index.scss';
   .carousel-box {
     position: relative;
     width: inherit;
@@ -247,12 +281,12 @@ export default {
     font-size: 18px;
   }
   .carousel-loop-item {
+    font-size: 16px;
     position: absolute;
     width: 100%;
     height: 100%;
     z-index: 1;
     background-color: inherit;
-    @include fontSize(15px, 1);
     svg {
       width: 50px;
       height: 50px;
@@ -273,7 +307,7 @@ export default {
   }
   .carousel-logo {
     position: relative;
-    color: #3F51B5;
+    color: $--text-deep-blue-color;
     cursor: pointer;
     @include padding('left', 20px, 1);
     @include padding('right', 20px, 1);
@@ -289,7 +323,7 @@ export default {
     svg {
       width: 40px;
       height: 40px;
-      fill: #3F51B5;
+      fill: $--text-deep-blue-color;
     }
   }
 </style>

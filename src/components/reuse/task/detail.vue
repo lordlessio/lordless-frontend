@@ -12,7 +12,7 @@
             </div>
             <div class="v-flex inline-block header-coin-desc">
               <p>{{ taskInfo.reward.candy.desc }}</p>
-              <p class="coin-href">{{ taskInfo.reward.candy.website }}</p>
+              <a class="coin-href" :href="taskInfo.reward.candy.website" target="_blank">{{ taskInfo.reward.candy.website }}</a>
             </div>
           </div>
         </div>
@@ -21,7 +21,12 @@
         <div class="container md">
           <div class="task-status-box">
             <div class="task-cnt-section task-status-top">
-              <h1>{{ taskInfo.reward.candy.website }}</h1>
+              <span class="status-top-bg">
+                <svg>
+                  <use :xlink:href="`#icon-task-status-${taskInfo.status}`"/>
+                </svg>
+              </span>
+              <h1>{{ taskInfo.ldbTaskType.name }}</h1>
               <p class="d-flex f-align-center task-status-serial">
                 <span>#{{ taskInfo._id }}</span>
                 <span class="inline-block">·</span>
@@ -31,20 +36,36 @@
               </p>
               <p>
                 <span>Task detail</span>
-                <span class="task-tip">Telegram</span>
+                <span class="task-tip" v-if="taskInfo.ldbTaskType.taskType === 1">Daily</span>
+                <span class="task-tip" v-if="taskInfo.ldbTaskType.taskType !== 1">Telegram</span>
               </p>
-              <p class="TTFontNormal">Join the Telegram of EOS official</p>
-              <ld-btn
-                class="TTFontBolder task-start-btn">
-                Getting started
-              </ld-btn>
+              <p class="TTFontNormal">{{ taskInfo.ldbTaskType.desc }}</p>
+              <div class="task-status-cnt">
+                <ld-btn
+                  v-if="taskInfo.status === 0"
+                  class="TTFontBolder task-start-btn">
+                  Getting started
+                </ld-btn>
+                <h3 v-if="taskInfo.status !== 0" class="d-flex f-align-center">
+                  <span class="inline-block line-height-0">
+                    <svg>
+                      <use xlink:href="#icon-bell"/>
+                    </svg>
+                  </span>
+                  <span v-if="taskInfo.status === 1">Congratulations.</span>
+                  <span v-else>Task has been over due.</span>
+                </h3>
+              </div>
             </div>
             <div class="d-flex sm-f-align-center sm-col-flex task-cnt-section task-status-bottom">
-              <div class="v-flex task-status-remaining">
-                <p>Time remaining</p>
-                <countdown class="task-status-time" :time="new Date(taskInfo.entAt) - new Date()" :interval="1000" tag="p">
+              <div class="v-flex task-status-date task-status-remaining">
+                <p v-if="taskInfo.status === 0">Time remaining</p>
+                <p v-else-if="taskInfo.status === 1">Completed on</p>
+                <p v-else>Over due on</p>
+                <countdown v-if="taskInfo.status === 0" class="task-status-time" :time="new Date(taskInfo.entAt) - new Date()" :interval="1000" tag="p">
                   <template slot-scope="props">{{ parseInt(props.days) }}d : {{ props.hours }}h : {{ props.minutes }}m : {{ props.seconds }}s</template>
                 </countdown>
+                <p v-else>{{ taskInfo.update_at | dateFormat }}</p>
               </div>
               <div class="task-status-date">
                 <p>Create on</p>
@@ -66,9 +87,15 @@
                 </svg>
               </span>
               <div class="v-flex rewards-cards-item rewards-cards-left">
-                <div class="rewards-small-card blue">
-                  <p>Total candy reward</p>
-                  <p>{{ taskInfo.reward.count }} <span class="text-upper">{{ taskInfo.reward.candy.symbol }}</span></p>
+                <div class="d-flex f-align-center rewards-small-card blue">
+                  <div class="v-flex">
+                    <p>Total <span class="text-upper">{{ taskInfo.reward.candy.symbol }}</span> reward</p>
+                    <p>{{ taskInfo.reward.count | formatDecimal({ len: 8 }) }}</p>
+                  </div>
+                  <div class="v-flex">
+                    <p>Action point cost</p>
+                    <p>{{ taskInfo.apCost }}</p>
+                  </div>
                 </div>
                 <div class="rewards-big-card red">
                   <div class="big-card-top">
@@ -126,13 +153,13 @@
                     </div>
                   </div>
                   <div class="big-card-bottom">
-                    <p class="text-upper">EOS</p>
+                    <p class="text-upper">{{ taskInfo.reward.candy.symbol }}</p>
                     <h1>+{{ taskInfo.lord.reward.count | formatDecimal({ len: 6 }) }}</h1>
                     <p>Prestige</p>
                     <h1>+{{ taskInfo.lord.activeness }}</h1>
                   </div>
                 </div>
-                <div class="rewards-small-card green">
+                <div class="rewards-small-card blue">
                   <p>Related LDB</p>
                   <p>+{{ taskInfo.ldb.activeness }} act.</p>
                 </div>
@@ -254,6 +281,10 @@ export default {
   .header-coin-desc {
     @include margin('left', 15px, 1);
     @include fontSize(18px, 1.2);
+    >a {
+      display: inline-block;
+      color: #fff;
+    }
   }
   .coin-href {
     font-size: 16px;
@@ -289,8 +320,10 @@ export default {
 
   // task-status-top
   .task-status-top {
+    position: relative;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+    overflow: hidden;
     @include padding('bottom', 35px, 1);
     >p {
       font-size: 16px;
@@ -301,6 +334,18 @@ export default {
       &:nth-of-type(3) {
         @include margin('top', 10px, 1);
       }
+    }
+  }
+  .status-top-bg {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    z-index: 0;
+    >svg {
+      height: 150%;
+      fill: rgba(255, 255, 255, .2);
+      transform: rotate(45deg);
     }
   }
   .task-status-serial {
@@ -322,12 +367,24 @@ export default {
       }
     }
   }
+  .task-status-cnt {
+    margin-top: 20px;
+    color: #fff;
+    svg {
+      margin-right: 10px;
+      width: 24px;
+      height: 24px;
+      fill: #fff;
+    }
+    >h3 {
+      padding-top: 15px;
+    }
+  }
   .task-start-btn {
     padding: 10px 15px;
     font-size: 18px;
     color: $--text-blue-color;
     box-shadow: 2.5px 5px 10px 0 rgba(255, 255, 255, .25);
-    @include margin('top', 20px, 1);
   }
 
   // task-status-bottom
@@ -350,8 +407,10 @@ export default {
     }
   }
   .task-status-date {
-    @include margin('left', 30px, -2);
     @include margin('top', 20px, 1, -2);
+    &:not(.task-status-remaining) {
+      @include margin('left', 30px, -2);
+    }
     >p {
       &:nth-of-type(1) {
         font-size: 16px;
@@ -413,19 +472,30 @@ export default {
   }
 
   .rewards-small-card {
+    padding-top: 19px;
+    padding-bottom: 19px;
     font-family: $--font-TTNormsMedium;
     color: #fff;
     border-radius: 5px;
     box-shadow: 0px 2px 10px 0 rgba(0, 0, 0, .25);
-    @include padding('top', 19px, 1);
-    @include padding('bottom', 19px, 1);
     >p {
       &:nth-of-type(1) {
-        @include fontSize(18px, 1);
+        font-size: 18px;
       }
       &:nth-of-type(2) {
+        margin-top: 5px;
         font-size: 24px;
-        @include margin('top', 5px, 1);
+      }
+    }
+    >div {
+      >p {
+        &:nth-of-type(1) {
+        font-size: 16px;
+        }
+        &:nth-of-type(2) {
+          margin-top: 5px;
+          font-size: 24px;
+        }
       }
     }
     &.blue {

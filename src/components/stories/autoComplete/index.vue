@@ -45,9 +45,9 @@
                 </div>
               </div>
             </div>
-            <div class="d-flex popper-record" :class="item._id ? '' : 'theme-gray'" v-if="!item.trending">
+            <div class="d-flex popper-record" :class="{ 'theme-gray': !item.id }" v-if="!item.trending">
               <div class="d-inline-flex f-auto-center popper-record-icon">
-                <i :class="`el-icon-${item._id ? (item.history ? 'time' : 'location') : 'location-outline'} color-secondary`"></i>
+                <i :class="`el-icon-${item.id ? (item.history ? 'time' : 'location') : 'location-outline'} color-secondary`"></i>
               </div>
               <div class="v-flex popper-record-text">
                 <span class="d-inline-block record-name">{{ item.name.zh }}</span>

@@ -1,15 +1,16 @@
 <template>
   <header id="ld-header" class="ld-header" :class="[{ 'fixed': fixed }, { 'inverse': inverse && !scroll }, { 'transparent': transparent }, { 'inherit': inherit }, theme]" v-if="show">
     <div class="container d-flex f-align-center">
-      <div class="text-left inline-block header-logo" v-if="showLogo">
-        <router-link to="/" class="inline-block">
+      <div class="text-left inline-block header-left" v-if="showLogo">
+        <header-logo :theme="theme"></header-logo>
+        <!-- <router-link to="/" class="inline-block header-logo">
           <svg class="inline-block">
             <use xlink:href="#icon-logo-image"/>
           </svg>
-          <!-- <svg class="inline-block logo-text">
-            <use xlink:href="#icon-logo-text"/>
-          </svg> -->
-        </router-link>
+        </router-link> -->
+        <!-- <div>
+          <p></p>
+        </div> -->
       </div>
       <div @click.stop="toggleHeader" id="header-mask" class="header-mask"></div>
       <div @click.stop="headerItemClick" class="v-flex lg-d-flex lg-f-align-center lg-f-justify-end header-text navbar-sidebar">
@@ -44,7 +45,7 @@
           </router-link>
         </span>
         <div class="header-right-item user-item sm-hidden" data-type="link">
-          <user-avatar class="user-avatar" :header="true"></user-avatar>
+          <user-avatar class="user-avatar" :theme="theme === 'dark' ? 'light' : 'dark'" :showText="false"></user-avatar>
         </div>
       </div>
     </div>
@@ -55,6 +56,7 @@
 import { addClass, removeClass, toggleClass } from 'utils/tool'
 import throttle from 'lodash/throttle'
 import UserAvatar from '@/components/reuse/userAvatar'
+import HeaderLogo from './logo'
 export default {
   props: {
 
@@ -102,10 +104,11 @@ export default {
     // header 主题
     theme: {
       type: String,
-      default: 'default'
+      default: 'dark'
     }
   },
   components: {
+    HeaderLogo,
     UserAvatar
   },
   methods: {
@@ -146,26 +149,42 @@ export default {
   @import '@/assets/stylus/mixin/index.scss';
   .ld-header {
     width: 100%;
-    height: 80px;
     // overflow: hidden;
     z-index: 999;
     transition: all .3s ease;
-    background-color: $--header-bg-color;
-    @include height(80px, -2);
+    @include height(90px, -2);
     @include height(60px, 1, -2);
     &.fixed {
       position: fixed;
       top: 0;
       left: 0;
     }
-    &.default {
-      color: #fff;
-      fill: #fff;
-    }
     &.dark {
-      background-color: #0E0F16;
+      background-color: $--header-bg-color;
       color: #fff;
-      fill: #fff;
+      // .header-logo {
+      //   background-color: #fff;
+      //   fill: $--text-deep-blue-color;
+      //   color: $--text-deep-blue-color;
+      // }
+      .header-right-item {
+        fill: #fff;
+      }
+    }
+    &.light {
+      background-color: #fff;
+      color: #555;
+      // .header-logo {
+      //   background-color: $--text-blue-color;
+      //   fill: #fff;
+      //   color: $--text-blue-color;
+      // }
+      .header-right-item {
+        fill: $--text-blue-color;
+      }
+    }
+    &.shadow {
+      box-shadow: 0 2px 5px 0px rgba(0, 0, 0, .25);
     }
     &.transparent {
       background-color: transparent;
@@ -209,24 +228,35 @@ export default {
     height: 100%;
   }
 
-  .header-logo {
-    // height: 80px;
-    // line-height: 80px;
-    transition: all .15s ease-out .15s;
-    svg {
-      fill: inherit;
-      width: 64px;
-      height: 45px;
-      vertical-align: middle;
-      &.logo-text {
-        margin-left: 10px;
-        width: 119px;
-        height: 32px;
-        transform: translateY(5px);
-        @include margin('left', 10px, 1);
-      }
-    }
-  }
+  // .header-logo {
+  //   position: relative;
+  //   // height: 80px;
+  //   // line-height: 80px;
+  //   transition: all .15s ease-out .15s;
+  //   padding: 11px;
+  //   width: 54px;
+  //   height: 54px;
+  //   border-radius: 100%;
+  //   box-sizing: border-box;
+  //   &::before {
+  //     content: 'BETA';
+  //     position: absolute;
+  //     right: 0;
+  //     top: 3px;
+  //     font-family: $--font-TTNormsBold;
+  //     font-size: 12px;
+  //     padding: 3px;
+  //     background-color: #fff;
+  //     border-radius: 2px;
+  //     box-shadow: 0 2px 5px rgba(0, 0, 0, .25);
+  //     transform: scale(.75) translateX(60%);
+  //   }
+  //   svg {
+  //     fill: inherit;
+  //     width: 100%;
+  //     height: 100%;
+  //   }
+  // }
   .header-text {
   }
 
@@ -264,10 +294,12 @@ export default {
       text-decoration: none;
     }
     svg {
+      fill: inherit;
       width: 24px;
       height: 24px;
     }
     &.user-item {
+      margin-left: 60px;
       height: 100%;
       .user-avatar {
         height: 48px;
@@ -350,13 +382,13 @@ export default {
       z-index: 99;
       // line-height: 60px;
     }
-    .header-logo {
-      // line-height: 60px;
-      svg {
-        width: 54px;
-        height: 40px;
-      }
-    }
+    // .header-logo {
+    //   // line-height: 60px;
+    //   svg {
+    //     width: 54px;
+    //     height: 40px;
+    //   }
+    // }
     .navbar-sidebar {
       margin: 0;
       position: fixed;
@@ -409,11 +441,6 @@ export default {
           height: 40px;
           fill: #fff;
         }
-      }
-    }
-    .header-logo {
-      .logo-text {
-        display: none;
       }
     }
   }

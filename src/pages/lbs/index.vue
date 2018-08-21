@@ -20,12 +20,12 @@
         :direction="-1"
         @logoEvt="$router.push('/market')"></TxCarousel>
     </div>
-    <div class="sm-hidden lbs-user-box text-nowrap" :class="{ 'shadow': userInfo.address }">
-      <user-avatar :scale="9"></user-avatar>
+    <div class="sm-hidden text-nowrap lbs-user-box" :class="{ 'shadow': userInfo.address }">
+      <user-avatar :scale="9" theme="dark" shadow loginText="Login" :showInfo="false"></user-avatar>
     </div>
     <div class="sm-hidden lbs-control-box" v-if="mapControl">
       <div class="d-flex col-flex lbs-control-container">
-        <span class="inline-block color-secondary"
+        <!-- <span class="inline-block color-secondary"
           :class="{ 'is-disabled': isMapMaxZoom }"
           @click.stop="changeMapZoom('plus', isMapMaxZoom)">
           <svg>
@@ -38,11 +38,12 @@
           <svg>
             <use xlink:href="#icon-search-minus"/>
           </svg>
-        </span>
+        </span> -->
         <span class="inline-block color-secondary"
-          @click.stop="$router.push('/market')">
+          :class="{ 'is-disabled': isMapMinZoom }"
+          @click.stop="changeMapZoom('minus', isMapMinZoom)">
           <svg>
-            <use xlink:href="#icon-map"/>
+            <use :xlink:href="`#icon-${isMapMinZoom ? 'gray-' : ''}map`"/>
           </svg>
         </span>
       </div>
@@ -150,18 +151,18 @@ export default {
 
       const b = []
       const c = []
-
       // 存在于数据库中，但是没有记录的
       const a = ldbs.filter((item) => {
         // 没有存在于数据库中的
-        if (!item._id) b.push(item)
+        if (!item.id) b.push(item)
 
         const sIndex = localLdbIds.indexOf(item._id)
 
         // 存在于记录中的
-        if (item._id && sIndex !== -1) c.push(localLdbs[sIndex])
+        if (item.id && sIndex !== -1) c.push(localLdbs[sIndex])
 
-        return item._id && sIndex === -1
+        // 数据存在并且本地没有记录
+        return item.id && sIndex === -1
       })
 
       return [].concat(c, a, b)
@@ -196,7 +197,7 @@ export default {
      * auto complete select event
      */
     handleSelect (item) {
-      if (item._id) {
+      if (item.id) {
         // 调整地图显示视图
         let { lat, lng } = item.chain
         lat = transferCoords(lat)
@@ -280,9 +281,6 @@ export default {
       this[actionTypes.LDB_GET_HISTORY_SEARCH_LDBS]()
       this.$refs.lordMap.init()
     })
-  },
-  beforeDestroy () {
-    this.$refs.txCarousel.destroy()
   }
 }
 </script>
@@ -314,14 +312,14 @@ export default {
     position: absolute;
     right: 60px;
     top: 50px;
-    width: 54px;
-    height: 54px;
+    // width: 54px;
+    // height: 54px;
     border-radius: 6px;
     color: #fff;
     cursor: pointer;
-    &.shadow {
-      box-shadow: 2px 4px 8px 0 rgba(12, 0, 42, .5);
-    }
+    // &.shadow {
+    //   box-shadow: 2px 4px 8px 0 rgba(12, 0, 42, .5);
+    // }
   }
   .lbs-control-box {
     position: absolute;
@@ -348,8 +346,6 @@ export default {
         }
       }
       &.is-disabled {
-        fill: #ccc;
-        stroke: #ccc;
         cursor: no-drop;
       }
     }

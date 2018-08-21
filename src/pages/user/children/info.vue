@@ -140,7 +140,7 @@
                 <div class="info-home-unknow" v-if="!overviews.home">
                   <p>You have no home now.</p>
                   <p>Set a home you will be located there when you login.</p>
-                  <ld-btn class="user-info-btn" theme="blue" inverse shadow>View map now</ld-btn>
+                  <ld-btn class="user-info-btn" theme="blue" inverse shadow @click="$router.push('/lbs')">View map now</ld-btn>
                 </div>
                 <div class="info-home-know" v-if="overviews.home">
                   <p class="info-ldb-name">{{ overviews.home.ldb.name.zh }}</p>

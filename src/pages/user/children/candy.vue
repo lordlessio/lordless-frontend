@@ -20,7 +20,7 @@
         </el-tooltip>
       </h1>
       <div
-        v-if="!userAssets.length && !userRecords.length"
+        v-if="!userAssets.length && !userRecords.total"
         class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
         <svg>
           <use xlink:href="#icon-no-candy"/>
@@ -29,16 +29,16 @@
         <div class="d-flex f-auto-center TTFontBolder">
           <span>Apply a</span>
           <span class="inline-block">
-            <ld-btn class="no-asset-btn TTFontBolder" theme="default" shadow>Task</ld-btn>
+            <ld-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Task</ld-btn>
           </span>
           <span>or buy a LDB in</span>
           <span class="inline-block">
-            <ld-btn class="no-asset-btn TTFontBolder" theme="default" shadow>Marketplace</ld-btn>
+            <ld-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Marketplace</ld-btn>
           </span>
         </div>
       </div>
       <div
-        v-if="userAssets.length || userRecords.length"
+        v-if="userAssets.length || userRecords.total"
         class="v-flex user-candy-tabs">
         <el-tabs
           v-model="candyTab"
@@ -47,48 +47,48 @@
             label="Balance"
             name="balance">
             <div class="d-flex f-align-center text-center candy-tabs-title">
-              <el-col :span="4">Asset</el-col>
-              <el-col :span="4">Quantity</el-col>
-              <el-col :span="5">Valued by ETH(≈)</el-col>
-              <el-col :span="5">Price(≈)</el-col>
-              <el-col :span="5">Total(≈)</el-col>
+              <el-col :span="5">Asset</el-col>
+              <el-col :span="5">Quantity</el-col>
+              <!-- <el-col :span="5">Valued by ETH(≈)</el-col> -->
+              <el-col :span="6">Price(≈)</el-col>
+              <el-col :span="6">Total(≈)</el-col>
             </div>
             <div
-              class="d-flex f-align-center text-center candy-balance-item"
+              class="d-flex f-align-center text-center candy-balance-item candy-list-item"
               v-for="(asset, index) of userAssets"
               :key="index">
-              <el-col :span="4" class="d-flex f-auto-center">
+              <el-col :span="5" class="d-flex f-auto-center candy-symbol">
                 <span class="inline-block candy-coin-svg">
                   <!-- <svg>
                     <use xlink:href="#coin-eth"/>
                   </svg> -->
                   <img src="http://lordless.oss-cn-hongkong.aliyuncs.com/test/coin.svg"/>
                 </span>
-                <span class="text-upper">{{ asset.candy.name }}</span>
-              </el-col>
-              <el-col :span="4">
-                <span>{{ asset.count | formatDecimal }}</span>
-                <span class="text-upper"> {{ asset.candy.name }}</span>
+                <span class="text-upper">{{ asset.candy.symbol }}</span>
               </el-col>
               <el-col :span="5">
+                <span>{{ asset.count | formatDecimal }}</span>
+                <span class="text-upper"> {{ asset.candy.symbol }}</span>
+              </el-col>
+              <!-- <el-col :span="5">
                 <span>{{ 1 / asset.candy.eth2TokenCount }}</span>
                 <span class="text-upper"> ETH</span>
-              </el-col>
-              <el-col :span="5">
+              </el-col> -->
+              <el-col :span="6">
                 <span>$</span>
-                <span> {{ 0.002 }}</span>
+                <span> {{ asset.candy.USD2TokenCount | formatDecimal }}</span>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="6">
                 <span>$</span>
-                <span> {{ asset.count * 0.002 | formatDecimal }}</span>
+                <span> {{ asset.count * asset.candy.USD2TokenCount | formatDecimal }}</span>
               </el-col>
             </div>
           </el-tab-pane>
           <el-tab-pane
             class="d-flex candy-tab-box"
             :class="{ 'showAside': aside.show }"
-            label="Transactions"
-            name="transactions">
+            label="History"
+            name="history">
             <div class="v-flex candy-rewards-box">
               <div class="d-flex f-align-center text-center candy-tabs-title">
                 <el-col :span="4">Asset</el-col>
@@ -98,103 +98,137 @@
               </div>
               <div class="candy-reward-list">
                 <div
-                  class="d-flex f-align-center text-center text-ellipsis candy-reward-item"
+                  class="d-flex f-align-center text-center text-ellipsis candy-reward-item  candy-list-item"
                   :class="{ 'choose': rewardModels[record._id], 'drop': parseInt(record.status) === 1 }"
-                  v-for="(record, index) of userRecords"
+                  v-for="(record, index) of userRecords.list"
                   :key="index"
                   @click="chooseReward($event, record)">
-                  <el-col :span="4" class="d-flex f-auto-center">
+                  <el-col :span="4" class="d-flex f-auto-center candy-symbol">
                     <span class="inline-block candy-coin-svg">
                       <svg>
                         <use xlink:href="#coin-eth"/>
                       </svg>
                     </span>
-                    <span>{{ record.candy.name }}</span>
+                    <span class="text-upper">{{ record.reward.candy.symbol }}</span>
                   </el-col>
                   <el-col :span="6">
-                    <span class="text-upper">{{ record.type }}</span>
+                    <span>{{ record.lord ? 'LORD' : 'Task' }}</span>
                     <span class="text-cap"> Reward</span>
                   </el-col>
                   <el-col :span="6">
-                    <span>{{ record.created_at | dateFormat }}</span>
+                    <span>{{ record.update_at | dateFormat }}</span>
                   </el-col>
                   <el-col :span="6" class="d-flex f-align-center candy-quantity">
                     <span class="line-height-0 candy-down-svg">
                       <svg>
-                        <use :xlink:href="`#${parseInt(record.status) === 1 ? 'icon-arrow-up' : 'icon-download'}`"/>
+                        <use xlink:href="#icon-download"/>
                       </svg>
                     </span>
-                    <span>{{ record.count }}</span>
+                    <span class="TTFontBolder">+{{ record.lord ? record.lord.reward.count : record.executor.reward.count | formatDecimal }}</span>
                   </el-col>
                 </div>
               </div>
             </div>
             <div class="candy-reward-aside">
-              <div class="reward-aside-container">
-                <h1>+1.2 <span>ONOT</span></h1>
-                <ld-btn theme="green" inverse class="text-cap reward-aside-btn">Task Reward</ld-btn>
-                <ul class="candy-aside-ul candy--value">
-                  <li>
-                    <p>Valued by <span class="text-upper">ETH</span></p>
-                    <p>0.000167 ETH</p>
-                  </li>
-                  <li>
-                    <p>Valued by <span class="text-upper">USD</span></p>
-                    <p>$ 0.000793</p>
-                  </li>
-                  <li>
-                    <p>Date</p>
-                    <p>{{ aside.data.date | dateFormat }}</p>
-                  </li>
-                </ul>
-                <ul class="candy-aside-ul candy-ldb-related">
-                  <li>
-                    <p>Related LDB</p>
-                    <h2>#87654</h2>
-                  </li>
-                  <li>
-                    <p>Name</p>
-                    <p>上海展览中心</p>
-                  </li>
-                  <li>
-                    <p>Coordinate</p>
-                    <p>121.451557, 31.225728</p>
-                  </li>
-                  <li>
-                    <p>LORD</p>
-                    <p class="candy-aside-blockies">
-                      <Blockies :scale="5" radius="5px"></Blockies>
-                    </p>
-                  </li>
-                </ul>
-                <ul class="candy-aside-ul candy-task-related">
-                  <li>
-                    <p>Related Task</p>
-                    <h2>#45687</h2>
-                  </li>
-                  <li>
-                    <p>Detail</p>
-                    <p>Follow the Twitter of @ONOT</p>
-                  </li>
-                  <li>
-                    <p>Reward percentage</p>
-                    <p>50%</p>
-                  </li>
-                  <li>
-                    <p>Employee</p>
-                    <p class="candy-aside-blockies">
-                      <Blockies :scale="5" radius="5px"></Blockies>
-                    </p>
-                  </li>
-                </ul>
+              <div v-if="aside.show && rewardLoading" class="reward-aside-skeletion">
+                <h1></h1>
+                <p></p>
+                <div>
+                  <p></p>
+                  <p></p>
+                </div>
+                <div>
+                  <p></p>
+                  <p></p>
+                </div>
+                <div>
+                  <p></p>
+                  <p></p>
+                </div>
+                <div class="big">
+                  <p></p>
+                  <h2></h2>
+                </div>
+                <div class="big">
+                  <p></p>
+                  <p></p>
+                </div>
+                <div>
+                  <p></p>
+                  <p></p>
+                </div>
+                <div>
+                  <p></p>
+                  <div></div>
+                </div>
               </div>
+              <transition name="ld-hide-fade">
+                <div v-if="!rewardLoading && aside.data && aside.show" class="reward-aside-container">
+                  <h1>+{{ (aside.lord ? aside.data.lord.reward.count : aside.data.executor.reward.count) | formatDecimal }} <span class="text-upper">{{ aside.data.reward.candy.symbol }}</span></h1>
+                  <ld-btn theme="green" inverse class="text-cap reward-aside-btn">{{ aside.lord ? 'LORD' : 'Task' }} Reward</ld-btn>
+                  <ul class="candy-aside-ul candy--value">
+                    <li>
+                      <p>Valued by <span class="text-upper">ETH</span></p>
+                      <p>0.000167 ETH</p>
+                    </li>
+                    <li>
+                      <p>Valued by <span class="text-upper">USD</span></p>
+                      <p>$ {{ (aside.lord ? aside.data.lord.reward.count : aside.data.executor.reward.count) / aside.data.reward.candy.USD2TokenCount | formatDecimal }}</p>
+                    </li>
+                    <li>
+                      <p>Date</p>
+                      <p>{{ aside.data.update_at | dateFormat }}</p>
+                    </li>
+                  </ul>
+                  <ul class="candy-aside-ul candy-ldb-related">
+                    <li>
+                      <p>Related LDB</p>
+                      <p class="aside-big-name">#{{ aside.data.ldb.info._id }}</p>
+                    </li>
+                    <li>
+                      <p>Name</p>
+                      <p>{{ aside.data.ldb.info.name.zh }}</p>
+                    </li>
+                    <li>
+                      <p>Coordinate</p>
+                      <p>{{ aside.data.ldb.info.chain.lng | transferCoords | sliceStr }}, {{ aside.data.ldb.info.chain.lat | transferCoords | sliceStr }}</p>
+                    </li>
+                    <li>
+                      <p>LORD</p>
+                      <p class="candy-aside-blockies">
+                        <Blockies :seed="aside.data.ldb.lord" :scale="5" theme="light" radius="5px"></Blockies>
+                      </p>
+                    </li>
+                  </ul>
+                  <ul class="candy-aside-ul candy-task-related">
+                    <li>
+                      <p>Related Task</p>
+                      <p class="aside-big-name">#{{ aside.data._id }}</p>
+                    </li>
+                    <li>
+                      <p>Detail</p>
+                      <p>{{ aside.data.ldbTaskType.name }}</p>
+                    </li>
+                    <li>
+                      <p>Reward percentage</p>
+                      <p>{{ (aside.lord ? aside.data.lord.reward.percentage : aside.data.executor.reward.percentage) * 100 }}%</p>
+                    </li>
+                    <li>
+                      <p>Employee</p>
+                      <p class="candy-aside-blockies">
+                        <Blockies :seed="aside.lord ? aside.data.lord.info : aside.data.executor.info" :scale="5" theme="light" radius="5px"></Blockies>
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+              </transition>
             </div>
           </el-tab-pane>
         </el-tabs>
         <Pagination
           v-if="showPagination"
           class="ld-candy-pagination"
-          :total="userRecordsTotal"
+          :total="userRecords.total"
           background
           @currentChange="pageChange">
         </Pagination>
@@ -208,7 +242,7 @@ import Blockies from '@/components/stories/blockies'
 import LdBtn from '@/components/stories/button'
 import Pagination from '@/components/stories/pagination'
 
-import { getAssetsByAddress, getRecords } from 'api'
+import { getUserAssets, getUserCandyHistory, getTaskById } from 'api'
 
 import { mapState } from 'vuex'
 export default {
@@ -224,19 +258,24 @@ export default {
       // 用户账户
       userAssets: [],
 
-      // 用户交易记录
-      userRecords: [],
-
-      // 交易记录总数
-      userRecordsTotal: 0,
+      // 用户交易记录信息
+      userRecords: {
+        pn: 1,
+        ps: 10,
+        list: [],
+        total: 0
+      },
 
       // 选中的交易记录
       rewardModels: {},
 
+      rewardLoading: false,
+
       // 交易记录侧边栏参数
       aside: {
         show: false,
-        data: {}
+        data: null,
+        lord: true
       }
     }
   },
@@ -257,44 +296,52 @@ export default {
     chooseTab (evt) {
       if (this.currentTab === this.candyTab) return
       this.currentTab = this.candyTab
-      this.rewardModels = {}
-      this.$set(this.aside, 'show', false)
+      this.initAside()
       if (this.candyTab === 'balance') this.getAssets()
       else this.getRecords()
     },
 
-    chooseReward (evt, data) {
+    async chooseReward (evt, data) {
       const { _id } = data
       if (this.rewardModels[_id]) {
-        this.rewardModels = {}
-        this.$set(this.aside, 'show', false)
+        this.initAside()
         return
       }
       this.rewardModels = {}
+      this.rewardLoading = true
+      const res = await getTaskById({ taskId: _id })
+      if (res.code === 1000 && res.data) {
+        this.$set(this.aside, 'data', res.data)
+      }
+      this.rewardLoading = false
       this.$set(this.rewardModels, _id, true)
+      this.$set(this.aside, 'lord', !!data.lord)
       this.$set(this.aside, 'show', true)
-      this.$set(this.aside, 'data', data)
     },
 
-    async getAssets ({ address } = this.userInfo) {
+    async initAside () {
+      this.rewardModels = {}
+      this.$set(this.aside, 'show', false)
+      this.$set(this.aside, 'data', null)
+    },
+
+    async getAssets () {
       if (this.candyTab !== 'balance') return
-      const res = await getAssetsByAddress(address)
+      const res = await getUserAssets()
       if (res.code === 1000) {
         this.userAssets = res.data
       }
     },
 
-    async getRecords ({ address = this.userInfo.address, page = 1, offset = 10 } = {}) {
-      if (this.candyTab !== 'transactions') return
+    async getRecords ({ address = this.userInfo.address, pn = 1, ps = 10 } = {}) {
+      if (this.candyTab !== 'history') return
       const params = {
-        page,
-        offset,
-        user: address
+        pn,
+        ps
       }
-      const res = await getRecords(params)
+      const res = await getUserCandyHistory(params)
       if (res.code === 1000) {
-        this.userRecords = res.data.list
-        this.userRecordsTotal = res.data.total
+        this.userRecords = res.data
       }
     },
 
@@ -367,9 +414,15 @@ export default {
   }
 
   .candy-tabs-title {
-    color: #999;
+    color: #bbb;
     @include margin('top', 25px, 1);
     @include margin('bottom', 10px, 1);
+  }
+  .candy-list-item {
+    color: #999;
+    .candy-symbol {
+      color: #777;
+    }
   }
 
   .candy-balance-item {
@@ -427,6 +480,9 @@ export default {
         color: #fff;
         fill: #fff;
       }
+      .candy-symbol {
+        color: #fff;
+      }
 
       // background-image: linear-gradient(45deg, #16222A, #3A6073);
     }
@@ -442,6 +498,54 @@ export default {
     fill: #4586FC;
     .candy-down-svg {
       @include margin('right', 3px, 1);
+    }
+  }
+
+  // reward-aside-skeletion
+  .reward-aside-skeletion {
+    padding: 30px 20px 50px 40px;
+    border-radius: 5px;
+    background-color: $--skeletion-light;
+    >h1 {
+      width: 80px;
+      height: 50px;
+      background-color: $--skeletion-dark;
+    }
+    >p {
+      margin-top: 6px;
+      width: 60px;
+      height: 25px;
+      border-radius: 5px;
+      background-color: $--skeletion-dark;
+    }
+    >div {
+      margin-top: 10px;
+      &.big {
+        margin-top: 25px;
+      }
+      >p {
+        background-color: $--skeletion-dark;
+        &:nth-of-type(1) {
+          width: 120px;
+          height: 20px;
+        }
+        &:nth-of-type(2) {
+          margin-top: 6px;
+          width: 120px;
+          height: 25px;
+        }
+      }
+      >h2 {
+        margin-top: 10px;
+        height: 30px;
+        background-color: $--skeletion-dark;
+      }
+      >div {
+        width: 30px;
+        height: 30px;
+        border-radius: 5px;
+        background-color: $--skeletion-dark;
+      }
     }
   }
 
@@ -481,7 +585,9 @@ export default {
     background-color: transparent;
     transition: all .3s;
     >h1 {
-      font-size: 50px;
+      font-family: $--font-TTNormsMedium;
+      font-weight: normal;
+      font-size: 48px;
       >span {
         font-size: 28px;
       }
@@ -501,7 +607,7 @@ export default {
           font-size: 14px;
         }
       }
-      >h2 {
+      .aside-big-name {
         font-size: 28px;
       }
     }
