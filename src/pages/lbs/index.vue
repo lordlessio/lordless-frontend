@@ -91,8 +91,8 @@ export default {
       mapControl: false,
 
       // lordMap options
-      lbsMPitch: 45,
-      mapScrollZooms: [12, 20]
+      lbsMPitch: 60,
+      mapScrollZooms: [12, 17]
     }
   },
   components: {

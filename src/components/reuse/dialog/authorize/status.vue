@@ -4,7 +4,7 @@
       <h1 class="TTFontBolder">{{ infos[type].title }}</h1>
       <p>{{ infos[type].content }}</p>
       <p>New here?Read our guide on getting started.</p>
-      <ld-btn theme="info" class="TTFontBolder lordless-message-btn" @click="$router.push('/status')">Read guide</ld-btn>
+      <ld-btn theme="deep-blue" class="TTFontBolder lordless-message-btn" @click="$router.push('/status')">Read guide</ld-btn>
       <img-box class="authorize-status-img" :sType="infos[type].sType" :center="false" :src="infos[type].imgUrl"></img-box>
     </div>
   </div>

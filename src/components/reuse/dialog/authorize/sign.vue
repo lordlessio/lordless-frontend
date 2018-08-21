@@ -17,7 +17,7 @@
         <div>
           <ld-btn
             class="TTFontBolder lordless-message-btn login-btn"
-            theme="info"
+            theme="deep-blue"
             shadow
             @click="relogin">Login</ld-btn>
         </div>
@@ -79,7 +79,7 @@
       </div>
       <ld-btn
         class="TTFontBolder lordless-message-btn"
-        theme="info"
+        theme="deep-blue"
         shadow
         :disabled="!signRequired"
         @click="signUp">Sign Up</ld-btn>

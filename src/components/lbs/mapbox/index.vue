@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { reldbIcon } from 'utils/tool'
+// import { reldbIcon } from 'utils/tool'
 // import MapBox from 'mapbox-gl/dist/mapbox-gl.js'
 export default {
   name: 'mapbox',
@@ -38,13 +38,13 @@ export default {
     },
     token: {
       type: String,
-      // default: 'pk.eyJ1IjoiZXVyeWNoZW4iLCJhIjoiY2ppMWc4MXd2MGVhNjNwb2Examk1a2hneiJ9.fbBmKer4pBqIm8gng008yA'
-      default: 'pk.eyJ1Ijoiam9lLWhpbGwiLCJhIjoiY2ppMWVldDIyMDlvcTNxcXAyZ3RuMmJ0YyJ9.4zH2xLDDfAmYp0k91-KOIA'
+      default: 'pk.eyJ1IjoiZXVyeWNoZW4iLCJhIjoiY2ppMWc4MXd2MGVhNjNwb2Examk1a2hneiJ9.fbBmKer4pBqIm8gng008yA'
+      // default: 'pk.eyJ1Ijoiam9lLWhpbGwiLCJhIjoiY2ppMWVldDIyMDlvcTNxcXAyZ3RuMmJ0YyJ9.4zH2xLDDfAmYp0k91-KOIA'
     },
     mapStyle: {
       type: String,
-      // default: 'mapbox://styles/eurychen/cjkje3xmq4lur2spivw4p4fbg'
-      default: 'mapbox://styles/joe-hill/cjifv0uhy0ag62rn3zk2tqh0b'
+      default: 'mapbox://styles/eurychen/cjkje3xmq4lur2spivw4p4fbg'
+      // default: 'mapbox://styles/joe-hill/cjifv0uhy0ag62rn3zk2tqh0b'
     },
     center: {
       type: Array,
@@ -114,7 +114,7 @@ export default {
       box.style.width = 'inherit'
       box.style.height = 'inherit'
       // const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}" style="width: 100%"/><p>${name}</p><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>800 / 1000</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${600 / 1000 * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
-      const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}" style="width: 100%"/><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>800 / 1000</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${600 / 1000 * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
+      const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}"/><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>800 / 1000</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${600 / 1000 * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
       box.innerHTML = boxHtml
       return box
     },
@@ -129,7 +129,7 @@ export default {
         const coords = [chain.lng / 1e16, chain.lat / 1e16]
 
         // 创建 Image markers
-        const imgSrc = reldbIcon(ldbIcon.source.map, 'map')
+        const imgSrc = `${process.env.LDBICON_ORIGIN}${ldbIcon.source.map}`
         // const imgSrc = 'http://lordless.oss-cn-hongkong.aliyuncs.com/console/ldbIcon/2018-08-04/1533395070990.png'
         const markerDom = this.createImageMarker({ name, imgSrc, level: chain.level })
         // const { id, fields } = item
@@ -151,17 +151,17 @@ export default {
         this.imageMarkers[_id] = imageMarker
       })
 
-      // let startTime = new Date()
-      // const checkImageMarker = (delay = 300) => {
-      //   // 如果map 的 zoom正在变化或者相邻事件执行时间少于300毫秒,return
-      //   if (new Date() - startTime < delay || map.isZooming()) return
-      //   startTime = new Date()
-      //   this.checkMarkerIsInView({ type: 'image' })
-      // }
-      // this.checkMarkerIsInView({ type: 'image' })
+      let startTime = new Date()
+      const checkImageMarker = (delay = 300) => {
+        // 如果map 的 zoom正在变化或者相邻事件执行时间少于300毫秒,return
+        if (new Date() - startTime < delay || map.isZooming()) return
+        startTime = new Date()
+        this.checkMarkerIsInView({ type: 'image' })
+      }
+      this.checkMarkerIsInView({ type: 'image' })
 
       // map move 之后，check image marker is Inview
-      // this.mapMoveEvent(checkImageMarker)
+      this.mapMoveEvent(checkImageMarker)
 
       // 每次zoom变化前，remove marker
       this.mapZoomStartEvent(() => this.checkMarkerIsInView({ type: 'image', remove: true }))
@@ -283,7 +283,7 @@ export default {
         const coords = [chain.lng / 1e16, chain.lat / 1e16]
 
         // 创建 markers
-        const poster = reldbIcon(ldbIcon.source.map, 'map')
+        const poster = `${process.env.LDBICON_ORIGIN}${ldbIcon.source.map}`
         // const poster = 'http://lordless.oss-cn-hongkong.aliyuncs.com/console/ldbIcon/2018-08-04/1533395070990.png'
         const pointDom = this.createPointMarker({ _id, name, poster, level: chain.level })
         pointDom.addEventListener('click', () => {
@@ -359,7 +359,7 @@ export default {
       return new Promise((resolve, reject) => {
         if (window.mapboxgl) return resolve()
         const el = document.createElement('script')
-        el.src = 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.45.0/mapbox-gl.js'
+        el.src = 'https://api.mapbox.cn/mapbox-gl-js/v0.45.0/mapbox-gl.js'
         el.type = 'text/javascript'
         el.async = true
         document.head.appendChild(el)
@@ -400,10 +400,6 @@ export default {
       // map.dragPan.disable()
       this.map = map
 
-      map.on('click', (e) => {
-        console.log('------e', e)
-      })
-
       map.on('load', () => {
         // 添加marker
         // this.createMarker(map)
@@ -416,7 +412,6 @@ export default {
 
         this.$emit('load')
       })
-      window.lMap = map
     },
 
     /**
@@ -543,7 +538,7 @@ export default {
      * @param {Function} cb 动画执行完毕的回调
      * @param {Map} map 地图实例，默认为当前实例
      */
-    flyToCoords ({ center = this.map.getCenter(), zoom = 14, duration = 500, pitch = this.pitch } = {}, cb, map = this.map) {
+    flyToCoords ({ center = this.map.getCenter(), zoom = 14, duration = 500, pitch = this.mPitch } = {}, cb, map = this.map) {
       if (map.isZooming()) {
         if (cb) cb()
         return
@@ -673,16 +668,24 @@ export default {
   }
 
   ._marker--ldb-container {
-    width: 250px;
+    // width: 250px;
+    margin: 0 auto;
+    width: 66.7%;
     line-height: 1;
+    transform: translateY(-35%);
+    color: #999;
+    >img {
+      width: 100%;
+      // transform: translateX(30%);
+    }
     // height: 100%;
     // transform-origin: center;
     // transform: scale(.5);
-    transition: width .35s ease-in-out;
+    // transition: width .35s ease-in-out;
   }
 
   ._marker--info-box {
-    color: #fff;
+    color: #999;
     overflow: hidden;
   }
   ._marker--info-container {
@@ -731,7 +734,7 @@ export default {
   ._point_marker--ldb-box {
     // position: relative;
     border: none;
-    height: 9px;
+    height: 12px;
     width: 12px;
     background-color: #E47172;
     border-radius: 50%;
@@ -751,10 +754,10 @@ export default {
       position: absolute;
       display: block;
       border: none;
-      height: 24px;
+      height: 32px;
       width: 32px;
       left: -10px;
-      top: -6px;
+      top: -10px;
       opacity: .2;
       background-color: inherit;
       border-radius: 50%;

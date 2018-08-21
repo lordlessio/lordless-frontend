@@ -7,7 +7,7 @@
           <span>
             <ld-btn
               class="d-flex f-align-center user-withdraw-btn"
-              theme="info"
+              theme="deep-blue"
               disabled
               shadow
               inverse>
@@ -59,9 +59,10 @@
               :key="index">
               <el-col :span="4" class="d-flex f-auto-center">
                 <span class="inline-block candy-coin-svg">
-                  <svg>
+                  <!-- <svg>
                     <use xlink:href="#coin-eth"/>
-                  </svg>
+                  </svg> -->
+                  <img src="http://lordless.oss-cn-hongkong.aliyuncs.com/test/coin.svg"/>
                 </span>
                 <span class="text-upper">{{ asset.candy.name }}</span>
               </el-col>

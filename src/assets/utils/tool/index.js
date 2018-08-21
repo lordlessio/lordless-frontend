@@ -246,15 +246,17 @@ export const getBrowser = () => {
   }
 }
 
-export const reldbIcon = (url, type = 'preview') => {
+export const reldbIcon = (url, type = 'preview', percent = 50) => {
   if (!url) return url
   let size = 600
   if (type === 'map') {
-    size = 400
+    size = `w_400`
   } else if (type === 'detail') {
-    size = 1600
+    size = `w_1600`
+  } else if (type === 'percent') {
+    size = `p_${percent}`
   }
-  return `${process.env.LDBICON_ORIGIN}${url}?x-oss-process=image/resize,w_${size}`
+  return `${process.env.LDBICON_ORIGIN}${url}?x-oss-process=image/resize,${size}`
 }
 
 export const transferCoords = (value) => {

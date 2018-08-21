@@ -48,7 +48,7 @@
           <div class="ldb-sell-btn">
             <ld-btn
               class="TTFontBolder lordless-message-btn"
-              theme="info"
+              theme="deep-blue"
               shadow
               :loading="sellPending"
               :disabled="metamaskChoose || sellPending"

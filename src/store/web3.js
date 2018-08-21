@@ -47,7 +47,7 @@ export default {
     [mutationTypes.WEB3_SET_WEB3_INFO] (state, payload = {}) {
       if (objectType(payload)[0] !== 'object') return
       state.web3Opt = Object.assign({}, state.web3Opt, payload)
-      window.web3Opt = Object.assign({}, state.web3Opt, payload)
+      // window.web3Opt = Object.assign({}, state.web3Opt, payload)
     }
   },
   actions: {

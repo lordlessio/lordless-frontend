@@ -137,7 +137,7 @@ export default {
     },
 
     showSign () {
-      return !this.lockedMetamask && !this.address
+      return !this.unallowMetamask && !this.address
     },
 
     closeTheme () {

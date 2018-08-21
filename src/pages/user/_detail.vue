@@ -312,7 +312,7 @@ export default {
   @import '@/assets/stylus/mixin/index.scss';
 
   .ld-user-box {
-    padding-top: 50px;
+    padding-top: 130px;
     @include viewport-unit('min-height', 100vh, 80px);
   }
   .user-header-cnt {

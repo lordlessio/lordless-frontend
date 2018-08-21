@@ -80,7 +80,7 @@
                     <p class="TTFontNormal detail-ldb-address">{{ info.address }}</p>
                     <p class="detail-ldb-location">{{ info.chain.lng | transferCoords | sliceStr}}, {{ info.chain.lat | transferCoords | sliceStr }}</p>
                     <p class="detail-ldb-desc">静安寺，又称静安古寺，位于上海市静安区，其历史相传最早可追溯至三国孙吴赤乌十年（247年），初名沪渎重玄寺。</p>
-                    <ld-btn v-if="!isHome" class="ldb-home-btn" theme="info" shadow inverse @click="setHome">Set as home</ld-btn>
+                    <ld-btn v-if="!isHome" class="ldb-home-btn" theme="deep-blue" shadow inverse @click="setHome">Set as home</ld-btn>
                     <figcaption>
                       <div class="d-flex f-align-center detail-lord-box">
                         <blockies

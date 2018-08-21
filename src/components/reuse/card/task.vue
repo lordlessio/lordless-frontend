@@ -14,7 +14,7 @@
           <div class="ld-task-status">
             <p class="d-flex f-align-center task-status-serial">
               <span class="line-height-0"># {{ info._id }}</span>
-              <span class="text-cap task-tip">Telegram</span>
+              <span class="text-cap task-tip">{{ info.ldbTaskType.taskType === 1 ? 'Daily' :'Telegram' }}</span>
             </p>
             <div class="d-flex f-align-center task-status-reward">
               <h2 class="color-blue" :class="{ 'text-line-through': info.status === 2 }">+{{ info.executor.reward.count | formatDecimal }} <span class="text-upper">{{ info.reward.candy.symbol }}</span></h2>

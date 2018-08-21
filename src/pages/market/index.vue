@@ -15,7 +15,7 @@
         </p>
       </section>
       <section class="lg-d-flex f-align-center market-sort-bar">
-        <p class="lg-v-flex sm-text-left sm-mar-b4">Total 40 LDBs on sale</p>
+        <p class="lg-v-flex sm-text-left sm-mar-b4">Total {{ total }} LDBs on sale</p>
         <div class="d-flex f-align-center">
           <span>Sort <span class="sm-hidden">by</span></span>
           <ld-select

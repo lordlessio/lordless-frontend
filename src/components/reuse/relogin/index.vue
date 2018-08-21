@@ -12,7 +12,7 @@
     </div>
     <div slot="footer" class="dialog-footer">
       <ld-button @click="setUserExpired(false)">取 消</ld-button>
-      <ld-button theme="info-2" @click="metaLogin">确 定</ld-button>
+      <ld-button theme="deep-blue-2" @click="metaLogin">确 定</ld-button>
     </div>
   </el-dialog>
 </template>

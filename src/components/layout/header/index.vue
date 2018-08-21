@@ -143,7 +143,7 @@ export default {
     // overflow: hidden;
     z-index: 999;
     transition: all .3s ease;
-    background-color: #4D33A7;
+    background-color: $--header-bg-color;
     @include height(80px, -2);
     @include height(60px, 1, -2);
     &.fixed {
@@ -167,7 +167,7 @@ export default {
       color: inherit;
     }
     &.inverse {
-      background-color: #4D33A7;
+      background-color: $--header-bg-color;
     }
     &.show-sidebar {
       .header-logo {

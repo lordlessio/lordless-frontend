@@ -87,7 +87,7 @@
               </div>
             </transition>
             <transition name="ld-hide-fade">
-              <el-row v-show="saleBuildings.length && loading" :gutter="20" class="user-buildings-cnt">
+              <el-row v-show="saleBuildings.length && !loading" :gutter="20" class="user-buildings-cnt">
                 <el-col
                   :xs="24" :sm="12" :lg="8"
                   class="building-item"

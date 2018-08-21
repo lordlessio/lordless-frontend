@@ -51,7 +51,7 @@ const checkWeb3 = async () => {
     }
 
     // 测试使用
-    window.web3js = web3js
+    // window.web3js = web3js
   } else {
     res.web3js = { default: false }
     res.error = 'Unable to connect to Web3'

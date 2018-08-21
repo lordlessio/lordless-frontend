@@ -82,7 +82,7 @@
               <div class="v-flex lg-text-right sm-text-left features-btn features-item">
                 <ld-button
                   v-if="showSell"
-                  theme="info"
+                  theme="deep-blue"
                   :disabled="ldbPendings.isSelling"
                   shadow
                   contract
@@ -90,7 +90,7 @@
 
                 <ld-button
                   v-if="showUnSell"
-                  theme="info"
+                  theme="deep-blue"
                   :disabled="ldbPendings.isCanceling"
                   shadow
                   contract

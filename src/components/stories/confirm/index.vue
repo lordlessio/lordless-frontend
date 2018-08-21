@@ -34,7 +34,7 @@
     </div>
     <div slot="footer" class="dialog-footer">
       <ld-button @click="detailAlert = false" v-if="type === 'submit'">{{ cancelText }}</ld-button>
-      <ld-button theme="info-2" @click="submit">{{ submitText }}</ld-button>
+      <ld-button theme="deep-blue-2" @click="submit">{{ submitText }}</ld-button>
     </div>
   </el-dialog>
 </template>

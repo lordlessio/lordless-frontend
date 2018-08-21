@@ -32,7 +32,8 @@
                       <use xlink:href="#icon-crown-l5"/>
                     </svg>
                   </span>
-                  <span>{{ userInfo.nickName }}</span>
+                  <span v-if="userInfo.nickName">{{ userInfo.nickName }}</span>
+                  <span v-else>{{ userInfo._id | splitAddress({ before: 4, end: 4 }) }}</span>
                   <span>
                     <ld-btn
                       class="user-Authorize-btn"
@@ -107,7 +108,7 @@
               <div class="exp-recived-box sm-hidden">
                 <span
                   class="exp-recived-item"
-                  v-for="(item, index) of overviews.activeness.list"
+                  v-for="(item, index) of overviews.activeness.list.slice(0, overviews.ps)"
                   :key="index"
                   :style="`color: rgba(78, 71, 211, ${1 - 0.25 * index});border-color: rgba(78, 71, 211, ${1 - 0.25 * index});z-index: ${-index};`">
                   +{{ item.activeness }}
@@ -247,7 +248,7 @@
                 <p class="card-cnt-tip">Recent rewarded tasks</p>
                 <ul class="v-flex d-flex col-flex text-left task-completed-cnt">
                   <li
-                    v-for="item of overviews.completeTasks.list"
+                    v-for="item of overviews.completeTasks.list.slice(0, overviews.ps)"
                     :key="item._id"
                     class="d-flex f-justify-around task-completed-item">
                     <span class="v-flex text-ellipsis">{{ item.ldbTaskType.name }}</span>
@@ -307,7 +308,7 @@
                 <div class="v-flex d-flex col-flex assets-earnings-list">
                   <ul class="text-left">
                     <li
-                      v-for="item of overviews.ldbEarnings.list"
+                      v-for="item of overviews.ldbEarnings.list.slice(0, overviews.ps)"
                       :key="item._id"
                       class="d-flex f-align-center earnings-list-item">
                       <div class="v-flex d-flex f-align-center text-ellipsis">
@@ -355,7 +356,7 @@
                   <ul class="text-left">
                     <li
                       class="d-flex recent-list-item"
-                      v-for="(recent, index) of recentData.list"
+                      v-for="(recent, index) of recentData.list.slice(0, overviews.ps)"
                       :key="index">
                       <p class="v-flex text-ellipsis">
                         Bought

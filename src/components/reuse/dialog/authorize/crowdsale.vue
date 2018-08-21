@@ -21,7 +21,7 @@
         <div>
           <ld-btn
             class="TTFontBolder lordless-message-btn crowdsale-btn"
-            theme="info"
+            theme="deep-blue"
             shadow
             :loading="crowdsalePending"
             :disabled="crowdsalePending"
@@ -180,13 +180,13 @@ export default {
     @include width(50%, 1);
     @include margin-around(30px, auto, 45px, auto, 1);
   }
-  .crowdsale-choose {
-    width: 26px;
-    height: 26px;
-    border-radius: 5px;
-    overflow: hidden;
-    background-color: $--secondary-color;
-  }
+  // .crowdsale-choose {
+  //   width: 26px;
+  //   height: 26px;
+  //   border-radius: 5px;
+  //   overflow: hidden;
+  //   background-color: $--secondary-color;
+  // }
   .crowdsale-text {
     margin-left: 10px;
     font-size: 18px;
