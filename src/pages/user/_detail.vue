@@ -34,10 +34,13 @@
                 </span>
               </el-tooltip>
             </p>
-            <div class="user-total-candy">
+            <div class="TTFontBolder user-level">
+              Level {{ user.level }}
+            </div>
+            <!-- <div class="user-total-candy">
               <p>Total earned candy</p>
               <p>0.003 ETH</p>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -339,6 +342,11 @@ export default {
     fill: none;
     cursor: pointer;
     @include margin('left', 8px, 1);
+  }
+  .user-level {
+    margin-top: 10px;
+    font-size: 20px;
+    color: #555;
   }
   .user-total-candy {
     margin-top: 10px;

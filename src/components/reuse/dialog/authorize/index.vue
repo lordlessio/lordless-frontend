@@ -19,12 +19,18 @@
         <i class="el-icon-close"></i>
       </span>
       <Crowdsale
-        v-if="showCrowsale"
         ref="crowdsale"
-        v-model="authorizeDialog"
+        v-model="showCrowsale"
         :avatar="avatar"
         :address="address"
         @pending="crowdsalePending"></Crowdsale>
+
+      <Telegram
+        ref="telegram"
+        v-model="showTelegram"
+        :avatar="avatar"
+        :address="address"
+        @telegram="$emit('telegram', $event)"></Telegram>
 
       <Status
         v-if="showStatus"
@@ -41,6 +47,7 @@
 </template>
 
 <script>
+import Telegram from './telegram'
 import Crowdsale from './crowdsale'
 import Status from './status'
 import Sign from './sign'
@@ -71,14 +78,18 @@ export default {
     },
     modelClose: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data: () => {
     return {
       authorizeDialog: false,
 
-      isInit: false
+      isInit: false,
+
+      showCrowsale: false,
+
+      showTelegram: false
 
       // crowdsale options
       // crowdsaleModel: false,
@@ -132,7 +143,7 @@ export default {
       return this.statusType
     },
 
-    showCrowsale () {
+    authorizeBool () {
       return this.address && !this.statusType
     },
 
@@ -141,7 +152,7 @@ export default {
     },
 
     closeTheme () {
-      return this.showCrowsale ? 'dark' : 'light'
+      return this.authorizeBool ? 'dark' : 'light'
     },
 
     // 合约内部状态初始化状态
@@ -168,6 +179,7 @@ export default {
     }
   },
   components: {
+    Telegram,
     Crowdsale,
     Status,
     Sign
@@ -178,27 +190,52 @@ export default {
       this.authorizeDialog = false
     },
 
-    checkoutAuthorize ({ crowdsale = false } = {}) {
+    checkoutAuthorize ({ crowdsale = false, telegram = false } = {}) {
       if (!this.isInit) return false
       console.log('---- this.statusType', this.statusType)
 
+      console.log('---- status', this.statusType || !this.address)
       // 检查用户状态是否ok
       if (this.statusType || !this.address) {
         this.authorizeDialog = true
         return false
       }
+      console.log('---- status', this.statusType || !this.address)
 
-      if (!this.crowdsale || !crowdsale) {
-        this.authorizeDialog = false
-        return true
+      // if (!this.authorizeBool) {
+      //   this.authorizeDialog = false
+      //   return true
+      // }
+      // if (!this.crowdsale || !crowdsale) {
+      //   this.authorizeDialog = false
+      //   return true
+      // }
+      if (crowdsale) {
+        this.showCrowsale = true
+        console.log('---- authorize crowdsale', this.$refs.crowdsale)
+        // 检查市场合约权限
+        this.authorizeDialog = !this.isCrowdsaleApproved
+        // const crowdsaleBool = await this.checkCrowdsale()
+        return this.isCrowdsaleApproved
       }
 
-      console.log('---- authorize crowdsale', this.$refs.crowdsale)
-      // 检查市场合约权限
-      this.authorizeDialog = !this.isCrowdsaleApproved
-      // const crowdsaleBool = await this.checkCrowdsale()
-      return this.isCrowdsaleApproved
+      // 如果验证 telegram 并且用户没有授权 telegram,则执行
+      if (telegram && (!this.userInfo.telegram || !this.userInfo.telegram._id)) {
+        console.log('----- telegram')
+        this.authorizeDialog = true
+        this.$nextTick(() => {
+          this.showTelegram = true
+        })
+        return false
+      }
+      this.authorizeDialog = false
+      return true
     },
+
+    // initModels () {
+    //   this.showTelegram = false
+    //   this.showCrowsale = false
+    // },
 
     crowdsalePending (data) {
       this.$emit('pending', data)
@@ -213,7 +250,7 @@ export default {
     },
     authorizeDialog (val) {
       this.$emit('blurs', val)
-      // this[mutationTypes.LAYOUT_SET_BLURS](val ? 2 : 1)
+      // if (!val) this.initModels()
     },
 
     // 如果切换了账号，关闭对话框

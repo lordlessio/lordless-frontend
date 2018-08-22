@@ -199,23 +199,9 @@ export default {
     handleSelect (item) {
       if (item.id) {
         // 调整地图显示视图
-        let { lat, lng } = item.chain
-        lat = transferCoords(lat)
-        lng = transferCoords(lng)
-
-        const queryCoords = this.coordQuery || this.$route.query.coords
-        if (queryCoords) {
-          const [clng, clat] = queryCoords.split(',')
-          if (parseFloat(clng) === lng && parseFloat(clat) === lat) return
-        }
-
-        this.coordQuery = [lng, lat].toString()
-
-        this.$refs.lordMap.flyToCoords({ center: [lng, lat], zoom: this.mapScrollZooms[this.mapScrollZooms.length - 1] }, () => {
-          historyState(`${this.$route.path}?coords=${[lng, lat].toString()}`)
-          // 如果是已上链信息，存储在记录中
-          this[actionTypes.LDB_SET_HISTORY_SEARCH_LDB](item)
-        })
+        this.flyToLdb(item.id)
+        // 如果是已上链信息，存储在记录中
+        this[actionTypes.LDB_SET_HISTORY_SEARCH_LDB](item)
       }
     },
 
@@ -223,17 +209,29 @@ export default {
      *  map load event
      */
     mapLoad () {
-      const coords = this.$route.query.coords
-
       this.getLdbs()
 
       this.initMapControl()
 
       this.$refs.txCarousel.init()
-      if (coords) {
-        this.coordQuery = coords
-        this.$refs.lordMap.flyToCoords({ center: coords.split(','), pitch: this.lbsMPitch, zoom: this.mapScrollZooms[this.mapScrollZooms.length - 1] })
-      }
+      // if (ldb) {
+      //   this.flyToLdb(ldb)
+      //   this.coordQuery = coords
+      //   this.$refs.lordMap.flyToCoords({ center: coords.split(','), pitch: this.lbsMPitch, zoom: this.mapScrollZooms[this.mapScrollZooms.length - 1] })
+      // }
+      this.flyToLdb()
+    },
+
+    flyToLdb (ldbId = this.$route.query.ldb, ldbs = this.ldbs) {
+      if (!ldbId) return
+      const ldb = ldbs.filter(item => item._id === parseInt(ldbId))[0]
+      if (!ldb) return
+      let { lng, lat } = ldb.chain
+      lng = transferCoords(lng)
+      lat = transferCoords(lat)
+      this.$refs.lordMap.flyToCoords({ center: [lng, lat], pitch: this.lbsMPitch, zoom: this.mapScrollZooms[this.mapScrollZooms.length - 1] }, () => {
+        historyState(`${this.$route.path}?ldb=${ldbId}`)
+      })
     },
 
     /**
@@ -259,13 +257,13 @@ export default {
       this.detailModel = true
       this.$nextTick(() => {
         this.ldbDetail = info
-        const { lat, lng } = info.chain
+        const { id } = info
 
-        const coords = [transferCoords(lng), transferCoords(lat)].toString()
-        this.coordQuery = coords
+        // const coords = [transferCoords(lng), transferCoords(lat)].toString()
+        // this.coordQuery = coords
 
-        this.coordsPath = `${this.$route.path}?coords=${coords}`
-        historyState(`/ldb/${info._id}`)
+        this.coordsPath = `${this.$route.path}?ldb=${id}`
+        historyState(`/ldb/${info.id}`)
       })
     },
 

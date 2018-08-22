@@ -352,3 +352,10 @@ export const formatDue = (obj, len = 2, type = 'single') => {
   }
   return arr.join(' : ')
 }
+
+/**
+ * ldb and user Ac
+ */
+export const nextAC = level => Math.ceil(Math.pow(level * 108, 2) / Math.pow(108, 2) * 10)
+
+export const remainingAC = (level, ac) => Math.ceil(Math.pow(level * 108, 2) / Math.pow(108, 2) * 10) - ac

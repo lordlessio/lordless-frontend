@@ -80,7 +80,7 @@
               </el-col>
               <el-col :span="6">
                 <span>$</span>
-                <span> {{ asset.count * asset.candy.USD2TokenCount | formatDecimal }}</span>
+                <span> {{ asset.count / asset.candy.USD2TokenCount | formatDecimal }}</span>
               </el-col>
             </div>
           </el-tab-pane>
@@ -211,7 +211,7 @@
                     </li>
                     <li>
                       <p>Reward percentage</p>
-                      <p>{{ (aside.lord ? aside.data.lord.reward.percentage : aside.data.executor.reward.percentage) * 100 }}%</p>
+                      <p>{{ (aside.lord ? aside.data.lord.reward.percentage : aside.data.executor.reward.percentage) | formatDecimal({ len: 3 }) * 100 }}%</p>
                     </li>
                     <li>
                       <p>Employee</p>
@@ -345,8 +345,8 @@ export default {
       }
     },
 
-    pageChange (e) {
-      this.getRecords({ page: e })
+    pageChange (pn) {
+      this.getRecords({ pn })
     }
   },
   watch: {

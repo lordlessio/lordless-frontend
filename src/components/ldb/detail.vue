@@ -4,15 +4,17 @@
       :info="ldbInfo"
       :dialog="dialog"
       :isHome.sync="isHome"
-      :candyTasks.sync="candyTasks"
+      :tasks.sync="candyTasks"
       :loading="infoLoading"
+      :owner="false"
+      :userInfo="userInfo"
       @receive="receiveCandy">
     </ldb-header-tool>
     <section class="ldb-detail-content">
       <div class="container md d-flex sm-col-flex">
         <div class="detail-cnt-left v-flex">
           <ldb-datas-tool
-            :info="ldbInfo"
+            :info.sync="ldbInfo"
             :loading="infoLoading">
           </ldb-datas-tool>
 
@@ -20,7 +22,9 @@
             :candies="ldbTasks | ldbGroupCandies"
             :tasks="ldbTasks | ldbGroupTasks"
             :ldbId="ldbInfo._id"
-            :loading="ldbTaskLoading">
+            :owner="ldbInfo.lord.address === userInfo.address"
+            :loading="ldbTaskLoading"
+            @receive="receiveTask">
           </tasks-now-tool>
 
           <records-tool
@@ -105,6 +109,9 @@ import range from 'lodash/range'
 
 import { contractMixins, dialogMixins } from '@/mixins'
 import { getHome, receiveTask, getLdbById, getActivitysByTokenId, getUserPendingsByTokenId, getLdb2Round } from 'api'
+
+import { actionTypes } from '@/store/types'
+import { mapActions } from 'vuex'
 export default {
   mixins: [ contractMixins, dialogMixins ],
   props: {
@@ -221,6 +228,9 @@ export default {
     LdbSell
   },
   methods: {
+    ...mapActions('user', [
+      actionTypes.USER_UPT_USER_AP
+    ]),
 
     async checkHome ({ ldbId = this.ldbInfo._id, userId = this.userInfo.address } = {}) {
       const res = await getHome({ userId })
@@ -532,17 +542,71 @@ export default {
      * 领取糖果事件
      */
     async receiveCandy ({ _id, countLeft, ldbTaskType } = {}, cb) {
-      if (!countLeft || !_id) return
+      if (!countLeft || !_id) return cb()
 
       // 检查登陆权限状态
       const authorize = await this.$refs.authorize.checkoutAuthorize()
-      if (!authorize) return
+      if (!authorize) return cb()
 
       const cbData = {}
       const res = await receiveTask({ roundId: _id, ldbId: this.ldbInfo._id, candy: true })
       if (res.code === 1000) {
         cbData.data = res.data
+
+        this.$notify({
+          type: 'success',
+          title: '糖果领取成功!',
+          message: `成功领取 ${res.data.executor.reward.count.toFixed(4)} 个 ${ldbTaskType.candyType.symbol.toUpperCase()}`,
+          position: 'bottom-right',
+          duration: 1500
+        })
+
+        // 根据消耗的ap值，手动更新 userInfo 的ap值
+        this[actionTypes.USER_UPT_USER_AP](res.data.apCost)
+
+        // 根据返回的建筑经验，修改当前建筑经验
+        this.$set(this.ldbInfo, 'activeness', this.ldbInfo.activeness + res.data.ldb.activeness)
+        this.$set(this.ldbInfo, 'apLeft', this.ldbInfo.apLeft - res.data.apCost)
       } else {
+        this.$notify.error({
+          title: '糖果领取失败!',
+          message: res.errorMsg,
+          position: 'bottom-right',
+          duration: 5000
+        })
+        cbData.errorMsg = res.errorMsg
+      }
+      return cb(cbData)
+    },
+
+    /**
+     * 领取任务事件
+     */
+    async receiveTask ({ _id, countLeft } = {}, cb) {
+      if (!countLeft || !_id) return cb()
+
+      // 检查登陆权限状态
+      const authorize = await this.$refs.authorize.checkoutAuthorize({ telegram: true })
+      if (!authorize) return cb()
+
+      const cbData = {}
+      const res = await receiveTask({ roundId: _id, ldbId: this.ldbInfo._id })
+      if (res.code === 1000) {
+        cbData.data = res.data
+
+        // 根据消耗的ap值，手动更新 userInfo 的ap值
+        this[actionTypes.USER_UPT_USER_AP](res.data.apCost)
+
+        // 根据返回的建筑经验，修改当前建筑经验
+        this.$set(this.ldbInfo, 'activeness', this.ldbInfo.activeness + res.data.ldb.activeness)
+        this.$set(this.ldbInfo, 'apLeft', this.ldbInfo.apLeft - res.data.apCost)
+      } else {
+        this.$notify.error({
+          title: '任务领取失败!',
+          message: res.errorMsg,
+          position: 'bottom-right',
+          duration: 5000
+        })
         cbData.errorMsg = res.errorMsg
       }
       return cb(cbData)

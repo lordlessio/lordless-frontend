@@ -127,6 +127,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  @import '@/assets/stylus/mixin/index.scss';
   .auto-complete-box {
     width: inherit;
     height: inherit;
@@ -169,7 +170,7 @@ export default {
     margin-left: 5px;
     width: 40px;
     height: 40px;
-    background-color: #776AFF;
+    background-color: $--map-blue-pink-color;
     border-radius: 5px;
     >svg {
       fill: #fff;

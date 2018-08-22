@@ -9,7 +9,14 @@
       </div>
       <div class="text-center ld-authorize-bottom">
         <p class="text-left">{{ info.desc }}</p>
-        <ld-btn v-if="active || !info.customize" class="TTFontBolder ld-authorize-btn" theme="blue" inverse shadow @click="$emit('click', info.symbol)">
+        <ld-btn
+          class="TTFontBolder ld-authorize-btn"
+          theme="blue"
+          inverse
+          shadow
+          :loading="!active && info.loading"
+          :disabled="!active && info.loading"
+          @click="$emit('click', info.symbol)">
           <span v-if="!active">Authorize</span>
           <span v-if="active" class="inline-block authorize-check-box">
             <svg>
@@ -17,7 +24,9 @@
             </svg>
           </span>
         </ld-btn>
-        <div v-if="!active && info.customize" class="ld-authorize-btn" :id="info.symbol"></div>
+        <!-- <div v-if="!active && info.customize" class="ld-authorize-btn ld-customize-btn" :id="info.symbol">
+          <p class="d-flex f-align-baseline customize-loading">loading <span class="line-height-1"><i class="el-icon-loading"></i></span></p>
+        </div> -->
       </div>
     </div>
   </div>
@@ -111,6 +120,21 @@ export default {
     bottom: 50px;
     transform: translate(-50%, 50%);
   }
+  // .ld-customize-btn {
+  //   .customize-loading {
+  //     position: absolute;
+  //     left: 50%;
+  //     top: 0;
+  //     padding: 8px 15px;
+  //     z-index: 0;
+  //     transform: translateX(-50%);
+  //   }
+  //   > :nth-child(2) {
+  //     position: relative;
+  //     background-color: #fff;
+  //     z-index: 1;
+  //   }
+  // }
   .authorize-check-box {
     padding: 10px;
     width: 56px;

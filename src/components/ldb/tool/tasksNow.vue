@@ -53,7 +53,7 @@
                         class="tasks-now-btn"
                         theme="blue"
                         shadow
-                        :disabled="receiveLoading || !item.countLeft"
+                        :disabled="receiveLoading || !item.countLeft || owner"
                         :loading="receiveLoading"
                         @click="receive(item)">
                         {{ item.countLeft ? 'Apply' : 'Applied' }}
@@ -74,8 +74,6 @@
 import LdBtn from '@/components/stories/button'
 import LdCarousel from '@/components/stories/carousel'
 import LdSliderBar from '@/components/stories/sliderBar'
-
-import { receiveTask } from 'api'
 export default {
   props: {
     candies: {
@@ -93,6 +91,10 @@ export default {
     ldbId: {
       type: [String, Number],
       default: null
+    },
+    owner: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => {
@@ -135,14 +137,14 @@ export default {
       }
     },
 
-    async receive ({ _id, ldbId = this.ldbId }) {
-      if (!_id || !ldbId || this.receiveLoading) return
+    async receive ({ _id, countLeft }) {
+      if (!_id || this.receiveLoading) return
       this.receiveLoading = true
-      const res = await receiveTask({ roundId: _id, ldbId })
-      if (res.code === 1000 && res.data) {
-        this.$router.push(`/task/${res.data._id}`)
-      }
-      this.receiveLoading = false
+      this.$emit('receive', { _id, countLeft }, ({ errorMsg, data } = {}) => {
+        this.receiveLoading = false
+        console.log('-------- receive')
+        if (data) this.$router.push(`/task/${data._id}`)
+      })
     }
   }
 }

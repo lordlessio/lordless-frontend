@@ -20,6 +20,7 @@
     </div>
     <Authorize
       ref="authorize"
+      @telegram="telegramFunc"
       @pending="authorizePending"
       @blurs="dialogSetBlurs($event, 0)">
     </Authorize>
@@ -30,7 +31,7 @@
 import AuthorizationCard from '@/components/reuse/card/authorization'
 import Authorize from '@/components/reuse/dialog/authorize'
 
-import { putUserTgAuth } from 'api'
+// import { putUserTgAuth } from 'api'
 
 import { contractMixins, dialogMixins } from '@/mixins'
 import { actionTypes } from '@/store/types'
@@ -46,14 +47,16 @@ export default {
           title: 'Marketplace contract',
           desc: 'Authorized the marketplace contract to operate LDB',
           icon: 'icon-marketplace',
-          active: false
+          active: false,
+          loading: false
         }, {
           symbol: 'telegram',
           title: 'Telegram',
           desc: 'Authorize the Telegram to apply tasks',
           icon: 'icon-telegram',
-          customize: true,
-          active: false
+          // customize: true,
+          active: false,
+          loading: false
         }
       ],
       authModels: {}
@@ -88,16 +91,21 @@ export default {
       }
     },
 
+    telegramFunc (res) {
+      if (res.code === 1000) this.initModels()
+    },
+
     // marketplace authorization
     /**
      * 授权市场权限的合约 pending 状态
      */
     async authorizePending ({ tx }) {
       const address = this.userInfo.address
+      this.rewriteAuthorizations('marketplace', { loading: true, active: false })
       this.checkCrowdsaleEvent({ address }, () => {
         this.$refs.authorize.checkoutAuthorize()
         this[actionTypes.CONTRACT_CHECK_CROWDSALE](address)
-        this.rewriteAuthorizations('marketplace')
+        this.rewriteAuthorizations('marketplace', { loading: false })
       })
     },
 
@@ -106,44 +114,49 @@ export default {
       switch (symbol) {
         case 'marketplace': this.$refs.authorize.checkoutAuthorize({ crowdsale: true })
           break
+        case 'telegram': this.$refs.authorize.checkoutAuthorize({ telegram: true })
+          break
         default: break
       }
     },
 
     // 重写 authorizations
-    rewriteAuthorizations (symbol = 'telegram') {
+    rewriteAuthorizations (symbol = 'telegram', { loading = false, active = true } = {}) {
       const authorizations = this.authorizations
       authorizations.map(item => {
-        if (item.symbol === symbol) item.active = true
+        if (item.symbol === symbol) {
+          item.active = active
+          item.loading = loading
+        }
       })
-      this.authorizations = authorizations
-    },
+      this.$set(this, 'authorizations', authorizations)
+    }
 
     // 初始化 tg 授权状态
-    initTelegram () {
-      const isTelegram = this.userInfo.telegram && this.userInfo.telegram.id
-      // const isTelegram = false
-      if (isTelegram) return
-      // const tgCode = '<script async src="https://telegram.org/js/telegram-widget.js?4" data-telegram-login="samplebot" data-size="large" data-userpic="false" data-onauth="onTelegramAuth(user)" data-request-access="write"><\/script>'
-      // document.getElementById('telegram').innerHTML = tgCode
-      const el = document.createElement('script')
-      el.src = 'https://telegram.org/js/telegram-widget.js?4'
-      el.async = true
-      el.setAttribute('data-telegram-login', 'ldbbot')
-      el.setAttribute('data-size', 'large')
-      el.setAttribute('data-userpic', false)
-      el.setAttribute('data-onauth', 'onTelegramAuth(user)')
-      el.setAttribute('data-request-access', 'write')
-      // document.body.appendChild(el)
-      document.getElementById('telegram').appendChild(el)
-      window.onTelegramAuth = async (user) => {
-        const res = await putUserTgAuth(user)
-        if (res.code === 1000) {
-          this[actionTypes.USER_SET_USER_BY_TOKEN]({ update: true })
-          this.rewriteAuthorizations('telegram')
-        }
-      }
-    }
+    // initTelegram () {
+    //   const isTelegram = this.userInfo.telegram && this.userInfo.telegram.id
+    //   // const isTelegram = false
+    //   if (isTelegram) return
+    //   // const tgCode = '<script async src="https://telegram.org/js/telegram-widget.js?4" data-telegram-login="samplebot" data-size="large" data-userpic="false" data-onauth="onTelegramAuth(user)" data-request-access="write"><\/script>'
+    //   // document.getElementById('telegram').innerHTML = tgCode
+    //   const el = document.createElement('script')
+    //   el.src = 'https://telegram.org/js/telegram-widget.js?4'
+    //   el.async = true
+    //   el.setAttribute('data-telegram-login', 'ldbbot')
+    //   el.setAttribute('data-size', 'large')
+    //   el.setAttribute('data-userpic', false)
+    //   el.setAttribute('data-onauth', 'onTelegramAuth(user)')
+    //   el.setAttribute('data-request-access', 'write')
+    //   // document.body.appendChild(el)
+    //   document.getElementById('telegram').appendChild(el)
+    //   window.onTelegramAuth = async (user) => {
+    //     const res = await putUserTgAuth(user)
+    //     if (res.code === 1000) {
+    //       this[actionTypes.USER_SET_USER_BY_TOKEN]({ update: true })
+    //       this.rewriteAuthorizations('telegram')
+    //     }
+    //   }
+    // }
   },
   watch: {
     marketModel (val) {
@@ -153,7 +166,7 @@ export default {
   mounted () {
     this.$nextTick(() => {
       this.initModels()
-      this.initTelegram()
+      // this.initTelegram()
     })
   }
 }

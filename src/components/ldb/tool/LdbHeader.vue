@@ -43,12 +43,12 @@
       <section v-if="!loading && info" class="ldb-detail-header" :class="{ 'is-active': !loading }">
         <div class="absolute-full detail-header-mask"></div>
         <div class="container header-container">
-          <div class="detail-ldb-candies">
+          <div v-if="!owner" class="detail-ldb-candies">
             <div id="ldb-candies-box" class="ldb-candies-container">
               <span class="inline-block ldb-candies-item"
                 :id="`ldb-candy-${candy.tid}`"
                 :style="`transform: translate(${candyCoords[candy.tid][0]}px, ${candyCoords[candy.tid][1]}px)`"
-                v-for="(candy, index) of candies"
+                v-for="(candy, index) of candyTasks"
                 :key="candy.tid">
                 <span
                   class="inline-block ldb-circle-candy"
@@ -80,7 +80,13 @@
                     <p class="TTFontNormal detail-ldb-address">{{ info.address }}</p>
                     <p class="detail-ldb-location">{{ info.chain.lng | transferCoords | sliceStr}}, {{ info.chain.lat | transferCoords | sliceStr }}</p>
                     <p class="detail-ldb-desc">静安寺，又称静安古寺，位于上海市静安区，其历史相传最早可追溯至三国孙吴赤乌十年（247年），初名沪渎重玄寺。</p>
-                    <ld-btn v-if="!isHome" class="ldb-home-btn" theme="deep-blue" shadow inverse @click="setHome">Set as home</ld-btn>
+                    <ld-btn
+                      class="ldb-home-btn"
+                      theme="deep-blue"
+                      shadow
+                      inverse
+                      :disabled="isHome"
+                      @click="setHome">{{ isHome ? 'Your home' : 'Set as home' }}</ld-btn>
                     <figcaption>
                       <div class="d-flex f-align-center detail-lord-box">
                         <blockies
@@ -128,7 +134,7 @@ export default {
       type: Object,
       default: {}
     },
-    candyTasks: {
+    tasks: {
       type: Array,
       default: () => {
         return []
@@ -137,6 +143,16 @@ export default {
     isHome: {
       type: Boolean,
       default: false
+    },
+    owner: {
+      type: Boolean,
+      default: false
+    },
+    userInfo: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     },
     loading: {
       type: Boolean,
@@ -150,17 +166,25 @@ export default {
   data: (vm) => {
     return {
       candyCoords: {},
-      candies: [],
-      hideCandies: 1,
-      tasks: vm.candyTasks
+      candyTasks: [],
+      hideTasks: 1,
+      allTasks: vm.tasks
     }
   },
   watch: {
-    candyTasks (val, oval) {
-      if (val.toString() !== this.tasks.toString() && val.length) this.getCandies(val)
+
+    // 监听外部传入的总任务，如果和 allTasks 不相等，重新生成 candyTasks
+    tasks (val, oval) {
+      if (val.toString() !== this.allTasks.toString() && val.length && this.userInfo.ap) this.getCandyTasks(val)
     },
-    candies (val) {
-      if (!val.length && this.tasks.length) this.getCandies()
+
+    /**
+     * 监听 candyTasks，
+     * 如果 candyTasks 为空并且 allTasks 不为空，重新生成 candyTasks
+     * 如果用户剩余 ap 不足，重新生成 candyTasks
+     */
+    candyTasks (val) {
+      if (this.userInfo.ap && !val.length && this.allTasks.length) this.getCandyTasks()
     }
   },
   components: {
@@ -172,15 +196,19 @@ export default {
     async setHome (ldbInfo = this.info) {
       const res = await setHome({ ldbId: ldbInfo._id })
       if (res.code === 1000) {
+        this.$notify({
+          type: 'success',
+          title: 'Home 设置成功!',
+          message: `成功设置 ${ldbInfo.name.zh} 为Home`,
+          position: 'bottom-right',
+          duration: 1500
+        })
         this.$emit('update:isHome', true)
       }
     },
     async receiveCandy (task) {
       if (task.status !== 'processing') return
-      this.$emit('receive', task, ({ errorMsg, data }) => {
-        console.log('-errorMsg', errorMsg)
-        console.log('--- data', data)
-
+      this.$emit('receive', task, ({ errorMsg, data } = {}) => {
         // 获取当前 receive 糖果dom
         const dom = document.getElementById(`ldb-candy-${task.tid}`)
         if (!dom) return
@@ -220,12 +248,12 @@ export default {
         const animateFunc = () => {
           console.timeEnd('animate')
           setTimeout(() => {
-            // 根据 hideCandies 次数，删除 candies
-            if (this.hideCandies === this.candies.length) {
-              this.$set(this, 'hideCandies', 1)
-              this.$set(this, 'candies', [])
+            // 根据 hideTasks 次数，删除 candyTasks
+            if (this.hideTasks === this.candyTasks.length) {
+              this.$set(this, 'hideTasks', 1)
+              this.$set(this, 'candyTasks', [])
             } else {
-              this.hideCandies = this.hideCandies + 1
+              this.hideTasks = this.hideTasks + 1
             }
           }, 500)
           dom.removeEventListener(transitionEvent(), animateFunc, false)
@@ -233,35 +261,52 @@ export default {
         dom.addEventListener(transitionEvent(), animateFunc, false)
       })
     },
-    getCandies (tasks = this.tasks) {
+
+    /**
+     * 获取糖果任务
+     */
+    getCandyTasks (tasks = this.tasks) {
+      if (this.owner) return
+
+      const leftAp = this.userInfo.ap
+      console.log('leftAp', leftAp)
+      const clen = leftAp >= 6 ? 6 : leftAp
+
+      // 获取全部糖果任务
       let allTasks = JSON.parse(JSON.stringify(tasks))
-      const candies = []
+      const candyTasks = []
       // if (candies.length) return
 
+      // const
+      // 遍历获取 candyTasks，并且修改 allTasks
       let loop = () => {
-        while (candies.length < 6 && allTasks.length) {
+        while (candyTasks.length < clen && allTasks.length) {
           allTasks.map((tasks, index) => {
-            if (candies.length >= 6) return
+            if (candyTasks.length >= clen) return
             if (!tasks || !tasks.length) {
               allTasks.splice(index, 1)
               return false
             }
-            candies.push(tasks[0])
+            candyTasks.push(tasks[0])
             allTasks[index].shift()
           })
         }
         loop = null
       }
       loop()
-      console.log('------------- candies', candies)
-      this.randomCandies(candies)
-      this.tasks = allTasks
-      this.$emit('update:candyTasks', allTasks)
+      console.log('------------- candyTasks', candyTasks)
+
+      // 随机糖果坐标
+      this.randomCandies(candyTasks)
+
+      this.allTasks = allTasks
+      this.$emit('update:tasks', allTasks)
     },
 
     // 随机糖果坐标
-    randomCandies (candies = this.candies) {
+    randomCandies (candyTasks = this.candyTasks) {
       const candyBox = document.getElementById('ldb-candies-box')
+      if (!candyBox) return
       const w = candyBox.offsetWidth
       const h = candyBox.offsetHeight
       const diameter = 54 + 27
@@ -270,7 +315,7 @@ export default {
       const col = Math.floor(h / diameter)
       const arr = []
       let loop = () => {
-        while (candies.length && arr.length < candies.length) {
+        while (candyTasks.length && arr.length < candyTasks.length) {
           const randomX = Math.floor(Math.random() * row + 0.5)
           const randomY = Math.floor(Math.random() * col + 0.5)
           const newCoord = [randomX, randomY]
@@ -291,10 +336,10 @@ export default {
       loop()
       const candyCoords = {}
       arr.map((item, index) => {
-        candyCoords[candies[index].tid] = [item[0] * diameter - Math.floor(Math.random() * 2 - 1) * radius, item[1] * diameter - Math.floor(Math.random() * 2 - 1) * Math.floor(Math.random() * 5) * radius / 5]
+        candyCoords[candyTasks[index].tid] = [item[0] * diameter - Math.floor(Math.random() * 2 - 1) * radius, item[1] * diameter - Math.floor(Math.random() * 2 - 1) * Math.floor(Math.random() * 5) * radius / 5]
       })
       this.$set(this, 'candyCoords', candyCoords)
-      this.$set(this, 'candies', candies)
+      this.$set(this, 'candyTasks', candyTasks)
     }
   }
 }

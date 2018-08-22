@@ -306,11 +306,10 @@ export default {
     }
   }
   .carousel-logo {
+    padding: 0 20px;
     position: relative;
-    color: $--text-deep-blue-color;
+    color: $--map-blue-pink-color;
     cursor: pointer;
-    @include padding('left', 20px, 1);
-    @include padding('right', 20px, 1);
     &::before {
       content: '';
       position: absolute;
@@ -323,7 +322,7 @@ export default {
     svg {
       width: 40px;
       height: 40px;
-      fill: $--text-deep-blue-color;
+      fill: $--map-blue-pink-color;
     }
   }
 </style>

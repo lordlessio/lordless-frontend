@@ -1,5 +1,5 @@
 <template>
-  <div class="crowdsale-box">
+  <div v-if="value" class="crowdsale-box">
     <div class="text-center crowdsale-container">
       <div class="inline-block lordless-shadow" :style="`border-radius: ${avatar.radius};`">
         <Blockies
@@ -192,8 +192,8 @@ export default {
     font-size: 18px;
   }
   .crowdsale-btn {
-    @include margin('top', 40px, 1);
-    @include padding('left', 25px, 1);
-    @include padding('right', 25px, 1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-top: 40px;
   }
 </style>

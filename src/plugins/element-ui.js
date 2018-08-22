@@ -3,7 +3,7 @@ import {
   Container, Header, Main, Aside,
   Col, Row,
   Tooltip, Progress, Select, Option, Carousel, CarouselItem,
-  Tabs, TabPane, Dialog, Autocomplete, Pagination,
+  Tabs, TabPane, Dialog, Autocomplete, Pagination, Notification,
   Collapse, CollapseItem
 } from 'element-ui'
 
@@ -35,3 +35,5 @@ Vue.use(CollapseItem)
 
 // 配置 element 默认参数
 Vue.prototype.$ELEMENT = { size: 'large', zIndex: 3000 }
+
+Vue.prototype.$notify = Notification

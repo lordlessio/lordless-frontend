@@ -37,9 +37,14 @@ export default {
       state.userInfo = stringifyParse(payload)
     },
 
+    // 修改 userInfo 信息
+    [mutationTypes.USER_UPT_USER_INFO]: (state, payload = {}) => {
+      state.userInfo = stringifyParse(Object.assign({}, state.userInfo, payload))
+    },
+
     // 存储 single user Info
     [mutationTypes.USER_SET_SINGLE_USER_INFO]: (state, payload = {}) => {
-      state.uSingleInfo = stringifyParse(payload)
+      state.uSingleInfo = stringifyParse(Object.assign({}, state.uSingleInfo, payload))
     },
 
     // 存储用户sigStr信息
@@ -162,6 +167,12 @@ export default {
     [actionTypes.USER_SET_USER_EXPIRED]: ({ commit }, payload) => {
       payload = Boolean(payload)
       commit(mutationTypes.USER_SET_USER_EXPIRED, payload)
+    },
+
+    // 改变用户ap
+    [actionTypes.USER_UPT_USER_AP]: ({ commit, state }, ap) => {
+      if (!ap) return
+      commit(mutationTypes.USER_UPT_USER_INFO, { ap: state.userInfo.ap - ap })
     }
   }
 }

@@ -108,8 +108,8 @@ export default {
       this.loading = false
     },
 
-    pageChange (e) {
-      this.getActivities({ pn: e })
+    pageChange (pn) {
+      this.getActivities({ pn })
     }
   },
   watch: {

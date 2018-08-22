@@ -54,7 +54,6 @@
     </el-container>
     <Authorize
       ref="authorize"
-      :crowdsale="false"
       :modelClose="false"
       :autoClose="false"
       @init="authorizeInit"

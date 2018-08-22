@@ -31,11 +31,6 @@ const router = new Router({
   mode: 'history',
   routes: [
     {
-      path: '/',
-      name: 'Market-index',
-      component: Market
-    },
-    {
       path: '/market',
       name: 'Market',
       component: Market
@@ -203,7 +198,7 @@ const router = new Router({
     {
       path: '*',
       name: 'other',
-      redirect: '/market'
+      redirect: '/lbs'
     }
   ]
 })

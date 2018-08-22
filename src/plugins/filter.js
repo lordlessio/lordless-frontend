@@ -8,7 +8,9 @@ import {
   transferCoords,
   weiToEth,
   dateFormat,
-  timeFormat
+  timeFormat,
+  nextAC,
+  remainingAC
 } from 'utils/tool'
 
 Vue.filter('splitAddress', splitAddress)
@@ -29,9 +31,9 @@ Vue.filter('reldbIcon', reldbIcon)
 
 Vue.filter('formatDue', formatDue)
 
-Vue.filter('nextAC', (level) => Math.ceil(Math.pow(level * 108, 2) / Math.pow(108, 2) * 10))
+Vue.filter('nextAC', nextAC)
 
-Vue.filter('remainingAC', (level, ac) => Math.ceil(Math.pow(level * 108, 2) / Math.pow(108, 2) * 10) - ac)
+Vue.filter('remainingAC', remainingAC)
 
 // ldb detail 私有 filter
 

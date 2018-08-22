@@ -54,6 +54,7 @@
 
 <script>
 import LdProgress from '@/components/stories/progress'
+import { nextAC } from 'utils/tool'
 export default {
   props: {
     info: {
@@ -85,6 +86,26 @@ export default {
             end: '#3588FD'
           }
         }
+      }
+    }
+  },
+  computed: {
+    ldbActiveness () {
+      return this.info.activeness
+    }
+  },
+  watch: {
+    /**
+     * 监听建筑当前经验
+     * 根据当前建筑等级，计算升级所需经验
+     * 达到升级条件，改变建筑等级
+     */
+    ldbActiveness (val) {
+      const nextAc = nextAC(this.info.chain.level)
+      if (val >= nextAc) {
+        const info = this.info
+        info.chain.level += 1
+        this.$emit('update:info', info)
       }
     }
   },

@@ -43,7 +43,8 @@
               <div class="task-status-cnt">
                 <ld-btn
                   v-if="taskInfo.status === 0"
-                  class="TTFontBolder task-start-btn">
+                  class="TTFontBolder task-start-btn"
+                  @click="startTask">
                   Getting started
                 </ld-btn>
                 <h3 v-if="taskInfo.status !== 0" class="d-flex f-align-center">
@@ -116,7 +117,7 @@
                       <p>{{ taskInfo.executor.info | splitAddress }}</p>
                       <div class="card-user-level">
                         <p class="text-upper">LEVEL {{ taskInfo.executor.level }}</p>
-                        <strong>{{ taskInfo.executor.reward.percentage * 100 }}<span>%</span></strong>
+                        <strong>{{ taskInfo.executor.reward.percentage | formatDecimal({ len: 3 }) * 100 }}<span>%</span></strong>
                       </div>
                     </div>
                   </div>
@@ -148,7 +149,7 @@
                       <p>{{ taskInfo.lord.info | splitAddress }}</p>
                       <div class="card-user-level">
                         <p class="text-upper">LEVEL {{ taskInfo.lord.level }}</p>
-                        <strong>{{ taskInfo.lord.reward.percentage * 100 }}<span>%</span></strong>
+                        <strong>{{ taskInfo.lord.reward.percentage | formatDecimal({ len: 3 }) * 100 }}<span>%</span></strong>
                       </div>
                     </div>
                   </div>
@@ -209,6 +210,9 @@ export default {
       }
       console.log('--get task Info', taskId)
       this.loading = false
+    },
+    async startTask (taskInfo = this.taskInfo) {
+      window.open(taskInfo.ldbTaskType.url)
     }
   }
 }
@@ -343,9 +347,11 @@ export default {
     height: 100%;
     z-index: 0;
     >svg {
+      width: 150%;
       height: 150%;
       fill: rgba(255, 255, 255, .2);
-      transform: rotate(45deg);
+      transform: rotate(45deg) translateX(-50%);
+      transform-origin: 25% 100%;
     }
   }
   .task-status-serial {
