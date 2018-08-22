@@ -8,7 +8,7 @@
       </div>
     </div>
     <transition name="ld-hide-fade">
-      <section v-show="!loading && total" class="ldb-left-section">
+      <section v-if="!loading && total" class="ldb-left-section">
         <h3 class="d-flex f-align-baseline">Transaction history<span class="v-flex text-right cursor-pointer" @click="$emit('more')">View more</span></h3>
         <div class="left-section-cnt ldb-tx-cnt">
           <el-row class="ldb-tx-header">

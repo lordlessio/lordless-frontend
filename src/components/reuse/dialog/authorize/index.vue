@@ -38,9 +38,8 @@
       </Status>
 
       <Sign
-        v-if="showSign"
-        v-model="authorizeDialog"
-        >
+        v-model="showSign"
+        @success="checkoutAuthorize({ crowdsale: true })">
       </Sign>
     </div>
   </el-dialog>
@@ -86,6 +85,8 @@ export default {
       authorizeDialog: false,
 
       isInit: false,
+
+      showSign: false,
 
       showCrowsale: false,
 
@@ -147,8 +148,8 @@ export default {
       return this.address && !this.statusType
     },
 
-    showSign () {
-      return !this.unallowMetamask && !this.address
+    signBool () {
+      return !this.statusType && !this.address
     },
 
     closeTheme () {
@@ -192,15 +193,24 @@ export default {
 
     checkoutAuthorize ({ crowdsale = false, telegram = false } = {}) {
       if (!this.isInit) return false
+      this.initModels()
       console.log('---- this.statusType', this.statusType)
 
-      console.log('---- status', this.statusType || !this.address)
+      console.log('---- status', this.statusType, !this.address)
+
+      this.showSign = this.signBool
+
       // 检查用户状态是否ok
       if (this.statusType || !this.address) {
+        console.log('===   =====')
         this.authorizeDialog = true
         return false
       }
-      console.log('---- status', this.statusType || !this.address)
+
+      // if (this.statusType) {
+      //   this.authorizeDialog = true
+      //   return false
+      // }
 
       // if (!this.authorizeBool) {
       //   this.authorizeDialog = false
@@ -232,10 +242,10 @@ export default {
       return true
     },
 
-    // initModels () {
-    //   this.showTelegram = false
-    //   this.showCrowsale = false
-    // },
+    initModels () {
+      this.showTelegram = false
+      this.showCrowsale = false
+    },
 
     crowdsalePending (data) {
       this.$emit('pending', data)
@@ -250,7 +260,6 @@ export default {
     },
     authorizeDialog (val) {
       this.$emit('blurs', val)
-      // if (!val) this.initModels()
     },
 
     // 如果切换了账号，关闭对话框

@@ -41,6 +41,13 @@
 
         </div>
         <div class="detail-cnt-right">
+
+          <approved-tasks-tool
+            class="detail-approved-tasks"
+            :ldbId="ldbInfo._id"
+            :loading="ldbTaskLoading">
+          </approved-tasks-tool>
+
           <ldb-sale-tool
             :info="ldbInfo"
             :pendings="ldbPendings"
@@ -51,11 +58,6 @@
             @sale="saleHandle"
             @cancel="cancelSaleHandle">
           </ldb-sale-tool>
-
-          <approved-tasks-tool
-            :ldbId="ldbInfo._id"
-            :loading="ldbTaskLoading">
-          </approved-tasks-tool>
           <!-- <ldb-candy-tool :list="candyLimits" :loading="ldbTaskLoading"></ldb-candy-tool> -->
 
         </div>
@@ -655,5 +657,8 @@ export default {
     margin-left: 40px;
     width: 100%;
     max-width: 300px;
+  }
+  .detail-approved-tasks {
+    margin-bottom: 60px;
   }
 </style>

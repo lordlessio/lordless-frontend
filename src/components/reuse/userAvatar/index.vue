@@ -6,11 +6,11 @@
     @click="$router.push(`/owner/info`)">
     <div class="d-flex f-align-center" v-if="userInfo.address">
       <div class="text-right user-avatar-info" v-if="showInfo">
-        <p>
+        <p class="text-ellipsis user-nickname">
           <span v-if="userInfo.nickName">{{ userInfo.nickName }}</span>
           <span v-else>{{ userInfo.address | splitAddress({ before: 4, end: 2 }) }}</span>
         </p>
-        <p class="d-flex f-align-center">
+        <p class="d-flex f-align-center f-justify-end">
           <span class="inline-block line-height-1">
             <svg>
               <use xlink:href="#icon-color-star"/>
@@ -158,6 +158,9 @@ export default {
         height: 14px;
       }
     }
+  }
+  .user-nickname {
+    max-width: 80px;
   }
   .user-getting-start {
     padding: 12px 18px;

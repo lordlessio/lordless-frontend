@@ -1,5 +1,5 @@
 <template>
-  <transition name="ld-dialog-hide-fade">
+  <transition name="ld-hide-fade">
     <div
       v-show="visible"
       class="ld-ldb-dialog"

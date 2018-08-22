@@ -58,13 +58,14 @@
               v-for="(asset, index) of userAssets"
               :key="index">
               <el-col :span="5" class="d-flex f-auto-center candy-symbol">
-                <span class="inline-block candy-coin-svg">
-                  <!-- <svg>
-                    <use xlink:href="#coin-eth"/>
-                  </svg> -->
-                  <img src="http://lordless.oss-cn-hongkong.aliyuncs.com/test/coin.svg"/>
-                </span>
-                <span class="text-upper">{{ asset.candy.symbol }}</span>
+                <p class="d-flex f-align-end">
+                  <span class="inline-block candy-coin-svg">
+                    <svg>
+                      <use :xlink:href="`#coin-${asset.candy.symbol.toLocaleLowerCase()}`"/>
+                    </svg>
+                  </span>
+                  <span class="text-upper">{{ asset.candy.symbol }}</span>
+                </p>
               </el-col>
               <el-col :span="5">
                 <span>{{ asset.count | formatDecimal }}</span>
@@ -76,7 +77,7 @@
               </el-col> -->
               <el-col :span="6">
                 <span>$</span>
-                <span> {{ asset.candy.USD2TokenCount | formatDecimal }}</span>
+                <span> {{ 1 / asset.candy.USD2TokenCount | formatDecimal }}</span>
               </el-col>
               <el-col :span="6">
                 <span>$</span>
@@ -104,12 +105,14 @@
                   :key="index"
                   @click="chooseReward($event, record)">
                   <el-col :span="4" class="d-flex f-auto-center candy-symbol">
-                    <span class="inline-block candy-coin-svg">
-                      <svg>
-                        <use xlink:href="#coin-eth"/>
-                      </svg>
-                    </span>
-                    <span class="text-upper">{{ record.reward.candy.symbol }}</span>
+                    <p class="d-flex f-align-end">
+                      <span class="inline-block candy-coin-svg">
+                        <svg>
+                          <use :xlink:href="`#coin-${record.reward.candy.symbol.toLocaleLowerCase()}`"/>
+                        </svg>
+                      </span>
+                      <span class="text-upper">{{ record.reward.candy.symbol }}</span>
+                    </p>
                   </el-col>
                   <el-col :span="6">
                     <span>{{ record.lord ? 'LORD' : 'Task' }}</span>
@@ -130,40 +133,42 @@
               </div>
             </div>
             <div class="candy-reward-aside">
-              <div v-if="aside.show && rewardLoading" class="reward-aside-skeletion">
-                <h1></h1>
-                <p></p>
-                <div>
+              <transition name="ld-hide-in-fade">
+                <div v-if="aside.show && rewardLoading" class="reward-aside-skeletion">
+                  <h1></h1>
                   <p></p>
-                  <p></p>
+                  <div>
+                    <p></p>
+                    <p></p>
+                  </div>
+                  <div>
+                    <p></p>
+                    <p></p>
+                  </div>
+                  <div>
+                    <p></p>
+                    <p></p>
+                  </div>
+                  <div class="big">
+                    <p></p>
+                    <h2></h2>
+                  </div>
+                  <div class="big">
+                    <p></p>
+                    <p></p>
+                  </div>
+                  <div>
+                    <p></p>
+                    <p></p>
+                  </div>
+                  <div>
+                    <p></p>
+                    <div></div>
+                  </div>
                 </div>
-                <div>
-                  <p></p>
-                  <p></p>
-                </div>
-                <div>
-                  <p></p>
-                  <p></p>
-                </div>
-                <div class="big">
-                  <p></p>
-                  <h2></h2>
-                </div>
-                <div class="big">
-                  <p></p>
-                  <p></p>
-                </div>
-                <div>
-                  <p></p>
-                  <p></p>
-                </div>
-                <div>
-                  <p></p>
-                  <div></div>
-                </div>
-              </div>
+              </transition>
               <transition name="ld-hide-fade">
-                <div v-if="!rewardLoading && aside.data && aside.show" class="reward-aside-container">
+                <div v-if="!rewardLoading && aside.data && aside.show" class="reward-aside-container text-nowrap">
                   <h1>+{{ (aside.lord ? aside.data.lord.reward.count : aside.data.executor.reward.count) | formatDecimal }} <span class="text-upper">{{ aside.data.reward.candy.symbol }}</span></h1>
                   <ld-btn theme="green" inverse class="text-cap reward-aside-btn">{{ aside.lord ? 'LORD' : 'Task' }} Reward</ld-btn>
                   <ul class="candy-aside-ul candy--value">
@@ -173,7 +178,7 @@
                     </li>
                     <li>
                       <p>Valued by <span class="text-upper">USD</span></p>
-                      <p>$ {{ (aside.lord ? aside.data.lord.reward.count : aside.data.executor.reward.count) / aside.data.reward.candy.USD2TokenCount | formatDecimal }}</p>
+                      <p>$ {{ ((aside.lord ? aside.data.lord.reward.count : aside.data.executor.reward.count) / aside.data.reward.candy.USD2TokenCount) | formatDecimal }}</p>
                     </li>
                     <li>
                       <p>Date</p>
@@ -196,7 +201,12 @@
                     <li>
                       <p>LORD</p>
                       <p class="candy-aside-blockies">
-                        <Blockies :seed="aside.data.ldb.lord" :scale="5" theme="light" radius="5px"></Blockies>
+                        <Blockies
+                          :seed="aside.data.ldb.info.lord"
+                          :scale="5"
+                          jump
+                          theme="light"
+                          radius="5px"></Blockies>
                       </p>
                     </li>
                   </ul>
@@ -211,12 +221,17 @@
                     </li>
                     <li>
                       <p>Reward percentage</p>
-                      <p>{{ (aside.lord ? aside.data.lord.reward.percentage : aside.data.executor.reward.percentage) | formatDecimal({ len: 3 }) * 100 }}%</p>
+                      <p>{{ (aside.lord ? aside.data.lord.reward.percentage : aside.data.executor.reward.percentage) | formatDecimal({ len: 5 }) * 100 }}%</p>
                     </li>
                     <li>
                       <p>Employee</p>
                       <p class="candy-aside-blockies">
-                        <Blockies :seed="aside.lord ? aside.data.lord.info : aside.data.executor.info" :scale="5" theme="light" radius="5px"></Blockies>
+                        <Blockies
+                          :seed="aside.lord ? aside.data.lord.info : aside.data.executor.info"
+                          :scale="5"
+                          jump
+                          theme="light"
+                          radius="5px"></Blockies>
                       </p>
                     </li>
                   </ul>
@@ -422,6 +437,10 @@ export default {
     color: #999;
     .candy-symbol {
       color: #777;
+      >p {
+        margin-left: 15%;
+        width: 90px;
+      }
     }
   }
 
@@ -439,9 +458,9 @@ export default {
     }
   }
   .candy-coin-svg {
-    width: 25px;
-    height: 25px;
-    @include margin('right', 5px, 1);
+    margin-right: 10px;
+    width: 24px;
+    height: 24px;
   }
   .candy-down-svg {
     margin-right: 5px;
@@ -503,6 +522,10 @@ export default {
 
   // reward-aside-skeletion
   .reward-aside-skeletion {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     padding: 30px 20px 50px 40px;
     border-radius: 5px;
     background-color: $--skeletion-light;
@@ -567,8 +590,8 @@ export default {
     }
   }
   .candy-reward-aside {
+    position: relative;
     color: #fff;
-
     width: 0;
     height: 0;
     opacity: 0;
@@ -587,7 +610,7 @@ export default {
     >h1 {
       font-family: $--font-TTNormsMedium;
       font-weight: normal;
-      font-size: 48px;
+      font-size: 38px;
       >span {
         font-size: 28px;
       }

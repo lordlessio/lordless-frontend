@@ -253,8 +253,12 @@ export const reldbIcon = (url, type = 'preview', percent = 50) => {
     size = 'w_400'
   } else if (type === 'detail') {
     size = 'w_1600'
+  } else if (type === 'preview') {
+    size = 'w_600'
   } else if (type === 'percent') {
     size = `p_${percent}`
+  } else if (type === 'svg') {
+    return `${process.env.LDBICON_ORIGIN}${url}`
   }
   return `${process.env.LDBICON_ORIGIN}${url}?x-oss-process=image/resize,${size}`
 }

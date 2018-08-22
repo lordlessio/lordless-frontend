@@ -15,7 +15,7 @@
       </div>
     </div>
     <transition name="ld-hide-fade">
-      <section v-show="!loading" class="d-flex f-align-ceter sm-col-flex detail-ldb-datas">
+      <section v-if="!loading" class="d-flex f-align-ceter sm-col-flex detail-ldb-datas">
         <div class="v-flex ldb-datas-item">
           <p class="datas-item-title">Level {{ info.chain.level }}</p>
           <h2>

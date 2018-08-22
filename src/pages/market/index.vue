@@ -19,15 +19,9 @@
         <div class="d-flex f-align-center">
           <span>Sort <span class="sm-hidden">by</span></span>
           <ld-select
-            class="sm-hidden market-sort-select"
+            class="market-sort-select"
             v-model="ldbSort"
             :items="sortItems"
-            @change="sortChange">
-          </ld-select>
-          <ld-select
-            class="lg-hidden market-sort-select sm"
-            v-model="ldbSort"
-            :items="smSortItems"
             @change="sortChange">
           </ld-select>
           <div class="market-switch-input">
@@ -38,7 +32,7 @@
               @change="orderChange">
             </switch-input>
             <switch-input
-              class="lg-hidden"
+              class="lg-hidden sm"
               v-model="ldbOrder"
               :items="smOrderItems"
               @change="orderChange">
@@ -49,12 +43,12 @@
       <section class="d-flex col-flex v-flex market-ldbs-box">
         <el-row :gutter="40" v-if="ldbsLoading">
           <el-col
-            v-for="item of [1,2]" :key="item"
+            v-for="item of [1,2, 3]" :key="item"
             :xs="24" :sm="12" :lg="8">
             <skeletion-building class="skeletion-building-item"></skeletion-building>
           </el-col>
         </el-row>
-        <transition name="ld-hide-fade">
+        <transition name="ld-hide-in-fade">
           <div
             v-if="!ldbs.length && !ldbsLoading"
             class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
@@ -70,7 +64,7 @@
             </div>
           </div>
         </transition>
-        <transition name="ld-hide-fade">
+        <transition name="ld-hide-in-fade">
           <el-row v-show="ldbs.length && !ldbsLoading" :gutter="40" class="v-flex market-cnt-box">
             <el-col
               class="market-cnt-item"
@@ -181,20 +175,13 @@ export default {
       sortItems: [
         {
           value: 'influence',
-          label: 'Most influential'
-        }, {
-          value: 'popular',
-          label: 'Most popular'
-        }
-      ],
-
-      smSortItems: [
-        {
-          value: 'influence',
           label: 'Influential'
         }, {
+          value: 'price',
+          label: 'Price'
+        }, {
           value: 'popular',
-          label: 'Popular'
+          label: 'Popularity'
         }
       ],
 
@@ -362,7 +349,9 @@ export default {
    */
   .market-sort-bar {
     padding: 30px 35px;
+    color: #fff;
     border-radius: 5px;
+    background-image: linear-gradient(45deg, #FF66A1, #FF9E7A);
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .25);
     @include padding('left', 35px, 3, -2);
   }
@@ -405,7 +394,7 @@ export default {
    *  market-ldbs-box --- begin
    */
   .market-ldbs-box {
-    margin-top: 60px;
+    margin-top: 90px;
   }
   .market-cnt-item {
     color: #fff;

@@ -89,7 +89,7 @@ export default {
         const res = await login({ sigStr, address: addr.toLocaleLowerCase(), email, nickName })
         if (res.code === 1000) {
           dispatch(actionTypes.USER_SET_USER_TOKEN, ({ address: addr, token: res.token }))
-          dispatch(actionTypes.USER_SET_USER_BY_TOKEN)
+          await dispatch(actionTypes.USER_SET_USER_BY_TOKEN)
           if (cb) cb()
         }
       }

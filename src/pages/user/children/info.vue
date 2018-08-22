@@ -16,7 +16,7 @@
             <p></p>
           </div>
         </div>
-        <transition name="ld-hide-fade">
+        <transition name="ld-hide-in-fade">
           <div v-show="!overviewLoading" class="d-flex f-align-center sm-col-flex user-info-header">
             <div class="user-avatar">
               <blockies
@@ -85,7 +85,7 @@
               <p></p>
             </div>
           </div>
-          <transition name="ld-hide-fade">
+          <transition name="ld-hide-in-fade">
             <div v-show="!overviewLoading" class="d-flex f-align-center info-cnt-box info-prestige-box">
               <div class="v-flex exp-progress-box">
                 <div class="d-flex f-align-end exp-progress-top">
@@ -128,7 +128,7 @@
               <p></p>
             </div>
           </div>
-          <transition name="ld-hide-fade">
+          <transition name="ld-hide-in-fade">
             <div v-show="!overviewLoading" class="d-flex f-align-center info-cnt-box info-home-box">
               <div class="info-home-poster">
                 <svg v-if="!overviews.home">
@@ -155,7 +155,7 @@
           </transition>
         </div>
       </div>
-      <transition name="ld-hide-fade">
+      <transition name="ld-hide-in-fade">
         <div v-show="!overviewLoading" class="info-item-container user-info-section info-task-section">
           <h2 class="info-cnt-title">Task</h2>
           <div class="d-flex f-align-center sm-col-flex text-center">
@@ -271,7 +271,7 @@
           </div>
         </div>
       </transition>
-      <transition name="ld-hide-fade">
+      <transition name="ld-hide-in-fade">
         <div v-show="!overviewLoading" class="info-item-container user-info-section info-assets-section">
           <h2 class="info-cnt-title">Assets</h2>
           <div class="d-flex f-align-center sm-col-flex text-center">
@@ -283,10 +283,10 @@
                 <p></p>
               </div> -->
               <div class="v-flex d-flex col-flex assets-estimated-cnt">
-                <p class="card-cnt-tip">Valued by ETH</p>
+                <p class="card-cnt-tip">Valued by USD</p>
                 <div class="v-flex d-flex col-flex f-auto-center card-cnt-box estimated-cnt-box">
-                  <h1 class="TTFontBlack">0 ETH</h1>
-                  <p>$ 0</p>
+                  <h1 class="TTFontBlack">${{ overviews.estimated | formatDecimal }}</h1>
+                  <!-- <p class="">USD</p> -->
                 </div>
               </div>
             </div>
@@ -1077,7 +1077,7 @@ export default {
       font-size: 48px;
     }
     >p {
-      font-size: 20px;
+      font-size: 24px;
       @include margin('top', 15px, 1);
     }
   }

@@ -30,7 +30,7 @@
             </svg>
           </span>
         </ld-btn>
-        <div v-else class="d-flex f-auto-center telegram-authorize-btn">
+        <div v-show="!userInfo.telegram || !userInfo.telegram.id" class="d-flex f-auto-center telegram-authorize-btn">
           <p v-if="!telegramReady" class="d-flex f-align-baseline customize-loading">loading <span class="line-height-1"><i class="el-icon-loading"></i></span></p>
           <div class="d-flex f-auto-center" id="telegram"></div>
         </div>
@@ -101,9 +101,11 @@ export default {
 
     // 初始化 tg 授权状态
     initTelegram () {
+      console.log('---- initTelegram')
       const isTelegram = this.userInfo.telegram && this.userInfo.telegram.id
       // const isTelegram = false
       if (isTelegram) return
+      console.log('---- come in telegram')
       // const tgCode = '<script async src="https://telegram.org/js/telegram-widget.js?4" data-telegram-login="samplebot" data-size="large" data-userpic="false" data-onauth="onTelegramAuth(user)" data-request-access="write"><\/script>'
       // document.getElementById('telegram').innerHTML = tgCode
       const el = document.createElement('script')

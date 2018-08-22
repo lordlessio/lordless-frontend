@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center authorize-sign-box">
+  <div v-if="value" class="text-center authorize-sign-box">
     <div class="authorize-login-container" v-if="!newUser">
       <div class="inline-block lordless-shadow" :style="`border-radius: ${avatar.radius};`">
         <Blockies
@@ -171,7 +171,7 @@ export default {
       // metamask 是否被打开
       this.metamaskChoose = true
       this[actionTypes.USER_META_LOGIN]({ cb: (err) => {
-        if (!err) this.$emit('input', false)
+        if (!err) this.$emit('success')
         this.metamaskChoose = false
       }})
     },
@@ -213,6 +213,7 @@ export default {
         nickName: nickName.model,
         email: email.model,
         cb: () => {
+          this.$emit('success')
           this.metamaskChoose = false
         }})
     }

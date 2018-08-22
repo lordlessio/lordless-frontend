@@ -60,10 +60,10 @@ export default {
   computed: {
     statusSvg () {
       if (this.type === 'CANCELAUCTION') {
-        return 'icon-cancel-sale'
+        return 'icon-cancel-auction'
       }
       if (this.type === 'NEWAUCTION') {
-        return 'icon-sale'
+        return 'icon-new-auction'
       }
       console.log('type', this.type)
       if (this.type === 'PAYBYETHSUCCESS' || this.type === 'PAYBYETH') {

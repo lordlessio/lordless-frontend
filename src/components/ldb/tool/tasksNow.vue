@@ -6,7 +6,7 @@
       <div></div>
     </div>
     <transition name="ld-hide-fade">
-      <section v-show="!loading" class="ldb-left-section">
+      <section v-if="!loading" class="ldb-left-section">
         <h3>Tasks now</h3>
         <div class="left-section-cnt">
           <div class="tasks-now-slider">

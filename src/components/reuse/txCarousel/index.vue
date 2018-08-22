@@ -9,10 +9,10 @@
               <i class="el-icon-loading"></i>
             </span>
           </div>
-          <transition name="ld-hide-fade">
+          <transition name="ld-hide-in-fade">
             <div v-if="!txs.length && !loading" class="d-flex f-auto-center carousel-no-records">There has no records</div>
           </transition>
-          <transition name="ld-hide-fade">
+          <transition name="ld-hide-in-fade">
             <div v-if="txs.length && !loading">
               <div
                 v-for="(tx, index) of txs"

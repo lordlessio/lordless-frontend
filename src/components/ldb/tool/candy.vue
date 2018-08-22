@@ -11,7 +11,7 @@
       </div>
     </div>
     <transition name="ld-hide-fade">
-      <section v-show="!loading" class="ldb-candy-list">
+      <section v-if="!loading" class="ldb-candy-list">
         <p class="candy-list-title">
           <span class="TTFontBolder inline-block">Candy</span>
         </p>

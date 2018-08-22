@@ -3,13 +3,16 @@
     <figure @click="$emit('choose', ldbInfo)">
       <div class="building-card-top">
         <div class="building-header">
+          <div class="building-level">
+            <img :src="`/static/img/ldb/ldb-level-${ldbInfo.chain.popularity}.png`"/>
+          </div>
           <img class="building-curve" src="~/static/svg/single/curve.svg">
           <ld-img :src="ldbInfo.ldbIcon.source.preview | reldbIcon"></ld-img>
           <span class="building-sale-bg"></span>
-          <p class="d-flex f-auto-center building-sale-tag">
+          <p class="d-flex col-flex f-auto-center building-sale-tag">
             <span class="building-sale-svg">
               <svg>
-                <use xlink:href="#icon-gradient-ldb-sale"/>
+                <use xlink:href="#icon-sale"/>
               </svg>
             </span>
             <span class="building-sale-price">{{ ldbInfo.chain.auction.price | weiToEth }} ETH</span>
@@ -99,16 +102,16 @@ export default {
       progressOpts: {
         capacity: {
           gradient: {
-            start: '#69D1C3',
-            end: '#69D1C3'
-          }
-        },
-        activeness: {
-          gradient: {
             start: '#4586FC',
             end: '#4586FC'
           }
         }
+        // activeness: {
+        //   gradient: {
+        //     start: '#4586FC',
+        //     end: '#4586FC'
+        //   }
+        // }
       }
     }
   },
@@ -172,6 +175,17 @@ export default {
       z-index: 2;
     }
   }
+  .building-level {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    width: 80px;
+    height: 80px;
+    z-index: 3;
+    >img {
+      width: 100%;
+    }
+  }
   .building-sale-bg {
     position: absolute;
     left: 0;
@@ -198,14 +212,16 @@ export default {
   .building-sale-svg {
     margin-right: 5px;
     display: inline-block;
-    width: 44px;
-    height: 44px;
+    width: 54px;
+    height: 15px;
+    fill: $--text-blue-color;
   }
   .building-sale-price {
+    margin-top: 10px;
     padding: 4px 12px;
     color: #fff;
     font-size: 16px;
-    background-image: linear-gradient(to bottom, #16222A, #3A6073);
+    background-image: linear-gradient(to right, #3588FD, #00C0EB);
     border-radius: 20px;
   }
 
@@ -240,7 +256,7 @@ export default {
   }
   .building-coords {
     font-size: 16px;
-    color: #4586FC;
+    color: $--text-blue-color;
   }
 
   .building-data {

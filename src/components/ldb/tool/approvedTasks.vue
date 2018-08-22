@@ -21,36 +21,38 @@
             <el-col
               class="sm-mar-t5 text-center approved-tasks-item"
               :span="24">
-              <p class="approved-card-tip" v-if="approvedTask && approvedTask.executor.info.nickName">{{ approvedTask.executor.info.nickName }} just completed a new task</p>
-              <p class="approved-card-tip" v-else-if="approvedTask && !approvedTask.executor.info.nickName">{{ approvedTask.executor.info._id | splitAddress({ before: 4, end: 2 }) }} just completed a new task</p>
-              <figure id="approved-item-container" class="approved-item-container">
-                <div class="d-flex f-auto-center approved-task-header">
-                  <span class="inline-block">
-                    <svg>
-                      <use xlink:href="#icon-logo-image"/>
-                    </svg>
-                  </span>
-                  <span class="inline-block">
-                    <svg>
-                      <use xlink:href="#icon-telegram"/>
-                    </svg>
-                  </span>
-                </div>
-                <p v-if="!approvedTask" class="approved-no-task">暂无任务被完成</p>
-                <figcaption v-if="approvedTask">{{ approvedTask.ldbTaskType.name }}</figcaption>
-                <div class="d-flex f-align-center approved-task-rewards" v-if="approvedTask">
-                  <div class="v-flex">
-                    <p>LORD</p>
-                    <h3 class="color-blue">+{{ approvedTask.lord.reward.count | formatDecimal }} <span class="text-upper">{{ approvedTask.reward.candy.symbol }}</span></h3>
-                    <p>≈$ {{ approvedTask.lord.reward.count / approvedTask.reward.candy.USD2TokenCount | formatDecimal }}</p>
+              <div class="relative" style="z-index: 2;">
+                <p class="approved-card-tip" v-if="approvedTask && approvedTask.executor.info.nickName">{{ approvedTask.executor.info.nickName }} just completed a new task</p>
+                <p class="approved-card-tip" v-else-if="approvedTask && !approvedTask.executor.info.nickName">{{ approvedTask.executor.info._id | splitAddress({ before: 4, end: 2 }) }} just completed a new task</p>
+                <figure id="approved-item-container" class="approved-item-container">
+                  <div class="d-flex f-auto-center approved-task-header">
+                    <span class="inline-block">
+                      <svg>
+                        <use xlink:href="#icon-logo-image"/>
+                      </svg>
+                    </span>
+                    <span class="inline-block">
+                      <svg>
+                        <use xlink:href="#icon-telegram"/>
+                      </svg>
+                    </span>
                   </div>
-                  <div class="v-flex">
-                    <p>Swordsman</p>
-                    <h3 class="color-blue">+{{ approvedTask.executor.reward.count | formatDecimal }} <span class="text-upper">{{ approvedTask.reward.candy.symbol }}</span></h3>
-                    <p>≈$ {{ approvedTask.executor.reward.count / approvedTask.reward.candy.USD2TokenCount | formatDecimal }}</p>
+                  <p v-if="!approvedTask" class="approved-no-task">暂无任务被完成</p>
+                  <figcaption v-if="approvedTask">{{ approvedTask.ldbTaskType.name }}</figcaption>
+                  <div class="d-flex f-align-center approved-task-rewards" v-if="approvedTask">
+                    <div class="v-flex">
+                      <p>LORD</p>
+                      <h3 class="color-blue">+{{ approvedTask.lord.reward.count | formatDecimal }} <span class="text-upper">{{ approvedTask.reward.candy.symbol }}</span></h3>
+                      <p>≈$ {{ approvedTask.lord.reward.count / approvedTask.reward.candy.USD2TokenCount | formatDecimal }}</p>
+                    </div>
+                    <div class="v-flex">
+                      <p>Swordsman</p>
+                      <h3 class="color-blue">+{{ approvedTask.executor.reward.count | formatDecimal }} <span class="text-upper">{{ approvedTask.reward.candy.symbol }}</span></h3>
+                      <p>≈$ {{ approvedTask.executor.reward.count / approvedTask.reward.candy.USD2TokenCount | formatDecimal }}</p>
+                    </div>
                   </div>
-                </div>
-              </figure>
+                </figure>
+              </div>
             </el-col>
           </el-row>
         </div>
@@ -199,17 +201,18 @@ export default {
     }
   }
   .ldb-approved-cnt {
-    margin-top: 10px;
+    // margin-top: 10px;
   }
   .approved-tasks-list {
-    margin-top: -20px;
+    // margin-top: -20px;
   }
 
   .approved-tasks-item {
     position: relative;
-    margin-top: 20px;
+    // margin-top: 20px;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .25);
     border-radius: 5px;
+    background-color: #fff;
     overflow: hidden;
     // &:nth-of-type(2n + 1) {
     //   @include padding('right', 12px, -2);

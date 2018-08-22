@@ -2,7 +2,7 @@
   <div class="d-flex user-building-box">
     <div class="d-flex v-flex col-flex user-candy-container">
       <h1 class="text-cap user-building-title">LDB</h1>
-      <transition name="ld-hide-fade">
+      <transition name="ld-hide-in-fade">
         <div
           v-if="!buildings.length && !saleBuildings.length && !loading"
           class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
@@ -38,12 +38,12 @@
             </div>
             <el-row class="mar-t3" :gutter="30" v-if="loading">
               <el-col
-                v-for="item of [1,2]" :key="item"
+                v-for="item of [1,2,3]" :key="item"
                 :xs="24" :sm="12" :lg="8">
                 <skeletion-building class="skeletion-building-item"></skeletion-building>
               </el-col>
             </el-row>
-            <transition name="ld-hide-fade">
+            <transition name="ld-hide-in-fade">
               <el-row v-if="buildings.length && !loading" :gutter="30" class="user-buildings-cnt">
                 <el-col
                   :xs="24" :sm="12" :lg="8"
@@ -70,7 +70,7 @@
                 <skeletion-building class="skeletion-building-item"></skeletion-building>
               </el-col>
             </el-row>
-            <transition name="ld-hide-fade">
+            <transition name="ld-hide-in-fade">
               <div
                 v-if="!saleBuildings.length && !loading"
                 class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-buildings">
@@ -86,7 +86,7 @@
                 </div>
               </div>
             </transition>
-            <transition name="ld-hide-fade">
+            <transition name="ld-hide-in-fade">
               <el-row v-show="saleBuildings.length && !loading" :gutter="20" class="user-buildings-cnt">
                 <el-col
                   :xs="24" :sm="12" :lg="8"

@@ -88,9 +88,8 @@ export default {
     },
     jumpFunc () {
       if (!this.jump) return
-      if (!this.userInfo.address) {
-        this.$router.push(`/user/${this.seed}`)
-      } else if (this.userInfo.address.toLowerCase() === this.seed.toLowerCase()) {
+      console.log('--- jump', this.seed)
+      if (this.userInfo.address.toLowerCase() === this.seed.toLowerCase()) {
         this.$router.push('/owner/info')
       } else {
         this.$router.push(`/user/${this.seed}`)

@@ -7,14 +7,14 @@
       <skeletion-box v-model="detailLoading" absolute></skeletion-box>
 
       <!-- sketch fab -->
-      <transition name="ld-hide-fade">
+      <transition name="ld-hide-in-fade">
         <sketch-fab v-if="!detailLoading" :poster="ldbInfo.ldbIcon.source.detail | reldbIcon('detail')" class="detail-fab"/>
       </transition>
     </div>
 
     <!-- detail cnt 骨架 -->
     <skeletion-detail-cnt v-if="detailLoading"></skeletion-detail-cnt>
-    <transition name="ld-hide-fade">
+    <transition name="ld-hide-in-fade">
       <div v-if="!detailLoading" class="detail-cnt-box">
         <div class="container">
           <div class="cnt-item cnt-header">

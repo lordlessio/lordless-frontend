@@ -14,7 +14,7 @@
       </div>
     </div>
     <transition name="ld-hide-fade">
-      <section v-show="!loading && (info.chain.auction.isOnAuction || isOwner)" class="ldb-deal-cnt">
+      <section v-if="!loading && (info.chain.auction.isOnAuction || isOwner)" class="ldb-deal-cnt">
         <figure>
           <h2>#{{ info.chain.tokenId }}</h2>
           <p class="deal-ldb-name">{{ info.name.zh }}</p>
@@ -182,7 +182,7 @@ export default {
 
   // ldb-deal-status
   .ldb-deal-status {
-    padding-bottom: 65px;
+    // padding-bottom: 65px;
     color: #fff;
   }
   .ldb-deal-cnt {

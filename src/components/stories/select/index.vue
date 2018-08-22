@@ -54,7 +54,7 @@ export default {
 @import '@/assets/stylus/mixin/index.scss';
 .lordless-sort-select {
   /deep/ .el-input__inner {
-    width: 160px;
+    width: 140px;
     height: 34px;
     line-height: 34px;
     font-family: $--font-TTNormsMedium;
