@@ -10,4 +10,5 @@ module.exports = merge(prodEnv, {
   ETHERSCANURL: '"https://ropsten.etherscan.io/tx/"',
   APPROVED_NETWORK_ID: 5777,
   contract,
+  tgBot: '"lordlesslocalbot"'
 })

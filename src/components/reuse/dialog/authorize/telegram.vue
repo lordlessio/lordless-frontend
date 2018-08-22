@@ -18,7 +18,19 @@
           <p class="TTFontBolder">Telegram Authorize</p>
           <p class="TTFontNormal telegram-info-text">Authorization the <a href="#" class="TTFontBolder">Telegram</a> to Receive Task</p>
         </div>
-        <div class="d-flex f-auto-center telegram-authorize-btn">
+        <ld-btn
+          v-if="userInfo.telegram && userInfo.telegram.id"
+          class="TTFontBolder ld-authorize-btn"
+          theme="blue"
+          shadow
+          :disabled="true">
+          <span class="inline-block authorize-check-box">
+            <svg>
+              <use xlink:href="#icon-ok"/>
+            </svg>
+          </span>
+        </ld-btn>
+        <div v-else class="d-flex f-auto-center telegram-authorize-btn">
           <p v-if="!telegramReady" class="d-flex f-align-baseline customize-loading">loading <span class="line-height-1"><i class="el-icon-loading"></i></span></p>
           <div class="d-flex f-auto-center" id="telegram"></div>
         </div>
@@ -29,6 +41,7 @@
 
 <script>
 import Blockies from '@/components/stories/blockies'
+import LdBtn from '@/components/stories/button'
 
 import { putUserTgAuth } from 'api'
 
@@ -78,7 +91,8 @@ export default {
     }
   },
   components: {
-    Blockies
+    Blockies,
+    LdBtn
   },
   methods: {
     ...mapActions('user', [
@@ -95,7 +109,7 @@ export default {
       const el = document.createElement('script')
       el.src = 'https://telegram.org/js/telegram-widget.js?4'
       el.async = true
-      el.setAttribute('data-telegram-login', 'ldbbot')
+      el.setAttribute('data-telegram-login', process.env.tgBot)
       el.setAttribute('data-size', 'large')
       el.setAttribute('data-userpic', false)
       el.setAttribute('data-onauth', 'onTelegramAuth(user)')
@@ -181,6 +195,21 @@ export default {
     padding: 8px 15px;
     z-index: 0;
     transform: translateX(-50%);
+  }
+  .ld-authorize-btn {
+    padding: 0;
+    margin-top: 40px;
+    border-radius: 100%;
+  }
+  .authorize-check-box {
+    padding: 10px;
+    width: 56px;
+    height: 56px;
+    box-sizing: border-box;
+    >svg {
+      width: 100%;
+      height: 100%;
+    }
   }
   .telegram-authorize-btn {
     margin-top: 40px;

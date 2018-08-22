@@ -245,7 +245,7 @@ export default {
     },
 
     playTask (item) {
-      console.log('-----playTask', item)
+      window.open(item.ldbTaskType.url)
     },
 
     /**

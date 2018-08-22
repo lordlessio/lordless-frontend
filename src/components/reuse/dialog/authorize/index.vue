@@ -220,7 +220,7 @@ export default {
       }
 
       // 如果验证 telegram 并且用户没有授权 telegram,则执行
-      if (telegram && (!this.userInfo.telegram || !this.userInfo.telegram._id)) {
+      if (telegram && (!this.userInfo.telegram || !this.userInfo.telegram.id)) {
         console.log('----- telegram')
         this.authorizeDialog = true
         this.$nextTick(() => {
