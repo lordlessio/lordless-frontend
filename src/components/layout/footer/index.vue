@@ -1,56 +1,126 @@
 <template>
   <footer class="ld-footer" :class="theme" v-if="show">
-    <div class="container">
-      <div class="d-flex sm-col-flex lg-f-align-center sm-text-center footer-top">
-        <div class="v-flex lg-text-left footer-logo">
-          <router-link to="/" class="inline-block" v-if="theme !== 'default'">
-            <svg class="inline-block logo-img">
-              <use xlink:href="#icon-logo-image"/>
-            </svg>
-            <svg class="inline-block logo-text">
-              <use xlink:href="#icon-logo-text"/>
-            </svg>
-          </router-link>
-          <router-link to="/" class="inline-block" v-if="theme === 'default'">
-            <img class="footer-logo-png" src="~/static/img/footer/ld-footer-logo.png"/>
-          </router-link>
+    <div class="container md">
+      <div class="d-flex sm-col-flex sm-text-center footer-top">
+        <div class="v-flex d-flex sm-col-flex">
+          <div class="v-flex ld-footer-item">
+            <ul class="ld-footer-ul footer-lordless-ul">
+              <li>
+                <strong class="relative">LORDLESS<span class="inline-block ld-footer-beta">BETA</span></strong>
+              </li>
+              <li>
+                <router-link to="/lbs">LBS</router-link>
+              </li>
+              <li>
+                <router-link to="/lbs">Marketplace</router-link>
+              </li>
+              <li>
+                <router-link to="/lbs">Home</router-link>
+              </li>
+              <li>
+                <router-link to="/lbs">Team</router-link>
+              </li>
+              <li>
+                <router-link to="/lbs">Roadmap</router-link>
+              </li>
+              <li>
+                <router-link to="/lbs">Airdrop plan</router-link>
+              </li>
+            </ul>
+            <ul class="ld-footer-ul footer-whitepaper-ul">
+              <li>
+                <strong>Whitepaper</strong>
+              </li>
+              <li>
+                <a target="_blank" href="">English</a>
+              </li>
+              <li>
+                <a target="_blank" href="">中文</a>
+              </li>
+            </ul>
+          </div>
+          <div class="v-flex ld-footer-item">
+            <ul class="ld-footer-ul footer-lordless-user">
+              <li>
+                <strong>User</strong>
+              </li>
+              <li>
+                <router-link to="/owner/info">Overview</router-link>
+              </li>
+              <li>
+                <router-link to="/owner/candy">Candy</router-link>
+              </li>
+              <li>
+                <router-link to="/owner/task">Tasks</router-link>
+              </li>
+              <li>
+                <router-link to="/owner/building">LDB</router-link>
+              </li>
+              <li>
+                <router-link to="/owner/authorization">Authorization</router-link>
+              </li>
+              <li>
+                <router-link to="/owner/activity">Activity</router-link>
+              </li>
+            </ul>
+          </div>
+          <div class="v-flex ld-footer-item">
+            <ul class="ld-footer-ul footer-lordless-about">
+              <li>
+                <strong>About</strong>
+              </li>
+              <li>
+                <router-link to="/">Team</router-link>
+              </li>
+              <li>
+                <router-link to="/">Guide</router-link>
+              </li>
+              <li>
+                <router-link to="/">FAQs</router-link>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="sm-d-flex sm-f-justify-around lg-text-right footer-icons-box">
-          <div class="sm-v-flex footer-icons-item">
-            <a class="inline-block" target="__blank" href="https://twitter.com/LordLessIo">
-              <svg v-if="theme !== 'default'">
-                <use xlink:href="#icon-twitter"/>
-              </svg>
-              <img v-if="theme === 'default'" src="~/static/img/footer/ld-Twitter-icon.png"/>
-            </a>
+        <div class="ld-footer-letter">
+          <strong>Newsletter</strong>
+          <p>The latest LORDLESS news, articles, and resources, sent straight to your inbox every month.</p>
+          <div class="d-flex footer-subscribe-eamil">
+            <p class="v-flex footer-subscribe-input">
+              <input type="text" placeholder="Your email"/>
+            </p>
+            <span class="TTFontBolder inline-block">Subscribe</span>
           </div>
-          <div class="sm-v-flex footer-icons-item">
-            <a class="inline-block" target="_blank" href="https://github.com/lordlessio">
-              <svg v-if="theme !== 'default'">
-                <use xlink:href="#icon-github"/>
-              </svg>
-              <img v-if="theme === 'default'" src="~/static/img/footer/ld-Github-icon.png"/>
-            </a>
-          </div>
-          <div class="sm-v-flex footer-icons-item">
-            <a class="inline-block" target="_blank" href="https://medium.com/@LordLessIo">
-              <svg v-if="theme !== 'default'">
-                <use xlink:href="#icon-medium"/>
-              </svg>
-              <img v-if="theme === 'default'" src="~/static/img/footer/ld-Medium-icon.png"/>
-            </a>
-          </div>
-          <div class="sm-v-flex footer-icons-item">
-            <a class="inline-block" target="_blank" href="https://t.me/lordlessio">
-              <svg v-if="theme !== 'default'">
+          <div class="footer-link-icons">
+            <span class="inline-block">
+              <svg>
                 <use xlink:href="#icon-telegram"/>
               </svg>
-              <img v-if="theme === 'default'" src="~/static/img/footer/ld-Telegram-icon.png"/>
-            </a>
+            </span>
+            <span class="inline-block">
+              <svg>
+                <use xlink:href="#icon-twitter"/>
+              </svg>
+            </span>
+            <span class="inline-block">
+              <svg>
+                <use xlink:href="#icon-github"/>
+              </svg>
+            </span>
+            <span class="inline-block">
+              <svg>
+                <use xlink:href="#icon-medium"/>
+              </svg>
+            </span>
+            <span class="inline-block">
+              <svg>
+                <use xlink:href="#icon-email"/>
+              </svg>
+            </span>
           </div>
+          <p class="footer-copyright">Copyright © 2017 - 2018 LORDLESS. All right reserved</p>
         </div>
       </div>
-      <div class="text-center footer-copyright">Copyright © 2017 - 2018 LORDLESS. All right reserved</div>
+      <p class="text-center ld-footer-term">Term of use & Privacy policy</p>
     </div>
   </footer>
 </template>
@@ -68,69 +138,166 @@ export default {
     // footer 主题
     theme: {
       type: String,
-      default: 'default'
+      default: 'dark'
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/class_mixin.scss';
+  @import '@/assets/stylus/mixin/index.scss';
   .ld-footer {
-    height: 130px;
-    @include margin('top', -230px, 1);
-    @include padding('top', 80px, 1.34);
-    @include padding('bottom', 100px, 1.34);
-    &.default {
-      background-color: #fff;
-      color: #373737;
-      fill: #fff;
-      border-top: 1px solid #E1E1E2;
+    padding: 50px 0;
+    strong {
+      display: inline-block;
+      font-size: 16px;
+      @include margin('bottom', 20px, 1.5);
+    }
+    &.light {
+      strong {
+        color: #555;
+      }
+      .ld-footer-ul {
+        a {
+          color: #999;
+        }
+      }
+      .ld-footer-letter {
+        color: #999;
+      }
+      .footer-subscribe-eamil {
+        >span {
+          color: #fff;
+          background-color: $--text-blue-color;
+        }
+      }
+      .footer-subscribe-input {
+        border: 1px solid #DDDDDD;
+        color: #999;
+      }
+      .footer-link-icons {
+        fill: #bbb;
+      }
+      .ld-footer-term {
+        color: #555;
+      }
     }
     &.dark {
-      background-color: #000;
-      color: #fff;
-      fill: #fff;
-      border-top: 1px solid #373737;
+      background-color: $--text-deep-blue-color;
+      strong {
+        color: #fff;
+      }
+      .ld-footer-ul {
+        a {
+          color: #BDB9FD;
+        }
+      }
+      .ld-footer-letter {
+        color: #BDB9FD;
+      }
+      .footer-subscribe-eamil {
+        >span {
+          background-color: #fff;
+          color: $--text-deep-blue-color;
+        }
+      }
+      .footer-subscribe-input {
+        color: #BDB9FD;
+        background-color: #726BFF;
+      }
+      .footer-link-icons {
+        fill: #BDB9FD
+      }
+      .ld-footer-term {
+        color: #fff;
+      }
     }
   }
-  .container {
-    height: 100%;
+
+  .ld-footer-beta {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    margin-left: 3px;
+    padding: 3px 5px;
+    font-family: $--font-TTNormsBold;
+    color: #fff;
+    font-size: 12px;
+    background-color: #BDB9FD;
+    border-radius: 2px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .25);
+    transform: scale(.75) translateX(100%);
   }
-  .footer-top {
-    @include margin('bottom', 70px, 2);
-  }
-  .footer-logo {
-    .footer-logo-png {
-      width: 200px;
+  .ld-footer-ul {
+    &:not(.footer-lordless-ul) {
+      @include margin('top', 30px, 1, -2);
     }
-    .logo-img {
-      width: 64px;
-      height: 45px;
-    }
-    .logo-text {
-      width: 119px;
-      height: 32px;
-      @include margin('left', 10px, 1);
-    }
-  }
-  .footer-icons-box {
-    @include margin('top', 30px, 1, -1);
-  }
-  .footer-icons-item {
-    display: inline-block;
-    @include margin('left', 23px, -2);
-    @include margin('right', 23px, -2);
-    svg {
-      fill: inherit;
-    }
-    svg, img {
-      width: 30px;
-      height: 30px;
+    a {
+      font-family: $--font-TTNormsRegular;
+      font-size: 16px;
+      line-height: 1.8;
     }
   }
-  .footer-copyright {
-    font-weight: 500;
+  .footer-whitepaper-ul {
+    margin-top: 50px;
+  }
+
+  .ld-footer-letter {
+    width: 350px;
+    @include margin('top', 30px, 1, -2);
+    >p {
+      font-size: 16px;
+    }
+    .footer-copyright {
+      margin-top: 15px;
+      font-size: 12px;
+    }
+  }
+  .footer-subscribe-eamil {
+    margin-top: 20px;
+    max-width: 350px;
+    >span {
+      padding: 15px 18px;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+  }
+  .footer-subscribe-input {
+    padding: 0 15px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    overflow: hidden;
+    >input {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: none;
+      font-family: $--font-TTNormsMedium;
+      font-size: 16px;
+      background-color: transparent;
+      color: inherit;
+      outline: none;
+      &::placeholder {
+        color: inherit;
+      }
+    }
+  }
+
+  .footer-link-icons {
+    margin-top: 45px;
+    >span {
+      width: 22px;
+      height: 22px;
+      &:not(:first-of-type) {
+        margin-left: 25px;
+      }
+    }
+  }
+
+  .ld-footer-term {
+    margin-top: 30px;
+    font-family: $--font-TTNormsRegular;
+    font-size: 16px;
   }
 
 </style>

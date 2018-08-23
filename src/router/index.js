@@ -36,7 +36,7 @@ const router = new Router({
       component: Market
     },
     {
-      path: '/lbs',
+      path: '/map',
       name: 'Lbs',
       component: Lbs,
       meta: {
@@ -198,7 +198,7 @@ const router = new Router({
     {
       path: '*',
       name: 'other',
-      redirect: '/lbs'
+      redirect: '/map'
     }
   ]
 })

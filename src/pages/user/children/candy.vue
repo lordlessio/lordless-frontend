@@ -92,10 +92,10 @@
             name="history">
             <div class="v-flex candy-rewards-box">
               <div class="d-flex f-align-center text-center candy-tabs-title">
-                <el-col :span="4">Asset</el-col>
-                <el-col :span="6">Type</el-col>
-                <el-col :span="6">Date</el-col>
-                <el-col :span="6">Quantity</el-col>
+                <el-col :span="aside.show ? 8 : 4">Asset</el-col>
+                <el-col :span="aside.show ? 8 : 6">Type</el-col>
+                <el-col v-if="!aside.show" :span="6">Date</el-col>
+                <el-col :span="aside.show ? 8 : 6">Quantity</el-col>
               </div>
               <div class="candy-reward-list">
                 <div
@@ -104,7 +104,7 @@
                   v-for="(record, index) of userRecords.list"
                   :key="index"
                   @click="chooseReward($event, record)">
-                  <el-col :span="4" class="d-flex f-auto-center candy-symbol">
+                  <el-col :span="aside.show ? 8 : 4" class="d-flex f-auto-center candy-symbol">
                     <p class="d-flex f-align-end">
                       <span class="inline-block candy-coin-svg">
                         <svg>
@@ -114,14 +114,14 @@
                       <span class="text-upper">{{ record.reward.candy.symbol }}</span>
                     </p>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col :span="aside.show ? 8 : 6">
                     <span>{{ record.lord ? 'LORD' : 'Task' }}</span>
                     <span class="text-cap"> Reward</span>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col v-if="!aside.show" :span="6">
                     <span>{{ record.update_at | dateFormat }}</span>
                   </el-col>
-                  <el-col :span="6" class="d-flex f-align-center candy-quantity">
+                  <el-col :span="aside.show ? 8 : 6" class="d-flex f-align-center candy-quantity">
                     <span class="line-height-0 candy-down-svg">
                       <svg>
                         <use xlink:href="#icon-download"/>
@@ -172,10 +172,10 @@
                   <h1>+{{ (aside.lord ? aside.data.lord.reward.count : aside.data.executor.reward.count) | formatDecimal }} <span class="text-upper">{{ aside.data.reward.candy.symbol }}</span></h1>
                   <ld-btn theme="green" inverse class="text-cap reward-aside-btn">{{ aside.lord ? 'LORD' : 'Task' }} Reward</ld-btn>
                   <ul class="candy-aside-ul candy--value">
-                    <li>
+                    <!-- <li>
                       <p>Valued by <span class="text-upper">ETH</span></p>
                       <p>0.000167 ETH</p>
-                    </li>
+                    </li> -->
                     <li>
                       <p>Valued by <span class="text-upper">USD</span></p>
                       <p>$ {{ ((aside.lord ? aside.data.lord.reward.count : aside.data.executor.reward.count) / aside.data.reward.candy.USD2TokenCount) | formatDecimal }}</p>

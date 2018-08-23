@@ -47,7 +47,7 @@
           <el-tab-pane
             label="Candy"
             name="candy">
-            <div class="tasks-sort">
+            <!-- <div class="tasks-sort">
               <span>Filter by</span>
               <ld-select
                 class="tasks-sort-select"
@@ -55,7 +55,7 @@
                 :items="sortItems"
                 @change="filterTasks">
               </ld-select>
-            </div>
+            </div> -->
             <div
               v-if="!taskInfos.total && !loading"
               class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-tasks">
@@ -87,7 +87,7 @@
           <el-tab-pane
             label="LORD tasks"
             name="lord">
-            <div class="tasks-sort">
+            <!-- <div class="tasks-sort">
               <span>Filter by</span>
               <ld-select
                 class="tasks-sort-select"
@@ -95,7 +95,7 @@
                 :items="sortItems"
                 @change="filterTasks">
               </ld-select>
-            </div>
+            </div> -->
             <div
               v-if="!taskInfos.total && !loading"
               class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-tasks">

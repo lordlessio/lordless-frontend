@@ -8,7 +8,7 @@ const instance = axios.create({
 // request
 instance.interceptors.request.use(async (res) => {
   // set lordless-token to headers
-  const address = window.localStorage.getItem('currentAddress').toLocaleLowerCase()
+  const address = (window.localStorage.getItem('currentAddress') || '').toLocaleLowerCase()
   const token = getObjStorage()[address]
   res.headers['lordless-token'] = token
   return res

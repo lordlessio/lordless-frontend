@@ -198,7 +198,7 @@
                   </div>
                   <div class="rewards-small-card blue">
                     <p>Related LDB</p>
-                    <p>+{{ taskInfo.ldb.activeness }} act.</p>
+                    <p>+{{ taskInfo.ldb.activeness }} ac.</p>
                   </div>
                 </div>
               </div>

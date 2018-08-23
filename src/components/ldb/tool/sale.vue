@@ -18,7 +18,7 @@
         <figure>
           <h2 class="TTFontBold deal-ldb-tokenId">#{{ info.chain.tokenId }}</h2>
           <p class="deal-ldb-name">{{ info.name.zh }}</p>
-          <span class="deal-presale-svg">
+          <span v-if="info.chain.auction.isOnPreAuction" class="deal-presale-svg">
             <svg>
               <use xlink:href="#icon-presale"/>
             </svg>

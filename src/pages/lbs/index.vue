@@ -137,6 +137,7 @@ export default {
         // this.$refs.lordMap.createPointLayer(ldbs)
         this.$refs.lordMap.createPointMarkers(ldbs)
         // this.$refs.lordMap.createMarkers(this.test_ldbs)
+        this.$nextTick(() => this.flyToLdb())
       }
     },
 
@@ -219,12 +220,12 @@ export default {
       //   this.coordQuery = coords
       //   this.$refs.lordMap.flyToCoords({ center: coords.split(','), pitch: this.lbsMPitch, zoom: this.mapScrollZooms[this.mapScrollZooms.length - 1] })
       // }
-      this.flyToLdb()
     },
 
     flyToLdb (ldbId = this.$route.query.ldb, ldbs = this.ldbs) {
       if (!ldbId) return
       const ldb = ldbs.filter(item => item._id === parseInt(ldbId))[0]
+      console.log('ldb', ldb)
       if (!ldb) return
       let { lng, lat } = ldb.chain
       lng = transferCoords(lng)

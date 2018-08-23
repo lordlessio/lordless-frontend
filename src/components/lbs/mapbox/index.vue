@@ -399,6 +399,7 @@ export default {
       map.dragRotate.disable()
       // map.dragPan.disable()
       this.map = map
+      window.lMap = map
 
       map.on('load', () => {
         // 添加marker
@@ -616,8 +617,8 @@ export default {
     },
 
     inBounds (point, bounds) {
-      var lng = (point.lng - bounds._ne.lng) * (point.lng - bounds._sw.lng) <= 0
-      var lat = (point.lat - bounds._ne.lat) * (point.lat - bounds._sw.lat) <= 0
+      var lng = (point.lng - bounds._ne.lng - 0.01) * (point.lng - bounds._sw.lng + 0.01) <= 0
+      var lat = (point.lat - bounds._ne.lat - 0.01) * (point.lat - bounds._sw.lat + 0.01) <= 0
       return lng && lat
     }
   }
