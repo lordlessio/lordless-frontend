@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center cursor-pointer ld-building-card" :class="[{ 'sale': sale, 'shadow': shadow }, `popularity-${ldbInfo.chain.popularity}`]">
+  <div class="text-center cursor-pointer ld-building-card" :class="[{ 'sale': sale || presale, 'shadow': shadow }, `popularity-${ldbInfo.chain.popularity}`]">
     <figure @click="$emit('choose', ldbInfo)">
       <div class="building-card-top">
         <div class="building-header">
@@ -12,7 +12,7 @@
           <p class="d-flex col-flex f-auto-center building-sale-tag">
             <span class="building-sale-svg">
               <svg>
-                <use xlink:href="#icon-sale"/>
+                <use :xlink:href="`#icon-${presale ? 'presale' : 'sale'}`"/>
               </svg>
             </span>
             <span class="building-sale-price">{{ ldbInfo.chain.auction.price | weiToEth }} ETH</span>
@@ -83,6 +83,10 @@ import LdImg from '@/components/stories/image'
 export default {
   props: {
     sale: {
+      type: Boolean,
+      default: false
+    },
+    presale: {
       type: Boolean,
       default: false
     },
@@ -212,7 +216,6 @@ export default {
   .building-sale-svg {
     margin-right: 5px;
     display: inline-block;
-    width: 54px;
     height: 15px;
     fill: $--text-blue-color;
   }

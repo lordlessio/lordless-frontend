@@ -2,7 +2,7 @@
   <div class="relative">
     <div v-if="loading" class="ld-task-skeletion">
       <div class="d-flex col-flex f-auto-center task-skeletion-header">
-        <div class="skeletion-header-container">
+        <div class="skeletion-header-container skeletion-breath">
           <h2></h2>
           <div class="d-flex f-align-center">
             <p></p>
@@ -13,7 +13,7 @@
           </div>
         </div>
       </div>
-      <div class="task-skeletion-cnt">
+      <div class="task-skeletion-cnt skeletion-breath">
         <h1></h1>
         <p></p>
         <p></p>
@@ -36,14 +36,14 @@
       </div>
     </div>
     <transition name="ld-hide-fade">
-      <div v-show="!loading && taskInfo" class="ld-task-box" :class="{ 'dialog': dialog }">
+      <div v-if="!loading && taskInfo" class="ld-task-box" :class="{ 'dialog': dialog }">
         <div class="d-flex f-auto-center task-detail-header">
           <div class="detail-header-cnt">
             <h2>{{ taskInfo.reward.candy.symbol }} Task Announcement</h2>
             <div class="d-flex f-align-center header-cnt-desc">
               <div class="inline-block header-coin-svg">
                 <svg>
-                  <use xlink:href="#coin-eth"/>
+                  <use :xlink:href="`#coin-${taskInfo.reward.candy.symbol.toLowerCase()}`"/>
                 </svg>
               </div>
               <div class="v-flex inline-block header-coin-desc">
@@ -153,7 +153,7 @@
                         <p>{{ taskInfo.executor.info | splitAddress }}</p>
                         <div class="card-user-level">
                           <p class="text-upper">LEVEL {{ taskInfo.executor.level }}</p>
-                          <strong>{{ taskInfo.executor.reward.percentage | formatDecimal({ len: 3 }) * 100 }}<span>%</span></strong>
+                          <strong>{{ taskInfo.executor.reward.percentage | formatDecimal({ len: 3, percentage: true }) }}<span>%</span></strong>
                         </div>
                       </div>
                     </div>
@@ -185,7 +185,7 @@
                         <p>{{ taskInfo.lord.info | splitAddress }}</p>
                         <div class="card-user-level">
                           <p class="text-upper">LEVEL {{ taskInfo.lord.level }}</p>
-                          <strong>{{ taskInfo.lord.reward.percentage | formatDecimal({ len: 5 }) * 100 }}<span>%</span></strong>
+                          <strong>{{ taskInfo.lord.reward.percentage | formatDecimal({ len: 3, percentage: true }) }}<span>%</span></strong>
                         </div>
                       </div>
                     </div>
@@ -246,7 +246,9 @@ export default {
         this.taskInfo = res.data
       }
       console.log('--get task Info', taskId)
-      this.loading = false
+      this.$nextTick(() => {
+        this.loading = false
+      })
     },
     async startTask (taskInfo = this.taskInfo) {
       window.open(taskInfo.ldbTaskType.url)

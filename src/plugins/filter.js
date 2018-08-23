@@ -9,6 +9,7 @@ import {
   weiToEth,
   dateFormat,
   timeFormat,
+  formatLdbType,
   nextAC,
   remainingAC
 } from 'utils/tool'
@@ -34,6 +35,8 @@ Vue.filter('formatDue', formatDue)
 Vue.filter('nextAC', nextAC)
 
 Vue.filter('remainingAC', remainingAC)
+
+Vue.filter('formatLdbType', formatLdbType)
 
 // ldb detail 私有 filter
 

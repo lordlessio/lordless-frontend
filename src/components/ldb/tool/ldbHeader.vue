@@ -5,7 +5,7 @@
         <div class="header-left-skeletion">
           <div class="header-left-box-skeletion">
             <div class="header-left-container-skeletion">
-              <div class="left-skeletion-container">
+              <div class="left-skeletion-container skeletion-breath">
                 <h1></h1>
                 <p></p>
                 <p></p>
@@ -75,7 +75,7 @@
                   <figure class="header-left-cnt">
                     <h1 :class="{ 'md': info.name.zh.length > 6, 'sm': info.name.zh.length > 9 }">{{ info.name.zh }}</h1>
                     <p class="detail-ldb-tag">
-                      <span class="inline-block">Buddhist & Church</span>
+                      <span class="inline-block" v-for="type of info.ldbType" :key="type">{{ type | formatLdbType }}</span>
                     </p>
                     <p class="TTFontNormal detail-ldb-address">{{ info.address }}</p>
                     <p class="detail-ldb-location">{{ info.chain.lng | transferCoords | sliceStr}}, {{ info.chain.lat | transferCoords | sliceStr }}</p>
@@ -126,7 +126,7 @@ import LdBtn from '@/components/stories/button'
 import LdImg from '@/components/stories/image'
 import Blockies from '@/components/stories/blockies'
 
-import { hasClass, removeClass, addClass, transitionEvent } from 'utils/tool'
+import { addClass, transitionEvent } from 'utils/tool'
 import { setHome } from 'api'
 export default {
   props: {
@@ -218,17 +218,17 @@ export default {
         if (!children) return
 
         // 如果接口报错
-        if (errorMsg) {
-          children.setAttribute('data-msg', errorMsg)
-          if (!hasClass('afterAnimate', dom)) {
-            // 执行动画
-            addClass('afterAnimate', dom)
-            setTimeout(() => {
-              removeClass('afterAnimate', dom)
-            }, 1000)
-          }
-          return
-        }
+        // if (errorMsg) {
+        //   children.setAttribute('data-msg', errorMsg)
+        //   if (!hasClass('afterAnimate', dom)) {
+        //     // 执行动画
+        //     addClass('afterAnimate', dom)
+        //     setTimeout(() => {
+        //       removeClass('afterAnimate', dom)
+        //     }, 1000)
+        //   }
+        //   return
+        // }
         if (!data) return
 
         // 设置当前dom鼠标形态

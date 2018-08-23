@@ -191,7 +191,16 @@ export default {
       this.authorizeDialog = false
     },
 
-    checkoutAuthorize ({ crowdsale = false, telegram = false } = {}) {
+    checkoutAuthorize ({ init = false, crowdsale = false, telegram = false } = {}) {
+      if (!this.isInit && !init) {
+        this.$notify({
+          type: 'warning',
+          title: 'web3初始化失败!',
+          message: '请检查 metamask 是否正常',
+          position: 'bottom-right',
+          duration: 3500
+        })
+      }
       if (!this.isInit) return false
       this.initModels()
       console.log('---- this.statusType', this.statusType)

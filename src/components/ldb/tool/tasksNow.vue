@@ -27,8 +27,8 @@
                 v-for="(item, index) of tasks"
                 :key="index._id">
                 <div class="tasks-now-item">
-                  <div class="d-flex">
-                    <div class="v-flex d-flex col-flex tasks-now-icons">
+                  <div class="d-flex row-flex">
+                    <div class="d-flex col-flex tasks-now-icons">
                       <span class="inline-block">
                         <svg>
                           <use xlink:href="#icon-logo-image"/>
@@ -48,15 +48,19 @@
                         <p>+{{ item.ac }} AC</p>
                       </div>
                     </div>
-                    <div class="v-flex d-flex f-align-end">
+                    <div class="d-flex f-align-end">
                       <ld-btn
                         class="tasks-now-btn"
                         theme="blue"
                         shadow
+                        inverse
                         :disabled="receiveLoading || !item.countLeft || owner"
                         :loading="receiveLoading"
                         @click="receive(item)">
-                        {{ item.countLeft ? 'Apply' : 'Applied' }}
+                        <span v-if="item.userStatus === 0">Applied</span>
+                        <span v-else-if="item.userStatus === 1">Completed</span>
+                        <span v-else-if="item.userStatus === -1">Failed</span>
+                        <span v-else>Apply</span>
                       </ld-btn>
                     </div>
                   </div>
@@ -197,8 +201,9 @@ export default {
   }
 
   .tasks-now-carousel {
-    margin-top: 100px;
-    color: #fff;
+    padding: 20px 0;
+    margin-top: 80px;
+    color: #777;
     overflow: hidden;
   }
   .ldb-detail-carousel {
@@ -211,22 +216,24 @@ export default {
     position: relative;
     padding: 28px;
     height: 100%;
-    background-image: linear-gradient(to right, #3A6073, #16222A);
+    // background-image: linear-gradient(to right, #3A6073, #16222A);
+    background-color: #fff;
     border-radius: 5px;
-    overflow: hidden;
-    &::after {
-      content: '';
-      position: absolute;
-      top: -15%;
-      left: 38%;
-      width: 100%;
-      padding-top: 100%;
-      border-radius: 100%;
-      background-image: linear-gradient(45deg , #00C0EB, #3588FD);
-      mix-blend-mode: soft-light;
-      overflow: hidden;
-      z-index: 1;
-    }
+    // overflow: hidden;
+    box-shadow: 0 2px 10px -1px rgba(0, 0, 0, 0.25);
+    // &::after {
+    //   content: '';
+    //   position: absolute;
+    //   top: -15%;
+    //   left: 38%;
+    //   width: 100%;
+    //   padding-top: 100%;
+    //   border-radius: 100%;
+    //   background-image: linear-gradient(45deg , #00C0EB, #3588FD);
+    //   mix-blend-mode: soft-light;
+    //   overflow: hidden;
+    //   z-index: 1;
+    // }
     >div {
       position: relative;
       z-index: 2;
@@ -240,7 +247,7 @@ export default {
       border-radius: 100%;
       fill: $--text-blue-color;
       background-color: #fff;
-      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .25);
+      box-shadow: 0 2px 10px -1px rgba(0, 0, 0, 0.25);
       box-sizing: border-box;
       &:not(:first-of-type) {
         margin-top: -15px;
@@ -250,7 +257,7 @@ export default {
   }
   .tasks-now-detail {
     margin-left: 25px;
-    max-width: 150px;
+    max-width: 125px;
     >p {
       font-size: 18px;
       // word-break: break-all;
@@ -258,12 +265,10 @@ export default {
   }
   .tasks-now-rewards {
     margin-top: 18px;
+    color: #999;
     white-space: nowrap;
     >p {
-      font-size: 24px;
-      &:first-of-type {
-        font-size: 18px;
-      }
+      font-size: 16px;
     }
   }
   .tasks-now-btn {

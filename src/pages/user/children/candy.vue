@@ -221,7 +221,7 @@
                     </li>
                     <li>
                       <p>Reward percentage</p>
-                      <p>{{ (aside.lord ? aside.data.lord.reward.percentage : aside.data.executor.reward.percentage) | formatDecimal({ len: 5 }) * 100 }}%</p>
+                      <p>{{ (aside.lord ? aside.data.lord.reward.percentage : aside.data.executor.reward.percentage) | formatDecimal({ len: 3, percentage: true }) }}%</p>
                     </li>
                     <li>
                       <p>Employee</p>

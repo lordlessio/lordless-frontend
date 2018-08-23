@@ -151,7 +151,7 @@ export default {
         this.loading = false
         return
       }
-      this.$refs.authorize.checkoutAuthorize()
+      this.$refs.authorize.checkoutAuthorize({ init: true })
     },
 
     async logout () {

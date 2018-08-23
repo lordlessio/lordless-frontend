@@ -30,7 +30,6 @@ p {
 }
 h1, h2, h3, h4 {
   font-family: $--font-TTNormsBold;
-  font-weight: bold;
 }
 h1 {
   @include fontSize(56px, 1.5);

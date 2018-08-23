@@ -87,6 +87,7 @@ export default {
 <style lang="scss" scoped>
   @import '@/assets/stylus/mixin/index.scss';
   .lordless-carousel {
+    overflow: visible;
     /deep/ .el-carousel__item--card {
       &::before {
         content: '';
@@ -97,12 +98,15 @@ export default {
         height: 100%;
         z-index: 0;
         opacity: 0;
-        background-color: #eee;
+        background-color: #f5f5f5;
         transition: all 0.2s;
       }
       &:not(.is-active) {
-        background-color: #eee;
+        background-color: #f5f5f5;
         pointer-events: none;
+        .tasks-now-item {
+          box-shadow: none;
+        }
         &::before {
           z-index: 3;
           opacity: 1;
@@ -119,6 +123,7 @@ export default {
     }
     /deep/ {
       .el-carousel__item {
+        overflow: visible;
         z-index: 1;
       }
     }
@@ -135,7 +140,7 @@ export default {
     transform: translateY(-50%);
     z-index: 5;
     border: none;
-    cursor: pointer;
+    // cursor: pointer;
     &::before {
       content: '';
       position: absolute;

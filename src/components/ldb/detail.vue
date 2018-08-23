@@ -49,7 +49,7 @@
           </approved-tasks-tool>
 
           <ldb-sale-tool
-            :info="ldbInfo"
+            :info.sync="ldbInfo"
             :pendings="ldbPendings"
             :contractStatus="contractStatus"
             :user="userInfo"
@@ -551,7 +551,7 @@ export default {
       if (!authorize) return cb()
 
       const cbData = {}
-      const res = await receiveTask({ roundId: _id, ldbId: this.ldbInfo._id, candy: true })
+      const res = await receiveTask({ roundId: _id, ldbId: this.ldbInfo._id })
       if (res.code === 1000) {
         cbData.data = res.data
 
@@ -585,32 +585,43 @@ export default {
      * 领取任务事件
      */
     async receiveTask ({ _id, countLeft } = {}, cb) {
+      if (!countLeft) {
+        this.$notify.error({
+          title: '任务领取失败!',
+          message: '超出任务领取上限',
+          position: 'bottom-right',
+          duration: 3500
+        })
+      }
       if (!countLeft || !_id) return cb()
 
       // 检查登陆权限状态
       const authorize = await this.$refs.authorize.checkoutAuthorize({ telegram: true })
+      console.log('authorize', authorize)
       if (!authorize) return cb()
 
       const cbData = {}
       const res = await receiveTask({ roundId: _id, ldbId: this.ldbInfo._id })
-      if (res.code === 1000) {
+      if (res.code === 1000 && res.data) {
         cbData.data = res.data
 
         // 根据消耗的ap值，手动更新 userInfo 的ap值
         this[actionTypes.USER_UPT_USER_AP](res.data.apCost)
 
+        console.log('ldbInfo', this.ldbInfo)
         // 根据返回的建筑经验，修改当前建筑经验
         this.$set(this.ldbInfo, 'activeness', this.ldbInfo.activeness + res.data.ldb.activeness)
         this.$set(this.ldbInfo, 'apLeft', this.ldbInfo.apLeft - res.data.apCost)
       } else {
         this.$notify.error({
           title: '任务领取失败!',
-          message: res.errorMsg,
+          message: res.errorMsg || '未知错误',
           position: 'bottom-right',
           duration: 5000
         })
         cbData.errorMsg = res.errorMsg
       }
+      console.log('receiveTask cbData', cbData)
       return cb(cbData)
     }
   },

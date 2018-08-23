@@ -32,7 +32,7 @@
         </ld-btn>
         <div v-show="!userInfo.telegram || !userInfo.telegram.id" class="d-flex f-auto-center telegram-authorize-btn">
           <p v-if="!telegramReady" class="d-flex f-align-baseline customize-loading">loading <span class="line-height-1"><i class="el-icon-loading"></i></span></p>
-          <div class="d-flex f-auto-center" id="telegram"></div>
+          <div class="d-flex f-auto-center" :id="telegramContainer"></div>
         </div>
       </div>
     </div>
@@ -76,7 +76,8 @@ export default {
   },
   data: () => {
     return {
-      telegramReady: false
+      telegramReady: false,
+      telegramContainer: `telegram${new Date().getTime()}`
     }
   },
   computed: {
@@ -86,7 +87,7 @@ export default {
   },
   watch: {
     value (val) {
-      if (val) this.initTelegram()
+      if (val) this.$nextTick(() => this.initTelegram())
       else this.removeTelegram()
     }
   },
@@ -103,7 +104,8 @@ export default {
     initTelegram () {
       console.log('---- initTelegram')
       const isTelegram = this.userInfo.telegram && this.userInfo.telegram.id
-      // const isTelegram = false
+
+      console.log('---- initTelegram', isTelegram)
       if (isTelegram) return
       console.log('---- come in telegram')
       // const tgCode = '<script async src="https://telegram.org/js/telegram-widget.js?4" data-telegram-login="samplebot" data-size="large" data-userpic="false" data-onauth="onTelegramAuth(user)" data-request-access="write"><\/script>'
@@ -117,7 +119,7 @@ export default {
       el.setAttribute('data-onauth', 'onTelegramAuth(user)')
       el.setAttribute('data-request-access', 'write')
       // document.body.appendChild(el)
-      document.getElementById('telegram').appendChild(el)
+      document.getElementById(this.telegramContainer).appendChild(el)
       el.onload = () => {
         this.telegramReady = true
       }
@@ -125,12 +127,19 @@ export default {
         const res = await putUserTgAuth(user)
         if (res.code === 1000) {
           this[actionTypes.USER_SET_USER_BY_TOKEN]({ update: true })
+        } else {
+          this.$notify.error({
+            title: 'Telegram 授权失败!',
+            message: res.errorMsg,
+            position: 'bottom-right',
+            duration: 3500
+          })
         }
         this.$emit('telegram', res)
       }
     },
     removeTelegram () {
-      const telegram = document.getElementById('telegram')
+      const telegram = document.getElementById(this.telegramContainer)
       while (telegram.firstChild) {
         telegram.removeChild(telegram.firstChild)
       }

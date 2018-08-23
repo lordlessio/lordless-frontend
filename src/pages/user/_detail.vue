@@ -89,6 +89,7 @@
                   :key="index">
                   <building-card
                     :sale="ldb.chain.auction.isOnAuction"
+                    :presale="ldb.chain.auction.isOnPreAuction"
                     :ldbInfo="ldb"
                     @choose="chooseLdb">
                   </building-card>

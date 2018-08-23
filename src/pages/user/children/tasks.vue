@@ -20,7 +20,44 @@
               </ld-select>
             </div>
             <div
-              v-if="!tasks.length && !loading"
+              v-if="!taskInfos.total && !loading"
+              class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-tasks">
+              <svg>
+                <use xlink:href="#icon-no-candy"/>
+              </svg>
+              <p>You have nothing on rewarded now.</p>
+              <div class="d-flex f-auto-center TTFontBolder">
+                <span>Make the first selling transaction for your</span>
+              </div>
+            </div>
+            <el-row v-if="taskInfos.total && !loading" :gutter="20" class="user-tasks-cnt">
+              <el-col
+                :xs="24"
+                class="tasks-item"
+                v-for="(task, index) of taskInfos.list"
+                :key="index">
+                <task-card
+                  :info="task"
+                  @play="playTask"
+                  @choose="chooseTask">
+                </task-card>
+              </el-col>
+            </el-row>
+          </el-tab-pane>
+          <el-tab-pane
+            label="Candy"
+            name="candy">
+            <div class="tasks-sort">
+              <span>Filter by</span>
+              <ld-select
+                class="tasks-sort-select"
+                v-model="tasksSort"
+                :items="sortItems"
+                @change="filterTasks">
+              </ld-select>
+            </div>
+            <div
+              v-if="!taskInfos.total && !loading"
               class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-tasks">
               <svg>
                 <use xlink:href="#icon-no-candy"/>
@@ -33,11 +70,11 @@
                 </span>
               </div>
             </div>
-            <el-row v-if="tasks.length && !loading" :gutter="20" class="user-tasks-cnt">
+            <el-row v-if="taskInfos.total && !loading" :gutter="20" class="user-tasks-cnt">
               <el-col
                 :xs="24"
                 class="tasks-item"
-                v-for="(task, index) of tasks"
+                v-for="(task, index) of taskInfos.list"
                 :key="index">
                 <task-card
                   :info="task"
@@ -48,10 +85,19 @@
             </el-row>
           </el-tab-pane>
           <el-tab-pane
-            label="Rewarded tasks"
-            name="rewarded">
+            label="LORD tasks"
+            name="lord">
+            <div class="tasks-sort">
+              <span>Filter by</span>
+              <ld-select
+                class="tasks-sort-select"
+                v-model="tasksSort"
+                :items="sortItems"
+                @change="filterTasks">
+              </ld-select>
+            </div>
             <div
-              v-if="!taskRewards.length && !loading"
+              v-if="!taskInfos.total && !loading"
               class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-tasks">
               <svg>
                 <use xlink:href="#icon-no-candy"/>
@@ -61,11 +107,11 @@
                 <span>Make the first selling transaction for your</span>
               </div>
             </div>
-            <el-row :gutter="20" class="user-tasks-cnt">
+            <el-row v-if="taskInfos.total && !loading" :gutter="20" class="user-tasks-cnt">
               <el-col
                 :xs="24"
                 class="tasks-item"
-                v-for="(task, index) of taskRewards"
+                v-for="(task, index) of taskInfos.list"
                 :key="index">
                 <task-card
                   :info="task"
@@ -122,6 +168,12 @@ export default {
       // 选中的建筑
       taskInfo: {},
 
+      taskInfos: {
+        pn: 1,
+        ps: 10,
+        list: [],
+        total: 0
+      },
       /**
        * all tasks options
        */
@@ -185,61 +237,63 @@ export default {
     chooseTab () {
       if (this.currentTab === this.taskTab) return
       this.currentTab = this.taskTab
+      this.tasksSort = -2
+      this.$set(this.taskInfos, 'pn', 1)
+      this.$set(this.taskInfos, 'ps', 10)
 
-      if (this.taskTab === 'tasks') this.getTasks()
-      else this.getTaskRewards()
+      this.getTasks()
+      // if (this.taskTab === 'tasks') this.getTasks()
+      // else this.getTaskRewards()
     },
 
     filterTasks (e) {
       this.getTasks({ status: e })
     },
 
-    async getTasks ({ pn = 1, ps = 10, status = this.tasksSort } = {}) {
+    async getTasks ({ pn = this.taskInfos.pn, ps = this.taskInfos.ps, status = this.tasksSort, type = this.taskTab } = {}) {
+      if (!this.userInfo.address) return
       this.loading = true
       const params = {
         pn,
         ps,
-        type: 'executor',
+        type,
         status
       }
       const res = await getUserTasks(params)
       if (res.code === 1000 && res.data) {
-        const { list, total } = res.data
-        this.tasks = list
-        this.tTotal = total
+        // const { list, total } = res.data
+        // this.tasks = list
+        // this.tTotal = total
+        this.$set(this, 'taskInfos', res.data)
       }
       this.loading = false
     },
 
-    async getTaskRewards ({ pn = 1, ps = 10 } = {}) {
-      this.loading = true
-      const params = {
-        pn,
-        ps,
-        type: 'lord'
-      }
-      const res = await getUserTasks(params)
-      if (res.code === 1000) {
-        const { list, total } = res.data
-        this.taskRewards = list
-        this.tRTotal = total
-      }
-      this.loading = false
-    },
+    // async getTaskRewards ({ pn = 1, ps = 10 } = {}) {
+    //   this.loading = true
+    //   const params = {
+    //     pn,
+    //     ps,
+    //     type: 'lord'
+    //   }
+    //   const res = await getUserTasks(params)
+    //   if (res.code === 1000) {
+    //     const { list, total } = res.data
+    //     this.taskRewards = list
+    //     this.tRTotal = total
+    //   }
+    //   this.loading = false
+    // },
 
-    pageChange (e) {
-      if (this.taskTab === 'tasks') {
-        this.getTasks({ pn: e })
-      } else {
-        this.getTaskRewards({ pn: e })
-      }
+    pageChange (pn) {
+      this.getTasks({ pn })
     },
 
     chooseTask (item) {
       console.log('-----chooseTask', item)
-      this.detailModel = true
+      this.taskInfo = item
       this.$nextTick(() => {
-        this.taskInfo = item
+        this.detailModel = true
         historyState(`/task/${item._id}`)
       })
     },
@@ -256,12 +310,8 @@ export default {
     }
   },
   watch: {
-    userInfo (val) {
-      if (this.taskTab === 'tasks') {
-        this.getTasks()
-      } else {
-        this.getTaskRewards()
-      }
+    userInfo (val, oval) {
+      this.getTasks()
     }
   },
   mounted () {

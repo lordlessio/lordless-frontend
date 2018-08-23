@@ -72,6 +72,7 @@
               :xs="24" :sm="12" :lg="8">
               <building-card
                 :sale="ldb.chain.auction.isOnAuction"
+                :presale="ldb.chain.auction.isOnPreAuction"
                 :ldbInfo="ldb"
                 @choose="openDetail">
               </building-card>
@@ -247,7 +248,6 @@ export default {
     async getLdbs ({ page = 1, offset = 9, sort = this.ldbSort, order = this.ldbOrder } = {}) {
       this.ldbsLoading = true
       const params = {
-        isOnAuction: true,
         page,
         offset,
         sort,

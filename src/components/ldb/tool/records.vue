@@ -10,6 +10,11 @@
     <transition name="ld-hide-fade">
       <section v-if="!loading && total" class="ldb-left-section">
         <h3 class="d-flex f-align-baseline">Transaction history<span class="v-flex text-right cursor-pointer" @click="$emit('more')">View more</span></h3>
+        <!-- <el-row
+          v-if="!total"
+          class="text-center ldb-no-txs">
+          <p>暂无交易哦</p>
+        </el-row> -->
         <div class="left-section-cnt ldb-tx-cnt">
           <el-row class="ldb-tx-header">
             <el-col :span="5">
@@ -26,11 +31,6 @@
             </el-col>
           </el-row>
           <el-row class="ldb-tx-list">
-            <!-- <el-row
-              v-if="!total"
-              class="text-center ldb-no-txs">
-              <p>暂无交易哦</p>
-            </el-row> -->
             <el-row
                 v-if="total"
                 v-for="record of list"

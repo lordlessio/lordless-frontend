@@ -28,7 +28,7 @@
           </router-link>
         </span>
         <span class="inline-block header-right-item" data-type="link">
-          <router-link to="/">
+          <router-link to="/market">
             Marketplace
           </router-link>
         </span>

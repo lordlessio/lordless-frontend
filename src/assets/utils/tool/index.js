@@ -291,11 +291,16 @@ export const sliceStr = (str, { start = 0, end = 10 } = {}) => {
   return str.toString().slice(start, end)
 }
 
-export const formatDecimal = (str, { len = 4 } = {}) => {
+export const formatDecimal = (str, { len = 4, percentage = false } = {}) => {
   if (!str) return str
   if (len === 0) return Math.round(str)
+  if (percentage) {
+    str = parseFloat(str) * 100
+  }
   str = str.toString()
-  str = str.split('.')[0] + '.' + str.split('.')[1].slice(0, len)
+  if (str.split('.')[1]) {
+    str = str.split('.')[0] + '.' + str.split('.')[1].slice(0, len)
+  }
   return parseFloat(str)
 }
 
@@ -363,3 +368,20 @@ export const formatDue = (obj, len = 2, type = 'single') => {
 export const nextAC = level => Math.ceil(Math.pow(level * 108, 2) / Math.pow(108, 2) * 10)
 
 export const remainingAC = (level, ac) => Math.ceil(Math.pow(level * 108, 2) / Math.pow(108, 2) * 10) - ac
+
+export const formatLdbType = (type) => {
+  const types = [
+    'Super Landmark',
+    'Business Office Building',
+    'Tourist Attraction',
+    'Hotel & Food',
+    'Museum & Exhibition',
+    'University & College',
+    'Buddhist & Church',
+    'Recreation & Shopping',
+    'Residential Quarter',
+    'Villa',
+    'Park & Square'
+  ]
+  return types[type]
+}
