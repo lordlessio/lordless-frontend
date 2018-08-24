@@ -500,12 +500,6 @@ export default {
       if (val) this.initInfo()
     }
   },
-  watch: {
-    account (val) {
-      console.log('---------- user info account', val)
-      if (val) this.initInfo()
-    }
-  },
   components: {
     Authorize,
 
