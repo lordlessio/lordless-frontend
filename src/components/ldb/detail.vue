@@ -517,7 +517,7 @@ export default {
     /**
      * 挂售建筑之后触发的合约 pending 状态
      */
-    async ldbSellPending ({ tx, tokenId = this.ldbInfo.chain.tokenId, action } = {}) {
+    async ldbSellPending ({ tx, tokenId = this.ldbInfo.chain.tokenId, price, action } = {}) {
       // 修改 isSelling 状态
       this.$set(this.ldbPendings, 'isSelling', true)
 
@@ -534,6 +534,7 @@ export default {
 
         // 改变市场状态
         this.$set(this.ldbInfo.chain.auction, 'isOnAuction', true)
+        this.$set(this.ldbInfo.chain.auction, 'price', price)
 
         this.$nextTick(() => {
           this.checkOwner(tokenId)

@@ -187,7 +187,7 @@ export default {
         .then(tx => {
           this.sellPending = true
           this.metamaskChoose = false
-          this.$emit('pending', { tx, tokenId, action: newAuction.name })
+          this.$emit('pending', { tx, tokenId, price: web3js.toWei(price), action: newAuction.name })
         })
         .catch((err) => {
           console.log('err', err)

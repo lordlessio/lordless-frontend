@@ -130,7 +130,7 @@ export default {
     showSale () {
       // const { init, isSell } = this.contractStatus
       const info = this.info
-      return !this.showSign && this.isOwner && !info.chain.auction.isOnAuction
+      return !this.showSign && this.isOwner && !info.chain.auction.isOnAuction && !info.chain.auction.isOnPreAuction
     },
 
     showCancelSale () {
