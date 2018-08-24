@@ -383,5 +383,5 @@ export const formatLdbType = (type) => {
     'Villa',
     'Park & Square'
   ]
-  return types[type]
+  return types[type - 1]
 }

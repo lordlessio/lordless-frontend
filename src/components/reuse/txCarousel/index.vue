@@ -13,7 +13,7 @@
             <div v-if="!txs.length && !loading" class="d-flex f-auto-center carousel-no-records">There has no records</div>
           </transition>
           <transition name="ld-hide-in-fade">
-            <div v-if="txs.length && !loading">
+            <div v-show="txs.length && !loading">
               <div
                 v-for="(tx, index) of txs"
                 :key="index"
@@ -82,7 +82,7 @@ export default {
     },
     dulation: {
       type: Number,
-      default: 10000
+      default: 5000
     },
     direction: {
       type: Number,
@@ -95,6 +95,7 @@ export default {
   },
   data: () => {
     return {
+      loopInstance: null,
       intervalTx: null,
       loading: true,
       loop: true,
@@ -108,7 +109,9 @@ export default {
       const res = await getRecords({ pn: 1, ps: 10 })
       if (res.code === 1000) {
         this.txs = res.data.list
+        return res.data.list
       }
+      return []
     },
 
     intervalTxs () {
@@ -126,11 +129,13 @@ export default {
      * 初始化循环
      */
     async initLoop () {
-      await this.getTxs()
-      if (this.txs.length < 3) return
+      const txs = await this.getTxs()
+      console.log('initLoop txs', txs)
+      if (txs.length < 3) return
       this.loopStart = true
       const height = document.querySelector('.carousel-loop-box').offsetHeight
       const loops = document.querySelectorAll('.carousel-loop-item')
+
       let aIndex = 0
       for (let i = 0; i < loops.length; i++) {
         if (hasClass('is-active', loops[i])) {
@@ -139,7 +144,7 @@ export default {
         }
       }
       addClass('is-prev', loops[loops.length - 1])
-      addClass('is-next', loops[aIndex + 1] || loops[0])
+      addClass('is-next', loops[aIndex + 1])
 
       this.initTransform(height, aIndex)
       this.loopFunc(height)
@@ -208,19 +213,16 @@ export default {
     loopFunc (height) {
       let instance
       const func = () => {
-        if (instance) this.destroy(instance)
+        if (instance) this.clearLoop(instance)
         instance = setTimeout(() => {
           this.change(height)
-          this.destroy(instance)
+          this.clearLoop(instance)
           return func()
         }, this.dulation)
         return instance
       }
       func()
-      this.$once('hook:beforeDestroy', () => {
-        clearTimeout(instance)
-        instance = null
-      })
+      this.loopInstance = instance
     },
 
     /**
@@ -242,7 +244,18 @@ export default {
      */
     logoEvt () {
       this.$emit('logoEvt')
+    },
+
+    clearLoop (loop = this.loopInstance) {
+      if (loop) {
+        clearTimeout(loop)
+        loop = null
+        this.loopInstance = null
+      }
     }
+  },
+  beforeDestroy () {
+    this.clearLoop()
   }
 }
 </script>

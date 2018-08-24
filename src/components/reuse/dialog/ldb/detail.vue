@@ -110,6 +110,7 @@ export default {
       this.loading = true
       if (!val) {
         this.$refs.ldbDetail.initStatus()
+        this.$refs.ldbDetail.destory()
         this.$emit('close')
       }
       this.detailModel = val

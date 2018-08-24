@@ -59,6 +59,7 @@
                         <blockies
                           theme="light"
                           :scale="6"
+                          jump
                           :seed="info.lord.address">
                         </blockies>
                         <div class="v-flex d-flex col-flex f-justify-around detail-lord-info">
@@ -689,7 +690,7 @@ export default {
   .detail-ldb-level {
     position: absolute;
     top: 0;
-    right: -10px;
+    right: 0;
     width: 33%;
     transform: translate(20%, -20%);
     >img {

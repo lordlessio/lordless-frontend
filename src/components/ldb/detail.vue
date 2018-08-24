@@ -43,6 +43,7 @@
         <div class="detail-cnt-right">
 
           <approved-tasks-tool
+            ref="approvedTask"
             class="detail-approved-tasks"
             :ldbId="ldbInfo._id"
             :loading="ldbTaskLoading">
@@ -624,6 +625,10 @@ export default {
       }
       console.log('receiveTask cbData', cbData)
       return cb(cbData)
+    },
+
+    destory () {
+      this.$refs.approvedTask.clearApproved()
     }
   },
   mounted () {
