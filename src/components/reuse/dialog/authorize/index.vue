@@ -39,7 +39,7 @@
 
       <Sign
         v-model="showSign"
-        @success="checkoutAuthorize({ crowdsale: true })">
+        @success="checkoutAuthorize()">
       </Sign>
     </div>
   </el-dialog>

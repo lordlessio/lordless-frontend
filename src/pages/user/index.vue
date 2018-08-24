@@ -160,10 +160,8 @@ export default {
   },
   watch: {
     userInfo (val, oVal) {
-      if (!val._id) {
-        this.$refs.authorize.checkoutAuthorize()
-        this.loading = true
-      } else this.loading = false
+      this.$refs.authorize.checkoutAuthorize({ init: true })
+      this.loading = !val._id
     }
   },
   mounted () {

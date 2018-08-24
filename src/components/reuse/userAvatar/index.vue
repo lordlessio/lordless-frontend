@@ -99,7 +99,7 @@ export default {
     ]),
 
     async sign () {
-      const authorize = await this.$refs.authorize.checkoutAuthorize({ crowdsale: true })
+      const authorize = await this.$refs.authorize.checkoutAuthorize()
       console.log('authorize', authorize)
       if (!authorize) return
       // 检测 user 是否注册过

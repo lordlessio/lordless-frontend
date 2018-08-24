@@ -33,13 +33,17 @@ const router = new Router({
     {
       path: '/market',
       name: 'Market',
-      component: Market
+      component: Market,
+      meta: {
+        title: 'lordless market'
+      }
     },
     {
       path: '/map',
       name: 'Lbs',
       component: Lbs,
       meta: {
+        title: 'lordless map',
         header: {
           show: false
         },
@@ -53,6 +57,7 @@ const router = new Router({
       name: 'ldbDetail',
       component: LdbDetail,
       meta: {
+        title: 'lordless ldb detail',
         header: {
           fixed: true,
           scroll: true,
@@ -65,6 +70,7 @@ const router = new Router({
       name: 'taskDetail',
       component: TaskDetail,
       meta: {
+        title: 'lordless taks detail',
         header: {
           fixed: true,
           scroll: true,
@@ -77,6 +83,7 @@ const router = new Router({
       name: 'status',
       component: Status,
       meta: {
+        title: 'lordless status',
         header: {
           fixed: true,
           scroll: true,
@@ -89,6 +96,7 @@ const router = new Router({
       name: 'lordless-sign',
       component: Sign,
       meta: {
+        title: 'lordless sign',
         header: {
           fixed: true,
           transparent: true
@@ -98,7 +106,10 @@ const router = new Router({
     {
       path: '/user/:address',
       name: 'userDetail',
-      component: UserDetail
+      component: UserDetail,
+      meta: {
+        title: 'lordless user detail'
+      }
     },
     {
       path: '/owner',
@@ -110,6 +121,7 @@ const router = new Router({
           name: 'OwnerInfo',
           component: OwnerInfo,
           meta: {
+            title: 'lordless owner overview',
             navgation: 'overview',
             header: {
               show: false
@@ -124,6 +136,7 @@ const router = new Router({
           name: 'Owner-candy',
           component: OwnerCandy,
           meta: {
+            title: 'lordless owner candy',
             navgation: 'candy',
             header: {
               show: false
@@ -138,6 +151,7 @@ const router = new Router({
           name: 'Owner-ldbs',
           component: OwnerBuildings,
           meta: {
+            title: 'lordless owner ldbs',
             navgation: 'ldb',
             header: {
               show: false
@@ -152,6 +166,7 @@ const router = new Router({
           name: 'Owner-tasks',
           component: OwnerTasks,
           meta: {
+            title: 'lordless owner tasks',
             navgation: 'tasks',
             header: {
               show: false
@@ -166,6 +181,7 @@ const router = new Router({
           name: 'Owner-authorization',
           component: OwnerAuthorization,
           meta: {
+            title: 'lordless owner authorization',
             navgation: 'authorization',
             header: {
               show: false
@@ -180,6 +196,7 @@ const router = new Router({
           name: 'Owner-activity',
           component: OwnerActivity,
           meta: {
+            title: 'lordless owner activity',
             navgation: 'activity',
             header: {
               show: false
@@ -191,7 +208,7 @@ const router = new Router({
         },
         {
           path: '*',
-          redirect: '/info'
+          redirect: '/map'
         }
       ]
     },
@@ -211,6 +228,11 @@ router.beforeEach((to, from, next) => {
   store.commit(`layout/${mutationTypes.LAYOUT_SET_HEADER_OPTIONS}`, header)
   store.commit(`layout/${mutationTypes.LAYOUT_SET_FOOTER_OPTIONS}`, footer)
   store.commit(`layout/${mutationTypes.LAYOUT_SET_BLURS}`, 0)
+
+  /* 路由发生变化修改页面title */
+  if (to.meta.title) {
+    document.title = to.meta.title
+  }
   next()
 })
 

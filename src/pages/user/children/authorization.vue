@@ -103,7 +103,7 @@ export default {
       const address = this.userInfo.address
       this.rewriteAuthorizations('marketplace', { loading: true, active: false })
       this.checkCrowdsaleEvent({ address }, () => {
-        this.$refs.authorize.checkoutAuthorize()
+        this.$refs.authorize.checkoutAuthorize({ crowdsale: true })
         this[actionTypes.CONTRACT_CHECK_CROWDSALE](address)
         this.rewriteAuthorizations('marketplace', { loading: false })
       })

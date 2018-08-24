@@ -473,7 +473,7 @@ export default {
      */
     async authorizePending ({ tx }) {
       this.checkCrowdsaleEvent({ address: this.userInfo.address }, () => {
-        this.$refs.authorize.checkoutAuthorize()
+        this.$refs.authorize.checkoutAuthorize({ crowdsale: true })
       })
     },
 
