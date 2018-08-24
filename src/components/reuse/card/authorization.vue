@@ -15,7 +15,7 @@
           inverse
           shadow
           :loading="!active && info.loading"
-          :disabled="!active && info.loading"
+          :disabled="info.loading"
           @click="$emit('click', info.symbol)">
           <span v-if="!active">Authorize</span>
           <span v-if="active" class="inline-block authorize-check-box">

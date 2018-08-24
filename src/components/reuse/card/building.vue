@@ -32,10 +32,10 @@
               <p>{{ ldbInfo.chain.level || 0 }}</p>
               <p>Level</p>
             </li>
-            <li class="v-flex building-data-item">
+            <!-- <li class="v-flex building-data-item">
               <p>{{ ldbInfo.chain.popularity || 0 }}</p>
               <p>Popularity</p>
-            </li>
+            </li> -->
             <li class="v-flex building-data-item">
               <p>{{ ldbInfo.members }}</p>
               <p>Members</p>
@@ -251,7 +251,7 @@ export default {
   }
   .building-name {
     font-size: 18px;
-    color: #777777;
+    color: #555;
   }
   .building-tokenId {
     font-size: 14px;
@@ -259,12 +259,13 @@ export default {
   }
   .building-coords {
     font-size: 16px;
-    color: $--text-blue-color;
+    color: #bbb;
   }
 
   .building-data {
     position: relative;
-    margin-top: 25px;
+    margin: 25px auto 0;
+    max-width: 230px;
   }
   .building-data-item {
     position: relative;

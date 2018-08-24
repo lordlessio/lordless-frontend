@@ -361,7 +361,7 @@
                       :key="index">
                       <p class="v-flex text-ellipsis">
                         Bought
-                        <a href="#"> #{{ recent.market[0].tokenId }} </a>
+                        <a :href="`${ETHERSCANURL}/${recent.tx.transactionHash}`" target="_blank"> #{{ recent.market[0].tokenId }} </a>
                         for
                         <span> {{ recent.market[0].price | weiToEth }} ETH</span>
                       </p>
@@ -488,6 +488,16 @@ export default {
     nextActiveness () {
       const level = this.userInfo.level
       return Math.ceil(Math.pow(level * 108, 2) / Math.pow(108, 2) * 10)
+    },
+
+    ETHERSCANURL () {
+      return process.env.ETHERSCANURL
+    }
+  },
+  watch: {
+    account (val) {
+      console.log('---------- user info account', val)
+      if (val) this.initInfo()
     }
   },
   watch: {
@@ -530,10 +540,7 @@ export default {
 
     authorizePending ({ tx } = {}) {
       const finishTx = async ({ err }) => {
-        if (err) {
-          console.log('err', err)
-          return
-        }
+        if (err) return
         const bool = await this[actionTypes.CONTRACT_CHECK_CROWDSALE](this.userInfo.address)
         if (!bool) {
           // 轮询 tx 状态

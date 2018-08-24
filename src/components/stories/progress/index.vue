@@ -100,6 +100,7 @@ export default {
     top: 0;
     height: 100%;
     z-index: 1;
+    transition: width .4s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .ld-progress-circle {
     position: relative;
