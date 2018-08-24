@@ -464,9 +464,9 @@ export default {
         this.ldbPendings = pendings
 
         const status = {
-          PayByEthSuccess: 'isBuying',
-          NewAuction: 'isSelling',
-          CancelAuction: 'isCanceling'
+          payByEth: 'isBuying',
+          newAuction: 'isSelling',
+          cancelAuction: 'isCanceling'
         }
 
         // 如果有 pending 状态，轮询此合约信息

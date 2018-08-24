@@ -265,7 +265,6 @@ export default {
      * @param {Object} ldbInfo 当前建筑对象
      */
     async getUserPendings ({ ldbInfo = this.ldbInfo } = {}) {
-      if (!this.account) return
       const res = await getUserPendingsByTokenId({ tokenId: ldbInfo.chain.tokenId })
       if (res.code === 1000) {
         // 获取合约 pending 状态 及 pending的合约信息
@@ -275,7 +274,7 @@ export default {
         this.ldbPendings = pendings
 
         const status = {
-          PayByEthSuccess: 'isBuying',
+          PayByEth: 'isBuying',
           NewAuction: 'isSelling',
           CancelAuction: 'isCanceling'
         }

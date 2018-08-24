@@ -490,6 +490,12 @@ export default {
       return Math.ceil(Math.pow(level * 108, 2) / Math.pow(108, 2) * 10)
     }
   },
+  watch: {
+    account (val) {
+      console.log('---------- user info account', val)
+      if (val) this.initInfo()
+    }
+  },
   components: {
     Authorize,
 
@@ -554,7 +560,7 @@ export default {
     },
 
     // 获取用户交易记录
-    async getUserTransactions ({ user = this.userInfo.address, ps = this.recentData.ps } = {}) {
+    async getUserTransactions ({ user = this.account, ps = this.recentData.ps } = {}) {
       const params = {
         user,
         opt: {
@@ -573,7 +579,6 @@ export default {
   async mounted () {
     await this[actionTypes.USER_SET_USER_BY_TOKEN]()
     this.$nextTick(() => {
-      console.log('this.userInfo.address', this.userInfo.address)
       this.initClipboard()
       this.initInfo()
     })

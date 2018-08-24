@@ -44,7 +44,7 @@ export default {
     },
     type: {
       type: String,
-      default: 'PAYBYETHSUCCESS'
+      default: 'PAYBYETH'
     },
     tx: {
       type: String,
@@ -66,7 +66,7 @@ export default {
         return 'icon-new-auction'
       }
       console.log('type', this.type)
-      if (this.type === 'PAYBYETHSUCCESS' || this.type === 'PAYBYETH') {
+      if (this.type === 'PAYBYETH') {
         return 'icon-auction'
       }
     },

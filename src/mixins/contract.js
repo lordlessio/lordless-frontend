@@ -35,7 +35,7 @@ export default {
       'NFTsCrowdsale'
     ]),
     account () {
-      return this.userInfo.address || this.$root.$children[0].web3Opt.address
+      return this.userInfo.address || this.$root.$children[0].web3Opt.address || window.localStorage.getItem('currentAddress')
     }
   },
   methods: {

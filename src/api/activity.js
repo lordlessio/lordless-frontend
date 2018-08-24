@@ -22,8 +22,8 @@ module.exports = axios => {
     },
 
     // 根据 tokenId 查询用户 pending 状态
-    getUserPendingsByTokenId: ({ tokenId, opt }) => {
-      return axios.get(`/api/activity/userPendings/${tokenId}`, { params: opt })
+    getUserPendingsByTokenId: (params) => {
+      return axios.get('/api/activity/userPendings', { params })
     },
 
     getRecords: (params) => {

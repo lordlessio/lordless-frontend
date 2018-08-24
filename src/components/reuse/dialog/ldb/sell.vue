@@ -168,7 +168,7 @@ export default {
 
       const startTime = Math.floor(new Date().getTime() / 1000)
       const endTime = Math.floor(new Date().getTime() / 1000) + duration * 3600 * 24
-      console.log('--- sale price', price, tokenId, endTime)
+      console.log('--- sale price', web3js.toWei(price), tokenId, startTime, endTime)
 
       this.metamaskChoose = true
 
