@@ -21,6 +21,7 @@
       <Crowdsale
         ref="crowdsale"
         v-model="showCrowsale"
+        :openStatus="authorizeDialog"
         :avatar="avatar"
         :address="address"
         @pending="crowdsalePending"></Crowdsale>
@@ -28,17 +29,21 @@
       <Telegram
         ref="telegram"
         v-model="showTelegram"
+        :openStatus="authorizeDialog"
         :avatar="avatar"
         :address="address"
         @telegram="$emit('telegram', $event)"></Telegram>
 
       <Status
         v-if="showStatus"
+        :openStatus="authorizeDialog"
         :type="statusType">
       </Status>
 
       <Sign
+        ref="signAuthorize"
         v-model="showSign"
+        :openStatus="authorizeDialog"
         @success="checkoutAuthorize()">
       </Sign>
     </div>
@@ -211,7 +216,6 @@ export default {
 
       // 检查用户状态是否ok
       if (this.statusType || !this.address) {
-        console.log('===   =====')
         this.authorizeDialog = true
         return false
       }
@@ -254,6 +258,7 @@ export default {
     initModels () {
       this.showTelegram = false
       this.showCrowsale = false
+      this.showSign = false
     },
 
     crowdsalePending (data) {

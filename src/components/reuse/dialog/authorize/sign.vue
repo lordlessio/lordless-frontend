@@ -1,6 +1,6 @@
 <template>
   <div v-if="value" class="text-center authorize-sign-box">
-    <div class="authorize-login-container" v-if="!newUser">
+    <div class="authorize-login-container" v-if="!register">
       <div class="inline-block lordless-shadow" :style="`border-radius: ${avatar.radius};`">
         <Blockies
           :scale="avatar.scale"
@@ -19,11 +19,13 @@
             class="TTFontBolder lordless-message-btn login-btn"
             theme="deep-blue"
             shadow
+            :loading="userChecking"
+            :disabled="userChecking"
             @click="relogin">Login</ld-btn>
         </div>
       </div>
     </div>
-    <div class="authorize-sign-container" v-if="newUser">
+    <div class="authorize-sign-container" v-if="register">
       <h1 class="TTFontBolder">Create Account</h1>
       <div class="text-left authorize-sign-cnt">
         <p>We use your email to send you notifications around collectible activity such as ones you buy and sell. We'll never share your email with anyone else.</p>
@@ -106,6 +108,10 @@ export default {
       type: Boolean,
       default: false
     },
+    openStatus: {
+      type: Boolean,
+      default: false
+    },
     avatar: {
       type: Object,
       default: () => {
@@ -119,7 +125,7 @@ export default {
   data: () => {
     return {
       userChecking: false,
-      newUser: false,
+      register: false,
 
       // 条款状态
       termModels: {
@@ -176,14 +182,19 @@ export default {
       }})
     },
 
-    async checkUser (address = this.account) {
+    async checkRegister (address = this.account) {
       console.log('check user sign')
       this.userChecking = true
       const res = await getUserByAddress(address)
-      if (res.code === 1000 && !res.data) this.newUser = true
+      if (res.code === 1000 && !res.data) this.register = true
       else if (res.code !== 1000) {
-        console.log('error ', res.errMsg)
-      } else this.newUser = false
+        this.$notify.error({
+          title: '用户检测失败!',
+          message: res.errorMsg || '未知错误',
+          position: 'bottom-right',
+          duration: 2500
+        })
+      } else this.register = false
       this.userChecking = false
     },
 
@@ -219,12 +230,12 @@ export default {
     }
   },
   watch: {
-    value (val) {
-      if (val) this.checkUser()
+    openStatus (val) {
+      if (val && this.value) this.checkRegister()
     }
   },
   mounted () {
-    this.checkUser()
+    this.checkRegister()
   }
 }
 </script>

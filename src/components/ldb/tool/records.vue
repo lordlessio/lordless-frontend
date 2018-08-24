@@ -32,8 +32,8 @@
           <el-row class="ldb-tx-list">
             <el-row
                 v-if="total"
-                v-for="record of list"
-                :key="record._id"
+                v-for="(record, index) of list"
+                :key="index"
                 class="ldb-tx-item">
               <el-col :span="5" class="color-blue">
                 <span>{{ record.market[0].price | weiToEth }}</span>

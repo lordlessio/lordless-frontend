@@ -166,6 +166,7 @@ export default {
       const price = parseFloat(sellInputs.price.model)
       const duration = parseFloat(sellInputs.duration.model)
 
+      const startTime = Math.floor(new Date().getTime() / 1000)
       const endTime = Math.floor(new Date().getTime() / 1000) + duration * 3600 * 24
       console.log('--- sale price', price, tokenId, endTime)
 
@@ -174,7 +175,7 @@ export default {
       // 传输的合约参数
       const newAuction = {
         name: 'newAuction',
-        values: [ web3js.toWei(price), tokenId, endTime ]
+        values: [ web3js.toWei(price), tokenId, startTime, endTime ]
       }
 
       // 估算 gas，不准

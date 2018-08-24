@@ -52,7 +52,7 @@
                   :key="index">
                   <building-card
                     :sale="building.chain.auction.isOnAuction"
-                    :presale="ldb.chain.auction.isOnPreAuction"
+                    :presale="building.chain.auction.isOnPreAuction"
                     :ldbInfo="building"
                     shadow
                     @choose="chooseBuilding">

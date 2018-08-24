@@ -44,7 +44,7 @@ const checkWeb3 = async () => {
     res.address = web3js.eth.defaultAccount
 
     const currentAddress = window.localStorage.getItem('currentAddress')
-    if (currentAddress !== web3js.eth.defaultAccount) {
+    if (web3js.eth.defaultAccount && currentAddress !== web3js.eth.defaultAccount) {
       window.localStorage.setItem('currentAddress', web3js.eth.defaultAccount)
       // 获取本地用户
       store.dispatch(`user/${actionTypes.USER_SET_USER_BY_TOKEN}`)

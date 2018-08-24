@@ -310,7 +310,7 @@ export default {
       if (res.code === 1000 && res.data) {
         if (this.ldbRecords.total) {
           this.ldbRecords = Object.assign({}, this.ldbRecords, res.data, {
-            list: [].concat(this.ldbRecords.list, res.data.list)
+            list: this.ldbRecords.list
           })
         } else this.ldbRecords = res.data
       }
