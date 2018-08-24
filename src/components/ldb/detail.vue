@@ -245,7 +245,6 @@ export default {
      * @param {String} id 建筑 _id
      */
     async getLdbInfo (id) {
-      console.log('dialog', this.dialog)
       this.infoLoading = true
       const res = await getLdbById({ id, pula: 'ldbIcon' })
       if (res.code === 1000) {
@@ -361,8 +360,9 @@ export default {
      * 初始化组件状态
      */
     initStatus () {
-      this.infoLoading = false
-      this.recordsLoading = false
+      this.infoLoading = true
+      this.ldbTaskLoading = true
+      this.recordsLoading = true
       this.errorMsg = null
     },
 

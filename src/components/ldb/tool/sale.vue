@@ -1,18 +1,11 @@
 <template>
-  <div class="ldb-deal-status">
-    <div v-if="loading" class="ldb-deal-skeletion">
-      <div class="deal-box-skeletion">
-        <div class="skeletion-breath">
-          <h2></h2>
-          <p></p>
-          <p></p>
-          <h2></h2>
-        </div>
-      </div>
-      <div class="skeletion-breath deal-btn-skeletion">
-        <p></p>
-      </div>
-    </div>
+  <div class="relative ldb-deal-status">
+
+    <!-- ldb detail sale skeletion -->
+    <transition name="ld-suspension-hide-fade">
+      <sale-skeletion v-if="loading"></sale-skeletion>
+    </transition>
+
     <transition name="ld-hide-fade">
       <section v-if="!loading && (info.chain.auction.isOnAuction || info.chain.auction.isOnPreAuction || isOwner)" class="ldb-deal-cnt">
         <figure>
@@ -94,6 +87,8 @@
 </template>
 
 <script>
+import SaleSkeletion from '@/components/skeletion/ldb/detail/tool/sale'
+
 import LdBtn from '@/components/stories/button'
 export default {
   props: {
@@ -163,6 +158,8 @@ export default {
     }
   },
   components: {
+    SaleSkeletion,
+
     LdBtn
   },
   methods: {
@@ -178,45 +175,6 @@ export default {
 
 <style lang="scss" scoped>
   @import '@/assets/stylus/mixin/index.scss';
-
-  // ldb-deal-skeletion
-  .ldb-deal-skeletion {
-
-  }
-  .deal-box-skeletion {
-    padding: 20px 25px;
-    border-radius: 5px;
-    background-color: $--skeletion-light;
-    h2 {
-      width: 80px;
-      height: 50px;
-      background-color: $--skeletion-dark;
-      &:last-of-type {
-        width: 100px;
-        margin-top: 20px;
-      }
-    }
-    p {
-      margin-top: 10px;
-      width: 120px;
-      height: 30px;
-      background-color: $--skeletion-dark;
-      &:last-of-type {
-        margin-top: 20px;
-        width: 180px;
-      }
-    }
-  }
-  .deal-btn-skeletion {
-    margin-top: 35px;
-    padding: 0 25px;
-    >p {
-      height: 50px;
-      border-radius: 5px;
-      background-color: $--skeletion-light;
-    }
-  }
-
 
   // ldb-deal-status
   .ldb-deal-status {

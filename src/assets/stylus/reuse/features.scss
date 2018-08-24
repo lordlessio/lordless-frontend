@@ -223,6 +223,20 @@
   transition: opacity .4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.ld-suspension-hide-fade-enter-active, .ld-suspension-hide-fade-leave-active {
+  opacity: 1;
+  transition: opacity .2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.ld-suspension-hide-fade-enter, .ld-suspension-hide-fade-leave-to {
+  opacity: 0;
+}
+.ld-suspension-hide-fade-leave-active, .ld-suspension-hide-fade-leave-to {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
 /**
  *  vue transtion style -- end
  */

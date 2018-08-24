@@ -108,13 +108,13 @@ export default {
     /**
      * 创建 Image marker dom
      */
-    createImageMarker ({ name, imgSrc, level } = {}) {
+    createImageMarker ({ name, imgSrc, level, ap, apLeft } = {}) {
       const box = document.createElement('div')
       box.className = `marker _marker--ldb-box _marker--level-${level}`
       box.style.width = 'inherit'
       box.style.height = 'inherit'
       // const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}" style="width: 100%"/><p>${name}</p><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>800 / 1000</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${600 / 1000 * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
-      const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}"/><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>800 / 1000</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${600 / 1000 * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
+      const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}"/><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>${apLeft} / ${ap}</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${apLeft / ap * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
       box.innerHTML = boxHtml
       return box
     },
@@ -125,13 +125,13 @@ export default {
      */
     createImageMarkers (list, map = this.map) {
       list.map(item => {
-        const { _id, name, chain, ldbIcon } = item
+        const { _id, name, chain, ldbIcon, ap, apLeft } = item
         const coords = [chain.lng / 1e16, chain.lat / 1e16]
 
         // 创建 Image markers
         const imgSrc = `${process.env.LDBICON_ORIGIN}${ldbIcon.source.map}`
         // const imgSrc = 'http://lordless.oss-cn-hongkong.aliyuncs.com/console/ldbIcon/2018-08-04/1533395070990.png'
-        const markerDom = this.createImageMarker({ name, imgSrc, level: chain.level })
+        const markerDom = this.createImageMarker({ name, imgSrc, level: chain.level, ap, apLeft })
         // const { id, fields } = item
         // const _id = id
         // const coords = fields.location.split(',')
@@ -176,6 +176,7 @@ export default {
     createPointMarker ({ _id, level } = {}) {
       const point = document.createElement('div')
       point.className = `marker _point_marker--ldb-box _point_marker--level-${level}`
+      point.innerHTML = '<span></span>'
       point.setAttribute('data-id', _id)
       return point
     },
@@ -723,7 +724,7 @@ export default {
     overflow: hidden;
   }
   .info-progress-main {
-    width: 150px;
+    width: 100%;
     position: absolute;
     left: 0;
     top: 0;
@@ -750,6 +751,25 @@ export default {
     background-color: #E47172;
     border-radius: 50%;
     cursor: pointer;
+    z-index: 1;
+    // >span {
+    //   display: inline-block;
+    //   height: 12px;
+    //   width: 12px;
+    //   background-color: #E47172;
+    //   border-radius: 50%;
+    //   cursor: pointer;
+    // }
+    &:hover {
+      z-index: 2;
+      // >span {
+      //   background-color: #4586FC;
+      // }
+      background-color: #4586FC;
+      // &::after {
+      //   background-color: #4586FC;
+      // }
+    }
     // &::before {
     //   content: '';
     //   position: absolute;
@@ -777,10 +797,6 @@ export default {
       animation: pulse 2s ease-in-out infinite;
       will-change: transform;
     }
-    &:hover {
-      z-index: 1;
-      background-color: #4586FC;
-    }
   }
   ._point_marker-container {
     padding: 6px 15px;
@@ -801,6 +817,10 @@ export default {
     height: 30px;
     border-radius: 50%;
     background-position: 30% 50%;
-    background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .mapboxgl-popup {
+    z-index: 1;
   }
 </style>

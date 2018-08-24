@@ -4,14 +4,10 @@
       :visible.sync="detailModel"
       @open="dialogOpen"
       @close="dialogClose">
-      <!-- <Loading
-        :loading="loading"
-        crown
-        position="absolute"
-        :index="99">
-      </Loading> -->
+      <!-- <ldb-detail-skeletion :visible="loading" dialog></ldb-detail-skeletion> -->
+
       <ldb-detail
-        v-if="value"
+        v-show="!loading"
         :class="{ 'blur': blurs[1] }"
         ref="ldbDetail"
         dialog
@@ -23,10 +19,10 @@
 </template>
 
 <script>
-import SlideDialog from '@/components/stories/dialog/slider'
+import LdbDetailSkeletion from '@/components/skeletion/ldb/detail'
 import LdbDetail from '@/components/ldb/detail'
 
-// import Loading from '@/components/stories/loading'
+import SlideDialog from '@/components/stories/dialog/slider'
 
 import { mutationTypes } from '@/store/types'
 import { mapMutations } from 'vuex'
@@ -50,7 +46,7 @@ export default {
     return {
       prevLdbId: null,
       detailModel: false,
-      // loading: false,
+      loading: true,
       tokenId: null
     }
   },
@@ -60,10 +56,10 @@ export default {
     }
   },
   components: {
+    LdbDetailSkeletion,
+
     SlideDialog,
     LdbDetail
-
-    // Loading
   },
   methods: {
     ...mapMutations('layout', [
@@ -81,6 +77,7 @@ export default {
         //   this.initLoading()
         //   return
         // }
+        this.loading = false
         this.$refs.ldbDetail.init(this.ldbId)
       }, 500)
     },
@@ -110,9 +107,9 @@ export default {
   watch: {
     value (val) {
       console.log('--------- dialog value', val)
-      if (val) {
-        this.loading = true
-      } else {
+      this.loading = true
+      if (!val) {
+        this.$refs.ldbDetail.initStatus()
         this.$emit('close')
       }
       this.detailModel = val

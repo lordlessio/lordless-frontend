@@ -1,12 +1,11 @@
 <template>
-  <div class="ldb-tx-history">
-    <div v-if="loading" class="ldb-records-skeletion">
-      <h3 class="skeletion-breath"></h3>
-      <div class="skeletion-breath">
-        <p></p>
-        <div></div>
-      </div>
-    </div>
+  <div class="relative ldb-tx-history">
+
+    <!-- ldb detail records skeletion -->
+    <transition name="ld-suspension-hide-fade">
+      <records-skeletion v-if="loading"></records-skeletion>
+    </transition>
+
     <transition name="ld-hide-fade">
       <section v-if="!loading && total" class="ldb-left-section">
         <h3 class="d-flex f-align-baseline">Transaction history<span class="v-flex text-right cursor-pointer" @click="$emit('more')">View more</span></h3>
@@ -58,6 +57,8 @@
 </template>
 
 <script>
+import RecordsSkeletion from '@/components/skeletion/ldb/detail/tool/records'
+
 export default {
   props: {
     list: {
@@ -74,33 +75,15 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  components: {
+    RecordsSkeletion
   }
 }
 </script>
 
 <style lang="scss" scoped>
   @import '@/assets/stylus/mixin/index.scss';
-  // ldb-records-skeletion
-  .ldb-records-skeletion {
-    // background-color: $--skeletion-light;
-    >h3 {
-      height: 40px;
-      background-color: $--skeletion-light;
-    }
-    >div {
-      margin-top: 30px;
-      >p {
-        height: 18px;
-        background-color: $--skeletion-light;
-      }
-      >div {
-        margin-top: 15px;
-        height: 60px;
-        border-radius: 5px;
-        background-color: $--skeletion-light;
-      }
-    }
-  }
 
   // ldb-tx-history
 

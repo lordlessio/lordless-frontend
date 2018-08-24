@@ -3,7 +3,7 @@
  */
 
 import { mutationTypes, actionTypes } from './types'
-import { getUserByAddress, getUserByToken, login, logout } from '../api'
+import { getUserByAddress, getUserByToken, login } from '../api'
 import { stringifyParse, getObjStorage } from 'utils/tool'
 import web3Store from './web3'
 export default {
@@ -143,11 +143,11 @@ export default {
     // 用户 logout
     [actionTypes.USER_LOGOUT]: async ({ commit }, { reset = false } = {}) => {
       // commit(mutationTypes.USER_SET_USER_INFO, { default: true })
-      commit(mutationTypes.USER_SET_USER_INFO)
       if (reset) {
         commit(mutationTypes.USER_SET_USER_TOKEN)
-        await logout()
+        // await logout()
       }
+      commit(mutationTypes.USER_SET_USER_INFO)
     },
 
     // 获取本地用户tokens

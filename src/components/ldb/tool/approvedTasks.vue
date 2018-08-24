@@ -1,18 +1,11 @@
 <template>
-  <div class="ldb-approved-tasks">
-    <div v-if="loading" class="ldb-approved-skeletion">
-      <!-- <h3 class="skeletion-breath"></h3> -->
-      <div class="skeletion-breath">
-        <p>
-          <span></span>
-          <span></span>
-        </p>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
-      </div>
-    </div>
+  <div class="relative ldb-approved-tasks">
+
+    <!-- ldb detail approved skeletion -->
+    <transition name="ld-suspension-hide-fade">
+      <approved-skeletion v-if="loading"></approved-skeletion>
+    </transition>
+
     <transition name="ld-hide-fade">
       <section v-if="!loading" class="ldb-approved-section">
         <!-- <p class="d-flex f-align-baseline">Approved tasks</p> -->
@@ -62,6 +55,8 @@
 </template>
 
 <script>
+import ApprovedSkeletion from '@/components/skeletion/ldb/detail/tool/approved'
+
 import { getApprovedTaskByLdbId } from 'api'
 import { transitionEvent, addClass, removeClass } from 'utils/tool'
 export default {
@@ -91,6 +86,9 @@ export default {
       // 如果初始加载，不执行动画
       if (oval) this.change()
     }
+  },
+  components: {
+    ApprovedSkeletion
   },
   methods: {
     async getApprovedTask (ldbId = this.ldbId) {
@@ -138,52 +136,6 @@ export default {
 
 <style lang="scss" scoped>
   @import '@/assets/stylus/mixin/index.scss';
-  // ldb-approved-skeletion
-  .ldb-approved-skeletion {
-    // >h3 {
-    //   height: 40px;
-    //   background-color: $--skeletion-light;
-    // }
-    >div {
-      padding: 50px 30px 40px;
-      margin-top: 30px;
-      border-radius: 5px;
-      background-color: $--skeletion-light;
-      >p {
-        background-color: $--skeletion-dark;
-        &:nth-of-type(1) {
-          text-align: center;
-          background-color: transparent;
-          >span {
-            display: inline-block;
-            width: 90px;
-            height: 90px;
-            border-radius: 100%;
-            background-color: $--skeletion-dark;
-            &:not(:first-of-type) {
-              margin-left: -15px;
-            }
-          }
-        }
-        &:nth-of-type(2) {
-          margin-top: 15px;
-          height: 18px;
-        }
-        &:nth-of-type(3) {
-          margin-top: 20px;
-          height: 18px;
-        }
-        &:nth-of-type(4) {
-          margin-top: 15px;
-          height: 25px;
-        }
-        &:nth-of-type(5) {
-          margin-top: 10px;
-          height: 18px;
-        }
-      }
-    }
-  }
 
   // ldb-approved-tasks
 

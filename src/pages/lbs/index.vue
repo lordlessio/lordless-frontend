@@ -305,6 +305,7 @@ export default {
     width: 100%;
     max-width: 750px;
     box-sizing: border-box;
+    z-index: 2;
     @include padding(-1, 20px, 1, -2);
   }
   .lbs-user-box {
