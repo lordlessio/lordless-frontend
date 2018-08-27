@@ -69,11 +69,10 @@
 import LdBtn from '@/components/stories/button'
 import LdInput from '@/components/stories/input'
 
-import { metamaskMixins } from '@/mixins'
+import { metamaskMixins, contractMixins } from '@/mixins'
 
-import { mapState } from 'vuex'
 export default {
-  mixins: [metamaskMixins],
+  mixins: [metamaskMixins, contractMixins],
   props: {
     value: {
       type: Boolean,
@@ -85,6 +84,12 @@ export default {
       default: () => {
         return {}
       }
+    },
+
+    // 是否执行内部pending, 默认 true
+    pending: {
+      type: Boolean,
+      default: false
     }
   },
   data: (vm) => {
@@ -112,9 +117,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('contract', [
-      'NFTsCrowdsale'
-    ]),
 
     sellRequired () {
       const { price, duration } = this.sellInputs
@@ -187,7 +189,25 @@ export default {
         .then(tx => {
           this.sellPending = true
           this.metamaskChoose = false
-          this.$emit('pending', { tx, tokenId, price: web3js.toWei(price), action: newAuction.name })
+
+          this.$emit('input', false)
+
+          this.$nextTick(() => {
+            this.$emit('pending', { tx, tokenId, price: web3js.toWei(price), action: newAuction.name, pending: true })
+          })
+          // 执行内部pending
+          if (this.pending) {
+            const loop = () => {
+              // 轮询 tx 状态
+              this.checkTxEvent({ tx, action: newAuction.name, tokenId }, ({ err, data }) => {
+                if (err) return
+                if (data.isPending) return loop()
+
+                this.$emit('pending', { tx, tokenId, price: web3js.toWei(price), action: newAuction.name }, data)
+              })
+            }
+            loop()
+          }
         })
         .catch((err) => {
           console.log('err', err)

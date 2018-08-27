@@ -46,7 +46,7 @@
                     </p>
                     <p class="TTFontNormal detail-ldb-address">{{ info.address }}</p>
                     <p class="detail-ldb-location">{{ info.chain.lng | transferCoords | sliceStr}}, {{ info.chain.lat | transferCoords | sliceStr }}</p>
-                    <p class="detail-ldb-desc">{{ info.desc.zh }}</p>
+                    <p class="detail-ldb-desc">{{ info.desc.zh | sliceStr({ end: 65 }) }}...</p>
                     <ld-btn
                       class="ldb-home-btn"
                       theme="deep-blue"
@@ -391,6 +391,7 @@ export default {
 
   .header-container {
     position: relative;
+    min-width: 1000px;
     max-width: 1280px;
     z-index: 2;
   }
@@ -594,6 +595,7 @@ export default {
     top: 0;
     left: 0;
     max-width: 1280px;
+    min-width: 1100px;
     height: 100%;
     @include viewport-unit('width', 100vw, 0px, 1);
   }
@@ -602,7 +604,8 @@ export default {
     padding-bottom: 40px;
     margin-left: 50%;
     width: 100%;
-    max-width: 1000px;
+    width: 1000px;
+    // max-width: 1000px;
     height: 100%;
     transform: translateX(-50%);
     box-sizing: border-box;
@@ -657,9 +660,6 @@ export default {
     font-size: 18px;
     font-family: $--font-TTNormsMedium;
   }
-  .detail-lord-box {
-
-  }
   .detail-lord-info {
     margin-left: 10px;
     >p {
@@ -680,6 +680,7 @@ export default {
     padding: 15px;
     margin-left: calc(100% - 30px);
     max-width: 980px;
+    min-width: 810px;
     width: 80%;
     background-color: #fff;
     opacity: 0;
@@ -715,4 +716,15 @@ export default {
   /**
    *  ldb-detail-header  -- end
    */
+
+  @media screen and (max-width: 1200px) {
+    .header-left-cnt-container {
+      padding-top: 50px;
+    }
+    .header-left-cnt {
+      >h1 {
+        font-size: 42px;
+      }
+    }
+  }
 </style>

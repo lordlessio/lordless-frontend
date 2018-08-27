@@ -16,7 +16,7 @@
         <p class="crowdsale-markline"></p>
         <div class="crowdsale-cnt-bottom">
           <p class="TTFontBolder">Authorization</p>
-          <p class="TTFontNormal crowdsale-info-text">Authorization the <a href="#" class="TTFontBolder">Marketplace contract</a> to operate LDB</p>
+          <p class="TTFontNormal crowdsale-info-text">Authorization the <a :href="`${ETHERSCANURL}/address/${NFTsCrowdsale.address}`" target="_blank" class="TTFontBolder">Marketplace contract</a> to operate LDB</p>
         </div>
         <div>
           <ld-btn
@@ -81,6 +81,10 @@ export default {
 
     web3Opt () {
       return this.$root.$children[0].web3Opt
+    },
+
+    ETHERSCANURL () {
+      return process.env.ETHERSCANURL
     }
   },
   components: {
@@ -141,6 +145,9 @@ export default {
           })
       }
     }
+  },
+  mounted () {
+    console.log('NFTsCrowdsale', this.NFTsCrowdsale)
   }
 }
 </script>

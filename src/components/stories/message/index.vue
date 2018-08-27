@@ -1,6 +1,5 @@
 <template>
   <div
-    v-dom-portal
     class="tip-main-box"
     :class="[{ 'hidden': !value, 'show': value },{ 'fixed': fixed }, theme]">
     <div class="container">

@@ -52,7 +52,6 @@
           <ldb-sale-tool
             :info.sync="ldbInfo"
             :pendings="ldbPendings"
-            :contractStatus="contractStatus"
             :user="userInfo"
             :loading="infoLoading"
             @buy="buyHandle"
@@ -66,7 +65,6 @@
     </section>
     <Authorize
       ref="authorize"
-      @pending="authorizePending"
       @blurs="dialogSetBlurs($event, dialog ? 1 : 0)">
     </Authorize>
 
@@ -195,23 +193,23 @@ export default {
     }
   },
   watch: {
-    LDBNFTs (val) {
-      if (val) {
-        this.checkLdbNFT(this.ldbInfo.chain.tokenId, val)
-      }
-    },
-    NFTsCrowdsale (val) {
-      if (val) {
-        this.checkCrowdsale(this.ldbInfo.chain.tokenId, val)
-      }
-    },
+    // LDBNFTs (val) {
+    //   if (val) {
+    //     this.checkLdbNFT(this.ldbInfo.chain.tokenId, val)
+    //   }
+    // },
+    // NFTsCrowdsale (val) {
+    //   if (val) {
+    //     this.checkCrowdsale(this.ldbInfo.chain.tokenId, val)
+    //   }
+    // },
     account (val, oval) {
       if (!oval) return
       this.initContractStatus()
       if (val) {
         this.checkHome({ userId: val })
         this.getLdbTasks({ userId: val })
-        this.checkOwner(this.ldbInfo.chain.tokenId)
+        // this.checkOwner(this.ldbInfo.chain.tokenId)
         this.getUserPendings()
       }
     }
@@ -238,8 +236,10 @@ export default {
     async checkHome ({ ldbId = this.ldbInfo._id, userId = this.userInfo.address } = {}) {
       const res = await getHome({ userId })
       if (res.code === 1000 && res.data) {
+        console.log('----- ldbId', ldbId, res.data)
         if (res.data._id === ldbId) this.isHome = true
-      }
+        else this.isHome = false
+      } else this.isHome = false
     },
     /**
      * 获取 ldb 建筑详情
@@ -247,7 +247,7 @@ export default {
      */
     async getLdbInfo (id) {
       this.infoLoading = true
-      const res = await getLdbById({ id, pula: 'ldbIcon' })
+      const res = await getLdbById({ id })
       if (res.code === 1000) {
         this.checkHome({ ldbId: res.data._id })
         this.getLdbTasks({ ldbId: res.data._id })
@@ -463,7 +463,7 @@ export default {
 
                 this.$nextTick(() => {
                   // this.orderModel = true
-                  this.checkOwner(tokenId)
+                  // this.checkOwner(tokenId)
                 })
               })
             }
@@ -537,7 +537,7 @@ export default {
                 // 改变市场状态
                 this.$set(this.ldbInfo.chain.auction, 'isOnAuction', false)
 
-                this.checkOwner(tokenId)
+                // this.checkOwner(tokenId)
               })
             }
             loop()
@@ -551,15 +551,6 @@ export default {
         console.log('err', err)
         this.$set(this.ldbPendings, 'isCanceling', false)
       }
-    },
-
-    /**
-     * 授权市场权限的合约 pending 状态
-     */
-    async authorizePending ({ tx }) {
-      this.checkCrowdsaleEvent({ address: this.userInfo.address }, () => {
-        this.$refs.authorize.checkoutAuthorize({ crowdsale: true })
-      })
     },
 
     /**
@@ -604,30 +595,24 @@ export default {
     /**
      * 挂售建筑之后触发的合约 pending 状态
      */
-    async ldbSellPending ({ tx, tokenId = this.ldbInfo.chain.tokenId, price, action } = {}) {
+    async ldbSellPending ({ tx, tokenId = this.ldbInfo.chain.tokenId, price, action } = {}, { isPending = true } = {}) {
+      this.$router.push('/owner/activity')
       // 修改 isSelling 状态
-      this.$set(this.ldbPendings, 'isSelling', true)
+      // this.$set(this.ldbPendings, 'isSelling', true)
 
-      const loop = () => {
-        // 轮询 tx 状态
-        this.checkTxEvent({ tx, action, tokenId }, ({ err, data }) => {
-          if (err) return
-          if (data.isPending) return loop()
+      // if (!isPending) {
+      //   // 关闭 buy dialog
+      //   this.sellModel = false
+      //   this.$set(this.ldbPendings, 'isSelling', false)
 
-          // 关闭 buy dialog
-          this.sellModel = false
-          this.$set(this.ldbPendings, 'isSelling', false)
+      //   // 改变市场状态
+      //   this.$set(this.ldbInfo.chain.auction, 'isOnAuction', true)
+      //   this.$set(this.ldbInfo.chain.auction, 'price', price)
 
-          // 改变市场状态
-          this.$set(this.ldbInfo.chain.auction, 'isOnAuction', true)
-          this.$set(this.ldbInfo.chain.auction, 'price', price)
-
-          this.$nextTick(() => {
-            this.checkOwner(tokenId)
-          })
-        })
-      }
-      loop()
+      //   this.$nextTick(() => {
+      //     this.checkOwner(tokenId)
+      //   })
+      // }
     },
     /**
      * 领取糖果事件
@@ -710,7 +695,6 @@ export default {
         })
         cbData.errorMsg = res.errorMsg
       }
-      console.log('receiveTask cbData', cbData)
       return cb(cbData)
     },
 

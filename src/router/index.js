@@ -17,13 +17,13 @@ import TaskDetail from '@/pages/task/_detail.vue'
 
 import UserDetail from '@/pages/user/_detail'
 
-import Owner from '@/pages/user'
-import OwnerInfo from '@/pages/user/children/info'
-import OwnerCandy from '@/pages/user/children/candy'
-import OwnerBuildings from '@/pages/user/children/buildings'
-import OwnerTasks from '@/pages/user/children/tasks'
-import OwnerAuthorization from '@/pages/user/children/authorization'
-import OwnerActivity from '@/pages/user/children/activity'
+import Owner from '@/pages/user/owner'
+import OwnerInfo from '@/pages/user/owner/children/info'
+import OwnerCandy from '@/pages/user/owner/children/candy'
+import OwnerBuildings from '@/pages/user/owner/children/buildings'
+import OwnerTasks from '@/pages/user/owner/children/tasks'
+import OwnerAuthorization from '@/pages/user/owner/children/authorization'
+import OwnerActivity from '@/pages/user/owner/children/activity'
 
 Vue.use(Router)
 

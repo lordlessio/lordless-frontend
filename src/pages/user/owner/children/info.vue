@@ -361,7 +361,7 @@
                       :key="index">
                       <p class="v-flex text-ellipsis">
                         Bought
-                        <a :href="`${ETHERSCANURL}/${recent.tx.transactionHash}`" target="_blank"> #{{ recent.market[0].tokenId }} </a>
+                        <a :href="`${ETHERSCANURL}/tx/${recent.tx.transactionHash}`" target="_blank"> #{{ recent.market[0].tokenId }} </a>
                         for
                         <span> {{ recent.market[0].price | weiToEth }} ETH</span>
                       </p>
@@ -388,7 +388,6 @@
     <Authorize
       ref="authorize"
       :address="userInfo.address"
-      @pending="authorizePending"
       @blurs="dialogSetBlurs">
     </Authorize>
   </div>
@@ -509,9 +508,6 @@ export default {
     LdBtn
   },
   methods: {
-    ...mapActions('contract', [
-      actionTypes.CONTRACT_CHECK_CROWDSALE
-    ]),
     ...mapActions('user', [
       actionTypes.USER_SET_USER_BY_TOKEN
     ]),
@@ -530,18 +526,6 @@ export default {
 
     userAuthorize () {
       this.$refs.authorize.checkoutAuthorize({ crowdsale: true })
-    },
-
-    authorizePending ({ tx } = {}) {
-      const finishTx = async ({ err }) => {
-        if (err) return
-        const bool = await this[actionTypes.CONTRACT_CHECK_CROWDSALE](this.userInfo.address)
-        if (!bool) {
-          // 轮询 tx 状态
-          this.checkTxEvent({ tx }, finishTx)
-        }
-      }
-      this.checkTxEvent({ tx }, finishTx)
     },
 
     initInfo () {

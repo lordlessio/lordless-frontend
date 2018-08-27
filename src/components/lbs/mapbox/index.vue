@@ -12,7 +12,7 @@ export default {
       type: Object,
       default: () => {
         return {
-          min: 13,
+          min: 17,
           max: 20
         }
       }
@@ -22,7 +22,7 @@ export default {
       default: () => {
         return {
           min: 12,
-          max: 12
+          max: 16.9
         }
       }
     },
@@ -475,13 +475,19 @@ export default {
         if (bool) return
         if (e.originalEvent.deltaY < 5 && e.originalEvent.deltaY > -5) return
 
-        bool = true
+        // bool = true
         // deltaY 大于0，代表向下滚动,zoom 放大，反之缩小
-        if (e.originalEvent.deltaY >= 5) {
-          this.plusMapZoom(this.lngLat, map, () => {
-            bool = false
-          })
-        } else if (e.originalEvent.deltaY <= -5) {
+        // if (e.originalEvent.deltaY >= 5) {
+        //   this.plusMapZoom(this.lngLat, map, () => {
+        //     bool = false
+        //   })
+        // } else if (e.originalEvent.deltaY <= -5) {
+        //   this.minusMapZoom(this.lngLat, map, () => {
+        //     bool = false
+        //   })
+        // }
+        if (e.originalEvent.deltaY <= -5) {
+          bool = true
           this.minusMapZoom(this.lngLat, map, () => {
             bool = false
           })
@@ -565,7 +571,6 @@ export default {
       const maxZoom = map.getMaxZoom()
       const minZoom = map.getMinZoom()
       const currentZoom = Math.round(map.getZoom())
-      console.log('currentZoom', currentZoom)
       const srollZooms = this.scrollZooms
       if (currentZoom === maxZoom || currentZoom === srollZooms[srollZooms.length - 1]) {
         this.isMaxZoom = true
@@ -630,6 +635,7 @@ export default {
   @import '@/assets/stylus/mapbox/index.scss';
 
   .mapbox-main-box {
+    overflow: hidden;
     &.sm-marker {
       ._marker--ldb-container, .info-progress-main {
         width: 60px;
@@ -697,6 +703,7 @@ export default {
   }
 
   ._marker--info-box {
+    width: 160px;
     color: #999;
     overflow: hidden;
   }

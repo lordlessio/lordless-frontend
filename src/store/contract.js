@@ -27,7 +27,7 @@ export default {
     [mutationTypes.CONTRACT_SET_INSTANCE]: (state, { key, value }) => {
       if (!key) return false
       state[key] = value
-      // window[key] = value
+      window[key] = value
     }
   },
 
@@ -65,6 +65,8 @@ export default {
       }
 
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'address', value: address })
+
+      // 初始化合约完成之后，检查当前用户市场权限
       dispatch(actionTypes.CONTRACT_CHECK_CROWDSALE, address)
     },
 

@@ -5,7 +5,7 @@
       <div class="user-authorization-cnt">
         <el-row :gutter="20" class="authorization-cnt-container">
           <el-col
-            :xs="24" :sm="12" :lg="8"
+            :xs="24" :sm="8"
             class="authorization-item"
             v-for="(authorization, index) of authorizations"
             :key="index">
@@ -70,14 +70,22 @@ export default {
       return this.$root.$children[0].isCrowdsaleApproved
     }
   },
+  watch: {
+    marketModel (val) {
+      if (val) this.rewriteAuthorizations('marketplace')
+    },
+
+    userInfo (val) {
+      if (val.telegram && val.telegram.id) {
+        this.rewriteAuthorizations('telegram')
+      }
+    }
+  },
   components: {
     AuthorizationCard,
     Authorize
   },
   methods: {
-    ...mapActions('contract', [
-      actionTypes.CONTRACT_CHECK_CROWDSALE
-    ]),
     ...mapActions('user', [
       actionTypes.USER_SET_USER_BY_TOKEN
     ]),
@@ -100,13 +108,7 @@ export default {
      * 授权市场权限的合约 pending 状态
      */
     async authorizePending ({ tx }) {
-      const address = this.userInfo.address
       this.rewriteAuthorizations('marketplace', { loading: true, active: false })
-      this.checkCrowdsaleEvent({ address }, () => {
-        this.$refs.authorize.checkoutAuthorize({ crowdsale: true })
-        this[actionTypes.CONTRACT_CHECK_CROWDSALE](address)
-        // this.rewriteAuthorizations('marketplace', { loading: false })
-      })
     },
 
     // 点击认证执行事件
@@ -157,11 +159,6 @@ export default {
     //     }
     //   }
     // }
-  },
-  watch: {
-    marketModel (val) {
-      if (val) this.rewriteAuthorizations('marketplace')
-    }
   },
   mounted () {
     this.$nextTick(() => {

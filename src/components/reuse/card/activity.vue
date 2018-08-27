@@ -19,7 +19,7 @@
           <ld-btn
             class="activity-view-btn"
             theme="blue">
-            <a class="d-flex f-align-center" :href="`${ETHERSCANURL}/${tx}`" target="_blank">
+            <a class="d-flex f-align-center" :href="`${ETHERSCANURL}/tx/${tx}`" target="_blank">
               <span class="inline-block activity-view-svg">
                 <svg>
                   <use xlink:href="#icon-etherscan"/>

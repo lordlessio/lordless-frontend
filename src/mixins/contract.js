@@ -6,20 +6,20 @@ export default {
     return {
 
       // ldb 合约检查状态
-      contractStatus: {
+      // contractStatus: {
 
-        // 合约初始化加载完成状态
-        init: false,
+      //   // 合约初始化加载完成状态
+      //   init: false,
 
-        // 是否在市场挂售
-        // isSell: false,
+      //   // 是否在市场挂售
+      //   // isSell: false,
 
-        // 当前ldb是否属于当前用户
-        ldbNFTOwner: false,
+      //   // 当前ldb是否属于当前用户
+      //   ldbNFTOwner: false,
 
-        // 当前ldb挂售者是否属于当前用户
-        crowdsaleOwner: false
-      },
+      //   // 当前ldb挂售者是否属于当前用户
+      //   crowdsaleOwner: false
+      // },
 
       contractInterval: [],
 
@@ -42,106 +42,106 @@ export default {
     /**
      * 合约检查 ldb 是否属于自身
      */
-    checkOwner (tokenId) {
-      this.checkLdbNFT(tokenId)
-      this.checkCrowdsale(tokenId)
-    },
+    // checkOwner (tokenId) {
+    //   this.checkLdbNFT(tokenId)
+    //   this.checkCrowdsale(tokenId)
+    // },
 
     /**
      * 合约检查 721 资产状态
      */
-    checkLdbNFT (tokenId, LDBNFTs = this.LDBNFTs) {
-      if (!LDBNFTs || !tokenId) return false
+    // checkLdbNFT (tokenId, LDBNFTs = this.LDBNFTs) {
+    //   if (!LDBNFTs || !tokenId) return false
 
-      // 合约参数
-      const ownerOf = {
-        name: 'ownerOf',
-        values: [ tokenId ]
-      }
+    //   // 合约参数
+    //   const ownerOf = {
+    //     name: 'ownerOf',
+    //     values: [ tokenId ]
+    //   }
 
-      // 检查该 721 资产是否属于当前 metamask 用户
-      LDBNFTs.methods(ownerOf.name, ownerOf.values)
-        .then(d => {
-          // this.contractStatus = Object.assign({}, this.contractStatus, {
-          //   ldbNFTOwner: d === this.account
-          // })
-          this.$set(this.contractStatus, 'ldbNFTOwner', d === this.account)
-          console.log('ldbNftOwner:', d === this.account)
-        })
-        .catch(() => {
-          // this.contractStatus = Object.assign({}, this.contractStatus, {
-          //   ldbNFTOwner: false
-          // })
-          this.$set(this.contractStatus, 'ldbNFTOwner', false)
-        })
-    },
+    //   // 检查该 721 资产是否属于当前 metamask 用户
+    //   LDBNFTs.methods(ownerOf.name, ownerOf.values)
+    //     .then(d => {
+    //       // this.contractStatus = Object.assign({}, this.contractStatus, {
+    //       //   ldbNFTOwner: d === this.account
+    //       // })
+    //       this.$set(this.contractStatus, 'ldbNFTOwner', d === this.account)
+    //       console.log('ldbNftOwner:', d === this.account)
+    //     })
+    //     .catch(() => {
+    //       // this.contractStatus = Object.assign({}, this.contractStatus, {
+    //       //   ldbNFTOwner: false
+    //       // })
+    //       this.$set(this.contractStatus, 'ldbNFTOwner', false)
+    //     })
+    // },
 
-    /**
-     * 合约检查 721 资产市场状态
-     */
-    checkCrowdsale (tokenId, NFTsCrowdsale = this.NFTsCrowdsale) {
-      if (!NFTsCrowdsale || !tokenId) return false
+    // /**
+    //  * 合约检查 721 资产市场状态
+    //  */
+    // checkCrowdsale (tokenId, NFTsCrowdsale = this.NFTsCrowdsale) {
+    //   if (!NFTsCrowdsale || !tokenId) return false
 
-      // 合约参数
-      // const isOnAuction = {
-      //   name: 'isOnAuction',
-      //   values: [ tokenId ]
-      // }
+    //   // 合约参数
+    //   const isOnAuction = {
+    //     name: 'isOnAuction',
+    //     values: [ tokenId ]
+    //   }
 
-      // // 合约检查该 721 资产是否在市场出售
-      // NFTsCrowdsale.methods(isOnAuction.name, isOnAuction.values)
-      //   .then(d => {
-      //     // this.contractStatus = Object.assign({}, this.contractStatus, {
-      //     //   isSell: d,
-      //     //   init: true
-      //     // })
-      //     this.$set(this.contractStatus, 'isSell', d)
-      //     console.log('isSell:', d)
-      //   })
-      //   .catch(() => {
-      //     // this.contractStatus = Object.assign({}, this.contractStatus, {
-      //     //   isSell: false
-      //     // })
-      //     this.$set(this.contractStatus, 'isSell', false)
-      //   })
+    //   // 合约检查该 721 资产是否在市场出售
+    //   NFTsCrowdsale.methods(isOnAuction.name, isOnAuction.values)
+    //     .then(d => {
+    //       // this.contractStatus = Object.assign({}, this.contractStatus, {
+    //       //   isSell: d,
+    //       //   init: true
+    //       // })
+    //       this.$set(this.contractStatus, 'isSell', d)
+    //       console.log('isSell:', d)
+    //     })
+    //     .catch(() => {
+    //       // this.contractStatus = Object.assign({}, this.contractStatus, {
+    //       //   isSell: false
+    //       // })
+    //       this.$set(this.contractStatus, 'isSell', false)
+    //     })
 
-      // 合约参数
-      const getAuction = {
-        name: 'getAuction',
-        values: [ tokenId ]
-      }
+    //   // 合约参数
+    //   const getAuction = {
+    //     name: 'getAuction',
+    //     values: [ tokenId ]
+    //   }
 
-      // 合约检查该 721 资产是否属于当前 metamask 用户出售
-      NFTsCrowdsale.methods(getAuction.name, getAuction.values)
-        .then(d => {
-          // this.contractStatus.crowdsaleOwner = d[0] === this.account
-          this.$set(this.contractStatus, 'crowdsaleOwner', d[1] === this.account)
-          this.$set(this.contractStatus, 'init', true)
-          console.log('crowdsaleOwner:', d[1] === this.account)
-        })
-        .catch(() => {
-          // this.contractStatus.crowdsaleOwner = false
-          this.$set(this.contractStatus, 'crowdsaleOwner', false)
-        })
-    },
+    //   // 合约检查该 721 资产是否属于当前 metamask 用户出售
+    //   NFTsCrowdsale.methods(getAuction.name, getAuction.values)
+    //     .then(d => {
+    //       // this.contractStatus.crowdsaleOwner = d[0] === this.account
+    //       this.$set(this.contractStatus, 'crowdsaleOwner', d[1] === this.account)
+    //       this.$set(this.contractStatus, 'init', true)
+    //       console.log('crowdsaleOwner:', d[1] === this.account)
+    //     })
+    //     .catch(() => {
+    //       // this.contractStatus.crowdsaleOwner = false
+    //       this.$set(this.contractStatus, 'crowdsaleOwner', false)
+    //     })
+    // },
 
-    async checkCrowdsaleEvent ({ address, LDBNFTs = this.LDBNFTs, NFTsCrowdsale = this.NFTsCrowdsale } = {}, cb) {
-      if (!address) return
-      const index = this.intervals.length
-      let interval = this.intervals[index]
-      // 初始化实例
-      if (interval) this.clearCInterval({ index })
-      // 创建新定时器实例
-      interval = setInterval(async () => {
-        const bool = await LDBNFTs.methods('isApprovedForAll', [address, NFTsCrowdsale.address])
-        if (bool) {
-          if (cb) cb()
-          this.clearCInterval({ index })
-        }
-      }, 5000)
+    // async checkCrowdsaleEvent ({ address, LDBNFTs = this.LDBNFTs, NFTsCrowdsale = this.NFTsCrowdsale } = {}, cb) {
+    //   if (!address) return
+    //   const index = this.intervals.length
+    //   let interval = this.intervals[index]
+    //   // 初始化实例
+    //   if (interval) this.clearCInterval({ index })
+    //   // 创建新定时器实例
+    //   interval = setInterval(async () => {
+    //     const bool = await LDBNFTs.methods('isApprovedForAll', [address, NFTsCrowdsale.address])
+    //     if (bool) {
+    //       this.clearCInterval({ index })
+    //       if (cb) cb()
+    //     }
+    //   }, 5000)
 
-      this.intervals[index] = interval
-    },
+    //   this.intervals[index] = interval
+    // },
 
     /**
      * 检查 contract event 状态
@@ -195,7 +195,7 @@ export default {
         this.intervals = []
       } else {
         clearInterval(intervals[index])
-        this.intervals[index] = null
+        this.$set(this.intervals, index, null)
       }
     }
   },

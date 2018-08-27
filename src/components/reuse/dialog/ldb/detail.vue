@@ -100,8 +100,8 @@ export default {
 
     initLoading ({ tokenId = this.tokenId }) {
       this.loading = false
-      const ldbDetail = this.$refs.ldbDetail
-      if (ldbDetail) ldbDetail.checkOwner(tokenId)
+      // const ldbDetail = this.$refs.ldbDetail
+      // if (ldbDetail) ldbDetail.checkOwner(tokenId)
     }
   },
   watch: {

@@ -39,14 +39,14 @@
             <el-row class="mar-t3" :gutter="30" v-if="loading">
               <el-col
                 v-for="item of [1,2,3]" :key="item"
-                :xs="24" :sm="12" :lg="8">
+                :xs="24" :sm="8">
                 <skeletion-building class="skeletion-building-item"></skeletion-building>
               </el-col>
             </el-row>
             <transition name="ld-hide-in-fade">
               <el-row v-if="buildings.length && !loading" :gutter="30" class="user-buildings-cnt">
                 <el-col
-                  :xs="24" :sm="12" :lg="8"
+                  :xs="24" :sm="8"
                   class="building-item"
                   v-for="(building, index) of buildings"
                   :key="index">
@@ -67,7 +67,7 @@
             <el-row class="mar-t3" :gutter="30" v-if="loading">
               <el-col
                 v-for="item of [1,2]" :key="item"
-                :xs="24" :sm="12" :lg="8">
+                :xs="24" :sm="8">
                 <skeletion-building class="skeletion-building-item"></skeletion-building>
               </el-col>
             </el-row>
@@ -90,7 +90,7 @@
             <transition name="ld-hide-in-fade">
               <el-row v-show="saleBuildings.length && !loading" :gutter="20" class="user-buildings-cnt">
                 <el-col
-                  :xs="24" :sm="12" :lg="8"
+                  :xs="24" :sm="8"
                   class="building-item"
                   v-for="(building, index) of saleBuildings"
                   :key="index">

@@ -83,7 +83,7 @@
               </div>
               <el-row :gutter="40" class="user-buildings-cnt">
                 <el-col
-                  :xs="24" :sm="12" :lg="8"
+                  :xs="24" :sm="8"
                   class="building-item"
                   v-for="(ldb, index) of userLdbs"
                   :key="index">
@@ -128,7 +128,7 @@
               </div>
               <el-row :gutter="40" class="user-buildings-cnt">
                 <el-col
-                  :xs="24" :sm="12" :lg="8"
+                  :xs="24" :sm="8"
                   class="building-item"
                   v-for="(ldb, index) of userLdbs"
                   :key="index">

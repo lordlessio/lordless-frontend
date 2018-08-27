@@ -1,8 +1,7 @@
 <template>
   <div
     class="tip-main-box"
-    :class="[{ 'hidden': !value, 'show': value },{ 'fixed': fixed }, theme]"
-    v-dom-portal="fixed">
+    :class="[{ 'hidden': !value, 'show': value },{ 'fixed': fixed }, theme]">
     <div class="container">
       <span class="tip-close" @click="close">
         <i class="el-icon-close"></i>

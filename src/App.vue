@@ -11,16 +11,15 @@
       <!-- <Relogin v-model="userExpired" :address="web3Opt.address"></Relogin> -->
     </div>
     <Footer v-bind="footerOpt"/>
-    <msg-tip
+    <!-- <msg-tip
       v-model="msgTip.show"
       :text="msgTip.text"
       :theme="msgTip.theme"
       fixed
       closeSync
       @close="closeTip">
-    </msg-tip>
-    <meta-tip v-model="metaOpen">
-    </meta-tip>
+    </msg-tip> -->
+    <meta-tip v-model="metaOpen"></meta-tip>
   </div>
 </template>
 
@@ -29,7 +28,7 @@ import LordlessSvg from '@/components/lordlessSvg'
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
 import Relogin from '@/components/reuse/relogin'
-import MsgTip from '@/components/stories/message'
+// import MsgTip from '@/components/stories/message'
 import MetaTip from '@/components/reuse/dialog/metaTip'
 
 import { initWeb3 } from '@/assets/utils/web3/initWeb3'
@@ -50,7 +49,7 @@ export default {
   components: {
     Header,
     Footer,
-    MsgTip,
+    // MsgTip,
     MetaTip,
     Relogin,
     LordlessSvg
@@ -129,10 +128,17 @@ export default {
             console.log('other：This is an unknown network.')
         }
       })
+    },
+    consoleFont () {
+      console.info(`%c
+    ╦   ╔═╗ ╦═╗ ╔╦╗ ╦   ╔═╗ ╔═╗ ╔═╗      ╔╦╗ ╔═╗ ╔═╗ ╔╦╗ ╦
+    ║   ║ ║ ╠╦╝  ║║ ║   ║╣  ╚═╗ ╚═╗       ║  ║╣  ╠═╣ ║║║ ║
+    ╩═╝ ╚═╝ ╩╚═ ═╩╝ ╩═╝ ╚═╝ ╚═╝ ╚═╝       ╩  ╚═╝ ╩ ╩ ╩ ╩ o
+    `, 'color: #4586FC;')
     }
   },
   mounted () {
-    console.log('this.web3Opt', this.web3Opt)
+    this.consoleFont()
     // document.getElementById('outside-loading').style = 'display: none'
     this.$nextTick(() => this[actionTypes.STATUS_INIT_BROSWER]())
   }

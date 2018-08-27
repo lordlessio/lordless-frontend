@@ -7,7 +7,7 @@ module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   LDBICON_ORIGIN: '"http://lordless.oss-cn-hongkong.aliyuncs.com/"',
   BACKEND_SERVER: '"//localhost:8080/lordless"',
-  ETHERSCANURL: '"https://ropsten.etherscan.io/tx/"',
+  ETHERSCANURL: '"https://ropsten.etherscan.io/"',
   APPROVED_NETWORK_ID: 5777,
   contract,
   tgBot: '"lordlesslocalbot"'

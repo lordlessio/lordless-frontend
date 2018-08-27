@@ -7,7 +7,7 @@
     </transition>
 
     <transition name="ld-hide-fade">
-      <section v-if="!loading" class="ldb-approved-section">
+      <section v-show="!loading" class="ldb-approved-section">
         <!-- <p class="d-flex f-align-baseline">Approved tasks</p> -->
         <div class="ldb-approved-cnt">
           <el-row class="approved-tasks-list">
@@ -79,12 +79,14 @@ export default {
     }
   },
   watch: {
-    ldbId (val) {
-      this.getApprovedTask(val)
-    },
     approvedTask (val, oval) {
       // 如果初始加载，不执行动画
       if (oval) this.change()
+    },
+    loading (val) {
+      if (!val) {
+        this.approvedIntervalFunc()
+      }
     }
   },
   components: {
@@ -99,19 +101,20 @@ export default {
       }
     },
     change () {
+      const tEvent = transitionEvent()
       const dom = document.getElementById('approved-item-container')
       const func = () => {
-        dom.removeEventListener(transitionEvent(), func, false)
+        dom.removeEventListener(tEvent, func, false)
         setTimeout(() => {
           removeClass('animate', dom)
         }, 250)
       }
-      dom.addEventListener(transitionEvent(), func, false)
+      dom.addEventListener(tEvent, func, false)
       this.$nextTick(() => {
         addClass('animate', dom)
       })
     },
-    approvedIntervalFunc () {
+    async approvedIntervalFunc () {
       this.getApprovedTask()
       this.clearApproved()
       this.approvedInterval = setInterval(() => {
@@ -119,6 +122,7 @@ export default {
       }, 10000)
     },
     clearApproved () {
+      removeClass('animate', document.getElementById('approved-item-container'))
       if (this.approvedInterval) {
         clearInterval(this.approvedInterval)
         this.approvedInterval = null
@@ -127,9 +131,6 @@ export default {
   },
   beforeDestroy () {
     this.clearApproved()
-  },
-  mounted () {
-    this.$nextTick(() => this.approvedIntervalFunc())
   }
 }
 </script>

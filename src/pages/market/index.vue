@@ -44,7 +44,7 @@
         <el-row :gutter="40" v-if="ldbsLoading">
           <el-col
             v-for="item of [1,2, 3]" :key="item"
-            :xs="24" :sm="12" :lg="8">
+            :xs="24" :sm="8">
             <skeletion-building class="skeletion-building-item"></skeletion-building>
           </el-col>
         </el-row>
@@ -69,7 +69,7 @@
             <el-col
               class="market-cnt-item"
               v-for="ldb of ldbs" :key="ldb._id"
-              :xs="24" :sm="12" :lg="8">
+              :xs="24" :sm="8">
               <building-card
                 :sale="ldb.chain.auction.isOnAuction"
                 :presale="ldb.chain.auction.isOnPreAuction"

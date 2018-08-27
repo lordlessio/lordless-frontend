@@ -8,7 +8,7 @@ module.exports = merge({
   LDBICON_ORIGIN: '"http://lordless.oss-cn-hongkong.aliyuncs.com/"',
   OSSFOLDERPATH: 'ropsten_dist',
   BACKEND_SERVER: '"//ropsten.lordless.games"',
-  ETHERSCANURL: '"https://ropsten.etherscan.io/tx/"',
+  ETHERSCANURL: '"https://ropsten.etherscan.io/"',
   APPROVED_NETWORK_ID: 3,
   contract,
   tgBot: '"lordlessropstenbot"'

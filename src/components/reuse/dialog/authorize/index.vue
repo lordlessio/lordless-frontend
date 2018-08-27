@@ -56,8 +56,13 @@ import Crowdsale from './crowdsale'
 import Status from './status'
 import Sign from './sign'
 
-import { mapState } from 'vuex'
+import { contractMixins } from '@/mixins'
+
+import { actionTypes } from '@/store/types'
+import { mapState, mapActions } from 'vuex'
 export default {
+  name: 'authorize-dialog',
+  mixins: [contractMixins],
   props: {
     avatar: {
       type: Object,
@@ -75,14 +80,15 @@ export default {
       default: true
     },
 
-    // 是否检测 crowdsale
-    crowdsale: {
-      type: Boolean,
-      default: true
-    },
     modelClose: {
       type: Boolean,
       default: false
+    },
+
+    // 是否内部执行pending
+    pending: {
+      type: Boolean,
+      default: true
     }
   },
   data: () => {
@@ -161,11 +167,17 @@ export default {
       return this.authorizeBool ? 'dark' : 'light'
     },
 
+    web3Error () {
+      return this.$root.$children[0].web3Opt.error
+    },
+
     // 合约内部状态初始化状态
     authorizeInit () {
       if (this.isInit) return true
       const browserInit = !this.browser.default
-      const web3Init = !this.$root.$children[0].web3Opt.web3js.default
+
+      const web3Opt = this.$root.$children[0].web3Opt
+      const web3Init = !web3Opt.web3js.default
       // const userInit = !this.userInfo.default
       console.log('browserInit', browserInit, web3Init)
       if (browserInit && web3Init) {
@@ -191,17 +203,30 @@ export default {
     Sign
   },
   methods: {
+    ...mapActions('contract', [
+      actionTypes.CONTRACT_CHECK_CROWDSALE
+    ]),
+
     closeDialog () {
       this.$emit('fClose')
       this.authorizeDialog = false
     },
 
     checkoutAuthorize ({ init = false, crowdsale = false, telegram = false } = {}) {
+      if (this.web3Error) {
+        this.$notify.error({
+          title: 'web3初始化失败!',
+          message: '请检查 metamask 是否正常',
+          position: 'bottom-right',
+          duration: 3500
+        })
+        return
+      }
       if (!this.isInit && !init) {
         this.$notify({
           type: 'warning',
-          title: 'web3初始化失败!',
-          message: '请检查 metamask 是否正常',
+          title: 'web3初始化中...',
+          message: 'web3正在初始化，请稍后重试。',
           position: 'bottom-right',
           duration: 3500
         })
@@ -261,7 +286,13 @@ export default {
       this.showSign = false
     },
 
-    crowdsalePending (data) {
+    crowdsalePending (data, address = this.address) {
+      if (this.pending) {
+        this.checkCrowdsaleEvent({ address }, () => {
+          this[actionTypes.CONTRACT_CHECK_CROWDSALE](address)
+          this.closeDialog()
+        })
+      }
       this.$emit('pending', data)
     }
   },
