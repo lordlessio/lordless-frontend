@@ -4,6 +4,7 @@
       class="d-flex f-align-center"
       :layout="layout"
       :total="total"
+      :page-size="size"
       :current-page.sync="currentP"
       @size-change="$emit('sizeChange', $event)"
       @prev-click="$emit('prev', $event)"
@@ -22,6 +23,10 @@ export default {
     layout: {
       type: String,
       default: 'prev,pager,next'
+    },
+    size: {
+      type: Number,
+      default: 10
     },
     total: {
       type: Number,

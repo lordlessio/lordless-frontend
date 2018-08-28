@@ -213,7 +213,7 @@ export default {
     loopFunc (height) {
       let instance
       const func = () => {
-        if (instance) this.clearLoop(instance)
+        if (instance) instance = this.clearLoop(instance)
         instance = setTimeout(() => {
           this.change(height)
           this.clearLoop(instance)
@@ -252,6 +252,7 @@ export default {
         loop = null
         this.loopInstance = null
       }
+      return null
     }
   },
   beforeDestroy () {

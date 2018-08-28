@@ -40,7 +40,7 @@
               <div class="header-left-cnt-box">
                 <div class="header-left-cnt-container">
                   <figure class="header-left-cnt">
-                    <h1 :class="{ 'md': info.name.zh.length > 6, 'sm': info.name.zh.length > 9 }">{{ info.name.zh }}</h1>
+                    <h1 v-if="info.name.zh" :class="{ 'md': info.name.zh.length > 6, 'sm': info.name.zh.length > 9 }">{{ info.name.zh }}</h1>
                     <p class="detail-ldb-tag">
                       <span class="inline-block" v-for="type of info.ldbType" :key="type">{{ type | formatLdbType }}</span>
                     </p>
@@ -216,18 +216,13 @@ export default {
         // 执行动画
         addClass('animate', dom)
 
-        console.time('animate')
         const animateFunc = () => {
-          console.timeEnd('animate')
-          setTimeout(() => {
-            // 根据 hideTasks 次数，删除 candyTasks
-            if (this.hideTasks === this.candyTasks.length) {
-              this.$set(this, 'hideTasks', 1)
-              this.$set(this, 'candyTasks', [])
-            } else {
-              this.hideTasks = this.hideTasks + 1
-            }
-          }, 500)
+          if (this.hideTasks === this.candyTasks.length) {
+            this.$set(this, 'hideTasks', 1)
+            this.$set(this, 'candyTasks', [])
+          } else {
+            this.hideTasks = this.hideTasks + 1
+          }
           dom.removeEventListener(transitionEvent(), animateFunc, false)
         }
         dom.addEventListener(transitionEvent(), animateFunc, false)

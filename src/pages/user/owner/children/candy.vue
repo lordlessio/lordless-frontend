@@ -20,150 +20,199 @@
         </el-tooltip>
       </h1>
       <div
-        v-if="!userAssets.length && !userRecords.total"
-        class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
-        <svg>
-          <use xlink:href="#icon-no-candy"/>
-        </svg>
-        <p>You have no candy now.</p>
-        <div class="d-flex f-auto-center TTFontBolder">
-          <span>Apply a</span>
-          <span class="inline-block">
-            <ld-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Task</ld-btn>
-          </span>
-          <span>or buy a LDB in</span>
-          <span class="inline-block">
-            <ld-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Marketplace</ld-btn>
-          </span>
-        </div>
-      </div>
-      <div
-        v-if="userAssets.length || userRecords.total"
-        class="v-flex user-candy-tabs">
+        class="v-flex d-flex user-candy-tabs">
         <el-tabs
+          class="relative v-flex"
           v-model="candyTab"
-          @tab-click="chooseTab">
+          @tab-click="switchTab">
           <el-tab-pane
             label="Balance"
             name="balance">
-            <div class="d-flex f-align-center text-center candy-tabs-title">
-              <el-col :span="5">Asset</el-col>
-              <el-col :span="5">Quantity</el-col>
-              <!-- <el-col :span="5">Valued by ETH(≈)</el-col> -->
-              <el-col :span="6">Price(≈)</el-col>
-              <el-col :span="6">Total(≈)</el-col>
+            <div v-if="candyLoading" class="user-candy-skeletion">
+              <p></p>
+              <div class="d-flex f-justify-around" v-for="item of [1,2]" :key="item">
+                <p class="skeletion-breath"></p>
+                <p class="skeletion-breath"></p>
+                <p class="skeletion-breath"></p>
+                <p class="skeletion-breath"></p>
+              </div>
             </div>
-            <div
-              class="d-flex f-align-center text-center candy-balance-item candy-list-item"
-              v-for="(asset, index) of userAssets"
-              :key="index">
-              <el-col :span="5" class="d-flex f-auto-center candy-symbol">
-                <p class="d-flex f-align-end">
-                  <span class="inline-block candy-coin-svg">
-                    <svg>
-                      <use :xlink:href="`#coin-${asset.candy.symbol.toLocaleLowerCase()}`"/>
-                    </svg>
+            <transition name="ld-hide-fade">
+              <div
+                v-if="!userAssets.length && !candyLoading"
+                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box absolute">
+                <svg>
+                  <use xlink:href="#icon-no-candy"/>
+                </svg>
+                <p>You have no candy now.</p>
+                <div class="d-flex f-auto-center TTFontBolder">
+                  <span>Apply a</span>
+                  <span class="inline-block">
+                    <ld-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Task</ld-btn>
                   </span>
-                  <span class="text-upper">{{ asset.candy.symbol }}</span>
-                </p>
-              </el-col>
-              <el-col :span="5">
-                <span>{{ asset.count | formatDecimal }}</span>
-                <span class="text-upper"> {{ asset.candy.symbol }}</span>
-              </el-col>
-              <!-- <el-col :span="5">
-                <span>{{ 1 / asset.candy.eth2TokenCount }}</span>
-                <span class="text-upper"> ETH</span>
-              </el-col> -->
-              <el-col :span="6">
-                <span>$</span>
-                <span> {{ 1 / asset.candy.USD2TokenCount | formatDecimal }}</span>
-              </el-col>
-              <el-col :span="6">
-                <span>$</span>
-                <span> {{ asset.count / asset.candy.USD2TokenCount | formatDecimal }}</span>
-              </el-col>
-            </div>
+                  <span>or buy a LDB in</span>
+                  <span class="inline-block">
+                    <ld-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Marketplace</ld-btn>
+                  </span>
+                </div>
+              </div>
+            </transition>
+            <transition name="ld-hide-fade">
+              <div v-show="userAssets.length && !candyLoading" class="relative">
+                <div class="d-flex f-align-center text-center candy-tabs-title">
+                  <el-col :span="5">Asset</el-col>
+                  <el-col :span="5">Quantity</el-col>
+                  <!-- <el-col :span="5">Valued by ETH(≈)</el-col> -->
+                  <el-col :span="6">Price(≈)</el-col>
+                  <el-col :span="6">Total(≈)</el-col>
+                </div>
+                <div
+                  class="d-flex f-align-center text-center candy-balance-item candy-list-item"
+                  v-for="(asset, index) of userAssets"
+                  :key="index">
+                  <el-col :span="5" class="d-flex f-auto-center candy-symbol">
+                    <p class="d-flex f-align-end">
+                      <span class="inline-block candy-coin-svg">
+                        <svg>
+                          <use :xlink:href="`#coin-${asset.candy.symbol.toLocaleLowerCase()}`"/>
+                        </svg>
+                      </span>
+                      <span class="text-upper">{{ asset.candy.symbol }}</span>
+                    </p>
+                  </el-col>
+                  <el-col :span="5">
+                    <span>{{ asset.count | formatDecimal }}</span>
+                    <span class="text-upper"> {{ asset.candy.symbol }}</span>
+                  </el-col>
+                  <!-- <el-col :span="5">
+                    <span>{{ 1 / asset.candy.eth2TokenCount }}</span>
+                    <span class="text-upper"> ETH</span>
+                  </el-col> -->
+                  <el-col :span="6">
+                    <span>$</span>
+                    <span> {{ 1 / asset.candy.USD2TokenCount | formatDecimal }}</span>
+                  </el-col>
+                  <el-col :span="6">
+                    <span>$</span>
+                    <span> {{ asset.count / asset.candy.USD2TokenCount | formatDecimal }}</span>
+                  </el-col>
+                </div>
+              </div>
+            </transition>
           </el-tab-pane>
           <el-tab-pane
             class="d-flex candy-tab-box"
             :class="{ 'showAside': aside.show }"
+            :disabled="!userAssets.length"
             label="History"
             name="history">
-            <div class="v-flex candy-rewards-box">
-              <div class="d-flex f-align-center text-center candy-tabs-title">
-                <el-col :span="aside.show ? 8 : 4">Asset</el-col>
-                <el-col :span="aside.show ? 8 : 6">Type</el-col>
-                <el-col v-if="!aside.show" :span="6">Date</el-col>
-                <el-col :span="aside.show ? 8 : 6">Quantity</el-col>
-              </div>
-              <div class="candy-reward-list">
-                <div
-                  class="d-flex f-align-center text-center text-ellipsis candy-reward-item  candy-list-item"
-                  :class="{ 'choose': rewardModels[record._id], 'drop': parseInt(record.status) === 1 }"
-                  v-for="(record, index) of userRecords.list"
-                  :key="index"
-                  @click="chooseReward($event, record)">
-                  <el-col :span="aside.show ? 8 : 4" class="d-flex f-auto-center candy-symbol">
-                    <p class="d-flex f-align-end">
-                      <span class="inline-block candy-coin-svg">
-                        <svg>
-                          <use :xlink:href="`#coin-${record.reward.candy.symbol.toLocaleLowerCase()}`"/>
-                        </svg>
-                      </span>
-                      <span class="text-upper">{{ record.reward.candy.symbol }}</span>
-                    </p>
-                  </el-col>
-                  <el-col :span="aside.show ? 8 : 6">
-                    <span>{{ record.lord ? 'LORD' : 'Task' }}</span>
-                    <span class="text-cap"> Reward</span>
-                  </el-col>
-                  <el-col v-if="!aside.show" :span="6">
-                    <span>{{ record.update_at | dateFormat }}</span>
-                  </el-col>
-                  <el-col :span="aside.show ? 8 : 6" class="d-flex f-align-center candy-quantity">
-                    <span class="line-height-0 candy-down-svg">
-                      <svg>
-                        <use xlink:href="#icon-download"/>
-                      </svg>
-                    </span>
-                    <span class="TTFontBolder">+{{ record.lord ? record.lord.reward.count : record.executor.reward.count | formatDecimal }}</span>
-                  </el-col>
-                </div>
+            <div v-if="candyLoading" class="user-candy-skeletion">
+              <p></p>
+              <div class="d-flex f-justify-around" v-for="item of [1,2]" :key="item">
+                <p class="skeletion-breath"></p>
+                <p class="skeletion-breath"></p>
+                <p class="skeletion-breath"></p>
+                <p class="skeletion-breath"></p>
               </div>
             </div>
+            <transition name="ld-hide-fade">
+              <div
+                v-if="!userRecords.total && !candyLoading"
+                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box absolute">
+                <svg>
+                  <use xlink:href="#icon-no-candy"/>
+                </svg>
+                <p>You have no records now.</p>
+                <div class="d-flex f-auto-center TTFontBolder">
+                  <span>Apply a</span>
+                  <span class="inline-block">
+                    <ld-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Task</ld-btn>
+                  </span>
+                  <span>or buy a LDB in</span>
+                  <span class="inline-block">
+                    <ld-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Marketplace</ld-btn>
+                  </span>
+                </div>
+              </div>
+            </transition>
+            <transition name="ld-hide-fade">
+              <div v-show="userRecords.total && !candyLoading" class="v-flex relative candy-rewards-box">
+                <div class="d-flex f-align-center text-center candy-tabs-title">
+                  <el-col :span="aside.show ? 8 : 4">Asset</el-col>
+                  <el-col :span="aside.show ? 8 : 6">Type</el-col>
+                  <el-col v-if="!aside.show" :span="6">Date</el-col>
+                  <el-col :span="aside.show ? 8 : 6">Quantity</el-col>
+                </div>
+                <div class="candy-reward-list">
+                  <div
+                    class="d-flex f-align-center text-center text-ellipsis candy-reward-item  candy-list-item"
+                    :class="{ 'choose': rewardModels[record._id], 'drop': parseInt(record.status) === 1 }"
+                    v-for="(record, index) of userRecords.list"
+                    :key="index"
+                    @click="chooseReward($event, record)">
+                    <el-col :span="aside.show ? 8 : 4" class="d-flex f-auto-center candy-symbol">
+                      <p class="d-flex f-align-end">
+                        <span class="inline-block candy-coin-svg">
+                          <svg>
+                            <use :xlink:href="`#coin-${record.reward.candy.symbol.toLocaleLowerCase()}`"/>
+                          </svg>
+                        </span>
+                        <span class="text-upper">{{ record.reward.candy.symbol }}</span>
+                      </p>
+                    </el-col>
+                    <el-col :span="aside.show ? 8 : 6">
+                      <span>{{ record.lord ? 'LORD' : 'Task' }}</span>
+                      <span class="text-cap"> Reward</span>
+                    </el-col>
+                    <el-col v-if="!aside.show" :span="6">
+                      <span>{{ record.update_at | dateFormat }}</span>
+                    </el-col>
+                    <el-col :span="aside.show ? 8 : 6" class="d-flex f-align-center candy-quantity">
+                      <span class="line-height-0 candy-down-svg">
+                        <svg>
+                          <use xlink:href="#icon-download"/>
+                        </svg>
+                      </span>
+                      <span class="TTFontBolder">+{{ record.lord ? record.lord.reward.count : record.executor.reward.count | formatDecimal }}</span>
+                    </el-col>
+                  </div>
+                </div>
+              </div>
+            </transition>
             <div class="candy-reward-aside">
-              <transition name="ld-hide-in-fade">
+              <transition name="ld-suspension-hide-fade">
                 <div v-if="aside.show && rewardLoading" class="reward-aside-skeletion">
-                  <h1></h1>
-                  <p></p>
-                  <div>
+                  <div class="aside-skeletion-container skeletion-breath">
+                    <h1></h1>
                     <p></p>
-                    <p></p>
-                  </div>
-                  <div>
-                    <p></p>
-                    <p></p>
-                  </div>
-                  <div>
-                    <p></p>
-                    <p></p>
-                  </div>
-                  <div class="big">
-                    <p></p>
-                    <h2></h2>
-                  </div>
-                  <div class="big">
-                    <p></p>
-                    <p></p>
-                  </div>
-                  <div>
-                    <p></p>
-                    <p></p>
-                  </div>
-                  <div>
-                    <p></p>
-                    <div></div>
+                    <div>
+                      <p></p>
+                      <p></p>
+                    </div>
+                    <div>
+                      <p></p>
+                      <p></p>
+                    </div>
+                    <div>
+                      <p></p>
+                      <p></p>
+                    </div>
+                    <div class="big">
+                      <p></p>
+                      <h2></h2>
+                    </div>
+                    <div class="big">
+                      <p></p>
+                      <p></p>
+                    </div>
+                    <div>
+                      <p></p>
+                      <p></p>
+                    </div>
+                    <div>
+                      <p></p>
+                      <div></div>
+                    </div>
                   </div>
                 </div>
               </transition>
@@ -270,6 +319,8 @@ export default {
       // 改变之前的 tab 区域
       currentTab: 'balance',
 
+      candyLoading: true,
+
       // 用户账户
       userAssets: [],
 
@@ -308,7 +359,11 @@ export default {
     Pagination
   },
   methods: {
-    chooseTab (evt) {
+
+    /**
+     * 切换 tab
+     */
+    switchTab (evt) {
       if (this.currentTab === this.candyTab) return
       this.currentTab = this.candyTab
       this.initAside()
@@ -316,6 +371,9 @@ export default {
       else this.getRecords()
     },
 
+    /**
+     * 查看糖果历史详情事件
+     */
     async chooseReward (evt, data) {
       const { _id } = data
       if (this.rewardModels[_id]) {
@@ -334,22 +392,34 @@ export default {
       this.$set(this.aside, 'show', true)
     },
 
+    /**
+     * 初始化 candy aside
+     */
     async initAside () {
       this.rewardModels = {}
       this.$set(this.aside, 'show', false)
       this.$set(this.aside, 'data', null)
     },
 
+    /**
+     * 获取用户糖果账户
+     */
     async getAssets () {
       if (this.candyTab !== 'balance') return
+      this.candyLoading = true
       const res = await getUserAssets()
       if (res.code === 1000) {
         this.userAssets = res.data
       }
+      this.candyLoading = false
     },
 
+    /**
+     * 获取用户糖果获取历史
+     */
     async getRecords ({ address = this.userInfo.address, pn = 1, ps = 10 } = {}) {
       if (this.candyTab !== 'history') return
+      this.candyLoading = true
       const params = {
         pn,
         ps
@@ -358,6 +428,7 @@ export default {
       if (res.code === 1000) {
         this.userRecords = res.data
       }
+      this.candyLoading = false
     },
 
     pageChange (pn) {
@@ -413,6 +484,30 @@ export default {
       margin-right: 5px;
       width: 25px;
       height: 25px;
+    }
+  }
+
+  // user-candy-skeletion
+  .user-candy-skeletion {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 70px;
+    // margin-top: 35px;
+    >p {
+      height: 25px;
+      background-color: $--skeletion-light;
+    }
+    >div {
+      margin-top: 15px;
+      padding: 20px;
+      background-color: $--skeletion-light;
+      border-radius: 5px;
+      >p {
+        width: 150px;
+        height: 25px;
+        background-color: $--skeletion-dark;
+      }
     }
   }
 
@@ -527,8 +622,10 @@ export default {
     left: 0;
     width: 100%;
     padding: 30px 20px 50px 40px;
-    border-radius: 5px;
     background-color: $--skeletion-light;
+  }
+  .aside-skeletion-container {
+    border-radius: 5px;
     >h1 {
       width: 80px;
       height: 50px;
@@ -600,6 +697,7 @@ export default {
     transition: all .3s;
   }
   .reward-aside-container {
+    position: relative;
     padding: 30px 20px 50px 40px;
     border-radius: 5px;
     background-image: linear-gradient(45deg, rgba(22, 34, 42, 1), rgba(58, 96, 115, 1));
@@ -607,6 +705,7 @@ export default {
     opacity: 0;
     background-color: transparent;
     transition: all .3s;
+    z-index: 1;
     >h1 {
       font-family: $--font-TTNormsMedium;
       font-weight: normal;

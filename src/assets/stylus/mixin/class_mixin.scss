@@ -253,6 +253,12 @@
   }
 }
 
+@mixin radial-gradient-bg($outside, $inside) {
+  background-image: -moz-radial-gradient($inside, $outside); /* new syntax */
+  background-image: -webkit-radial-gradient($inside, $outside); /* new syntax */
+  background-image: radial-gradient($inside, $outside);
+}
+
 /* 字体 */
 @mixin TTFontNormal () {
   font-family: $--font-TTNormsRegular;

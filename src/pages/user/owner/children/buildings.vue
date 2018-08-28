@@ -53,7 +53,7 @@
                   <building-card
                     :sale="building.chain.auction.isOnAuction"
                     :presale="building.chain.auction.isOnPreAuction"
-                    :ldbInfo="building"
+                    :info="building"
                     shadow
                     @choose="chooseBuilding">
                   </building-card>

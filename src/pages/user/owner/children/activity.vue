@@ -3,7 +3,7 @@
     <div class="d-flex v-flex col-flex user-activity-container">
       <h1 class="text-cap user-activity-title">activity</h1>
       <div
-        v-if="!activities.length && !loading"
+        v-if="!activities.total && !loading"
         class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
         <svg>
           <use xlink:href="#icon-action"/>
@@ -17,31 +17,51 @@
         </div>
       </div>
       <div
-        v-if="activities.length"
+        v-if="activities.total"
         class="v-flex user-activity-tabs">
         <el-tabs
           v-model="activityTab">
           <el-tab-pane
             label="Activity"
             name="Activity">
-            <el-row :gutter="20" class="user-activity-cnt">
-              <el-col
-                :xs="24"
-                class="activity-item"
-                v-for="(activity, index) of activities"
-                :key="index">
-                <activity-card
-                  :info="activity"
-                  :type="activity.market[0].action.toUpperCase()"
-                  :tx="activity.tx.transactionHash">
-                </activity-card>
-              </el-col>
-            </el-row>
+            <transition name="ld-suspension-hide-fade">
+              <div v-if="loading" class="user-activity-skeletion">
+                <div class="d-flex f-aligin-center">
+                  <div class="v-flex d-flex f-aligin-center activity-skeletion-left skeletion-breath">
+                    <p></p>
+                    <div class="v-flex">
+                      <p></p>
+                      <p></p>
+                      <p></p>
+                    </div>
+                  </div>
+                  <div class="d-flex f-align-center activity-skeletion-right skeletion-breath">
+                    <p></p>
+                  </div>
+                </div>
+              </div>
+            </transition>
+            <transition>
+              <el-row :gutter="20" class="user-activity-cnt">
+                <el-col
+                  :xs="24"
+                  class="activity-item"
+                  v-for="(activity, index) of activities.list"
+                  :key="index">
+                  <activity-card
+                    :info="activity"
+                    :type="activity.market[0].action.toUpperCase()"
+                    :tx="activity.tx.transactionHash">
+                  </activity-card>
+                </el-col>
+              </el-row>
+            </transition>
           </el-tab-pane>
         </el-tabs>
          <Pagination
             class="ld-activity-pagination"
-            :total="pageTotal"
+            :total="activities.total"
+            :size="activities.ps"
             background
             @currentChange="pageChange">
           </Pagination>
@@ -61,7 +81,7 @@ export default {
   data: () => {
     return {
 
-      loading: false,
+      loading: true,
 
       // 当前 tab 区域
       activityTab: 'Activity',
@@ -71,9 +91,12 @@ export default {
        */
 
       // 用户全部的 tx 记录
-      activities: [],
-      // 记录总数
-      pageTotal: 1
+      activities: {
+        total: 0,
+        list: [],
+        pn: 1,
+        ps: 10
+      }
     }
   },
   computed: {
@@ -88,7 +111,7 @@ export default {
   },
   methods: {
 
-    async getActivities ({ address = this.userInfo.address, pn = 1, ps = 10 } = {}) {
+    async getActivities ({ address = this.userInfo.address, pn = this.activities.pn, ps = this.activities.ps } = {}) {
       this.loading = true
       if (!address) return
 
@@ -101,9 +124,7 @@ export default {
       }
       const res = await getActivitysByUser(params)
       if (res.code === 1000) {
-        const { list, total } = res.data
-        this.activities = list
-        this.total = total
+        this.activities = res.data
       }
       this.loading = false
     },
@@ -155,6 +176,54 @@ export default {
     position: absolute;
     left: 0;
     bottom: -100px;
+  }
+
+  // user-activity-skeletion
+  .user-activity-skeletion {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    >div {
+      padding: 35px 45px 35px 45px;
+      border-radius: 5px;
+      background-color: $--skeletion-light;
+    }
+  }
+  .activity-skeletion-left {
+    >p {
+      margin-right: 15px;
+      width: 75px;
+      height: 75px;
+      background-color: $--skeletion-dark;
+      border-radius: 100%;
+    }
+    >div {
+      >p {
+        width: 90%;
+        height: 20px;
+        background-color: $--skeletion-dark;
+        &:nth-of-type(1) {
+          width: 150px;
+          height: 15px;
+        }
+        &:nth-of-type(2) {
+          margin-top: 15px;
+        }
+        &:nth-of-type(3) {
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+  .activity-skeletion-right {
+    margin-left: 80px;
+    >p {
+      width: 180px;
+      height: 60px;
+      border-radius: 5px;
+      background-color: $--skeletion-dark;
+    }
   }
 
    .user-activity-tabs {

@@ -57,7 +57,7 @@
 <script>
 import ApprovedSkeletion from '@/components/skeletion/ldb/detail/tool/approved'
 
-import { getApprovedTaskByLdbId } from 'api'
+import { getApprovedTask } from 'api'
 import { transitionEvent, addClass, removeClass } from 'utils/tool'
 export default {
   props: {
@@ -95,7 +95,7 @@ export default {
   methods: {
     async getApprovedTask (ldbId = this.ldbId) {
       if (!ldbId && ldbId !== 0) return
-      const res = await getApprovedTaskByLdbId(ldbId, { taskId: this.approvedTask ? this.approvedTask._id : undefined })
+      const res = await getApprovedTask({ ldbId, taskId: this.approvedTask ? this.approvedTask._id : undefined })
       if (res.code === 1000 && res.data) {
         this.approvedTask = res.data
       }
@@ -105,9 +105,7 @@ export default {
       const dom = document.getElementById('approved-item-container')
       const func = () => {
         dom.removeEventListener(tEvent, func, false)
-        setTimeout(() => {
-          removeClass('animate', dom)
-        }, 250)
+        removeClass('animate', dom)
       }
       dom.addEventListener(tEvent, func, false)
       this.$nextTick(() => {

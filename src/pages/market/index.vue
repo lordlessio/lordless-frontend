@@ -73,7 +73,7 @@
               <building-card
                 :sale="ldb.chain.auction.isOnAuction"
                 :presale="ldb.chain.auction.isOnPreAuction"
-                :ldbInfo="ldb"
+                :info="ldb"
                 @choose="openDetail">
               </building-card>
               <!-- <div class="market-cnt-item" @click.stop="openDetail(item)">

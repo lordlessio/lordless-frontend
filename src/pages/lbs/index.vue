@@ -8,20 +8,22 @@
       @load="mapLoad"/>
     <div class="lbs-search">
       <AutoComplete
-        placeholder="Search location or buiding in LORDLESS"
+        placeholder="Search buidings in LORDLESS"
         @handleSearch="handleSearch"
         @handleSelect="handleSelect"
         @trend="handleSelect">
       </AutoComplete>
     </div>
     <div class="lbs-tx-box">
-      <TxCarousel
+      <loop-task ref="loopTask"></loop-task>
+      <!-- <TxCarousel
         ref="txCarousel"
         :direction="-1"
-        @logoEvt="$router.push('/market')"></TxCarousel>
+        @logoEvt="$router.push('/market')"></TxCarousel> -->
     </div>
-    <div class="sm-hidden text-nowrap lbs-user-box" :class="{ 'shadow': userInfo.address }">
-      <user-avatar :scale="9" theme="dark" shadow loginText="Login" :showInfo="false"></user-avatar>
+    <div class="sm-hidden text-nowrap lbs-user-box">
+      <!-- <user-avatar :scale="9" theme="dark" shadow loginText="Login" :showInfo="false"></user-avatar> -->
+      <header-tip></header-tip>
     </div>
     <div class="sm-hidden lbs-control-box" v-if="mapControl">
       <div class="d-flex col-flex lbs-control-container">
@@ -39,11 +41,10 @@
             <use xlink:href="#icon-search-minus"/>
           </svg>
         </span> -->
-        <span class="inline-block color-secondary"
-          :class="{ 'is-disabled': isMapMinZoom }"
+        <span v-if="!isMapMinZoom" class="inline-block color-secondary"
           @click.stop="changeMapZoom('minus', isMapMinZoom)">
           <svg>
-            <use :xlink:href="`#icon-${isMapMinZoom ? 'gray-' : ''}map`"/>
+            <use xlink:href="#icon-ldb-map"/>
           </svg>
         </span>
       </div>
@@ -58,12 +59,14 @@
 </template>
 
 <script>
-import Mapbox from '@/components/lbs/mapbox'
+import Mapbox from '@/components/content/lbs/mapbox'
 import DetailDialog from '@/components/reuse/dialog/ldb/detail'
-import TxCarousel from '@/components/reuse/txCarousel'
-import AutoComplete from '@/components/stories/autoComplete'
+import HeaderTip from '@/components/reuse/headerTip'
+// import TxCarousel from '@/components/reuse/txCarousel'
+import LoopTask from '@/components/reuse/loopTask'
+import AutoComplete from '@/components/reuse/autoComplete'
 import Blockies from '@/components/stories/blockies'
-import UserAvatar from '@/components/reuse/userAvatar'
+// import UserAvatar from '@/components/reuse/userAvatar'
 import { getAutoLdbs, getChainLdbs } from 'api'
 import { historyState, transferCoords } from 'utils/tool'
 import { mapActions, mapState } from 'vuex'
@@ -99,10 +102,12 @@ export default {
   components: {
     Mapbox,
     AutoComplete,
-    TxCarousel,
+    LoopTask,
+    // TxCarousel,
     DetailDialog,
     Blockies,
-    UserAvatar
+    // UserAvatar,
+    HeaderTip
   },
   computed: {
     ...mapState('ldb', [
@@ -166,7 +171,10 @@ export default {
         return item.id && sIndex === -1
       })
 
-      return [].concat(c, a, b)
+      const result = [].concat(c, a, b)
+      if (result.length) result[result.length - 1].last = 1
+
+      return result
     },
 
     /**
@@ -214,7 +222,8 @@ export default {
 
       this.initMapControl()
 
-      this.$refs.txCarousel.init()
+      this.$refs.loopTask.init()
+      // this.$refs.txCarousel.init()
       // if (ldb) {
       //   this.flyToLdb(ldb)
       //   this.coordQuery = coords
@@ -314,9 +323,9 @@ export default {
     top: 50px;
     // width: 54px;
     // height: 54px;
-    border-radius: 6px;
-    color: #fff;
-    cursor: pointer;
+    // border-radius: 6px;
+    // color: #fff;
+    // cursor: pointer;
     // &.shadow {
     //   box-shadow: 2px 4px 8px 0 rgba(12, 0, 42, .5);
     // }
@@ -330,6 +339,7 @@ export default {
   .lbs-control-container {
     background-color: #fff;
     border-radius: 10px;
+    overflow: hidden;
     >span {
       position: relative;
       cursor: pointer;

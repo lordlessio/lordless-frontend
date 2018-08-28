@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import TaskDetail from '@/components/reuse/task/detail'
+import TaskDetail from '@/components/content/task/detail'
 
 import { mutationTypes } from '@/store/types'
 import { mapMutations } from 'vuex'

@@ -9,7 +9,7 @@
             </svg>
           </span>
           <div class="v-flex ld-activity-desc">
-            <p>{{ new Date() | dateFormat }}</p>
+            <p>{{ info.market[0].txEndAt | dateFormat }}</p>
             <p v-if="type === 'CANCELAUCTION'">You cancelled the sale of <span> LDB #{{ info.market[0].tokenId }}. </span> You will get it back when the transaction is confirmed on chain.</p>
             <p v-else-if="type === 'NEWAUCTION'">You started a sale by action for <span> LDB #{{ info.market[0].tokenId }}. </span></p>
             <p v-else>You requested to purchase <span> LDB #{{ info.market[0].tokenId }}. </span> If nobody's confirmation comes earlier, you will get the LDB finally.</p>
@@ -83,9 +83,9 @@ export default {
 <style lang="scss" scoped>
   @import '@/assets/stylus/mixin/index.scss';
   .ld-activity-card {
+    padding: 35px 45px 35px 45px;
     background-color: #fff;
     border-radius: 5px;
-    @include padding-around(35px, 45px, 35px, 45px, 1);
     &.shadow {
       box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, .1);
     }

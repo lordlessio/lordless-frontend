@@ -1,13 +1,13 @@
 <template>
-  <div class="text-center cursor-pointer ld-building-card" :class="[{ 'sale': sale || presale, 'shadow': shadow }, `popularity-${ldbInfo.chain.popularity}`]">
-    <figure @click="$emit('choose', ldbInfo)">
+  <div class="text-center cursor-pointer ld-building-card" :class="[{ 'sale': sale || presale, 'shadow': shadow }]">
+    <figure @click="$emit('choose', info)">
       <div class="building-card-top">
-        <div class="building-header">
+        <div class="building-header" :class="`building-popularity-${info.chain.popularity}`">
           <div class="building-level">
-            <img :src="`/static/img/ldb/ldb-level-${ldbInfo.chain.popularity}.png`"/>
+            <img :src="`/static/img/ldb/ldb-level-${info.chain.popularity}.png`"/>
           </div>
           <img class="building-curve" src="~/static/svg/single/curve.svg">
-          <ld-img :src="ldbInfo.ldbIcon.source.preview | reldbIcon"></ld-img>
+          <ld-img :src="info.ldbIcon.source.preview | reldbIcon"></ld-img>
           <span class="building-sale-bg"></span>
           <p class="d-flex col-flex f-auto-center building-sale-tag">
             <span class="building-sale-svg">
@@ -15,29 +15,29 @@
                 <use :xlink:href="`#icon-${presale ? 'presale' : 'sale'}`"/>
               </svg>
             </span>
-            <span class="building-sale-price">{{ ldbInfo.chain.auction.price | weiToEth }} ETH</span>
+            <span class="building-sale-price">{{ info.chain.auction.price | weiToEth }} ETH</span>
           </p>
         </div>
         <div class="building-main-cnt">
-          <h2 class="building-name">{{ ldbInfo.name.zh }}</h2>
-          <p class="building-tokenId">#{{ ldbInfo.chain.tokenId }}</p>
+          <h2 class="building-name">{{ info.name.zh }}</h2>
+          <p class="building-tokenId">#{{ info.chain.tokenId }}</p>
           <p class="d-flex f-auto-center building-coords">
             <span>
               <i class="el-icon-location"></i>
             </span>
-            <span>&nbsp;{{ ldbInfo.chain.lng | transferCoords | sliceStr }}, {{ ldbInfo.chain.lat | transferCoords | sliceStr }}</span>
+            <span>&nbsp;{{ info.chain.lng | transferCoords | sliceStr }}, {{ info.chain.lat | transferCoords | sliceStr }}</span>
           </p>
           <ul class="d-flex f-align-center building-data">
             <li class="v-flex building-data-item">
-              <p>{{ ldbInfo.chain.level || 0 }}</p>
+              <p>{{ info.chain.level || 0 }}</p>
               <p>Level</p>
             </li>
             <!-- <li class="v-flex building-data-item">
-              <p>{{ ldbInfo.chain.popularity || 0 }}</p>
+              <p>{{ info.chain.popularity || 0 }}</p>
               <p>Popularity</p>
             </li> -->
             <li class="v-flex building-data-item">
-              <p>{{ ldbInfo.members }}</p>
+              <p>{{ info.members }}</p>
               <p>Members</p>
             </li>
           </ul>
@@ -48,12 +48,12 @@
           <li class="d-flex col-flex">
             <p class="d-flex f-align-center">
               <span class="v-flex">AP</span>
-              <span>{{ ldbInfo.apLeft }}</span>
+              <span>{{ info.apLeft }}</span>
             </p>
             <p class="building-progress">
               <ld-progress
-                :current="ldbInfo.apLeft"
-                :max="ldbInfo.ap"
+                :current="info.apLeft"
+                :max="info.ap"
                 :gradient="progressOpts.capacity.gradient">
               </ld-progress>
             </p>
@@ -61,11 +61,11 @@
           <!-- <li class="d-flex col-flex">
             <p class="d-flex f-align-center">
               <span class="v-flex">Activeness</span>
-              <span>{{ ldbInfo.chain.activeness }}</span>
+              <span>{{ info.chain.activeness }}</span>
             </p>
             <p class="building-progress">
               <ld-progress
-                :current="ldbInfo.chain.activeness"
+                :current="info.chain.activeness"
                 :max="1267"
                 :gradient="progressOpts.activeness.gradient">
               </ld-progress>
@@ -90,7 +90,7 @@ export default {
       type: Boolean,
       default: false
     },
-    ldbInfo: {
+    info: {
       type: Object,
       default: () => {
         return {}
@@ -128,13 +128,6 @@ export default {
 
 <style lang="scss" scoped>
   @import '@/assets/stylus/mixin/index.scss';
-  @mixin header-bg($outside, $inside, $direction: to bottom) {
-    .building-header {
-      background-image: -moz-radial-gradient($inside, $outside); /* new syntax */
-      background-image: -webkit-radial-gradient($inside, $outside); /* new syntax */
-      background-image: radial-gradient($inside, $outside);
-    }
-  }
 
   .ld-building-card {
     background-color: #fff;
@@ -149,21 +142,6 @@ export default {
       .building-card-bottom {
         box-shadow: 0px 20px 25px -15px rgba(0, 0, 0, 0.25);
       }
-    }
-    &.popularity-1 {
-      @include header-bg(#8BC1FF, #C3DEFC);
-    }
-    &.popularity-2 {
-      @include header-bg(#97DBD9, #E7FDE1);
-    }
-    &.popularity-3 {
-      @include header-bg(#C0C0FF, #F2F1FD);
-    }
-    &.popularity-4 {
-      @include header-bg(#FFC3AE, #FDF1E1);
-    }
-    &.popularity-5 {
-      @include header-bg(#FFDA99, #FFE7C7);
     }
   }
 

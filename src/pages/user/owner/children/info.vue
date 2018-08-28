@@ -4,7 +4,7 @@
       <div class="user-info-section">
         <h2 class="info-cnt-title">Info Card</h2>
         <div v-if="overviewLoading" class="d-flex f-align-center info-header-skeletion">
-          <div class="v-flex d-flex f-align-center">
+          <div class="v-flex d-flex f-align-center skeletion-breath">
             <p></p>
             <div class="v-flex">
               <p></p>
@@ -75,12 +75,12 @@
         <div class="v-flex info-item-container info-prestige-section">
           <h2 class="info-cnt-title">Prestige Value</h2>
           <div v-if="overviewLoading" class="d-flex f-align-center info-prestige-skeletion">
-            <div class="v-flex prestige-level-skeletion">
+            <div class="v-flex prestige-level-skeletion skeletion-breath">
               <p></p>
               <p></p>
               <p></p>
             </div>
-            <div class="d-flex row-flex prestige-ac-skeletion">
+            <div class="d-flex row-flex prestige-ac-skeletion skeletion-breath">
               <p></p>
               <p></p>
             </div>
@@ -121,8 +121,8 @@
         <div class="v-flex info-item-container info-home-section">
           <h2 class="info-cnt-title">Home</h2>
           <div v-if="overviewLoading" class="d-flex f-align-center info-home-skeletion">
-            <p></p>
-            <div class="v-flex">
+            <p class="skeletion-breath"></p>
+            <div class="v-flex skeletion-breath">
               <p></p>
               <p></p>
               <p></p>
@@ -301,7 +301,7 @@
                 <p class="card-cnt-tip">Rewards from LDB</p>
                 <div class="v-flex d-flex col-flex f-auto-center card-cnt-box">
                   <p>You have no transactions</p>
-                  <ld-btn class="user-info-btn" theme="blue" inverse shadow>Buy a LDB</ld-btn>
+                  <ld-btn class="user-info-btn" theme="blue" inverse shadow @click.native="$router.push('/market')">Buy a LDB</ld-btn>
                 </div>
               </div>
               <div v-if="overviews.ldbEarnings.total" class="v-flex d-flex col-flex assets-earnings-know">
@@ -348,7 +348,7 @@
                 <p class="card-cnt-tip">Rewards from LDB</p>
                 <div class="v-flex d-flex f-auto-center col-flex card-cnt-box">
                   <p>You have no transactions</p>
-                  <ld-btn class="user-info-btn" theme="blue" inverse shadow>Marketplace</ld-btn>
+                  <ld-btn class="user-info-btn" theme="blue" inverse shadow @click.native="$router.push('/market')">Marketplace</ld-btn>
                 </div>
               </div>
               <div v-if="recentData.total" class="v-flex d-flex col-flex assets-recent-know">

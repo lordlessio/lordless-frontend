@@ -114,7 +114,23 @@ export default {
       box.style.width = 'inherit'
       box.style.height = 'inherit'
       // const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}" style="width: 100%"/><p>${name}</p><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>800 / 1000</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${600 / 1000 * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
-      const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}"/><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>${apLeft} / ${ap}</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${apLeft / ap * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
+      // const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}"/><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>${apLeft} / ${ap}</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${apLeft / ap * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
+      const boxHtml = `
+      <div class="_marker--ldb-container">
+        <img src="${imgSrc}"/>
+        <div class="_marker--info-box">
+          <div class="d-flex col-flex _marker--info-container">
+            <div class="_marker--info-bottom">
+              <div class="_marker--info-progress" style="width: ${apLeft / ap * 100}%">
+                <span class="inline-block info-progress-main"></span>
+              </div>
+            </div>
+            <div class="text-nowrap _market--info-ap">
+              AP ${apLeft} / ${ap}
+            </div>
+          </div>
+        </div>
+      </div>`
       box.innerHTML = boxHtml
       return box
     },
@@ -181,81 +197,81 @@ export default {
       return point
     },
 
-    createPointLayer (list, map = this.map) {
-      const features = (size) => {
-        list.map(item => {
-          const { name, chain } = item
-          const coords = [chain.lng / 1e16, chain.lat / 1e16]
-          return {
-            'type': 'Feature',
-            'geometry': {
-              'type': 'Point',
-              'coordinates': coords
-            },
-            'properties': {
-              'title': name.zh,
-              'icon': 'harbor',
-              'size': size
-            }
-          }
-        })
-      }
+    // createPointLayer (list, map = this.map) {
+    //   const features = (size) => {
+    //     list.map(item => {
+    //       const { name, chain } = item
+    //       const coords = [chain.lng / 1e16, chain.lat / 1e16]
+    //       return {
+    //         'type': 'Feature',
+    //         'geometry': {
+    //           'type': 'Point',
+    //           'coordinates': coords
+    //         },
+    //         'properties': {
+    //           'title': name.zh,
+    //           'icon': 'harbor',
+    //           'size': size
+    //         }
+    //       }
+    //     })
+    //   }
 
-      map.loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png', function (error, image) {
-        if (error) throw error
-        map.addImage('cat', image)
-        map.addSource('lordless_pointer', {
-          'type': 'geojson',
-          'data': {
-            'type': 'FeatureCollection',
-            'features': features(0.1)
-          }
-        })
-        const layer = {
-          'id': 'points',
-          'type': 'symbol',
-          'source': 'lordless_pointer',
-          'layout': {
-            'icon-image': 'cat',
-            'icon-size': {
-              'property': 'size',
-              'type': 'identity'
-            },
-            'text-field': '{title}',
-            'text-offset': [0, 0.6],
-            'text-anchor': 'top'
-          }
-        }
-        map.addLayer(layer)
+    //   map.loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png', function (error, image) {
+    //     if (error) throw error
+    //     map.addImage('cat', image)
+    //     map.addSource('lordless_pointer', {
+    //       'type': 'geojson',
+    //       'data': {
+    //         'type': 'FeatureCollection',
+    //         'features': features(0.1)
+    //       }
+    //     })
+    //     const layer = {
+    //       'id': 'points',
+    //       'type': 'symbol',
+    //       'source': 'lordless_pointer',
+    //       'layout': {
+    //         'icon-image': 'cat',
+    //         'icon-size': {
+    //           'property': 'size',
+    //           'type': 'identity'
+    //         },
+    //         'text-field': '{title}',
+    //         'text-offset': [0, 0.6],
+    //         'text-anchor': 'top'
+    //       }
+    //     }
+    //     map.addLayer(layer)
 
-        function animateMarker () {
-        // Update the data to a new position based on the animation timestamp. The
-        // divisor in the expression `timestamp / 1000` controls the animation speed.
-          map.getSource('lordless_pointer').setData({
-            'type': 'geojson',
-            'data': {
-              'type': 'FeatureCollection',
-              'features': features(Math.random * 3 * 0.1)
-            }
-          })
+    //     function animateMarker () {
+    //     // Update the data to a new position based on the animation timestamp. The
+    //     // divisor in the expression `timestamp / 1000` controls the animation speed.
+    //       map.getSource('lordless_pointer').setData({
+    //         'type': 'geojson',
+    //         'data': {
+    //           'type': 'FeatureCollection',
+    //           'features': features(Math.random * 3 * 0.1)
+    //         }
+    //       })
 
-          // Request the next frame of the animation.
-          requestAnimationFrame(animateMarker)
-        }
+    //       // Request the next frame of the animation.
+    //       requestAnimationFrame(animateMarker)
+    //     }
 
-        // Start the animation.
-        setTimeout(() => {
-          animateMarker()
-        }, 10000)
-        // map.on('mouseenter', 'points', function (e) {
-        //   console.log('---- layer popup', e.features[0].geometry.coordinates)
-        //   new MapBox.Popup()
-        //     .setLngLat(e.features[0].geometry.coordinates)
-        //     .setHTML(e.features[0].properties.title)
-        //     .addTo(map)
-        // })
-      })
-    },
+    //     // Start the animation.
+    //     setTimeout(() => {
+    //       animateMarker()
+    //     }, 10000)
+    //     // map.on('mouseenter', 'points', function (e) {
+    //     //   console.log('---- layer popup', e.features[0].geometry.coordinates)
+    //     //   new MapBox.Popup()
+    //     //     .setLngLat(e.features[0].geometry.coordinates)
+    //     //     .setHTML(e.features[0].properties.title)
+    //     //     .addTo(map)
+    //     // })
+    //   })
+    // },
 
     /**
      * 创建 point popup 对象
@@ -365,7 +381,7 @@ export default {
         el.async = true
         document.head.appendChild(el)
         el.onload = () => {
-          setTimeout(() => resolve(), 0)
+          resolve()
         }
         el.onerror = (e) => reject(new Error(e))
       })
@@ -662,7 +678,7 @@ export default {
     }
   }
 
-  @mixin progress-gradient-bg($start: #FFBB17, $end: #FFED38, $duration: to right) {
+  @mixin progress-gradient-bg($start: #FFCC66, $end: #FFCC66, $duration: to right) {
     .info-progress-main {
       background-image: linear-gradient($duration, $start, $end);
     }
@@ -703,31 +719,35 @@ export default {
   }
 
   ._marker--info-box {
-    width: 160px;
+    display: inline-block;
+    min-width: 160px;
+    max-width: 180px;
     color: #999;
     overflow: hidden;
   }
   ._marker--info-container {
+    position: relative;
     margin-top: 10px;
   }
-  ._marker--info-top {
-    margin-bottom: 8px;
-    font-size: 18px;
-    height: 22px;
-    transition: height .35s ease, opacity .15s ease .15s, visibility 0s 0s;
-  }
+  // ._marker--info-top {
+  //   margin-bottom: 8px;
+  //   font-size: 18px;
+  //   height: 22px;
+  //   transition: height .35s ease, opacity .15s ease .15s, visibility 0s 0s;
+  // }
 
   ._marker--info-bottom {
-    height: 15px;
+    height: 10px;
     border-radius: 10px;
-    background-color: #fff;
+    background-color: #BDB9FD;
     overflow: hidden;
     transition: height .35s ease-in-out;
   }
   ._marker--info-progress {
     position: relative;
     height: 100%;
-    border-radius: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
     overflow: hidden;
   }
   .info-progress-main {
@@ -737,6 +757,18 @@ export default {
     top: 0;
     height: 100%;
     transition: width .35s ease-in-out;
+  }
+
+  ._market--info-ap {
+    margin-top: -5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #eee;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: #7D72F0;
+    z-index: 1;
   }
 
   // _point_marker--ldb-box

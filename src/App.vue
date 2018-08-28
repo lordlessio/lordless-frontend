@@ -27,7 +27,6 @@
 import LordlessSvg from '@/components/lordlessSvg'
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
-import Relogin from '@/components/reuse/relogin'
 // import MsgTip from '@/components/stories/message'
 import MetaTip from '@/components/reuse/dialog/metaTip'
 
@@ -51,7 +50,6 @@ export default {
     Footer,
     // MsgTip,
     MetaTip,
-    Relogin,
     LordlessSvg
   },
   computed: {

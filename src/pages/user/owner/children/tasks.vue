@@ -19,30 +19,53 @@
                 @change="filterTasks">
               </ld-select>
             </div>
-            <div
-              v-if="!taskInfos.total && !loading"
-              class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-tasks">
-              <svg>
-                <use xlink:href="#icon-no-candy"/>
-              </svg>
-              <p>You have nothing on rewarded now.</p>
-              <div class="d-flex f-auto-center TTFontBolder">
-                <span>Make the first selling transaction for your</span>
+            <div v-if="loading" class="user-tasks-skeletion">
+              <div class="d-flex skeletion-breath">
+                <div class="v-flex tasks-skeletion-left">
+                  <p></p>
+                  <p></p>
+                  <p></p>
+                </div>
+                <div class="d-flex col-flex tasks-skeletion-right">
+                  <p></p>
+                  <p></p>
+                </div>
               </div>
             </div>
-            <el-row v-if="taskInfos.total && !loading" :gutter="20" class="user-tasks-cnt">
-              <el-col
-                :xs="24"
-                class="tasks-item"
-                v-for="(task, index) of taskInfos.list"
-                :key="index">
-                <task-card
-                  :info="task"
-                  @play="playTask"
-                  @choose="chooseTask">
-                </task-card>
-              </el-col>
-            </el-row>
+            <transition name="ld-hide-in-fade">
+              <div
+                v-if="!taskInfos.total && !loading"
+                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-tasks">
+                <svg>
+                  <use xlink:href="#icon-no-candy"/>
+                </svg>
+                <p>You have nothing tasks now.</p>
+                <!-- <div class="d-flex f-auto-center TTFontBolder">
+                  <span>Make the first selling transaction for your</span>
+                </div> -->
+                <div class="d-flex f-auto-center TTFontBolder">
+                  <span>recive Task in LDB</span>
+                  <span class="inline-block">
+                    <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/map')">Map</ld-btn>
+                  </span>
+                </div>
+              </div>
+            </transition>
+            <transition name="ld-hide-in-fade">
+              <el-row v-if="taskInfos.total && !loading" :gutter="20" class="relative user-tasks-cnt">
+                <el-col
+                  :xs="24"
+                  class="tasks-item"
+                  v-for="(task, index) of taskInfos.list"
+                  :key="index">
+                  <task-card
+                    :info="task"
+                    @play="playTask"
+                    @choose="chooseTask">
+                  </task-card>
+                </el-col>
+              </el-row>
+            </transition>
           </el-tab-pane>
           <el-tab-pane
             label="Candy"
@@ -56,36 +79,53 @@
                 @change="filterTasks">
               </ld-select>
             </div> -->
-            <div
-              v-if="!taskInfos.total && !loading"
-              class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-tasks">
-              <svg>
-                <use xlink:href="#icon-no-candy"/>
-              </svg>
-              <p>You have no tasks now.</p>
-              <div class="d-flex f-auto-center TTFontBolder">
-                <span>Try to buy a LDB in</span>
-                <span class="inline-block">
-                  <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/market')">Marketplace</ld-btn>
-                </span>
+            <div v-if="loading" class="user-tasks-skeletion">
+              <div class="d-flex skeletion-breath">
+                <div class="v-flex tasks-skeletion-left">
+                  <p></p>
+                  <p></p>
+                  <p></p>
+                </div>
+                <div class="d-flex col-flex tasks-skeletion-right">
+                  <p></p>
+                  <p></p>
+                </div>
               </div>
             </div>
-            <el-row v-if="taskInfos.total && !loading" :gutter="20" class="user-tasks-cnt">
-              <el-col
-                :xs="24"
-                class="tasks-item"
-                v-for="(task, index) of taskInfos.list"
-                :key="index">
-                <task-card
-                  :info="task"
-                  @play="playTask"
-                  @choose="chooseTask">
-                </task-card>
-              </el-col>
-            </el-row>
+            <transition name="ld-hide-in-fade">
+              <div
+                v-if="!taskInfos.total && !loading"
+                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-tasks">
+                <svg>
+                  <use xlink:href="#icon-no-candy"/>
+                </svg>
+                <p>You have no Candy Tasks now.</p>
+                <div class="d-flex f-auto-center TTFontBolder">
+                  <span>recive candy in LDB</span>
+                  <span class="inline-block">
+                    <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/map')">Map</ld-btn>
+                  </span>
+                </div>
+              </div>
+            </transition>
+            <transition name="ld-hide-in-fade">
+              <el-row v-if="taskInfos.total && !loading" :gutter="20" class="relative user-tasks-cnt">
+                <el-col
+                  :xs="24"
+                  class="tasks-item"
+                  v-for="(task, index) of taskInfos.list"
+                  :key="index">
+                  <task-card
+                    :info="task"
+                    @play="playTask"
+                    @choose="chooseTask">
+                  </task-card>
+                </el-col>
+              </el-row>
+            </transition>
           </el-tab-pane>
           <el-tab-pane
-            label="LORD tasks"
+            label="LORD rewards"
             name="lord">
             <!-- <div class="tasks-sort">
               <span>Filter by</span>
@@ -96,30 +136,50 @@
                 @change="filterTasks">
               </ld-select>
             </div> -->
-            <div
-              v-if="!taskInfos.total && !loading"
-              class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-tasks">
-              <svg>
-                <use xlink:href="#icon-no-candy"/>
-              </svg>
-              <p>You have nothing on rewarded now.</p>
-              <div class="d-flex f-auto-center TTFontBolder">
-                <span>Make the first selling transaction for your</span>
+            <div v-if="loading" class="user-tasks-skeletion">
+              <div class="d-flex skeletion-breath">
+                <div class="v-flex tasks-skeletion-left">
+                  <p></p>
+                  <p></p>
+                  <p></p>
+                </div>
+                <div class="d-flex col-flex tasks-skeletion-right">
+                  <p></p>
+                  <p></p>
+                </div>
               </div>
             </div>
-            <el-row v-if="taskInfos.total && !loading" :gutter="20" class="user-tasks-cnt">
-              <el-col
-                :xs="24"
-                class="tasks-item"
-                v-for="(task, index) of taskInfos.list"
-                :key="index">
-                <task-card
-                  :info="task"
-                  reward
-                  @choose="chooseTask">
-                </task-card>
-              </el-col>
-            </el-row>
+            <transition name="ld-hide-in-fade">
+              <div
+                v-if="!taskInfos.total && !loading"
+                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-tasks">
+                <svg>
+                  <use xlink:href="#icon-no-candy"/>
+                </svg>
+                <p>You have nothing on LORD rewarded now.</p>
+                <div class="d-flex f-auto-center TTFontBolder">
+                  <span>Try to buy a LDB in</span>
+                  <span class="inline-block">
+                    <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/market')">Marketplace</ld-btn>
+                  </span>
+                </div>
+              </div>
+            </transition>
+            <transition name="ld-hide-in-fade">
+              <el-row v-if="taskInfos.total && !loading" :gutter="20" class="relative user-tasks-cnt">
+                <el-col
+                  :xs="24"
+                  class="tasks-item"
+                  v-for="(task, index) of taskInfos.list"
+                  :key="index">
+                  <task-card
+                    :info="task"
+                    reward
+                    @choose="chooseTask">
+                  </task-card>
+                </el-col>
+              </el-row>
+            </transition>
           </el-tab-pane>
         </el-tabs>
         <Pagination
@@ -339,6 +399,53 @@ export default {
       color: #999;
       &.is-active {
         color: inherit;
+      }
+    }
+  }
+
+  // user-tasks-skeletion
+  .user-tasks-skeletion {
+    position: absolute;
+    left: 0;
+    top: 70px;
+    width: 100%;
+    >div {
+      padding: 30px 45px;
+      background-color: $--skeletion-light;
+      border-radius: 5px;
+    }
+  }
+  .tasks-skeletion-left {
+    >p {
+      background-color: $--skeletion-dark;
+      &:nth-of-type(1) {
+        width: 280px;
+        height: 30px;
+      }
+      &:nth-of-type(2) {
+        margin-top: 15px;
+        width: 200px;
+        height: 20px;
+      }
+      &:nth-of-type(3) {
+        margin-top: 25px;
+        width: 280px;
+        height: 25px;
+      }
+    }
+  }
+  .tasks-skeletion-right {
+    >p {
+      background-color: $--skeletion-dark;
+      &:nth-of-type(1) {
+        margin-left: 50px;
+        width: 100px;
+        height: 15px;
+      }
+      &:nth-of-type(2) {
+        margin-top: 10px;
+        width: 150px;
+        height: 20px;
       }
     }
   }

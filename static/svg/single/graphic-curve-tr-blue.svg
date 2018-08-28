@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="860" height="464" viewBox="0 0 860 464">
+  <defs>
+    <rect id="graphic-curve-tr-a" width="860" height="464"/>
+    <linearGradient id="graphic-curve-tr-b" x1="24.271%" x2="110.039%" y1="80.908%" y2="-8.286%">
+      <stop offset="0%" stop-color="#7D72F0"/>
+      <stop offset="100%" stop-color="#1613B0"/>
+    </linearGradient>
+    <rect id="graphic-curve-tr-d" width="830" height="364"/>
+    <linearGradient id="graphic-curve-tr-e" x1="47.606%" x2="122.757%" y1="111.683%" y2="-32.857%">
+      <stop offset="0%" stop-color="#7D72F0"/>
+      <stop offset="100%" stop-color="#1613B0"/>
+    </linearGradient>
+    <rect id="graphic-curve-tr-g" width="600" height="453"/>
+    <linearGradient id="graphic-curve-tr-h" x1="-1.065%" x2="150.853%" y1="73.43%" y2="-21.489%">
+      <stop offset="0%" stop-color="#7D72F0"/>
+      <stop offset="100%" stop-color="#1613B0"/>
+    </linearGradient>
+    <rect id="graphic-curve-tr-j" width="650" height="310"/>
+    <linearGradient id="graphic-curve-tr-k" x1="2.866%" x2="124.225%" y1="115.567%" y2="-12.342%">
+      <stop offset="0%" stop-color="#7D72F0"/>
+      <stop offset="100%" stop-color="#1613B0"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <mask id="graphic-curve-tr-c" fill="#fff">
+      <use xlink:href="#graphic-curve-tr-a"/>
+    </mask>
+    <g fill="url(#graphic-curve-tr-b)" fill-rule="nonzero" mask="url(#graphic-curve-tr-c)" opacity=".3">
+      <path d="M0.302321185,0 L860.302321,0 L860.302321,463.999944 C745.542858,291.131502 707.618746,252.897229 507.312782,152.521497 C407.050246,102.278733 90.8622215,74.1367193 0.302321185,0 Z" transform="translate(-1)"/>
+    </g>
+    <g transform="translate(30)">
+      <mask id="graphic-curve-tr-f" fill="#fff">
+        <use xlink:href="#graphic-curve-tr-d"/>
+      </mask>
+      <g fill="url(#graphic-curve-tr-e)" fill-rule="nonzero" mask="url(#graphic-curve-tr-f)" opacity=".3">
+        <path d="M0.0693950368,0.319858995 L0.0683024951,0.319229574 L829.720602,0 L830.068302,364 C640.729298,258.287064 462.250995,193.666671 258.075413,121.40256 C151.397472,83.6453631 65.3945126,43.284771 0.0693950368,0.319858995 Z" transform="translate(-1)"/>
+      </g>
+    </g>
+    <g transform="translate(260)">
+      <mask id="graphic-curve-tr-i" fill="#fff">
+        <use xlink:href="#graphic-curve-tr-g"/>
+      </mask>
+      <g fill="url(#graphic-curve-tr-h)" fill-rule="nonzero" mask="url(#graphic-curve-tr-i)" opacity=".3">
+        <path d="M0.390896518,-0.000463787511 L599.39256,-0.000463787511 L599.39256,452.999356 C533.255172,424.847378 466.805557,388.113582 396.788147,333.398269 C273.997756,237.446635 141.865564,125.997355 0.390896518,-0.000463787511 Z"/>
+      </g>
+    </g>
+    <g transform="translate(210)">
+      <mask id="graphic-curve-tr-l" fill="#fff">
+        <use xlink:href="#graphic-curve-tr-j"/>
+      </mask>
+      <g fill="url(#graphic-curve-tr-k)" fill-rule="nonzero" mask="url(#graphic-curve-tr-l)" opacity=".3">
+        <path d="M0.000396880041,0 L650.000397,0 L650.000397,309.001474 C601.517588,296.660553 547.943031,287.595334 489.029121,281.732471 C305.718155,263.487079 142.574489,168.575099 0.000396880041,0 Z"/>
+      </g>
+    </g>
+  </g>
+</svg>

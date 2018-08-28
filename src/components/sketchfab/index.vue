@@ -140,7 +140,7 @@ export default {
         el.async = true
         document.head.appendChild(el)
         el.onload = () => {
-          setTimeout(() => resolve(), 0)
+          resolve()
         }
         el.onerror = (e) => reject(new Error(e))
       })

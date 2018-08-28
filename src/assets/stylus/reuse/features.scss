@@ -177,6 +177,12 @@
     color: #4E47D3;
     border-radius: 5px;
   }
+  &.absolute {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
 
 .contract-pending-tip {
@@ -192,9 +198,32 @@
 }
 
 /**
+ *  ldb card radial gradient
+ */
+.building-popularity-1 {
+  @include radial-gradient-bg(#8BC1FF, #C3DEFC);
+}
+.building-popularity-2 {
+  @include radial-gradient-bg(#97DBD9, #E7FDE1);
+}
+.building-popularity-3 {
+  @include radial-gradient-bg(#C0C0FF, #F2F1FD);
+}
+.building-popularity-4 {
+  @include radial-gradient-bg(#FFC3AE, #FDF1E1);
+}
+.building-popularity-5 {
+  @include radial-gradient-bg(#FFDA99, #FFE7C7);
+}
+
+/**
+ *  ldb card radial gradient -- end
+ */
+
+/**
  *  vue transtion style -- begin
  */
- .ld-hide-fade-enter-active, .ld-hide-fade-leave-active {
+.ld-hide-fade-enter-active, .ld-hide-fade-leave-active {
   opacity: 1;
   transition: opacity .4s cubic-bezier(0.4, 0, 0.2, 1);
 }

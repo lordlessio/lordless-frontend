@@ -385,3 +385,14 @@ export const formatLdbType = (type) => {
   ]
   return types[type - 1]
 }
+
+export const getMessageByCode = ({ code, errorMsg = '未知错误' }) => {
+  const message = {
+    2001: '您的Ap不足了，请耐心等待下次恢复。',
+    2002: '建筑的Ap不足了，请换个建筑继续吧。',
+    2003: '领主不可以领取自己建筑的糖果。',
+    2004: '该任务已经达到领取上限了。',
+    2011: '该任务不存在，可能它过期了'
+  }
+  return message[code] || errorMsg
+}

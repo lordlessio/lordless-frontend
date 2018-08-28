@@ -90,7 +90,7 @@
                   <building-card
                     :sale="ldb.chain.auction.isOnAuction"
                     :presale="ldb.chain.auction.isOnPreAuction"
-                    :ldbInfo="ldb"
+                    :info="ldb"
                     @choose="chooseLdb">
                   </building-card>
                 </el-col>

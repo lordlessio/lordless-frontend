@@ -5,12 +5,12 @@
     :style="`font-size: ${fontSize};border-radius: ${radius};`"
     @click="$router.push(`/owner/info`)">
     <div class="d-flex f-align-center" v-if="userInfo.address">
-      <div class="text-right user-avatar-info" v-if="showInfo">
+      <div class="text-right user-avatar-info" :class="{ 'order-1 left-margin': leftInfo }" v-if="showInfo">
         <p class="text-ellipsis user-nickname">
           <span v-if="userInfo.nickName">{{ userInfo.nickName }}</span>
-          <span v-else>{{ userInfo.address | splitAddress({ before: 4, end: 2 }) }}</span>
+          <span v-else>{{ userInfo.address | splitAddress({ before: 6, end: 2 }) }}</span>
         </p>
-        <p class="d-flex f-align-center f-justify-end">
+        <p class="d-flex f-align-center" :class="leftInfo ? 'f-justify-start' : 'f-justify-end'">
           <span class="inline-block line-height-1">
             <svg>
               <use xlink:href="#icon-color-star"/>
@@ -28,12 +28,13 @@
       </Blockies>
     </div>
     <ld-btn
-      v-if="!userInfo.address"
+      v-if="!userInfo.address && !tip"
       class="user-getting-start"
       :theme="theme === 'dark' ? 'blue' : 'deep-blue'"
       :inverse="theme === 'dark'"
       @click.native="sign"
       shadow>{{ loginText }}</ld-btn>
+    <p class="TTFontBolder top-login-text" v-if="!userInfo.address && tip" @click.stop="sign">{{ loginText }}</p>
     <authorize
       ref="authorize"
       @blurs="dialogSetBlurs($event, 0)">
@@ -78,9 +79,19 @@ export default {
       type: Boolean,
       default: true
     },
+    leftInfo: {
+      type: Boolean,
+      default: false
+    },
     theme: {
       type: String,
       default: 'dark'
+    },
+
+    // 是否从 headerTip 引用
+    tip: {
+      type: Boolean,
+      default: false
     }
   },
   components: {
@@ -146,7 +157,6 @@ export default {
     }
   }
   .user-avatar-info {
-    margin-right: 15px;
     >p {
       font-size: 18px;
       &:nth-of-type(2) {
@@ -158,6 +168,12 @@ export default {
         height: 14px;
       }
     }
+    &:not(.left-margin) {
+      margin-right: 15px;
+    }
+    &.left-margin {
+      margin-left: 15px;
+    }
   }
   .user-nickname {
     max-width: 80px;
@@ -167,5 +183,9 @@ export default {
   }
   .user-sign {
     cursor: pointer;
+  }
+  .top-login-text {
+    color: $--text-blue-purple-color;
+    font-size: 18px;
   }
 </style>

@@ -1,12 +1,13 @@
 <template>
   <div class="ldb-detail-main">
     <ldb-header-tool
+      ref="ldbDetailHeader"
       :info="ldbInfo"
       :dialog="dialog"
       :isHome.sync="isHome"
       :tasks.sync="candyTasks"
       :loading="infoLoading"
-      :owner="false"
+      :owner="ldbInfo.lord._id === userInfo._id"
       :userInfo="userInfo"
       @receive="receiveCandy">
     </ldb-header-tool>
@@ -107,7 +108,7 @@ import Authorize from '@/components/reuse/dialog/authorize'
 import LdbSell from '@/components/reuse/dialog/ldb/sell'
 
 import range from 'lodash/range'
-
+import { getMessageByCode } from 'utils/tool'
 import { contractMixins, dialogMixins, metamaskMixins } from '@/mixins'
 import { getHome, receiveTask, getLdbById, getActivitysByTokenId, getUserPendingsByTokenId, getLdb2Round } from 'api'
 
@@ -230,7 +231,8 @@ export default {
   },
   methods: {
     ...mapActions('user', [
-      actionTypes.USER_UPT_USER_AP
+      actionTypes.USER_UPT_USER_AP,
+      actionTypes.USER_SET_USER_BY_TOKEN
     ]),
 
     async checkHome ({ ldbId = this.ldbInfo._id, userId = this.userInfo.address } = {}) {
@@ -257,7 +259,7 @@ export default {
       } else {
         this.$notify.error({
           title: '建筑信息获取失败!',
-          message: res.errorMsg,
+          message: getMessageByCode(res),
           position: 'bottom-right',
           duration: 5000
         })
@@ -333,7 +335,7 @@ export default {
     /**
      * 获取当前建筑任务情况
      */
-    async getLdbTasks ({ ldbId = this.ldbInfo._id, userId = this.userInfo.address }) {
+    async getLdbTasks ({ ldbId = this.ldbInfo._id, userId = this.userInfo.address } = {}) {
       this.ldbTaskLoading = true
       const res = await getLdb2Round({ ldbId })
       if (res.code === 1000 && res.data) {
@@ -646,11 +648,17 @@ export default {
       } else {
         this.$notify.error({
           title: '糖果领取失败!',
-          message: res.errorMsg,
+          message: getMessageByCode(res),
           position: 'bottom-right',
-          duration: 5000
+          duration: 3500
         })
         cbData.errorMsg = res.errorMsg
+        if (res.code === 2001) {
+          await this[actionTypes.USER_SET_USER_BY_TOKEN]()
+          this.$refs.ldbDetailHeader.getCandyTasks()
+        } else if (res.code === 2011) {
+          await this.getLdbTasks()
+        }
       }
       return cb(cbData)
     },
@@ -689,9 +697,9 @@ export default {
       } else {
         this.$notify.error({
           title: '任务领取失败!',
-          message: res.errorMsg || '未知错误',
+          message: getMessageByCode(res),
           position: 'bottom-right',
-          duration: 5000
+          duration: 3500
         })
         cbData.errorMsg = res.errorMsg
       }

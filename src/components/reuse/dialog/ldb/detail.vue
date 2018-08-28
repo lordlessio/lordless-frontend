@@ -5,7 +5,9 @@
       @open="dialogOpen"
       @close="dialogClose">
       <!-- <ldb-detail-skeletion :visible="loading" dialog></ldb-detail-skeletion> -->
-
+      <div class="sm-hidden text-nowrap ldb-detail-dialog-tip">
+        <header-tip :market="false" leftInfo></header-tip>
+      </div>
       <ldb-detail
         v-show="!loading"
         :class="{ 'blur': blurs[1] }"
@@ -20,7 +22,8 @@
 
 <script>
 import LdbDetailSkeletion from '@/components/skeletion/ldb/detail'
-import LdbDetail from '@/components/ldb/detail'
+import LdbDetail from '@/components/content/ldb/detail'
+import HeaderTip from '@/components/reuse/headerTip'
 
 import SlideDialog from '@/components/stories/dialog/slider'
 
@@ -59,7 +62,8 @@ export default {
     LdbDetailSkeletion,
 
     SlideDialog,
-    LdbDetail
+    LdbDetail,
+    HeaderTip
   },
   methods: {
     ...mapMutations('layout', [
@@ -71,7 +75,7 @@ export default {
      */
 
     dialogOpen () {
-      setTimeout(() => {
+      const openTimeout = setTimeout(() => {
         // if (this.prevLdbId && this.prevLdbId === this.ldbId) {
         //   this.loading = false
         //   this.initLoading()
@@ -79,6 +83,7 @@ export default {
         // }
         this.loading = false
         this.$refs.ldbDetail.init(this.ldbId)
+        clearTimeout(openTimeout)
       }, 500)
     },
 
@@ -127,5 +132,12 @@ export default {
     width: 100%;
     height: 100%;
     background-color: #fff;
+  }
+  .ldb-detail-dialog-tip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    // transform: translateX(50%);
+    z-index: 9;
   }
 </style>

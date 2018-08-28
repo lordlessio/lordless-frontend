@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import LdbDetail from '@/components/ldb/detail'
+import LdbDetail from '@/components/content/ldb/detail'
 export default {
   data: () => {
     return {}

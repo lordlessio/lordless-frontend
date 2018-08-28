@@ -13,9 +13,9 @@ module.exports = axios => {
       return axios.get('/api/listLdb2Round', { params })
     },
 
-    // 根据 ldbId 获取最近完成的任务
-    getApprovedTaskByLdbId: (ldbId, params) => {
-      return axios.get(`/api/task/approved/${ldbId}`, { params })
+    // 根据条件获取最近完成的任务
+    getApprovedTask: (params) => {
+      return axios.get('/api/task/approved', { params })
     }
   }
 }
