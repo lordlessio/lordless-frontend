@@ -126,17 +126,9 @@ export default {
             console.log('other：This is an unknown network.')
         }
       })
-    },
-    consoleFont () {
-      console.info(`%c
-    ╦   ╔═╗ ╦═╗ ╔╦╗ ╦   ╔═╗ ╔═╗ ╔═╗      ╔╦╗ ╔═╗ ╔═╗ ╔╦╗ ╦
-    ║   ║ ║ ╠╦╝  ║║ ║   ║╣  ╚═╗ ╚═╗       ║  ║╣  ╠═╣ ║║║ ║
-    ╩═╝ ╚═╝ ╩╚═ ═╩╝ ╩═╝ ╚═╝ ╚═╝ ╚═╝       ╩  ╚═╝ ╩ ╩ ╩ ╩ o
-    `, 'color: #4586FC;')
     }
   },
   mounted () {
-    this.consoleFont()
     // document.getElementById('outside-loading').style = 'display: none'
     this.$nextTick(() => this[actionTypes.STATUS_INIT_BROSWER]())
   }
