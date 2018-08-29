@@ -708,8 +708,13 @@ export default {
 
     destory () {
       this.$refs.approvedTask.clearApproved()
+      this.initStatus()
+      this.initContractStatus()
       this.clearCInterval({ all: true })
     }
+  },
+  beforeDestroy () {
+    this.destory()
   },
   mounted () {
     // if (!this.dialog) {

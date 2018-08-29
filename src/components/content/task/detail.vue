@@ -1,40 +1,42 @@
 <template>
   <div class="relative">
-    <div v-if="loading" class="ld-task-skeletion">
-      <div class="d-flex col-flex f-auto-center task-skeletion-header">
-        <div class="skeletion-header-container skeletion-breath">
-          <h2></h2>
-          <div class="d-flex f-align-center">
-            <p></p>
+    <transition name="ld-suspension-hide-fade">
+      <div v-if="loading" class="ld-task-skeletion">
+        <div class="d-flex col-flex f-auto-center task-skeletion-header">
+          <div class="skeletion-header-container skeletion-breath">
+            <h2></h2>
+            <div class="d-flex f-align-center">
+              <p></p>
+              <div>
+                <p></p>
+                <p></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="task-skeletion-cnt skeletion-breath">
+          <h1></h1>
+          <p></p>
+          <p></p>
+          <p></p>
+          <p></p>
+          <div class="d-flex">
             <div>
+              <p></p>
+              <p></p>
+            </div>
+            <div class="v-flex">
+              <p></p>
+              <p></p>
+            </div>
+            <div class="v-flex">
               <p></p>
               <p></p>
             </div>
           </div>
         </div>
       </div>
-      <div class="task-skeletion-cnt skeletion-breath">
-        <h1></h1>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
-        <div class="d-flex">
-          <div>
-            <p></p>
-            <p></p>
-          </div>
-          <div class="v-flex">
-            <p></p>
-            <p></p>
-          </div>
-          <div class="v-flex">
-            <p></p>
-            <p></p>
-          </div>
-        </div>
-      </div>
-    </div>
+    </transition>
     <transition name="ld-hide-fade">
       <div v-if="!loading && taskInfo" class="ld-task-box" :class="{ 'dialog': dialog }">
         <div class="d-flex f-auto-center task-detail-header">
@@ -252,7 +254,14 @@ export default {
     },
     async startTask (taskInfo = this.taskInfo) {
       window.open(taskInfo.ldbTaskType.url)
+    },
+    destory () {
+      this.taskInfo = null
+      this.loading = true
     }
+  },
+  beforeDestroy () {
+    this.destory()
   }
 }
 </script>
@@ -378,6 +387,10 @@ export default {
       .task-detail-header {
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
+      }
+      .task-status-box {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
       }
       .task-rewards-box {
         margin-top: 0;

@@ -1,24 +1,28 @@
 <template>
-  <div>
-    <slide-dialog
-      :visible.sync="detailModel"
-      @open="dialogOpen"
-      @close="dialogClose">
-      <!-- <ldb-detail-skeletion :visible="loading" dialog></ldb-detail-skeletion> -->
+  <el-dialog
+    :visible.sync="detailModel"
+    :custom-class="`lordless-dialog dialog-ldb-detail transparent ${(blurs[1] && value) ? 'blur' : ''}`"
+    lock-scroll
+    append-to-body
+    :top="top"
+    :show-close="false"
+    @open="dialogOpen"
+    @close="dialogClose">
+    <div>
+      <span @click.stop="$emit('input', false)" class="inline-block dialog-ldb-close">
+        <i class="el-icon-close"></i>
+      </span>
       <task-detail
-        v-show="!loading"
         ref="taskDetail"
         dialog
         :taskId="taskId">
       </task-detail>
-    </slide-dialog>
-  </div>
+    </div>
+  </el-dialog>
 </template>
 
 <script>
 import TaskDetail from '@/components/content/task/detail'
-
-import SlideDialog from '@/components/stories/dialog/slider'
 
 import { mutationTypes } from '@/store/types'
 import { mapMutations } from 'vuex'
@@ -36,7 +40,6 @@ export default {
   },
   data: () => {
     return {
-      loading: true,
       detailModel: false
     }
   },
@@ -46,8 +49,7 @@ export default {
     }
   },
   components: {
-    TaskDetail,
-    SlideDialog
+    TaskDetail
   },
   methods: {
     ...mapMutations('layout', [
@@ -59,29 +61,23 @@ export default {
      */
     dialogOpen () {
       this.$emit('open')
-      setTimeout(() => {
-        this.loading = false
+      this.$nextTick(() => {
         this.$refs.taskDetail.init(this.taskId)
-      }, 500)
+      })
     },
 
     /**
      * 对话框关闭事件
      */
     dialogClose () {
-      const taskDetail = this.$refs.taskDetail
-      if (taskDetail) {
-        taskDetail.destory()
-      }
       this.$emit('input', false)
       this.$emit('close')
-      this[mutationTypes.LAYOUT_SET_BLURS](0)
     }
   },
   watch: {
     value (val) {
-      this.loading = true
       this.detailModel = val
+      this[mutationTypes.LAYOUT_SET_BLURS](val ? 1 : 0)
     },
     detailModel (val) {
       this.$emit('input', val)

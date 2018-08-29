@@ -91,11 +91,13 @@ export default {
      * 对话框关闭事件
      */
     dialogClose () {
-      this.$emit('input', false)
       const ldbDetail = this.$refs.ldbDetail
-      console.log('-----close', ldbDetail, Boolean(ldbDetail))
-      if (ldbDetail) ldbDetail.clearCInterval()
+      if (ldbDetail) {
+        ldbDetail.destory()
+      }
       this[mutationTypes.LAYOUT_SET_BLURS](0)
+      this.$emit('input', false)
+      this.$emit('close')
     },
 
     initDetailInfo ({ chain } = {}) {
@@ -113,11 +115,6 @@ export default {
     value (val) {
       console.log('--------- dialog value', val)
       this.loading = true
-      if (!val) {
-        this.$refs.ldbDetail.initStatus()
-        this.$refs.ldbDetail.destory()
-        this.$emit('close')
-      }
       this.detailModel = val
     },
     detailModel (val) {
