@@ -116,7 +116,7 @@ export default {
       // const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}" style="width: 100%"/><p>${name}</p><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>800 / 1000</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${600 / 1000 * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
       // const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}"/><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>${apLeft} / ${ap}</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${apLeft / ap * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
       const boxHtml = `
-      <div class="_marker--ldb-container">
+      <div class="d-flex col-flex _marker--ldb-container">
         <img src="${imgSrc}"/>
         <div class="_marker--info-box">
           <div class="d-flex col-flex _marker--info-container">
@@ -703,13 +703,14 @@ export default {
 
   ._marker--ldb-container {
     // width: 250px;
-    margin: 0 auto;
-    width: 66.7%;
+    // margin: 0 auto;
     line-height: 1;
     transform: translateY(-35%);
     color: #999;
     >img {
-      width: 100%;
+      margin: 0 auto;
+      width: 66.7%;
+      // width: 100%;
       // transform: translateX(30%);
     }
     // height: 100%;
@@ -719,6 +720,7 @@ export default {
   }
 
   ._marker--info-box {
+    margin: 0 auto;
     display: inline-block;
     min-width: 160px;
     max-width: 180px;
