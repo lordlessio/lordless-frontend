@@ -251,8 +251,7 @@ export default {
         page,
         offset,
         sort,
-        order,
-        market: true
+        order
       }
       const res = await getChainLdbs(params)
       if (res.code === 1000) {

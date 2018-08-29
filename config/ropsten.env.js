@@ -5,7 +5,7 @@ const contract = JSON.stringify(require('../.contract/ropsten.json'))
 
 module.exports = merge({
   NODE_ENV: '"ropsten"',
-  LDBICON_ORIGIN: '"https://lordless.oss-cn-hongkong.aliyuncs.com/"',
+  LDBICON_ORIGIN: '"https://cdn.lordlessio.com"',
   OSSFOLDERPATH: 'ropsten_dist',
   BACKEND_SERVER: '"//ropsten.lordless.games"',
   ETHERSCANURL: '"https://ropsten.etherscan.io/"',

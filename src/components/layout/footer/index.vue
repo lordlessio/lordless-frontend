@@ -86,12 +86,12 @@
         <div class="ld-footer-letter">
           <strong>Newsletter</strong>
           <p>The latest LORDLESS news, articles, and resources, sent straight to your inbox every month.</p>
-          <div class="d-flex footer-subscribe-eamil">
+          <a href="http://eepurl.com/dsLYcr" target="_blank" class="d-flex footer-subscribe-eamil">
             <p class="v-flex footer-subscribe-input">
-              <input type="text" placeholder="Your email"/>
+              <input disabled type="text" placeholder="Email me when it's ready"/>
             </p>
             <span class="TTFontBolder inline-block">Subscribe</span>
-          </div>
+          </a>
           <div class="footer-link-icons">
             <a class="inline-block" href="https://t.me/lordlessio" target="_blank">
               <svg>

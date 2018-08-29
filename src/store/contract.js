@@ -2,7 +2,7 @@
 /**
  * contract store options
  */
-import { NFTsCrowdsale, Building, LDBNFTs } from '@/contract'
+import { NFTsCrowdsale, TavernNFTs } from '@/contract'
 import { mutationTypes, actionTypes } from './types'
 import web3Store from './web3'
 export default {
@@ -16,11 +16,8 @@ export default {
     isCrowdsaleApproved: false,
 
     // 合约
-    LDBNFTs: null,
-    NFTsCrowdsale: null,
-
-    // 测试使用
-    Building: null
+    TavernNFTs: null,
+    NFTsCrowdsale: null
   },
 
   mutations: {
@@ -40,10 +37,10 @@ export default {
      * check crowdsale by address
      */
     [actionTypes.CONTRACT_CHECK_CROWDSALE]: async ({ state, commit }, address) => {
-      const { LDBNFTs, NFTsCrowdsale } = state
+      const { TavernNFTs, NFTsCrowdsale } = state
       let isCrowdsaleApproved
       if (!address) isCrowdsaleApproved = false
-      else isCrowdsaleApproved = await LDBNFTs.methods('isApprovedForAll', [address, NFTsCrowdsale.address])
+      else isCrowdsaleApproved = await TavernNFTs.methods('isApprovedForAll', [address, NFTsCrowdsale.address])
 
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'isCrowdsaleApproved', value: isCrowdsaleApproved })
       return isCrowdsaleApproved
@@ -59,8 +56,8 @@ export default {
       // 如果是 monitor 的状态，不重置合约文件
       if (!monitor) {
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'NFTsCrowdsale', value: NFTsCrowdsale(web3js) })
-        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Building', value: Building(web3js) })
-        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'LDBNFTs', value: LDBNFTs(web3js) })
+        // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Building', value: Building(web3js) })
+        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'TavernNFTs', value: TavernNFTs(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'contractReady', value: true })
       }
 
@@ -78,7 +75,7 @@ export default {
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'address', value: null })
       // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'NFTsCrowdsale', value: null })
       // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'buildingContract', value: null })
-      // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'LDBNFTs', value: null })
+      // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'TavernNFTs', value: null })
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'isCrowdsaleApproved', value: false })
     }
   }

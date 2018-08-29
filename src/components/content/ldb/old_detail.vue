@@ -754,7 +754,7 @@ export default {
     // ldbId (val) {
     //   if (val) this.getLdbInfo(val)
     // },
-    LDBNFTs (val) {
+    TavernNFTs (val) {
       if (val) {
         this.checkLdbNFT(this.ldbInfo.chain.tokenId, val)
       }

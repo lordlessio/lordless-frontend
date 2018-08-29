@@ -31,7 +31,7 @@ export default {
       'userInfo'
     ]),
     ...mapState('contract', [
-      'LDBNFTs',
+      'TavernNFTs',
       'NFTsCrowdsale'
     ]),
     account () {
@@ -50,8 +50,8 @@ export default {
     /**
      * 合约检查 721 资产状态
      */
-    // checkLdbNFT (tokenId, LDBNFTs = this.LDBNFTs) {
-    //   if (!LDBNFTs || !tokenId) return false
+    // checkLdbNFT (tokenId, TavernNFTs = this.TavernNFTs) {
+    //   if (!TavernNFTs || !tokenId) return false
 
     //   // 合约参数
     //   const ownerOf = {
@@ -60,7 +60,7 @@ export default {
     //   }
 
     //   // 检查该 721 资产是否属于当前 metamask 用户
-    //   LDBNFTs.methods(ownerOf.name, ownerOf.values)
+    //   TavernNFTs.methods(ownerOf.name, ownerOf.values)
     //     .then(d => {
     //       // this.contractStatus = Object.assign({}, this.contractStatus, {
     //       //   ldbNFTOwner: d === this.account
@@ -125,7 +125,7 @@ export default {
     //     })
     // },
 
-    // async checkCrowdsaleEvent ({ address, LDBNFTs = this.LDBNFTs, NFTsCrowdsale = this.NFTsCrowdsale } = {}, cb) {
+    // async checkCrowdsaleEvent ({ address, TavernNFTs = this.TavernNFTs, NFTsCrowdsale = this.NFTsCrowdsale } = {}, cb) {
     //   if (!address) return
     //   const index = this.intervals.length
     //   let interval = this.intervals[index]
@@ -133,7 +133,7 @@ export default {
     //   if (interval) this.clearCInterval({ index })
     //   // 创建新定时器实例
     //   interval = setInterval(async () => {
-    //     const bool = await LDBNFTs.methods('isApprovedForAll', [address, NFTsCrowdsale.address])
+    //     const bool = await TavernNFTs.methods('isApprovedForAll', [address, NFTsCrowdsale.address])
     //     if (bool) {
     //       this.clearCInterval({ index })
     //       if (cb) cb()

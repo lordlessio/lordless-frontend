@@ -75,7 +75,7 @@ export default {
   },
   computed: {
     ...mapState('contract', [
-      'LDBNFTs',
+      'TavernNFTs',
       'NFTsCrowdsale'
     ]),
 
@@ -98,9 +98,9 @@ export default {
      * 检查是否 授权了市场合约
      */
     // async checkCrowdsale () {
-    //   const LDBNFTs = this.LDBNFTs
+    //   const TavernNFTs = this.TavernNFTs
     //   const NFTsCrowdsale = this.NFTsCrowdsale
-    //   const crowdsaleModel = await LDBNFTs.isApprovedForAll(this.address, NFTsCrowdsale.address)
+    //   const crowdsaleModel = await TavernNFTs.isApprovedForAll(this.address, NFTsCrowdsale.address)
     //   console.log('authorize crowdsaleModel', crowdsaleModel)
     //   if (!crowdsaleModel) this.$emit('input', true)
     //   else this.$emit('input', false)
@@ -112,7 +112,7 @@ export default {
     /**
      * 授权市场合约
      */
-    async chooseCrowdsale ({ LDBNFTs = this.LDBNFTs, web3Opt = this.web3Opt, NFTsCrowdsale = this.NFTsCrowdsale } = {}) {
+    async chooseCrowdsale ({ TavernNFTs = this.TavernNFTs, web3Opt = this.web3Opt, NFTsCrowdsale = this.NFTsCrowdsale } = {}) {
       const crowdsaleModel = this.crowdsaleModel
 
       if (!crowdsaleModel) {
@@ -128,11 +128,11 @@ export default {
         }
 
         // 估算 gas,不准
-        // const gas = (await LDBNFTs.estimateGas(setApprovalForAll.name, setApprovalForAll.values)) || 300000
+        // const gas = (await TavernNFTs.estimateGas(setApprovalForAll.name, setApprovalForAll.values)) || 300000
         const gas = 300000
 
         // 执行合约
-        LDBNFTs.methods(setApprovalForAll.name, setApprovalForAll.values.concat([{ gas, gasPrice }]))
+        TavernNFTs.methods(setApprovalForAll.name, setApprovalForAll.values.concat([{ gas, gasPrice }]))
           .then(tx => {
             this.crowdsalePending = true
             this.metamaskChoose = false
