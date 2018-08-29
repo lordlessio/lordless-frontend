@@ -133,7 +133,7 @@ export default {
     position: relative;
     padding: 35px 40px;
     padding-right: 140px;
-    background-image: url('/static/svg/single/graphic-curve-tr-blue.svg');
+    background-image: url('~static/svg/single/graphic-curve-tr-blue.svg');
     background-size: auto 100%;
     background-position: 100% 0;
     background-repeat: no-repeat;
