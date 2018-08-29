@@ -147,7 +147,7 @@
                   <p class="text-ellipsis info-ldb-influence">{{ overviews.home.ldb.chain.influence }} influence</p>
                   <div class="d-flex f-align-baseline info-home-status">
                     <p class="v-flex">{{ overviews.home.ldb.apLeft }} AP remaining</p>
-                    <ld-btn class="user-info-btn" theme="blue" inverse shadow @click="$router.push(`/ldb/${overviews.home.ldb._id}`)">Go</ld-btn>
+                    <ld-btn class="user-info-btn" theme="blue" inverse shadow @click="$router.push(`/tavern/${overviews.home.ldb._id}`)">Go</ld-btn>
                   </div>
                 </div>
               </div>
@@ -206,7 +206,7 @@
                 </div>
               </div>
               <div v-if="overviews.currentTask" class="v-flex d-flex col-flex task-current-know">
-                <p class="card-cnt-tip">A task from LDB <a href="#">#{{ overviews.currentTask.ldb.info.chain.tokenId }}</a> in progress</p>
+                <p class="card-cnt-tip">A task from Taverns <a href="#">#{{ overviews.currentTask.ldb.info.chain.tokenId }}</a> in progress</p>
                 <div class="v-flex d-flex col-flex task-current-cnt">
                   <p>{{ overviews.currentTask.ldbTaskType.name }}</p>
                   <ul class="d-flex task-current-data">
@@ -291,21 +291,21 @@
               </div>
             </div>
             <div class="v-flex d-flex col-flex info-cnt-box info-card-cnt assets-earnings-box" style="z-index: 2;">
-              <p class="card-cnt-title">LDB earnings</p>
+              <p class="card-cnt-title">Taverns earnings</p>
               <!-- <div class="info-list-skeletion" v-if="overviewLoading">
                 <p></p>
                 <p></p>
                 <p></p>
               </div> -->
               <div v-if="!overviews.ldbEarnings.total" class="v-flex d-flex col-flex assets-earnings-unknow">
-                <p class="card-cnt-tip">Rewards from LDB</p>
+                <p class="card-cnt-tip">Rewards from Taverns</p>
                 <div class="v-flex d-flex col-flex f-auto-center card-cnt-box">
                   <p>You have no transactions</p>
-                  <ld-btn class="user-info-btn" theme="blue" inverse shadow @click.native="$router.push('/market')">Buy a LDB</ld-btn>
+                  <ld-btn class="user-info-btn" theme="blue" inverse shadow @click.native="$router.push('/market')">Buy a Tavern</ld-btn>
                 </div>
               </div>
               <div v-if="overviews.ldbEarnings.total" class="v-flex d-flex col-flex assets-earnings-know">
-                <p class="card-cnt-tip">Rewards from LDB</p>
+                <p class="card-cnt-tip">Rewards from Taverns</p>
                 <div class="v-flex d-flex col-flex assets-earnings-list">
                   <ul class="text-left">
                     <li
@@ -345,14 +345,14 @@
                 <p></p>
               </div> -->
               <div v-if="!recentData.total" class="v-flex d-flex col-flex assets-recent-unknow">
-                <p class="card-cnt-tip">Rewards from LDB</p>
+                <p class="card-cnt-tip">Rewards from Taverns</p>
                 <div class="v-flex d-flex f-auto-center col-flex card-cnt-box">
                   <p>You have no transactions</p>
                   <ld-btn class="user-info-btn" theme="blue" inverse shadow @click.native="$router.push('/market')">Marketplace</ld-btn>
                 </div>
               </div>
               <div v-if="recentData.total" class="v-flex d-flex col-flex assets-recent-know">
-                <p class="card-cnt-tip">Rewards from LDB</p>
+                <p class="card-cnt-tip">Rewards from Taverns</p>
                 <div class="v-flex d-flex col-flex assets-recent-list">
                   <ul class="text-left">
                     <li

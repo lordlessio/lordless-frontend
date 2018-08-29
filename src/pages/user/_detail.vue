@@ -60,10 +60,10 @@
                 <svg>
                   <use xlink:href="#icon-no-ldb"/>
                 </svg>
-                <p>This have nothing on LDB now.</p>
+                <p>This have nothing on Tavern now.</p>
               </div>
               <div class="d-flex f-align-center building-sort">
-                <div class="v-flex">{{ total }} LDBs</div>
+                <div class="v-flex">{{ total }} Taverns</div>
                 <div>
                   <span>Sort by</span>
                   <ld-select
@@ -108,7 +108,7 @@
                 <p>There have nothing on sale now.</p>
               </div>
               <div class="d-flex f-align-center building-sort">
-                <div class="v-flex">{{ total }} LDBs</div>
+                <div class="v-flex">{{ total }} Taverns</div>
                 <div>
                   <span>Sort by</span>
                   <ld-select
@@ -286,7 +286,7 @@ export default {
       this.detailModel = true
       this.$nextTick(() => {
         this.detailInfo = item
-        historyState(`/ldb/${item._id}`)
+        historyState(`/tavern/${item._id}`)
       })
     },
 

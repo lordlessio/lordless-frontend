@@ -16,7 +16,7 @@
         <i class="el-icon-close"></i>
       </span>
       <div class="text-center dialog-sell-cnt">
-        <h1>Sell LDB</h1>
+        <h1>Sell Tavern</h1>
         <p class="text-left"><span>#{{ ldbInfo.chain.tokenId }}</span> will be placed for auction. When time expires, you need to cancel the auction, and then <span>#{{ ldbInfo.chain.tokenId }}</span> will be set free for sale.</p>
         <div class="dialog-sell-middle">
           <ld-input

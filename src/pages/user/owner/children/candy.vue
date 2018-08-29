@@ -50,7 +50,7 @@
                   <span class="inline-block">
                     <ld-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Task</ld-btn>
                   </span>
-                  <span>or buy a LDB in</span>
+                  <span>or buy a Tavern in</span>
                   <span class="inline-block">
                     <ld-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Marketplace</ld-btn>
                   </span>
@@ -128,7 +128,7 @@
                   <span class="inline-block">
                     <ld-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Task</ld-btn>
                   </span>
-                  <span>or buy a LDB in</span>
+                  <span>or buy a Tavern in</span>
                   <span class="inline-block">
                     <ld-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Marketplace</ld-btn>
                   </span>
@@ -236,7 +236,7 @@
                   </ul>
                   <ul class="candy-aside-ul candy-ldb-related">
                     <li>
-                      <p>Related LDB</p>
+                      <p>Related Tavern</p>
                       <p class="aside-big-name">#{{ aside.data.ldb.info._id }}</p>
                     </li>
                     <li>

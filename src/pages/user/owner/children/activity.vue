@@ -10,7 +10,7 @@
         </svg>
         <p>You have no Activity now.</p>
         <div class="d-flex f-auto-center TTFontBolder">
-          <span>Try to purchase or sell a LDB in</span>
+          <span>Try to purchase or sell a Tavern in</span>
           <span class="inline-block">
             <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/market')">Marketplace</ld-btn>
           </span>

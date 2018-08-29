@@ -16,7 +16,7 @@
         <p class="crowdsale-markline"></p>
         <div class="crowdsale-cnt-bottom">
           <p class="TTFontBolder">Authorization</p>
-          <p class="TTFontNormal crowdsale-info-text">Authorization the <a :href="`${ETHERSCANURL}/address/${NFTsCrowdsale.address}`" target="_blank" class="TTFontBolder">Marketplace contract</a> to operate LDB</p>
+          <p class="TTFontNormal crowdsale-info-text">Authorization the <a :href="`${ETHERSCANURL}/address/${NFTsCrowdsale.address}`" target="_blank" class="TTFontBolder">Marketplace contract</a> to operate Taverns</p>
         </div>
         <div>
           <ld-btn

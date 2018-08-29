@@ -84,9 +84,9 @@ export default {
           path: '/owner/info'
         },
         {
-          name: 'LDB',
+          name: 'taverns',
           icon: 'building',
-          path: '/owner/ldb'
+          path: '/owner/taverns'
         },
         {
           name: 'candy',

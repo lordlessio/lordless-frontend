@@ -9,7 +9,7 @@ import Sign from '@/pages/user/sign.vue'
 import Market from '@/pages/market'
 import Lbs from '@/pages/lbs'
 
-import LdbDetail from '@/pages/ldb/_detail.vue'
+import TavernDetail from '@/pages/ldb/_detail.vue'
 
 import Status from '@/pages/help/status'
 
@@ -20,7 +20,7 @@ import UserDetail from '@/pages/user/_detail'
 import Owner from '@/pages/user/owner'
 import OwnerInfo from '@/pages/user/owner/children/info'
 import OwnerCandy from '@/pages/user/owner/children/candy'
-import OwnerBuildings from '@/pages/user/owner/children/buildings'
+import OwnerTaverns from '@/pages/user/owner/children/taverns'
 import OwnerTasks from '@/pages/user/owner/children/tasks'
 import OwnerAuthorization from '@/pages/user/owner/children/authorization'
 import OwnerActivity from '@/pages/user/owner/children/activity'
@@ -53,11 +53,11 @@ const router = new Router({
       }
     },
     {
-      path: '/ldb/:ldbId',
-      name: 'ldbDetail',
-      component: LdbDetail,
+      path: '/tavern/:ldbId',
+      name: 'TavernDetail',
+      component: TavernDetail,
       meta: {
-        title: 'lordless ldb detail',
+        title: 'lordless tavern detail',
         header: {
           fixed: true,
           scroll: true,
@@ -147,12 +147,12 @@ const router = new Router({
           }
         },
         {
-          path: 'ldb',
-          name: 'Owner-ldbs',
-          component: OwnerBuildings,
+          path: 'taverns',
+          name: 'Owner-taverns',
+          component: OwnerTaverns,
           meta: {
-            title: 'lordless owner ldbs',
-            navgation: 'ldb',
+            title: 'lordless owner taverns',
+            navgation: 'taverns',
             header: {
               show: false
             },

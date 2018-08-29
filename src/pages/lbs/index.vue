@@ -240,7 +240,7 @@ export default {
       lng = transferCoords(lng)
       lat = transferCoords(lat)
       this.$refs.lordMap.flyToCoords({ center: [lng, lat], pitch: this.lbsMPitch, zoom: this.mapScrollZooms[this.mapScrollZooms.length - 1] }, () => {
-        historyState(`${this.$route.path}?ldb=${ldbId}`)
+        historyState(`${this.$route.path}?tavern=${ldbId}`)
       })
     },
 
@@ -272,8 +272,8 @@ export default {
         // const coords = [transferCoords(lng), transferCoords(lat)].toString()
         // this.coordQuery = coords
 
-        this.coordsPath = `${this.$route.path}?ldb=${id}`
-        historyState(`/ldb/${info.id}`)
+        this.coordsPath = `${this.$route.path}?tavern=${id}`
+        historyState(`/tavern/${info.id}`)
       })
     },
 

@@ -24,7 +24,7 @@
               <p>≈ $ {{ task.executor.reward.count / task.reward.candy.USD2TokenCount | formatDecimal }}</p>
             </li>
             <li>
-              <p>Related LDB</p>
+              <p>Related Tavern</p>
               <p class="TTFontBolder">+{{ task.ldb.activeness }} AC</p>
               <p>#{{ task.ldb.info._id }}</p>
             </li>

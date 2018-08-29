@@ -44,7 +44,7 @@
                   <span>Make the first selling transaction for your</span>
                 </div> -->
                 <div class="d-flex f-auto-center TTFontBolder">
-                  <span>recive Task in LDB</span>
+                  <span>recive Task in Taverns</span>
                   <span class="inline-block">
                     <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/map')">Map</ld-btn>
                   </span>
@@ -101,7 +101,7 @@
                 </svg>
                 <p>You have no Candy Tasks now.</p>
                 <div class="d-flex f-auto-center TTFontBolder">
-                  <span>recive candy in LDB</span>
+                  <span>recive candy in Tavern</span>
                   <span class="inline-block">
                     <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/map')">Map</ld-btn>
                   </span>
@@ -158,7 +158,7 @@
                 </svg>
                 <p>You have nothing on LORD rewarded now.</p>
                 <div class="d-flex f-auto-center TTFontBolder">
-                  <span>Try to buy a LDB in</span>
+                  <span>Try to buy a Tavern in</span>
                   <span class="inline-block">
                     <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/market')">Marketplace</ld-btn>
                   </span>

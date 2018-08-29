@@ -45,7 +45,7 @@ export default {
         {
           symbol: 'marketplace',
           title: 'Marketplace contract',
-          desc: 'Authorized the marketplace contract to operate LDB',
+          desc: 'Authorized the marketplace contract to operate Taverns',
           icon: 'icon-marketplace',
           active: false,
           loading: false

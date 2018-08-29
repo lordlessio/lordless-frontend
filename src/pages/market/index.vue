@@ -9,13 +9,13 @@
       </div> -->
       <section class="text-center market-header">
         <h1>Marketplace</h1>
-        <p>Marketplace is an easy, convenient way to buy and sell your LDB.<br>
-          You can list LDBs in the marketplace to reach thousands of people<br>
-          in LORDLESS and find unique LDBs for sale.
+        <p>Marketplace is an easy, convenient way to buy and sell your Tavern.<br>
+          You can list Taverns in the marketplace to reach thousands of people<br>
+          in LORDLESS and find unique Taverns for sale.
         </p>
       </section>
       <section class="lg-d-flex f-align-center market-sort-bar">
-        <p class="lg-v-flex sm-text-left sm-mar-b4">Total {{ total }} LDBs on sale</p>
+        <p class="lg-v-flex sm-text-left sm-mar-b4">Total {{ total }} Taverns on sale</p>
         <div class="d-flex f-align-center">
           <span>Sort <span class="sm-hidden">by</span></span>
           <ld-select
@@ -57,7 +57,7 @@
             </svg>
             <p>Market have no building now.</p>
             <div class="d-flex f-auto-center TTFontBolder">
-              <span>See all ldbs in</span>
+              <span>See all Taverns in</span>
               <span class="inline-block">
                 <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('mapbox')">Map</ld-btn>
               </span>
@@ -231,7 +231,7 @@ export default {
       this.detailModel = true
       this.$nextTick(() => {
         this.detailInfo = info
-        historyState(`/ldb/${info._id}`)
+        historyState(`/tavern/${info._id}`)
       })
     },
 

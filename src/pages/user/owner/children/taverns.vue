@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex user-building-box">
     <div class="d-flex v-flex col-flex user-candy-container">
-      <h1 class="text-cap user-building-title">LDB</h1>
+      <h1 class="text-cap user-building-title">Taverns</h1>
       <transition name="ld-hide-in-fade">
         <div
           v-if="!buildings.length && !saleBuildings.length && !loading"
@@ -9,9 +9,9 @@
           <svg>
             <use xlink:href="#icon-no-ldb"/>
           </svg>
-          <p>You have no building now.</p>
+          <p>You have no Tavern now.</p>
           <div class="d-flex f-auto-center TTFontBolder">
-            <span>Try to buy a LDB in</span>
+            <span>Try to buy a Tavern in</span>
             <span class="inline-block">
               <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/market')">Marketplace</ld-btn>
             </span>
@@ -279,7 +279,7 @@ export default {
       this.detailModel = true
       this.$nextTick(() => {
         this.detailInfo = item
-        historyState(`/ldb/${item._id}`)
+        historyState(`/tavern/${item._id}`)
       })
     },
 

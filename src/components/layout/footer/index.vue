@@ -54,7 +54,7 @@
                 <router-link to="/owner/task">Tasks</router-link>
               </li>
               <li>
-                <router-link to="/owner/building">LDB</router-link>
+                <router-link to="/owner/taverns">Taverns</router-link>
               </li>
               <li>
                 <router-link to="/owner/authorization">Authorization</router-link>

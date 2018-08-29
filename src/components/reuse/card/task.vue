@@ -60,7 +60,7 @@
               <p>≈ {{ info.lord.reward.count / info.reward.candy.USD2TokenCount | formatDecimal }} <span class="text-upper">USD</span></p>
             </div>
             <div class="v-flex reward-cnt-item">
-              <p>Related LDB</p>
+              <p>Related Tavern</p>
               <p>#{{ info.ldb.info }}</p>
               <h2 class="color-blue">+10 <span>act</span></h2>
             </div>

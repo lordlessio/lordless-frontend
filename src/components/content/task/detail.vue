@@ -118,7 +118,7 @@
             </div>
             <div class="task-cnt-section task-rewards-box">
               <h1>Rewards</h1>
-              <p class="TTFontBolder">If the swordman wants to claim candy or get rewards of the task from the LDB, you need to battle with the LORD. The final reward is  based on the result of the battle.</p>
+              <p class="TTFontBolder">If the swordman wants to claim candy or get rewards of the task from the Tavern, you need to battle with the LORD. The final reward is  based on the result of the battle.</p>
               <div class="d-flex f-justify-between sm-col-flex text-center rewards-cards-box">
                 <span class="rewards-vs-svg sm-hidden">
                   <svg>
@@ -199,7 +199,7 @@
                     </div>
                   </div>
                   <div class="rewards-small-card blue">
-                    <p>Related LDB</p>
+                    <p>Related Tavern</p>
                     <p>+{{ taskInfo.ldb.activeness }} ac.</p>
                   </div>
                 </div>
