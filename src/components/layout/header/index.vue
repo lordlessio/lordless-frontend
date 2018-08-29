@@ -33,16 +33,16 @@
           </router-link>
         </span>
         <span class="inline-block header-right-item" data-type="link">
-          <router-link to="/">
+          <a href="https://github.com/lordlessio/game-contracts/wiki/FAQ" target="_blank">
             FAQs
-          </router-link>
+          </a>
         </span>
         <span class="inline-block header-right-item line-height-0" data-type="link">
-          <router-link to="/">
+          <a href="https://t.me/lordlessio" target="_blank">
             <svg>
               <use xlink:href="#icon-telegram"/>
             </svg>
-          </router-link>
+          </a>
         </span>
         <div class="header-right-item user-item sm-hidden" data-type="link">
           <user-avatar class="user-avatar" :theme="theme === 'dark' ? 'light' : 'dark'" :showText="false"></user-avatar>

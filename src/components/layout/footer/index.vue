@@ -9,22 +9,22 @@
                 <strong class="relative">LORDLESS<span class="inline-block ld-footer-beta">BETA</span></strong>
               </li>
               <li>
-                <router-link to="/lbs">LBS</router-link>
+                <router-link to="/map">Map</router-link>
               </li>
               <li>
-                <router-link to="/lbs">Marketplace</router-link>
+                <router-link to="/market">Marketplace</router-link>
               </li>
               <li>
                 <router-link to="/lbs">Home</router-link>
               </li>
               <li>
-                <router-link to="/lbs">Team</router-link>
+                <a href="http://lordless.io/team" target="_blank">Team</a>
               </li>
               <li>
-                <router-link to="/lbs">Roadmap</router-link>
+                <a href="http://lordless.io/#ROADMAP" target="_blank">Roadmap</a>
               </li>
               <li>
-                <router-link to="/lbs">Airdrop plan</router-link>
+                <a href="http://lordless.io/airdrop" target="_blank">Airdrop plan</a>
               </li>
             </ul>
             <ul class="ld-footer-ul footer-whitepaper-ul">
@@ -32,10 +32,10 @@
                 <strong>Whitepaper</strong>
               </li>
               <li>
-                <a target="_blank" href="">English</a>
+                <a target="_blank" href="http://lordless.io/whitepaper-en.pdf">English</a>
               </li>
               <li>
-                <a target="_blank" href="">中文</a>
+                <a target="_blank" href="http://lordless.io/whitepaper-cn.pdf">中文</a>
               </li>
             </ul>
           </div>
@@ -70,13 +70,15 @@
                 <strong>About</strong>
               </li>
               <li>
-                <router-link to="/">Team</router-link>
+                <a href="http://lordless.io/team" target="_blank">Team</a>
               </li>
               <li>
                 <router-link to="/">Guide</router-link>
               </li>
               <li>
-                <router-link to="/">FAQs</router-link>
+                <a href="https://github.com/lordlessio/game-contracts/wiki/FAQ" target="_blank">
+                  FAQs
+                </a>
               </li>
             </ul>
           </div>
@@ -91,31 +93,31 @@
             <span class="TTFontBolder inline-block">Subscribe</span>
           </div>
           <div class="footer-link-icons">
-            <span class="inline-block">
+            <a class="inline-block" href="https://t.me/lordlessio" target="_blank">
               <svg>
                 <use xlink:href="#icon-telegram"/>
               </svg>
-            </span>
-            <span class="inline-block">
+            </a>
+            <a class="inline-block" href="https://twitter.com/LordLessIo" target="_blank">
               <svg>
                 <use xlink:href="#icon-twitter"/>
               </svg>
-            </span>
-            <span class="inline-block">
+            </a>
+            <a class="inline-block" href="https://github.com/lordlessio" target="_blank">
               <svg>
                 <use xlink:href="#icon-github"/>
               </svg>
-            </span>
-            <span class="inline-block">
+            </a>
+            <a class="inline-block" href="https://medium.com/@LordLessIo" target="_blank">
               <svg>
                 <use xlink:href="#icon-medium"/>
               </svg>
-            </span>
-            <span class="inline-block">
+            </a>
+            <a class="inline-block" href="mailto:eury@lordless.io" target="_blank">
               <svg>
                 <use xlink:href="#icon-email"/>
               </svg>
-            </span>
+            </a>
           </div>
           <p class="footer-copyright">Copyright © 2017 - 2018 LORDLESS. All right reserved</p>
         </div>
@@ -285,9 +287,10 @@ export default {
 
   .footer-link-icons {
     margin-top: 45px;
-    >span {
+    >a {
       width: 22px;
       height: 22px;
+      cursor: pointer;
       &:not(:first-of-type) {
         margin-left: 25px;
       }
