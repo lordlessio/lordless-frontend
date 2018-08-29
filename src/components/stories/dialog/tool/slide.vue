@@ -1,11 +1,13 @@
 <template>
-  <transition name="ld-slide-fade">
+  <transition name="ld-slide-fade"
+    @after-enter="$emit('opened')"
+    @after-leave="$emit('closed')">
     <div
-      v-show="visible"
+      v-if="visible"
       ref="slide"
       class="ld-dialog-slide"
       @click.stop>
-      <div class="ld-slide-container">
+      <div v-show="rendered" class="ld-slide-container">
         <span @click.stop="$emit('update:visible', false)" class="lg-hidden inline-block dialog-ldb-close">
           <i class="el-icon-close"></i>
         </span>
@@ -16,10 +18,6 @@
 </template>
 
 <script>
-// import { transitionEvent } from 'utils/tool'
-
-import { actionTypes } from '@/store/types'
-import { mapActions } from 'vuex'
 export default {
   props: {
     visible: {
@@ -40,7 +38,6 @@ export default {
     visible (val) {
       if (val) {
         if (!this.rendered) this.rendered = true
-        this[actionTypes.LAYOUT_SET_APP_OPTIONS]({ transform: true })
         this.$emit('open')
         this.$nextTick(() => {
           this.$refs.slide.scrollTop = 0
@@ -50,15 +47,17 @@ export default {
         }
       } else {
         this.$emit('close')
-        this[actionTypes.LAYOUT_SET_APP_OPTIONS]({ transform: false })
       }
       // this.load(val)
     }
   },
   methods: {
-    ...mapActions('layout', [
-      actionTypes.LAYOUT_SET_APP_OPTIONS
-    ])
+    destroy () {
+      // if appendToBody is true, remove DOM node after destroy
+      if (this.appendToBody && this.$el && this.$el.parentNode) {
+        this.$el.parentNode.removeChild(this.$el)
+      }
+    }
 
     // load (status) {
     //   this.$el.addEventListener(transitionEvent(), () => {
@@ -72,7 +71,7 @@ export default {
   mounted () {
     if (this.visible) {
       this.rendered = true
-      this.open()
+      // this.open()
       if (this.appendToBody) {
         document.body.appendChild(this.$el)
       }
@@ -80,11 +79,7 @@ export default {
   },
 
   destroyed () {
-    this[actionTypes.LAYOUT_SET_APP_OPTIONS]({ transform: false })
-    // if appendToBody is true, remove DOM node after destroy
-    if (this.appendToBody && this.$el && this.$el.parentNode) {
-      this.$el.parentNode.removeChild(this.$el)
-    }
+    this.destroy()
     // this.$el.removeEventListener(transitionEvent(), () => {}, { once: true })
   }
 }

@@ -2,7 +2,7 @@
   <div>
     <slide-dialog
       :visible.sync="detailModel"
-      @open="dialogOpen"
+      @opened="dialogOpen"
       @close="dialogClose">
       <!-- <ldb-detail-skeletion :visible="loading" dialog></ldb-detail-skeletion> -->
       <task-detail
@@ -59,10 +59,8 @@ export default {
      */
     dialogOpen () {
       this.$emit('open')
-      setTimeout(() => {
-        this.loading = false
-        this.$refs.taskDetail.init(this.taskId)
-      }, 500)
+      this.loading = false
+      this.$nextTick(() => this.$refs.taskDetail.init(this.taskId))
     },
 
     /**

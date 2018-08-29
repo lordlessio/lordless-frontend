@@ -1,7 +1,7 @@
 <template>
   <transition name="ld-hide-fade">
     <div
-      v-show="visible"
+      v-if="visible"
       class="ld-ldb-dialog"
       @click="$emit('update:visible', false)">
     </div>
@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import { addClass, removeClass } from 'utils/tool'
 export default {
   props: {
     visible: {
@@ -25,18 +24,18 @@ export default {
     visible (val) {
       if (val) {
         document.body.appendChild(this.$el)
-        addClass('overflow-hidden', document.body)
-      } else {
-        removeClass('overflow-hidden', document.body)
+      }
+    }
+  },
+  methods: {
+    destroy () {
+      if (this.$el && this.$el.parentNode) {
+        this.$el.parentNode.removeChild(this.$el)
       }
     }
   },
   destroyed () {
-    removeClass('overflow-hidden', document.body)
-    // if appendToBody is true, remove DOM node after destroy
-    if (this.$el && this.$el.parentNode) {
-      this.$el.parentNode.removeChild(this.$el)
-    }
+    this.destroy()
   }
 }
 </script>

@@ -1,11 +1,11 @@
 <template>
   <el-container class="ld-user-box">
-    <Loading
+    <!-- <Loading
       :loading="false"
       crown
       position="fixed"
       :index="99">
-    </Loading>
+    </Loading> -->
     <aside class="d-flex lg-col-flex sm-row-flex ld-user-navgation">
       <div class="d-flex f-auto-center user-navgation-logo sm-hidden">
         <header-logo theme="deep-blue"></header-logo>
@@ -56,7 +56,7 @@
       ref="authorize"
       :modelClose="false"
       :autoClose="false"
-      @init="authorizeInit"
+      @init="checkUser"
       @blurs="dialogSetBlurs"
       @fClose="fCloseAuthorize">
     </Authorize>
@@ -67,7 +67,7 @@
 import HeaderLogo from '@/components/layout/header/logo'
 import LdHeader from '@/components/layout/header'
 import Authorize from '@/components/reuse/dialog/authorize'
-import Loading from '@/components/stories/loading'
+// import Loading from '@/components/stories/loading'
 
 import { dialogMixins } from '@/mixins'
 
@@ -125,7 +125,7 @@ export default {
     ])
   },
   components: {
-    Loading,
+    // Loading,
 
     HeaderLogo,
     LdHeader,
@@ -137,21 +137,13 @@ export default {
       actionTypes.USER_LOGOUT
     ]),
 
-    authorizeInit () {
-      console.log('-------authorizeInit')
-      this.checkUser()
-    },
-
     fCloseAuthorize () {
       if (this.loading) this.$router.push('/')
     },
 
     async checkUser () {
-      if (this.userInfo.address) {
-        this.loading = false
-        return
-      }
-      this.$refs.authorize.checkoutAuthorize({ init: true })
+      const authorize = this.$refs.authorize.checkoutAuthorize({ init: true })
+      this.loading = this.userInfo.address && !authorize
     },
 
     async logout () {
@@ -160,14 +152,11 @@ export default {
   },
   watch: {
     userInfo (val, oVal) {
-      this.$refs.authorize.checkoutAuthorize({ init: true })
-      this.loading = !val._id
+      this.$nextTick(() => this.checkUser())
     }
   },
   mounted () {
-    this.$nextTick(() => {
-      this.checkUser()
-    })
+    this.$nextTick(() => this.checkUser())
   }
 }
 </script>

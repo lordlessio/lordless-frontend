@@ -37,4 +37,3 @@ export const TavernNFTs = (web3js) => initContract(process.env.contract.TavernNF
 export const NFTsCrowdsale = (web3js) => initContract(process.env.contract.NFTsCrowdsale, web3js)
 // export const Power = (web3js) => initContract(process.env.contract.Power, web3js)
 // export const Building = (web3js) => initContract(process.env.contract.Building, web3js)
-
