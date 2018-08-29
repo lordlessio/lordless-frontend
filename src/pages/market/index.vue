@@ -123,7 +123,6 @@
     </div>
     <detail-dialog
       v-model="detailModel"
-      theme="light"
       :ldbId="detailInfo._id"
       @close="dialogClose">
     </detail-dialog>

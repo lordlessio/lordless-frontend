@@ -2,7 +2,7 @@
   <div>
     <slide-dialog
       :visible.sync="detailModel"
-      @open="dialogOpen"
+      @opened="dialogOpen"
       @close="dialogClose">
       <!-- <ldb-detail-skeletion :visible="loading" dialog></ldb-detail-skeletion> -->
       <div class="sm-hidden text-nowrap ldb-detail-dialog-tip">
@@ -13,7 +13,6 @@
         :class="{ 'blur': blurs[1] }"
         ref="ldbDetail"
         dialog
-        :theme="theme"
         @initInfo="initDetailInfo">
       </ldb-detail>
     </slide-dialog>
@@ -35,22 +34,15 @@ export default {
       type: Boolean,
       default: false
     },
-    ldbId: [String, Number],
-    theme: {
-      type: String,
-      default: 'light'
-    },
-    top: {
-      type: String,
-      default: '0px'
-    }
+    ldbId: [String, Number]
   },
   data: () => {
     return {
       prevLdbId: null,
       detailModel: false,
       loading: true,
-      tokenId: null
+      tokenId: null,
+      openTimeout: null
     }
   },
   computed: {
@@ -75,16 +67,9 @@ export default {
      */
 
     dialogOpen () {
-      const openTimeout = setTimeout(() => {
-        // if (this.prevLdbId && this.prevLdbId === this.ldbId) {
-        //   this.loading = false
-        //   this.initLoading()
-        //   return
-        // }
-        this.loading = false
-        this.$refs.ldbDetail.init(this.ldbId)
-        clearTimeout(openTimeout)
-      }, 500)
+      this.$emit('open')
+      this.loading = false
+      this.$nextTick(() => this.$refs.ldbDetail.init(this.ldbId))
     },
 
     /**
@@ -113,7 +98,6 @@ export default {
   },
   watch: {
     value (val) {
-      console.log('--------- dialog value', val)
       this.loading = true
       this.detailModel = val
     },
