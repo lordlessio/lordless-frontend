@@ -19,7 +19,7 @@
                 @change="filterTasks">
               </ld-select>
             </div>
-            <div v-if="loading" class="user-tasks-skeletion">
+            <div v-if="loading" class="user-tasks-skeletion has-filter">
               <div class="d-flex skeletion-breath">
                 <div class="v-flex tasks-skeletion-left">
                   <p></p>
@@ -409,6 +409,9 @@ export default {
     left: 0;
     top: 70px;
     width: 100%;
+    &.has-filter {
+      top: 130px;
+    }
     >div {
       padding: 30px 45px;
       background-color: $--skeletion-light;

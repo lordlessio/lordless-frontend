@@ -316,13 +316,15 @@ export const dateFormat = (date, format = 'MMMM Do YYYY, HH:mm:ss') => {
  */
 export const timeFormat = date => {
   const now = new Date()
-  if (differenceInCalendarISOYears(now, new Date(date))) return `${differenceInCalendarISOYears(now, new Date(date))} years ago`
-  else if (differenceInCalendarMonths(now, new Date(date))) return `${differenceInCalendarMonths(now, new Date(date))} months ago`
-  else if (differenceInCalendarISOWeeks(now, new Date(date))) return `${differenceInCalendarISOWeeks(now, new Date(date))} weeks ago`
-  else if (differenceInCalendarDays(now, new Date(date))) return `${differenceInCalendarDays(now, new Date(date))} days ago`
-  else if (differenceInHours(now, new Date(date))) return `${differenceInHours(now, new Date(date))} hours ago`
-  else if (differenceInMinutes(now, new Date(date))) return `${differenceInMinutes(now, new Date(date))} minutes ago`
-  else return `${differenceInSeconds(now, new Date(date))} seconds ago`
+  const fDate = new Date(date)
+  if (differenceInCalendarISOYears(now, fDate)) return `${differenceInCalendarISOYears(now, fDate)} years ago`
+  else if (differenceInCalendarMonths(now, fDate)) return `${differenceInCalendarMonths(now, fDate)} months ago`
+  else if (differenceInCalendarISOWeeks(now, fDate)) return `${differenceInCalendarISOWeeks(now, fDate)} weeks ago`
+  else if (differenceInCalendarDays(now, fDate)) return `${differenceInCalendarDays(now, fDate)} days ago`
+  else if (differenceInHours(now, fDate)) return `${differenceInHours(now, fDate)} hours ago`
+  else if (differenceInMinutes(now, fDate)) return `${differenceInMinutes(now, fDate)} minutes ago`
+  else if (differenceInSeconds(now, fDate) <= 10) return 'Just now'
+  else return `${differenceInSeconds(now, fDate)} seconds ago`
 }
 
 /**

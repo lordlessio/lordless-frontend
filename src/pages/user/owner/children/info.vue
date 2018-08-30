@@ -525,6 +525,7 @@ export default {
     },
 
     userAuthorize () {
+      if (this.isCrowdsaleApproved) return
       this.$refs.authorize.checkoutAuthorize({ crowdsale: true })
     },
 

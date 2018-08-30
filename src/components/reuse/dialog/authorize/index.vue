@@ -286,14 +286,19 @@ export default {
       this.showSign = false
     },
 
-    crowdsalePending (data, address = this.address) {
+    crowdsalePending ({ tx, pass = false }, address = this.address) {
+      if (pass) {
+        this[actionTypes.CONTRACT_CHECK_CROWDSALE](address)
+        this.closeDialog()
+        return
+      }
       if (this.pending) {
         this.checkCrowdsaleEvent({ address }, () => {
           this[actionTypes.CONTRACT_CHECK_CROWDSALE](address)
           this.closeDialog()
         })
       }
-      this.$emit('pending', data)
+      this.$emit('pending', { tx })
     }
   },
   watch: {

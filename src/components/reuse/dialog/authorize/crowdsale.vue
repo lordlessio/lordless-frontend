@@ -113,37 +113,43 @@ export default {
      * 授权市场合约
      */
     async chooseCrowdsale ({ TavernNFTs = this.TavernNFTs, web3Opt = this.web3Opt, NFTsCrowdsale = this.NFTsCrowdsale } = {}) {
-      const crowdsaleModel = this.crowdsaleModel
+      this.crowdsalePending = true
 
-      if (!crowdsaleModel) {
-        // metamask 是否被打开
-        this.metamaskChoose = true
-
-        const { gasPrice } = web3Opt
-
-        // 传输的合约参数
-        const setApprovalForAll = {
-          name: 'setApprovalForAll',
-          values: [ NFTsCrowdsale.address, true ]
-        }
-
-        // 估算 gas,不准
-        // const gas = (await TavernNFTs.estimateGas(setApprovalForAll.name, setApprovalForAll.values)) || 300000
-        const gas = 300000
-
-        // 执行合约
-        TavernNFTs.methods(setApprovalForAll.name, setApprovalForAll.values.concat([{ gas, gasPrice }]))
-          .then(tx => {
-            this.crowdsalePending = true
-            this.metamaskChoose = false
-            this.$emit('pending', { tx })
-          })
-          .catch(err => {
-            console.log('err', err)
-            this.metamaskChoose = false
-            this.$emit('error', err)
-          })
+      // 检查是否已经授权
+      const bool = await TavernNFTs.methods('isApprovedForAll', [this.address, NFTsCrowdsale.address])
+      console.log('--------- bool', bool, this.address)
+      if (bool) {
+        this.crowdsalePending = false
+        this.$emit('pending', { pass: true })
+        return
       }
+
+      // metamask 是否被打开
+      this.metamaskChoose = true
+
+      const { gasPrice } = web3Opt
+
+      // 传输的合约参数
+      const setApprovalForAll = {
+        name: 'setApprovalForAll',
+        values: [ NFTsCrowdsale.address, true ]
+      }
+
+      // 估算 gas,不准
+      // const gas = (await TavernNFTs.estimateGas(setApprovalForAll.name, setApprovalForAll.values)) || 300000
+      const gas = 300000
+
+      // 执行合约
+      TavernNFTs.methods(setApprovalForAll.name, setApprovalForAll.values.concat([{ gas, gasPrice }]))
+        .then(tx => {
+          this.metamaskChoose = false
+          this.$emit('pending', { tx })
+        })
+        .catch(err => {
+          console.log('err', err)
+          this.metamaskChoose = false
+          this.$emit('error', err)
+        })
     }
   },
   mounted () {

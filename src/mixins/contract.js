@@ -125,34 +125,35 @@ export default {
     //     })
     // },
 
-    // async checkCrowdsaleEvent ({ address, TavernNFTs = this.TavernNFTs, NFTsCrowdsale = this.NFTsCrowdsale } = {}, cb) {
-    //   if (!address) return
-    //   const index = this.intervals.length
-    //   let interval = this.intervals[index]
-    //   // 初始化实例
-    //   if (interval) this.clearCInterval({ index })
-    //   // 创建新定时器实例
-    //   interval = setInterval(async () => {
-    //     const bool = await TavernNFTs.methods('isApprovedForAll', [address, NFTsCrowdsale.address])
-    //     if (bool) {
-    //       this.clearCInterval({ index })
-    //       if (cb) cb()
-    //     }
-    //   }, 5000)
+    async checkCrowdsaleEvent ({ address, TavernNFTs = this.TavernNFTs, NFTsCrowdsale = this.NFTsCrowdsale } = {}, cb) {
+      if (!address) return
+      let interval = null
+      // 创建新定时器实例
+      interval = setInterval(async () => {
+        const bool = await TavernNFTs.methods('isApprovedForAll', [address, NFTsCrowdsale.address])
+        if (bool) {
+          clearInterval(interval)
+          interval = null
+          // this.clearCInterval({ index })
+          if (cb) cb()
+        }
+      }, 5000)
 
-    //   this.intervals[index] = interval
-    // },
+      // this.intervals[index] = interval
+    },
 
     /**
      * 检查 contract event 状态
      * @param {String} tx 合约地址
      * @param {Function} cb 需要执行的回调函数
      */
-    async checkTxEvent ({ tx, action, tokenId } = {}, cb) {
+    async checkTxEvent ({ tx, action, loop = false, tokenId } = {}, cb) {
       if (!tx) return
       if (action) {
         await postActivity({ tx, action, tokenId })
       }
+      if (!loop) return cb()
+
       const index = this.intervals.length
       let interval = this.intervals[index]
       // 初始化实例

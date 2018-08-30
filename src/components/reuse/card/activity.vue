@@ -9,7 +9,7 @@
             </svg>
           </span>
           <div class="v-flex ld-activity-desc">
-            <p>{{ info.market[0].txEndAt | dateFormat }}</p>
+            <p>{{ info.created_at | timeFormat }}</p>
             <p v-if="type === 'CANCELAUCTION'">You cancelled the sale of <span> Tavern #{{ info.market[0].tokenId }}. </span> You will get it back when the transaction is confirmed on chain.</p>
             <p v-else-if="type === 'NEWAUCTION'">You started a sale by action for <span> Tavern #{{ info.market[0].tokenId }}. </span></p>
             <p v-else>You requested to purchase <span> Tavern #{{ info.market[0].tokenId }}. </span> If nobody's confirmation comes earlier, you will get the Tavern finally.</p>
@@ -118,7 +118,7 @@ export default {
     >p {
       &:nth-of-type(1) {
         color: #555;
-        font-size: 14px;
+        font-size: 16px;
       }
       &:nth-of-type(2) {
         min-height: 50px;
