@@ -11,12 +11,13 @@
       :userInfo="userInfo"
       @receive="receiveCandy">
     </ldb-header-tool>
-    <section class="ldb-detail-content">
+    <section class="ldb-detail-content" :class="{ 'show': contentShow }">
       <div class="container md d-flex sm-col-flex">
         <div class="detail-cnt-left v-flex">
           <ldb-datas-tool
             :info.sync="ldbInfo"
-            :loading="infoLoading">
+            :loading="infoLoading"
+            @enter="contentShow = true">
           </ldb-datas-tool>
 
           <tasks-now-tool
@@ -124,6 +125,8 @@ export default {
   },
   data: () => {
     return {
+
+      contentShow: false,
 
       // ldbInfo loading 状态
       infoLoading: true,
@@ -750,8 +753,14 @@ export default {
    */
   .ldb-detail-content {
     position: relative;
-    transform: translateY(-80px);
+    opacity: 0;
+    transform: translateY(0);
     z-index: 2;
+    transition: opacity .15s ease-in-out, transform .45s ease-in-out;
+    &.show {
+      opacity: 1;
+      transform: translateY(-80px);
+    }
   }
 
   /* detail-cnt-right */

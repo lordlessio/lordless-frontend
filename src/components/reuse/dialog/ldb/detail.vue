@@ -117,7 +117,7 @@ export default {
   .ldb-detail-dialog-tip {
     position: absolute;
     left: 0;
-    top: 0;
+    top: 5px;
     // transform: translateX(50%);
     z-index: 9;
   }

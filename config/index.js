@@ -3,7 +3,7 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
-const fs = require('fs')
+// const fs = require('fs')
 
 const { format } = require('date-fns')
 const argv = require('yargs').argv
@@ -88,7 +88,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsDllDirectory: 'static/dll',
     ossPublicPath,
-    assetsPublicPath: `https://cdn.lordlessio.com/${ossPublicPath}`,
+    assetsPublicPath: `http://lordless.oss-cn-hongkong.aliyuncs.com/${ossPublicPath}`,
 
     /**
      * Source Maps

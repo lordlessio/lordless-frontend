@@ -9,7 +9,8 @@ const mutationTypes = {
   USER_SET_USER_TOKEN: 'setUserToken',
   USER_SET_USERS: 'setUsers',
   USER_SET_USER_EXPIRED: 'setUserExpired',
-  USER_UPT_USER_INFO: 'userUptUserInfo'
+  USER_UPT_USER_INFO: 'userUptUserInfo',
+  USER_SET_USER_HOME: 'userSetUserHome'
 }
 const actionTypes = {
   USER_META_LOGIN: 'metaLogin',
@@ -19,7 +20,8 @@ const actionTypes = {
   USER_GET_TOKEN_BY_ADDRESS: 'getTokenByAddress',
   USER_LOGOUT: 'userLogout',
   USER_SET_USER_EXPIRED: 'setUserExpired',
-  USER_UPT_USER_AP: 'userUptUserAp'
+  USER_UPT_USER_AP: 'userUptUserAp',
+  USER_SET_USER_HOME: 'userSetUserHome'
 }
 
 module.exports = {

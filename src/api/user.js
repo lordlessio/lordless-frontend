@@ -16,6 +16,11 @@ module.exports = axios => {
       return axios.get('/api/user/overview', { params })
     },
 
+    // 获取用户 home 信息
+    getUserHome: (params) => {
+      return axios.get('/api/user/home', { params })
+    },
+
     // 获取用户任务信息
     getUserTasks: (params) => {
       return axios.get('/api/user/tasks', { params })

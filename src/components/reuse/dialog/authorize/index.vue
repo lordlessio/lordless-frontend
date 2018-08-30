@@ -216,7 +216,7 @@ export default {
       if (this.web3Error) {
         this.$notify.error({
           title: 'web3初始化失败!',
-          message: '请检查 metamask 是否正常',
+          message: '请检查 Metamask 是否正常.',
           position: 'bottom-right',
           duration: 3500
         })
@@ -226,7 +226,7 @@ export default {
         this.$notify({
           type: 'warning',
           title: 'web3初始化中...',
-          message: 'web3正在初始化，请稍后重试。',
+          message: 'web3还在初始化, 检查 Metamask 后重试.',
           position: 'bottom-right',
           duration: 3500
         })

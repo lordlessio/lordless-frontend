@@ -131,22 +131,22 @@
           <transition name="ld-hide-in-fade">
             <div v-show="!overviewLoading" class="d-flex f-align-center info-cnt-box info-home-box">
               <div class="info-home-poster">
-                <svg v-if="!overviews.home">
+                <svg v-if="!userHome._id">
                   <use xlink:href="#icon-help"/>
                 </svg>
-                <img v-else :src="`/static/img/ldb/ldb-level-${overviews.home.ldb.chain.popularity}.png`"/>
+                <img v-else :src="`/static/img/ldb/ldb-level-${userHome.ldb.chain.popularity}.png`"/>
               </div>
               <div class="v-flex info-home-cnt">
-                <div class="info-home-unknow" v-if="!overviews.home">
+                <div class="info-home-unknow" v-if="!userHome._id">
                   <p>You have no home now.</p>
                   <p>Set a home you will be located there when you login.</p>
                   <ld-btn class="user-info-btn" theme="blue" inverse shadow @click="$router.push('/lbs')">View map now</ld-btn>
                 </div>
-                <div class="info-home-know" v-if="overviews.home">
-                  <p class="info-ldb-name">{{ overviews.home.ldb.name.zh }}</p>
-                  <p class="text-ellipsis info-ldb-influence">{{ overviews.home.ldb.chain.influence }} influence</p>
+                <div class="info-home-know" v-if="userHome._id">
+                  <p class="info-ldb-name">{{ userHome.ldb.name.zh }}</p>
+                  <p class="text-ellipsis info-ldb-influence">{{ userHome.ldb.chain.influence }} influence</p>
                   <div class="d-flex f-align-baseline info-home-status">
-                    <p class="v-flex">{{ overviews.home.ldb.apLeft }} AP remaining</p>
+                    <p class="v-flex">{{ userHome.ldb.apLeft }} AP remaining</p>
                     <ld-btn class="user-info-btn" theme="blue" inverse shadow @click="$router.push(`/tavern/${overviews.home.ldb._id}`)">Go</ld-btn>
                   </div>
                 </div>
@@ -461,14 +461,14 @@ export default {
           list: [],
           total: 0
         },
-        home: null,
         currentTask: null
       }
     }
   },
   computed: {
     ...mapState('user', [
-      'userInfo'
+      'userInfo',
+      'userHome'
     ]),
 
     balance () {
@@ -946,9 +946,9 @@ export default {
     }
     >img {
       position: absolute;
-      left: -10%;
-      top: -5%;
-      width: 120%;
+      left: -15%;
+      top: -15%;
+      width: 130%;
     }
   }
   .info-home-unknow {

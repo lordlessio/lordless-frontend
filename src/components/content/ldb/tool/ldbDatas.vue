@@ -6,7 +6,7 @@
       <datas-skeletion v-if="loading"></datas-skeletion>
     </transition>
 
-    <transition name="ld-hide-fade">
+    <transition name="ld-hide-fade" @after-enter="$emit('enter')">
       <section v-if="!loading" class="d-flex f-align-ceter sm-col-flex detail-ldb-datas">
         <div class="v-flex ldb-datas-item">
           <p class="datas-item-title">Level {{ info.chain.level }}</p>

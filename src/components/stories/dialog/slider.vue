@@ -34,7 +34,6 @@ export default {
   },
   watch: {
     visible (val) {
-      console.log('----- slider visible', val)
       this.dialogModel = val
       removeClass('overflow-hidden', document.body)
     },
@@ -60,6 +59,10 @@ export default {
       this[actionTypes.LAYOUT_SET_APP_OPTIONS]({ transform: false })
       removeClass('overflow-hidden', document.body)
     }
+  },
+  destroyed () {
+    this[actionTypes.LAYOUT_SET_APP_OPTIONS]({ transform: false })
+    removeClass('overflow-hidden', document.body)
   }
 }
 </script>

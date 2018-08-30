@@ -3,15 +3,14 @@
  */
 
 import { mutationTypes, actionTypes } from './types'
-import { getUserByAddress, getUserByToken, login } from '../api'
+import { getUserByAddress, getUserByToken, getUserHome, login } from '../api'
 import { stringifyParse, getObjStorage } from 'utils/tool'
 import web3Store from './web3'
 export default {
   namespaced: true,
   state: {
 
-    // 当前所有登陆过的用户
-    users: {},
+    userHome: {},
 
     // 当前用户
     userInfo: { default: true },
@@ -23,14 +22,6 @@ export default {
     userExpired: false
   },
   mutations: {
-
-    // 存储 users
-    [mutationTypes.USER_SET_USERS]: (state, payload = {}) => {
-      const address = payload.address
-      if (!address) return
-
-      state.users[address.toLocaleLowerCase()] = stringifyParse(payload)
-    },
 
     // 存储 userInfo
     [mutationTypes.USER_SET_USER_INFO]: (state, payload = {}) => {
@@ -61,6 +52,12 @@ export default {
     // 改变 userExpired 状态
     [mutationTypes.USER_SET_USER_EXPIRED]: (state, payload = true) => {
       state.userExpired = Boolean(payload)
+    },
+
+    // 存储 userHome 信息
+    [mutationTypes.USER_SET_USER_HOME]: (state, { home = {}, update = false } = {}) => {
+      if (!update) state.userHome = stringifyParse(home)
+      else state.userHome = stringifyParse(Object.assign({}, state.userHome, home))
     }
   },
   actions: {
@@ -109,23 +106,11 @@ export default {
 
     /**
      * 根据token获取用户信息
-     * @param {Object} obejct 包含两个参数：address, update
-     * @param {String} address: 代表当前请求用户的address
-     * @param {Boolean} update: 代表当前请求是否属于更新用户信息
      */
-    [actionTypes.USER_SET_USER_BY_TOKEN]: async ({ state, commit }, { update, address = window.localStorage.getItem('currentAddress') || '' } = {}) => {
-      // 如果 state[address], 代表此用户数据已存在，不需要继续请求接口
-      // 如果token过期？to do ...
-      address = address.toLocaleLowerCase()
-      if (!update && state.users[address]) {
-        commit(mutationTypes.USER_SET_USER_INFO, state.users[address])
-        return true
-      }
-
+    [actionTypes.USER_SET_USER_BY_TOKEN]: async ({ state, commit }) => {
       // 根据token请求用户信息
       const res = await getUserByToken()
       if (res.code === 1000 && res.data) {
-        // commit(mutationTypes.USER_SET_USERS, res.data)
         commit(mutationTypes.USER_SET_USER_INFO, res.data)
         if (state.userExpired) commit(mutationTypes.USER_SET_USER_EXPIRED, false)
         return true
@@ -173,6 +158,20 @@ export default {
     [actionTypes.USER_UPT_USER_AP]: ({ commit, state }, ap) => {
       if (!ap) return
       commit(mutationTypes.USER_UPT_USER_INFO, { ap: state.userInfo.ap - ap })
+    },
+
+    /**
+     * 根据token获取用户home
+     */
+    [actionTypes.USER_SET_USER_HOME]: async ({ commit }, { home = {}, update = false } = {}) => {
+      if (update) {
+        commit(mutationTypes.USER_SET_USER_HOME, { home, update })
+        return
+      }
+      const res = await getUserHome()
+      if (res.code === 1000 && res.data) {
+        commit(mutationTypes.USER_SET_USER_HOME, { home: res.data })
+      } else commit(mutationTypes.USER_SET_USER_HOME)
     }
   }
 }

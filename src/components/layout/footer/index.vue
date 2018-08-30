@@ -15,7 +15,7 @@
                 <router-link to="/market">Marketplace</router-link>
               </li>
               <li>
-                <router-link to="/lbs">Home</router-link>
+                <span class="cursor-pointer" @click.stop="jumpHome">Home</span>
               </li>
               <li>
                 <a href="http://lordless.io/team" target="_blank">Team</a>
@@ -128,6 +128,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   props: {
 
@@ -141,6 +142,18 @@ export default {
     theme: {
       type: String,
       default: 'dark'
+    }
+  },
+  computed: {
+    ...mapState('user', [
+      'userHome'
+    ])
+  },
+  methods: {
+    jumpHome () {
+      const home = this.userHome || {}
+      if (!home._id) return
+      this.$router.push(`/tavern/${home.ldb.id}`)
     }
   }
 }
@@ -160,7 +173,7 @@ export default {
         color: #555;
       }
       .ld-footer-ul {
-        a {
+        a, span {
           color: #999;
         }
       }
@@ -190,7 +203,7 @@ export default {
         color: #fff;
       }
       .ld-footer-ul {
-        a {
+        a, span {
           color: #BDB9FD;
         }
       }

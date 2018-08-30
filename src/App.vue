@@ -38,6 +38,7 @@ export default {
   name: 'App',
   async created () {
     this[actionTypes.USER_SET_USER_BY_TOKEN]()
+    this[actionTypes.USER_SET_USER_HOME]()
     if (this.web3Opt.web3js.default) initWeb3()
   },
   data: () => {
@@ -91,7 +92,8 @@ export default {
       actionTypes.STATUS_INIT_BROSWER
     ]),
     ...mapActions('user', [
-      actionTypes.USER_SET_USER_BY_TOKEN
+      actionTypes.USER_SET_USER_BY_TOKEN,
+      actionTypes.USER_SET_USER_HOME
     ]),
     ...mapActions('layout', [
       actionTypes.LAYOUT_SET_MESSAGE_TIP,

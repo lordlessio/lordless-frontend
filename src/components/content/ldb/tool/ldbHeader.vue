@@ -6,12 +6,12 @@
       <header-skeletion v-if="loading" :class="{ 'dialog': dialog }"></header-skeletion>
     </transition>
 
-    <transition name="ld-hide-fade">
-      <section v-if="!loading && info" class="ldb-detail-header" :class="{ 'is-active': !loading }">
+    <transition name="ld-hide-fade" @after-enter="afterEnter">
+      <section v-if="!loading && info" id="ldb-detail-header" class="ldb-detail-header" :class="{ 'animate': animate }">
         <div class="absolute-full detail-header-mask"></div>
         <div class="container header-container">
           <div v-if="!owner" class="detail-ldb-candies">
-            <div id="ldb-candies-box" class="ldb-candies-container">
+            <div id="ldb-candies-box" class="ldb-candies-container" :class="{ 'show': rendered }">
               <span class="inline-block ldb-candies-item"
                 :id="`ldb-candy-${candy.tid}`"
                 :style="`transform: translate(${candyCoords[candy.tid][0]}px, ${candyCoords[candy.tid][1]}px)`"
@@ -98,6 +98,9 @@ import Blockies from '@/components/stories/blockies'
 
 import { addClass, transitionEvent } from 'utils/tool'
 import { setHome } from 'api'
+
+import { actionTypes } from '@/store/types'
+import { mapActions } from 'vuex'
 export default {
   props: {
     info: {
@@ -135,6 +138,8 @@ export default {
   },
   data: (vm) => {
     return {
+      rendered: false,
+      animate: false,
       candyCoords: {},
       candyTasks: [],
       hideTasks: 1,
@@ -145,7 +150,7 @@ export default {
 
     // 监听外部传入的总任务，如果和 allTasks 不相等，重新生成 candyTasks
     tasks (val, oval) {
-      if (val.toString() !== this.allTasks.toString() && val.length && this.userInfo.ap !== 0) this.getCandyTasks(val)
+      if (val.toString() !== this.allTasks.toString() && val.length && this.userInfo.ap !== 0 && this.rendered) this.getCandyTasks(val)
     },
 
     /**
@@ -154,7 +159,7 @@ export default {
      * 如果用户剩余 ap 不足，重新生成 candyTasks
      */
     candyTasks (val) {
-      if (this.userInfo.ap !== 0 && !val.length && this.allTasks.length) this.getCandyTasks()
+      if (this.userInfo.ap !== 0 && !val.length && this.allTasks.length && this.rendered) this.getCandyTasks()
     }
   },
   components: {
@@ -165,6 +170,22 @@ export default {
     Blockies
   },
   methods: {
+    ...mapActions('user', [
+      actionTypes.USER_SET_USER_HOME
+    ]),
+
+    afterEnter () {
+      this.animate = true
+      const header = document.getElementById('ldb-detail-header')
+      if (!header) return
+      const animateFunc = () => {
+        this.rendered = true
+        this.getCandyTasks()
+        header.removeEventListener(transitionEvent(), animateFunc)
+      }
+      header.addEventListener(transitionEvent(), animateFunc)
+    },
+
     async setHome (ldbInfo = this.info) {
       const res = await setHome({ ldbId: ldbInfo._id })
       if (res.code === 1000) {
@@ -175,6 +196,7 @@ export default {
           position: 'bottom-right',
           duration: 1500
         })
+        this[actionTypes.USER_SET_USER_HOME]({ home: { ldb: ldbInfo }, update: true })
         this.$emit('update:isHome', true)
       }
     },
@@ -343,19 +365,27 @@ export default {
     padding-bottom: 150px;
     padding-top: 120px;
     overflow: hidden;
-    &.is-active {
+    &.animate {
       .detail-header-mask {
-        animation: springMove .55s linear 1 forwards;
+        &::after {
+          animation: bounceSkewInRight .55s;
+          opacity: 1;
+          transform: translate3d(-20%, 0, 0) skew(-25deg) translateX(0px) translateZ(0px);
+        }
       }
       .detail-header-left {
-        left: 0;
+        // left: 0;
         opacity: 1;
+        animation: bounceInLeft .55s;
+        transform: translate3d(0, -50%, 0);
         &::before {
           opacity: 1;
         }
       }
       .detail-header-right {
         opacity: 1;
+        animation: bounceInRight .55s .15s;
+        transform: translate3d(-100%, 0, 0) translateX(0px);
         // transform: translateX(0);
       }
     }
@@ -377,10 +407,12 @@ export default {
       background-image: linear-gradient(to bottom, #96A8FD, #CDCAF6);
     }
     &::after {
-      left: 60%;
+      left: 100%;
       background-image: linear-gradient(to bottom, #00C0EB, #3588FD);
-      transform: skew(-25deg) translateZ(0);
+      transform: translate3d(10%, 0, 0) skew(-25deg) translateX(0px) translateZ(0px);
+      opacity: 0;
       z-index: 1;
+      transition: all 0s .55s;
     }
   }
 
@@ -405,34 +437,42 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
+    opacity: 0;
+    transition: opacity 0s 1s;
+    &.show {
+      opacity: 1;
+      animation: candiesShow 1s 1;
+    }
   }
 
   @keyframes candyAnimate {
     0% {
-      transform: translateY(-10px);
+      transform: translateY(-10px) translate3d(0,0,0);
+      -moz-transform: translateY(-10px) translate3d(0,0,0);
       animation-timing-function: ease-in;
     }
     50% {
-      transform: translateY(10px);
+      transform: translateY(10px) translate3d(0,0,0);
+      -moz-transform: translateY(10px) translate3d(0,0,0);
       animation-timing-function: ease-out;
     }
   }
 
   @keyframes candyAfterAnimate {
     0% {
-      transform: translate(-40%, 5px);
+      transform: translate(-40%, 5px) translateZ(0);
       opacity: 0;
       animation-timing-function: ease-in;
     }
     20% {
-      transform: translate(-40%, 0px);
+      transform: translate(-40%, 0px) translateZ(0);
       opacity: 1;
     }
     50% {
       animation-timing-function: ease-out;
     }
     100% {
-      transform: translate(-40%, -5px);
+      transform: translate(-40%, -5px) translateZ(0);
       opacity: 0;
     }
   }
@@ -448,8 +488,6 @@ export default {
     position: absolute;
     left: 0;
     top: 0;
-    opacity: 0;
-    animation: candiesShow 1s 1 forwards;
     &.animate {
       z-index: -1;
       .ldb-circle-candy {
@@ -462,13 +500,13 @@ export default {
         }
       }
     }
-    &.afterAnimate {
-      .ldb-circle-candy {
-        &::after {
-          animation: candyAfterAnimate 1s 1;
-        }
-      }
-    }
+    // &.afterAnimate {
+    //   .ldb-circle-candy {
+    //     &::after {
+    //       animation: candyAfterAnimate 1s 1;
+    //     }
+    //   }
+    // }
   }
   .ldb-circle-candy {
     position: relative;
@@ -476,7 +514,9 @@ export default {
     height: 54px;
     cursor: pointer;
     transform: translateY(-10px);
-    animation: candyAnimate 5s ease-in-out infinite;
+    // -moz-transform: translateY(-20px);
+    animation: candyAnimate 5s linear infinite;
+    -moz-animation-duration: 2.4s;
     will-change: transform;
     &::before {
       content: attr(data-num);
@@ -525,15 +565,16 @@ export default {
   // detail-header-left
   .detail-header-left {
     position: absolute;
-    left: -100%;
+    left: 0;
     top: 50%;
     width: 50%;
     height: 90%;
-    transform: translateY(-50%);
-    z-index: 1;
+    transform: translate3d(-100%, -50%, 0);;
     color: #fff;
     opacity: 0;
-    transition: left .55s spring, opacity .55s spring;
+    z-index: 1;
+    transition: all 0s .55s;
+    // transition: left .55s spring, opacity .55s spring;
     // background-blend-mode: soft-light;
     &::before {
       content: '';
@@ -548,7 +589,7 @@ export default {
       z-index: -1;
       box-shadow: 13px 13px 30px 3px rgba(0, 0, 0, .35);
       opacity: 0;
-      transition: opacity .3s spring .55s;
+      transition: opacity .3s ease-in .55s;
     }
   }
   .header-left-container {
@@ -679,8 +720,9 @@ export default {
     width: 80%;
     background-color: #fff;
     opacity: 0;
-    transform: translateX(-100%);
-    transition: transform .55s spring .25s, opacity .55s spring .25s;
+    transform: translate3d(0, 0, 0) translateX(0px);
+    transition: all 0s .55s;
+    // transition: transform .55s spring .25s, opacity .55s spring .25s;
     // height: calc(930px / 4 * 3);
   }
   .detail-ldb-level {
