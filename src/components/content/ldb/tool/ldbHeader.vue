@@ -97,10 +97,6 @@ import LdImg from '@/components/stories/image'
 import Blockies from '@/components/stories/blockies'
 
 import { addClass, transitionEvent } from 'utils/tool'
-import { setHome } from 'api'
-
-import { actionTypes } from '@/store/types'
-import { mapActions } from 'vuex'
 export default {
   props: {
     info: {
@@ -170,9 +166,6 @@ export default {
     Blockies
   },
   methods: {
-    ...mapActions('user', [
-      actionTypes.USER_SET_USER_HOME
-    ]),
 
     afterEnter () {
       this.animate = true
@@ -187,18 +180,8 @@ export default {
     },
 
     async setHome (ldbInfo = this.info) {
-      const res = await setHome({ ldbId: ldbInfo._id })
-      if (res.code === 1000) {
-        this.$notify({
-          type: 'success',
-          title: 'Home 设置成功!',
-          message: `成功设置 ${ldbInfo.name.zh} 为Home`,
-          position: 'bottom-right',
-          duration: 1500
-        })
-        this[actionTypes.USER_SET_USER_HOME]({ home: { ldb: ldbInfo }, update: true })
-        this.$emit('update:isHome', true)
-      }
+      if (this.isHome) return
+      this.$emit('setHome')
     },
     async receiveCandy (task) {
       if (task.status !== 'processing') return

@@ -9,6 +9,7 @@
       :loading="infoLoading"
       :owner="ldbInfo.lord._id === userInfo._id"
       :userInfo="userInfo"
+      @setHome="setHome"
       @receive="receiveCandy">
     </ldb-header-tool>
     <section class="ldb-detail-content" :class="{ 'show': contentShow }">
@@ -111,7 +112,7 @@ import LdbSell from '@/components/reuse/dialog/ldb/sell'
 import range from 'lodash/range'
 import { getMessageByCode } from 'utils/tool'
 import { contractMixins, dialogMixins, metamaskMixins } from '@/mixins'
-import { getHome, receiveTask, getLdbById, getActivitysByTokenId, getUserPendingsByTokenId, getLdb2Round } from 'api'
+import { setHome, getHome, receiveTask, getLdbById, getActivitysByTokenId, getUserPendingsByTokenId, getLdb2Round } from 'api'
 
 import { actionTypes } from '@/store/types'
 import { mapActions } from 'vuex'
@@ -235,8 +236,26 @@ export default {
   methods: {
     ...mapActions('user', [
       actionTypes.USER_UPT_USER_AP,
-      actionTypes.USER_SET_USER_BY_TOKEN
+      actionTypes.USER_SET_USER_BY_TOKEN,
+      actionTypes.USER_SET_USER_HOME
     ]),
+
+    async setHome (ldbInfo = this.ldbInfo) {
+      const authorize = await this.$refs.authorize.checkoutAuthorize()
+      if (!authorize) return
+      const res = await setHome({ ldbId: ldbInfo._id })
+      if (res.code === 1000) {
+        this.$notify({
+          type: 'success',
+          title: 'Home 设置成功!',
+          message: `成功设置 ${ldbInfo.name.zh} 为Home`,
+          position: 'bottom-right',
+          duration: 1500
+        })
+        this[actionTypes.USER_SET_USER_HOME]({ home: { ldb: ldbInfo }, update: true })
+        this.isHome = true
+      }
+    },
 
     async checkHome ({ ldbId = this.ldbInfo._id, userId = this.userInfo.address } = {}) {
       const res = await getHome({ userId })

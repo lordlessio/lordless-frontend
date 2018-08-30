@@ -7,6 +7,7 @@ const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
@@ -49,23 +50,20 @@ const webpackConfig = merge(baseWebpackConfig, {
     //   context: path.join(__dirname, '../dist_dll/manifest'),
     //   manifest: require("../dist_dll/manifest/ethereum-manifest.json")
     // }),
-    new HtmlWebpackAssetPlugin({
-      assets: ['static/dll/vue.dll.js', 'static/dll/utils.dll.js'],
-      files: ['index.html'],
-      append: false,
-      hash: true
-    }),
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
       'process.env': env
     }),
     new UglifyJsPlugin({
+      cache: true,
       uglifyOptions: {
         compress: {
-          warnings: false
+          warnings: false,
+          drop_console: true
         }
       },
       sourceMap: config.build.productionSourceMap,
+      warningsFilter: () => true,
       parallel: true
     }),
     // extract css into its own file
@@ -103,6 +101,18 @@ const webpackConfig = merge(baseWebpackConfig, {
       favicon: './static/lordless.ico',
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
+    }),
+
+    new HtmlWebpackAssetPlugin({
+      assets: ['static/dll/vue.dll.js', 'static/dll/utils.dll.js'],
+      files: ['index.html'],
+      append: false,
+      hash: true
+    }),
+
+    // 给 js 文件添加 async
+    new ScriptExtHtmlWebpackPlugin({
+      defaultAttribute: 'async'
     }),
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),
