@@ -8,7 +8,7 @@
     <!-- </Loading> -->
     <span class="inline-block switch-btn" @click.stop="switchFab">{{ this.is3D ? '2D' : '3D' }}</span>
     <div class="fab-poster">
-      <img-box sType="height" bottom :src="poster" type="span"></img-box>
+      <img-box alt="tavern detail" sType="height" bottom :src="poster" type="span"></img-box>
     </div>
     <div class="fab-content">
       <iframe src="" @load="sketchLoad" width="100%" height="100%" ref="sketch_frame" id="sketch_frame" frameborder="0" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>

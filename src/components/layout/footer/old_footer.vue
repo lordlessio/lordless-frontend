@@ -12,7 +12,7 @@
             </svg>
           </router-link>
           <router-link to="/" class="inline-block" v-if="theme === 'default'">
-            <img class="footer-logo-png" src="~/static/img/footer/ld-footer-logo.png"/>
+            <img alt="lordless logo" class="footer-logo-png" src="~/static/img/footer/ld-footer-logo.png"/>
           </router-link>
         </div>
         <div class="sm-d-flex sm-f-justify-around lg-text-right footer-icons-box">
@@ -21,7 +21,7 @@
               <svg v-if="theme !== 'default'">
                 <use xlink:href="#icon-twitter"/>
               </svg>
-              <img v-if="theme === 'default'" src="~/static/img/footer/ld-Twitter-icon.png"/>
+              <img alt="twitter icon" v-if="theme === 'default'" src="~/static/img/footer/ld-Twitter-icon.png"/>
             </a>
           </div>
           <div class="sm-v-flex footer-icons-item">
@@ -29,7 +29,7 @@
               <svg v-if="theme !== 'default'">
                 <use xlink:href="#icon-github"/>
               </svg>
-              <img v-if="theme === 'default'" src="~/static/img/footer/ld-Github-icon.png"/>
+              <img alt="github icon" v-if="theme === 'default'" src="~/static/img/footer/ld-Github-icon.png"/>
             </a>
           </div>
           <div class="sm-v-flex footer-icons-item">
@@ -37,7 +37,7 @@
               <svg v-if="theme !== 'default'">
                 <use xlink:href="#icon-medium"/>
               </svg>
-              <img v-if="theme === 'default'" src="~/static/img/footer/ld-Medium-icon.png"/>
+              <img alt="medium icon" v-if="theme === 'default'" src="~/static/img/footer/ld-Medium-icon.png"/>
             </a>
           </div>
           <div class="sm-v-flex footer-icons-item">
@@ -45,7 +45,7 @@
               <svg v-if="theme !== 'default'">
                 <use xlink:href="#icon-telegram"/>
               </svg>
-              <img v-if="theme === 'default'" src="~/static/img/footer/ld-Telegram-icon.png"/>
+              <img alt="telegram icon" v-if="theme === 'default'" src="~/static/img/footer/ld-Telegram-icon.png"/>
             </a>
           </div>
         </div>

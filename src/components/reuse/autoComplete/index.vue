@@ -35,11 +35,12 @@
                       :class="`building-popularity-${trend.chain.popularity}`"
                       @click.stop="$emit('trend', trend)">
                       <img-box
+                        alt="tavern preview"
                         type="span"
                         absolute
                         :src="trend.ldbIcon.source.preview | reldbIcon('map')"></img-box>
                         <span class="building-sale-bg"></span>
-                        <img class="ldb-curve" src="~/static/svg/single/curve.svg">
+                        <img alt="tavern curve" class="ldb-curve" src="~/static/svg/single/curve.svg">
                     </div>
                     <div class="text-center popper-trending-text">
                       {{ trend.name.zh }}

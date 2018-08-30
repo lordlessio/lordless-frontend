@@ -4,10 +4,10 @@
       <div class="building-card-top">
         <div class="building-header" :class="`building-popularity-${info.chain.popularity}`">
           <div class="building-level">
-            <img :src="`/static/img/ldb/ldb-level-${info.chain.popularity}.png`"/>
+            <img alt="tavern popularity image" :src="`/static/img/ldb/ldb-level-${info.chain.popularity}.png`"/>
           </div>
-          <img class="building-curve" src="~/static/svg/single/curve.svg">
-          <ld-img :src="info.ldbIcon.source.preview | reldbIcon"></ld-img>
+          <img alt="tavern curve" class="building-curve" src="~/static/svg/single/curve.svg">
+          <ld-img alt="tavern preview" :src="info.ldbIcon.source.preview | reldbIcon"></ld-img>
           <span class="building-sale-bg"></span>
           <p class="d-flex col-flex f-auto-center building-sale-tag">
             <span class="building-sale-svg">

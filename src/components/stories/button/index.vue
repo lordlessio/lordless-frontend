@@ -1,5 +1,5 @@
 <template>
-  <button :disabled="disabled" class="button-styles" :class="[`${theme}`, { 'shadow': shadow, 'inverse': inverse }]" @click.stop="onClick">
+  <button role="button" aria-label="click" :disabled="disabled" class="button-styles" :class="[`${theme}`, { 'shadow': shadow, 'inverse': inverse }]" @click.stop="onClick">
     <slot v-if="!loading"></slot>
     <span v-if="loading">
       <i class="el-icon-loading"></i>

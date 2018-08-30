@@ -88,7 +88,7 @@
           <p>The latest LORDLESS news, articles, and resources, sent straight to your inbox every month.</p>
           <a href="http://eepurl.com/dsLYcr" target="_blank" class="d-flex footer-subscribe-eamil">
             <p class="v-flex footer-subscribe-input">
-              <input disabled type="text" placeholder="Email me when it's ready"/>
+              <input aria-label="subscribe email" disabled type="text" placeholder="Email me when it's ready"/>
             </p>
             <span class="TTFontBolder inline-block">Subscribe</span>
           </a>

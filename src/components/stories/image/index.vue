@@ -1,6 +1,6 @@
 <template>
   <div class="image-box" :class="[sType, { 'd-flex f-justify-center': center, 'absolute': absolute }]">
-    <img v-if="type === 'img'" :src="src"/>
+    <img v-if="type === 'img'" :alt="alt" :src="src"/>
     <span v-else :class="{ 'contain': contain, 'bottom': bottom }" :style="`background-image: url('${src}')`"></span>
   </div>
 </template>
@@ -22,6 +22,11 @@ export default {
     type: {
       type: String,
       default: 'img'
+    },
+
+    alt: {
+      type: String,
+      default: ''
     },
 
     sType: {

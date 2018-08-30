@@ -18,7 +18,7 @@
       <div class="ldb-order-box">
         <div class="text-center order-header">
           <div class="order-header-icon">
-            <img-box sType="height" src="/static/svg/single/congra.svg"></img-box>
+            <img-box alt="Congratulations" sType="height" src="/static/svg/single/congra.svg"></img-box>
           </div>
           <h1 class="TTNormsBold">Congratulations</h1>
           <p>You've got</p>
@@ -30,6 +30,7 @@
               <div class="order-cnt-poster">
                 <div class="order-poster">
                   <img-box
+                    alt="tavern preview"
                     sType="height"
                     type="span"
                     :src="ldbInfo.ldbIcon.source.preview | reldbIcon">

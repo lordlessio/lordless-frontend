@@ -4,11 +4,12 @@
       <div id="loop-task-container" class="d-flex f-align-center loop-task-container">
         <div class="building-poster" :class="`building-popularity-${task.ldb.info.chain.popularity}`">
           <img-box
+            alt="tavern preview"
             type="span"
             absolute
             :src="task.ldb.info.ldbIcon.source.preview | reldbIcon('map')"></img-box>
             <span class="building-sale-bg"></span>
-            <img class="ldb-curve" src="~/static/svg/single/curve.svg">
+            <img alt="tavern curve" class="ldb-curve" src="~/static/svg/single/curve.svg">
         </div>
         <div class="v-flex loop-task-cnt">
           <p>{{ task.ldbTaskType.name }}</p>

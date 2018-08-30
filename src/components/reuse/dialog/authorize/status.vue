@@ -5,7 +5,7 @@
       <p>{{ infos[type].content }}</p>
       <p>New here?Read our guide on getting started.</p>
       <ld-btn theme="deep-blue" class="TTFontBolder lordless-message-btn" @click="$router.push('/status')">Read guide</ld-btn>
-      <img-box class="authorize-status-img" :sType="infos[type].sType" :center="false" :src="infos[type].imgUrl"></img-box>
+      <img-box class="authorize-status-img" :alt="infos[type].title" :sType="infos[type].sType" :center="false" :src="infos[type].imgUrl"></img-box>
     </div>
   </div>
 </template>

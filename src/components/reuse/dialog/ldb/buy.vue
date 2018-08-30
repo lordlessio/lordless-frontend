@@ -44,7 +44,7 @@
             </div>
           </div>
           <div class="ldb-poster-box">
-            <img-box type="span" contain :src="ldbInfo.ldbIcon.source.preview | reldbIcon"></img-box>
+            <img-box alt="tavern preview" type="span" contain :src="ldbInfo.ldbIcon.source.preview | reldbIcon"></img-box>
           </div>
         </div>
         <!-- <p class="ldb-buy-markline"></p> -->

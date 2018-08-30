@@ -8,7 +8,7 @@
     :show-close="false">
     <div class="ld-relogin-input">
       <p>账户信息失效了，需要重新认证呀！</p>
-      <input disabled type="text" :value="address | splitAddress({ before: 12, end: 12, symbol: '***' })"/>
+      <input aria-label="address" disabled type="text" :value="address | splitAddress({ before: 12, end: 12, symbol: '***' })"/>
     </div>
     <div slot="footer" class="dialog-footer">
       <ld-button @click="setUserExpired(false)">取 消</ld-button>

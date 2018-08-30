@@ -6,6 +6,7 @@
         :class="{ 'small': inputModel || focused || inputModel === 0 }"><span v-if="!regexError || isRequired">{{ placeholder }}</span><span v-if="!isRequired && regexError">{{ regexError }}</span></label>
       <input
         v-model="inputModel"
+        aria-label="input text"
         class="lordless-input"
         :type="type"
         :maxlength="maxlength"
