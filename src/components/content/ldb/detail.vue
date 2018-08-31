@@ -688,8 +688,10 @@ export default {
         if (res.code === 2001) {
           await this[actionTypes.USER_SET_USER_BY_TOKEN]()
           this.$refs.ldbDetailHeader.getCandyTasks()
-        } else if (res.code === 2011) {
+        } else if (res.code === 2011 || res.code === 2004) {
           await this.getLdbTasks()
+        } else if (res.code === 2002) {
+          this.$set(this.ldbInfo, 'apLeft', 0)
         }
       }
       return cb(cbData)

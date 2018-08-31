@@ -100,7 +100,7 @@ import LdBtn from '@/components/stories/button'
 import LdImg from '@/components/stories/image'
 import Blockies from '@/components/stories/blockies'
 
-import { addClass, transitionEvent } from 'utils/tool'
+import { addClass, removeClass, transitionEvent } from 'utils/tool'
 export default {
   props: {
     info: {
@@ -189,52 +189,71 @@ export default {
     },
     async receiveCandy (task) {
       if (task.status !== 'processing') return
+      let animateAfter = false
+      let dataBack = false
+
+      const removeCandy = () => {
+        if (!animateAfter || !dataBack) return
+        if (this.hideTasks === this.candyTasks.length) {
+          this.$set(this, 'hideTasks', 1)
+          this.$set(this, 'candyTasks', [])
+        } else {
+          this.hideTasks = this.hideTasks + 1
+        }
+      }
+
+      // 获取当前 receive 糖果dom
+      const dom = document.getElementById(`ldb-candy-${task.tid}`)
+      if (!dom) return
+
+      // 获取子元素
+      const children = dom.firstChild
+      if (!children) return
+
+      // 设置当前dom鼠标形态
+      dom.style.cursor = 'no-drop'
+
+      // 屏蔽子元素鼠标事件及暂停动画
+      children.style.pointerEvents = 'none'
+      children.style.animationPlayState = 'paused'
+
+      const num = children.getAttribute('data-num')
+      children.setAttribute('data-msg', `+ ${num} ${task.ldbTaskType.candyType.symbol.toLowerCase()}`)
+
+      // 执行动画
+      addClass('animate', dom)
+
+      const animateFunc = () => {
+        animateAfter = true
+        removeCandy()
+        dom.removeEventListener(transitionEvent(), animateFunc, false)
+      }
+      dom.addEventListener(transitionEvent(), animateFunc, false)
+
       this.$emit('receive', task, ({ errorMsg, data } = {}) => {
         // 获取当前 receive 糖果dom
-        const dom = document.getElementById(`ldb-candy-${task.tid}`)
-        if (!dom) return
+        // const dom = document.getElementById(`ldb-candy-${task.tid}`)
+        // if (!dom) return
 
-        // 获取子元素
-        const children = dom.firstChild
-        if (!children) return
+        // // 获取子元素
+        // const children = dom.firstChild
+        // if (!children) return
 
-        // 如果接口报错
-        // if (errorMsg) {
-        //   children.setAttribute('data-msg', errorMsg)
-        //   if (!hasClass('afterAnimate', dom)) {
-        //     // 执行动画
-        //     addClass('afterAnimate', dom)
-        //     setTimeout(() => {
-        //       removeClass('afterAnimate', dom)
-        //     }, 1000)
-        //   }
-        //   return
-        // }
-        if (!data) return
+        if (!data) {
+          // 设置当前dom鼠标形态
+          dom.style.cursor = 'pointer'
 
-        // 设置当前dom鼠标形态
-        dom.style.cursor = 'no-drop'
+          // 屏蔽子元素鼠标事件及暂停动画
+          children.style.pointerEvents = ''
+          children.style.animationPlayState = ''
 
-        // 屏蔽子元素鼠标事件及暂停动画
-        children.style.pointerEvents = 'none'
-        children.style.animationPlayState = 'paused'
-
-        // set 结果信息
-        children.setAttribute('data-msg', `+ ${data.executor.reward.count.toFixed(4)} ${task.ldbTaskType.candyType.symbol.toUpperCase()}`)
-
-        // 执行动画
-        addClass('animate', dom)
-
-        const animateFunc = () => {
-          if (this.hideTasks === this.candyTasks.length) {
-            this.$set(this, 'hideTasks', 1)
-            this.$set(this, 'candyTasks', [])
-          } else {
-            this.hideTasks = this.hideTasks + 1
-          }
-          dom.removeEventListener(transitionEvent(), animateFunc, false)
+          // 执行动画
+          removeClass('animate', dom)
+          return
         }
-        dom.addEventListener(transitionEvent(), animateFunc, false)
+
+        dataBack = true
+        removeCandy()
       })
     },
 
