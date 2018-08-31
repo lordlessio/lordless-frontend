@@ -88,6 +88,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions('region', [
+      actionTypes.REGION_SET_REGIONS
+    ]),
     ...mapActions('status', [
       actionTypes.STATUS_INIT_BROSWER
     ]),
@@ -132,7 +135,10 @@ export default {
   },
   mounted () {
     // document.getElementById('outside-loading').style = 'display: none'
-    this.$nextTick(() => this[actionTypes.STATUS_INIT_BROSWER]())
+    this.$nextTick(() => {
+      this[actionTypes.REGION_SET_REGIONS]()
+      this[actionTypes.STATUS_INIT_BROSWER]()
+    })
   }
 }
 </script>

@@ -2,85 +2,93 @@
   <footer class="ld-footer" :class="theme" v-if="show">
     <div class="container md">
       <div class="d-flex sm-col-flex sm-text-center footer-top">
-        <div class="v-flex d-flex sm-col-flex">
-          <div class="v-flex ld-footer-item">
-            <ul class="ld-footer-ul footer-lordless-ul">
-              <li>
-                <strong class="relative">LORDLESS<span class="inline-block ld-footer-beta">BETA</span></strong>
-              </li>
-              <li>
-                <router-link to="/map">Map</router-link>
-              </li>
-              <li>
-                <router-link to="/market">Marketplace</router-link>
-              </li>
-              <li>
-                <span class="cursor-pointer" @click.stop="jumpHome">Home</span>
-              </li>
-              <li>
-                <a href="http://lordless.io/team" target="_blank">Team</a>
-              </li>
-              <li>
-                <a href="http://lordless.io/#ROADMAP" target="_blank">Roadmap</a>
-              </li>
-              <li>
-                <a href="http://lordless.io/airdrop" target="_blank">Airdrop plan</a>
-              </li>
-            </ul>
-            <ul class="ld-footer-ul footer-whitepaper-ul">
-              <li>
-                <strong>Whitepaper</strong>
-              </li>
-              <li>
-                <a target="_blank" href="http://lordless.io/whitepaper-en.pdf">English</a>
-              </li>
-              <li>
-                <a target="_blank" href="http://lordless.io/whitepaper-cn.pdf">中文</a>
-              </li>
-            </ul>
+        <div class="v-flex sm-col-flex">
+          <div class="d-flex sm-col-flex">
+            <div class="v-flex ld-footer-item">
+              <ul class="ld-footer-ul footer-lordless-ul">
+                <li>
+                  <strong class="relative footer-lordless-title">LORDLESS</strong>
+                </li>
+                <li>
+                  <router-link to="/map">Map</router-link>
+                </li>
+                <li>
+                  <router-link to="/market">Marketplace</router-link>
+                </li>
+                <li>
+                  <span class="cursor-pointer" @click.stop="jumpHome">Home</span>
+                </li>
+                <li>
+                  <a href="http://lordless.io/team" target="_blank">Team</a>
+                </li>
+                <li>
+                  <a href="http://lordless.io/#ROADMAP" target="_blank">Roadmap</a>
+                </li>
+                <li>
+                  <a href="http://lordless.io/airdrop" target="_blank">Airdrop plan</a>
+                </li>
+              </ul>
+            </div>
+            <div class="v-flex ld-footer-item">
+              <ul class="ld-footer-ul footer-lordless-user">
+                <li>
+                  <strong>User</strong>
+                </li>
+                <li>
+                  <router-link to="/owner/info">Overview</router-link>
+                </li>
+                <li>
+                  <router-link to="/owner/candy">Candy</router-link>
+                </li>
+                <li>
+                  <router-link to="/owner/task">Tasks</router-link>
+                </li>
+                <li>
+                  <router-link to="/owner/taverns">Taverns</router-link>
+                </li>
+                <li>
+                  <router-link to="/owner/authorization">Authorization</router-link>
+                </li>
+                <li>
+                  <router-link to="/owner/activity">Activity</router-link>
+                </li>
+              </ul>
+            </div>
+            <div class="v-flex ld-footer-item">
+              <ul class="ld-footer-ul footer-lordless-about">
+                <li>
+                  <strong>About</strong>
+                </li>
+                <li>
+                  <a href="http://lordless.io/team" target="_blank">Team</a>
+                </li>
+                <li>
+                  <router-link to="/">Guide</router-link>
+                </li>
+                <li>
+                  <a href="https://github.com/lordlessio/game-contracts/wiki/FAQ" target="_blank">
+                    FAQs
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
-          <div class="v-flex ld-footer-item">
-            <ul class="ld-footer-ul footer-lordless-user">
-              <li>
-                <strong>User</strong>
-              </li>
-              <li>
-                <router-link to="/owner/info">Overview</router-link>
-              </li>
-              <li>
-                <router-link to="/owner/candy">Candy</router-link>
-              </li>
-              <li>
-                <router-link to="/owner/task">Tasks</router-link>
-              </li>
-              <li>
-                <router-link to="/owner/taverns">Taverns</router-link>
-              </li>
-              <li>
-                <router-link to="/owner/authorization">Authorization</router-link>
-              </li>
-              <li>
-                <router-link to="/owner/activity">Activity</router-link>
-              </li>
-            </ul>
-          </div>
-          <div class="v-flex ld-footer-item">
-            <ul class="ld-footer-ul footer-lordless-about">
-              <li>
-                <strong>About</strong>
-              </li>
-              <li>
-                <a href="http://lordless.io/team" target="_blank">Team</a>
-              </li>
-              <li>
-                <router-link to="/">Guide</router-link>
-              </li>
-              <li>
-                <a href="https://github.com/lordlessio/game-contracts/wiki/FAQ" target="_blank">
-                  FAQs
-                </a>
-              </li>
-            </ul>
+          <div class="d-flex sm-col-flex">
+            <div class="v-flex ld-footer-item">
+              <ul class="ld-footer-ul footer-whitepaper-ul">
+                <li>
+                  <strong>Whitepaper</strong>
+                </li>
+                <li>
+                  <a target="_blank" href="http://lordless.io/whitepaper-en.pdf">English</a>
+                </li>
+                <li>
+                  <a target="_blank" href="http://lordless.io/whitepaper-cn.pdf">中文</a>
+                </li>
+              </ul>
+            </div>
+            <div class="v-flex ld-footer-item"></div>
+            <div class="v-flex ld-footer-item"></div>
           </div>
         </div>
         <div class="ld-footer-letter">
@@ -228,21 +236,39 @@ export default {
       }
     }
   }
-
-  .ld-footer-beta {
-    position: absolute;
-    top: -5px;
-    right: -10px;
-    margin-left: 3px;
-    padding: 3px 5px;
-    font-family: $--font-TTNormsBold;
-    color: #fff;
-    font-size: 12px;
-    background-color: #BDB9FD;
-    border-radius: 2px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, .25);
-    transform: scale(.75) translateX(100%);
+  .footer-lordless-title {
+    position: relative;
+    &::before {
+      content: 'BETA';
+      position: absolute;
+      top: -5px;
+      right: -10px;
+      margin-left: 3px;
+      padding: 3px 5px;
+      font-family: $--font-TTNormsBold;
+      color: #fff;
+      font-size: 12px;
+      background-color: #BDB9FD;
+      border-radius: 2px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, .25);
+      transform: scale(.75) translateX(100%);
+    }
   }
+
+  // .ld-footer-beta {
+  //   position: absolute;
+  //   top: -5px;
+  //   right: -10px;
+  //   margin-left: 3px;
+  //   padding: 3px 5px;
+  //   font-family: $--font-TTNormsBold;
+  //   color: #fff;
+  //   font-size: 12px;
+  //   background-color: #BDB9FD;
+  //   border-radius: 2px;
+  //   box-shadow: 0 2px 5px rgba(0, 0, 0, .25);
+  //   transform: scale(.75) translateX(100%);
+  // }
   .ld-footer-ul {
     &:not(.footer-lordless-ul) {
       @include margin('top', 30px, 1, -2);

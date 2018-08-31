@@ -7,6 +7,7 @@ import web3 from './web3'
 import ldb from './ldb'
 import contract from './contract'
 import status from './status'
+import region from './region'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -18,7 +19,8 @@ const store = new Vuex.Store({
     web3,
     ldb,
     contract,
-    status
+    status,
+    region
   }
 })
 

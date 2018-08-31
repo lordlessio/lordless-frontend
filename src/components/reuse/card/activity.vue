@@ -10,9 +10,9 @@
           </span>
           <div class="v-flex ld-activity-desc">
             <p>{{ info.created_at | timeFormat }}</p>
-            <p v-if="type === 'CANCELAUCTION'">You cancelled the sale of <span> Tavern #{{ info.market[0].tokenId }}. </span> You will get it back when the transaction is confirmed on chain.</p>
-            <p v-else-if="type === 'NEWAUCTION'">You started a sale by action for <span> Tavern #{{ info.market[0].tokenId }}. </span></p>
-            <p v-else>You requested to purchase <span> Tavern #{{ info.market[0].tokenId }}. </span> If nobody's confirmation comes earlier, you will get the Tavern finally.</p>
+            <p v-if="type === 'CANCELAUCTION'">You cancelled the sale of <span class="cursor-pointer" @click.stop="$router.push(`/tavern/${info.market[0].tokenId}`)"> Tavern #{{ info.market[0].tokenId }}. </span> You will get it back when the transaction is confirmed on chain.</p>
+            <p v-else-if="type === 'NEWAUCTION'">You started a sale by action for <span class="cursor-pointer" @click.stop="$router.push(`/tavern/${info.market[0].tokenId}`)"> Tavern #{{ info.market[0].tokenId }}. </span></p>
+            <p v-else>You requested to purchase <span class="cursor-pointer" @click.stop="$router.push(`/tavern/${info.market[0].tokenId}`)"> Tavern #{{ info.market[0].tokenId }}. </span> If nobody's confirmation comes earlier, you will get the Tavern finally.</p>
           </div>
         </div>
         <div class="d-flex col-flex f-justify-between text-right activity-view-detail">

@@ -14,6 +14,7 @@ const userAsset = require('./userAsset')
 const userRecord = require('./userRecord')
 const activity = require('./activity')
 const home = require('./home')
+const region = require('./region')
 
 module.exports = merge(
   aMap(axios),
@@ -29,5 +30,6 @@ module.exports = merge(
   userAsset(axios),
   userRecord(axios),
   activity(axios),
-  home(axios)
+  home(axios),
+  region(axios)
 )

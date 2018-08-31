@@ -16,7 +16,8 @@
                   <use xlink:href="#icon-crown-red"/>
                 </svg>
               </span>
-              <span>{{ user.nickName }}</span>
+              <span v-if="user.nickName">{{ user.nickName }}</span>
+              <span v-else>{{ user.address | splitAddress({ before: 5, end: 2 }) }}</span>
             </h2>
             <p class="d-flex f-align-center">
               <span id="detail-user-address" class="text-ellipsis">
@@ -35,7 +36,7 @@
               </el-tooltip>
             </p>
             <div class="TTFontBolder user-level">
-              Level {{ user.level }}
+              Level <span>{{ user.level }}</span>
             </div>
             <!-- <div class="user-total-candy">
               <p>Total earned candy</p>
@@ -47,7 +48,7 @@
     </div>
     <div class="v-flex d-flex ld-user-content">
       <div class="v-flex d-flex container md">
-        <div class="v-flex user-building-tabs" :class="{ 'margin': userLdbs.length }">
+        <div class="v-flex user-building-tabs" :class="{ 'margin': userLdbs.total }">
           <el-tabs
             v-model="ldbTab"
             @tab-click="chooseTab">
@@ -55,7 +56,7 @@
               label="All"
               name="all">
               <div
-                v-if="!userLdbs.length && !loading"
+                v-if="!userLdbs.total && !loading"
                 class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-buildings">
                 <svg>
                   <use xlink:href="#icon-no-ldb"/>
@@ -63,7 +64,7 @@
                 <p>This have nothing on Tavern now.</p>
               </div>
               <div class="d-flex f-align-center building-sort">
-                <div class="v-flex">{{ total }} Taverns</div>
+                <div class="v-flex">{{ userLdbs.total }} Taverns</div>
                 <div>
                   <span>Sort by</span>
                   <ld-select
@@ -85,7 +86,7 @@
                 <el-col
                   :xs="24" :sm="8"
                   class="building-item"
-                  v-for="(ldb, index) of userLdbs"
+                  v-for="(ldb, index) of userLdbs.list"
                   :key="index">
                   <building-card
                     :sale="ldb.chain.auction.isOnAuction"
@@ -100,7 +101,7 @@
               label="On sale"
               name="sale">
               <div
-                v-if="!userLdbs.length && !loading"
+                v-if="!userLdbs.total && !loading"
                 class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-buildings">
                 <svg>
                   <use xlink:href="#icon-no-selling-ldb"/>
@@ -108,7 +109,7 @@
                 <p>There have nothing on sale now.</p>
               </div>
               <div class="d-flex f-align-center building-sort">
-                <div class="v-flex">{{ total }} Taverns</div>
+                <div class="v-flex">{{ userLdbs.total }} Taverns</div>
                 <div>
                   <span>Sort by</span>
                   <ld-select
@@ -130,11 +131,11 @@
                 <el-col
                   :xs="24" :sm="8"
                   class="building-item"
-                  v-for="(ldb, index) of userLdbs"
+                  v-for="(ldb, index) of userLdbs.list"
                   :key="index">
                   <building-card
                     :sale="ldb.chain.auction.isOnAuction"
-                    :ldbInfo="ldb"
+                    :info="ldb"
                     @choose="chooseLdb">
                   </building-card>
                 </el-col>
@@ -142,9 +143,9 @@
             </el-tab-pane>
           </el-tabs>
           <Pagination
-            v-if="userLdbs.length"
+            v-if="userLdbs.total"
             class="ld-building-pagination"
-            :total="total"
+            :total="userLdbs.total"
             background
             @currentChange="pageChange">
           </Pagination>
@@ -179,8 +180,12 @@ export default {
       loading: false,
       user: {},
       clipBool: false,
-      userLdbs: [],
-      total: 0,
+      userLdbs: {
+        pn: 1,
+        ps: 9,
+        list: [],
+        total: 0
+      },
       ldbTab: 'all',
 
       // sort model
@@ -241,25 +246,23 @@ export default {
       }
       if (!res.data) console.log('用户不存在')
     },
-    async getUserLdbs ({ address = this.user.address, isOnAuction = this.ldbTab === 'all' ? undefined : true, sort = this.ldbSort, order = this.ldbOrder, page = 1, offset = 9 } = {}) {
+    async getUserLdbs ({ address = this.user.address, isOnAuction = this.ldbTab === 'all' ? undefined : true, sort = this.ldbSort, order = this.ldbOrder, pn = this.userLdbs.pn, ps = this.userLdbs.ps } = {}) {
       const params = {
         user: address,
-        page,
-        offset,
+        isOnAuction,
+        pn,
+        ps,
         sort,
-        order,
-        isOnAuction
+        order
       }
       const res = await getChainLdbs(params)
-      if (res.code === 1000) {
-        const { list, total } = res.data
-        this.userLdbs = list
-        this.total = total
+      if (res.code === 1000 && res.data) {
+        this.userLdbs = res.data
       }
     },
 
-    pageChange (e) {
-      this.getUserLdbs({ page: e })
+    pageChange (pn) {
+      this.getUserLdbs({ pn })
     },
     // 初始化 黏贴板
     initClipboard () {
@@ -348,6 +351,9 @@ export default {
     margin-top: 10px;
     font-size: 20px;
     color: #555;
+    // >span {
+    //   font-size: 20px;
+    // }
   }
   .user-total-candy {
     margin-top: 10px;

@@ -4,7 +4,7 @@
       <h1 class="text-cap user-building-title">Taverns</h1>
       <transition name="ld-hide-in-fade">
         <div
-          v-if="!buildings.length && !saleBuildings.length && !loading"
+          v-if="!buildings.total && !saleBuildings.total && !loading"
           class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
           <svg>
             <use xlink:href="#icon-no-ldb"/>
@@ -19,7 +19,7 @@
         </div>
       </transition>
       <div
-        v-if="loading || buildings.length || saleBuildings.length"
+        v-if="loading || buildings.total || saleBuildings.total"
         class="v-flex user-building-tabs">
         <el-tabs
           v-model="buildingTab"
@@ -44,11 +44,11 @@
               </el-col>
             </el-row>
             <transition name="ld-hide-in-fade">
-              <el-row v-if="buildings.length && !loading" :gutter="30" class="user-buildings-cnt">
+              <el-row v-if="buildings.total && !loading" :gutter="30" class="user-buildings-cnt">
                 <el-col
                   :xs="24" :sm="8"
                   class="building-item"
-                  v-for="(building, index) of buildings"
+                  v-for="(building, index) of buildings.list"
                   :key="index">
                   <building-card
                     :sale="building.chain.auction.isOnAuction"
@@ -73,7 +73,7 @@
             </el-row>
             <transition name="ld-hide-in-fade">
               <div
-                v-if="!saleBuildings.length && !loading"
+                v-if="!saleBuildings.total && !loading"
                 class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-buildings">
                 <svg>
                   <use xlink:href="#icon-no-selling-ldb"/>
@@ -88,15 +88,15 @@
               </div>
             </transition>
             <transition name="ld-hide-in-fade">
-              <el-row v-show="saleBuildings.length && !loading" :gutter="20" class="user-buildings-cnt">
+              <el-row v-show="saleBuildings.total && !loading" :gutter="20" class="user-buildings-cnt">
                 <el-col
                   :xs="24" :sm="8"
                   class="building-item"
-                  v-for="(building, index) of saleBuildings"
+                  v-for="(sBuilding, index) of saleBuildings.list"
                   :key="index">
                   <building-card
-                    :sale="building.chain.auction.isOnAuction"
-                    :ldbInfo="building"
+                    :sale="sBuilding.chain.auction.isOnAuction"
+                    :info="sBuilding"
                     shadow
                     @choose="chooseBuilding">
                   </building-card>
@@ -106,7 +106,7 @@
           </el-tab-pane>
         </el-tabs>
         <Pagination
-          v-if="showPagination"
+          v-if="pageTotal"
           class="ld-building-pagination"
           :total="pageTotal"
           background
@@ -173,18 +173,24 @@ export default {
       buildingSort: 'influence',
 
       // 用户全部的建筑
-      buildings: [],
-      // 建筑总数
-      bTotal: 0,
+      buildings: {
+        list: [],
+        total: 0,
+        pn: 1,
+        ps: 9
+      },
 
       /**
        * sort building options
        */
 
       // 用户出售的建筑
-      saleBuildings: [],
-      // sale 建筑总数
-      saleBTotal: 0
+      saleBuildings: {
+        list: [],
+        total: 0,
+        pn: 1,
+        ps: 9
+      }
     }
   },
   computed: {
@@ -193,15 +199,9 @@ export default {
     ]),
     pageTotal () {
       if (this.buildingTab === 'all') {
-        return this.bTotal
+        return this.buildings.total
       }
-      return this.saleBTotal
-    },
-    showPagination () {
-      if (this.buildingTab === 'all') {
-        return this.buildings.length
-      }
-      return this.saleBuildings.length
+      return this.saleBuildings.total
     }
   },
   components: {
@@ -231,38 +231,34 @@ export default {
       this.getAllBuilding(params)
     },
 
-    async getAllBuilding ({ address = this.userInfo.address, sort = this.buildingSort, page = 1, offset = 9 } = {}) {
+    async getAllBuilding ({ address = this.userInfo.address, sort = this.buildingSort, pn = this.buildings.pn, ps = this.buildings.ps } = {}) {
       if (!address) return
       this.loading = true
       const params = {
-        page,
-        offset,
+        pn,
+        ps,
         sort,
         user: address
       }
       const res = await getChainLdbs(params)
-      if (res.code === 1000) {
-        const { list, total } = res.data
-        this.buildings = list
-        this.bTotal = total
+      if (res.code === 1000 && res.data) {
+        this.buildings = res.data
       }
       this.loading = false
     },
 
-    async getSaleBuilding ({ address = this.userInfo.address, page = 1, offset = 9 } = {}) {
+    async getSaleBuilding ({ address = this.userInfo.address, pn = this.saleBuildings.pn, ps = this.saleBuildings.ps } = {}) {
       if (!address) return
       this.loading = true
       const params = {
-        page,
-        offset,
+        pn,
+        ps,
         user: address,
         isOnAuction: true
       }
       const res = await getChainLdbs(params)
-      if (res.code === 1000) {
-        const { list, total } = res.data
-        this.saleBuildings = list
-        this.saleBTotal = total
+      if (res.code === 1000 && res.data) {
+        this.saleBuildings = res.data
       }
       this.loading = false
     },

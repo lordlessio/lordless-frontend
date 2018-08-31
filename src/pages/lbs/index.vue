@@ -133,7 +133,7 @@ export default {
     ]),
 
     async getLdbs () {
-      const result = await getChainLdbs({ extensions: 'base', offset: -1 })
+      const result = await getChainLdbs({ extensions: 'base', ps: -1 })
       if (result.code === 1000) {
         const ldbs = result.data.list
         this.ldbs = ldbs

@@ -11,7 +11,9 @@ import {
   timeFormat,
   formatLdbType,
   nextAC,
-  remainingAC
+  remainingAC,
+  filterRegions,
+  findRegionById
 } from 'utils/tool'
 
 Vue.filter('splitAddress', splitAddress)
@@ -37,6 +39,10 @@ Vue.filter('nextAC', nextAC)
 Vue.filter('remainingAC', remainingAC)
 
 Vue.filter('formatLdbType', formatLdbType)
+
+Vue.filter('filterRegions', filterRegions)
+
+Vue.filter('singleRegion', findRegionById)
 
 // ldb detail 私有 filter
 

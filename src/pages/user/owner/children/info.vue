@@ -34,7 +34,7 @@
                     </svg>
                   </span>
                   <span v-if="userInfo.nickName">{{ userInfo.nickName }}</span>
-                  <span v-else>{{ userInfo._id | splitAddress({ before: 4, end: 4 }) }}</span>
+                  <span v-else>{{ userInfo._id | splitAddress({ before: 5, end: 2 }) }}</span>
                   <span>
                     <ld-btn
                       class="user-Authorize-btn"
@@ -147,7 +147,7 @@
                   <p class="text-ellipsis info-ldb-influence">{{ userHome.ldb.chain.influence }} influence</p>
                   <div class="d-flex f-align-baseline info-home-status">
                     <p class="v-flex">{{ userHome.ldb.apLeft }} AP remaining</p>
-                    <ld-btn class="user-info-btn" theme="blue" inverse shadow @click="$router.push(`/tavern/${overviews.home.ldb._id}`)">Go</ld-btn>
+                    <ld-btn class="user-info-btn" theme="blue" inverse shadow @click="$router.push(`/tavern/${userHome.ldb.id}`)">Go</ld-btn>
                   </div>
                 </div>
               </div>

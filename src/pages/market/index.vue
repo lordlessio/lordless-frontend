@@ -15,7 +15,7 @@
         </p>
       </section>
       <section class="lg-d-flex f-align-center market-sort-bar">
-        <p class="lg-v-flex sm-text-left sm-mar-b4">Total {{ total }} Taverns on sale</p>
+        <p class="lg-v-flex sm-text-left sm-mar-b4">Total {{ ldbs.total }} Taverns on sale</p>
         <div class="d-flex f-align-center">
           <span>Sort <span class="sm-hidden">by</span></span>
           <ld-select
@@ -50,7 +50,7 @@
         </el-row>
         <transition name="ld-hide-in-fade">
           <div
-            v-if="!ldbs.length && !ldbsLoading"
+            v-if="!ldbs.total && !ldbsLoading"
             class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
             <svg>
               <use xlink:href="#icon-no-selling-ldb"/>
@@ -65,10 +65,10 @@
           </div>
         </transition>
         <transition name="ld-hide-in-fade">
-          <el-row v-show="ldbs.length && !ldbsLoading" :gutter="40" class="v-flex market-cnt-box">
+          <el-row v-show="ldbs.total && !ldbsLoading" :gutter="40" class="v-flex market-cnt-box">
             <el-col
               class="market-cnt-item"
-              v-for="ldb of ldbs" :key="ldb._id"
+              v-for="ldb of ldbs.list" :key="ldb._id"
               :xs="24" :sm="8">
               <building-card
                 :sale="ldb.chain.auction.isOnAuction"
@@ -109,12 +109,12 @@
           </el-row>
         </transition>
         <div class="market-pagination-box">
-          <skeletion-pager v-if="ldbsLoading && !ldbs.length"></skeletion-pager>
+          <skeletion-pager v-if="ldbsLoading && !ldbs.total"></skeletion-pager>
           <Pagination
-            v-if="ldbs.length"
+            v-if="ldbs.total"
             class="market-pagination-pages"
-            :total="total"
-            :currentPage="paginationPage"
+            :total="ldbs.total"
+            :currentPage="ldbs.pn"
             background
             @currentChange="pageChange">
           </Pagination>
@@ -148,11 +148,12 @@ export default {
   data: () => {
     return {
       // ldb 建筑列表
-      ldbs: [],
-
-      total: 0,
-
-      paginationPage: 1,
+      ldbs: {
+        pn: 1,
+        ps: 9,
+        list: [],
+        total: 0
+      },
 
       marketPath: null,
 
@@ -163,7 +164,7 @@ export default {
       detailInfo: {},
 
       // market search model
-      marketSearch: '',
+      // marketSearch: '',
 
       // loading options
       ldbsLoading: true,
@@ -227,10 +228,11 @@ export default {
      * 打开详情信息页
      */
     openDetail (info) {
+      console.log('---- info', info)
       this.detailModel = true
       this.$nextTick(() => {
         this.detailInfo = info
-        historyState(`/tavern/${info._id}`)
+        historyState(`/tavern/${info.id}`)
       })
     },
 
@@ -244,19 +246,14 @@ export default {
     /**
      * 获取 ldb 列表信息
      */
-    async getLdbs ({ page = 1, offset = 9, sort = this.ldbSort, order = this.ldbOrder } = {}) {
+    async getLdbs ({ pn = this.ldbs.pn, ps = this.ldbs.ps, sort = this.ldbSort, order = this.ldbOrder } = {}) {
       this.ldbsLoading = true
       const params = {
-        page,
-        offset,
-        sort,
-        order
+        pn, ps, sort, order
       }
       const res = await getChainLdbs(params)
-      if (res.code === 1000) {
-        const { list, total } = res.data
-        this.ldbs = list
-        this.total = total
+      if (res.code === 1000 && res.data) {
+        this.ldbs = res.data
       }
       this.ldbsLoading = false
     },
@@ -268,8 +265,9 @@ export default {
     orderChange (order) {
       this.getLdbs({ order })
     },
+
     pageChange (page) {
-      this.getLdbs({ page })
+      this.getLdbs({ pn: page })
 
       const path = `${this.$route.path}?page=${page}`
       this.marketPath = path
@@ -282,21 +280,20 @@ export default {
       if (!val) {
         window.history.pushState(null, null, this.$route.path)
       }
-    },
-    marketSearch (val) {
-      const ldbs = this.$root.$children[0].ldbs
-      if (val) {
-        this.ldbs = ldbs.filter(item => item.name.zh.indexOf(val) !== -1)
-      } else {
-        this.ldbs = ldbs
-      }
     }
+    // marketSearch (val) {
+    //   const ldbs = this.$root.$children[0].ldbs
+    //   if (val) {
+    //     this.ldbs = ldbs.filter(item => item.name.zh.indexOf(val) !== -1)
+    //   } else {
+    //     this.ldbs = ldbs
+    //   }
+    // }
   },
   mounted () {
     this.$nextTick(() => {
-      const page = parseInt(this.$route.query.page || 1)
-      this.paginationPage = page
-      this.getLdbs({ page })
+      const pn = parseInt(this.$route.query.page || 1)
+      this.getLdbs({ pn })
     })
   }
 }

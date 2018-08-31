@@ -67,7 +67,11 @@
                           <p>{{ info.lord.address | splitAddress({ symbol: '******' }) }}</p>
                         </div>
                       </div>
-                      <p class="detail-ldb-city">Shanghai China</p>
+                      <p class="d-flex row-flex detail-ldb-city">
+                        <span class="ldb-city-item" :style="`order: ${-index};`" v-for="(region, index) of info.origin.regions.slice(0, 2)" :key="`${region}_${index}`">
+                          {{ region | singleRegion }}
+                        </span>
+                      </p>
                     </figcaption>
                   </figure>
                 </div>
@@ -691,6 +695,22 @@ export default {
   .detail-ldb-city {
     margin-top: 10px;
     font-size: 20px;
+  }
+  .ldb-city-item {
+    &:not(:last-of-type) {
+      position: relative;
+      margin-left: 16px;
+      &::before {
+        content: '·';
+        position: absolute;
+        left: -8px;
+        top: 50%;
+        color: inherit;
+        font-size: 36px;
+        font-weight: bold;
+        transform: translate(-50%, -50%);
+      }
+    }
   }
 
   // detail-header-right

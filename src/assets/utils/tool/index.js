@@ -398,3 +398,21 @@ export const getMessageByCode = ({ code, errorMsg = '未知错误' }) => {
   }
   return message[code] || errorMsg
 }
+
+export const filterRegions = (ids, { lang = 'en', len = 2, invserse = false, list = store.state.region.regions } = {}) => {
+  if (!list.length) return ' '
+  if (objectType(ids)[0] === 'string') return list.filter(item => item._id === ids)[0].name[lang]
+  else if (objectType(ids)[0] === 'array') {
+    ids = ids.map(id => {
+      return list.filter(item => item._id === id)[0].name[lang]
+    })
+    if (invserse) ids = ids.slice(ids.length - len, ids.length)
+    else ids = ids.slice(0, len)
+  }
+  return ids.join(' ')
+}
+
+export const findRegionById = (id, { lang = 'en', list = store.state.region.regions } = {}) => {
+  if (!list.length) return ' '
+  return list.filter(item => item._id === id)[0].name[lang]
+}
