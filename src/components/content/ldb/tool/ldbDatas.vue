@@ -6,38 +6,42 @@
       <datas-skeletion v-if="loading"></datas-skeletion>
     </transition>
 
-    <transition name="ld-hide-fade" @after-enter="$emit('enter')">
+    <transition name="ld-hide-fade" @after-enter="datasEnter">
       <section v-if="!loading" class="d-flex f-align-ceter sm-col-flex detail-ldb-datas">
         <div class="v-flex ldb-datas-item">
-          <p class="datas-item-title">Level {{ info.chain.level }}</p>
+          <div class="datas-item-title">Level <count-up class="inline-block" :startVal="countUp.level.start" :endVal="countUp.level.end" :duration="countUp.level.duration" :isReady="countUp.level.isReady"></count-up></div>
           <h2>
-            {{ info.activeness }}
-            <span class="TTFontBold inline-block">/ {{ info.chain.level | nextAC }}</span>
+            <span class="datas-item-current">
+              <count-up class="inline-block" :startVal="countUp.cAC.start" :endVal="countUp.cAC.end" :duration="countUp.cAC.duration" :isReady="countUp.cAC.isReady"></count-up>
+            </span>
+            <span class="TTFontBold inline-block datas-item-next">/ <count-up class="inline-block" :startVal="countUp.nAC.start" :endVal="countUp.nAC.end" :duration="countUp.nAC.duration" :isReady="countUp.nAC.isReady"></count-up></span>
           </h2>
           <div class="ldb-datas-progress">
             <ld-progress
               shadow
-              :current="info.activeness"
-              :max="info.chain.level | nextAC"
+              :current="countUp.cAC.end"
+              :max="countUp.nAC.end"
               :gradient="progressOpts.level.gradient">
             </ld-progress>
           </div>
-          <p class="ldb-datas-desc">{{ info.chain.level | remainingAC(info.activeness) }} AC to level up</p>
+          <p class="ldb-datas-desc">{{ countUp.nAC.end - countUp.cAC.end }} AC to level up</p>
         </div>
         <div class="v-flex ldb-datas-item">
           <p class="datas-item-title">Action Point</p>
           <h2>
-            {{ info.apLeft }}
-            <span class="TTFontBold inline-block">/ {{ info.ap }}</span></h2>
+            <span class="datas-item-current">
+              <count-up class="inline-block" :startVal="countUp.cAP.start" :endVal="countUp.cAP.end" :duration="countUp.cAP.duration" :isReady="countUp.cAP.isReady"></count-up>
+            </span>
+            <span class="TTFontBold inline-block datas-item-next">/ <count-up class="inline-block" :startVal="countUp.nAP.start" :endVal="countUp.nAP.end" :duration="countUp.nAP.duration" :isReady="countUp.nAP.isReady"></count-up></span></h2>
           <div class="ldb-datas-progress">
             <ld-progress
               shadow
-              :current="info.apLeft"
-              :max="info.ap"
+              :current="countUp.cAP.end"
+              :max="countUp.nAP.end"
               :gradient="progressOpts.action.gradient">
             </ld-progress>
           </div>
-          <p class="ldb-datas-desc">{{ info.apLeft }} AP remaining</p>
+          <p class="ldb-datas-desc">{{ countUp.cAP.end }} AP remaining</p>
         </div>
       </section>
     </transition>
@@ -63,7 +67,7 @@ export default {
       default: false
     }
   },
-  data: () => {
+  data: (vm) => {
     return {
       progressOpts: {
         level: {
@@ -80,12 +84,49 @@ export default {
             end: '#3588FD'
           }
         }
+      },
+      acTimer: null,
+      apTimer: null,
+      countUp: {
+        level: {
+          isReady: false,
+          duration: 1.5,
+          start: 0,
+          end: 0
+        },
+        cAC: {
+          isReady: false,
+          duration: 1.5,
+          start: 0,
+          end: 0
+        },
+        nAC: {
+          isReady: false,
+          duration: 1.5,
+          start: 0,
+          end: 0
+        },
+        cAP: {
+          isReady: false,
+          duration: 1.5,
+          start: 0,
+          end: 0
+        },
+        nAP: {
+          isReady: false,
+          duration: 1.5,
+          start: 0,
+          end: 0
+        }
       }
     }
   },
   computed: {
     ldbActiveness () {
       return this.info.activeness
+    },
+    apLeft () {
+      return this.info.apLeft
     }
   },
   watch: {
@@ -95,17 +136,144 @@ export default {
      * 达到升级条件，改变建筑等级
      */
     ldbActiveness (val) {
-      const nextAc = nextAC(this.info.chain.level)
-      if (val >= nextAc) {
-        const info = this.info
-        info.chain.level += 1
-        this.$emit('update:info', info)
+      const func = () => {
+        return () => {
+          let _this = this
+          clearTimeout(_this.acTimer)
+          _this.acTimer = null
+          _this.acTimer = setTimeout(() => {
+            const nextAc = nextAC(_this.info.chain.level)
+            if (val >= nextAc) {
+              const info = _this.info
+              info.chain.level += 1
+              _this.$emit('update:info', info)
+              _this.initLevelCU({ end: info.chain.level })
+              _this.initNextACCU({ end: nextAC(info.chain.level) })
+            }
+            _this.initCurrentACCU({ end: val })
+          }, 600)
+        }
       }
+      func()()
+    },
+
+    /**
+     * 监听当前建筑 apLeft
+     */
+    apLeft (val) {
+      const func = () => {
+        return () => {
+          let _this = this
+          clearTimeout(_this.apTimer)
+          _this.apTimer = null
+          _this.apTimer = setTimeout(() => {
+            _this.initCurrentAPCU({ end: val })
+          }, 600)
+        }
+      }
+      func()()
     }
   },
   components: {
     LdProgress,
     DatasSkeletion
+  },
+  methods: {
+    datasEnter () {
+      this.$emit('enter')
+      this.initCountUp()
+    },
+    initCountUp () {
+      this.initLevelCU()
+      this.initCurrentACCU()
+      this.initNextACCU()
+      this.initCurrentAPCU()
+      this.initNextAPCU()
+    },
+    initLevelCU ({ start = this.countUp.level.start, end = this.countUp.level.end || this.info.chain.level } = {}) {
+      if (!this.countUp.level.isReady) {
+        this.$set(this.countUp, 'level', {
+          start: end,
+          end,
+          isReady: true,
+          duration: 1.5
+        })
+        return
+      }
+      this.$set(this.countUp.level, 'end', end)
+      const timeOut = setTimeout(() => {
+        this.$set(this.countUp.level, 'start', end)
+        clearTimeout(timeOut)
+      }, this.countUp.level.duration)
+    },
+
+    initCurrentACCU ({ start = this.countUp.cAC.start, end = this.countUp.cAC.end || this.info.activeness } = {}) {
+      if (!this.countUp.cAC.isReady) {
+        this.$set(this.countUp, 'cAC', {
+          start: end,
+          end,
+          isReady: true,
+          duration: 1.5
+        })
+        return
+      }
+      this.$set(this.countUp.cAC, 'end', end)
+      const timeOut = setTimeout(() => {
+        this.$set(this.countUp.cAC, 'start', end)
+        clearTimeout(timeOut)
+      }, this.countUp.cAC.duration)
+    },
+
+    initNextACCU ({ start = this.countUp.nAC.start, end = this.countUp.nAC.end || nextAC(this.info.chain.level) } = {}) {
+      if (!this.countUp.nAC.isReady) {
+        this.$set(this.countUp, 'nAC', {
+          start: end,
+          end,
+          isReady: true,
+          duration: 1.5
+        })
+        return
+      }
+      this.$set(this.countUp.nAC, 'end', end)
+      const timeOut = setTimeout(() => {
+        this.$set(this.countUp.nAC, 'start', end)
+        clearTimeout(timeOut)
+      }, this.countUp.nAC.duration)
+    },
+
+    initCurrentAPCU ({ start = this.countUp.cAP.start, end = this.countUp.cAP.end || this.info.apLeft } = {}) {
+      if (!this.countUp.cAP.isReady) {
+        this.$set(this.countUp, 'cAP', {
+          start: end,
+          end,
+          isReady: true,
+          duration: 1.5
+        })
+        return
+      }
+      this.$set(this.countUp.cAP, 'end', end)
+      const timeOut = setTimeout(() => {
+        this.$set(this.countUp.cAP, 'start', end)
+        clearTimeout(timeOut)
+      }, this.countUp.cAP.duration)
+    },
+
+    initNextAPCU ({ start = this.countUp.nAP.start, end = this.countUp.nAP.end || this.info.ap } = {}) {
+      if (!this.countUp.nAP.isReady) {
+        this.$set(this.countUp, 'nAP', {
+          start: end,
+          end,
+          isReady: true,
+          duration: 1.5
+        })
+        return
+      }
+      this.$set(this.countUp.nAP, 'end', end)
+      const timeOut = setTimeout(() => {
+        this.$set(this.countUp.nAP, 'start', end)
+        clearTimeout(timeOut)
+      }, this.countUp.nAP.duration)
+    }
   }
 }
 </script>
@@ -123,14 +291,18 @@ export default {
     padding: 32px 30px;
     >h2 {
       margin-top: 10px;
-      >span {
-        font-size: 18px;
-        font-weight: normal;
-        color: #999;
-        transform: translateY(-3px);
-      }
     }
   }
+  .datas-item-current {
+
+  }
+  .datas-item-next {
+    font-size: 18px;
+    font-weight: normal;
+    color: #999;
+    transform: translateY(-3px);
+  }
+
   .datas-item-title {
     font-size: 24px;
   }

@@ -68,9 +68,11 @@
                         </div>
                       </div>
                       <p class="d-flex row-flex detail-ldb-city">
-                        <span class="ldb-city-item" :style="`order: ${-index};`" v-for="(region, index) of info.origin.regions.slice(0, 2)" :key="`${region}_${index}`">
+                        <span class="ldb-city-item">Shanghai</span>
+                        <span class="ldb-city-item">China</span>
+                        <!-- <span class="ldb-city-item" :style="`order: ${-index};`" v-for="(region, index) of info.origin.regions.slice(0, 2)" :key="`${region}_${index}`">
                           {{ region | singleRegion }}
-                        </span>
+                        </span> -->
                       </p>
                     </figcaption>
                   </figure>
@@ -716,7 +718,7 @@ export default {
     font-size: 20px;
   }
   .ldb-city-item {
-    &:not(:last-of-type) {
+    &:not(:first-of-type) {
       position: relative;
       margin-left: 16px;
       &::before {

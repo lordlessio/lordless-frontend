@@ -253,7 +253,7 @@
                     :key="item._id"
                     class="d-flex f-justify-around task-completed-item">
                     <span class="v-flex text-ellipsis">{{ item.ldbTaskType.name }}</span>
-                    <span class="task-completed-reward">+{{ item.executor.reward.count | sliceStr({ end: 6 }) }} <span>{{ item.reward.candy.symbol }}</span></span>
+                    <span class="text-ellipsis text-right task-completed-reward">+{{ item.executor.reward.count | sliceStr({ end: 6 }) }} <span>{{ item.reward.candy.symbol }}</span></span>
                   </li>
                   <li
                     v-if="overviews.completeTasks.total >= overviews.ps"
@@ -285,7 +285,7 @@
               <div class="v-flex d-flex col-flex assets-estimated-cnt">
                 <p class="card-cnt-tip">Valued by USD</p>
                 <div class="v-flex d-flex col-flex f-auto-center card-cnt-box estimated-cnt-box">
-                  <h1 class="TTFontBlack">${{ overviews.estimated || 0 | formatDecimal }}</h1>
+                  <h1 class="TTFontBlack">$<count-up class="inline-block" :endVal="overviews.estimated || 0" :decimals="4" :duration="2.5"></count-up></h1>
                   <!-- <p class="">USD</p> -->
                 </div>
               </div>
@@ -1047,7 +1047,7 @@ export default {
     color: #999;
   }
   .task-completed-item {
-    @include margin('top', 10px, 1);
+    margin-top: 10px;
     >span {
       display: inline-block;
       max-width: 220px;
@@ -1056,7 +1056,7 @@ export default {
   .task-completed-reward {
     font-family: $--font-TTNormsMedium;
     color: #4E47D3;
-    text-align: right;
+    // text-align: right;
     @include width(120px, 1.2);
   }
 

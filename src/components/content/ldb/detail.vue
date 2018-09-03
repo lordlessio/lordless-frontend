@@ -12,10 +12,11 @@
       @setHome="setHome"
       @receive="receiveCandy">
     </ldb-header-tool>
-    <section class="ldb-detail-content" :class="{ 'show': contentShow }">
+    <section id="ldb-detail-content" class="ldb-detail-content" :class="{ 'show': contentShow }">
       <div class="container md d-flex sm-col-flex">
         <div class="detail-cnt-left v-flex">
           <ldb-datas-tool
+            ref="ldbDatas"
             :info.sync="ldbInfo"
             :loading="infoLoading"
             @enter="contentShow = true">
@@ -239,6 +240,21 @@ export default {
       actionTypes.USER_SET_USER_BY_TOKEN,
       actionTypes.USER_SET_USER_HOME
     ]),
+
+    // showContent () {
+    //   this.contentShow = true
+    //   this.$nextTick(() => {
+    //     const content = document.getElementById('ldb-detail-content')
+    //     console.time('content')
+    //     const func = (e) => {
+    //       console.log('----3', e)
+    //       console.timeEnd('content')
+    //       this.$refs.ldbDatas.initCountUp()
+    //       content.removeEventListener(animationEndEvent(), func)
+    //     }
+    //     content.addEventListener(animationEndEvent(), func)
+    //   })
+    // },
 
     async setHome (ldbInfo = this.ldbInfo) {
       const authorize = await this.$refs.authorize.checkoutAuthorize()
@@ -779,6 +795,19 @@ export default {
   /**
    *  ldb-detail-content  -- begin
    */
+  // @keyframes showContent {
+  //   0% {
+  //     opacity: 0;
+  //     transform: translateY(0);
+  //   }
+  //   33% {
+  //     opacity: 1;
+  //   }
+  //   100% {
+  //     opacity: 1;
+  //     transform: translateY(-80px);
+  //   }
+  // }
   .ldb-detail-content {
     position: relative;
     opacity: 0;
@@ -786,6 +815,7 @@ export default {
     z-index: 2;
     transition: opacity .15s ease-in-out, transform .45s ease-in-out;
     &.show {
+      // animation: showContent .45s ease-in-out 1;
       opacity: 1;
       transform: translateY(-80px);
     }

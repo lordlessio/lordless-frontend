@@ -142,7 +142,7 @@ export default {
     showBuy () {
       // const { init, isSell } = this.contractStatus
       const info = this.info
-      return info.chain.auction.isOnAuction || info.chain.auction.isOnPreAuction
+      return !this.isOwner && (info.chain.auction.isOnAuction || info.chain.auction.isOnPreAuction)
     },
 
     showSign () {

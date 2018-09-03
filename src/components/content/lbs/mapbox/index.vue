@@ -117,7 +117,7 @@ export default {
       // const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}"/><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>${apLeft} / ${ap}</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${apLeft / ap * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
       const boxHtml = `
       <div class="d-flex col-flex _marker--ldb-container">
-        <img alt="${name}" src="${imgSrc}"/>
+        <img alt="${name.zh}" src="${imgSrc}"/>
         <div class="text-center _marker--info-box">
           <div class="d-flex col-flex _marker--info-container">
             <div class="_marker--info-bottom">

@@ -198,6 +198,18 @@ export const transitionEvent = () => {
   }
 }
 
+export const animationEndEvent = () => {
+  const el = document.createElement('surface')
+  const animationEnds = {
+    'OAnimation': 'oAnimationEnd',
+    'MozAnimation': 'animationEnd',
+    'WebkitAnimation': 'webkitAnimationEnd'
+  }
+  for (const t in animationEnds) {
+    if (el.style[t] !== undefined) return animationEnds[t]
+  }
+}
+
 export const hasContent = (child, parent, deep = false) => {
   const parentType = objectType(parent)
   if (parentType[0] !== 'object' && parent.indexOf(child) !== -1) return true

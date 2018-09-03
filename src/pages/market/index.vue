@@ -115,6 +115,7 @@
             class="market-pagination-pages"
             :total="ldbs.total"
             :currentPage="ldbs.pn"
+            :size="ldbs.ps"
             background
             @currentChange="pageChange">
           </Pagination>
