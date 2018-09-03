@@ -376,25 +376,24 @@ export default {
     &.animate {
       .detail-header-mask {
         &::after {
-          animation: bounceSkewInRight .55s;
+          animation: bounceSkewInRight .55s 1;
           opacity: 1;
           transform: translate3d(-20%, 0, 0) skew(-25deg) translateX(0px) translateZ(0px);
         }
       }
       .detail-header-left {
         // left: 0;
+        animation: bounceInLeft .55s 1;
         opacity: 1;
-        animation: bounceInLeft .55s;
         transform: translate3d(0, -50%, 0);
         &::before {
           opacity: 1;
         }
       }
       .detail-header-right {
+        animation: bounceInRight .55s .15s 1;
         opacity: 1;
-        animation: bounceInRight .55s .15s;
         transform: translate3d(-100%, 0, 0) translateX(0px);
-        // transform: translateX(0);
       }
     }
   }
@@ -582,6 +581,7 @@ export default {
     opacity: 0;
     z-index: 1;
     transition: all 0s .55s;
+    // transition: all .55s 0s;
     // transition: left .55s spring, opacity .55s spring;
     // background-blend-mode: soft-light;
     &::before {
@@ -745,7 +745,8 @@ export default {
     background-color: #fff;
     opacity: 0;
     transform: translate3d(0, 0, 0) translateX(0px);
-    transition: all 0s .55s;
+    transition: all 0s .7s;
+    // transition: all .55s .15s;
     // transition: transform .55s spring .25s, opacity .55s spring .25s;
     // height: calc(930px / 4 * 3);
   }

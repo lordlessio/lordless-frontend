@@ -9,10 +9,11 @@
         <header-tip :market="false" leftInfo></header-tip>
       </div>
       <ldb-detail
-        v-show="!loading"
+        v-if="!loading"
         :class="{ 'blur': blurs[1] }"
         ref="ldbDetail"
         dialog
+        :detailInfo.sync="detailInfo"
         @initInfo="initDetailInfo">
       </ldb-detail>
     </slide-dialog>
@@ -38,11 +39,9 @@ export default {
   },
   data: () => {
     return {
-      prevLdbId: null,
+      detailInfo: null,
       detailModel: false,
-      loading: true,
-      tokenId: null,
-      openTimeout: null
+      loading: true
     }
   },
   computed: {
@@ -76,25 +75,29 @@ export default {
      * 对话框关闭事件
      */
     dialogClose () {
-      const ldbDetail = this.$refs.ldbDetail
-      if (ldbDetail) {
-        ldbDetail.destory()
-      }
-      this[mutationTypes.LAYOUT_SET_BLURS](0)
+      let timeout = setTimeout(() => {
+        const ldbDetail = this.$refs.ldbDetail
+        if (ldbDetail) {
+          ldbDetail.destory()
+        }
+        this[mutationTypes.LAYOUT_SET_BLURS](0)
+        clearTimeout(timeout)
+        timeout = null
+      }, 0)
       this.$emit('input', false)
-      this.$emit('close')
+      console.log('---detailInfo', this.detailInfo)
+      this.$emit('close', this.detailInfo)
     },
 
-    initDetailInfo ({ chain } = {}) {
-      this.tokenId = chain.tokenId
-      this.initLoading({ tokenId: chain.tokenId })
-    },
-
-    initLoading ({ tokenId = this.tokenId }) {
-      this.loading = false
-      // const ldbDetail = this.$refs.ldbDetail
-      // if (ldbDetail) ldbDetail.checkOwner(tokenId)
+    initDetailInfo () {
+      // this.initLoading()
     }
+
+    // initLoading () {
+    // this.loading = false
+    // const ldbDetail = this.$refs.ldbDetail
+    // if (ldbDetail) ldbDetail.checkOwner(tokenId)
+    // }
   },
   watch: {
     value (val) {

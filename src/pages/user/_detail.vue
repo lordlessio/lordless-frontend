@@ -146,6 +146,7 @@
             v-if="userLdbs.total"
             class="ld-building-pagination"
             :total="userLdbs.total"
+            :size="userLdbs.ps"
             background
             @currentChange="pageChange">
           </Pagination>
@@ -301,8 +302,14 @@ export default {
       this.getUserLdbs({ order })
     },
 
-    dialogClose () {
-
+    dialogClose (info, list = this.userLdbs.list) {
+      for (let i = 0; i < list.length; i++) {
+        if (list[i]._id === info._id) {
+          list[i] = info
+          break
+        }
+      }
+      this.$set(this.userLdbs, 'list', list)
     }
   },
   mounted () {

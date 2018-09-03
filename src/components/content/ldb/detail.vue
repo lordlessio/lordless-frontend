@@ -123,6 +123,10 @@ export default {
     dialog: {
       type: Boolean,
       default: false
+    },
+    detailInfo: {
+      type: Object,
+      default: null
     }
   },
   data: () => {
@@ -209,6 +213,9 @@ export default {
     //     this.checkCrowdsale(this.ldbInfo.chain.tokenId, val)
     //   }
     // },
+    ldbInfo (val, oval) {
+      if (val && oval && this.dialog) this.$emit('update:detailInfo', val)
+    },
     account (val, oval) {
       if (!oval) return
       this.initContractStatus()
@@ -761,13 +768,16 @@ export default {
       this.initStatus()
       this.initContractStatus()
       this.clearCInterval({ all: true })
+
+      this.ldbInfo = null
+      this.ldbRecords = null
+      this.ldbTasks = null
+      this.candyTasks = null
+      this.candies = null
     }
   },
   beforeDestroy () {
     this.destory()
-  },
-  mounted () {
-    this.$nextTick(() => this.$emit('mounted'))
   }
 }
 </script>

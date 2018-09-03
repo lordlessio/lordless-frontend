@@ -240,8 +240,15 @@ export default {
     /**
      * 对话框关闭触发函数
      */
-    dialogClose () {
+    dialogClose (info, list = this.ldbs.list) {
       historyState(this.marketPath || this.$route.path)
+      for (let i = 0; i < list.length; i++) {
+        if (list[i]._id === info._id) {
+          list[i] = info
+          break
+        }
+      }
+      this.$set(this.ldbs, 'list', list)
     },
 
     /**

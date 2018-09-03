@@ -336,6 +336,7 @@ export default {
     position: absolute;
     bottom: 50px;
     right: 60px;
+    border-radius: 10px;
     box-shadow: 2.5px 5px 20px 0 rgba(0, 0, 0, .25);
   }
   .lbs-control-container {

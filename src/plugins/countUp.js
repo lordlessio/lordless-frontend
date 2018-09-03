@@ -44,7 +44,6 @@ const _CountUp = {
     endVal: {
       handler (value) {
         if (this.instance && isFunction(this.instance.update) && this.isReady) {
-          console.log('------ change endVal')
           this.instance.update(value)
         } else {
           this.init()
@@ -55,7 +54,6 @@ const _CountUp = {
   },
   methods: {
     init () {
-      console.log('this.endVal', this.endVal)
       if (this.instance) {
         return
       }

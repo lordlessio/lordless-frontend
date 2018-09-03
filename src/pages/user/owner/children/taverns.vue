@@ -106,9 +106,10 @@
           </el-tab-pane>
         </el-tabs>
         <Pagination
-          v-if="pageTotal"
+          v-if="pageDatas.total"
           class="ld-building-pagination"
-          :total="pageTotal"
+          :total="pageDatas.total"
+          :size="pageDatas.ps"
           background
           @currentChange="pageChange">
         </Pagination>
@@ -197,11 +198,11 @@ export default {
     ...mapState('user', [
       'userInfo'
     ]),
-    pageTotal () {
+    pageDatas () {
       if (this.buildingTab === 'all') {
-        return this.buildings.total
+        return { total: this.buildings.total, ps: this.buildings.ps }
       }
-      return this.saleBuildings.total
+      return { total: this.saleBuildings.total, ps: this.saleBuildings.ps }
     }
   },
   components: {
@@ -282,7 +283,7 @@ export default {
     /**
      * 对话框关闭触发函数
      */
-    dialogClose () {
+    dialogClose (info) {
       historyState(this.$route.path)
     }
   },
