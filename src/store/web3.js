@@ -59,7 +59,6 @@ export default {
 
     // 重置或修改 web3Opt
     [actionTypes.WEB3_RESET_OR_UPDATE_WEB3] ({ commit, state }, payload = stringifyParse(state.defaultWeb3Opt)) {
-      if (objectType(payload)[0] !== 'object') return
       commit(mutationTypes.WEB3_SET_WEB3_INFO, payload)
     }
   }

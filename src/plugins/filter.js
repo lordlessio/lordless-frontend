@@ -44,6 +44,10 @@ Vue.filter('filterRegions', filterRegions)
 
 Vue.filter('singleRegion', findRegionById)
 
+Vue.filter('originSource', (url, { size = 1000 } = {}) => {
+  return `${process.env.LDBICON_ORIGIN}/frontend/static${url}?x-oss-process=image/resize,w_${size}`
+})
+
 // ldb detail 私有 filter
 
 // 过滤 group 任务

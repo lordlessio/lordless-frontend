@@ -63,7 +63,7 @@
                   <a href="http://lordless.io/team" target="_blank">Team</a>
                 </li>
                 <li>
-                  <router-link to="/">Guide</router-link>
+                  <router-link to="/guide">Guide</router-link>
                 </li>
                 <li>
                   <a href="https://github.com/lordlessio/game-contracts/wiki/FAQ" target="_blank">

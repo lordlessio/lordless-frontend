@@ -20,10 +20,8 @@
                 <p class="text-color-secondary mar-t2">You'll need to use Chrome or Firefox as your internet browser because this will allow you to user Metamask(your digital wallet)</p>
                 <p class="no-install-browser" v-if="unBrowser">Install <a target="_blank" href="https://www.google.com/chrome/">Google Chrome</a> or <a target="_blank" href="https://www.mozilla.org/en-US/firefox/new/">Mozilla Firefox</a></p>
               </div>
-              <div class="sm-hidden text-center status-cnt-right">
-                <svg>
-                  <use xlink:href="#icon-borswer"/>
-                </svg>
+              <div class="d-flex f-auto-center sm-hidden text-center status-cnt-right">
+                <img class="browser" :src="'/img/guide-browsers.png' | originSource"/>
               </div>
             </div>
           </li>
@@ -41,10 +39,11 @@
                 <p class="no-install-metamask" v-if="unBrowser && unMetamask">Install extension for <a target="_blank" href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn">Google Chrome</a> or <a target="_blank" href="https://addons.mozilla.org/zh-CN/firefox/addon/ether-metamask/">Mozilla Firefox</a></p>
                 <p class="unlock-wallet" v-if="!unMetamask && lockedMetamask">Your wallet is locked. Please unlock it.</p>
               </div>
-              <div class="sm-hidden text-center status-cnt-right">
-                <svg>
+              <div class="d-flex f-auto-center sm-hidden text-center status-cnt-right">
+                <img :src="'/img/guide-metamask.png' | originSource"/>
+                <!-- <svg>
                   <use xlink:href="#color-icon-metamask"/>
-                </svg>
+                </svg> -->
               </div>
             </div>
           </li>
@@ -60,10 +59,11 @@
                 <h2>Own some Ethereum</h2>
                 <p class="text-color-secondary mar-t2">You'll need to use Chrome or Firefox as your internet browser because this will allow you to user Metamask(your digital wallet)</p>
               </div>
-              <div class="sm-hidden text-center status-cnt-right">
-                <svg>
+              <div class="d-flex f-auto-center sm-hidden text-center status-cnt-right">
+                <!-- <svg>
                   <use xlink:href="#color-coin-eth"/>
-                </svg>
+                </svg> -->
+                <img :src="'/img/guide-ethereum.png' | originSource"/>
               </div>
             </div>
           </li>
@@ -156,25 +156,29 @@ export default {
 
 <style lang="scss" scoped>
   @import '@/assets/stylus/mixin/index.scss';
+  .lordless-status-box {
+    padding-top: 80px;
+  }
   .no-install-browser, .no-install-metamask {
-    @include margin('top', 20px, 1);
+    margin-top: 20px;
     >a {
       color: #4E47D3;
       text-decoration: none;
     }
   }
   .unlock-wallet {
+    margin-top: 20px;
     @include margin('top', 20px, 1);
   }
   .lordless-status-header {
-    @include margin('top', 50px, 1);
-    @include margin('bottom', 100px, 1);
+    margin-top: 50px;
+    margin-bottom: 100px;
     >h1 {
-      @include fontSize(36px, 1);
+      font-size: 36px;
     }
     >p {
-      @include margin('top', 18px, 1);
-      @include fontSize(20px, 1);
+      margin-top: 18px;
+      font-size: 20px;
     }
   }
   .status-cnt-item {
@@ -187,42 +191,46 @@ export default {
   }
   .status-cnt-container {
     position: relative;
-    @include padding-around(60px, 0, 30px, 60px, 1);
+    padding: 60px 0 30px 60px;
   }
   .status-cnt-symbol {
     position: absolute;
     top: -20px;
     left: 31px;
-    @include fontSize(14px, 1);
+    font-size: 14px;
   }
   .status-cnt-left {
     >h2 {
-      @include fontSize(22px, 1);
+      font-size: 22px;
     }
     >p {
-      @include fontSize(16px, 1);
+      font-size: 16px;
     }
   }
   .status-cnt-right {
+    padding: 0 30px;
     width: 30%;
     max-width: 350px;
+    height: 120px;
     box-sizing: border-box;
-    @include height(120px, 1);
-    @include padding('left', 30px, 1);
-    @include padding('right', 30px, 1);
-    svg {
-      width: 100%;
+    img {
+      height: 100%;
+      pointer-events: none;
+      &.browser {
+        width: 100%;
+        height: auto;
+      }
     }
   }
 
   .status-start-box {
+    margin-top: 60px;
+    padding-top: 40px;
+    padding-bottom: 30px;
     position: relative;
     color: #fff;
     background-color: transparent;
     @include TTFontBolder();
-    @include margin('top', 60px, 1);
-    @include padding('top', 40px, 1);
-    @include padding('bottom', 30px, 1);
     &::before {
       content: '';
       position: absolute;
@@ -236,31 +244,31 @@ export default {
     }
     >h2 {
       font-family: inherit;
-      @include fontSize(26px, 1);
+      font-size: 26px;
     }
   }
   .start-btn {
+    margin-top: 30px;
+    padding: 10px 30px;
     color: #4E47D3;
-    @include fontSize(24px, 1);
-    @include margin('top', 30px, 1);
-    @include padding-around(10px, 30px, 10px, 30px, 1);
+    font-size: 24px;
   }
 
   .lordless-status-questions {
+    margin-top: 40px;
+    margin-bottom: 80px;
     @include TTFontBolder();
-    @include margin('top', 40px, 1);
-    @include padding('bottom', 80px, 1);
     >h2 {
       font-family: inherit;
-      @include fontSize(28px, 1);
+      font-size: 28px;
     }
   }
   .status-questions-cnt {
-    @include margin('top', 50px, 1);
+    margin-top: 50px;
     >p {
+      margin-top: 50px;
+      font-size: 20px;
       @include TTFontNormal();
-      @include fontSize(20px, 1);
-      @include margin('top', 50px, 1);
       >span {
         text-decoration: underline;
         cursor: pointer;
@@ -273,18 +281,18 @@ export default {
     overflow: hidden;
     box-shadow: 5px 5px 20px 0 rgba(0, 0, 0, .15);
     &:not(:first-of-type) {
-      @include margin('left', 40px, 1);
+      margin-left: 40px;
     }
   }
   .questions-cnt-header {
+    padding: 32px 22px;
     color: #fff;
+    font-size: 18px;
     background-color: #4E47D3;
-    @include fontSize(18px, 1);
-    @include padding-around(32px, 22px, 32px, 22px, 1);
   }
   .questions-cnt-body {
+    padding: 24px 22px;
+    font-size: 16px;
     @include TTFontNormal();
-    @include fontSize(16px, 1);
-    @include padding-around(24px, 22px, 24px, 22px, 1);
   }
 </style>

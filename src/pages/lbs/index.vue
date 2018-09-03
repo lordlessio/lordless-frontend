@@ -222,6 +222,8 @@ export default {
 
       this.initMapControl()
 
+      this.flyToLdb()
+
       this.$refs.loopTask.init()
       // this.$refs.txCarousel.init()
       // if (ldb) {
@@ -231,16 +233,16 @@ export default {
       // }
     },
 
-    flyToLdb (ldbId = this.$route.query.ldb, ldbs = this.ldbs) {
-      if (!ldbId) return
-      const ldb = ldbs.filter(item => item._id === parseInt(ldbId))[0]
+    flyToLdb (tavernId = this.$route.query.tavern, ldbs = this.ldbs) {
+      if (!tavernId) return
+      const ldb = ldbs.filter(item => item._id === parseInt(tavernId))[0]
       console.log('ldb', ldb)
       if (!ldb) return
       let { lng, lat } = ldb.chain
       lng = transferCoords(lng)
       lat = transferCoords(lat)
       this.$refs.lordMap.flyToCoords({ center: [lng, lat], pitch: this.lbsMPitch, zoom: this.mapScrollZooms[this.mapScrollZooms.length - 1] }, () => {
-        historyState(`${this.$route.path}?tavern=${ldbId}`)
+        historyState(`${this.$route.path}?tavern=${tavernId}`)
       })
     },
 

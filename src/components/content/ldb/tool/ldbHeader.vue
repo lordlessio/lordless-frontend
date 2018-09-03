@@ -84,7 +84,7 @@
               <ld-img absolute type="span" :src="info.ldbIcon.source.detail | reldbIcon('detail')"></ld-img>
             </div>
             <div class="detail-ldb-level">
-              <img alt="tavern popularity image" :src="`/static/img/ldb/ldb-level-${info.chain.popularity}.png`"/>
+              <img alt="tavern popularity image" :src="`/img/ldb-level-${info.chain.popularity}.png` | originSource({ size: 450 })"/>
             </div>
           </div>
         </div>

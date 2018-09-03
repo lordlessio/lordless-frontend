@@ -751,10 +751,6 @@ export default {
     this.destory()
   },
   mounted () {
-    // if (!this.dialog) {
-    //   window.screenTop = '80px'
-    // }
-    document.documentElement.scrollTop = 0
     this.$nextTick(() => this.$emit('mounted'))
   }
 }

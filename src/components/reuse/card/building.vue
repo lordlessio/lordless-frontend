@@ -4,7 +4,7 @@
       <div class="building-card-top">
         <div class="building-header" :class="`building-popularity-${info.chain.popularity}`">
           <div class="building-level">
-            <img alt="tavern popularity image" :src="`/static/img/ldb/ldb-level-${info.chain.popularity}.png`"/>
+            <img alt="tavern popularity image" :src="`/img/ldb-level-${info.chain.popularity}.png` | originSource({ size: 120 })"/>
           </div>
           <img alt="tavern curve" class="building-curve" src="~/static/svg/single/curve.svg">
           <ld-img alt="tavern preview" :src="info.ldbIcon.source.preview | reldbIcon"></ld-img>
@@ -134,7 +134,7 @@ export default {
     border-radius: 5px;
     transition: all .15s ease;
     &.sale {
-      .building-sale-tag, .building-sale-bg {
+      .building-sale-tag {
         visibility: visible;
       }
     }
@@ -181,7 +181,6 @@ export default {
     background-position-y: 45%;
     opacity: .3;
     background-repeat: no-repeat;
-    visibility: hidden;
   }
   .building-sale-tag {
     position: absolute;

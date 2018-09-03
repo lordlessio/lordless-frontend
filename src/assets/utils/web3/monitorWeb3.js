@@ -16,7 +16,7 @@ export const monitorWeb3 = () => {
       gasPrice = gasPriceRes.gasPrice
       store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { gasPrice: gasPriceRes.gasPrice || 0 })
     }
-  }, 3000)
+  }, 30000)
 
   return setInterval(async () => {
     /**
@@ -34,6 +34,7 @@ export const monitorWeb3 = () => {
     const nRes = await getNetwork(web3js)
 
     if (nRes.error) {
+      error = nRes.error
       store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { error: nRes.error })
       return
     }
@@ -43,7 +44,7 @@ export const monitorWeb3 = () => {
     // 如果切换了网络, 修改 web3Opt
     if ((newNetworkId && newNetworkId !== networkId) || (!newNetworkId && networkId)) {
       networkId = newNetworkId
-      store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { networkId: newNetworkId })
+      store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { networkId })
       return
     }
 
@@ -53,6 +54,7 @@ export const monitorWeb3 = () => {
     const cRes = await getCoinbase(web3js)
 
     if (cRes.error) {
+      error = nRes.error
       store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { error: nRes.error })
       return
     }

@@ -19,7 +19,6 @@ export default {
     }
   },
   mounted () {
-    document.documentElement.scrollTop = 0
     const { ldbId } = this.$route.params
     this.$nextTick(() => this.$refs.ldbDetail.init(ldbId))
   }

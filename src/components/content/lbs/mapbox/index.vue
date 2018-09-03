@@ -383,7 +383,15 @@ export default {
         el.onload = () => {
           resolve()
         }
-        el.onerror = (e) => reject(new Error(e))
+        el.onerror = () => {
+          this.$notify.error({
+            title: 'Timeout of network!',
+            message: 'error of map source, please checkout your network.',
+            position: 'bottom-right',
+            duration: 10000
+          })
+        }
+        // el.onerror = (e) => reject(new Error(e))
       })
     },
 

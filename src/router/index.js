@@ -11,7 +11,7 @@ import Lbs from '@/pages/lbs'
 
 import TavernDetail from '@/pages/ldb/_detail.vue'
 
-import Status from '@/pages/help/status'
+import Guide from '@/pages/help/guide'
 
 import TaskDetail from '@/pages/task/_detail.vue'
 
@@ -79,11 +79,11 @@ const router = new Router({
       }
     },
     {
-      path: '/status',
-      name: 'status',
-      component: Status,
+      path: '/guide',
+      name: 'guide',
+      component: Guide,
       meta: {
-        title: 'lordless status',
+        title: 'lordless guide',
         header: {
           fixed: true,
           scroll: true,
@@ -238,6 +238,7 @@ router.beforeEach((to, from, next) => {
 
 // google统计
 router.afterEach(function (to) {
+  document.documentElement.scrollTop = 0
   if (window.ga) {
     window.ga('set', 'page', to.fullPath) // 你可能想根据请求参数添加其他参数，可以修改这里的 to.fullPath
     window.ga('send', 'pageview')

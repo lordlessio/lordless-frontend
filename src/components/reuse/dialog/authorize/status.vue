@@ -4,8 +4,8 @@
       <h1 class="TTFontBolder">{{ infos[type].title }}</h1>
       <p>{{ infos[type].content }}</p>
       <p>New here?Read our guide on getting started.</p>
-      <ld-btn theme="deep-blue" class="TTFontBolder lordless-message-btn" @click="$router.push('/status')">Read guide</ld-btn>
-      <img-box class="authorize-status-img" :alt="infos[type].title" :sType="infos[type].sType" :center="false" :src="infos[type].imgUrl"></img-box>
+      <ld-btn theme="deep-blue" class="TTFontBolder lordless-message-btn" @click="$router.push('/guide')">Read guide</ld-btn>
+      <img-box class="authorize-status-img" :alt="infos[type].title" :sType="infos[type].sType" :center="false" :src="infos[type].imgUrl | originSource"></img-box>
     </div>
   </div>
 </template>
@@ -26,25 +26,25 @@ export default {
         missing: {
           title: 'MetaMask is Missing',
           content: 'Install MetaMask in your browser extension market.',
-          imgUrl: '/static/img/status/status-metamask-addon.png',
+          imgUrl: '/img/status-metamask-addon.png',
           sType: 'width'
         },
         locked: {
           title: 'Your MetaMask is locked',
           content: 'Open MetaMask and follow the instructions to unlock it.',
-          imgUrl: '/static/img/status/status-metamask-addon.png',
+          imgUrl: '/img/status-metamask-addon.png',
           sType: 'width'
         },
         network: {
           title: 'MetaMask network is unallow',
           content: 'Open MetaMask and Choose right network.',
-          imgUrl: '/static/img/status/status-main-network.png',
+          imgUrl: '/img/status-main-network.png',
           sType: 'height'
         },
         browser: {
           title: 'Your browser is unsupported',
           content: 'You need to use Chrome or Firefox which allows you to use MetaMask.',
-          imgUrl: '/static/img/status/status-borwser.png',
+          imgUrl: '/img/status-borwser.png',
           sType: 'width'
         }
       }

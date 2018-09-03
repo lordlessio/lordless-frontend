@@ -174,11 +174,10 @@ export default {
 
     // 合约内部状态初始化状态
     authorizeInit () {
-      if (this.isInit) return true
       const browserInit = !this.browser.default
 
       const web3Opt = this.$root.$children[0].web3Opt
-      const web3Init = !web3Opt.web3js.default
+      const web3Init = !web3Opt.web3js.default && !web3Opt.error
       // const userInit = !this.userInfo.default
       console.log('browserInit', browserInit, web3Init)
       if (browserInit && web3Init) {
@@ -186,6 +185,7 @@ export default {
         this.isInit = true
         return true
       }
+      this.isInit = false
       return false
     },
 
@@ -221,7 +221,7 @@ export default {
           position: 'bottom-right',
           duration: 3500
         })
-        return
+        // return false
       }
       if (!this.isInit && !init) {
         this.$notify({
@@ -232,7 +232,7 @@ export default {
           duration: 3500
         })
       }
-      if (!this.isInit) return false
+      // if (!this.isInit) return false
       this.initModels()
       console.log('---- this.statusType', this.statusType)
 
