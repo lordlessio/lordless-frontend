@@ -148,12 +148,10 @@ export default {
         .catch(err => {
           console.log('err', err)
           this.metamaskChoose = false
+          this.crowdsalePending = true
           this.$emit('error', err)
         })
     }
-  },
-  mounted () {
-    console.log('NFTsCrowdsale', this.NFTsCrowdsale)
   }
 }
 </script>

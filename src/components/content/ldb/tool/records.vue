@@ -43,10 +43,14 @@
                 {{ record.created_at | timeFormat }}
               </el-col>
               <el-col :span="6" class="sm-text-ellipsis">
-                {{ record.market[0].buyer | splitAddress({ before: 6, end: 4 }) }}
+                <router-link :to="`/user/${record.market[0].buyer}`">
+                  {{ record.market[0].buyer | splitAddress({ before: 6, end: 4 }) }}
+                </router-link>
               </el-col>
               <el-col :span="6" class="sm-text-ellipsis">
-                {{ record.market[0].seller | splitAddress({ before: 6, end: 4 }) }}
+                <router-link :to="`/user/${record.market[0].seller}`">
+                  {{ record.market[0].seller | splitAddress({ before: 6, end: 4 }) }}
+                </router-link>
               </el-col>
             </el-row>
           </el-row>
@@ -115,6 +119,12 @@ export default {
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .25);
     &:not(:first-of-type) {
       margin-top: 25px;
+    }
+    a {
+      color: inherit;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 </style>

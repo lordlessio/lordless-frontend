@@ -3,7 +3,6 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
-// const fs = require('fs')
 
 const { format } = require('date-fns')
 const argv = require('yargs').argv
@@ -11,22 +10,13 @@ let env = require('./prod.env')
 
 const assetsRoot = path.resolve(__dirname, '../dist')
 
-// 读取 dist/ossPublicPath.json 文件，获得其中的地址
-// const txtPath = path.resolve(__dirname, '../dist/ossPath.json')
-
-// console.log('===', fs.existsSync(txtPath), txtPath)
-// if (!fs.existsSync(txtPath)) {
-//   fs.mkdirSync(txtPath)
-// }
-
-// const oss = fs.readFileSync(txtPath)
-// console.log('oss', oss)
-
 const timeStr = `${format(new Date(), 'YYYY-MM-DD')}_${new Date().getTime()}`
 
 if (argv.env === 'ropsten') {
   env = require('./ropsten.env')
 }
+
+const devEnv = require('./dev.env')
 
 const ossPublicPath = `frontend/${env.OSSFOLDERPATH}/${timeStr}/`
 
@@ -35,14 +25,14 @@ const ossPublicPath = `frontend/${env.OSSFOLDERPATH}/${timeStr}/`
 
 module.exports = {
   dev: {
-    env: require('./dev.env'),
+    env: devEnv,
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
 
     // Various Dev Server settings
     host: '0.0.0.0', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: devEnv.port || 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,

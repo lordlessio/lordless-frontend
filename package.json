@@ -5,7 +5,8 @@
   "author": "founy",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --port 8080",
+    "pdev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --port 80",
     "start": "npm run dev",
     "testBuild": "node build/build.js --env ropsten",
     "build": "node build/build.js",

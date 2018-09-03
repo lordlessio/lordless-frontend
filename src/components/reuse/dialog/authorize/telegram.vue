@@ -19,7 +19,7 @@
           <p class="TTFontNormal telegram-info-text">Authorization the <a href="#" class="TTFontBolder">Telegram</a> to Receive Task</p>
         </div>
         <ld-btn
-          v-if="userInfo.telegram && userInfo.telegram.id"
+          v-if="isOk"
           class="TTFontBolder ld-authorize-btn"
           theme="blue"
           shadow
@@ -83,12 +83,20 @@ export default {
   computed: {
     ...mapState('user', [
       'userInfo'
-    ])
+    ]),
+
+    isOk () {
+      return this.userInfo.telegram && this.userInfo.telegram.id
+    }
   },
   watch: {
     value (val) {
       if (val) this.$nextTick(() => this.initTelegram())
       else this.removeTelegram()
+    },
+
+    isOk (val) {
+      if (val) this.$emit('close')
     }
   },
   components: {

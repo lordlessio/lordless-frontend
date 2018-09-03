@@ -754,6 +754,7 @@ export default {
     // if (!this.dialog) {
     //   window.screenTop = '80px'
     // }
+    document.documentElement.scrollTop = 0
     this.$nextTick(() => this.$emit('mounted'))
   }
 }
