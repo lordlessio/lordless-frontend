@@ -232,7 +232,7 @@ export default {
           duration: 3500
         })
       }
-      // if (!this.isInit) return false
+      if (!this.isInit) return false
       this.initModels()
       console.log('---- this.statusType', this.statusType)
 
