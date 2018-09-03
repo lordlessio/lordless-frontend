@@ -215,8 +215,8 @@ export default {
     checkoutAuthorize ({ init = false, crowdsale = false, telegram = false } = {}) {
       if (this.web3Error) {
         this.$notify.error({
-          title: 'web3初始化失败!',
-          message: '请检查 Metamask 是否正常.',
+          title: 'Error!',
+          message: 'please check your metamask!',
           position: 'bottom-right',
           duration: 3500
         })
@@ -225,8 +225,8 @@ export default {
       if (!this.isInit && !init) {
         this.$notify({
           type: 'warning',
-          title: 'web3初始化中...',
-          message: 'web3还在初始化, 检查 Metamask 后重试.',
+          title: 'web3 init...',
+          message: 'please check your metamask! ',
           position: 'bottom-right',
           duration: 3500
         })

@@ -247,8 +247,8 @@ export default {
       if (res.code === 1000) {
         this.$notify({
           type: 'success',
-          title: 'Home 设置成功!',
-          message: `成功设置 ${ldbInfo.name.zh} 为Home`,
+          title: 'Home set successfully!',
+          message: ``,
           position: 'bottom-right',
           duration: 1500
         })
@@ -280,7 +280,7 @@ export default {
         this.ldbInfo = Object.assign({}, this.ldbInfo, res.data)
       } else {
         this.$notify.error({
-          title: '建筑信息获取失败!',
+          title: 'Network Error!',
           message: getMessageByCode(res),
           position: 'bottom-right',
           duration: 5000
@@ -665,8 +665,8 @@ export default {
 
         this.$notify({
           type: 'success',
-          title: '糖果领取成功!',
-          message: `成功领取 ${res.data.executor.reward.count.toFixed(4)} 个 ${ldbTaskType.candyType.symbol.toUpperCase()}`,
+          title: 'Cheers!',
+          message: `+ ${res.data.executor.reward.count.toFixed(4)} ${ldbTaskType.candyType.symbol.toUpperCase()}`,
           position: 'bottom-right',
           duration: 1500
         })
@@ -679,7 +679,7 @@ export default {
         this.$set(this.ldbInfo, 'apLeft', this.ldbInfo.apLeft - res.data.apCost)
       } else {
         this.$notify.error({
-          title: '糖果领取失败!',
+          title: 'Error!',
           message: getMessageByCode(res),
           position: 'bottom-right',
           duration: 3500
@@ -703,8 +703,8 @@ export default {
     async receiveTask ({ _id, countLeft } = {}, cb) {
       if (!countLeft) {
         this.$notify.error({
-          title: '任务领取失败!',
-          message: '超出任务领取上限',
+          title: 'Error!',
+          message: 'quests count limit',
           position: 'bottom-right',
           duration: 3500
         })
@@ -730,7 +730,7 @@ export default {
         this.$set(this.ldbInfo, 'apLeft', this.ldbInfo.apLeft - res.data.apCost)
       } else {
         this.$notify.error({
-          title: '任务领取失败!',
+          title: 'Error!',
           message: getMessageByCode(res),
           position: 'bottom-right',
           duration: 3500

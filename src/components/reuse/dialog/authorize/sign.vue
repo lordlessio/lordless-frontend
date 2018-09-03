@@ -189,8 +189,8 @@ export default {
       if (res.code === 1000 && !res.data) this.register = true
       else if (res.code !== 1000) {
         this.$notify.error({
-          title: '用户检测失败!',
-          message: res.errorMsg || '未知错误',
+          title: 'error!',
+          message: res.errorMsg || 'unknown',
           position: 'bottom-right',
           duration: 2500
         })

@@ -129,7 +129,7 @@ export default {
           this[actionTypes.USER_SET_USER_BY_TOKEN]({ update: true })
         } else {
           this.$notify.error({
-            title: 'Telegram 授权失败!',
+            title: 'Telegram authorization failed!',
             message: res.errorMsg,
             position: 'bottom-right',
             duration: 3500

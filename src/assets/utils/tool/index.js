@@ -390,11 +390,11 @@ export const formatLdbType = (type) => {
 
 export const getMessageByCode = ({ code, errorMsg = '未知错误' }) => {
   const message = {
-    2001: '您的Ap不足了，请耐心等待下次恢复。',
-    2002: '建筑的Ap不足了，请换个建筑继续吧。',
-    2003: '领主不可以领取自己建筑的糖果。',
-    2004: '该任务已经达到领取上限了。',
-    2011: '该任务不存在，可能它过期了'
+    2001: 'Your Ap is not enough, please wait for recovery.',
+    2002: 'Tavern\'s Ap is not enough; please change to another',
+    2003: 'don\'t cheer by yourself',
+    2004: 'quests count is limited',
+    2011: 'quest does not exist'
   }
   return message[code] || errorMsg
 }
