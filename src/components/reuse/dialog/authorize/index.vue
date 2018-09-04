@@ -213,7 +213,28 @@ export default {
       this.authorizeDialog = false
     },
 
-    checkoutAuthorize ({ init = false, crowdsale = false, telegram = false } = {}) {
+    checkoutAuthorize ({ crowdsale = false, telegram = false } = {}) {
+      // 检查用户信息是否ok
+      if (!this.address) {
+        this.authorizeDialog = true
+        return false
+      }
+
+      if (!crowdsale && !telegram) return true
+
+      this.initModels()
+      console.log('---- this.statusType', this.statusType)
+
+      console.log('---- status', this.statusType, !this.address)
+
+      this.showSign = this.signBool
+
+      // 检查guide配置是否ok
+      if (this.statusType) {
+        this.authorizeDialog = true
+        return false
+      }
+
       if (this.web3Error) {
         this.$notify.error({
           title: 'Error!',
@@ -223,7 +244,7 @@ export default {
         })
         // return false
       }
-      if (!this.isInit && !init) {
+      if (!this.isInit) {
         this.$notify({
           type: 'warning',
           title: 'web3 init...',
@@ -233,18 +254,6 @@ export default {
         })
       }
       if (!this.isInit) return false
-      this.initModels()
-      console.log('---- this.statusType', this.statusType)
-
-      console.log('---- status', this.statusType, !this.address)
-
-      this.showSign = this.signBool
-
-      // 检查用户状态是否ok
-      if (this.statusType || !this.address) {
-        this.authorizeDialog = true
-        return false
-      }
 
       // if (this.statusType) {
       //   this.authorizeDialog = true

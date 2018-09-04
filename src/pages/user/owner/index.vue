@@ -142,8 +142,8 @@ export default {
     },
 
     async checkUser () {
-      const authorize = this.$refs.authorize.checkoutAuthorize({ init: true })
-      this.loading = this.userInfo.address && !authorize
+      const authorize = this.$refs.authorize.checkoutAuthorize()
+      this.loading = !this.userInfo.address && !authorize
     },
 
     async logout () {

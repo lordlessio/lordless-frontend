@@ -171,19 +171,20 @@ export default {
       ldbsLoading: true,
 
       // sort model
-      ldbSort: 'influence',
+      ldbSort: 'popular',
 
       // sort 列表选项
       sortItems: [
+        {
+          value: 'popular',
+          label: 'Popularity'
+        },
         {
           value: 'influence',
           label: 'Influential'
         }, {
           value: 'price',
           label: 'Price'
-        }, {
-          value: 'popular',
-          label: 'Popularity'
         }
       ],
 
