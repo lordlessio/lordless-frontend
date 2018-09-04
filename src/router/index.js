@@ -35,7 +35,7 @@ const router = new Router({
       name: 'Market',
       component: Market,
       meta: {
-        title: 'lordless market'
+        title: 'Marketplace - LORDLESS'
       }
     },
     {
@@ -43,7 +43,7 @@ const router = new Router({
       name: 'Lbs',
       component: Lbs,
       meta: {
-        title: 'lordless map',
+        title: 'Map - LORDLESS',
         header: {
           show: false
         },
@@ -57,7 +57,7 @@ const router = new Router({
       name: 'TavernDetail',
       component: TavernDetail,
       meta: {
-        title: 'lordless tavern detail',
+        title: 'Tavern - LORDLESS',
         header: {
           fixed: true,
           scroll: true,
@@ -70,7 +70,7 @@ const router = new Router({
       name: 'taskDetail',
       component: TaskDetail,
       meta: {
-        title: 'lordless taks detail',
+        title: 'Quest - LORDLESS',
         header: {
           fixed: true,
           scroll: true,
@@ -83,7 +83,7 @@ const router = new Router({
       name: 'guide',
       component: Guide,
       meta: {
-        title: 'lordless guide',
+        title: 'Guide - LORDLESS ',
         header: {
           fixed: true,
           scroll: true,
@@ -96,7 +96,7 @@ const router = new Router({
       name: 'lordless-sign',
       component: Sign,
       meta: {
-        title: 'lordless sign',
+        title: 'Sign - LORDLESS',
         header: {
           fixed: true,
           transparent: true
@@ -108,7 +108,7 @@ const router = new Router({
       name: 'userDetail',
       component: UserDetail,
       meta: {
-        title: 'lordless user detail'
+        title: 'USER - LORDLESS'
       }
     },
     {
@@ -121,7 +121,7 @@ const router = new Router({
           name: 'OwnerInfo',
           component: OwnerInfo,
           meta: {
-            title: 'lordless owner overview',
+            title: 'Overview - LORDLESS',
             navgation: 'overview',
             header: {
               show: false
@@ -136,7 +136,7 @@ const router = new Router({
           name: 'Owner-candy',
           component: OwnerCandy,
           meta: {
-            title: 'lordless owner candy',
+            title: 'My Candies - LORDLESS',
             navgation: 'candy',
             header: {
               show: false
@@ -151,7 +151,7 @@ const router = new Router({
           name: 'Owner-taverns',
           component: OwnerTaverns,
           meta: {
-            title: 'lordless owner taverns',
+            title: 'My Taverns - LORDLESS',
             navgation: 'taverns',
             header: {
               show: false
@@ -166,7 +166,7 @@ const router = new Router({
           name: 'Owner-tasks',
           component: OwnerTasks,
           meta: {
-            title: 'lordless owner tasks',
+            title: 'My Quests - LORDLESS',
             navgation: 'tasks',
             header: {
               show: false
@@ -181,7 +181,7 @@ const router = new Router({
           name: 'Owner-authorization',
           component: OwnerAuthorization,
           meta: {
-            title: 'lordless owner authorization',
+            title: 'Authorization - LORDLESS',
             navgation: 'authorization',
             header: {
               show: false
@@ -196,7 +196,7 @@ const router = new Router({
           name: 'Owner-activity',
           component: OwnerActivity,
           meta: {
-            title: 'lordless owner activity',
+            title: 'My Activities - LORDLESS',
             navgation: 'activity',
             header: {
               show: false
