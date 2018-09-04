@@ -177,8 +177,8 @@
                     :color="progressOpts.candy.color">
                   </ld-progress>
                 </div>
-                <p class="user-recover-time" v-if="new Date(overviews.recoverAt) - new Date() >= 0">
-                  <countdown class="task-status-time" @countdownend="getUserOverview" :time="new Date(overviews.recoverAt) - new Date()" :interval="1000" tag="p">
+                <p class="user-recover-time" v-if="new Date(overviews.recoverAt) - new Date() + 5000 > 0">
+                  <countdown class="task-status-time" @countdownend="getUserOverview" :time="new Date(overviews.recoverAt) - new Date() + 5000" :interval="1000" tag="p">
                     <!-- <template slot-scope="props">{{ parseInt(props.days) || props.hours || props.minutes || props.seconds }}{{ parseInt(props.days) ? 'd' : (props.hours ? 'h' : (props.minutes ? 'm' : props.seconds ? 's' : '')) }}</template> -->
                     <template slot-scope="props">{{ props | formatDue(3) }}</template>
                   </countdown>

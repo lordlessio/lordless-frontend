@@ -148,7 +148,7 @@ export default {
         .catch(err => {
           console.log('err', err)
           this.metamaskChoose = false
-          this.crowdsalePending = true
+          this.crowdsalePending = false
           this.$emit('error', err)
         })
     }

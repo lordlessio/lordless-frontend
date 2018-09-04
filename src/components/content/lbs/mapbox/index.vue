@@ -424,7 +424,7 @@ export default {
       map.dragRotate.disable()
       // map.dragPan.disable()
       this.map = map
-      window.lMap = map
+      // window.lMap = map
 
       map.on('load', () => {
         // 添加marker

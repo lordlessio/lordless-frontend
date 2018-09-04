@@ -310,7 +310,8 @@ export default {
           break
         }
       }
-      this.$set(this, 'taverns', Object.assign({}, this.taverns, { list }))
+      this.$set(this.taverns, 'list', list)
+      this.$forceUpdate()
     }
   },
   mounted () {
