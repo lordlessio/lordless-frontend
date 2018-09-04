@@ -50,7 +50,7 @@
               </div>
               <div class="v-flex inline-block header-coin-desc">
                 <p>{{ taskInfo.reward.candy.desc }}</p>
-                <a class="coin-href" :href="taskInfo.reward.candy.website" target="_blank">{{ taskInfo.reward.candy.website }}</a>
+                <a class="coin-href hover-underline" :href="taskInfo.reward.candy.website" target="_blank">{{ taskInfo.reward.candy.website }}</a>
               </div>
             </div>
           </div>
@@ -64,7 +64,8 @@
                     <use :xlink:href="`#icon-task-status-${taskInfo.status}`"/>
                   </svg>
                 </span>
-                <h1>{{ taskInfo.ldbTaskType.name }}</h1>
+                <h1 v-if="taskInfo.ldbTaskType.taskType === 2"><link-symbol :href="taskInfo.ldbTaskType.url" target="_blank">{{ taskInfo.ldbTaskType.name }}</link-symbol></h1>
+                <h1 v-else>{{ taskInfo.ldbTaskType.name }}</h1>
                 <p class="d-flex f-align-center task-status-serial">
                   <span>#{{ taskInfo._id }}</span>
                   <span class="inline-block">·</span>
@@ -146,13 +147,14 @@
                       <div class="card-top-cnt">
                         <div class="rewards-user-avatar">
                           <blockies
+                            jump
                             :scale="12"
                             theme="light"
                             :seed="taskInfo.executor.info">
                           </blockies>
                         </div>
                         <p>Swordsman</p>
-                        <p>{{ taskInfo.executor.info | splitAddress }}</p>
+                        <p><link-symbol :to="taskInfo.executor.info">{{ taskInfo.executor.info | splitAddress }}</link-symbol></p>
                         <div class="card-user-level">
                           <p class="text-upper">LEVEL {{ taskInfo.executor.level }}</p>
                           <strong>{{ taskInfo.executor.reward.percentage | formatDecimal({ len: 3, percentage: true }) }}<span>%</span></strong>
@@ -178,13 +180,14 @@
                       <div class="card-top-cnt">
                         <div class="rewards-user-avatar">
                           <blockies
+                            jump
                             :scale="12"
                             theme="light"
                             :seed="taskInfo.lord.info">
                           </blockies>
                         </div>
                         <p>LORD</p>
-                        <p>{{ taskInfo.lord.info | splitAddress }}</p>
+                        <p><link-symbol :to="taskInfo.lord.info">{{ taskInfo.lord.info | splitAddress }}</link-symbol></p>
                         <div class="card-user-level">
                           <p class="text-upper">LEVEL {{ taskInfo.lord.level }}</p>
                           <strong>{{ taskInfo.lord.reward.percentage | formatDecimal({ len: 3, percentage: true }) }}<span>%</span></strong>
@@ -253,6 +256,7 @@ export default {
       })
     },
     async startTask (taskInfo = this.taskInfo) {
+      console.log('taskInfo', taskInfo)
       window.open(taskInfo.ldbTaskType.url)
     },
     destory () {
@@ -435,7 +439,7 @@ export default {
     @include padding(-1, 22px, 1.2);
   }
   .header-coin-desc {
-    @include margin('left', 15px, 1);
+    margin-left: 15px;
     @include fontSize(18px, 1.2);
     >a {
       display: inline-block;
@@ -443,8 +447,8 @@ export default {
     }
   }
   .coin-href {
+    margin-top: 10px;
     font-size: 16px;
-    @include margin('top', 10px, 1);
   }
 
   /**

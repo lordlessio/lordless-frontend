@@ -321,6 +321,11 @@
   .#{$media}cursor-pointer {
     cursor: pointer;
   }
+  .#{$media}hover-underline {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
   .#{$media}line-height-1 {
     line-height: 1
   }

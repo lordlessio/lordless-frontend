@@ -12,7 +12,7 @@
             <img alt="tavern curve" class="ldb-curve" src="~/static/svg/single/curve.svg">
         </div>
         <div class="v-flex loop-task-cnt">
-          <p>{{ task.ldbTaskType.name }}</p>
+          <p><link-symbol :link="`/task/${task._id}`">{{ task.ldbTaskType.name }}</link-symbol></p>
           <ul class="d-flex text-center loop-task-rewards">
             <li>
               <p>LORD</p>
@@ -32,8 +32,8 @@
           </ul>
         </div>
         <p class="d-flex f-align-center loop-task-people">
-          <span class="inline-block text-ellipsis" v-if="task.executor.info.nickName">{{ task.executor.info.nickName }}</span>
-          <span class="inline-block text-ellipsis" v-else>{{ task.executor.info._id | splitAddress({ before: 4, end: 2 }) }}</span>
+          <span class="inline-block text-ellipsis" v-if="task.executor.info.nickName"><link-symbol :to="task.executor.info._id">{{ task.executor.info.nickName }}</link-symbol></span>
+          <span class="inline-block text-ellipsis" v-else><link-symbol :to="task.executor.info._id">{{ task.executor.info._id | splitAddress({ before: 4, end: 2 }) }}</link-symbol></span>
           just completed a new task
         </p>
       </div>

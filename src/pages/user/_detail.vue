@@ -48,7 +48,7 @@
     </div>
     <div class="v-flex d-flex ld-user-content">
       <div class="v-flex d-flex container md">
-        <div class="v-flex user-building-tabs" :class="{ 'margin': userLdbs.total }">
+        <div class="v-flex user-building-tabs" :class="{ 'margin': taverns.total }">
           <el-tabs
             v-model="ldbTab"
             @tab-click="chooseTab">
@@ -56,7 +56,7 @@
               label="All"
               name="all">
               <div
-                v-if="!userLdbs.total && !loading"
+                v-if="!taverns.total && !loading"
                 class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-buildings">
                 <svg>
                   <use xlink:href="#icon-no-ldb"/>
@@ -64,7 +64,7 @@
                 <p>This have nothing on Tavern now.</p>
               </div>
               <div class="d-flex f-align-center building-sort">
-                <div class="v-flex">{{ userLdbs.total }} Taverns</div>
+                <div class="v-flex">{{ taverns.total }} Taverns</div>
                 <div>
                   <span>Sort by</span>
                   <ld-select
@@ -86,7 +86,7 @@
                 <el-col
                   :xs="24" :sm="8"
                   class="building-item"
-                  v-for="(ldb, index) of userLdbs.list"
+                  v-for="(ldb, index) of taverns.list"
                   :key="index">
                   <building-card
                     :sale="ldb.chain.auction.isOnAuction"
@@ -101,7 +101,7 @@
               label="On sale"
               name="sale">
               <div
-                v-if="!userLdbs.total && !loading"
+                v-if="!taverns.total && !loading"
                 class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-buildings">
                 <svg>
                   <use xlink:href="#icon-no-selling-ldb"/>
@@ -109,7 +109,7 @@
                 <p>There have nothing on sale now.</p>
               </div>
               <div class="d-flex f-align-center building-sort">
-                <div class="v-flex">{{ userLdbs.total }} Taverns</div>
+                <div class="v-flex">{{ taverns.total }} Taverns</div>
                 <div>
                   <span>Sort by</span>
                   <ld-select
@@ -131,7 +131,7 @@
                 <el-col
                   :xs="24" :sm="8"
                   class="building-item"
-                  v-for="(ldb, index) of userLdbs.list"
+                  v-for="(ldb, index) of taverns.list"
                   :key="index">
                   <building-card
                     :sale="ldb.chain.auction.isOnAuction"
@@ -143,10 +143,10 @@
             </el-tab-pane>
           </el-tabs>
           <Pagination
-            v-if="userLdbs.total"
+            v-if="taverns.total"
             class="ld-building-pagination"
-            :total="userLdbs.total"
-            :size="userLdbs.ps"
+            :total="taverns.total"
+            :size="taverns.ps"
             background
             @currentChange="pageChange">
           </Pagination>
@@ -181,7 +181,7 @@ export default {
       loading: false,
       user: {},
       clipBool: false,
-      userLdbs: {
+      taverns: {
         pn: 1,
         ps: 9,
         list: [],
@@ -241,13 +241,13 @@ export default {
       this.loading = false
       if (res.code === 1000 && res.data) {
         this.user = res.data
-        this.getUserLdbs({ address: res.data.address })
+        this.getUserTaverns({ address: res.data.address })
       } else {
         this.$router.push('/')
       }
       if (!res.data) console.log('用户不存在')
     },
-    async getUserLdbs ({ address = this.user.address, isOnAuction = this.ldbTab === 'all' ? undefined : true, sort = this.ldbSort, order = this.ldbOrder, pn = this.userLdbs.pn, ps = this.userLdbs.ps } = {}) {
+    async getUserTaverns ({ address = this.user.address, isOnAuction = this.ldbTab === 'all' ? undefined : true, sort = this.ldbSort, order = this.ldbOrder, pn = this.taverns.pn, ps = this.taverns.ps } = {}) {
       const params = {
         user: address,
         isOnAuction,
@@ -258,12 +258,12 @@ export default {
       }
       const res = await getChainLdbs(params)
       if (res.code === 1000 && res.data) {
-        this.userLdbs = res.data
+        this.taverns = res.data
       }
     },
 
     pageChange (pn) {
-      this.getUserLdbs({ pn })
+      this.getUserTaverns({ pn })
     },
     // 初始化 黏贴板
     initClipboard () {
@@ -282,7 +282,7 @@ export default {
       this.ldbOrder = 'desc'
       console.log('----- user', this.user)
       this.$nextTick(() => {
-        this.getUserLdbs()
+        this.getUserTaverns()
       })
     },
 
@@ -295,21 +295,22 @@ export default {
     },
 
     sortChange (sort) {
-      this.getUserLdbs({ sort })
+      this.getUserTaverns({ sort })
     },
 
     orderChange (order) {
-      this.getUserLdbs({ order })
+      this.getUserTaverns({ order })
     },
 
-    dialogClose (info, list = this.userLdbs.list) {
+    dialogClose (info, list = this.taverns.list) {
+      historyState(this.$route.path)
       for (let i = 0; i < list.length; i++) {
         if (list[i]._id === info._id) {
           list[i] = info
           break
         }
       }
-      this.$set(this.userLdbs, 'list', list)
+      this.$set(this, 'taverns', Object.assign({}, this.taverns, { list }))
     }
   },
   mounted () {

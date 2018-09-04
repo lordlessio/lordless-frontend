@@ -8,7 +8,8 @@
 
     <transition name="ld-hide-fade">
       <section v-if="!loading && total" class="ldb-left-section">
-        <h3 class="d-flex f-align-baseline">Transaction history<span class="v-flex text-right cursor-pointer" @click="$emit('more')">View more</span></h3>
+        <!-- <h3 class="d-flex f-align-baseline">Transaction history<span class="v-flex text-right cursor-pointer" @click="$emit('more')">View more</span></h3> -->
+        <h3 class="d-flex f-align-baseline">Transaction history</h3>
         <!-- <el-row
           v-if="!total"
           class="text-center ldb-no-txs">
@@ -43,14 +44,14 @@
                 {{ record.created_at | timeFormat }}
               </el-col>
               <el-col :span="6" class="sm-text-ellipsis">
-                <router-link :to="`/user/${record.market[0].buyer}`">
+                <link-symbol underline :to="record.market[0].buyer">
                   {{ record.market[0].buyer | splitAddress({ before: 6, end: 4 }) }}
-                </router-link>
+                </link-symbol>
               </el-col>
               <el-col :span="6" class="sm-text-ellipsis">
-                <router-link :to="`/user/${record.market[0].seller}`">
+                <link-symbol underline :to="record.market[0].seller">
                   {{ record.market[0].seller | splitAddress({ before: 6, end: 4 }) }}
-                </router-link>
+                </link-symbol>
               </el-col>
             </el-row>
           </el-row>
@@ -119,12 +120,6 @@ export default {
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .25);
     &:not(:first-of-type) {
       margin-top: 25px;
-    }
-    a {
-      color: inherit;
-      &:hover {
-        text-decoration: underline;
-      }
     }
   }
 </style>

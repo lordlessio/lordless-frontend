@@ -31,7 +31,7 @@
                     </span>
                   </div>
                   <p v-if="!approvedTask" class="approved-no-task">暂无任务被完成</p>
-                  <figcaption v-if="approvedTask">{{ approvedTask.ldbTaskType.name }}</figcaption>
+                  <figcaption v-if="approvedTask"><link-symbol :link="`/task/${approvedTask._id}`">{{ approvedTask.ldbTaskType.name }}</link-symbol></figcaption>
                   <div class="d-flex f-align-center approved-task-rewards" v-if="approvedTask">
                     <div class="v-flex">
                       <p>LORD</p>

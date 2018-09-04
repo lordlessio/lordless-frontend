@@ -85,7 +85,6 @@ export default {
         timeout = null
       }, 0)
       this.$emit('input', false)
-      console.log('---detailInfo', this.detailInfo)
       this.$emit('close', this.detailInfo)
     },
 

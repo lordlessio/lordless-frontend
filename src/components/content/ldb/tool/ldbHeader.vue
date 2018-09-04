@@ -46,7 +46,7 @@
                     </p>
                     <p class="TTFontNormal detail-ldb-address">{{ info.address }}</p>
                     <p class="detail-ldb-location">{{ info.chain.lng | transferCoords | sliceStr}}, {{ info.chain.lat | transferCoords | sliceStr }}</p>
-                    <p class="detail-ldb-desc">{{ info.desc.zh | sliceStr({ end: 65 }) }}...</p>
+                    <p class="detail-ldb-desc">{{ info.desc.zh | sliceStr({ end: 62 }) }}...</p>
                     <ld-btn
                       class="ldb-home-btn"
                       theme="deep-blue"
@@ -64,7 +64,7 @@
                         </blockies>
                         <div class="v-flex d-flex col-flex f-justify-around detail-lord-info">
                           <p>{{ info.lord.nickName || 'LORDLESS' }}</p>
-                          <p>{{ info.lord.address | splitAddress({ symbol: '******' }) }}</p>
+                          <p><link-symbol underline :to="info.lord.address">{{ info.lord.address | splitAddress({ symbol: '***' }) }}</link-symbol></p>
                         </div>
                       </div>
                       <p class="d-flex row-flex detail-ldb-city">
@@ -376,14 +376,14 @@ export default {
     &.animate {
       .detail-header-mask {
         &::after {
-          animation: bounceSkewInRight .55s 1;
+          animation: bounceSkewInRight .45s 1;
           opacity: 1;
           transform: translate3d(-20%, 0, 0) skew(-25deg) translateX(0px) translateZ(0px);
         }
       }
       .detail-header-left {
         // left: 0;
-        animation: bounceInLeft .55s 1;
+        animation: bounceInLeft .45s 1;
         opacity: 1;
         transform: translate3d(0, -50%, 0);
         &::before {
@@ -391,7 +391,7 @@ export default {
         }
       }
       .detail-header-right {
-        animation: bounceInRight .55s .15s 1;
+        animation: bounceInRight .45s .15s 1;
         opacity: 1;
         transform: translate3d(-100%, 0, 0) translateX(0px);
       }
@@ -419,7 +419,7 @@ export default {
       transform: translate3d(10%, 0, 0) skew(-25deg) translateX(0px) translateZ(0px);
       opacity: 0;
       z-index: 1;
-      transition: all 0s .55s;
+      transition: all 0s .45s;
     }
   }
 
@@ -580,7 +580,7 @@ export default {
     color: #fff;
     opacity: 0;
     z-index: 1;
-    transition: all 0s .55s;
+    transition: all 0s .45s;
     // transition: all .55s 0s;
     // transition: left .55s spring, opacity .55s spring;
     // background-blend-mode: soft-light;
@@ -597,7 +597,7 @@ export default {
       z-index: -1;
       box-shadow: 13px 13px 30px 3px rgba(0, 0, 0, .35);
       opacity: 0;
-      transition: opacity .3s ease-in .55s;
+      transition: opacity .3s ease-in .45s;
     }
   }
   .header-left-container {
@@ -745,7 +745,7 @@ export default {
     background-color: #fff;
     opacity: 0;
     transform: translate3d(0, 0, 0) translateX(0px);
-    transition: all 0s .7s;
+    transition: all 0s .6s;
     // transition: all .55s .15s;
     // transition: transform .55s spring .25s, opacity .55s spring .25s;
     // height: calc(930px / 4 * 3);

@@ -158,7 +158,7 @@ export default {
       // 当前建筑交易记录
       ldbRecords: {
         pn: 1,
-        ps: 3,
+        ps: 10,
         list: [],
         total: 0
       },

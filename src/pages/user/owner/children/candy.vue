@@ -237,7 +237,7 @@
                   <ul class="candy-aside-ul candy-ldb-related">
                     <li>
                       <p>Related Tavern</p>
-                      <p class="aside-big-name">#{{ aside.data.ldb.info._id }}</p>
+                      <p class="aside-big-name"><link-symbol :link="`/tavern/${aside.data.ldb.info._id}`">#{{ aside.data.ldb.info._id }}</link-symbol></p>
                     </li>
                     <li>
                       <p>Name</p>
@@ -262,7 +262,7 @@
                   <ul class="candy-aside-ul candy-task-related">
                     <li>
                       <p>Related Task</p>
-                      <p class="aside-big-name">#{{ aside.data._id }}</p>
+                      <p class="aside-big-name"><link-symbol :link="`/task/${aside.data._id}`">#{{ aside.data._id }}</link-symbol></p>
                     </li>
                     <li>
                       <p>Detail</p>

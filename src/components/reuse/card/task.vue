@@ -8,8 +8,8 @@
           <h2>
             {{ info.ldbTaskType.name }}
             <span v-if="info.status === 0" class="task-status doing">Under way</span>
-            <span v-if="info.status === 1" class="task-status">Approved</span>
-            <span v-if="info.status === -1" class="task-status reject">Rejected</span>
+            <span v-else-if="info.status === 1" class="task-status">Approved</span>
+            <span v-else-if="info.status === -1" class="task-status reject">Rejected</span>
           </h2>
           <div class="ld-task-status">
             <p class="d-flex f-align-center task-status-serial">
@@ -19,8 +19,8 @@
             <div class="d-flex f-align-center task-status-reward">
               <h2 class="color-blue" :class="{ 'text-line-through': info.status === -1 }">+{{ info.executor.reward.count | formatDecimal }} <span class="text-upper">{{ info.reward.candy.symbol }}</span></h2>
               <span>
-                <span>≈ {{ info.executor.reward.count / info.reward.candy.USD2TokenCount | formatDecimal }}</span>
-                <span class="text-upper">USD</span>
+                <span>≈ $ {{ info.executor.reward.count / info.reward.candy.USD2TokenCount | formatDecimal }}</span>
+                <!-- <span class="text-upper"></span> -->
               </span>
             </div>
           </div>
@@ -28,7 +28,7 @@
         <div class="d-flex col-flex f-justify-between text-right task-tool-box">
           <div class="task-tool-top">
             <p class="task-tool-status">{{ info.status === 0 ? 'Due on' : info.status === 1 ? 'Completed on' : 'Over due on' }}</p>
-            <p class="task-tool-date">{{ info.update_at | dateFormat }}</p>
+            <p class="task-tool-date">{{ info.status === 1 ? info.roundId.update_at : info.roundId.endAt | dateFormat }}</p>
           </div>
           <p>
             <span v-if="info.status === 0" class="inline-block task-svg task-play-svg" @click="$emit('play', info)">
@@ -57,24 +57,24 @@
               <p>Task</p>
               <p>#{{ info._id }}</p>
               <h2 class="color-blue">+{{ info.lord.reward.count | formatDecimal }} <span class="text-upper">{{ info.reward.candy.symbol }}</span></h2>
-              <p>≈ {{ info.lord.reward.count / info.reward.candy.USD2TokenCount | formatDecimal }} <span class="text-upper">USD</span></p>
+              <p>≈ $ {{ info.lord.reward.count / info.reward.candy.USD2TokenCount | formatDecimal }}</p>
             </div>
             <div class="v-flex reward-cnt-item">
               <p>Related Tavern</p>
               <p>#{{ info.ldb.info }}</p>
-              <h2 class="color-blue">+10 <span>act</span></h2>
+              <h2 class="color-blue">+{{ info.ldb.activeness }} <span>ac</span></h2>
             </div>
             <div class="reward-cnt-item">
               <p>Swordsman</p>
               <p>{{ info.executor.info | splitAddress({ before: 5, end: 3 }) }}</p>
               <h2 class="color-blue">+{{ info.executor.reward.count | formatDecimal }} <span class="text-upper">{{ info.reward.candy.symbol }}</span></h2>
-              <p>≈ {{ info.executor.reward.count / info.reward.candy.USD2TokenCount | formatDecimal }} <span class="text-upper">USD</span></p>
+              <p>≈ $ {{ info.executor.reward.count / info.reward.candy.USD2TokenCount | formatDecimal }}</p>
             </div>
           </div>
           <div class="d-flex col-flex f-justify-between text-right reward-cnt-right">
             <div class="task-tool-top">
               <p class="task-tool-status">Completed on</p>
-              <p class="task-tool-date">{{ info.update_at | dateFormat }}</p>
+              <p class="task-tool-date">{{ info.roundId.update_at | dateFormat }}</p>
             </div>
             <p>
               <span class="inline-block task-svg" @click="$emit('choose', info)">

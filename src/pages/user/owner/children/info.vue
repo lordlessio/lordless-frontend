@@ -171,12 +171,18 @@
                   <ld-progress
                     circle
                     :current="userInfo.ap"
-                    :max="50"
+                    :max="userInfo.maxAp"
                     :width="140"
                     :circleWidth="progressOpts.candy.circleWidth"
                     :color="progressOpts.candy.color">
                   </ld-progress>
                 </div>
+                <p class="user-recover-time" v-if="new Date(overviews.recoverAt) - new Date() >= 0">
+                  <countdown class="task-status-time" @countdownend="getUserOverview" :time="new Date(overviews.recoverAt) - new Date()" :interval="1000" tag="p">
+                    <!-- <template slot-scope="props">{{ parseInt(props.days) || props.hours || props.minutes || props.seconds }}{{ parseInt(props.days) ? 'd' : (props.hours ? 'h' : (props.minutes ? 'm' : props.seconds ? 's' : '')) }}</template> -->
+                    <template slot-scope="props">{{ props | formatDue(3) }}</template>
+                  </countdown>
+                </p>
               </div>
             </div>
             <div class="v-flex d-flex col-flex info-cnt-box info-card-cnt task-current-box" style="z-index: 2;">
@@ -208,7 +214,7 @@
               <div v-if="overviews.currentTask" class="v-flex d-flex col-flex task-current-know">
                 <p class="card-cnt-tip">A task from Taverns <a href="#">#{{ overviews.currentTask.ldb.info.chain.tokenId }}</a> in progress</p>
                 <div class="v-flex d-flex col-flex task-current-cnt">
-                  <p>{{ overviews.currentTask.ldbTaskType.name }}</p>
+                  <p class="cursor-pointer hover-underline" @click.stop="$router.push(`/task/${overviews.currentTask._id}`)">{{ overviews.currentTask.ldbTaskType.name }}</p>
                   <ul class="d-flex task-current-data">
                     <li class="v-flex task-current-symbol">
                       <h3>Symbol</h3>
@@ -285,7 +291,7 @@
               <div class="v-flex d-flex col-flex assets-estimated-cnt">
                 <p class="card-cnt-tip">Valued by USD</p>
                 <div class="v-flex d-flex col-flex f-auto-center card-cnt-box estimated-cnt-box">
-                  <h1 class="TTFontBlack">$<count-up class="inline-block" :endVal="overviews.estimated || 0" :decimals="4" :duration="2.5"></count-up></h1>
+                  <h1 class="TTFontBlack">${{ overviews.estimated || 0 | formatDecimal }}</h1>
                   <!-- <p class="">USD</p> -->
                 </div>
               </div>
@@ -976,7 +982,7 @@ export default {
 
   .info-card-cnt {
     position: relative;
-    height: 250px;
+    height: 260px;
     font-family: $--font-TTNormsRegular;
     &:not(:first-of-type) {
       @include margin('top', 20px, 1, -2);
@@ -1004,6 +1010,14 @@ export default {
     width: 140px;
     height: 140px;
     color: #999999;
+  }
+  .user-recover-time {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    font-size: 14px;
+    color: #999;
   }
 
   .task-current-know {
@@ -1115,7 +1129,7 @@ export default {
     @include width(120px, 1.2);
   }
   .info-more {
-    transform: translateY(5px);
+    transform: translateY(12px);
     >a {
       font-size: 14px;
       color: #4E47D3;
