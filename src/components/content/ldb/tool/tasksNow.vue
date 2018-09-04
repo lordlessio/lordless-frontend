@@ -42,7 +42,7 @@
                       </span>
                     </div>
                     <div class="d-flex col-flex tasks-now-detail">
-                      <p>{{ item.ldbTaskType.name }}</p>
+                      <p><link-symbol :href="item.ldbTaskType.url">{{ item.ldbTaskType.name }}</link-symbol></p>
                       <div class="tasks-now-rewards">
                         <p>-{{ item.ldbTaskType.apCost }} AP</p>
                         <p class="text-upper">+{{ item.ldbTaskType.priceInUSD * item.ldbTaskType.candyType.USD2TokenCount | formatDecimal }} {{ item.ldbTaskType.candyType.symbol }}</p>

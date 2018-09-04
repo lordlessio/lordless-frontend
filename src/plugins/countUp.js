@@ -13,7 +13,7 @@ const _CountUp = {
     },
     endVal: {
       type: Number,
-      required: true
+      required: 0
     },
     decimals: {
       type: Number,
@@ -50,6 +50,9 @@ const _CountUp = {
         }
       },
       deep: false
+    },
+    isReady (val) {
+      if (val && !this.instance) this.init()
     }
   },
   methods: {
