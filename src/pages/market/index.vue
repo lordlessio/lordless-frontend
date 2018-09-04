@@ -248,7 +248,8 @@ export default {
           break
         }
       }
-      this.$set(this, 'ldbs', Object.assign({}, this.ldbs, { list }))
+      this.$set(this.ldbs, 'list', list)
+      this.$forceUpdate()
     },
 
     /**

@@ -1,4 +1,6 @@
 'use strict'
+const contract = JSON.stringify(require('../.contract/mainnet.json'))
+
 module.exports = {
   NODE_ENV: '"production"',
   LDBICON_ORIGIN: '"http://lordless.oss-cn-hongkong.aliyuncs.com"',
@@ -6,5 +8,6 @@ module.exports = {
   BACKEND_SERVER: '"//lordless.games"',
   ETHERSCANURL: '"https://etherscan.io/"',
   APPROVED_NETWORK_ID: 1,
-  tgBot: '"ldbbot"'
+  contract,
+  tgBot: '"LORDLESS_bot"'
 }
