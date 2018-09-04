@@ -152,12 +152,17 @@ export default {
   },
   watch: {
     userInfo (val, oVal) {
+      console.log('---- val', val, oVal)
       this.$nextTick(() => this.checkUser())
     }
-  },
-  mounted () {
-    this.$nextTick(() => this.checkUser())
   }
+  // mounted () {
+  //   this.$nextTick(() => {
+  //     if (this.userInfo._id) {
+  //       this.checkUser()
+  //     }
+  //   })
+  // }
 }
 </script>
 

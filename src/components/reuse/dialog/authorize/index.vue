@@ -122,7 +122,7 @@ export default {
     ]),
 
     address () {
-      return this.userInfo.address
+      return this.userInfo._id
     },
 
     unBrowser () {
@@ -214,6 +214,8 @@ export default {
     },
 
     checkoutAuthorize ({ crowdsale = false, telegram = false } = {}) {
+      this.showSign = this.signBool
+
       // 检查用户信息是否ok
       if (!this.address) {
         this.authorizeDialog = true
@@ -226,8 +228,6 @@ export default {
       console.log('---- this.statusType', this.statusType)
 
       console.log('---- status', this.statusType, !this.address)
-
-      this.showSign = this.signBool
 
       // 检查guide配置是否ok
       if (this.statusType) {

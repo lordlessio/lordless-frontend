@@ -37,8 +37,6 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'App',
   async created () {
-    this[actionTypes.USER_SET_USER_BY_TOKEN]()
-    this[actionTypes.USER_SET_USER_HOME]()
     if (this.web3Opt.web3js.default) initWeb3()
   },
   data: () => {
@@ -138,6 +136,8 @@ export default {
     this.$nextTick(() => {
       // this[actionTypes.REGION_SET_REGIONS]()
       this[actionTypes.STATUS_INIT_BROSWER]()
+      this[actionTypes.USER_SET_USER_BY_TOKEN]()
+      this[actionTypes.USER_SET_USER_HOME]()
     })
   }
 }

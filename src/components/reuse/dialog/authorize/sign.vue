@@ -154,7 +154,7 @@ export default {
   },
   computed: {
     account () {
-      return this.$root.$children[0].web3Opt.address
+      return this.$root.$children[0].web3Opt.address || window.localStorage.getItem('currentAddress')
     },
     signRequired () {
       const { nickName, email } = this.signInputs
@@ -174,6 +174,7 @@ export default {
     ]),
 
     relogin () {
+      if (this.userChecking) return
       // metamask 是否被打开
       this.metamaskChoose = true
       this[actionTypes.USER_META_LOGIN]({ cb: (err) => {
