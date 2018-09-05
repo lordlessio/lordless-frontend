@@ -39,8 +39,8 @@
             <!-- <div class="TTFontBolder user-level">
               Level <span>{{ user.level }}</span>
             </div> -->
-            <p class="d-flex f-wrap f-align-center user-types">
-              <span class="inline-block" v-for="(tag, index) of ['LESS', 'IOST', 'LESS', 'IOST', 'LESS', 'IOST', 'LESS', 'IOST', 'LESS', 'IOST']" :key="index">{{ tag }}</span>
+            <p v-if="user.tags && user.tags.length" class="d-flex f-wrap f-align-center user-types">
+              <span class="inline-block" v-for="(tag, index) of user.tags.slice(0, 20)" :key="index">{{ tag }}</span>
             </p>
             <!-- <div class="user-total-candy">
               <p>Total earned candy</p>
