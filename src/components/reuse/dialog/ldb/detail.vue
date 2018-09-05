@@ -75,15 +75,13 @@ export default {
      * 对话框关闭事件
      */
     dialogClose () {
-      let timeout = setTimeout(() => {
-        const ldbDetail = this.$refs.ldbDetail
-        if (ldbDetail) {
-          ldbDetail.destory()
-        }
-        this[mutationTypes.LAYOUT_SET_BLURS](0)
-        clearTimeout(timeout)
-        timeout = null
-      }, 0)
+      const ldbDetail = this.$refs.ldbDetail
+      if (ldbDetail) {
+        ldbDetail.destory()
+      }
+      this[mutationTypes.LAYOUT_SET_BLURS](0)
+      // clearTimeout(timeout)
+      // timeout = null
       this.$emit('input', false)
       this.$emit('close', this.detailInfo)
     },

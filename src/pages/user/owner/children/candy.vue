@@ -102,7 +102,7 @@
           </el-tab-pane>
           <el-tab-pane
             class="d-flex candy-tab-box"
-            :class="{ 'showAside': aside.show }"
+            :class="{ 'showAside': aside.show, 'cursor-no-drop': !userAssets.length }"
             :disabled="!userAssets.length"
             label="History"
             name="history">

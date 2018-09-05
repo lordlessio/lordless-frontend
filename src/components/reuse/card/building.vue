@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center cursor-pointer ld-building-card" :class="[{ 'sale': sale || presale, 'shadow': shadow }]">
+  <div class="text-center cursor-pointer alone-layer ld-building-card" :class="[{ 'sale': sale || presale, 'shadow': shadow }]">
     <figure @click="$emit('choose', info)">
       <div class="building-card-top">
         <div class="building-header" :class="`building-popularity-${info.chain.popularity}`">

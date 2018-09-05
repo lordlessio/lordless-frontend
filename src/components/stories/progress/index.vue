@@ -1,5 +1,5 @@
 <template>
-  <div class="ld-progress-box">
+  <div class="alone-layer ld-progress-box">
     <div v-if="!circle" class="ld-progress-line" :class="{ 'shadow': shadow }" :style="`background-color: ${underColor};`">
       <div
         class="ld-progress-bar"

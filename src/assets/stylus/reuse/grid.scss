@@ -274,7 +274,7 @@
   }
   .#{$media}transform {
     will-change: transform;
-    transform: translateX(-25%);
+    transform: translateX(-25%) translateZ(0);
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .#{$media}no-transform {
@@ -283,6 +283,9 @@
   }
   .#{$media}overflow-hidden {
     overflow: hidden;
+  }
+  .#{$media}alone-layer {
+    transform: translateZ(0);
   }
 }
 // @include tool-vars();
@@ -320,6 +323,9 @@
   }
   .#{$media}cursor-pointer {
     cursor: pointer;
+  }
+  .#{$media}cursor-no-drop {
+    cursor: no-drop;
   }
   .#{$media}hover-underline {
     &:hover {

@@ -2,9 +2,9 @@
   <div class="relative ldb-tx-history">
 
     <!-- ldb detail records skeletion -->
-    <transition name="ld-suspension-hide-fade">
+    <!-- <transition name="ld-suspension-hide-fade"> -->
       <records-skeletion v-if="loading"></records-skeletion>
-    </transition>
+    <!-- </transition> -->
 
     <transition name="ld-hide-fade">
       <section v-if="!loading && total" class="ldb-left-section">
@@ -15,7 +15,7 @@
           class="text-center ldb-no-txs">
           <p>暂无交易哦</p>
         </el-row> -->
-        <div class="left-section-cnt ldb-tx-cnt">
+        <div class="alone-layer left-section-cnt ldb-tx-cnt">
           <el-row class="ldb-tx-header">
             <el-col :span="5">
               Price

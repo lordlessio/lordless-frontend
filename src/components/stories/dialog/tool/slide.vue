@@ -5,9 +5,9 @@
     <div
       v-if="visible"
       ref="slide"
-      class="ld-dialog-slide"
+      class="alone-layer ld-dialog-slide"
       @click.stop>
-      <div v-show="rendered" class="ld-slide-container">
+      <div v-if="rendered" class="ld-slide-container">
         <span @click.stop="$emit('update:visible', false)" class="lg-hidden inline-block dialog-ldb-close">
           <i class="el-icon-close"></i>
         </span>

@@ -1,10 +1,10 @@
 <template>
-  <div class="relative ldb-datas-box">
+  <div class="relative alone-layer ldb-datas-box">
 
     <!-- ldb detail datas skeletion -->
-    <transition name="ld-suspension-hide-fade">
+    <!-- <transition name="ld-suspension-hide-fade"> -->
       <datas-skeletion v-if="loading"></datas-skeletion>
-    </transition>
+    <!-- </transition> -->
 
     <transition name="ld-hide-fade" @after-enter="datasEnter">
       <section v-if="!loading" class="d-flex f-align-ceter sm-col-flex detail-ldb-datas">

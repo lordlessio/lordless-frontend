@@ -12,14 +12,15 @@
 //     }
 //   }
 // }
+// cubic-bezier(0.4, 0, 0.2, 1)
 @keyframes bounceInLeft {
   from,
-  60%,
-  75%,
-  90%,
+  55%,
   to {
     -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
     animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    // -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1.55);
+    // animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1.55);
   }
 
   0% {
@@ -28,7 +29,7 @@
     transform: translate3d(-100%, -50%, 0);
   }
 
-  60% {
+  55% {
     opacity: 1;
     -webkit-transform: translate3d(30px, -50%, 0);
     transform: translate3d(30px, -50%, 0);
@@ -42,12 +43,12 @@
 }
 @keyframes bounceInRight {
   from,
-  60%,
-  75%,
-  90%,
+  55%,
   to {
     -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
     animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    // -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1.55);
+    // animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1.55);
   }
 
   0% {
@@ -56,7 +57,7 @@
     transform: translate3d(0, 0, 0) translateX(0px);
   }
 
-  60% {
+  55% {
     opacity: 1;
     -webkit-transform: translate3d(-100%, 0, 0) translateX(-30px);
     transform: translate3d(-100%, 0, 0) translateX(-30px);
@@ -71,12 +72,12 @@
 
 @keyframes bounceSkewInRight {
   from,
-  60%,
-  75%,
-  90%,
+  55%,
   to {
     -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
     animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    // -webkit-animation-timing-function: cubic-bezier(0, 0, 0, 1.45);
+    // animation-timing-function: cubic-bezier(0, 0, 0, 1.45);
   }
 
   0% {
@@ -85,7 +86,7 @@
     transform: translate3d(10%, 0, 0) skew(-25deg) translateX(0px) translateZ(0px);
   }
 
-  60% {
+  55% {
     opacity: 1;
     -webkit-transform: translate3d(-20%, 0, 0) skew(-25deg) translateX(-30px) translateZ(0px);
     transform: translate3d(-20%, 0, 0) skew(-25deg) translateX(-30px) translateZ(0px);

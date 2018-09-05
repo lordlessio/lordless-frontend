@@ -2,22 +2,22 @@
   <div class="relative ldb-tasks-now">
 
     <!-- ldb detail taskNow skeletion -->
-    <transition name="ld-suspension-hide-fade">
+    <!-- <transition name="ld-suspension-hide-fade"> -->
       <task-now-skeletion v-if="loading"></task-now-skeletion>
-    </transition>
+    <!-- </transition> -->
 
     <transition name="ld-hide-fade">
       <section v-if="!loading" class="ldb-left-section">
         <h3>Tasks now</h3>
         <div class="left-section-cnt">
-          <div class="tasks-now-slider">
+          <div class="alone-layer tasks-now-slider">
             <ld-slider-bar
               :list="candies"
               :active.sync="sliderBarModel"
               @change="getCarouselNameBySymbol">
             </ld-slider-bar>
           </div>
-          <div class="tasks-now-carousel">
+          <div class="alone-layer tasks-now-carousel">
             <ld-carousel
               class="ldb-detail-carousel"
               :activeItem="activeCarousel"

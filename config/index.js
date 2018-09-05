@@ -78,7 +78,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsDllDirectory: 'static/dll',
     ossPublicPath,
-    assetsPublicPath: `http://lordless.oss-cn-hongkong.aliyuncs.com/${ossPublicPath}`,
+    assetsPublicPath: `//cdn.lordlessio.com/${ossPublicPath}`,
 
     /**
      * Source Maps

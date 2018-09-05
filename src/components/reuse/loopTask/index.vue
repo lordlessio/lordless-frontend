@@ -129,6 +129,7 @@ export default {
     border-radius: 5px;
     background-color: #fff;
     box-shadow: 1px 3px 8px 3px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
   }
   .loop-task-container {
     position: relative;

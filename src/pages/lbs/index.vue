@@ -183,6 +183,7 @@ export default {
      */
     filterComplete (query, list) {
       const localLdbs = this.historySearchLdbs
+      localLdbs[0].localFirst = true
       return query ? this.restructurSearchLdbs(list, localLdbs, query) : [].concat([{
         trending: 1,
         list: this.trendings

@@ -62,6 +62,9 @@
                   </el-tooltip>
                 </p>
                 <p class="user-eamil">{{ userInfo.email }}</p>
+                <p v-if="userInfo.tags && userInfo.tags.length" class="d-flex f-wrap f-align-center user-types">
+                  <span class="inline-block" v-for="(tag, index) of userInfo.tags.slice(0, 20)" :key="index">{{ tag }}</span>
+                </p>
               </div>
               <div class="lg-text-right header-cnt-balance sm-hidden">
                 <p>ETH Balance in wallet</p>
@@ -821,6 +824,7 @@ export default {
     @include margin('left', 6px, 1);
   }
   .header-cnt-text {
+    padding-right: 50px;
     >h2 {
       font-size: 18px;
     }
@@ -844,6 +848,20 @@ export default {
   }
   .user-eamil {
     color: #BDB9FD;
+  }
+  .user-types {
+    margin-top: 4px;
+    >span {
+      margin-top: 6px;
+      margin-right: 10px;
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 20px;
+      // border: 1px solid #BDB9FD;
+      color: #fff;
+      background-color: rgba(189, 185, 253, .5);
+      box-sizing: border-box;
+    }
   }
 
   .header-cnt-balance {

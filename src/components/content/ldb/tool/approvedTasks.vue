@@ -2,9 +2,9 @@
   <div class="relative ldb-approved-tasks">
 
     <!-- ldb detail approved skeletion -->
-    <transition name="ld-suspension-hide-fade">
+    <!-- <transition name="ld-suspension-hide-fade"> -->
       <approved-skeletion v-if="loading"></approved-skeletion>
-    </transition>
+    <!-- </transition> -->
 
     <transition name="ld-hide-fade">
       <section v-show="!loading" class="ldb-approved-section">
@@ -12,7 +12,7 @@
         <div class="ldb-approved-cnt">
           <el-row class="approved-tasks-list">
             <el-col
-              class="sm-mar-t5 text-center approved-tasks-item"
+              class="sm-mar-t5 text-center approved-tasks-item alone-layer"
               :span="24">
               <div class="relative" style="z-index: 2;">
                 <p class="approved-card-tip" v-if="approvedTask && approvedTask.executor.info.nickName">{{ approvedTask.executor.info.nickName }} just completed a new task</p>

@@ -2,7 +2,7 @@
   <transition name="ld-hide-fade">
     <div
       v-if="visible"
-      class="ld-ldb-dialog"
+      class="alone-layer ld-ldb-dialog"
       @click="$emit('update:visible', false)">
     </div>
   </transition>

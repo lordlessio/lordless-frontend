@@ -14,7 +14,7 @@
           in LORDLESS and find unique Taverns for sale.
         </p>
       </section>
-      <section class="lg-d-flex f-align-center market-sort-bar">
+      <section class="alone-layer lg-d-flex f-align-center market-sort-bar">
         <p class="lg-v-flex sm-text-left sm-mar-b4">Total {{ ldbs.total }} Taverns on sale</p>
         <div class="d-flex f-align-center">
           <span>Sort <span class="sm-hidden">by</span></span>

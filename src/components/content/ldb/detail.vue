@@ -309,9 +309,11 @@ export default {
           duration: 5000
         })
       }
-      this.infoLoading = false
 
-      this.$nextTick(() => this.$emit('initInfo', this.ldbInfo))
+      this.$nextTick(() => {
+        this.infoLoading = false
+        this.$emit('initInfo', this.ldbInfo)
+      })
     },
 
     /**
@@ -374,7 +376,9 @@ export default {
           })
         } else this.ldbRecords = res.data
       }
-      this.recordsLoading = false
+      this.$nextTick(() => {
+        this.recordsLoading = false
+      })
     },
 
     /**

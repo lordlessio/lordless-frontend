@@ -16,8 +16,9 @@
                   <use xlink:href="#icon-crown-red"/>
                 </svg>
               </span>
-              <span v-if="user.nickName">{{ user.nickName }}</span>
+              <span v-if="user.nickName">{{ user.nickName | sliceStr }}</span>
               <span v-else>{{ user.address | splitAddress({ before: 5, end: 2 }) }}</span>
+              <span class="TTFontBolder user-level">Level {{ user.level }}</span>
             </h2>
             <p class="d-flex f-align-center">
               <span id="detail-user-address" class="text-ellipsis">
@@ -35,9 +36,12 @@
                 </span>
               </el-tooltip>
             </p>
-            <div class="TTFontBolder user-level">
+            <!-- <div class="TTFontBolder user-level">
               Level <span>{{ user.level }}</span>
-            </div>
+            </div> -->
+            <p class="d-flex f-wrap f-align-center user-types">
+              <span class="inline-block" v-for="(tag, index) of ['LESS', 'IOST', 'LESS', 'IOST', 'LESS', 'IOST', 'LESS', 'IOST', 'LESS', 'IOST']" :key="index">{{ tag }}</span>
+            </p>
             <!-- <div class="user-total-candy">
               <p>Total earned candy</p>
               <p>0.003 ETH</p>
@@ -358,12 +362,27 @@ export default {
     @include margin('left', 8px, 1);
   }
   .user-level {
-    margin-top: 10px;
-    font-size: 20px;
-    color: #555;
+    // margin-top: 10px;
+    margin-left: 15px;
+    font-size: 18px;
+    color: #999;
     // >span {
     //   font-size: 20px;
     // }
+  }
+  .user-types {
+    margin-top: 4px;
+    >span {
+      margin-top: 6px;
+      margin-right: 10px;
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 20px;
+      // border: 1px solid #BDB9FD;
+      color: #fff;
+      background-color: #bbb;
+      box-sizing: border-box;
+    }
   }
   .user-total-candy {
     margin-top: 10px;

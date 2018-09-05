@@ -1,10 +1,10 @@
 <template>
-  <div class="relative ldb-deal-status">
+  <div class="relative alone-layer ldb-deal-status">
 
     <!-- ldb detail sale skeletion -->
-    <transition name="ld-suspension-hide-fade">
+    <!-- <transition name="ld-suspension-hide-fade"> -->
       <sale-skeletion v-if="loading"></sale-skeletion>
-    </transition>
+    <!-- </transition> -->
 
     <transition name="ld-hide-fade">
       <section v-if="!loading && (info.chain.auction.isOnAuction || info.chain.auction.isOnPreAuction || isOwner)" class="ldb-deal-cnt">

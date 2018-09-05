@@ -1,6 +1,6 @@
 <template>
   <div
-    class="cursor-pointer user-avatar-box"
+    class="alone-layer cursor-pointer user-avatar-box"
     :class="[{ 'shadow': shadow && userInfo.address }, theme]"
     :style="`font-size: ${fontSize};border-radius: ${radius};`"
     @click="$router.push(`/owner/info`)">
@@ -73,7 +73,7 @@ export default {
     },
     loginText: {
       type: String,
-      default: 'Getting started'
+      default: 'Get started'
     },
     showInfo: {
       type: Boolean,

@@ -1,5 +1,5 @@
 <template>
-  <div class="auto-complete-box" :class="{ 'redius-top': isSelect, 'shadow': shadow }">
+  <div class="auto-complete-box" :class="{ 'shadow': shadow }">
     <div class="auto-complete-container">
       <div class="complete-input">
         <el-autocomplete
@@ -11,12 +11,20 @@
           @select="handleSelect"
           @blur="inputBlur"
           @focus="inputFocus">
-          <i
+          <span
+            class="color-secondary ld-auto-icon"
+            slot="suffix"
+            @click="iconClick">
+            <svg>
+              <use :xlink:href="`#icon-${searchText ? 'close' : 'search'}`"/>
+            </svg>
+          </span>
+          <!-- <i
             class="el-input__icon ld-auto-icon color-secondary"
             :class="`el-icon-${searchText ? 'close' : 'search'}`"
             slot="suffix"
             @click="iconClick">
-          </i>
+          </i> -->
           <div class="d-inline-flex f-auto-center complete-icon" slot="prefix">
             <svg>
               <use xlink:href="#icon-logo-image"/>
@@ -55,7 +63,7 @@
                 </div>
               </div>
             </div>
-            <div class="d-flex popper-record" :class="{ 'theme-gray': !item.id }" v-if="!item.trending">
+            <div class="d-flex popper-record" :class="{ 'theme-gray': !item.id, 'margin': item.localFirst }" v-if="!item.trending">
               <div class="d-inline-flex f-auto-center popper-record-icon">
                 <i :class="`el-icon-${item.id ? (item.history ? 'time' : 'location') : 'location-outline'} color-secondary`"></i>
               </div>
@@ -84,13 +92,6 @@ export default {
       default: 'Search Somthing'
     },
 
-    trendings: {
-      type: Array,
-      default: () => {
-        return []
-      }
-    },
-
     shadow: {
       type: Boolean,
       default: true
@@ -98,27 +99,13 @@ export default {
   },
   data: () => {
     return {
-      searchText: '',
-      isSelect: false
-    }
-  },
-  computed: {
-    trendingLdbs () {
-      return this.trendings.slice(0, 3)
+      searchText: ''
     }
   },
   components: {
     ImgBox
   },
   methods: {
-    inputBlur () {
-      this.isSelect = false
-    },
-
-    inputFocus () {
-      this.isSelect = true
-    },
-
     handleSearch (string, cb) {
       this.$emit('handleSearch', string, cb)
     },
@@ -162,8 +149,8 @@ export default {
       .el-input__inner {
         padding-left: 63px;
         padding-right: 40px;
-        font-size: 16px;
-        font-weight: 500;
+        font-size: 18px;
+        font-family: $--font-TTNormsMedium;
         border: none;
         outline: none;
         &::placeholder {
@@ -181,8 +168,14 @@ export default {
     }
   }
   .ld-auto-icon {
-    font-weight: bolder;
+    // font-weight: bolder;
+    width: 28px;
+    height: 28px;
     cursor: pointer;
+    >svg {
+      width: 28px;
+      stroke-width: 3px;
+    }
   }
   .complete-icon {
     padding: 8px;
@@ -200,7 +193,6 @@ export default {
 
   // popper-trending
   .popper-trending {
-    margin-bottom: 15px;
     padding: 0 10px;
     >p {
       padding-left: 10px;
@@ -209,6 +201,9 @@ export default {
       color: #bbb;
     }
     // border-bottom: 1px solid #eee;
+    &.margin {
+      margin-bottom: 15px;
+    }
   }
   .popper-trending-container {
     padding: 0 10px 10px;
@@ -295,6 +290,9 @@ export default {
       .record-name {
         color: #aaa;
       }
+    }
+    &.margin {
+      margin-top: 15px;
     }
     &:hover {
       background-color: #f5f7fa;

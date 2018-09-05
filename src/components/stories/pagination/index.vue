@@ -1,5 +1,5 @@
 <template>
-  <div class="ld-pagination-box TTFontBold" :class="{ 'background': background }">
+  <div class="alone-layer ld-pagination-box TTFontBold" :class="{ 'background': background }">
     <el-pagination
       class="d-flex f-align-center"
       :layout="layout"

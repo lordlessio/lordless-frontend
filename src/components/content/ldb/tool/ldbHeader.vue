@@ -8,10 +8,10 @@
 
     <transition name="ld-hide-fade" @after-enter="afterEnter">
       <section v-if="!loading && info" id="ldb-detail-header" class="ldb-detail-header" :class="{ 'animate': animate }">
-        <div class="absolute-full detail-header-mask"></div>
-        <div class="container header-container">
+        <div class="alone-layer absolute-full detail-header-mask"></div>
+        <div class="alone-layer container header-container">
           <div v-if="!owner" class="detail-ldb-candies">
-            <div id="ldb-candies-box" class="ldb-candies-container" :class="{ 'show': rendered }">
+            <div id="ldb-candies-box" class="alone-layer ldb-candies-container" :class="{ 'show': rendered }">
               <span class="inline-block ldb-candies-item"
                 :id="`ldb-candy-${candy.tid}`"
                 :style="`transform: translate(${candyCoords[candy.tid][0]}px, ${candyCoords[candy.tid][1]}px)`"
@@ -85,7 +85,7 @@
               <!-- <img src="http://lordless.oss-cn-hongkong.aliyuncs.com//lordlesstest/ldbicon/!-4-detail.jpg?x-oss-process=image/resize,w_1600"/> -->
               <ld-img absolute type="span" :src="info.ldbIcon.source.detail | reldbIcon('detail')"></ld-img>
             </div>
-            <div class="detail-ldb-level">
+            <div class="alone-layer detail-ldb-level">
               <img alt="tavern popularity image" :src="`/img/ldb-level-${info.chain.popularity}.png` | originSource({ size: 450 })"/>
             </div>
           </div>
@@ -174,21 +174,96 @@ export default {
   methods: {
 
     afterEnter () {
-      this.animate = true
       const header = document.getElementById('ldb-detail-header')
       if (!header) return
       const animateFunc = () => {
-        this.rendered = true
-        this.getCandyTasks()
         header.removeEventListener(transitionEvent(), animateFunc)
+        this.$nextTick(() => {
+          this.rendered = true
+          this.getCandyTasks()
+        })
       }
       header.addEventListener(transitionEvent(), animateFunc)
+      this.animate = true
     },
 
+    /**
+     * 设置home
+     */
     async setHome (ldbInfo = this.info) {
       if (this.isHome) return
       this.$emit('setHome')
     },
+
+    /**
+     * 糖果领取动画
+     */
+    // receiveAnimate (candy, { a = 0.001, speed = 166.67 } = {}) {
+    //   let bool = false
+    //   const scrollLeft = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft)
+
+    //   const scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop)
+    //   // 四边缘的坐标
+    //   const candyEle = candy.getBoundingClientRect()
+    //   const boxEle = document.getElementById('ldb-detail-content').getBoundingClientRect()
+
+    //   // 移动元素的中心点坐标
+    //   const candyCenter = {
+    //     x: candyEle.left + (candyEle.right - candyEle.left) / 2 + scrollLeft,
+    //     y: candyEle.top + (candyEle.bottom - candyEle.top) / 2 + scrollTop
+    //   }
+
+    //   // 目标元素位置
+    //   const boxCenter = {
+    //     x: boxEle.left,
+    //     y: boxEle.top
+    //   }
+
+    //   // 转换成相对坐标位置
+    //   // const coordElement = {
+    //   //   x: 0,
+    //   //   y: 0
+    //   // }
+    //   const coordTarget = {
+    //     x: -1 * (candyCenter.x - boxCenter.x),
+    //     y: -1 * (candyCenter.y - boxCenter.y)
+    //   }
+
+    //   const b = (coordTarget.y - a * coordTarget.x * coordTarget.x) / coordTarget.x
+
+    //   let startx = 0
+    //   const rate = coordTarget.x > 0 ? 1 : -1
+
+    //   const step = () => {
+    //     // 切线 y'=2ax+b
+    //     let tangent = 2 * a * startx + b // = y / x
+    //     // y*y + x*x = speed
+    //     // (tangent * x)^2 + x*x = speed
+    //     // x = Math.sqr(speed / (tangent * tangent + 1));
+    //     startx = startx + rate * Math.sqrt(speed / (tangent * tangent + 1))
+
+    //     // 防止过界
+    //     if ((rate === 1 && startx > coordTarget.x) || (rate === -1 && startx < coordTarget.x)) {
+    //       startx = coordTarget.x
+    //     }
+    //     let x = startx
+    //     let y = a * x * x + b * x
+
+    //     candy.style.transform = 'translate(' + [x + 'px', y + 'px'].join() + ')'
+
+    //     if (startx !== coordTarget.x) {
+    //       window.requestAnimationFrame(step)
+    //     } else {
+    //       // 运动结束，回调执行
+    //       bool = true
+    //     }
+    //   }
+    //   return window.requestAnimationFrame(step)
+    // },
+
+    /**
+     * 领取糖果
+     */
     async receiveCandy (task) {
       if (task.status !== 'processing') return
       let animateAfter = false
@@ -360,7 +435,7 @@ export default {
         padding-top: 60px;
       }
       .detail-ldb-level {
-        transform: translate(0, -25%);
+        transform: translate(5%, -25%) translateZ(0);
       }
     }
   }
@@ -376,24 +451,30 @@ export default {
     &.animate {
       .detail-header-mask {
         &::after {
-          animation: bounceSkewInRight .45s 1;
-          opacity: 1;
-          transform: translate3d(-20%, 0, 0) skew(-25deg) translateX(0px) translateZ(0px);
+          animation: bounceSkewInRight .55s 1 forwards;
+          // opacity: 1;
+          // transform: translate3d(-20%, 0, 0) skew(-25deg) translateX(0px) translateZ(0px);
         }
       }
       .detail-header-left {
         // left: 0;
-        animation: bounceInLeft .45s 1;
-        opacity: 1;
-        transform: translate3d(0, -50%, 0);
+        animation: bounceInLeft .55s 1 forwards;
+        // opacity: 1;
+        // transform: translate3d(0, -50%, 0);
         &::before {
           opacity: 1;
         }
       }
       .detail-header-right {
-        animation: bounceInRight .45s .15s 1;
-        opacity: 1;
-        transform: translate3d(-100%, 0, 0) translateX(0px);
+        animation: bounceInRight .55s .15s 1 forwards;
+        // opacity: 1;
+        // transform: translate3d(-100%, 0, 0) translateX(0px);
+      }
+      .detail-ldb-level {
+        >img {
+          opacity: 1;
+          transform: scale(1);
+        }
       }
     }
   }
@@ -419,7 +500,7 @@ export default {
       transform: translate3d(10%, 0, 0) skew(-25deg) translateX(0px) translateZ(0px);
       opacity: 0;
       z-index: 1;
-      transition: all 0s .45s;
+      // transition: all 0s .45s;
     }
   }
 
@@ -468,7 +549,6 @@ export default {
   @keyframes candyAfterAnimate {
     0% {
       transform: translate(-40%, 5px) translateZ(0);
-      opacity: 0;
       animation-timing-function: ease-in;
     }
     20% {
@@ -580,7 +660,7 @@ export default {
     color: #fff;
     opacity: 0;
     z-index: 1;
-    transition: all 0s .45s;
+    // transition: all 0s .45s;
     // transition: all .55s 0s;
     // transition: left .55s spring, opacity .55s spring;
     // background-blend-mode: soft-light;
@@ -745,7 +825,7 @@ export default {
     background-color: #fff;
     opacity: 0;
     transform: translate3d(0, 0, 0) translateX(0px);
-    transition: all 0s .6s;
+    // transition: all 0s .6s;
     // transition: all .55s .15s;
     // transition: transform .55s spring .25s, opacity .55s spring .25s;
     // height: calc(930px / 4 * 3);
@@ -754,10 +834,13 @@ export default {
     position: absolute;
     top: 0;
     right: 0;
-    width: 33%;
-    transform: translate(20%, -20%);
+    width: 30%;
+    transform: translate(15%, -20%) translateZ(0);
     >img {
+      opacity: 0;
       width: 100%;
+      transform: scale(.75);
+      transition: all .25s ease-in-out .5s;
     }
   }
   .detail-ldb-poster {
