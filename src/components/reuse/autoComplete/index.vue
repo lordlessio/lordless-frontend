@@ -8,9 +8,7 @@
           popper-class="lordless-autocomplete hide-arrow redius-bottom"
           :fetch-suggestions="handleSearch"
           :placeholder="placeholder"
-          @select="handleSelect"
-          @blur="inputBlur"
-          @focus="inputFocus">
+          @select="handleSelect">
           <span
             class="color-secondary ld-auto-icon"
             slot="suffix"

@@ -372,6 +372,8 @@ export default {
   }
   .user-types {
     margin-top: 4px;
+    max-height: 62px;
+    overflow: hidden;
     >span {
       margin-top: 6px;
       margin-right: 10px;

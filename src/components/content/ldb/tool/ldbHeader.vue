@@ -197,8 +197,10 @@ export default {
 
     /**
      * 糖果领取动画
+     * @param {Number} a 二次项系数
+     * @param {Number} speed 动画速率
      */
-    // receiveAnimate (candy, { a = 0.001, speed = 166.67 } = {}) {
+    // receiveAnimate (candy, { a = 0.003, speed = 166.67 } = {}) {
     //   let bool = false
     //   const scrollLeft = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft)
 
@@ -225,18 +227,33 @@ export default {
     //   //   y: 0
     //   // }
     //   const coordTarget = {
-    //     x: -1 * (candyCenter.x - boxCenter.x),
-    //     y: -1 * (candyCenter.y - boxCenter.y)
+    //     x: boxCenter.x - candyCenter.x,
+    //     y: boxCenter.y - candyCenter.y
     //   }
 
+    //   // 抛物线方向
+    //   const rate = coordTarget.x > 0 ? 1 : -1
+
+    //   // 一次项系数 y = a * x^2 + b * x + c
+
+    //   // -b / 2a = x
+    //   // (4ac - b^2) / 4a = maxY
+    //   // b = -2ax
+    //   // 这里c 为 0
+    //   // so: -b^2 / 4a = maxY
+    //   // -a * x^2 = maxY
+
+    //   // so: a = - maxY / x^2
+    //   // const a = rate * (maxY / Math.pow(coordTarget.x, 2))
+
+    //   // so: b = - 2ax
     //   const b = (coordTarget.y - a * coordTarget.x * coordTarget.x) / coordTarget.x
 
     //   let startx = 0
-    //   const rate = coordTarget.x > 0 ? 1 : -1
 
     //   const step = () => {
     //     // 切线 y'=2ax+b
-    //     let tangent = 2 * a * startx + b // = y / x
+    //     let tangent = 2 * a * startx + b
     //     // y*y + x*x = speed
     //     // (tangent * x)^2 + x*x = speed
     //     // x = Math.sqr(speed / (tangent * tangent + 1));
@@ -248,12 +265,16 @@ export default {
     //     }
     //     let x = startx
     //     let y = a * x * x + b * x
+    //     console.log('--- x', x, 'y', y, 'coordTarget', coordTarget)
 
     //     candy.style.transform = 'translate(' + [x + 'px', y + 'px'].join() + ')'
 
     //     if (startx !== coordTarget.x) {
+    //       console.log('----- animation')
     //       window.requestAnimationFrame(step)
     //     } else {
+    //       console.log('----- stop')
+    //       candy.style.transform = ''
     //       // 运动结束，回调执行
     //       bool = true
     //     }

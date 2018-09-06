@@ -133,16 +133,18 @@ export default {
     ]),
 
     async getLdbs () {
-      const result = await getChainLdbs({ extensions: 'base', ps: -1 })
+      const result = await getChainLdbs({ extensions: 'base', ps: -1, type: 'map' })
       if (result.code === 1000) {
         const ldbs = result.data.list
         this.ldbs = ldbs
         console.log('ldbs', ldbs)
-        this.$refs.lordMap.createImageMarkers(ldbs)
-        // this.$refs.lordMap.createPointLayer(ldbs)
-        this.$refs.lordMap.createPointMarkers(ldbs)
-        // this.$refs.lordMap.createMarkers(this.test_ldbs)
-        this.$nextTick(() => this.flyToLdb())
+        this.$nextTick(() => {
+          this.$refs.lordMap.createImageMarkers(ldbs)
+          // this.$refs.lordMap.createPointLayer(ldbs)
+          this.$refs.lordMap.createPointMarkers(ldbs)
+          // this.$refs.lordMap.createMarkers(this.test_ldbs)
+          this.flyToLdb()
+        })
       }
     },
 
@@ -183,7 +185,7 @@ export default {
      */
     filterComplete (query, list) {
       const localLdbs = this.historySearchLdbs
-      localLdbs[0].localFirst = true
+      if (localLdbs.length) localLdbs[0].localFirst = true
       return query ? this.restructurSearchLdbs(list, localLdbs, query) : [].concat([{
         trending: 1,
         list: this.trendings
