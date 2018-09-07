@@ -34,6 +34,17 @@
               </span>
             </div>
           </div>
+          <div id="header-candy-layer" class="alone-layer header-candy-layer">
+            <div id="header-receive-box" class="header-receive-box">
+              <div class="header-receive-main">
+                <div id="receive-box-container" class="receive-box-container">
+                  <img class="receive-box-top" src="~static/img/ldb/box-top.png"/>
+                  <img class="receive-box-bottom" src="~static/img/ldb/box-bottom.png"/>
+                  <span id="receive-box-candy" class="receive-box-candy"></span>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="detail-header-left">
             <div class="header-left-container">
               <span class="header-left-mask"></span>
@@ -102,7 +113,8 @@ import LdBtn from '@/components/stories/button'
 import LdImg from '@/components/stories/image'
 import Blockies from '@/components/stories/blockies'
 
-import { addClass, removeClass, transitionEvent } from 'utils/tool'
+import { addClass, removeClass, hasClass, transitionEvent, animationIterationEvent } from 'utils/tool'
+// import { Tween } from 'utils/tool/tween'
 export default {
   props: {
     info: {
@@ -145,7 +157,9 @@ export default {
       candyCoords: {},
       candyTasks: [],
       hideTasks: 1,
-      allTasks: vm.tasks
+      allTasks: vm.tasks,
+      receiveBoxBool: false,
+      receiveEndCandy: null
     }
   },
   watch: {
@@ -161,7 +175,17 @@ export default {
      * 如果用户剩余 ap 不足，重新生成 candyTasks
      */
     candyTasks (val) {
+      console.log('----- candyTasks', val, this.allTasks, this.rendered)
       if (this.userInfo.ap !== 0 && !val.length && this.allTasks.length && this.rendered) this.getCandyTasks()
+    },
+
+    receiveBoxBool (val) {
+      const receiveLayer = document.getElementById('header-candy-layer')
+      if (val) {
+        addClass('show', receiveLayer)
+      } else {
+        removeClass('show', receiveLayer)
+      }
     }
   },
   components: {
@@ -195,103 +219,187 @@ export default {
       this.$emit('setHome')
     },
 
+    // 已知抛物线两个点的坐标，求抛物线 二次项系数 Quadratic
+    getBezierQuadratic (a, b) {
+      const x1 = a.x
+      const y1 = a.y
+      const x2 = b.x
+      const y2 = b.y
+      return (x1 * y2 - y1 * x2) / (x1 * x2 * x2 - x1 * x1 * x2)
+    },
+
+    // 获取抛物线顶点
+    getVertex ({ v1, v2 = { x: 0, y: 0 }, speed = 1 } = {}) {
+      if (!v1) return null
+      const x2 = v1.x
+      const y2 = v1.y
+      const vx = x2 - v2.x
+      const vy = y2 - v2.y
+      const rate = vx > 0 ? 1 : -1
+
+      // 圆的半径
+      // x1 * x1 + x2 * x2 = r * r
+      const r = Math.sqrt(vx * vx + vy * vy) / 2
+      const vertex = {}
+
+      // vertex.x * vertex.x = r * r - (vy / 2) * (vy / 2) = r * r - (vy * vy / 4)
+      vertex.x = rate * (Math.sqrt(r * r - (vy * vy / 4)))
+      vertex.y = (r - (vy / 2))
+      return vertex
+    },
+
+    /**
+     * 抛物线公式
+     * @param {Number} rate 方向
+     * @param {Number} time 当前时间
+     * @param {Number} duration 持续时间
+     * @param {Number} a 纵向加速度
+     * @param {Number} sx 水平位移量
+     * @param {Number} sy 垂直位移量
+     * @return {Object} x, y 坐标
+     */
+    bezierPath ({ time = 0, duration = 1000, a = 980, sx = 1000, sy = 0 } = {}) {
+      const ta = duration / 1000
+      const t = time / 1000
+
+      // 根据总时间求出 x 轴及 y 轴方向的初速度
+      const v0x = sx / ta
+      const v0y = sy / ta - 1 / 2 * a * ta
+
+      // 物理抛物线
+      // s = v1 * t + 1 / 2 * a * t * t
+      const x = v0x * t
+      const y = v0y * t + 1 / 2 * a * t * t
+      return { x, y }
+    },
+
     /**
      * 糖果领取动画
      * @param {Number} a 二次项系数
      * @param {Number} speed 动画速率
      */
-    // receiveAnimate (candy, { a = 0.003, speed = 166.67 } = {}) {
-    //   let bool = false
-    //   const scrollLeft = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft)
+    receiveAnimate (candy, { before = -1, duration = 1000, tname = 'Cubic', ttype = 'easeInOut' } = {}, cb) {
+      const scrollLeft = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft)
 
-    //   const scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop)
-    //   // 四边缘的坐标
-    //   const candyEle = candy.getBoundingClientRect()
-    //   const boxEle = document.getElementById('ldb-detail-content').getBoundingClientRect()
+      const scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop)
+      // 四边缘的坐标
+      const candyEle = candy.getBoundingClientRect()
+      const boxEle = document.getElementById('header-receive-box').getBoundingClientRect()
 
-    //   // 移动元素的中心点坐标
-    //   const candyCenter = {
-    //     x: candyEle.left + (candyEle.right - candyEle.left) / 2 + scrollLeft,
-    //     y: candyEle.top + (candyEle.bottom - candyEle.top) / 2 + scrollTop
-    //   }
+      // 移动元素的中心点坐标
+      const candyCenter = {
+        x: candyEle.left + (candyEle.right - candyEle.left) / 2 + scrollLeft,
+        y: candyEle.top + (candyEle.bottom - candyEle.top) / 2 + scrollTop
+      }
 
-    //   // 目标元素位置
-    //   const boxCenter = {
-    //     x: boxEle.left,
-    //     y: boxEle.top
-    //   }
+      // 目标元素位置
+      const boxCenter = {
+        x: boxEle.left + (boxEle.right - boxEle.left) / 7 * 3 + scrollLeft,
+        y: boxEle.top + (boxEle.bottom - boxEle.top) / 9 * 5 + scrollTop
+      }
 
-    //   // 转换成相对坐标位置
-    //   // const coordElement = {
-    //   //   x: 0,
-    //   //   y: 0
-    //   // }
-    //   const coordTarget = {
-    //     x: boxCenter.x - candyCenter.x,
-    //     y: boxCenter.y - candyCenter.y
-    //   }
+      // 相对坐标位置
+      const coordTarget = {
+        x: boxCenter.x - candyCenter.x,
+        y: candyCenter.y - boxCenter.y
+      }
 
-    //   // 抛物线方向
-    //   const rate = coordTarget.x > 0 ? 1 : -1
+      // 顶点坐标
+      // const coordVertex = this.getVertex({ v1: coordTarget, speed: 0.35 })
 
-    //   // 一次项系数 y = a * x^2 + b * x + c
+      // const a = this.getBezierQuadratic(coordTarget, coordVertex)
 
-    //   // -b / 2a = x
-    //   // (4ac - b^2) / 4a = maxY
-    //   // b = -2ax
-    //   // 这里c 为 0
-    //   // so: -b^2 / 4a = maxY
-    //   // -a * x^2 = maxY
+      // 元素偏移和坐标系相反
+      // const rate = coordTarget.x > 0 ? 1 : -1
 
-    //   // so: a = - maxY / x^2
-    //   // const a = rate * (maxY / Math.pow(coordTarget.x, 2))
+      // 一次项系数 y = a * x^2 + b * x + c
 
-    //   // so: b = - 2ax
-    //   const b = (coordTarget.y - a * coordTarget.x * coordTarget.x) / coordTarget.x
+      // -b / 2a = x
+      // (4ac - b^2) / 4a = maxY
+      // b = -2ax
+      // 这里c 为 0
+      // so: -b^2 / 4a = maxY
+      // -a * x^2 = maxY
 
-    //   let startx = 0
+      // so: a = - maxY / x^2
+      // const a = rate * (maxY / Math.pow(coordTarget.x, 2))
 
-    //   const step = () => {
-    //     // 切线 y'=2ax+b
-    //     let tangent = 2 * a * startx + b
-    //     // y*y + x*x = speed
-    //     // (tangent * x)^2 + x*x = speed
-    //     // x = Math.sqr(speed / (tangent * tangent + 1));
-    //     startx = startx + rate * Math.sqrt(speed / (tangent * tangent + 1))
+      // so: b = - 2ax
+      // const b = (coordTarget.y - a * coordTarget.x * coordTarget.x) / coordTarget.x
 
-    //     // 防止过界
-    //     if ((rate === 1 && startx > coordTarget.x) || (rate === -1 && startx < coordTarget.x)) {
-    //       startx = coordTarget.x
-    //     }
-    //     let x = startx
-    //     let y = a * x * x + b * x
-    //     console.log('--- x', x, 'y', y, 'coordTarget', coordTarget)
+      // console.log(' --- a', a, 'b', b, 'coordVertex', coordVertex, 'coordTarget', coordTarget)
 
-    //     candy.style.transform = 'translate(' + [x + 'px', y + 'px'].join() + ')'
+      // let startx = 0
+      let startt = 0
 
-    //     if (startx !== coordTarget.x) {
-    //       console.log('----- animation')
-    //       window.requestAnimationFrame(step)
-    //     } else {
-    //       console.log('----- stop')
-    //       candy.style.transform = ''
-    //       // 运动结束，回调执行
-    //       bool = true
-    //     }
-    //   }
-    //   return window.requestAnimationFrame(step)
-    // },
+      const bezierPath = ({ time = 0, duration = 1000, a = 5000, sx = 1000, sy = 0 } = {}) => {
+        const ta = duration / 1000
+        const t = time / 1000
+        sy = Math.abs(sy)
+
+        // 根据总时间求出 x 轴及 y 轴方向的初速度
+        const v0x = sx / ta
+        const v0y = sy / ta - 1 / 2 * a * ta
+
+        // 物理抛物线
+        // s = v1 * t + 1 / 2 * a * t * t
+        const x = v0x * t
+        const y = v0y * t + 1 / 2 * a * t * t
+        return { x, y }
+      }
+
+      // timestamp 时间戳,当前动画执行了多久
+      // elapsed 帧率
+      const step = (timestamp) => {
+        if (!startt) startt = timestamp
+        const time = timestamp - startt
+        let { x, y } = bezierPath({ time, duration, a: 6000, sx: coordTarget.x, sy: coordTarget.y })
+
+        // startx = startx + rate * Math.sqrt(speed / (tangent * tangent + 1))
+        // startx = Tween[tname][ttype](nowt, 0, coordTarget.x, duration)
+
+        // 防止过界
+        // if ((rate === 1 && startx > coordTarget.x) || (rate === -1 && startx < coordTarget.x)) {
+        //   startx = coordTarget.x
+        // }
+        // if (Math.abs(startx) >= Math.abs(coordTarget.x)) {
+        //   startx = coordTarget.x
+        // }
+        // let x = startx
+        // let y = rate * (a * x * x + b * x)
+        if (Math.abs(x) >= Math.abs(coordTarget.x)) {
+          x = coordTarget.x
+          y = y > 0 ? Math.abs(coordTarget.y) : -Math.abs(coordTarget.y)
+        }
+
+        candy.style.transform = `translate3d(${x}px, ${y}px, 0) translateZ(0)`
+
+        if (x !== coordTarget.x && duration > time) {
+          window.requestAnimationFrame(step)
+        } else {
+          const cdata = { boxCenter, coordTarget, coords: { x, y } }
+          if (cb) cb(cdata)
+        }
+      }
+      return window.requestAnimationFrame(step)
+    },
 
     /**
      * 领取糖果
      */
     async receiveCandy (task) {
       if (task.status !== 'processing') return
+
+      this.receiveBoxBool = true
+      const rbox = document.getElementById('header-receive-box')
+      // const cbox = rbox.firstChild
       let animateAfter = false
       let dataBack = false
+      let iserror = false
 
       const removeCandy = () => {
         if (!animateAfter || !dataBack) return
+        console.log('------ this.hideTasks', this.hideTasks, this.candyTasks.length)
         if (this.hideTasks === this.candyTasks.length) {
           this.$set(this, 'hideTasks', 1)
           this.$set(this, 'candyTasks', [])
@@ -301,32 +409,91 @@ export default {
       }
 
       // 获取当前 receive 糖果dom
-      const dom = document.getElementById(`ldb-candy-${task.tid}`)
-      if (!dom) return
+      const candy = document.getElementById(`ldb-candy-${task.tid}`)
+      if (!candy) return
+      const candyId = candy.getAttribute('id')
+      this.receiveEndCandy = candyId
 
       // 获取子元素
-      const children = dom.firstChild
-      if (!children) return
+      const cCandy = candy.firstChild
+      if (!cCandy) return
 
       // 设置当前dom鼠标形态
-      dom.style.cursor = 'no-drop'
+      candy.style.cursor = 'no-drop'
 
       // 屏蔽子元素鼠标事件及暂停动画
-      children.style.pointerEvents = 'none'
-      children.style.animationPlayState = 'paused'
+      // children.style.pointerEvents = 'none'
+      cCandy.style.animationPlayState = 'paused'
+      addClass('move', cCandy)
 
-      const num = children.getAttribute('data-num')
-      children.setAttribute('data-msg', `+ ${num} ${task.ldbTaskType.candyType.symbol.toLowerCase()}`)
+      const intoBoxCandy = document.getElementById('receive-box-candy')
 
+      const cloneCandyId = `clone_${candyId}`
+      // const num = children.getAttribute('data-num')
+      // children.setAttribute('data-msg', `+ ${num} ${task.ldbTaskType.candyType.symbol.toLowerCase()}`)
+      this.receiveAnimate(cCandy, { duration: 500 }, ({ boxCenter, coordTarget, coords, beforeEnd }) => {
+        // if (!beforeEnd) return
+
+        if (!hasClass('animate', rbox)) addClass('animate', rbox)
+        else rbox.style.animationPlayState = 'running'
+
+        const rboxFunc = () => {
+          rbox.removeEventListener(animationIterationEvent(), rboxFunc)
+          rbox.style.animationPlayState = 'paused'
+
+          animateAfter = true
+          removeCandy()
+        }
+        rbox.addEventListener(animationIterationEvent(), rboxFunc)
+
+        const eatFunc = () => {
+          const cloneCandy = document.getElementById(cloneCandyId)
+          cloneCandy.removeEventListener(transitionEvent(), eatFunc)
+          cloneCandy.style.animationPlayState = 'paused'
+          addClass('hidden', cloneCandy)
+
+          intoBoxCandy.style = ''
+
+          // 如果当前糖果是box关闭前的最后那个糖果，关闭box
+          if (this.receiveEndCandy === candyId) {
+            rbox.style = ''
+            removeClass('animate', rbox)
+            this.receiveBoxBool = false
+          }
+        }
+
+        if (intoBoxCandy.firstChild) intoBoxCandy.removeChild(intoBoxCandy.firstChild)
+
+        const cloneCandy = cCandy.cloneNode(true)
+
+        cloneCandy.setAttribute('id', cloneCandyId)
+        cloneCandy.style = ''
+        cloneCandy.className = 'receive-clone-candy animate'
+        intoBoxCandy.appendChild(cloneCandy)
+
+        document.getElementById(cloneCandyId).addEventListener(animationIterationEvent(), eatFunc)
+
+        const ccr = cCandy.getClientRects()[0]
+        const ibcr = document.getElementById('receive-box-container').getClientRects()[0]
+
+        const ibcleft = ccr.left - ibcr.left
+        const ibctop = ccr.top - ibcr.top
+        intoBoxCandy.style = `transform: translate3d(${ibcleft}px, ${ibctop}px, 0);`
+
+        if (!iserror) {
+          addClass('hidden', cCandy)
+        }
+        cCandy.style.transform = ''
+      })
       // 执行动画
-      addClass('animate', dom)
+      // addClass('animate', dom)
 
-      const animateFunc = () => {
-        animateAfter = true
-        removeCandy()
-        dom.removeEventListener(transitionEvent(), animateFunc, false)
-      }
-      dom.addEventListener(transitionEvent(), animateFunc, false)
+      // const animateFunc = () => {
+      //   animateAfter = true
+      //   removeCandy()
+      //   dom.removeEventListener(transitionEvent(), animateFunc, false)
+      // }
+      // dom.addEventListener(transitionEvent(), animateFunc, false)
 
       this.$emit('receive', task, ({ errorMsg, data } = {}) => {
         // 获取当前 receive 糖果dom
@@ -339,14 +506,18 @@ export default {
 
         if (!data) {
           // 设置当前dom鼠标形态
-          dom.style.cursor = 'pointer'
+          candy.style.cursor = 'pointer'
 
           // 屏蔽子元素鼠标事件及暂停动画
-          children.style.pointerEvents = ''
-          children.style.animationPlayState = ''
+          cCandy.style.pointerEvents = ''
+          cCandy.style.animationPlayState = ''
 
+          // restart animation
+          iserror = true
+          removeClass('hidden', cCandy)
+          removeClass('move', cCandy)
           // 执行动画
-          removeClass('animate', dom)
+          // removeClass('animate', candy)
           return
         }
 
@@ -532,6 +703,139 @@ export default {
     z-index: 2;
   }
 
+  // header-candy-layer
+
+  @keyframes receiveBoxShow {
+    from,
+    75%,
+    to {
+      -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    0% {
+      transform: translate3d(-100%, 100%, 0) translate(0, 0) translateZ(0px);
+    }
+
+    70% {
+      transform: translate3d(-25%, 20%, 0) translate(6px, -6px) translateZ(0px);
+    }
+    to {
+      transform: translate3d(-25%, 20%, 0) translate(0px, 0px) translateZ(0px);
+    }
+  }
+
+  @keyframes receiveBoxEat {
+    0% {
+      transform: translate(0px, 0px) scale(1) translateZ(0px);
+    }
+
+    50% {
+      transform: translate(-10px, 10px) scale(1.1) translateZ(0px);
+    }
+  }
+
+  .header-candy-layer {
+    position: absolute;
+    left: 0;
+    top: 5%;
+    width: 40%;
+    height: 90%;
+    z-index: 1;
+    overflow: hidden;
+    transition: z-index 0s .5s;
+    &.show {
+      .header-receive-main {
+        animation: receiveBoxShow .5s linear 1;
+        transform: translate3d(-25%, 20%, 0) translate(0px, 0px) translateZ(0px);
+        transition-delay: .5s;
+      }
+      z-index: 5;
+      transition-delay: 0s;
+    }
+  }
+
+  .header-receive-box {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 264px;
+    // &.hide {
+    //   .header-receive-main {
+    //     animation: receiveBoxHide .5s linear forwards;
+    //     // transform: translate3d(-25%, 20%, 0);
+    //   }
+    // }
+    &.animate {
+      animation: receiveBoxEat .5s ease-out infinite;
+    }
+  }
+  .header-receive-main {
+    transform: translate3d(-100%, 100%, 0);
+    transition: transform .5s 0s ease-out;
+    will-change: transform;
+  }
+  .receive-box-container {
+    position: relative;
+    width: 100%;
+    >img {
+      transform: rotate(45deg);
+    }
+  }
+  .receive-box-top {
+    position: relative;
+    width: 100%;
+    z-index: 1;
+  }
+  .receive-box-bottom {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 3;
+  }
+  .receive-box-candy {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 54px;
+    height: 54px;
+    // transform: translate3d(173.536px, 38.2502px, 0);
+    z-index: 2;
+    // opacity: 1;
+    // transition: opacity 0s .75s;
+  }
+
+  @keyframes cloneCandyAnimate {
+    0% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      animation-timing-function: ease-in;
+    }
+    15% {
+      opacity: 1;
+      transform: translate3d(5px, -15px, 0);
+      animation-timing-function: ease-out;
+    }
+    50% {
+      opacity: 0;
+      transform: translate3d(-50px, 25px, 0);
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  .receive-clone-candy {
+    display: inline-block;
+    position: relative;
+    width: 54px;
+    height: 54px;
+    opacity: 0;
+    &.animate {
+      animation: cloneCandyAnimate 1.5s ease-out infinite;
+    }
+  }
+
   // detail-ldb-candies
   .detail-ldb-candies {
     position: absolute;
@@ -626,6 +930,15 @@ export default {
     animation: candyAnimate 5s linear infinite;
     -moz-animation-duration: 2.4s;
     will-change: transform;
+    &.move {
+      &::before {
+        display: none;
+      }
+      animation: none;
+    }
+    &.transition {
+      transition: all .35s ease-in;
+    }
     &::before {
       content: attr(data-num);
       position: absolute;
@@ -680,7 +993,7 @@ export default {
     transform: translate3d(-100%, -50%, 0);;
     color: #fff;
     opacity: 0;
-    z-index: 1;
+    z-index: 3;
     // transition: all 0s .45s;
     // transition: all .55s 0s;
     // transition: left .55s spring, opacity .55s spring;
@@ -744,6 +1057,8 @@ export default {
     height: 100%;
     @include viewport-unit('width', 100vw, 0px, 1);
   }
+
+
   .header-left-cnt-container {
     padding-top: 90px;
     padding-bottom: 40px;

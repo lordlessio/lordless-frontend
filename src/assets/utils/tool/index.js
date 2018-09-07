@@ -10,6 +10,15 @@ import {
 } from 'date-fns'
 import store from '@/store'
 
+window.requestAnimFrame = (function () {
+  return window.requestAnimationFrame ||
+         window.webkitRequestAnimationFrame ||
+         window.mozRequestAnimationFrame ||
+         function (callback) {
+           window.setTimeout(callback, 1000 / 60)
+         }
+})()
+
 /**
  * 获取 data 数据类型
  * @param {Object} data 需要分析的数据
@@ -198,11 +207,25 @@ export const transitionEvent = () => {
   }
 }
 
+export const animationIterationEvent = () => {
+  const el = document.createElement('surface')
+  const animationEnds = {
+    'animation': 'animationiteration',
+    'OAnimation': 'oAnimationIteration',
+    'MozAnimation': 'animationiteration',
+    'WebkitAnimation': 'webkitAnimationIteration'
+  }
+  for (const t in animationEnds) {
+    if (el.style[t] !== undefined) return animationEnds[t]
+  }
+}
+
 export const animationEndEvent = () => {
   const el = document.createElement('surface')
   const animationEnds = {
+    'animation': 'animationend',
     'OAnimation': 'oAnimationEnd',
-    'MozAnimation': 'animationEnd',
+    'MozAnimation': 'animationend',
     'WebkitAnimation': 'webkitAnimationEnd'
   }
   for (const t in animationEnds) {
