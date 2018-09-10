@@ -251,9 +251,9 @@ export default {
       }
       if (!res.data) console.log('用户不存在')
     },
-    async getUserTaverns ({ address = this.user.address, isOnAuction = this.ldbTab === 'all' ? undefined : true, sort = this.ldbSort, order = this.ldbOrder, pn = this.taverns.pn, ps = this.taverns.ps } = {}) {
+    async getUserTaverns ({ lord = this.user.address, isOnAuction = this.ldbTab === 'all' ? undefined : true, sort = this.ldbSort, order = this.ldbOrder, pn = this.taverns.pn, ps = this.taverns.ps } = {}) {
       const params = {
-        user: address,
+        lord,
         isOnAuction,
         pn,
         ps,

@@ -281,9 +281,8 @@ export default {
     },
 
     async checkHome ({ ldbId = this.ldbInfo._id, userId = this.userInfo.address } = {}) {
-      const res = await getHome({ userId })
+      const res = await getHome()
       if (res.code === 1000 && res.data) {
-        console.log('----- ldbId', ldbId, res.data)
         if (res.data._id === ldbId) this.isHome = true
         else this.isHome = false
       } else this.isHome = false

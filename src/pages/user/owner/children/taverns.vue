@@ -232,14 +232,14 @@ export default {
       this.getAllBuilding(params)
     },
 
-    async getAllBuilding ({ address = this.userInfo.address, sort = this.buildingSort, pn = this.buildings.pn, ps = this.buildings.ps } = {}) {
-      if (!address) return
+    async getAllBuilding ({ lord = this.userInfo._id, sort = this.buildingSort, pn = this.buildings.pn, ps = this.buildings.ps } = {}) {
+      if (!lord) return
       this.loading = true
       const params = {
         pn,
         ps,
         sort,
-        user: address
+        lord
       }
       const res = await getChainLdbs(params)
       if (res.code === 1000 && res.data) {
@@ -248,13 +248,13 @@ export default {
       this.loading = false
     },
 
-    async getSaleBuilding ({ address = this.userInfo.address, pn = this.saleBuildings.pn, ps = this.saleBuildings.ps } = {}) {
-      if (!address) return
+    async getSaleBuilding ({ lord = this.userInfo._id, pn = this.saleBuildings.pn, ps = this.saleBuildings.ps } = {}) {
+      if (!lord) return
       this.loading = true
       const params = {
         pn,
         ps,
-        user: address,
+        lord,
         isOnAuction: true
       }
       const res = await getChainLdbs(params)

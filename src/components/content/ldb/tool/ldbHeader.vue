@@ -113,8 +113,8 @@ import LdBtn from '@/components/stories/button'
 import LdImg from '@/components/stories/image'
 import Blockies from '@/components/stories/blockies'
 
-import { addClass, removeClass, hasClass, transitionEvent, animationIterationEvent } from 'utils/tool'
-// import { Tween } from 'utils/tool/tween'
+import { addClass, removeClass, hasClass, transitionEvent, animationEndEvent, animationIterationEvent } from 'utils/tool'
+import { receiveAnimate } from 'utils/tool/animate'
 export default {
   props: {
     info: {
@@ -158,7 +158,7 @@ export default {
       candyTasks: [],
       hideTasks: 1,
       allTasks: vm.tasks,
-      receiveBoxBool: false,
+      receiveBoxShow: false,
       receiveEndCandy: null
     }
   },
@@ -166,7 +166,7 @@ export default {
 
     // 监听外部传入的总任务，如果和 allTasks 不相等，重新生成 candyTasks
     tasks (val, oval) {
-      if (val.toString() !== this.allTasks.toString() && val.length && this.userInfo.ap !== 0 && this.rendered) this.getCandyTasks(val)
+      if (val.toString() !== this.allTasks.toString() && val.length && this.userInfo.ap !== 0 && this.info.apLeft !== 0 && this.rendered) this.getCandyTasks(val)
     },
 
     /**
@@ -176,15 +176,25 @@ export default {
      */
     candyTasks (val) {
       console.log('----- candyTasks', val, this.allTasks, this.rendered)
-      if (this.userInfo.ap !== 0 && !val.length && this.allTasks.length && this.rendered) this.getCandyTasks()
+      if (this.userInfo.ap !== 0 && this.info.apLeft !== 0 && !val.length && this.allTasks.length && this.rendered) this.getCandyTasks()
     },
 
-    receiveBoxBool (val) {
+    receiveBoxShow (val) {
       const receiveLayer = document.getElementById('header-candy-layer')
       if (val) {
         addClass('show', receiveLayer)
       } else {
-        removeClass('show', receiveLayer)
+        addClass('hide', receiveLayer)
+        const func = () => {
+          receiveLayer.removeEventListener(animationEndEvent(), func)
+          if (this.receiveBoxShow) {
+            removeClass('hide', receiveLayer)
+            return
+          }
+          removeClass('hide', receiveLayer)
+          removeClass('show', receiveLayer)
+        }
+        receiveLayer.addEventListener(animationEndEvent(), func)
       }
     }
   },
@@ -196,6 +206,20 @@ export default {
     Blockies
   },
   methods: {
+
+    // hideReceiveLayer () {
+    //   const receiveLayer = document.getElementById('header-candy-layer')
+    //   const func = () => {
+    //     receiveLayer.removeEventListener(animationEndEvent(), func)
+    //     if (this.receiveBoxShow) {
+    //       removeClass('hide', receiveLayer)
+    //       return
+    //     }
+    //     removeClass('hide', receiveLayer)
+    //     removeClass('show', receiveLayer)
+    //   }
+    //   receiveLayer.addEventListener(animationEndEvent(), func)
+    // },
 
     afterEnter () {
       const header = document.getElementById('ldb-detail-header')
@@ -274,125 +298,16 @@ export default {
     },
 
     /**
-     * 糖果领取动画
-     * @param {Number} a 二次项系数
-     * @param {Number} speed 动画速率
-     */
-    receiveAnimate (candy, { before = -1, duration = 1000, tname = 'Cubic', ttype = 'easeInOut' } = {}, cb) {
-      const scrollLeft = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft)
-
-      const scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop)
-      // 四边缘的坐标
-      const candyEle = candy.getBoundingClientRect()
-      const boxEle = document.getElementById('header-receive-box').getBoundingClientRect()
-
-      // 移动元素的中心点坐标
-      const candyCenter = {
-        x: candyEle.left + (candyEle.right - candyEle.left) / 2 + scrollLeft,
-        y: candyEle.top + (candyEle.bottom - candyEle.top) / 2 + scrollTop
-      }
-
-      // 目标元素位置
-      const boxCenter = {
-        x: boxEle.left + (boxEle.right - boxEle.left) / 7 * 3 + scrollLeft,
-        y: boxEle.top + (boxEle.bottom - boxEle.top) / 9 * 5 + scrollTop
-      }
-
-      // 相对坐标位置
-      const coordTarget = {
-        x: boxCenter.x - candyCenter.x,
-        y: candyCenter.y - boxCenter.y
-      }
-
-      // 顶点坐标
-      // const coordVertex = this.getVertex({ v1: coordTarget, speed: 0.35 })
-
-      // const a = this.getBezierQuadratic(coordTarget, coordVertex)
-
-      // 元素偏移和坐标系相反
-      // const rate = coordTarget.x > 0 ? 1 : -1
-
-      // 一次项系数 y = a * x^2 + b * x + c
-
-      // -b / 2a = x
-      // (4ac - b^2) / 4a = maxY
-      // b = -2ax
-      // 这里c 为 0
-      // so: -b^2 / 4a = maxY
-      // -a * x^2 = maxY
-
-      // so: a = - maxY / x^2
-      // const a = rate * (maxY / Math.pow(coordTarget.x, 2))
-
-      // so: b = - 2ax
-      // const b = (coordTarget.y - a * coordTarget.x * coordTarget.x) / coordTarget.x
-
-      // console.log(' --- a', a, 'b', b, 'coordVertex', coordVertex, 'coordTarget', coordTarget)
-
-      // let startx = 0
-      let startt = 0
-
-      const bezierPath = ({ time = 0, duration = 1000, a = 5000, sx = 1000, sy = 0 } = {}) => {
-        const ta = duration / 1000
-        const t = time / 1000
-        sy = Math.abs(sy)
-
-        // 根据总时间求出 x 轴及 y 轴方向的初速度
-        const v0x = sx / ta
-        const v0y = sy / ta - 1 / 2 * a * ta
-
-        // 物理抛物线
-        // s = v1 * t + 1 / 2 * a * t * t
-        const x = v0x * t
-        const y = v0y * t + 1 / 2 * a * t * t
-        return { x, y }
-      }
-
-      // timestamp 时间戳,当前动画执行了多久
-      // elapsed 帧率
-      const step = (timestamp) => {
-        if (!startt) startt = timestamp
-        const time = timestamp - startt
-        let { x, y } = bezierPath({ time, duration, a: 6000, sx: coordTarget.x, sy: coordTarget.y })
-
-        // startx = startx + rate * Math.sqrt(speed / (tangent * tangent + 1))
-        // startx = Tween[tname][ttype](nowt, 0, coordTarget.x, duration)
-
-        // 防止过界
-        // if ((rate === 1 && startx > coordTarget.x) || (rate === -1 && startx < coordTarget.x)) {
-        //   startx = coordTarget.x
-        // }
-        // if (Math.abs(startx) >= Math.abs(coordTarget.x)) {
-        //   startx = coordTarget.x
-        // }
-        // let x = startx
-        // let y = rate * (a * x * x + b * x)
-        if (Math.abs(x) >= Math.abs(coordTarget.x)) {
-          x = coordTarget.x
-          y = y > 0 ? Math.abs(coordTarget.y) : -Math.abs(coordTarget.y)
-        }
-
-        candy.style.transform = `translate3d(${x}px, ${y}px, 0) translateZ(0)`
-
-        if (x !== coordTarget.x && duration > time) {
-          window.requestAnimationFrame(step)
-        } else {
-          const cdata = { boxCenter, coordTarget, coords: { x, y } }
-          if (cb) cb(cdata)
-        }
-      }
-      return window.requestAnimationFrame(step)
-    },
-
-    /**
      * 领取糖果
      */
     async receiveCandy (task) {
       if (task.status !== 'processing') return
 
-      this.receiveBoxBool = true
+      this.receiveBoxShow = true
+
+      // 糖果盒子对象
       const rbox = document.getElementById('header-receive-box')
-      // const cbox = rbox.firstChild
+
       let animateAfter = false
       let dataBack = false
       let iserror = false
@@ -429,11 +344,8 @@ export default {
       const intoBoxCandy = document.getElementById('receive-box-candy')
 
       const cloneCandyId = `clone_${candyId}`
-      // const num = children.getAttribute('data-num')
-      // children.setAttribute('data-msg', `+ ${num} ${task.ldbTaskType.candyType.symbol.toLowerCase()}`)
-      this.receiveAnimate(cCandy, { duration: 500 }, ({ boxCenter, coordTarget, coords, beforeEnd }) => {
-        // if (!beforeEnd) return
 
+      receiveAnimate(cCandy, document.getElementById('header-receive-box'), { duration: 500 }, ({ boxCenter, coords, beforeEnd }) => {
         if (!hasClass('animate', rbox)) addClass('animate', rbox)
         else rbox.style.animationPlayState = 'running'
 
@@ -447,9 +359,10 @@ export default {
         rbox.addEventListener(animationIterationEvent(), rboxFunc)
 
         const eatFunc = () => {
+          console.log('-------- eatFunc')
           const cloneCandy = document.getElementById(cloneCandyId)
-          cloneCandy.removeEventListener(transitionEvent(), eatFunc)
-          cloneCandy.style.animationPlayState = 'paused'
+          cloneCandy.removeEventListener(animationEndEvent(), eatFunc)
+          // cloneCandy.style.animationPlayState = 'paused'
           addClass('hidden', cloneCandy)
 
           intoBoxCandy.style = ''
@@ -458,7 +371,9 @@ export default {
           if (this.receiveEndCandy === candyId) {
             rbox.style = ''
             removeClass('animate', rbox)
-            this.receiveBoxBool = false
+            setTimeout(() => {
+              this.receiveBoxShow = false
+            }, 0)
           }
         }
 
@@ -471,7 +386,7 @@ export default {
         cloneCandy.className = 'receive-clone-candy animate'
         intoBoxCandy.appendChild(cloneCandy)
 
-        document.getElementById(cloneCandyId).addEventListener(animationIterationEvent(), eatFunc)
+        document.getElementById(cloneCandyId).addEventListener(animationEndEvent(), eatFunc)
 
         const ccr = cCandy.getClientRects()[0]
         const ibcr = document.getElementById('receive-box-container').getClientRects()[0]
@@ -485,25 +400,8 @@ export default {
         }
         cCandy.style.transform = ''
       })
-      // 执行动画
-      // addClass('animate', dom)
-
-      // const animateFunc = () => {
-      //   animateAfter = true
-      //   removeCandy()
-      //   dom.removeEventListener(transitionEvent(), animateFunc, false)
-      // }
-      // dom.addEventListener(transitionEvent(), animateFunc, false)
 
       this.$emit('receive', task, ({ errorMsg, data } = {}) => {
-        // 获取当前 receive 糖果dom
-        // const dom = document.getElementById(`ldb-candy-${task.tid}`)
-        // if (!dom) return
-
-        // // 获取子元素
-        // const children = dom.firstChild
-        // if (!children) return
-
         if (!data) {
           // 设置当前dom鼠标形态
           candy.style.cursor = 'pointer'
@@ -512,12 +410,10 @@ export default {
           cCandy.style.pointerEvents = ''
           cCandy.style.animationPlayState = ''
 
-          // restart animation
+          // restart candy animation
           iserror = true
           removeClass('hidden', cCandy)
           removeClass('move', cCandy)
-          // 执行动画
-          // removeClass('animate', candy)
           return
         }
 
@@ -532,7 +428,8 @@ export default {
     getCandyTasks (tasks = this.tasks) {
       if (this.owner) return
 
-      const leftAp = this.userInfo._id ? this.userInfo.ap : 6
+      // 根据用户及建筑剩余ap判断显示糖果
+      const leftAp = this.userInfo._id ? (this.info.apLeft > this.userInfo.ap ? this.userInfo.ap : this.info.apLeft) : 6
       console.log('leftAp', leftAp)
       const clen = leftAp >= 6 ? 6 : leftAp
 
@@ -705,9 +602,9 @@ export default {
 
   // header-candy-layer
 
-  @keyframes receiveBoxShow {
+  @keyframes receiveBoxShowAnimate {
     from,
-    75%,
+    70%,
     to {
       -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
       animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
@@ -716,12 +613,19 @@ export default {
     0% {
       transform: translate3d(-100%, 100%, 0) translate(0, 0) translateZ(0px);
     }
-
     70% {
       transform: translate3d(-25%, 20%, 0) translate(6px, -6px) translateZ(0px);
     }
     to {
       transform: translate3d(-25%, 20%, 0) translate(0px, 0px) translateZ(0px);
+    }
+  }
+  @keyframes receiveBoxHideAnimate {
+    0% {
+      transform: translate3d(-25%, 20%, 0) translate(0px, 0px) translateZ(0px);
+    }
+    100% {
+      transform: translate3d(-100%, 100%, 0) translate(0, 0) translateZ(0px);
     }
   }
 
@@ -743,15 +647,18 @@ export default {
     height: 90%;
     z-index: 1;
     overflow: hidden;
-    transition: z-index 0s .5s;
     &.show {
-      .header-receive-main {
-        animation: receiveBoxShow .5s linear 1;
-        transform: translate3d(-25%, 20%, 0) translate(0px, 0px) translateZ(0px);
-        transition-delay: .5s;
-      }
       z-index: 5;
-      transition-delay: 0s;
+      .header-receive-main {
+        visibility: visible;
+        animation: receiveBoxShowAnimate .5s linear forwards;
+      }
+    }
+    &.hide {
+      .header-receive-main {
+        animation-name: receiveBoxHideAnimate;
+        animation-duration: .35s;
+      }
     }
   }
 
@@ -760,19 +667,14 @@ export default {
     bottom: 0;
     left: 0;
     width: 264px;
-    // &.hide {
-    //   .header-receive-main {
-    //     animation: receiveBoxHide .5s linear forwards;
-    //     // transform: translate3d(-25%, 20%, 0);
-    //   }
-    // }
     &.animate {
       animation: receiveBoxEat .5s ease-out infinite;
     }
   }
   .header-receive-main {
-    transform: translate3d(-100%, 100%, 0);
-    transition: transform .5s 0s ease-out;
+    visibility: hidden;
+    transform: translate3d(-25%, 20%, 0) translate(0px, 0px) translateZ(0px);
+    // transition: transform .5s 0s ease-out;
     will-change: transform;
   }
   .receive-box-container {
@@ -800,10 +702,7 @@ export default {
     left: 0;
     width: 54px;
     height: 54px;
-    // transform: translate3d(173.536px, 38.2502px, 0);
     z-index: 2;
-    // opacity: 1;
-    // transition: opacity 0s .75s;
   }
 
   @keyframes cloneCandyAnimate {
@@ -812,17 +711,18 @@ export default {
       transform: translate3d(0, 0, 0);
       animation-timing-function: ease-in;
     }
-    15% {
+    30% {
       opacity: 1;
       transform: translate3d(5px, -15px, 0);
       animation-timing-function: ease-out;
     }
-    50% {
-      opacity: 0;
-      transform: translate3d(-50px, 25px, 0);
-    }
+    // 50% {
+    //   opacity: 0;
+    //   transform: translate3d(-50px, 25px, 0);
+    // }
     100% {
       opacity: 0;
+      transform: translate3d(-50px, 25px, 0);
     }
   }
   .receive-clone-candy {
@@ -832,7 +732,7 @@ export default {
     height: 54px;
     opacity: 0;
     &.animate {
-      animation: cloneCandyAnimate 1.5s ease-out infinite;
+      animation: cloneCandyAnimate .75s ease-out 1;
     }
   }
 

@@ -44,11 +44,11 @@ module.exports = axios => {
     // 用户登陆
     login: (params) => {
       return axios.post('/api/user/login', params)
-    },
+    }
 
     // 注销登陆
-    logout: () => {
-      return axios.put('/api/user/logout')
-    }
+    // logout: () => {
+    //   return axios.put('/api/user/logout')
+    // }
   }
 }
