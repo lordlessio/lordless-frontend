@@ -50,7 +50,7 @@
                       </div>
                     </div>
                     <div class="d-flex f-align-end">
-                      <ld-btn
+                      <lordless-btn
                         class="tasks-now-btn"
                         theme="blue"
                         shadow
@@ -62,7 +62,7 @@
                         <span v-else-if="item.userStatus === 1">Completed</span>
                         <span v-else-if="item.userStatus === -1">Failed</span>
                         <span v-else>Apply</span>
-                      </ld-btn>
+                      </lordless-btn>
                     </div>
                   </div>
                 </div>
@@ -78,7 +78,6 @@
 <script>
 import TaskNowSkeletion from '@/components/skeletion/ldb/detail/tool/taskNow'
 
-import LdBtn from '@/components/stories/button'
 import LdCarousel from '@/components/stories/carousel'
 import LdSliderBar from '@/components/stories/sliderBar'
 export default {
@@ -114,7 +113,6 @@ export default {
   components: {
     TaskNowSkeletion,
 
-    LdBtn,
     LdCarousel,
     LdSliderBar
   },

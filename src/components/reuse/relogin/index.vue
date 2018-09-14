@@ -11,8 +11,8 @@
       <input aria-label="address" disabled type="text" :value="address | splitAddress({ before: 12, end: 12, symbol: '***' })"/>
     </div>
     <div slot="footer" class="dialog-footer">
-      <ld-button @click="setUserExpired(false)">取 消</ld-button>
-      <ld-button theme="deep-blue-2" @click="metaLogin">确 定</ld-button>
+      <lordless-btn @click="setUserExpired(false)">取 消</lordless-btn>
+      <lordless-btn theme="deep-blue-2" @click="metaLogin">确 定</lordless-btn>
     </div>
   </el-dialog>
 </template>
@@ -20,7 +20,6 @@
 <script>
 import { mapActions } from 'vuex'
 import { actionTypes } from '@/store/types'
-import LdButton from '@/components/stories/button'
 export default {
   props: {
     value: {
@@ -31,9 +30,6 @@ export default {
   },
   data: () => {
     return {}
-  },
-  components: {
-    LdButton
   },
   methods: {
     ...mapActions('user', [

@@ -16,7 +16,7 @@
           </div>
         </div>
         <div class="d-flex col-flex f-justify-between text-right activity-view-detail">
-          <ld-btn
+          <lordless-btn
             class="activity-view-btn"
             theme="blue">
             <a class="d-flex f-align-center" :href="`${ETHERSCANURL}/tx/${tx}`" target="_blank">
@@ -27,7 +27,7 @@
               </span>
               <span>View Details</span>
             </a>
-          </ld-btn>
+          </lordless-btn>
         </div>
       </div>
     </div>
@@ -35,7 +35,6 @@
 </template>
 
 <script>
-import LdBtn from '@/components/stories/button'
 export default {
   props: {
     shadow: {
@@ -73,9 +72,6 @@ export default {
     ETHERSCANURL () {
       return process.env.ETHERSCANURL
     }
-  },
-  components: {
-    LdBtn
   }
 }
 </script>

@@ -8,14 +8,14 @@
     <!-- </Loading> -->
     <span class="inline-block switch-btn" @click.stop="switchFab">{{ this.is3D ? '2D' : '3D' }}</span>
     <div class="fab-poster">
-      <img-box alt="tavern detail" sType="height" bottom :src="poster" type="span"></img-box>
+      <lordless-img alt="tavern detail" sType="height" bottom :src="poster" type="span"></lordless-img>
     </div>
     <div class="fab-content">
       <iframe src="" @load="sketchLoad" width="100%" height="100%" ref="sketch_frame" id="sketch_frame" frameborder="0" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
       <!-- <div class="sketch-bottom-cnt">
         <div class="d-flex">
           <div class="lord-avatar">
-            <Blockies ref="lordAvatar" :autoInit="false" :seed="lordInfo.address" :size="10"/>
+            <lordless-blockies ref="lordAvatar" :autoInit="false" :seed="lordInfo.address" :size="10"/>
           </div>
           <div class="v-flex" v-if="viewerReady">
             <p class="lord-name-box">
@@ -30,8 +30,6 @@
 </template>
 
 <script>
-import ImgBox from '@/components/stories/image'
-import Blockies from '@/components/stories/blockies'
 import Loading from '@/components/stories/loading'
 export default {
   props: {
@@ -122,8 +120,6 @@ export default {
     }
   },
   components: {
-    ImgBox,
-    Blockies,
     Loading
   },
   methods: {

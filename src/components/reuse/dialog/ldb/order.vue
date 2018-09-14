@@ -18,7 +18,10 @@
       <div class="ldb-order-box">
         <div class="text-center order-header">
           <div class="order-header-icon">
-            <img-box alt="Congratulations" sType="height" src="/static/svg/single/congra.svg"></img-box>
+            <lordless-img
+              alt="Congratulations"
+              sType="height"
+              src="/static/svg/single/congra.svg"/>
           </div>
           <h1 class="TTNormsBold">Congratulations</h1>
           <p>You've got</p>
@@ -29,12 +32,11 @@
             <div class="order-cnt-left">
               <div class="order-cnt-poster">
                 <div class="order-poster">
-                  <img-box
+                  <lordless-img
                     alt="tavern preview"
                     sType="height"
                     type="span"
-                    :src="ldbInfo.ldbIcon.source.preview | reldbIcon">
-                  </img-box>
+                    :src="ldbInfo.ldbIcon.source.preview | reldbIcon"/>
                 </div>
               </div>
             </div>
@@ -59,7 +61,7 @@
               <!-- <div class="d-flex col-flex order-ldb-reward">
                 <p class="d-flex f-align-center order-tx-title">
                   <span class="inline-block order-tx-img">
-                    <img-box src="~static/img/test/tx-img.png"></img-box>
+                    <lordless-img src="~static/img/test/tx-img.png"></lordless-img>
                   </span>
                   <span>Transaction fee return</span>
                 </p>
@@ -71,29 +73,29 @@
             </div>
           </div>
           <div class="d-flex f-align-center order-footer">
-            <ld-button theme="blue" shadow class="d-flex f-align-center TTFontBolder lordless-message-btn order-share-btn">
+            <lordless-btn theme="blue" shadow class="d-flex f-align-center TTFontBolder lordless-message-btn order-share-btn">
               <span>Copy link</span>
               <span class="mar-l1 line-height-0">
                 <svg>
                   <use xlink:href="#icon-share"/>
                 </svg>
               </span>
-            </ld-button>
-            <ld-button theme="blue" shadow class="order-footer-btn line-height-0">
+            </lordless-btn>
+            <lordless-btn theme="blue" shadow class="order-footer-btn line-height-0">
               <svg>
                 <use xlink:href="#icon-facebook"/>
               </svg>
-            </ld-button>
-            <ld-button theme="blue" shadow class="order-footer-btn line-height-0">
+            </lordless-btn>
+            <lordless-btn theme="blue" shadow class="order-footer-btn line-height-0">
               <svg>
                 <use xlink:href="#icon-twitter"/>
               </svg>
-            </ld-button>
-            <ld-button theme="blue" shadow class="order-footer-btn fill line-height-0">
+            </lordless-btn>
+            <lordless-btn theme="blue" shadow class="order-footer-btn fill line-height-0">
               <svg>
                 <use xlink:href="#icon-google+"/>
               </svg>
-            </ld-button>
+            </lordless-btn>
           </div>
         </div>
       </div>
@@ -102,9 +104,6 @@
 </template>
 
 <script>
-import LdButton from '@/components/stories/button'
-import ImgBox from '@/components/stories/image'
-
 // import { mutationTypes } from '@/store/types'
 // import { mapMutations } from 'vuex'
 export default {
@@ -136,10 +135,6 @@ export default {
     metaOpen () {
       return this.$root.$children[0].metaOpen
     }
-  },
-  components: {
-    LdButton,
-    ImgBox
   },
   // methods: {
   //   ...mapMutations('layout', [

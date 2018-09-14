@@ -8,23 +8,22 @@
     type="card"
     height="223px"
     @change="carouselChange">
-    <ld-btn
+    <lordless-btn
       theme="inherit"
       class="inline-block lordless-carousel-btn prev"
       :disabled="disabledPrev"
       @click="carouselChoose('prev', disabledPrev)">
-    </ld-btn>
-    <ld-btn
+    </lordless-btn>
+    <lordless-btn
       theme="inherit"
       class="inline-block lordless-carousel-btn next"
       :disabled="disabledNext"
       @click="carouselChoose('next', disabledNext)">
-    </ld-btn>
+    </lordless-btn>
     <slot></slot>
   </el-carousel>
 </template>
 <script>
-import LdBtn from '@/components/stories/button'
 export default {
   props: {
     type: {
@@ -55,9 +54,6 @@ export default {
     activeItem (val) {
       this.init(val)
     }
-  },
-  components: {
-    LdBtn
   },
   methods: {
     init (activeItem = this.activeItem || this.list[0]) {

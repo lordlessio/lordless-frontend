@@ -84,11 +84,6 @@ export default {
           path: '/owner/info'
         },
         {
-          name: 'taverns',
-          icon: 'building',
-          path: '/owner/taverns'
-        },
-        {
           name: 'candy',
           icon: 'candy',
           path: '/owner/candy'
@@ -97,6 +92,11 @@ export default {
           name: 'tasks',
           icon: 'task',
           path: '/owner/tasks'
+        },
+        {
+          name: 'taverns',
+          icon: 'building',
+          path: '/owner/taverns'
         },
         {
           name: 'activity',

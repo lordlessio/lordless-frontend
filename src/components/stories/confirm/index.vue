@@ -13,7 +13,11 @@
           <i class="el-icon-close"></i>
         </span>
         <div class="confirm-cnt-left">
-          <img-box alt="tavern preview" class="confirm-poster" :src="ldbInfo.ldbIcon.source.preview | reldbIcon" type="span"></img-box>
+          <lordless-img
+            alt="tavern preview"
+            class="confirm-poster"
+            :src="ldbInfo.ldbIcon.source.preview | reldbIcon"
+            type="span"/>
         </div>
         <div class="v-flex confirm-cnt-box">
           <h3>{{ ldbInfo.name.zh }}</h3>
@@ -33,15 +37,13 @@
       </div>
     </div>
     <div slot="footer" class="dialog-footer">
-      <ld-button @click="detailAlert = false" v-if="type === 'submit'">{{ cancelText }}</ld-button>
-      <ld-button theme="deep-blue-2" @click="submit">{{ submitText }}</ld-button>
+      <lordless-btn @click="detailAlert = false" v-if="type === 'submit'">{{ cancelText }}</lordless-btn>
+      <lordless-btn theme="deep-blue-2" @click="submit">{{ submitText }}</lordless-btn>
     </div>
   </el-dialog>
 </template>
 
 <script>
-import LdButton from '@/components/stories/button'
-import ImgBox from '@/components/stories/image'
 export default {
   name: 'lordless-confirm',
   props: {
@@ -72,10 +74,6 @@ export default {
   },
   data: {
     detailAlert: false
-  },
-  components: {
-    LdButton,
-    ImgBox
   },
   methods: {
     submit () {

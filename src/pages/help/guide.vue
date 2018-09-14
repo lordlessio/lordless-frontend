@@ -70,7 +70,7 @@
         </ul>
         <div class="text-center status-start-box" v-if="finishStatus">
           <h2>It seems that you're fully prepared!</h2>
-          <ld-button class="TTFontBolder text-upper start-btn" @click="$router.push('market')">START</ld-button>
+          <lordless-btn class="TTFontBolder text-upper start-btn" @click="$router.push('market')">START</lordless-btn>
         </div>
       </div>
       <div class="text-center lordless-status-questions">
@@ -115,7 +115,6 @@
 </template>
 
 <script>
-import LdButton from '@/components/stories/button'
 import { mapState } from 'vuex'
 export default {
   data: () => {
@@ -147,9 +146,6 @@ export default {
     finishStatus () {
       return !this.unBrowser && !this.unMetamask && !this.lockedMetamask && !this.unOwnEthBalance
     }
-  },
-  components: {
-    LdButton
   }
 }
 </script>

@@ -1,13 +1,17 @@
 <template>
-  <div class="d-flex col-flex ld-user-box">
+  <div class="d-flex col-flex ld-detail-user-box">
     <div class="ld-user-header">
       <div class="container md">
-        <div class="d-flex f-align-center">
+        <info-header
+          :loading="!user"
+          :user="user">
+        </info-header>
+        <!-- <div class="d-flex f-align-center">
           <div class="user-header-avatar">
-            <blockies
+            <lordless-blockies
               :scale="18"
               radius="20px"
-              :seed="user.address"></blockies>
+              :seed="user.address"></lordless-blockies>
           </div>
           <div class="v-flex sm-col-reverse-flex user-header-cnt">
             <h2 class="d-flex f-align-center">
@@ -36,23 +40,35 @@
                 </span>
               </el-tooltip>
             </p>
-            <!-- <div class="TTFontBolder user-level">
-              Level <span>{{ user.level }}</span>
-            </div> -->
             <p v-if="user.tags && user.tags.length" class="d-flex f-wrap f-align-center user-types">
               <span class="inline-block" v-for="(tag, index) of user.tags.slice(0, 20)" :key="index">{{ tag }}</span>
             </p>
-            <!-- <div class="user-total-candy">
-              <p>Total earned candy</p>
-              <p>0.003 ETH</p>
-            </div> -->
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="v-flex d-flex ld-user-content">
-      <div class="v-flex d-flex container md">
-        <div class="v-flex user-building-tabs" :class="{ 'margin': taverns.total }">
+      <div class="v-flex container md">
+        <div class="d-flex f-align-center sm-col-flex user-info-section info-cnt-one">
+          <info-prestige
+            class="v-flex"
+            :loading="overviewLoading"
+            :user="user"
+            :overviews="overviews">
+          </info-prestige>
+          <info-home
+            class="v-flex"
+            :loading="!userHome"
+            :home="userHome">
+          </info-home>
+        </div>
+        <info-task
+          :loading="overviewLoading"
+          :user="user"
+          :overviews="overviews"
+          @timeDown="getUserOverview">
+        </info-task>
+        <!-- <div class="v-flex user-building-tabs" :class="{ 'margin': taverns.total }">
           <el-tabs
             v-model="ldbTab"
             @tab-click="chooseTab">
@@ -154,121 +170,117 @@
             background
             @currentChange="pageChange">
           </Pagination>
-        </div>
+        </div> -->
       </div>
     </div>
-    <detail-dialog
+    <!-- <detail-dialog
       v-model="detailModel"
       theme="light"
       :ldbId="detailInfo._id"
       @close="dialogClose">
-    </detail-dialog>
+    </detail-dialog> -->
   </div>
 </template>
 
 <script>
-import { getUserByAddress, getChainLdbs } from 'api'
+import { getUserByAddress, getUserOverview, getUserHome } from 'api'
 
-import { historyState } from 'utils/tool'
+// import { historyState } from 'utils/tool'
 
 import Clipboard from 'clipboard'
 
-import LdSelect from '@/components/stories/select'
-import SwitchInput from '@/components/stories/switchInput'
-import Pagination from '@/components/stories/pagination'
-import DetailDialog from '@/components/reuse/dialog/ldb/detail'
-import BuildingCard from '@/components/reuse/card/building'
-import Blockies from '@/components/stories/blockies'
+// import LdSelect from '@/components/stories/select'
+// import SwitchInput from '@/components/stories/switchInput'
+// import Pagination from '@/components/stories/pagination'
+// import DetailDialog from '@/components/reuse/dialog/ldb/detail'
+// import BuildingCard from '@/components/reuse/card/building'
+
+import InfoHeader from '@/components/reuse/card/user/header'
+import InfoPrestige from '@/components/reuse/card/user/prestige'
+import InfoHome from '@/components/reuse/card/user/home'
+import InfoTask from '@/components/reuse/card/user/task'
 export default {
   data: () => {
     return {
       loading: false,
-      user: {},
+      user: null,
       clipBool: false,
-      taverns: {
+
+      userHome: null,
+
+      overviewLoading: true,
+      overviews: {
         pn: 1,
-        ps: 9,
-        list: [],
-        total: 0
-      },
-      ldbTab: 'all',
+        ps: 4,
+        completeTasks: {
+          list: [],
+          total: 0
+        },
+        activeness: {
+          list: [],
+          total: 0
+        },
+        currentTask: null
+      }
 
-      // sort model
-      ldbSort: 'influence',
+      /**
+       * taverns options
+       */
+      // taverns: {
+      //   pn: 1,
+      //   ps: 9,
+      //   list: [],
+      //   total: 0
+      // },
+      // ldbTab: 'all',
 
-      // sort 列表选项
-      sortItems: [
-        {
-          value: 'influence',
-          label: 'Most influential'
-        }, {
-          value: 'popular',
-          label: 'Most popular'
-        }
-      ],
+      // // sort model
+      // ldbSort: 'influence',
 
-      // order model
-      ldbOrder: 'desc',
+      // // sort 列表选项
+      // sortItems: [
+      //   {
+      //     value: 'influence',
+      //     label: 'Most influential'
+      //   }, {
+      //     value: 'popular',
+      //     label: 'Most popular'
+      //   }
+      // ],
 
-      orderItems: [
-        {
-          value: 'desc',
-          label: 'High to Low'
-        }, {
-          value: 'asc',
-          label: 'Low to High'
-        }
-      ],
+      // // order model
+      // ldbOrder: 'desc',
 
-      detailModel: false,
+      // orderItems: [
+      //   {
+      //     value: 'desc',
+      //     label: 'High to Low'
+      //   }, {
+      //     value: 'asc',
+      //     label: 'Low to High'
+      //   }
+      // ],
 
-      // 选中的建筑
-      detailInfo: {}
+      // detailModel: false,
+
+      // // 选中的建筑
+      // detailInfo: {}
     }
   },
   components: {
-    DetailDialog,
-    BuildingCard,
-    Blockies,
-    Pagination,
-    SwitchInput,
-    LdSelect
+    // DetailDialog,
+    // BuildingCard,
+    // Pagination,
+
+    // SwitchInput,
+    // LdSelect,
+
+    InfoHeader,
+    InfoPrestige,
+    InfoHome,
+    InfoTask
   },
   methods: {
-
-    init ({ address } = {}) {
-      this.loading = true
-      this.getUserInfo({ address })
-    },
-    async getUserInfo ({ address = this.user.address } = {}) {
-      const res = await getUserByAddress(address)
-      this.loading = false
-      if (res.code === 1000 && res.data) {
-        this.user = res.data
-        this.getUserTaverns({ address: res.data.address })
-      } else {
-        this.$router.push('/')
-      }
-      if (!res.data) console.log('用户不存在')
-    },
-    async getUserTaverns ({ lord = this.user.address, isOnAuction = this.ldbTab === 'all' ? undefined : true, sort = this.ldbSort, order = this.ldbOrder, pn = this.taverns.pn, ps = this.taverns.ps } = {}) {
-      const params = {
-        lord,
-        isOnAuction,
-        pn,
-        ps,
-        sort,
-        order
-      }
-      const res = await getChainLdbs(params)
-      if (res.code === 1000 && res.data) {
-        this.taverns = res.data
-      }
-    },
-
-    pageChange (pn) {
-      this.getUserTaverns({ pn })
-    },
     // 初始化 黏贴板
     initClipboard () {
       const clip = new Clipboard('#copy-address')
@@ -281,42 +293,100 @@ export default {
       this.clipBool = false
     },
 
-    chooseTab () {
-      this.ldbSort = 'influence'
-      this.ldbOrder = 'desc'
-      console.log('----- user', this.user)
-      this.$nextTick(() => {
-        this.getUserTaverns()
-      })
+    init ({ address } = {}) {
+      this.loading = true
+      this.getUserInfo({ address })
     },
-
-    chooseLdb (item) {
-      this.detailModel = true
-      this.$nextTick(() => {
-        this.detailInfo = item
-        historyState(`/tavern/${item._id}`)
-      })
-    },
-
-    sortChange (sort) {
-      this.getUserTaverns({ sort })
-    },
-
-    orderChange (order) {
-      this.getUserTaverns({ order })
-    },
-
-    dialogClose (info, list = this.taverns.list) {
-      historyState(this.$route.path)
-      for (let i = 0; i < list.length; i++) {
-        if (list[i]._id === info._id) {
-          list[i] = info
-          break
-        }
+    async getUserInfo ({ address = this.user.address } = {}) {
+      const res = await getUserByAddress(address)
+      this.loading = false
+      if (res.code === 1000 && res.data) {
+        this.user = res.data
+        // this.getUserTaverns({ address: res.data._id })
+        this.getUserHome({ user: res.data._id })
+        this.getUserOverview({ user: res.data._id })
+      } else {
+        this.$router.push('/')
       }
-      this.$set(this.taverns, 'list', list)
-      this.$forceUpdate()
+      if (!res.data) console.log('用户不存在')
+    },
+
+    // 获取用户 home
+    async getUserHome ({ user } = {}) {
+      this.homeLoading = true
+      const res = await getUserHome({ user })
+      if (res.code === 1000 && res.data) {
+        this.userHome = res.data
+      }
+      this.homeLoading = false
+    },
+
+    // 获取用户 overview 信息
+    async getUserOverview ({ user } = {}) {
+      this.overviewLoading = true
+      const { pn, ps } = this.overviews
+      const res = await getUserOverview({ user, pn, ps })
+      if (res.code === 1000) {
+        this.overviews = Object.assign({}, this.overviews, res.data)
+      }
+      this.overviewLoading = false
     }
+
+    // async getUserTaverns ({ lord = this.user.address, isOnAuction = this.ldbTab === 'all' ? undefined : true, sort = this.ldbSort, order = this.ldbOrder, pn = this.taverns.pn, ps = this.taverns.ps } = {}) {
+    //   const params = {
+    //     lord,
+    //     isOnAuction,
+    //     pn,
+    //     ps,
+    //     sort,
+    //     order
+    //   }
+    //   const res = await getChainLdbs(params)
+    //   if (res.code === 1000 && res.data) {
+    //     this.taverns = res.data
+    //   }
+    // },
+
+    // pageChange (pn) {
+    //   this.getUserTaverns({ pn })
+    // },
+
+    // chooseTab () {
+    //   this.ldbSort = 'influence'
+    //   this.ldbOrder = 'desc'
+    //   console.log('----- user', this.user)
+    //   this.$nextTick(() => {
+    //     this.getUserTaverns()
+    //   })
+    // },
+
+    // chooseLdb (item) {
+    //   this.detailModel = true
+    //   this.$nextTick(() => {
+    //     this.detailInfo = item
+    //     historyState(`/tavern/${item._id}`)
+    //   })
+    // },
+
+    // sortChange (sort) {
+    //   this.getUserTaverns({ sort })
+    // },
+
+    // orderChange (order) {
+    //   this.getUserTaverns({ order })
+    // },
+
+    // dialogClose (info, list = this.taverns.list) {
+    //   historyState(this.$route.path)
+    //   for (let i = 0; i < list.length; i++) {
+    //     if (list[i]._id === info._id) {
+    //       list[i] = info
+    //       break
+    //     }
+    //   }
+    //   this.$set(this.taverns, 'list', list)
+    //   this.$forceUpdate()
+    // }
   },
   mounted () {
     document.documentElement.scrollTop = 0
@@ -329,124 +399,126 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import '@/assets/stylus/mixin/index.scss';
+  @import '@/assets/stylus/reuse/single/user_info.scss';
 
-  .ld-user-box {
+  .ld-detail-user-box {
     padding-top: 130px;
-    @include viewport-unit('min-height', 100vh, 80px);
+    background-color: #f4f4f4;
+    @include viewport-unit('min-height', 100vh);
   }
-  .user-header-cnt {
-    color: #999;
-    @include margin('left', 40px, -1);
-    >h2 {
-      color: #555;
-      font-size: 18px;
-    }
-    >p {
-      font-size: 16px;
-      line-height: 1.6;
-    }
-  }
-  .header-crown-svg {
-    margin-right: 6px;
-    width: 30px;
-    height: 30px;
-  }
-  .paste-icon {
-    width: 18px;
-    height: 18px;
-    stroke: #999;
-    fill: none;
-    cursor: pointer;
-    @include margin('left', 8px, 1);
-  }
-  .user-level {
-    // margin-top: 10px;
-    margin-left: 15px;
-    font-size: 18px;
-    color: #999;
-    // >span {
-    //   font-size: 20px;
-    // }
-  }
-  .user-types {
-    margin-top: 4px;
-    max-height: 62px;
-    overflow: hidden;
-    >span {
-      margin-top: 6px;
-      margin-right: 10px;
-      font-size: 12px;
-      padding: 3px 8px;
-      border-radius: 20px;
-      // border: 1px solid #BDB9FD;
-      color: #fff;
-      background-color: #bbb;
-      box-sizing: border-box;
-    }
-  }
-  .user-total-candy {
-    margin-top: 10px;
-  }
+  // .user-header-cnt {
+  //   color: #999;
+  //   @include margin('left', 40px, -1);
+  //   >h2 {
+  //     color: #555;
+  //     font-size: 18px;
+  //   }
+  //   >p {
+  //     font-size: 16px;
+  //     line-height: 1.6;
+  //   }
+  // }
+  // .header-crown-svg {
+  //   margin-right: 6px;
+  //   width: 30px;
+  //   height: 30px;
+  // }
+  // .paste-icon {
+  //   width: 18px;
+  //   height: 18px;
+  //   stroke: #999;
+  //   fill: none;
+  //   cursor: pointer;
+  //   @include margin('left', 8px, 1);
+  // }
+  // .user-level {
+  //   // margin-top: 10px;
+  //   margin-left: 15px;
+  //   font-size: 18px;
+  //   color: #999;
+  //   // >span {
+  //   //   font-size: 20px;
+  //   // }
+  // }
+  // .user-types {
+  //   margin-top: 4px;
+  //   max-height: 62px;
+  //   overflow: hidden;
+  //   >span {
+  //     margin-top: 6px;
+  //     margin-right: 10px;
+  //     font-size: 12px;
+  //     padding: 3px 8px;
+  //     border-radius: 20px;
+  //     // border: 1px solid #BDB9FD;
+  //     color: #fff;
+  //     background-color: #bbb;
+  //     box-sizing: border-box;
+  //   }
+  // }
+  // .user-total-candy {
+  //   margin-top: 10px;
+  // }
 
   /**
    *  ld-user-content  -- begin
    */
-  .ld-user-content {
-    @include margin('top', 65px, 1);
-    /deep/ .el-tabs__header {
-      margin: 0;
-    }
-    /deep/ .el-tabs__content {
-      position: static;
-      overflow: initial;
-    }
-    /deep/ .el-tabs__item {
-      font-size: 18px;
-      color: #999;
-      &.is-active {
-        color: inherit;
-      }
-    }
-  }
+  // .ld-user-content {
+  //   @include margin('top', 65px, 1);
+  //   /deep/ .el-tabs__header {
+  //     margin: 0;
+  //   }
+  //   /deep/ .el-tabs__content {
+  //     position: static;
+  //     overflow: initial;
+  //   }
+  //   /deep/ .el-tabs__item {
+  //     font-size: 18px;
+  //     color: #999;
+  //     &.is-active {
+  //       color: inherit;
+  //     }
+  //   }
+  // }
 
-  .user-building-tabs {
-    position: relative;
-    &.margin {
-      @include margin('bottom', 100px, 1);
-    }
-  }
-  .user-no-sale-buildings {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  .building-item {
-    @include margin('bottom', 60px, 1);
-    >.ld-building-card {
-      box-shadow: 0 5px 20px 0 rgba(0, 0, 0, .1);
-    }
-  }
-  .building-sort {
-    margin-top: 35px;
-    margin-bottom: 35px;
-    color: #999;
-  }
-  .building-sort-select {
-    margin-left: 20px;
-  }
-  .order-switch-input {
-    display: inline-block;
-    margin-left: 20px;
-  }
+  // .user-building-tabs {
+  //   position: relative;
+  //   &.margin {
+  //     @include margin('bottom', 100px, 1);
+  //   }
+  // }
+  // .user-no-sale-buildings {
+  //   position: absolute;
+  //   top: 50%;
+  //   left: 50%;
+  //   transform: translate(-50%, -50%);
+  // }
+  // .building-item {
+  //   @include margin('bottom', 60px, 1);
+  //   >.ld-building-card {
+  //     box-shadow: 0 5px 20px 0 rgba(0, 0, 0, .1);
+  //   }
+  // }
+  // .building-sort {
+  //   margin-top: 35px;
+  //   margin-bottom: 35px;
+  //   color: #999;
+  // }
+  // .building-sort-select {
+  //   margin-left: 20px;
+  // }
+  // .order-switch-input {
+  //   display: inline-block;
+  //   margin-left: 20px;
+  // }
 
-  .ld-building-pagination {
-    position: absolute;
-    left: 0;
-    bottom: -50px;
-  }
+  // .ld-building-pagination {
+  //   position: absolute;
+  //   left: 0;
+  //   bottom: -50px;
+  // }
   /**
    *  ld-user-content  -- end
    */

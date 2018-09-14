@@ -2,7 +2,7 @@
   <div v-if="value" class="text-center authorize-sign-box">
     <div class="authorize-login-container" v-if="!register">
       <div class="inline-block lordless-shadow" :style="`border-radius: ${avatar.radius};`">
-        <Blockies
+        <lordless-blockies
           :scale="avatar.scale"
           :radius="avatar.radius"
           :seed="account"
@@ -15,13 +15,13 @@
         </div>
         <p class="login-markline"></p>
         <div>
-          <ld-btn
+          <lordless-btn
             class="TTFontBolder lordless-message-btn login-btn"
             theme="deep-blue"
             shadow
             :loading="userChecking"
             :disabled="userChecking"
-            @click="relogin">Login</ld-btn>
+            @click="relogin">Login</lordless-btn>
         </div>
       </div>
     </div>
@@ -79,21 +79,19 @@
           </div>
         </div>
       </div>
-      <ld-btn
+      <lordless-btn
         class="TTFontBolder lordless-message-btn"
         theme="deep-blue"
         shadow
         :disabled="!signRequired"
-        @click="signUp">Sign Up</ld-btn>
+        @click="signUp">Sign Up</lordless-btn>
     </div>
   </div>
 </template>
 
 <script>
-import LdBtn from '@/components/stories/button'
 import LdInput from '@/components/stories/input'
 import CheckBox from '@/components/stories/checkbox'
-import Blockies from '@/components/stories/blockies'
 
 import { getUserByAddress } from 'api'
 
@@ -163,8 +161,6 @@ export default {
     }
   },
   components: {
-    Blockies,
-    LdBtn,
     LdInput,
     CheckBox
   },

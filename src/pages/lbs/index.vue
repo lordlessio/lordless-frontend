@@ -41,7 +41,7 @@
             <use xlink:href="#icon-search-minus"/>
           </svg>
         </span> -->
-        <span v-if="!isMapMinZoom" class="inline-block color-secondary"
+        <span v-if="!isMapMinZoom" class="inline-block line-height-0 color-secondary"
           @click.stop="changeMapZoom('minus', isMapMinZoom)">
           <svg>
             <use xlink:href="#icon-ldb-map"/>
@@ -68,7 +68,7 @@ import AutoComplete from '@/components/reuse/autoComplete'
 import Blockies from '@/components/stories/blockies'
 // import UserAvatar from '@/components/reuse/userAvatar'
 import { getAutoLdbs, getChainLdbs } from 'api'
-import { historyState, transferCoords } from 'utils/tool'
+import { historyState, transferCoords, stringifyParse } from 'utils/tool'
 import { mapActions, mapState } from 'vuex'
 import { actionTypes } from '@/store/types'
 export default {
@@ -184,7 +184,7 @@ export default {
      * @param {String} query
      */
     filterComplete (query, list) {
-      const localLdbs = this.historySearchLdbs
+      const localLdbs = stringifyParse(this.historySearchLdbs)
       if (localLdbs.length) localLdbs[0].localFirst = true
       return query ? this.restructurSearchLdbs(list, localLdbs, query) : [].concat([{
         trending: 1,
@@ -213,7 +213,7 @@ export default {
         // 调整地图显示视图
         this.flyToLdb(item.id)
         // 如果是已上链信息，存储在记录中
-        this[actionTypes.LDB_SET_HISTORY_SEARCH_LDB](item)
+        this[actionTypes.LDB_SET_HISTORY_SEARCH_LDB](Object.assign({}, item, { localFirst: false }))
       }
     },
 
@@ -347,9 +347,9 @@ export default {
     border-radius: 10px;
     overflow: hidden;
     >span {
+      padding: 14px;
       position: relative;
       cursor: pointer;
-      @include padding(-1, 12px, 1);
       &:not(:first-of-type) {
         &::before {
           content: '';
@@ -366,8 +366,8 @@ export default {
       }
     }
     svg {
-      width: 30px;
-      height: 30px;
+      width: 44px;
+      height: 44px;
     }
   }
   @media screen and (max-width: 768px) {

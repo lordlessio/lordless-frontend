@@ -17,12 +17,12 @@
             <span class="TTFontBold inline-block datas-item-next">/ <count-up class="inline-block" :startVal="countUp.nAC.start" :endVal="countUp.nAC.end" :duration="countUp.nAC.duration" :isReady="countUp.nAC.isReady"></count-up></span>
           </h2>
           <div class="ldb-datas-progress">
-            <ld-progress
+            <lordless-progress
               shadow
               :current="countUp.cAC.end"
               :max="countUp.nAC.end"
               :gradient="progressOpts.level.gradient">
-            </ld-progress>
+            </lordless-progress>
           </div>
           <p class="ldb-datas-desc">{{ countUp.nAC.end - countUp.cAC.end }} AC to level up</p>
         </div>
@@ -34,12 +34,12 @@
             </span>
             <span class="TTFontBold inline-block datas-item-next">/ <count-up class="inline-block" :startVal="countUp.nAP.start" :endVal="countUp.nAP.end" :duration="countUp.nAP.duration" :isReady="countUp.nAP.isReady"></count-up></span></h2>
           <div class="ldb-datas-progress">
-            <ld-progress
+            <lordless-progress
               shadow
               :current="countUp.cAP.end"
               :max="countUp.nAP.end"
               :gradient="progressOpts.action.gradient">
-            </ld-progress>
+            </lordless-progress>
           </div>
           <p class="ldb-datas-desc">{{ countUp.cAP.end }} AP remaining</p>
         </div>
@@ -50,8 +50,6 @@
 
 <script>
 import DatasSkeletion from '@/components/skeletion/ldb/detail/tool/datas'
-
-import LdProgress from '@/components/stories/progress'
 import { nextAC } from 'utils/tool'
 export default {
   props: {
@@ -175,7 +173,6 @@ export default {
     }
   },
   components: {
-    LdProgress,
     DatasSkeletion
   },
   methods: {

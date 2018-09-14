@@ -2,7 +2,7 @@
   <div v-show="value" class="telegram-box">
     <div class="text-center telegram-container">
       <div class="inline-block lordless-shadow" :style="`border-radius: ${avatar.radius};`">
-        <Blockies
+        <lordless-blockies
           :scale="avatar.scale"
           :radius="avatar.radius"
           :seed="address"
@@ -18,7 +18,7 @@
           <p class="TTFontBolder">Telegram Authorize</p>
           <p class="TTFontNormal telegram-info-text">Authorization the <a href="#" class="TTFontBolder">Telegram</a> to Receive Task</p>
         </div>
-        <ld-btn
+        <lordless-btn
           v-if="isOk"
           class="TTFontBolder ld-authorize-btn"
           theme="blue"
@@ -29,7 +29,7 @@
               <use xlink:href="#icon-ok"/>
             </svg>
           </span>
-        </ld-btn>
+        </lordless-btn>
         <div v-show="!userInfo.telegram || !userInfo.telegram.id" class="d-flex f-auto-center telegram-authorize-btn">
           <p v-if="!telegramReady" class="d-flex f-align-baseline customize-loading">loading <span class="line-height-1"><i class="el-icon-loading"></i></span></p>
           <div class="d-flex f-auto-center" :id="telegramContainer"></div>
@@ -40,9 +40,6 @@
 </template>
 
 <script>
-import Blockies from '@/components/stories/blockies'
-import LdBtn from '@/components/stories/button'
-
 import { putUserTgAuth } from 'api'
 
 import { metamaskMixins } from '@/mixins'
@@ -98,10 +95,6 @@ export default {
     isOk (val) {
       if (val) this.$emit('close')
     }
-  },
-  components: {
-    Blockies,
-    LdBtn
   },
   methods: {
     ...mapActions('user', [

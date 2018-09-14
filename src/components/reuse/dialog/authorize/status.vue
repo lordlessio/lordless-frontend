@@ -4,15 +4,13 @@
       <h1 class="TTFontBolder">{{ infos[type].title }}</h1>
       <p>{{ infos[type].content }}</p>
       <p>New here?Read our guide on getting started.</p>
-      <ld-btn theme="deep-blue" class="TTFontBolder lordless-message-btn" @click="$router.push('/guide')">Read guide</ld-btn>
-      <img-box class="authorize-status-img" :alt="infos[type].title" :sType="infos[type].sType" :center="false" :src="infos[type].imgUrl | originSource"></img-box>
+      <lordless-btn theme="deep-blue" class="TTFontBolder lordless-message-btn" @click="$router.push('/guide')">Read guide</lordless-btn>
+      <lordless-img class="authorize-status-img" :alt="infos[type].title" :sType="infos[type].sType" :center="false" :src="infos[type].imgUrl | originSource"/>
     </div>
   </div>
 </template>
 
 <script>
-import ImgBox from '@/components/stories/image'
-import LdBtn from '@/components/stories/button'
 export default {
   props: {
     type: {
@@ -49,10 +47,6 @@ export default {
         }
       }
     }
-  },
-  components: {
-    ImgBox,
-    LdBtn
   }
 }
 </script>

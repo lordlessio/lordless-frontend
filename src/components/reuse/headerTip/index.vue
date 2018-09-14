@@ -1,14 +1,13 @@
 <template>
   <div class="ld-header-tip">
     <div class="d-flex f-align-center header-tip-container">
-      <ld-btn v-if="market" class="header-tip-btn" theme="blue-purple" inverse shadow @click.native="$router.push('/market')">Marketplace</ld-btn>
+      <lordless-btn v-if="market" class="header-tip-btn" theme="blue-purple" inverse shadow @click.native="$router.push('/market')">Marketplace</lordless-btn>
       <user-avatar :tip="true" :leftInfo="leftInfo"></user-avatar>
     </div>
   </div>
 </template>
 
 <script>
-import LdBtn from '@/components/stories/button'
 import UserAvatar from '@/components/reuse/userAvatar'
 export default {
   props: {
@@ -18,11 +17,10 @@ export default {
     },
     leftInfo: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   components: {
-    LdBtn,
     UserAvatar
   }
 }

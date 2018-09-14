@@ -17,7 +17,7 @@
       </span>
       <div class="text-center dialog-buy-cnt">
         <!-- <div class="ldb-buy-poster">
-          <img-box type="span" :src="ldbInfo.ldbIcon.source.detail"></img-box>
+          <lordless-img type="span" :src="ldbInfo.ldbIcon.source.detail"></lordless-img>
         </div>
         <div class="ldb-buy-info">
           <p>You are going to buy</p>
@@ -44,7 +44,11 @@
             </div>
           </div>
           <div class="ldb-poster-box">
-            <img-box alt="tavern preview" type="span" contain :src="ldbInfo.ldbIcon.source.preview | reldbIcon"></img-box>
+            <lordless-img
+              alt="tavern preview"
+              type="span"
+              contain
+              :src="ldbInfo.ldbIcon.source.preview | reldbIcon"/>
           </div>
         </div>
         <!-- <p class="ldb-buy-markline"></p> -->
@@ -52,7 +56,7 @@
           <!-- <p>Price</p>
           <h1 class="color-yellow ldb-buy-price">{{ ldbInfo.chain.auction.price }} ETH</h1> -->
           <div class="ldb-buy-btn">
-            <ld-btn
+            <lordless-btn
               class="TTFontBolder lordless-message-btn"
               theme="deep-blue"
               shadow
@@ -68,7 +72,7 @@
                 </span>
                 <span>Insufficient balance</span>
               </span>
-            </ld-btn>
+            </lordless-btn>
           </div>
           <div class="contract-pending-tip" v-show="buyPending">
             <p>contract is pending, waiting for few minutes</p>
@@ -80,9 +84,6 @@
 </template>
 
 <script>
-import ImgBox from '@/components/stories/image'
-import LdBtn from '@/components/stories/button'
-
 import { metamaskMixins } from '@/mixins'
 
 import { mapState } from 'vuex'
@@ -127,10 +128,6 @@ export default {
     web3Opt () {
       return this.$root.$children[0].web3Opt
     }
-  },
-  components: {
-    ImgBox,
-    LdBtn
   },
   methods: {
     async submitBuy ({ ldbInfo = this.ldbInfo, web3Opt = this.web3Opt, NFTsCrowdsale = this.NFTsCrowdsale } = {}) {

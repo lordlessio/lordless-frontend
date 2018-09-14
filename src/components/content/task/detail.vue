@@ -80,12 +80,12 @@
                 </p>
                 <p class="TTFontNormal">{{ taskInfo.ldbTaskType.desc }}</p>
                 <div class="task-status-cnt">
-                  <ld-btn
+                  <lordless-btn
                     v-if="taskInfo.status === 0"
                     class="TTFontBolder task-start-btn"
                     @click="startTask">
                     Getting started
-                  </ld-btn>
+                  </lordless-btn>
                   <h3 v-if="taskInfo.status !== 0" class="d-flex f-align-center">
                     <span class="inline-block line-height-0">
                       <svg>
@@ -146,12 +146,12 @@
                       </span>
                       <div class="card-top-cnt">
                         <div class="rewards-user-avatar">
-                          <blockies
+                          <lordless-blockies
                             jump
                             :scale="12"
                             theme="light"
                             :seed="taskInfo.executor.info">
-                          </blockies>
+                          </lordless-blockies>
                         </div>
                         <p>Swordsman</p>
                         <p><link-symbol :to="taskInfo.executor.info">{{ taskInfo.executor.info | splitAddress }}</link-symbol></p>
@@ -179,12 +179,12 @@
                       </span>
                       <div class="card-top-cnt">
                         <div class="rewards-user-avatar">
-                          <blockies
+                          <lordless-blockies
                             jump
                             :scale="12"
                             theme="light"
                             :seed="taskInfo.lord.info">
-                          </blockies>
+                          </lordless-blockies>
                         </div>
                         <p>LORD</p>
                         <p><link-symbol :to="taskInfo.lord.info">{{ taskInfo.lord.info | splitAddress }}</link-symbol></p>
@@ -216,9 +216,6 @@
 </template>
 
 <script>
-import LdBtn from '@/components/stories/button'
-import Blockies from '@/components/stories/blockies'
-
 import { getTaskById } from 'api'
 export default {
   props: {
@@ -232,10 +229,6 @@ export default {
       loading: true,
       taskInfo: null
     }
-  },
-  components: {
-    LdBtn,
-    Blockies
   },
   methods: {
     /**

@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: 'ld-progress',
+  name: 'lordless-progress',
   props: {
     shadow: {
       type: Boolean,

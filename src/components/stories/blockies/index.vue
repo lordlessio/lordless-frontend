@@ -12,6 +12,7 @@
 import Blockies from 'ethereum-blockies'
 import { mapState } from 'vuex'
 export default {
+  name: 'lordless-blockies',
   props: {
     autoInit: {
       type: Boolean,

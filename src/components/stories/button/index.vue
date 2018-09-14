@@ -9,7 +9,7 @@
 
 <script>
   export default {
-    name: 'my-button',
+    name: 'lordless-btn',
 
     props: {
       theme: {

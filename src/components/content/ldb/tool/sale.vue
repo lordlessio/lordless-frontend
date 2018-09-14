@@ -50,25 +50,25 @@
           </figcaption>
         </figure>
         <div class="text-center ldb-deal-btns">
-          <ld-btn
+          <lordless-btn
             v-if="showSale"
             class="ldb-deal-btn"
             theme="blue"
             shadow
             inverse
             :disabled="pendings.isSelling"
-            @click="$emit('sale')">{{ pendings.isSelling ? 'Saling' : 'Sale' }}</ld-btn>
+            @click="$emit('sale')">{{ pendings.isSelling ? 'Saling' : 'Sale' }}</lordless-btn>
 
-          <ld-btn
+          <lordless-btn
             v-if="showCancelSale"
             class="ldb-deal-btn"
             theme="blue"
             shadow
             inverse
             :disabled="pendings.isCanceling"
-            @click="$emit('cancel')">{{ pendings.isCanceling ? 'Cancel Saling' : 'Cancel Sale'}}</ld-btn>
+            @click="$emit('cancel')">{{ pendings.isCanceling ? 'Cancel Saling' : 'Cancel Sale'}}</lordless-btn>
 
-          <ld-btn
+          <lordless-btn
             v-if="showBuy"
             class="ldb-deal-btn"
             theme="blue"
@@ -79,7 +79,7 @@
             <span v-if="info.chain.auction.isOnPreAuction">Buy</span>
             <span v-else-if="showSign">Sign to Buy</span>
             <span v-else>{{ pendings.isBuying ? 'Buying' : 'Buy now' }}</span>
-          </ld-btn>
+          </lordless-btn>
         </div>
       </section>
     </transition>
@@ -88,8 +88,6 @@
 
 <script>
 import SaleSkeletion from '@/components/skeletion/ldb/detail/tool/sale'
-
-import LdBtn from '@/components/stories/button'
 export default {
   props: {
     info: {
@@ -158,9 +156,7 @@ export default {
     }
   },
   components: {
-    SaleSkeletion,
-
-    LdBtn
+    SaleSkeletion
   },
   methods: {
     countdownprogress (data) {

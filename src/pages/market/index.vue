@@ -59,7 +59,11 @@
             <div class="d-flex f-auto-center TTFontBolder">
               <span>See all Taverns in</span>
               <span class="inline-block">
-                <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('mapbox')">Map</ld-btn>
+                <lordless-btn
+                  class="TTFontBolder no-asset-btn"
+                  theme="default"
+                  shadow
+                  @click="$router.push('mapbox')">Map</lordless-btn>
               </span>
             </div>
           </div>
@@ -137,10 +141,8 @@ import { historyState } from 'utils/tool'
 import DetailDialog from '@/components/reuse/dialog/ldb/detail'
 import LdSelect from '@/components/stories/select'
 import SwitchInput from '@/components/stories/switchInput'
-import ImgBox from '@/components/stories/image'
 import Pagination from '@/components/stories/pagination'
 import BuildingCard from '@/components/reuse/card/building'
-import LdBtn from '@/components/stories/button'
 
 import SkeletionBuilding from '@/components/skeletion/building'
 import SkeletionPager from '@/components/skeletion/pagination'
@@ -214,10 +216,8 @@ export default {
   components: {
     LdSelect,
     SwitchInput,
-    LdBtn,
     BuildingCard,
     Pagination,
-    ImgBox,
     DetailDialog,
 
     // SkeletionList,

@@ -2,7 +2,7 @@
   <div v-if="value" class="crowdsale-box">
     <div class="text-center crowdsale-container">
       <div class="inline-block lordless-shadow" :style="`border-radius: ${avatar.radius};`">
-        <Blockies
+        <lordless-blockies
           :scale="avatar.scale"
           :radius="avatar.radius"
           :seed="address"
@@ -19,13 +19,13 @@
           <p class="TTFontNormal crowdsale-info-text">Authorization the <a :href="`${ETHERSCANURL}/address/${NFTsCrowdsale.address}`" target="_blank" class="TTFontBolder">Marketplace contract</a> to operate Taverns</p>
         </div>
         <div>
-          <ld-btn
+          <lordless-btn
             class="TTFontBolder lordless-message-btn crowdsale-btn"
             theme="deep-blue"
             shadow
             :loading="crowdsalePending"
             :disabled="crowdsalePending"
-            @click="chooseCrowdsale">Go</ld-btn>
+            @click="chooseCrowdsale">Go</lordless-btn>
         </div>
       </div>
       <div class="contract-pending-tip" v-if="crowdsalePending">
@@ -36,9 +36,7 @@
 </template>
 
 <script>
-import Blockies from '@/components/stories/blockies'
 import CheckBox from '@/components/stories/checkbox'
-import LdBtn from '@/components/stories/button'
 
 import { metamaskMixins } from '@/mixins'
 
@@ -88,9 +86,7 @@ export default {
     }
   },
   components: {
-    Blockies,
-    CheckBox,
-    LdBtn
+    CheckBox
   },
   methods: {
 

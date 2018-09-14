@@ -50,14 +50,14 @@
                     </div>
                   </div>
                   <div class="user-avatar">
-                    <blockies
+                    <lordless-blockies
                       ref="lordBlockies"
                       jump
                       :scale="9"
                       radius='8px'
                       :fontSize="'24px'"
                       :seed="ldbInfo.lord.address">
-                    </blockies>
+                    </lordless-blockies>
                   </div>
                 </div>
               </el-col>

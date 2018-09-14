@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: 'my-image',
+  name: 'lordless-img',
 
   props: {
 
@@ -63,7 +63,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/class_mixin.scss';
+  @import '@/assets/stylus/mixin/index.scss';
   .image-box {
     position: relative;
     width: inherit;

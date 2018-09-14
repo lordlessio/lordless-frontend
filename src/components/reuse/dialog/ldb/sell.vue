@@ -46,7 +46,7 @@
         </div>
         <div class="TTFontBolder ldb-sell-bottom">
           <div class="ldb-sell-btn">
-            <ld-btn
+            <lordless-btn
               class="TTFontBolder lordless-message-btn"
               theme="deep-blue"
               shadow
@@ -54,7 +54,7 @@
               :disabled="metamaskChoose || sellPending"
               @click="submitSell">
               <span class="sell-confirm" v-if="!sellPending">Sell</span>
-            </ld-btn>
+            </lordless-btn>
           </div>
           <div class="contract-pending-tip" v-show="sellPending">
             <p>contract is pending, waiting for few minutes</p>
@@ -66,7 +66,6 @@
 </template>
 
 <script>
-import LdBtn from '@/components/stories/button'
 import LdInput from '@/components/stories/input'
 
 import { metamaskMixins, contractMixins } from '@/mixins'
@@ -136,7 +135,6 @@ export default {
     }
   },
   components: {
-    LdBtn,
     LdInput
   },
   methods: {

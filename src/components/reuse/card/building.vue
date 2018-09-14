@@ -7,7 +7,9 @@
             <img alt="tavern popularity image" :src="`/img/ldb-level-${info.chain.popularity}.png` | originSource({ size: 120 })"/>
           </div>
           <img alt="tavern curve" class="building-curve" src="~/static/svg/single/curve.svg">
-          <ld-img alt="tavern preview" :src="info.ldbIcon.source.preview | reldbIcon"></ld-img>
+          <lordless-img
+            alt="tavern preview"
+            :src="info.ldbIcon.source.preview | reldbIcon"/>
           <span class="building-sale-bg"></span>
           <p class="d-flex col-flex f-auto-center building-sale-tag">
             <span class="building-sale-svg">
@@ -22,8 +24,11 @@
           <h2 class="building-name">{{ info.name.zh }}</h2>
           <p class="building-tokenId">#{{ info.chain.tokenId }}</p>
           <p class="d-flex f-auto-center building-coords">
-            <span>
-              <i class="el-icon-location"></i>
+            <span class="inline-block building-coords-icon">
+              <svg>
+                <use xlink:href="#icon-location"/>
+              </svg>
+              <!-- <i class="el-icon-location"></i> -->
             </span>
             <span>&nbsp;{{ info.chain.lng | transferCoords | sliceStr }}, {{ info.chain.lat | transferCoords | sliceStr }}</span>
           </p>
@@ -51,11 +56,11 @@
               <span>{{ info.apLeft }}</span>
             </p>
             <p class="building-progress">
-              <ld-progress
+              <lordless-progress
                 :current="info.apLeft"
                 :max="info.ap"
                 :gradient="progressOpts.capacity.gradient">
-              </ld-progress>
+              </lordless-progress>
             </p>
           </li>
           <!-- <li class="d-flex col-flex">
@@ -64,11 +69,11 @@
               <span>{{ info.chain.activeness }}</span>
             </p>
             <p class="building-progress">
-              <ld-progress
+              <lordless-progress
                 :current="info.chain.activeness"
                 :max="1267"
                 :gradient="progressOpts.activeness.gradient">
-              </ld-progress>
+              </lordless-progress>
             </p>
           </li> -->
         </ul>
@@ -78,8 +83,6 @@
 </template>
 
 <script>
-import LdProgress from '@/components/stories/progress'
-import LdImg from '@/components/stories/image'
 export default {
   props: {
     sale: {
@@ -118,10 +121,6 @@ export default {
         // }
       }
     }
-  },
-  components: {
-    LdProgress,
-    LdImg
   }
 }
 </script>
@@ -237,6 +236,11 @@ export default {
   .building-coords {
     font-size: 16px;
     color: #bbb;
+  }
+  .building-coords-icon {
+    fill: #bbb;
+    width: 16px;
+    height: 16px;
   }
 
   .building-data {

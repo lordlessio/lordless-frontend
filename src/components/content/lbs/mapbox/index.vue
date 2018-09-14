@@ -747,7 +747,7 @@ export default {
   // }
 
   ._marker--info-bottom {
-    height: 10px;
+    height: 16px;
     border-radius: 10px;
     background-color: #BDB9FD;
     overflow: hidden;
@@ -770,7 +770,7 @@ export default {
   }
 
   ._market--info-ap {
-    margin-top: -5px;
+    margin-top: -8px;
     padding: 10px 20px;
     font-size: 16px;
     font-weight: 500;

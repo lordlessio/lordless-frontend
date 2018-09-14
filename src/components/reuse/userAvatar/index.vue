@@ -19,21 +19,21 @@
           <span>AP {{ userInfo.ap }}</span>
         </p>
       </div>
-      <Blockies
+      <lordless-blockies
         class="user-avatar-poster"
         :radius="radius"
         :seed="userInfo.address"
         :scale="scale"
         :theme="theme">
-      </Blockies>
+      </lordless-blockies>
     </div>
-    <ld-btn
+    <lordless-btn
       v-if="!userInfo.address && !tip"
       class="user-getting-start"
       :theme="theme === 'dark' ? 'blue' : 'deep-blue'"
       :inverse="theme === 'dark'"
       @click.native="sign"
-      shadow>{{ loginText }}</ld-btn>
+      shadow>{{ loginText }}</lordless-btn>
     <p class="TTFontBolder top-login-text" v-if="!userInfo.address && tip" @click.stop="sign">{{ loginText }}</p>
     <authorize
       ref="authorize"
@@ -44,8 +44,6 @@
 
 <script>
 import Authorize from '@/components/reuse/dialog/authorize'
-import Blockies from '@/components/stories/blockies'
-import LdBtn from '@/components/stories/button'
 
 import { dialogMixins } from '@/mixins'
 
@@ -95,9 +93,7 @@ export default {
     }
   },
   components: {
-    Blockies,
-    Authorize,
-    LdBtn
+    Authorize
   },
   computed: {
     ...mapState('user', [

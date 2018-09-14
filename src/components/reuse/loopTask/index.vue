@@ -3,11 +3,11 @@
     <div v-if="task" class="ld-loop-task sm-hidden">
       <div id="loop-task-container" class="d-flex f-align-center loop-task-container">
         <div class="building-poster" :class="`building-popularity-${task.ldb.info.chain.popularity}`">
-          <img-box
+          <lordless-img
             alt="tavern preview"
             type="span"
             absolute
-            :src="task.ldb.info.ldbIcon.source.preview | reldbIcon('map')"></img-box>
+            :src="task.ldb.info.ldbIcon.source.preview | reldbIcon('map')"/>
             <span class="building-sale-bg"></span>
             <img alt="tavern curve" class="ldb-curve" src="~/static/svg/single/curve.svg">
         </div>
@@ -42,8 +42,6 @@
 </template>
 
 <script>
-import ImgBox from '@/components/stories/image'
-
 import { transitionEvent, removeClass, addClass } from 'utils/tool'
 import { getApprovedTask } from 'api'
 export default {
@@ -66,9 +64,6 @@ export default {
     task (val, oval) {
       if (oval) this.change()
     }
-  },
-  components: {
-    ImgBox
   },
   methods: {
     init () {

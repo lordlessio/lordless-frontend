@@ -58,21 +58,21 @@
                     <p class="TTFontNormal detail-ldb-address">{{ info.address }}</p>
                     <p class="detail-ldb-location">{{ info.chain.lng | transferCoords | sliceStr}}, {{ info.chain.lat | transferCoords | sliceStr }}</p>
                     <p class="detail-ldb-desc">{{ info.desc.zh | sliceStr({ end: 62 }) }}...</p>
-                    <ld-btn
+                    <lordless-btn
                       class="ldb-home-btn"
                       theme="deep-blue"
                       shadow
                       inverse
                       :disabled="isHome"
-                      @click="setHome">{{ isHome ? 'Your home' : 'Set as home' }}</ld-btn>
+                      @click="setHome">{{ isHome ? 'Your home' : 'Set as home' }}</lordless-btn>
                     <figcaption>
                       <div class="d-flex f-align-center detail-lord-box">
-                        <blockies
+                        <lordless-blockies
                           theme="light"
                           :scale="6"
                           jump
                           :seed="info.lord.address">
-                        </blockies>
+                        </lordless-blockies>
                         <div class="v-flex d-flex col-flex f-justify-around detail-lord-info">
                           <p>{{ info.lord.nickName || 'LORDLESS' }}</p>
                           <p><link-symbol underline :to="info.lord.address">{{ info.lord.address | splitAddress({ symbol: '***' }) }}</link-symbol></p>
@@ -94,7 +94,7 @@
           <div class="detail-header-right">
             <div class="detail-ldb-poster">
               <!-- <img src="http://lordless.oss-cn-hongkong.aliyuncs.com//lordlesstest/ldbicon/!-4-detail.jpg?x-oss-process=image/resize,w_1600"/> -->
-              <ld-img absolute type="span" :src="info.ldbIcon.source.detail | reldbIcon('detail')"></ld-img>
+              <lordless-img absolute type="span" :src="info.ldbIcon.source.detail | reldbIcon('detail')"></lordless-img>
             </div>
             <div class="alone-layer detail-ldb-level">
               <img alt="tavern popularity image" :src="`/img/ldb-level-${info.chain.popularity}.png` | originSource({ size: 450 })"/>
@@ -108,10 +108,6 @@
 
 <script>
 import HeaderSkeletion from '@/components/skeletion/ldb/detail/tool/header'
-
-import LdBtn from '@/components/stories/button'
-import LdImg from '@/components/stories/image'
-import Blockies from '@/components/stories/blockies'
 
 import { addClass, removeClass, hasClass, transitionEvent, animationEndEvent, animationIterationEvent } from 'utils/tool'
 import { receiveAnimate } from 'utils/tool/animate'
@@ -199,11 +195,7 @@ export default {
     }
   },
   components: {
-    HeaderSkeletion,
-
-    LdBtn,
-    LdImg,
-    Blockies
+    HeaderSkeletion
   },
   methods: {
 

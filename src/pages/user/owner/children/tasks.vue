@@ -46,7 +46,7 @@
                 <div class="d-flex f-auto-center TTFontBolder">
                   <span>recive Task in Taverns</span>
                   <span class="inline-block">
-                    <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/map')">Map</ld-btn>
+                    <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/map')">Map</lordless-btn>
                   </span>
                 </div>
               </div>
@@ -103,7 +103,7 @@
                 <div class="d-flex f-auto-center TTFontBolder">
                   <span>recive candy in Tavern</span>
                   <span class="inline-block">
-                    <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/map')">Map</ld-btn>
+                    <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/map')">Map</lordless-btn>
                   </span>
                 </div>
               </div>
@@ -160,7 +160,7 @@
                 <div class="d-flex f-auto-center TTFontBolder">
                   <span>Try to buy a Tavern in</span>
                   <span class="inline-block">
-                    <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/market')">Marketplace</ld-btn>
+                    <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/market')">Marketplace</lordless-btn>
                   </span>
                 </div>
               </div>
@@ -204,7 +204,6 @@ import TaskDialog from '@/components/reuse/dialog/task/detail'
 import TaskCard from '@/components/reuse/card/task'
 import Pagination from '@/components/stories/pagination'
 import LdSelect from '@/components/stories/select'
-import LdBtn from '@/components/stories/button'
 
 import { historyState } from 'utils/tool'
 
@@ -290,7 +289,6 @@ export default {
     TaskDialog,
     TaskCard,
     Pagination,
-    LdBtn,
     LdSelect
   },
   methods: {

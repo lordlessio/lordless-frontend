@@ -18,15 +18,15 @@
                 <li>
                   <span class="cursor-pointer" @click.stop="jumpHome">Home</span>
                 </li>
-                <li>
+                <!-- <li>
                   <a href="http://lordless.io/team" target="_blank">Team</a>
-                </li>
+                </li> -->
                 <li>
                   <a href="http://lordless.io/#ROADMAP" target="_blank">Roadmap</a>
                 </li>
-                <li>
+                <!-- <li>
                   <a href="http://lordless.io/airdrop" target="_blank">Airdrop plan</a>
-                </li>
+                </li> -->
               </ul>
             </div>
             <div class="v-flex ld-footer-item">
@@ -284,7 +284,8 @@ export default {
   }
 
   .ld-footer-letter {
-    width: 350px;
+    width: 100%;
+    max-width: 350px;
     @include margin('top', 30px, 1, -2);
     >p {
       font-size: 16px;

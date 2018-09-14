@@ -40,11 +40,11 @@
                       class="popper-trending-poster"
                       :class="`building-popularity-${trend.chain.popularity}`"
                       @click.stop="$emit('trend', trend)">
-                      <img-box
+                      <lordless-img
                         alt="tavern preview"
                         type="span"
                         absolute
-                        :src="trend.ldbIcon.source.preview | reldbIcon('map')"></img-box>
+                        :src="trend.ldbIcon.source.preview | reldbIcon('map')"/>
                         <span class="building-sale-bg"></span>
                         <img alt="tavern curve" class="ldb-curve" src="~/static/svg/single/curve.svg">
                     </div>
@@ -62,8 +62,11 @@
               </div>
             </div>
             <div class="d-flex popper-record" :class="{ 'theme-gray': !item.id, 'margin': item.localFirst }" v-if="!item.trending">
-              <div class="d-inline-flex f-auto-center popper-record-icon">
-                <i :class="`el-icon-${item.id ? (item.history ? 'time' : 'location') : 'location-outline'} color-secondary`"></i>
+              <div class="d-inline-flex f-auto-center popper-record-icon color-secondary">
+                <!-- <i :class="`el-icon-${item.id ? (item.history ? 'time' : 'location') : 'location-outline'} color-secondary`"></i> -->
+                <svg>
+                  <use :xlink:href="`#icon-${item.history ? 'search-history' : 'location'}`"/>
+                </svg>
               </div>
               <div class="v-flex popper-record-text" :class="{ 'bottom-border': searchText, 'no-border': searchText && item.last }">
                 <span class="d-inline-block record-name">{{ item.name.zh }}</span>
@@ -81,7 +84,6 @@
 </template>
 
 <script>
-import ImgBox from '@/components/stories/image'
 export default {
   props: {
 
@@ -99,9 +101,6 @@ export default {
     return {
       searchText: ''
     }
-  },
-  components: {
-    ImgBox
   },
   methods: {
     handleSearch (string, cb) {
@@ -125,8 +124,8 @@ export default {
   @import '@/assets/stylus/mixin/index.scss';
   .auto-complete-box {
     width: inherit;
-    height: inherit;
-    padding: 10px 0;
+    height: 70px;
+    padding: 15px 0;
     background-color: #fff;
     box-sizing: border-box;
     border-radius: 3px;
@@ -145,8 +144,8 @@ export default {
         font-size: 16px;
       }
       .el-input__inner {
-        padding-left: 63px;
-        padding-right: 40px;
+        padding-left: 80px;
+        padding-right: 43px;
         font-size: 18px;
         font-family: $--font-TTNormsMedium;
         border: none;
@@ -157,29 +156,39 @@ export default {
           color: #999;
         }
       }
+      // .el-input__suffix {
+      //   margin-right: 8px;
+      //   font-size: 22px;
+      //   font-weight: bold;
+      //   color: #aaa;
+      // }
+      .el-input__prefix {
+        top: 50%;
+        left: 20px;
+        height: initial;
+        transform: translateY(-50%);
+      }
       .el-input__suffix {
-        margin-right: 8px;
-        font-size: 22px;
-        font-weight: bold;
-        color: #aaa;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
       }
     }
   }
   .ld-auto-icon {
     // font-weight: bolder;
-    width: 28px;
-    height: 28px;
+    width: 23px;
+    height: 23px;
     cursor: pointer;
     >svg {
-      width: 28px;
-      stroke-width: 3px;
+      width: 23px;
     }
   }
   .complete-icon {
     padding: 8px;
-    margin-left: 5px;
-    width: 40px;
-    height: 40px;
+    // margin-left: 13px;
+    width: 44px;
+    height: 44px;
     background-color: $--map-blue-pink-color;
     border-radius: 5px;
     >svg {
@@ -281,9 +290,10 @@ export default {
     padding-right: 20px;
     &.theme-gray {
       .popper-record-icon {
-        i {
-          color: #aaa;
-        }
+        fill: #aaa;
+        // i {
+        //   color: #aaa;
+        // }
       }
       .record-name {
         color: #aaa;
@@ -297,11 +307,17 @@ export default {
     }
   }
   .popper-record-icon {
-    padding: 0 15px;
-    font-size: 22px;
+    padding-left: 25px;
+    padding-right: 18px;
+    // padding: 0 15px;
+    // font-size: 22px;
+    >svg {
+      width: 22px;
+      height: 22px;
+    }
   }
   .popper-record-text {
-    padding: 15px 0;
+    padding: 18px 0;
     color: #555;
     font-size: 16px;
     font-weight: 500;

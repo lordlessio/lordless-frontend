@@ -5,7 +5,7 @@
         <span class="v-flex">Candy</span>
         <el-tooltip class="item" effect="dark" content="Coming soon" placement="left">
           <span>
-            <ld-btn
+            <lordless-btn
               class="d-flex f-align-center user-withdraw-btn"
               theme="deep-blue"
               disabled
@@ -15,7 +15,7 @@
                 <use xlink:href="#icon-withdraw"/>
               </svg>
               <span>Withdraw</span>
-            </ld-btn>
+            </lordless-btn>
           </span>
         </el-tooltip>
       </h1>
@@ -48,11 +48,11 @@
                 <div class="d-flex f-auto-center TTFontBolder">
                   <span>Apply a</span>
                   <span class="inline-block">
-                    <ld-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Task</ld-btn>
+                    <lordless-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Task</lordless-btn>
                   </span>
                   <span>or buy a Tavern in</span>
                   <span class="inline-block">
-                    <ld-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Marketplace</ld-btn>
+                    <lordless-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Marketplace</lordless-btn>
                   </span>
                 </div>
               </div>
@@ -126,11 +126,11 @@
                 <div class="d-flex f-auto-center TTFontBolder">
                   <span>Apply a</span>
                   <span class="inline-block">
-                    <ld-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Task</ld-btn>
+                    <lordless-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Task</lordless-btn>
                   </span>
                   <span>or buy a Tavern in</span>
                   <span class="inline-block">
-                    <ld-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Marketplace</ld-btn>
+                    <lordless-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Marketplace</lordless-btn>
                   </span>
                 </div>
               </div>
@@ -219,7 +219,7 @@
               <transition name="ld-hide-fade">
                 <div v-if="!rewardLoading && aside.data && aside.show" class="reward-aside-container text-nowrap">
                   <h1>+{{ (aside.lord ? aside.data.lord.reward.count : aside.data.executor.reward.count) | formatDecimal }} <span class="text-upper">{{ aside.data.reward.candy.symbol }}</span></h1>
-                  <ld-btn theme="green" inverse class="text-cap reward-aside-btn">{{ aside.lord ? 'LORD' : 'Task' }} Reward</ld-btn>
+                  <lordless-btn theme="green" inverse class="text-cap reward-aside-btn">{{ aside.lord ? 'LORD' : 'Task' }} Reward</lordless-btn>
                   <ul class="candy-aside-ul candy--value">
                     <!-- <li>
                       <p>Valued by <span class="text-upper">ETH</span></p>
@@ -250,12 +250,12 @@
                     <li>
                       <p>LORD</p>
                       <p class="candy-aside-blockies">
-                        <Blockies
+                        <lordless-blockies
                           :seed="aside.data.ldb.info.lord"
                           :scale="5"
                           jump
                           theme="light"
-                          radius="5px"></Blockies>
+                          radius="5px"></lordless-blockies>
                       </p>
                     </li>
                   </ul>
@@ -275,12 +275,12 @@
                     <li>
                       <p>Employee</p>
                       <p class="candy-aside-blockies">
-                        <Blockies
+                        <lordless-blockies
                           :seed="aside.lord ? aside.data.lord.info : aside.data.executor.info"
                           :scale="5"
                           jump
                           theme="light"
-                          radius="5px"></Blockies>
+                          radius="5px"></lordless-blockies>
                       </p>
                     </li>
                   </ul>
@@ -302,8 +302,6 @@
 </template>
 
 <script>
-import Blockies from '@/components/stories/blockies'
-import LdBtn from '@/components/stories/button'
 import Pagination from '@/components/stories/pagination'
 
 import { getUserAssets, getUserCandyHistory, getTaskById } from 'api'
@@ -354,8 +352,6 @@ export default {
     }
   },
   components: {
-    Blockies,
-    LdBtn,
     Pagination
   },
   methods: {

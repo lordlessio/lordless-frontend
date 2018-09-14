@@ -9,7 +9,7 @@
       </div>
       <div class="text-center ld-authorize-bottom">
         <p class="text-left">{{ info.desc }}</p>
-        <ld-btn
+        <lordless-btn
           class="TTFontBolder ld-authorize-btn"
           theme="blue"
           inverse
@@ -23,7 +23,7 @@
               <use xlink:href="#icon-ok"/>
             </svg>
           </span>
-        </ld-btn>
+        </lordless-btn>
         <!-- <div v-if="!active && info.customize" class="ld-authorize-btn ld-customize-btn" :id="info.symbol">
           <p class="d-flex f-align-baseline customize-loading">loading <span class="line-height-1"><i class="el-icon-loading"></i></span></p>
         </div> -->
@@ -33,7 +33,6 @@
 </template>
 
 <script>
-import LdBtn from '@/components/stories/button'
 export default {
   props: {
     active: {
@@ -46,12 +45,6 @@ export default {
         return {}
       }
     }
-  },
-  data: () => {
-    return {}
-  },
-  components: {
-    LdBtn
   }
 }
 </script>

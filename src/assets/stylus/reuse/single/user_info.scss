@@ -1,0 +1,55 @@
+@import '@/assets/stylus/mixin/index.scss';
+.user-info-section {
+  @include margin('bottom', 20px, -2);
+  &:not(:first-of-type) {
+    @include margin('top', 25px, -2);
+  }
+}
+.info-item-container {
+  @include margin('top', 35px, 1, -2);
+  // @include width(100vw, 1, -2);
+}
+.info-cnt-title {
+  font-size: 20px;
+  color: #BBBBBB;
+  @include margin('bottom', 15px, 1);
+}
+.info-cnt-box {
+  padding: 20px 25px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, .1);
+  @include width(100%, 1, -2);
+}
+
+.user-info-btn {
+  padding: 8px 15px;
+  font-size: 16px;
+  @include margin('top', 15px, 1);
+}
+
+// info-card-cnt
+
+.info-card-cnt {
+  position: relative;
+  height: 260px;
+  font-family: $--font-TTNormsRegular;
+  &:not(:first-of-type) {
+    @include margin('top', 20px, 1, -2);
+    @include margin('left', -8px, -2);
+    @include padding('left', 33px, -2);
+  }
+}
+.card-cnt-title {
+  font-family: $--font-TTNormsMedium;
+  font-size: 20px;
+}
+.card-cnt-tip {
+  font-size: 14px;
+  color: #999;
+  @include padding('top', 5px, 1);
+  @include padding('bottom', 10px, 1);
+}
+.card-cnt-box {
+  color: #999;
+}

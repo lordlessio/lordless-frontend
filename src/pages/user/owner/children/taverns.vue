@@ -13,7 +13,7 @@
           <div class="d-flex f-auto-center TTFontBolder">
             <span>Try to buy a Tavern in</span>
             <span class="inline-block">
-              <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/market')">Marketplace</ld-btn>
+              <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/market')">Marketplace</lordless-btn>
             </span>
           </div>
         </div>
@@ -82,7 +82,7 @@
                 <div class="d-flex f-auto-center TTFontBolder">
                   <span>Make the first selling transaction for your</span>
                   <span class="inline-block">
-                    <ld-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="buildingTab = 'all'">LDB</ld-btn>
+                    <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="buildingTab = 'all'">LDB</lordless-btn>
                   </span>
                 </div>
               </div>
@@ -131,7 +131,6 @@ import LdSelect from '@/components/stories/select'
 import DetailDialog from '@/components/reuse/dialog/ldb/detail'
 import BuildingCard from '@/components/reuse/card/building'
 import Pagination from '@/components/stories/pagination'
-import LdBtn from '@/components/stories/button'
 
 import { historyState } from 'utils/tool'
 
@@ -211,7 +210,6 @@ export default {
     DetailDialog,
     BuildingCard,
     Pagination,
-    LdBtn,
     LdSelect
   },
   methods: {
