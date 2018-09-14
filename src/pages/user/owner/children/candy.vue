@@ -378,14 +378,14 @@ export default {
       }
       this.rewardModels = {}
       this.rewardLoading = true
+      this.$set(this.rewardModels, _id, true)
+      this.$set(this.aside, 'show', true)
       const res = await getTaskById({ taskId: _id })
       if (res.code === 1000 && res.data) {
         this.$set(this.aside, 'data', res.data)
       }
       this.rewardLoading = false
-      this.$set(this.rewardModels, _id, true)
       this.$set(this.aside, 'lord', !!data.lord)
-      this.$set(this.aside, 'show', true)
     },
 
     /**
@@ -613,6 +613,7 @@ export default {
 
   // reward-aside-skeletion
   .reward-aside-skeletion {
+    margin-left: 30px;
     position: absolute;
     top: 0;
     left: 0;
