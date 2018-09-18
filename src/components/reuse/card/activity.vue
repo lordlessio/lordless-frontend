@@ -1,14 +1,14 @@
 <template>
   <div class="ld-activity-card" :class="{ 'shadow': shadow }">
     <div class="ld-activity-container">
-      <div class="d-flex f-align-center activity-status-box">
-        <div class="v-flex d-flex f-align-center">
+      <div class="d-flex sm-col-flex f-align-center activity-status-box">
+        <div class="v-flex d-flex sm-col-flex f-align-center">
           <span class="inline-block line-height-1 activity-status-svg">
             <svg>
               <use :xlink:href="`#${statusSvg}`"/>
             </svg>
           </span>
-          <div class="v-flex ld-activity-desc">
+          <div class="v-flex sm-text-center sm-mar-t3 sm-mar-b3 ld-activity-desc">
             <p>{{ info.created_at | timeFormat }}</p>
             <p v-if="type === 'CANCELAUCTION'">You cancelled the sale of <span class="cursor-pointer" @click.stop="$router.push(`/tavern/${info.market[0].tokenId}`)"> Tavern #{{ info.market[0].tokenId }}. </span> You will get it back when the transaction is confirmed on chain.</p>
             <p v-else-if="type === 'NEWAUCTION'">You started a sale by action for <span class="cursor-pointer" @click.stop="$router.push(`/tavern/${info.market[0].tokenId}`)"> Tavern #{{ info.market[0].tokenId }}. </span></p>
@@ -77,7 +77,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
   .ld-activity-card {
     padding: 35px 45px 35px 45px;
     background-color: #fff;

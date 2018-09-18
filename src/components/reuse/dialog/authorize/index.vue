@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="authorizeDialog"
-    :custom-class="`inline-block lordless-dialog message-dialog no-header no-header transparent center ${metaOpen ? 'blur' : ''}`"
+    :custom-class="`inline-block lordless-dialog message-dialog no-header transparent center ${metaOpen ? 'blur' : ''}`"
     width="100%"
     append-to-body
     center

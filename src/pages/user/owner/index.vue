@@ -44,7 +44,7 @@
       <div class="ld-user-header">
         <ld-header v-bind="headerOpt" theme="light"></ld-header>
       </div>
-      <el-main class="d-flex ld-user-content">
+      <el-main id="user-main-content" class="d-flex ld-user-content">
         <div class="v-flex d-flex user-content-container">
           <transition name="owner-cnt-fade">
             <router-view class="owner-cnt-box" v-if="true"></router-view>
@@ -100,7 +100,7 @@ export default {
         },
         {
           name: 'activity',
-          icon: 'authorization',
+          icon: 'activity',
           path: '/owner/activity'
         },
         {
@@ -111,6 +111,11 @@ export default {
       ],
       headerOpt: {
         show: true,
+        logo: {
+          show: true,
+          mobile: true,
+          pc: false
+        },
         showLogo: false,
         inverse: false,
         transparent: true,
@@ -167,8 +172,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   .owner-cnt-fade-enter-active {
     opacity: 1;
     z-index: 1;
@@ -256,19 +259,19 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
-    height: 90px;
     padding: 0 30px;
     background-color: #fff;
     // color: #fff;
     z-index: 9;
     box-shadow: 2px 3px 5px 0 rgba(0, 0, 0, .1);
+    @include height(90px, -2);
+    @include height(70px, 1, -2);
   }
 
   .ld-user-content {
     padding: 90px 0 0;
     background-color: #f4f4f4;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
+    @include overflow();
   }
   .user-content-container {
     position: relative;
@@ -282,6 +285,7 @@ export default {
     top: 0;
     width: 100%;
     min-height: 100%;
+    // @include overflow();
   }
   @media screen and (max-width: 991px) {
     .ld-user-navgation {

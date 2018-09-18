@@ -15,7 +15,7 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
+
   // ldb-approved-skeletion
   .ldb-approved-skeletion {
     padding: 50px 30px 40px;

@@ -80,7 +80,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
+
   .ld-progress-box {
     width: 100%;
     height: 100%;

@@ -23,6 +23,7 @@
           </ldb-datas-tool>
 
           <tasks-now-tool
+            class="sm-hidden"
             :candies="ldbTasks | ldbGroupCandies"
             :tasks="ldbTasks | ldbGroupTasks"
             :ldbId="ldbInfo._id"
@@ -786,8 +787,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   .ldb-detail-main {
     /deep/ .ldb-left-section {
     margin-top: 50px;
@@ -836,9 +835,10 @@ export default {
 
   /* detail-cnt-right */
   .detail-cnt-right {
-    margin-left: 40px;
+    @include margin('left', 40px, -2);
+    @include dimension('max-width', 300px, -2);
     width: 100%;
-    max-width: 300px;
+    // max-width: 300px;
   }
   .detail-approved-tasks {
     margin-bottom: 60px;

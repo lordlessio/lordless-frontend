@@ -25,7 +25,7 @@ import LdbDetailSkeletion from '@/components/skeletion/ldb/detail'
 import LdbDetail from '@/components/content/ldb/detail'
 import HeaderTip from '@/components/reuse/headerTip'
 
-import SlideDialog from '@/components/stories/dialog/slider'
+import SlideDialog from '@/components/stories/dialog/slider/index.vue'
 
 import { mutationTypes } from '@/store/types'
 import { mapMutations } from 'vuex'

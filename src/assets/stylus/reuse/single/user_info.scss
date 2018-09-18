@@ -1,4 +1,4 @@
-@import '@/assets/stylus/mixin/index.scss';
+//
 .user-info-section {
   @include margin('bottom', 20px, -2);
   &:not(:first-of-type) {

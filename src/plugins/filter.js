@@ -13,7 +13,8 @@ import {
   nextAC,
   remainingAC,
   filterRegions,
-  findRegionById
+  findRegionById,
+  originSource
 } from 'utils/tool'
 
 Vue.filter('splitAddress', splitAddress)
@@ -44,9 +45,7 @@ Vue.filter('filterRegions', filterRegions)
 
 Vue.filter('singleRegion', findRegionById)
 
-Vue.filter('originSource', (url, { size = 1000 } = {}) => {
-  return `${process.env.LDBICON_ORIGIN}/frontend/static${url}?x-oss-process=image/resize,w_${size}`
-})
+Vue.filter('originSource', originSource)
 
 // ldb detail 私有 filter
 

@@ -97,7 +97,7 @@
                   </h3>
                 </div>
               </div>
-              <div class="d-flex sm-f-align-center sm-col-flex task-cnt-section task-status-bottom">
+              <div class="d-flex sm-col-flex task-cnt-section task-status-bottom">
                 <div class="v-flex task-status-date task-status-remaining">
                   <p v-if="taskInfo.status === 0">Time remaining</p>
                   <p v-else-if="taskInfo.status === 1">Completed on</p>
@@ -169,7 +169,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="v-flex rewards-cards-item rewards-cards-right">
+                <div class="sm-mar-t5 v-flex rewards-cards-item rewards-cards-right">
                   <div class="rewards-big-card yellow">
                     <div class="big-card-top">
                       <span class="big-card-svg crown">
@@ -264,8 +264,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   /**
    *  ld-task-skeletion
    */

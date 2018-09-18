@@ -45,8 +45,8 @@
                         type="span"
                         absolute
                         :src="trend.ldbIcon.source.preview | reldbIcon('map')"/>
-                        <span class="building-sale-bg"></span>
-                        <img alt="tavern curve" class="ldb-curve" src="~/static/svg/single/curve.svg">
+                        <span class="building-sale-bg" :style="`background-image: url(${originSource('/svg/sale-bg.svg', { size: -1 })})`"></span>
+                        <img alt="tavern curve" class="ldb-curve" :src="'/svg/curve.svg' | originSource({ size: -1 })">
                     </div>
                     <div class="text-center popper-trending-text">
                       {{ trend.name.zh }}
@@ -84,6 +84,7 @@
 </template>
 
 <script>
+import { originSource } from 'utils/tool'
 export default {
   props: {
 
@@ -103,6 +104,10 @@ export default {
     }
   },
   methods: {
+    originSource () {
+      return originSource(...arguments)
+    },
+
     handleSearch (string, cb) {
       this.$emit('handleSearch', string, cb)
     },
@@ -121,7 +126,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
   .auto-complete-box {
     width: inherit;
     height: 70px;
@@ -220,6 +224,9 @@ export default {
       background-color: #f5f7fa;
     }
   }
+  .popper-trending-item {
+    width: 33%;
+  }
   .popper-trending-poster {
     margin-bottom: 10px;
     position: relative;
@@ -250,7 +257,7 @@ export default {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-image: url('~static/svg/single/sale-bg.svg');
+    // background-image: url('~static/svg/single/sale-bg.svg');
     background-size: 200%;
     background-position-x: 50%;
     background-position-y: 45%;

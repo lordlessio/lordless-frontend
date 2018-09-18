@@ -175,6 +175,35 @@ export const Tween = {
   }
 }
 
+/**
+ * scroll To Top 动画
+ * @param target 移动的dom，默认为 documentElement
+ * @param before 起始位置
+ * @param end 结束位置
+ * @param duration 执行时间
+ * @param lname 动画名称
+ * @param ltype 动画类型
+ */
+export const scrollToTop = ({ target = null, before = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop, end = 0, duration = 300, lname = 'Bounce', ltype = 'easeInOut' } = {}, cb) => {
+  let st = 0
+  const step = (timestamp) => {
+    if (!st) st = timestamp
+    const t = timestamp - st
+    let top = before - Tween[lname][ltype](t, 0, before - end, duration) + end
+
+    if (top <= end) top = end
+
+    if (target) target.scrollTop = top
+    else document.documentElement.scrollTop = top
+    if (t >= duration) {
+      if (cb) return cb()
+      return true
+    }
+    return window.requestAnimationFrame(step)
+  }
+  return window.requestAnimationFrame(step)
+}
+
 // 已知抛物线两个点的坐标，求抛物线 二次项系数 Quadratic
 export const getBezierQuadratic = (a, b) => {
   const x1 = a.x

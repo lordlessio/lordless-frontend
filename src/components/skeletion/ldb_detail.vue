@@ -41,8 +41,6 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   // ldb-header-skeletion
   .ldb-header-skeletion {
     padding-top: 120px;

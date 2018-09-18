@@ -10,6 +10,7 @@
   box-sizing: border-box;
   @include padding('top', 90px, -2);
   @include padding('top', 60px, 1, -2);
+  overflow: hidden;
   // @include padding('bottom', 230px, 1);
   &.full {
     padding: 0;

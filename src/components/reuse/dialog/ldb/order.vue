@@ -21,7 +21,7 @@
             <lordless-img
               alt="Congratulations"
               sType="height"
-              src="/static/svg/single/congra.svg"/>
+              :src="'/svg/congra.svg' | originSource({ size: -1 })"/>
           </div>
           <h1 class="TTNormsBold">Congratulations</h1>
           <p>You've got</p>
@@ -158,7 +158,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
+
   .lordless-message-box {
     // @include padding('bottom', 60px, 1);
   }

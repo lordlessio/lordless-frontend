@@ -117,8 +117,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   .user-avatar-box {
     width: inherit;
     height: inherit;

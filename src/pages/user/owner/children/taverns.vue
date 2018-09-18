@@ -105,14 +105,15 @@
             </transition>
           </el-tab-pane>
         </el-tabs>
-        <Pagination
+        <lordless-pagination
           v-if="pageDatas.total"
           class="ld-building-pagination"
+          :scrollE="$el"
+          :scrollPE="pageScrollPE"
           :total="pageDatas.total"
           :size="pageDatas.ps"
           background
-          @currentChange="pageChange">
-        </Pagination>
+          @currentChange="pageChange"/>
       </div>
     </div>
     <detail-dialog
@@ -130,7 +131,6 @@ import SkeletionBuilding from '@/components/skeletion/building'
 import LdSelect from '@/components/stories/select'
 import DetailDialog from '@/components/reuse/dialog/ldb/detail'
 import BuildingCard from '@/components/reuse/card/building'
-import Pagination from '@/components/stories/pagination'
 
 import { historyState } from 'utils/tool'
 
@@ -197,6 +197,9 @@ export default {
     ...mapState('user', [
       'userInfo'
     ]),
+    pageScrollPE () {
+      return document.getElementById('user-main-content')
+    },
     pageDatas () {
       if (this.buildingTab === 'all') {
         return { total: this.buildings.total, ps: this.buildings.ps }
@@ -209,7 +212,6 @@ export default {
 
     DetailDialog,
     BuildingCard,
-    Pagination,
     LdSelect
   },
   methods: {
@@ -303,7 +305,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
+
   .user-building-box {
     font-size: 16px;
     @include padding(-1, 30px, 1);

@@ -45,13 +45,13 @@
                   <use xlink:href="#icon-no-candy"/>
                 </svg>
                 <p>You have no candy now.</p>
-                <div class="d-flex f-auto-center TTFontBolder">
+                <div class="d-flex sm-col-flex f-auto-center TTFontBolder">
                   <span>Apply a</span>
-                  <span class="inline-block">
+                  <span class="inline-block sm-mar-t1">
                     <lordless-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Task</lordless-btn>
                   </span>
-                  <span>or buy a Tavern in</span>
-                  <span class="inline-block">
+                  <span class="sm-mar-t3">or buy a Tavern in</span>
+                  <span class="inline-block sm-mar-t1 sm-mar-b3">
                     <lordless-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Marketplace</lordless-btn>
                   </span>
                 </div>
@@ -60,17 +60,17 @@
             <transition name="ld-hide-fade">
               <div v-show="userAssets.length && !candyLoading" class="relative">
                 <div class="d-flex f-align-center text-center candy-tabs-title">
-                  <el-col :span="5">Asset</el-col>
-                  <el-col :span="5">Quantity</el-col>
+                  <el-col :span="5" :xs="8">Asset</el-col>
+                  <el-col :span="5" :xs="8">Quantity</el-col>
                   <!-- <el-col :span="5">Valued by ETH(≈)</el-col> -->
-                  <el-col :span="6">Price(≈)</el-col>
-                  <el-col :span="6">Total(≈)</el-col>
+                  <el-col :span="6" :xs="0" class="sm-hidden">Price(≈)</el-col>
+                  <el-col :span="6" :xs="8">Total(≈)</el-col>
                 </div>
                 <div
                   class="d-flex f-align-center text-center candy-balance-item candy-list-item"
                   v-for="(asset, index) of userAssets"
                   :key="index">
-                  <el-col :span="5" class="d-flex f-auto-center candy-symbol">
+                  <el-col :span="5" :xs="8" class="d-flex f-auto-center candy-symbol">
                     <p class="d-flex f-align-end">
                       <span class="inline-block candy-coin-svg">
                         <svg>
@@ -80,7 +80,7 @@
                       <span class="text-upper">{{ asset.candy.symbol }}</span>
                     </p>
                   </el-col>
-                  <el-col :span="5">
+                  <el-col :span="5" :xs="8">
                     <span>{{ asset.count | formatDecimal }}</span>
                     <span class="text-upper"> {{ asset.candy.symbol }}</span>
                   </el-col>
@@ -88,11 +88,11 @@
                     <span>{{ 1 / asset.candy.eth2TokenCount }}</span>
                     <span class="text-upper"> ETH</span>
                   </el-col> -->
-                  <el-col :span="6">
+                  <el-col :span="6" :xs="0" class="sm-hidden">
                     <span>$</span>
                     <span> {{ 1 / asset.candy.USD2TokenCount | formatDecimal }}</span>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col :span="6" :xs="8">
                     <span>$</span>
                     <span> {{ asset.count / asset.candy.USD2TokenCount | formatDecimal }}</span>
                   </el-col>
@@ -102,7 +102,7 @@
           </el-tab-pane>
           <el-tab-pane
             class="d-flex candy-tab-box"
-            :class="{ 'showAside': aside.show, 'cursor-no-drop': !userAssets.length }"
+            :class="{ 'cursor-no-drop': !userAssets.length }"
             :disabled="!userAssets.length"
             label="History"
             name="history">
@@ -123,13 +123,13 @@
                   <use xlink:href="#icon-no-candy"/>
                 </svg>
                 <p>You have no records now.</p>
-                <div class="d-flex f-auto-center TTFontBolder">
+                <div class="d-flex sm-col-flex f-auto-center TTFontBolder">
                   <span>Apply a</span>
-                  <span class="inline-block">
+                  <span class="inline-block sm-mar-t1">
                     <lordless-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Task</lordless-btn>
                   </span>
-                  <span>or buy a Tavern in</span>
-                  <span class="inline-block">
+                  <span class="sm-mar-t3">or buy a Tavern in</span>
+                  <span class="inline-block sm-mar-t1 sm-mar-b3">
                     <lordless-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Marketplace</lordless-btn>
                   </span>
                 </div>
@@ -138,10 +138,10 @@
             <transition name="ld-hide-fade">
               <div v-show="userRecords.total && !candyLoading" class="v-flex relative candy-rewards-box">
                 <div class="d-flex f-align-center text-center candy-tabs-title">
-                  <el-col :span="aside.show ? 8 : 4">Asset</el-col>
-                  <el-col :span="aside.show ? 8 : 6">Type</el-col>
-                  <el-col v-if="!aside.show" :span="6">Date</el-col>
-                  <el-col :span="aside.show ? 8 : 6">Quantity</el-col>
+                  <el-col :span="aside.show ? 8 : 4" :xs="8">Asset</el-col>
+                  <el-col :span="aside.show ? 8 : 6" :xs="8">Type</el-col>
+                  <el-col v-if="!aside.show" :span="6" :xs="0">Date</el-col>
+                  <el-col :span="aside.show ? 8 : 6" :xs="8">Quantity</el-col>
                 </div>
                 <div class="candy-reward-list">
                   <div
@@ -150,7 +150,7 @@
                     v-for="(record, index) of userRecords.list"
                     :key="index"
                     @click="chooseReward($event, record)">
-                    <el-col :span="aside.show ? 8 : 4" class="d-flex f-auto-center candy-symbol">
+                    <el-col :span="aside.show ? 8 : 4" :xs="8" class="d-flex f-auto-center candy-symbol">
                       <p class="d-flex f-align-end">
                         <span class="inline-block candy-coin-svg">
                           <svg>
@@ -160,14 +160,14 @@
                         <span class="text-upper">{{ record.reward.candy.symbol }}</span>
                       </p>
                     </el-col>
-                    <el-col :span="aside.show ? 8 : 6">
+                    <el-col :span="aside.show ? 8 : 6" :xs="8">
                       <span>{{ record.lord ? 'LORD' : 'Task' }}</span>
                       <span class="text-cap"> Reward</span>
                     </el-col>
-                    <el-col v-if="!aside.show" :span="6">
+                    <el-col v-if="!aside.show" :span="6" :xs="0">
                       <span>{{ record.update_at | dateFormat }}</span>
                     </el-col>
-                    <el-col :span="aside.show ? 8 : 6" class="d-flex f-align-center candy-quantity">
+                    <el-col :span="aside.show ? 8 : 6" :xs="8" class="d-flex f-align-center candy-quantity">
                       <span class="line-height-0 candy-down-svg">
                         <svg>
                           <use xlink:href="#icon-download"/>
@@ -179,7 +179,11 @@
                 </div>
               </div>
             </transition>
-            <div class="candy-reward-aside">
+            <candy-aside
+              :loading="rewardLoading"
+              :aside="aside"
+              @close="initAside"/>
+            <!-- <div class="candy-reward-aside">
               <transition name="ld-suspension-hide-fade">
                 <div v-if="aside.show && rewardLoading" class="reward-aside-skeletion">
                   <div class="aside-skeletion-container skeletion-breath">
@@ -221,10 +225,6 @@
                   <h1>+{{ (aside.lord ? aside.data.lord.reward.count : aside.data.executor.reward.count) | formatDecimal }} <span class="text-upper">{{ aside.data.reward.candy.symbol }}</span></h1>
                   <lordless-btn theme="green" inverse class="text-cap reward-aside-btn">{{ aside.lord ? 'LORD' : 'Task' }} Reward</lordless-btn>
                   <ul class="candy-aside-ul candy--value">
-                    <!-- <li>
-                      <p>Valued by <span class="text-upper">ETH</span></p>
-                      <p>0.000167 ETH</p>
-                    </li> -->
                     <li>
                       <p>Valued by <span class="text-upper">USD</span></p>
                       <p>$ {{ ((aside.lord ? aside.data.lord.reward.count : aside.data.executor.reward.count) / aside.data.reward.candy.USD2TokenCount) | formatDecimal }}</p>
@@ -286,24 +286,24 @@
                   </ul>
                 </div>
               </transition>
-            </div>
+            </div> -->
           </el-tab-pane>
         </el-tabs>
-        <Pagination
+        <lordless-pagination
           v-if="showPagination"
           class="ld-candy-pagination"
+          :scrollE="$el"
+          :scrollPE="pageScrollPE"
           :total="userRecords.total"
           background
-          @currentChange="pageChange">
-        </Pagination>
+          @currentChange="pageChange"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Pagination from '@/components/stories/pagination'
-
+import CandyAside from '@/components/reuse/owner/candy/aside.vue'
 import { getUserAssets, getUserCandyHistory, getTaskById } from 'api'
 
 import { mapState } from 'vuex'
@@ -349,10 +349,13 @@ export default {
     ]),
     showPagination () {
       return this.candyTab !== 'balance'
+    },
+    pageScrollPE () {
+      return document.getElementById('user-main-content')
     }
   },
   components: {
-    Pagination
+    CandyAside
   },
   methods: {
 
@@ -370,7 +373,7 @@ export default {
     /**
      * 查看糖果历史详情事件
      */
-    async chooseReward (evt, data) {
+    async chooseReward (evt, data = {}) {
       const { _id } = data
       if (this.rewardModels[_id]) {
         this.initAside()
@@ -449,8 +452,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   .user-candy-box {
     font-size: 16px;
     @include padding(-1, 30px, 1);
@@ -458,7 +459,9 @@ export default {
       margin: 0;
     }
     /deep/ .el-tabs__content {
-      overflow: initial;
+      // overflow: initial;
+      width: 100%;
+      @include overflow();
     }
     /deep/ .el-tabs__item {
       font-size: 18px;
@@ -520,7 +523,7 @@ export default {
   }
 
   .candy-tabs-title {
-    color: #bbb;
+    color:#bbb;
     @include margin('top', 25px, 1);
     @include margin('bottom', 10px, 1);
   }
@@ -564,10 +567,11 @@ export default {
     border-radius: 5px;
   }
   .candy-reward-item {
+    padding-top: 25px;
+    padding-bottom: 25px;
     background-color: #fff;
     cursor: pointer;
-    @include padding('top', 25px, 1);
-    @include padding('bottom', 25px, 1);
+    @include padding('right', 10px, 1, -2);
     span {
       display: inline-block;
     }
@@ -666,74 +670,74 @@ export default {
     }
   }
 
-  // candy-reward-aside
-  .candy-tab-box {
-    &.showAside {
-      .candy-reward-aside {
-        padding-left: 30px;
-        width: 350px;
-        height: inherit;
-        opacity: 1;
-        visibility: visible;
-      }
-      .reward-aside-container {
-        opacity: 1;
-        visibility: visible;
-        transition: all .3s .2s;
-      }
-    }
-  }
-  .candy-reward-aside {
-    position: relative;
-    color: #fff;
-    width: 0;
-    height: 0;
-    opacity: 0;
-    visibility: hidden;
-    overflow: hidden;
-    transition: all .3s;
-  }
-  .reward-aside-container {
-    position: relative;
-    padding: 30px 20px 50px 40px;
-    border-radius: 5px;
-    background-image: linear-gradient(45deg, rgba(22, 34, 42, 1), rgba(58, 96, 115, 1));
+  // // candy-reward-aside
+  // .candy-tab-box {
+  //   &.showAside {
+  //     .candy-reward-aside {
+  //       padding-left: 30px;
+  //       width: 350px;
+  //       height: inherit;
+  //       opacity: 1;
+  //       visibility: visible;
+  //     }
+  //     .reward-aside-container {
+  //       opacity: 1;
+  //       visibility: visible;
+  //       transition: all .3s .2s;
+  //     }
+  //   }
+  // }
+  // .candy-reward-aside {
+  //   position: relative;
+  //   color: #fff;
+  //   width: 0;
+  //   height: 0;
+  //   opacity: 0;
+  //   visibility: hidden;
+  //   overflow: hidden;
+  //   transition: all .3s;
+  // }
+  // .reward-aside-container {
+  //   position: relative;
+  //   padding: 30px 20px 50px 40px;
+  //   border-radius: 5px;
+  //   background-image: linear-gradient(45deg, rgba(22, 34, 42, 1), rgba(58, 96, 115, 1));
 
-    opacity: 0;
-    background-color: transparent;
-    transition: all .3s;
-    z-index: 1;
-    >h1 {
-      font-family: $--font-TTNormsMedium;
-      font-weight: normal;
-      font-size: 38px;
-      >span {
-        font-size: 28px;
-      }
-    }
-  }
-  .reward-aside-btn {
-    padding: 4px 6px;
-    font-size: 12px;
-  }
-  .candy-aside-ul {
-    @include margin('top', 25px, 1);
-    >li {
-      font-size: 16px;
-      @include margin('top', 10px, 1);
-      >p {
-        &:first-of-type {
-          font-size: 14px;
-        }
-      }
-      .aside-big-name {
-        font-size: 28px;
-      }
-    }
-  }
-  .candy-aside-blockies {
-    width: 30px;
-    height: 30px;
-    @include margin('top', 6px, 1);
-  }
+  //   opacity: 0;
+  //   background-color: transparent;
+  //   transition: all .3s;
+  //   z-index: 1;
+  //   >h1 {
+  //     font-family: $--font-TTNormsMedium;
+  //     font-weight: normal;
+  //     font-size: 38px;
+  //     >span {
+  //       font-size: 28px;
+  //     }
+  //   }
+  // }
+  // .reward-aside-btn {
+  //   padding: 4px 6px;
+  //   font-size: 12px;
+  // }
+  // .candy-aside-ul {
+  //   @include margin('top', 25px, 1);
+  //   >li {
+  //     font-size: 16px;
+  //     @include margin('top', 10px, 1);
+  //     >p {
+  //       &:first-of-type {
+  //         font-size: 14px;
+  //       }
+  //     }
+  //     .aside-big-name {
+  //       font-size: 28px;
+  //     }
+  //   }
+  // }
+  // .candy-aside-blockies {
+  //   width: 30px;
+  //   height: 30px;
+  //   @include margin('top', 6px, 1);
+  // }
 </style>

@@ -1,0 +1,33 @@
+/* font-family */
+@font-face {
+  font-family: 'TTNormsBlack';
+  src: url('//cdn.lordlessio.com/static/fonts/TTNorms-Black.woff2') format('woff2'), /* Modern Browsers */
+       url('//cdn.lordlessio.com/static/fonts/TTNorms-Black.ttf') format('truetype'); /* Safari, Android, iOS */
+           font-style: normal;
+  font-weight: bold;
+  text-rendering: optimizeLegibility;
+}
+@font-face {
+  font-family: 'TTNormsBold';
+  src: url('//cdn.lordlessio.com/static/fonts/TTNorms-Bold.woff2') format('woff2'), /* Modern Browsers */
+       url('//cdn.lordlessio.com/static/fonts/TTNorms-Bold.ttf') format('truetype'); /* Safari, Android, iOS */
+           font-style: normal;
+  font-weight: bold;
+  text-rendering: optimizeLegibility;
+}
+@font-face {
+  font-family: 'TTNormsMedium';
+  src: url('//cdn.lordlessio.com/static/fonts/TTNorms-Medium.woff2') format('woff2'), /* Modern Browsers */
+       url('//cdn.lordlessio.com/static/fonts/TTNorms-Medium.ttf') format('truetype'); /* Safari, Android, iOS */
+           font-style: normal;
+  font-weight: normal;
+  text-rendering: optimizeLegibility;
+}
+@font-face {
+  font-family: 'TTNormsRegular';
+  src: url('//cdn.lordlessio.com/static/fonts/TTNorms-Regular.woff2') format('woff2'), /* Modern Browsers */
+       url('//cdn.lordlessio.com/static/fonts/TTNorms-Regular.ttf') format('truetype'); /* Safari, Android, iOS */
+           font-style: normal;
+  font-weight: normal;
+  text-rendering: optimizeLegibility;
+}

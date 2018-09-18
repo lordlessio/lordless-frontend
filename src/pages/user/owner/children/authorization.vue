@@ -170,7 +170,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
+
   .user-authorization-box {
     font-size: 16px;
     @include padding(-1, 30px, 1);

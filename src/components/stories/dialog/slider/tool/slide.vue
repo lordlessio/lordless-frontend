@@ -86,7 +86,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
+
   .ld-dialog-slide {
     position: fixed;
     top: 0;

@@ -276,8 +276,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   // detail-ldb-datas
   .detail-ldb-datas {
     background-color: #fff;

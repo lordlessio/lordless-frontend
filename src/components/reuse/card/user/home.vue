@@ -15,7 +15,7 @@
           <svg v-if="!home._id">
             <use xlink:href="#icon-help"/>
           </svg>
-          <img v-else alt="tavern popularity" :src="`/img/ldb-level-${home.ldb.chain.popularity}.png` | originSource({ size: 135 })"/>
+          <img v-else alt="tavern popularity" :src="`/img/tavern/ldb-level-${home.ldb.chain.popularity}.png` | originSource({ size: 135 })"/>
         </div>
         <div class="v-flex info-home-cnt">
           <div class="info-home-unknow" v-if="!home._id">
@@ -69,8 +69,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   // info-home-skeletion
   .info-home-skeletion {
     padding: 20px 25px;

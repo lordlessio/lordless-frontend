@@ -38,8 +38,8 @@
             <div id="header-receive-box" class="header-receive-box">
               <div class="header-receive-main">
                 <div id="receive-box-container" class="receive-box-container">
-                  <img class="receive-box-top" src="~static/img/ldb/box-top.png"/>
-                  <img class="receive-box-bottom" src="~static/img/ldb/box-bottom.png"/>
+                  <img alt="tavern box top" class="receive-box-top" :src="'/img/tavern/box-top.png' | originSource"/>
+                  <img alt="tavern box bottom" class="receive-box-bottom" :src="'/img/tavern/box-bottom.png' | originSource"/>
                   <span id="receive-box-candy" class="receive-box-candy"></span>
                 </div>
               </div>
@@ -97,7 +97,7 @@
               <lordless-img absolute type="span" :src="info.ldbIcon.source.detail | reldbIcon('detail')"></lordless-img>
             </div>
             <div class="alone-layer detail-ldb-level">
-              <img alt="tavern popularity image" :src="`/img/ldb-level-${info.chain.popularity}.png` | originSource({ size: 450 })"/>
+              <img :alt="`tavern popularity ${info.chain.popularity}`" :src="`/img/tavern/ldb-level-${info.chain.popularity}.png` | originSource({ size: 450 })"/>
             </div>
           </div>
         </div>
@@ -499,8 +499,91 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
+  @keyframes bounceInLeft {
+    from,
+    55%,
+    to {
+      -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+      // -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1.55);
+      // animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1.55);
+    }
 
+    0% {
+      opacity: 0;
+      -webkit-transform: translate3d(-100%, -50%, 0);
+      transform: translate3d(-100%, -50%, 0);
+    }
+
+    55% {
+      opacity: 1;
+      -webkit-transform: translate3d(30px, -50%, 0);
+      transform: translate3d(30px, -50%, 0);
+    }
+
+    to {
+      opacity: 1;
+      -webkit-transform: translate3d(0, -50%, 0);
+      transform: translate3d(0, -50%, 0);
+    }
+  }
+  @keyframes bounceInRight {
+    from,
+    55%,
+    to {
+      -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+      // -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1.55);
+      // animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1.55);
+    }
+
+    0% {
+      opacity: 0;
+      -webkit-transform: translate3d(0, 0, 0) translateX(0px);
+      transform: translate3d(0, 0, 0) translateX(0px);
+    }
+
+    55% {
+      opacity: 1;
+      -webkit-transform: translate3d(-100%, 0, 0) translateX(-30px);
+      transform: translate3d(-100%, 0, 0) translateX(-30px);
+    }
+
+    to {
+      opacity: 1;
+      -webkit-transform: translate3d(-100%, 0, 0) translateX(0px);
+      transform: translate3d(-100%, 0, 0) translateX(0px);
+    }
+  }
+
+  @keyframes bounceSkewInRight {
+    from,
+    55%,
+    to {
+      -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+      // -webkit-animation-timing-function: cubic-bezier(0, 0, 0, 1.45);
+      // animation-timing-function: cubic-bezier(0, 0, 0, 1.45);
+    }
+
+    0% {
+      opacity: 0;
+      -webkit-transform: translate3d(10%, 0, 0) skew(-25deg) translateX(0px) translateZ(0px);
+      transform: translate3d(10%, 0, 0) skew(-25deg) translateX(0px) translateZ(0px);
+    }
+
+    55% {
+      opacity: 1;
+      -webkit-transform: translate3d(-20%, 0, 0) skew(-25deg) translateX(-30px) translateZ(0px);
+      transform: translate3d(-20%, 0, 0) skew(-25deg) translateX(-30px) translateZ(0px);
+    }
+
+    to {
+      opacity: 1;
+      -webkit-transform: translate3d(-20%, 0, 0) skew(-25deg) translateX(0px) translateZ(0px);
+      transform: translate3d(-20%, 0, 0) skew(-25deg) translateX(0px) translateZ(0px);
+    }
+  }
   .ldb-header-box {
     &.dialog {
       .header-left-cnt {

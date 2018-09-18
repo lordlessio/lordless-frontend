@@ -104,7 +104,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
+
   .lordless-input-box {
     width: inherit;
     height: inherit;

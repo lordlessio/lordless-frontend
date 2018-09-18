@@ -299,7 +299,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '@/assets/stylus/mixin/index.scss';
+
   .ld-lbs-main {
     position: relative;
     @include viewport-unit(height, 100vh);

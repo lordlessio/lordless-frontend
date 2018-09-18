@@ -12,6 +12,7 @@ body, html {
   box-sizing: border-box;
   color: #555;
   line-height: 1.4;
+  // overflow: hidden;
   @include viewport-unit(width, 100vw);
 }
 

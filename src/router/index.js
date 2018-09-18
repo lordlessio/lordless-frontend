@@ -12,6 +12,8 @@ import Lbs from '@/pages/lbs'
 import TavernDetail from '@/pages/ldb/_detail.vue'
 
 import Guide from '@/pages/help/guide'
+import Terms from '@/pages/help/terms'
+import Privacy from '@/pages/help/privacy'
 
 import TaskDetail from '@/pages/task/_detail.vue'
 
@@ -85,6 +87,34 @@ const router = new Router({
       meta: {
         title: 'Guide - LORDLESS ',
         header: {
+          fixed: true,
+          scroll: true,
+          transparent: false
+        }
+      }
+    },
+    {
+      path: '/terms',
+      name: 'terms',
+      component: Terms,
+      meta: {
+        title: 'Terms - LORDLESS ',
+        header: {
+          pageTitle: 'LORDLESS Term of Use',
+          fixed: true,
+          scroll: true,
+          transparent: false
+        }
+      }
+    },
+    {
+      path: '/privacy',
+      name: 'privacy',
+      component: Privacy,
+      meta: {
+        title: 'Privacy - LORDLESS ',
+        header: {
+          pageTitle: 'LORDLESS Privacy policy',
           fixed: true,
           scroll: true,
           transparent: false

@@ -24,25 +24,25 @@ export default {
         missing: {
           title: 'MetaMask is Missing',
           content: 'Install MetaMask in your browser extension market.',
-          imgUrl: '/img/status-metamask-addon.png',
+          imgUrl: '/img/guide/status-metamask-addon.png',
           sType: 'width'
         },
         locked: {
           title: 'Your MetaMask is locked',
           content: 'Open MetaMask and follow the instructions to unlock it.',
-          imgUrl: '/img/status-metamask-addon.png',
+          imgUrl: '/img/guide/status-metamask-addon.png',
           sType: 'width'
         },
         network: {
           title: 'MetaMask network is unallow',
           content: 'Open MetaMask and Choose right network.',
-          imgUrl: '/img/status-main-network.png',
+          imgUrl: '/img/guide/status-main-network.png',
           sType: 'height'
         },
         browser: {
           title: 'Your browser is unsupported',
           content: 'You need to use Chrome or Firefox which allows you to use MetaMask.',
-          imgUrl: '/img/status-borwser.png',
+          imgUrl: '/img/guide/status-borwser.png',
           sType: 'width'
         }
       }
@@ -52,7 +52,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
+
   // .authorize-status-box {
   //   max-width: 600px;
   //   color: #fff;

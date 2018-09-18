@@ -18,8 +18,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   .header-logo {
     position: relative;
     // height: 80px;

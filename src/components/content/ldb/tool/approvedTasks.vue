@@ -134,8 +134,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   // ldb-approved-tasks
 
   .ldb-approved-tasks {

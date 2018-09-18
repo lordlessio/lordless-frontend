@@ -30,7 +30,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
+
   .lordless-sign-box {
     color: #fff;
     background-image: linear-gradient(135deg, #5961F9, #EE9AE5);

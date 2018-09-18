@@ -451,3 +451,7 @@ export const findRegionById = (id, { lang = 'en', list = store.state.region.regi
   if (!list.length) return ' '
   return list.filter(item => item._id === id)[0].name[lang]
 }
+
+export const originSource = (url, { size = 1000 } = {}) => {
+  return `${process.env.LDBICON_ORIGIN}/frontend/static${url}${size !== -1 ? '?x-oss-process=image/resize,w_' + size : ''}`
+}

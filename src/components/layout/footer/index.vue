@@ -29,7 +29,7 @@
                 </li> -->
               </ul>
             </div>
-            <div class="v-flex ld-footer-item">
+            <div class="v-flex ld-footer-item" v-if="!isMobile">
               <ul class="ld-footer-ul footer-lordless-user">
                 <li>
                   <strong>User</strong>
@@ -69,6 +69,12 @@
                   <a href="https://github.com/lordlessio/game-contracts/wiki/FAQ" target="_blank">
                     FAQs
                   </a>
+                </li>
+                <li>
+                  <router-link to="/terms">Terms</router-link>
+                </li>
+                <li>
+                  <router-link to="/privacy">Privacy policy</router-link>
                 </li>
               </ul>
             </div>
@@ -155,7 +161,11 @@ export default {
   computed: {
     ...mapState('user', [
       'userHome'
-    ])
+    ]),
+
+    isMobile () {
+      return this.$root.$children[0].isMobile
+    }
   },
   methods: {
     jumpHome () {
@@ -168,7 +178,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
   .ld-footer {
     padding: 50px 0;
     strong {

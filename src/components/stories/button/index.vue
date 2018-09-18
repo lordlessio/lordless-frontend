@@ -46,7 +46,7 @@
 </script>
 
 <style lang="scss">
-  @import '@/assets/stylus/mixin/index.scss';
+
   .button-styles {
     font-size: 16px;
     border-style: solid;

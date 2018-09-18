@@ -259,6 +259,30 @@
   background-image: radial-gradient($inside, $outside);
 }
 
+/**
+ *  $property: css 属性
+ *  $value: css 参数
+ *  $multiple: 显示控制， 1: >769px  -1: <= 769px
+ */
+@mixin grid($property: 'width', $value: 20px, $multiple: 1) {
+  @media screen and (min-width: 769px) {
+    @if ($multiple == 1) {
+      #{$property}: $value;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    @if ($multiple == -1) {
+      #{$property}: $value;
+    }
+  }
+}
+
+/* 布局 */
+@mixin overflow () {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* 字体 */
 @mixin TTFontNormal () {
   font-family: $--font-TTNormsRegular;

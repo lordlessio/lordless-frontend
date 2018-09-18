@@ -4,13 +4,13 @@
       <div class="building-card-top">
         <div class="building-header" :class="`building-popularity-${info.chain.popularity}`">
           <div class="building-level">
-            <img alt="tavern popularity image" :src="`/img/ldb-level-${info.chain.popularity}.png` | originSource({ size: 120 })"/>
+            <img alt="tavern popularity image" :src="`/img/tavern/ldb-level-${info.chain.popularity}.png` | originSource({ size: 120 })"/>
           </div>
-          <img alt="tavern curve" class="building-curve" src="~/static/svg/single/curve.svg">
+          <img alt="tavern curve" class="building-curve" :src="'/svg/curve.svg' | originSource({ size: -1 })">
           <lordless-img
             alt="tavern preview"
             :src="info.ldbIcon.source.preview | reldbIcon"/>
-          <span class="building-sale-bg"></span>
+          <span class="building-sale-bg" :style="`background-image: url(${originSource('/svg/sale-bg.svg', { size: -1 })})`"></span>
           <p class="d-flex col-flex f-auto-center building-sale-tag">
             <span class="building-sale-svg">
               <svg>
@@ -83,6 +83,7 @@
 </template>
 
 <script>
+import { originSource } from 'utils/tool'
 export default {
   props: {
     sale: {
@@ -121,13 +122,16 @@ export default {
         // }
       }
     }
+  },
+  methods: {
+    originSource () {
+      return originSource(...arguments)
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   .ld-building-card {
     background-color: #fff;
     border-radius: 5px;
@@ -174,7 +178,7 @@ export default {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-image: url('~static/svg/single/sale-bg.svg');
+    // background-image: url('~static/svg/single/sale-bg.svg');
     background-size: 200%;
     background-position-x: 50%;
     background-position-y: 45%;

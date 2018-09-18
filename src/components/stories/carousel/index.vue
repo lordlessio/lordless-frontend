@@ -81,7 +81,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
+
   .lordless-carousel {
     overflow: visible;
     /deep/ .el-carousel__item--card {

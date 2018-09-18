@@ -58,13 +58,14 @@
             </transition>
           </el-tab-pane>
         </el-tabs>
-         <Pagination
-            class="ld-activity-pagination"
-            :total="activities.total"
-            :size="activities.ps"
-            background
-            @currentChange="pageChange">
-          </Pagination>
+        <lordless-pagination
+          class="ld-activity-pagination"
+          :scrollE="pageScrollE"
+          :scrollPE="pageScrollPE"
+          :total="activities.total"
+          :size="activities.ps"
+          background
+          @currentChange="pageChange"/>
       </div>
     </div>
   </div>
@@ -72,7 +73,6 @@
 
 <script>
 import ActivityCard from '@/components/reuse/card/activity'
-import Pagination from '@/components/stories/pagination'
 
 import { getActivitysByUser } from 'api'
 import { mapState } from 'vuex'
@@ -101,11 +101,16 @@ export default {
   computed: {
     ...mapState('user', [
       'userInfo'
-    ])
+    ]),
+    pageScrollE () {
+      return this.$el
+    },
+    pageScrollPE () {
+      return document.getElementById('user-main-content')
+    }
   },
   components: {
-    ActivityCard,
-    Pagination
+    ActivityCard
   },
   methods: {
 
@@ -145,7 +150,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
+
   .user-activity-box {
     font-size: 16px;
     @include padding(-1, 30px, 1);

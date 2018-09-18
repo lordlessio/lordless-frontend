@@ -1,12 +1,13 @@
 <template>
   <div class="ld-task-card" :class="{ 'shadow': shadow }">
-    <div class="ld-task-container">
+    <div class="ld-task-container sm-text-center">
       <div
         v-if="!reward"
-        class="d-flex task-status-box">
+        class="d-flex sm-col-flex task-status-box">
         <div class="v-flex">
           <h2>
             {{ info.ldbTaskType.name }}
+            <!-- <span class="text-cap task-tip">{{ info.ldbTaskType.taskType === 1 ? 'Daily' :'Telegram' }}</span> -->
             <span v-if="info.status === 0" class="task-status doing">Under way</span>
             <span v-else-if="info.status === 1" class="task-status">Approved</span>
             <span v-else-if="info.status === -1" class="task-status reject">Rejected</span>
@@ -16,16 +17,16 @@
               <span class="line-height-0"># {{ info._id }}</span>
               <span class="text-cap task-tip">{{ info.ldbTaskType.taskType === 1 ? 'Daily' :'Telegram' }}</span>
             </p>
-            <div class="d-flex f-align-center task-status-reward">
+            <div class="d-flex sm-col-flex f-align-center task-status-reward">
               <h2 class="color-blue" :class="{ 'text-line-through': info.status === -1 }">+{{ info.executor.reward.count | formatDecimal }} <span class="text-upper">{{ info.reward.candy.symbol }}</span></h2>
-              <span>
+              <span class="sm-mar-t2">
                 <span>≈ $ {{ info.executor.reward.count / info.reward.candy.USD2TokenCount | formatDecimal }}</span>
                 <!-- <span class="text-upper"></span> -->
               </span>
             </div>
           </div>
         </div>
-        <div class="d-flex col-flex f-justify-between text-right task-tool-box">
+        <div class="sm-mar-t5 d-flex col-flex sm-row-flex sm-f-align-center f-justify-between text-right sm-text-center task-tool-box">
           <div class="task-tool-top">
             <p class="task-tool-status">{{ info.status === 0 ? 'Due on' : info.status === 1 ? 'Completed on' : 'Over due on' }}</p>
             <p class="task-tool-date">{{ info.status === 1 ? info.roundId.update_at : info.roundId.endAt | dateFormat }}</p>
@@ -51,8 +52,8 @@
           {{ info.ldbTaskType.name }}
           <span class="task-tip">{{ info.ldbTaskType.taskType === 1 ? 'Daily' :'Telegram' }}</span>
         </h2>
-        <div class="d-flex task-reward-cnt">
-          <div class="v-flex d-flex text-center reward-cnt-left">
+        <div class="d-flex sm-col-flex task-reward-cnt">
+          <div class="v-flex d-flex sm-col-flex text-center reward-cnt-left">
             <div class="reward-cnt-item">
               <p>Task</p>
               <p>#{{ info._id }}</p>
@@ -71,7 +72,7 @@
               <p>≈ $ {{ info.executor.reward.count / info.reward.candy.USD2TokenCount | formatDecimal }}</p>
             </div>
           </div>
-          <div class="d-flex col-flex f-justify-between text-right reward-cnt-right">
+          <div class="sm-mar-t5 d-flex col-flex sm-row-flex sm-f-align-center f-justify-between text-right sm-text-center reward-cnt-right">
             <div class="task-tool-top">
               <p class="task-tool-status">Completed on</p>
               <p class="task-tool-date">{{ info.roundId.update_at | dateFormat }}</p>
@@ -112,11 +113,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
   .ld-task-card {
     padding: 30px 45px;
     background-color: #fff;
     border-radius: 5px;
+    // @include padding('left', 20px, )
     &.shadow {
       box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, .1);
     }
@@ -143,7 +144,7 @@ export default {
 
   }
   .task-tool-top {
-    margin-bottom: 25px;
+    @include margin('bottom', 25px, -2);
   }
   .task-tool-status {
     color: #999;
@@ -236,6 +237,9 @@ export default {
     }
     >h2 {
       margin-top: 6px;
+    }
+    &:not(:first-of-type) {
+      @include margin('top', 15px, 1, -2);
     }
   }
   .reward-cnt-left {

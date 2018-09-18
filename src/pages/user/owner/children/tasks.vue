@@ -35,7 +35,7 @@
             <transition name="ld-hide-in-fade">
               <div
                 v-if="!taskInfos.total && !loading"
-                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-tasks">
+                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box absolute user-no-sale-tasks">
                 <svg>
                   <use xlink:href="#icon-no-candy"/>
                 </svg>
@@ -95,7 +95,7 @@
             <transition name="ld-hide-in-fade">
               <div
                 v-if="!taskInfos.total && !loading"
-                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-tasks">
+                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box absolute user-no-sale-tasks">
                 <svg>
                   <use xlink:href="#icon-no-candy"/>
                 </svg>
@@ -152,7 +152,7 @@
             <transition name="ld-hide-in-fade">
               <div
                 v-if="!taskInfos.total && !loading"
-                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-tasks">
+                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box absolute user-no-sale-tasks">
                 <svg>
                   <use xlink:href="#icon-no-candy"/>
                 </svg>
@@ -182,13 +182,14 @@
             </transition>
           </el-tab-pane>
         </el-tabs>
-        <Pagination
+        <lordless-pagination
           v-if="showPagination"
           class="ld-tasks-pagination"
+          :scrollE="$el"
+          :scrollPE="pageScrollPE"
           :total="pageTotal"
           background
-          @currentChange="pageChange">
-        </Pagination>
+          @currentChange="pageChange"/>
       </div>
     </div>
     <task-dialog
@@ -202,7 +203,6 @@
 <script>
 import TaskDialog from '@/components/reuse/dialog/task/detail'
 import TaskCard from '@/components/reuse/card/task'
-import Pagination from '@/components/stories/pagination'
 import LdSelect from '@/components/stories/select'
 
 import { historyState } from 'utils/tool'
@@ -272,6 +272,9 @@ export default {
     ...mapState('user', [
       'userInfo'
     ]),
+    pageScrollPE () {
+      return document.getElementById('user-main-content')
+    },
     pageTotal () {
       if (this.taskTab === 'tasks') {
         return this.tTotal
@@ -288,7 +291,6 @@ export default {
   components: {
     TaskDialog,
     TaskCard,
-    Pagination,
     LdSelect
   },
   methods: {
@@ -381,7 +383,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
+
   .user-tasks-box {
     font-size: 16px;
     @include padding(-1, 30px, 1);
@@ -488,13 +490,17 @@ export default {
    .user-tasks-tabs {
     position: relative;
     @include margin('top', 35px, 1);
-    @include margin('bottom', 150px, 1);
+    @include margin('bottom', 50px, 1);
   }
   .user-no-sale-tasks {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    // width: 100%;
+    // @include margin('top', 50px, 1, -2);
+    // @media screen and (min-width: 769px) {
+    //   position: absolute;
+    //   top: 50%;
+    //   left: 50%;
+    //   transform: translate(-50%, -50%);
+    // }
   }
   .tasks-item {
     @include margin('top', 30px, 1);

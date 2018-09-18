@@ -8,14 +8,24 @@
       :current-page.sync="currentP"
       @size-change="$emit('sizeChange', $event)"
       @prev-click="$emit('prev', $event)"
-      @next-click="$emit('next', $event)">
-    </el-pagination>
+      @next-click="$emit('next', $event)"/>
   </div>
 </template>
 
 <script>
 export default {
+  name: 'lordless-pagination',
   props: {
+    scrollE: {
+      default: null
+    },
+    scrollPE: {
+      default: null
+    },
+    scrollOffset: {
+      type: Number,
+      default: 50
+    },
     background: {
       type: Boolean,
       default: false
@@ -44,6 +54,10 @@ export default {
   },
   watch: {
     currentP (val) {
+      if (this.scrollE) {
+        const top = this.scrollE.offsetTop - this.scrollOffset
+        this.scrollPE ? this.scrollPE.scrollTop = top : document.documentElement.scrollTop = top
+      }
       this.$emit('currentChange', val)
     }
   }
@@ -60,6 +74,8 @@ export default {
         box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1);
         border-radius: 3px;
         font-weight: normal;
+        @include padding('left', 15px, 1, -2);
+        @include padding('right', 15px, 1, -2);
       }
       /deep/ .el-pager {
         li {
@@ -90,6 +106,7 @@ export default {
       .btn-next, .btn-prev {
         height: 32px;
         line-height: 32px;
+        @include grid('display', none, -1);
         .el-icon {
           font-size: 16px;
         }

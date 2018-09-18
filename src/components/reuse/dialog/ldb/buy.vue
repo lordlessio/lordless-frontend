@@ -185,8 +185,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   .lordless-message-box {
     position: relative;
     padding: 0 0 60px;

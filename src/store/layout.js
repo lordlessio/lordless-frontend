@@ -26,8 +26,18 @@ export default {
     header: {
       show: true,
 
-      // header logo is show
-      showLogo: true,
+      pageTitle: null,
+
+      // header logo option
+      logo: {
+        show: true,
+
+        // is mobile show <= 768px
+        mobile: true,
+
+        // is pc show > 768px
+        pc: true
+      },
 
       // header is fixed position
       fixed: true,
@@ -51,7 +61,12 @@ export default {
     // default options for header
     dHeader: {
       show: true,
-      showLogo: true,
+      pageTitle: null,
+      logo: {
+        show: true,
+        mobile: true,
+        pc: true
+      },
       fixed: true,
       transparent: false,
       scroll: false,

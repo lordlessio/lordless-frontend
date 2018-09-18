@@ -14,7 +14,7 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
+
   .ld-building-skeletion {
     background-color: $--skeletion-light;
     border-radius: 5px;

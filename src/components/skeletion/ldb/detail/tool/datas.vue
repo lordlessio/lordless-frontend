@@ -16,8 +16,6 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   // ldb-datas-skeletion
   .ldb-datas-skeletion {
     border-radius: 5px;

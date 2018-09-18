@@ -1,15 +1,15 @@
 <template>
   <transition name="loop-task-fade">
     <div v-if="task" class="ld-loop-task sm-hidden">
-      <div id="loop-task-container" class="d-flex f-align-center loop-task-container">
+      <div id="loop-task-container" class="d-flex f-align-center loop-task-container" :style="`background-image: url(${originSource('/svg/graphic-curve-tr-blue.svg', { size: -1 })})`">
         <div class="building-poster" :class="`building-popularity-${task.ldb.info.chain.popularity}`">
           <lordless-img
             alt="tavern preview"
             type="span"
             absolute
             :src="task.ldb.info.ldbIcon.source.preview | reldbIcon('map')"/>
-            <span class="building-sale-bg"></span>
-            <img alt="tavern curve" class="ldb-curve" src="~/static/svg/single/curve.svg">
+            <span class="building-sale-bg" :style="`background-image: url(${originSource('/svg/sale-bg.svg', { size: -1 })})`"></span>
+            <img alt="tavern curve" class="ldb-curve" :src="'/svg/curve.svg' | originSource({ size: -1 })">
         </div>
         <div class="v-flex loop-task-cnt">
           <p><link-symbol :link="`/task/${task._id}`">{{ task.ldbTaskType.name }}</link-symbol></p>
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { transitionEvent, removeClass, addClass } from 'utils/tool'
+import { transitionEvent, removeClass, addClass, originSource } from 'utils/tool'
 import { getApprovedTask } from 'api'
 export default {
   props: {
@@ -66,6 +66,9 @@ export default {
     }
   },
   methods: {
+    originSource () {
+      return originSource(...arguments)
+    },
     init () {
       this.loopTask()
     },
@@ -130,7 +133,7 @@ export default {
     position: relative;
     padding: 35px 40px;
     padding-right: 140px;
-    background-image: url('~static/svg/single/graphic-curve-tr-blue.svg');
+    // background-image: url('~static/svg/single/graphic-curve-tr-blue.svg');
     background-size: auto 100%;
     background-position: 100% 0;
     background-repeat: no-repeat;
@@ -169,7 +172,7 @@ export default {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-image: url('~static/svg/single/sale-bg.svg');
+    // background-image: url('~static/svg/single/sale-bg.svg');
     background-size: 200%;
     background-position-x: 50%;
     background-position-y: 45%;

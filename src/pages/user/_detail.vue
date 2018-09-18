@@ -400,7 +400,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '@/assets/stylus/mixin/index.scss';
+
   @import '@/assets/stylus/reuse/single/user_info.scss';
 
   .ld-detail-user-box {

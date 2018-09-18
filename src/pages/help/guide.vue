@@ -21,7 +21,7 @@
                 <p class="no-install-browser" v-if="unBrowser">Install <a target="_blank" href="https://www.google.com/chrome/">Google Chrome</a> or <a target="_blank" href="https://www.mozilla.org/en-US/firefox/new/">Mozilla Firefox</a></p>
               </div>
               <div class="d-flex f-auto-center sm-hidden text-center status-cnt-right">
-                <img class="browser" :src="'/img/guide-browsers.png' | originSource"/>
+                <img class="browser" :src="'/img/guide/guide-browsers.png' | originSource"/>
               </div>
             </div>
           </li>
@@ -40,7 +40,7 @@
                 <p class="unlock-wallet" v-if="!unMetamask && lockedMetamask">Your wallet is locked. Please unlock it.</p>
               </div>
               <div class="d-flex f-auto-center sm-hidden text-center status-cnt-right">
-                <img :src="'/img/guide-metamask.png' | originSource"/>
+                <img :src="'/img/guide/guide-metamask.png' | originSource"/>
                 <!-- <svg>
                   <use xlink:href="#color-icon-metamask"/>
                 </svg> -->
@@ -63,7 +63,7 @@
                 <!-- <svg>
                   <use xlink:href="#color-coin-eth"/>
                 </svg> -->
-                <img :src="'/img/guide-ethereum.png' | originSource"/>
+                <img :src="'/img/guide/guide-ethereum.png' | originSource"/>
               </div>
             </div>
           </li>
@@ -151,7 +151,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
+
   .lordless-status-box {
     padding-top: 80px;
   }

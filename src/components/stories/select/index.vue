@@ -4,6 +4,10 @@
     popper-class="lordless-sort-options"
     v-model="model"
     @change="change">
+    <span
+      slot="suffix">
+      <i class="el-icon el-icon-caret-top"></i>
+    </span>
     <el-option
       v-for="sort in items"
       :key="sort.value"
@@ -51,7 +55,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/stylus/mixin/index.scss';
+
 .lordless-sort-select {
   /deep/ .el-input__inner {
     width: 140px;
@@ -69,6 +73,9 @@ export default {
       font-weight: bolder;
       color: #fff;
     }
+  }
+  /deep/ .el-input__icon {
+    line-height: 100%;
   }
   &.sm {
     /deep/ .el-input__inner {

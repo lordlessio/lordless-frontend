@@ -153,7 +153,7 @@
                 <svg v-if="!userHome._id">
                   <use xlink:href="#icon-help"/>
                 </svg>
-                <img v-else alt="tavern popularity" :src="`/img/ldb-level-${userHome.ldb.chain.popularity}.png` | originSource({ size: 135 })"/>
+                <img v-else alt="tavern popularity" :src="`/img/tavern/ldb-level-${userHome.ldb.chain.popularity}.png` | originSource({ size: 135 })"/>
               </div>
               <div class="v-flex info-home-cnt">
                 <div class="info-home-unknow" v-if="!userHome._id">

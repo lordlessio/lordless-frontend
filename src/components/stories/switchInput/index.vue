@@ -52,7 +52,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
+
   .ld-switch-input {
     padding: 0 10px 0 20px;
     height: 34px;

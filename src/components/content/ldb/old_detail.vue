@@ -780,8 +780,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   @mixin detail-theme($theme: 'light') {
     @if $theme == 'light' {
       background-color: #f4f4f4;

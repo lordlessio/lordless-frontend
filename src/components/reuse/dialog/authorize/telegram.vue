@@ -150,7 +150,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
+
   .telegram-box {
     padding-bottom: 10px;
     border-radius: 5px;

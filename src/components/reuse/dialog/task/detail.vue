@@ -18,7 +18,7 @@
 <script>
 import TaskDetail from '@/components/content/task/detail'
 
-import SlideDialog from '@/components/stories/dialog/slider'
+import SlideDialog from '@/components/stories/dialog/slider/index.vue'
 
 import { mutationTypes } from '@/store/types'
 import { mapMutations } from 'vuex'

@@ -89,8 +89,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   // info-prestige-skeletion
   .info-prestige-skeletion {
     padding: 20px 25px;

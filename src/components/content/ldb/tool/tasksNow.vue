@@ -158,8 +158,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   // ldb-tasks-now
   .ldb-tasks-now {
     margin-top: 50px;

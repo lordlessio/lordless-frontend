@@ -7,8 +7,6 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   // ldb-tasks-skeletion
   .ldb-tasks-skeletion {
     >h3 {

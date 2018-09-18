@@ -284,6 +284,9 @@
   .#{$media}overflow-hidden {
     overflow: hidden;
   }
+  .#{$media}overflow {
+    @include overflow();
+  }
   .#{$media}alone-layer {
     transform: translateZ(0);
   }

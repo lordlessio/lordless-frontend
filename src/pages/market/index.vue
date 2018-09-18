@@ -14,7 +14,7 @@
           in LORDLESS and find unique Taverns for sale.
         </p>
       </section>
-      <section class="alone-layer lg-d-flex f-align-center market-sort-bar">
+      <section id="market-sort-bar" class="alone-layer lg-d-flex f-align-center market-sort-bar">
         <p class="lg-v-flex sm-text-left sm-mar-b4">Total {{ ldbs.total }} Taverns on sale</p>
         <div class="d-flex f-align-center">
           <span>Sort <span class="sm-hidden">by</span></span>
@@ -114,15 +114,16 @@
         </transition>
         <div class="market-pagination-box">
           <skeletion-pager v-if="ldbsLoading && !ldbs.total"></skeletion-pager>
-          <Pagination
+          <lordless-pagination
             v-if="ldbs.total"
+            :scrollE="pageScrollE"
+            :scrollOffset="150"
             class="market-pagination-pages"
             :total="ldbs.total"
             :currentPage="ldbs.pn"
             :size="ldbs.ps"
             background
-            @currentChange="pageChange">
-          </Pagination>
+            @currentChange="pageChange"/>
         </div>
       </section>
     </div>
@@ -141,7 +142,6 @@ import { historyState } from 'utils/tool'
 import DetailDialog from '@/components/reuse/dialog/ldb/detail'
 import LdSelect from '@/components/stories/select'
 import SwitchInput from '@/components/stories/switchInput'
-import Pagination from '@/components/stories/pagination'
 import BuildingCard from '@/components/reuse/card/building'
 
 import SkeletionBuilding from '@/components/skeletion/building'
@@ -213,11 +213,15 @@ export default {
       ]
     }
   },
+  computed: {
+    pageScrollE () {
+      return document.getElementById('market-sort-bar')
+    }
+  },
   components: {
     LdSelect,
     SwitchInput,
     BuildingCard,
-    Pagination,
     DetailDialog,
 
     // SkeletionList,
@@ -311,7 +315,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
+
   .ld-market {
     background-color: #f8f8f8;
   }

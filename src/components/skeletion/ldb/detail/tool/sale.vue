@@ -15,8 +15,6 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   // ldb-deal-skeletion
   .ldb-deal-skeletion {
 

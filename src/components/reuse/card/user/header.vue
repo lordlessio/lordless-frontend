@@ -23,9 +23,9 @@
             radius="20px"
             :seed="user.address"></lordless-blockies>
         </div>
-        <div class="v-flex d-flex lg-f-align-end sm-col-reverse-flex info-header-cnt">
+        <div class="v-flex d-flex lg-f-align-end sm-text-center sm-col-reverse-flex info-header-cnt">
           <div class="v-flex header-cnt-text">
-            <h2 class="d-flex f-align-center">
+            <h2 class="d-flex f-align-center sm-f-justify-center">
               <span class="header-crown-svg">
                 <svg>
                   <use xlink:href="#icon-crown-l5"/>
@@ -34,7 +34,7 @@
               <span v-if="user.nickName">{{ user.nickName }}</span>
               <span v-else>{{ user._id | splitAddress({ before: 5, end: 2 }) }}</span>
               <span v-if="!owner" class="TTFontBolder user-level">Level {{ user.level }}</span>
-              <span v-if="owner">
+              <span class="sm-hidden" v-if="owner">
                 <lordless-btn
                   class="user-Authorize-btn"
                   :theme="isCrowdsaleApproved ? 'green' : 'red'"
@@ -147,8 +147,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
-
   // info-header-skeletion
   .info-header-skeletion {
     padding: 25px;
@@ -210,7 +208,7 @@ export default {
     @include margin('left', 6px, 1);
   }
   .header-cnt-text {
-    padding-right: 50px;
+    @include padding('right', 50px, -2);
     >h2 {
       font-size: 18px;
     }
@@ -225,12 +223,14 @@ export default {
     height: 30px;
   }
   .paste-icon {
+    margin-left: 8px;
     width: 20px;
     height: 20px;
     stroke: #fff;
     fill: none;
     cursor: pointer;
-    @include margin('left', 8px, 1);
+    @include width(25px, 1, -2);
+    @include height(25px, 1, -2);
   }
   .user-eamil {
     color: #BDB9FD;

@@ -52,28 +52,22 @@
           </ld-input>
         </div>
         <div class="authorize-terms-box">
-          <p>Please read our <span>Terms of Use</span> and <span>Privacy Policy</span>.</p>
+          <p>Please read our <span @click.stop="termsModel = true">Terms of Use</span> and <span @click.stop="privacyModel = true">Privacy Policy</span>.</p>
           <div class="d-flex f-align-center authorize-terms-item">
             <div class="authorize-sign-checkbox" :class="{ 'active': termModels.terms }">
-              <check-box
-                v-model="termModels.terms">
-              </check-box>
+              <check-box v-model="termModels.terms"/>
             </div>
             <span>I have read and agree to the LORDLESS Terms of Use.</span>
           </div>
           <div class="d-flex f-align-center authorize-terms-item">
             <div class="authorize-sign-checkbox" :class="{ 'active': termModels.privacy }">
-              <check-box
-                v-model="termModels.privacy">
-              </check-box>
+              <check-box v-model="termModels.privacy"/>
             </div>
             <span>I have read and agree to the LORDLESS Privacy Policy.</span>
           </div>
           <div class="d-flex f-align-center authorize-terms-item">
             <div class="authorize-sign-checkbox" :class="{ 'active': termModels.notice }">
-              <check-box
-                v-model="termModels.notice">
-              </check-box>
+              <check-box v-model="termModels.notice"/>
             </div>
             <span>I wish to receive marketing updates (optional).</span>
           </div>
@@ -86,12 +80,20 @@
         :disabled="!signRequired"
         @click="signUp">Sign Up</lordless-btn>
     </div>
+    <terms-dialog
+      v-model="termsModel"
+      @agree="termAgree('terms')"/>
+    <privacy-dialog
+      v-model="privacyModel"
+      @agree="termAgree('privacy')"/>
   </div>
 </template>
 
 <script>
 import LdInput from '@/components/stories/input'
 import CheckBox from '@/components/stories/checkbox'
+import TermsDialog from '@/components/reuse/dialog/sign/terms.vue'
+import PrivacyDialog from '@/components/reuse/dialog/sign/privacy.vue'
 
 import { getUserByAddress } from 'api'
 
@@ -124,6 +126,9 @@ export default {
     return {
       userChecking: false,
       register: false,
+
+      termsModel: false,
+      privacyModel: false,
 
       // 条款状态
       termModels: {
@@ -162,7 +167,10 @@ export default {
   },
   components: {
     LdInput,
-    CheckBox
+    CheckBox,
+
+    TermsDialog,
+    PrivacyDialog
   },
   methods: {
     ...mapActions('user', [
@@ -211,6 +219,10 @@ export default {
       this.$set(this.signInputs.nickName, 'required', !!model)
     },
 
+    termAgree (type) {
+      this.$set(this.termModels, type, true)
+    },
+
     signUp () {
       if (!this.signRequired) return
       const { email, nickName } = this.signInputs
@@ -238,7 +250,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/stylus/mixin/index.scss';
   .login-box {
     border-radius: 5px;
     @include padding('bottom', 40px, 1);
@@ -298,6 +309,7 @@ export default {
       margin-bottom: 10px;
       >span {
         color: $--color-btn-yellow;
+        cursor: pointer;
       }
     }
   }
