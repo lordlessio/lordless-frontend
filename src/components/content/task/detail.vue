@@ -81,7 +81,7 @@
                 <p class="TTFontNormal">{{ taskInfo.ldbTaskType.desc }}</p>
                 <div class="task-status-cnt">
                   <lordless-btn
-                    v-if="taskInfo.status === 0"
+                    v-if="taskInfo.status === 0 && owner"
                     class="TTFontBolder task-start-btn"
                     @click="startTask">
                     Getting started
@@ -92,7 +92,8 @@
                         <use xlink:href="#icon-bell"/>
                       </svg>
                     </span>
-                    <span v-if="taskInfo.status === 1">Congratulations.</span>
+                    <span v-if="!owner && taskInfo.status !== 1">Remaining.</span>
+                    <span v-else-if="taskInfo.status === 1">Congratulations.</span>
                     <span v-else>Task has been over due.</span>
                   </h3>
                 </div>
@@ -217,6 +218,7 @@
 
 <script>
 import { getTaskById } from 'api'
+import { mapState } from 'vuex'
 export default {
   props: {
     dialog: {
@@ -228,6 +230,14 @@ export default {
     return {
       loading: true,
       taskInfo: null
+    }
+  },
+  computed: {
+    ...mapState('user', [
+      'userInfo'
+    ]),
+    owner () {
+      return this.userInfo && this.userInfo._id === this.taskInfo.executor.info
     }
   },
   methods: {

@@ -4,7 +4,8 @@
       <div class="container md">
         <info-header
           :loading="!user"
-          :user="user">
+          :user="user"
+          :lord="overviews.lord">
         </info-header>
         <!-- <div class="d-flex f-align-center">
           <div class="user-header-avatar">
@@ -54,20 +55,22 @@
             class="v-flex"
             :loading="overviewLoading"
             :user="user"
-            :overviews="overviews">
-          </info-prestige>
+            :overviews="overviews"/>
           <info-home
             class="v-flex"
-            :loading="!userHome"
-            :home="userHome">
-          </info-home>
+            :loading="homeLoading"
+            :home="userHome"/>
         </div>
         <info-task
           :loading="overviewLoading"
           :user="user"
           :overviews="overviews"
-          @timeDown="getUserOverview">
-        </info-task>
+          @timeDown="getUserOverview"/>
+        <!-- <info-assets
+          :loading="overviewLoading"
+          :user="user"
+          :overviews="overviews"
+          simple/> -->
         <!-- <div class="v-flex user-building-tabs" :class="{ 'margin': taverns.total }">
           <el-tabs
             v-model="ldbTab"
@@ -199,14 +202,16 @@ import InfoHeader from '@/components/reuse/card/user/header'
 import InfoPrestige from '@/components/reuse/card/user/prestige'
 import InfoHome from '@/components/reuse/card/user/home'
 import InfoTask from '@/components/reuse/card/user/task'
+// import InfoAssets from '@/components/reuse/card/user/assets'
 export default {
   data: () => {
     return {
-      loading: false,
+      // loading: true,
       user: null,
       clipBool: false,
 
       userHome: null,
+      homeLoading: true,
 
       overviewLoading: true,
       overviews: {
@@ -220,6 +225,7 @@ export default {
           list: [],
           total: 0
         },
+        lord: 0,
         currentTask: null
       }
 
@@ -279,6 +285,7 @@ export default {
     InfoPrestige,
     InfoHome,
     InfoTask
+    // InfoAssets
   },
   methods: {
     // 初始化 黏贴板
@@ -294,7 +301,7 @@ export default {
     },
 
     init ({ address } = {}) {
-      this.loading = true
+      // this.loading = true
       this.getUserInfo({ address })
     },
     async getUserInfo ({ address = this.user.address } = {}) {

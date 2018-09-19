@@ -10,17 +10,17 @@
       </div>
     </div>
     <transition name="ld-hide-in-fade">
-      <div v-if="!loading && home" class="d-flex f-align-center info-cnt-box info-home-box">
+      <div v-if="!loading" class="d-flex f-align-center info-cnt-box info-home-box">
         <div class="info-home-poster">
-          <svg v-if="!home._id">
+          <svg v-if="!home || !home._id">
             <use xlink:href="#icon-help"/>
           </svg>
           <img v-else alt="tavern popularity" :src="`/img/tavern/ldb-level-${home.ldb.chain.popularity}.png` | originSource({ size: 135 })"/>
         </div>
         <div class="v-flex info-home-cnt">
-          <div class="info-home-unknow" v-if="!home._id">
-            <p>You have no home now.</p>
-            <p>Set a home you will be located there when you login.</p>
+          <div class="info-home-unknow" v-if="!home || !home._id">
+            <p>{{ call }} have no home now.</p>
+            <p v-if="owner">Set a home you will be located there when you login.</p>
             <lordless-btn
               class="user-info-btn"
               theme="blue"
@@ -30,7 +30,7 @@
               View map now
             </lordless-btn>
           </div>
-          <div class="info-home-know" v-if="home._id">
+          <div class="info-home-know" v-if="home && home._id">
             <p class="info-ldb-name">{{ home.ldb.name.zh }}</p>
             <p class="text-ellipsis info-ldb-influence">{{ home.ldb.chain.influence }} influence</p>
             <div class="d-flex f-align-baseline info-home-status">
@@ -63,6 +63,15 @@ export default {
       default: () => {
         return {}
       }
+    },
+    owner: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    call () {
+      return this.owner ? 'You' : 'He(She)'
     }
   }
 }

@@ -19,6 +19,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+  .task-detail-box {
+    @include margin('top', -90px, 1.5);
+  }
 </style>

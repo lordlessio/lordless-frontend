@@ -4,6 +4,7 @@
       <info-header
         :loading="overviewLoading"
         :user="userInfo"
+        :lord="overviews.lord"
         owner>
       </info-header>
       <!-- <div class="user-info-section">
@@ -88,6 +89,7 @@
         </info-prestige>
         <info-home
           class="v-flex"
+          owner
           :loading="overviewLoading"
           :home="userHome">
         </info-home>
@@ -449,6 +451,7 @@ export default {
           list: [],
           total: 0
         },
+        lord: 0,
         currentTask: null
       }
     }

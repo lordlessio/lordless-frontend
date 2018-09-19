@@ -15,7 +15,16 @@
       </div>
     </div>
     <transition name="ld-hide-in-fade">
-      <div v-if="!loading && user" class="d-flex f-align-center sm-col-flex user-info-header">
+      <div
+        v-if="!loading && user"
+        class="d-flex f-align-start sm-f-align-center sm-col-flex relative user-info-header">
+        <span class="inline-block header-ldentity-svg">
+          <span class="inline-block header-ldentity-container" :class="{ 'lord': lord }">
+            <svg>
+              <use :xlink:href="`#icon-${lord ? 'logo-image' : 'sword'}`"/>
+            </svg>
+          </span>
+        </span>
         <div class="user-avatar">
           <lordless-blockies
             theme="light"
@@ -23,7 +32,7 @@
             radius="20px"
             :seed="user.address"></lordless-blockies>
         </div>
-        <div class="v-flex d-flex lg-f-align-end sm-text-center sm-col-reverse-flex info-header-cnt">
+        <div class="v-flex d-flex lg-f-align-center sm-text-center sm-col-reverse-flex info-header-cnt">
           <div class="v-flex header-cnt-text">
             <h2 class="d-flex f-align-center sm-f-justify-center">
               <span class="header-crown-svg">
@@ -101,6 +110,10 @@ export default {
     owner: {
       type: Boolean,
       default: false
+    },
+    lord: {
+      type: Number,
+      default: 0
     }
   },
   data: () => {
@@ -193,21 +206,62 @@ export default {
   }
 
   .user-info-header {
+    padding: 25px;
     color: #fff;
     background-image: linear-gradient(45deg, $--gradient-blue-color, $--gradient-pink-color);
-    @include padding(-1, 25px, 1);
+    overflow: hidden;
+    // @include padding(-1, 25px, 1);
   }
+
+  .header-ldentity-svg {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 30%;
+    min-width: 300px;
+    height: 100%;
+    fill: rgba(60, 44, 201, .1);
+  }
+  .header-ldentity-container {
+    position: relative;
+    margin-top: -25%;
+    width: 100%;
+    padding-top: 100%;
+    transform: rotate(15deg);
+    &.lord {
+      transform: rotate(-15deg);
+      >svg {
+        left: -20%;
+        width: 120%;
+        height: 120%;
+      }
+    }
+    >svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      // height: 150px;
+      // width: 120%;
+      // height: 120%;
+    }
+  }
+
   .info-header-cnt {
     width: 100%;
+    min-height: 108px;
     @include margin('left', 25px, -1);
     @include margin('top', 20px, 1, -2);
   }
   .user-Authorize-btn {
+    margin-left: 6px;
     padding: 4px 6px;
     font-size: 14px;
-    @include margin('left', 6px, 1);
+    // @include margin('left', 6px, 1);
   }
   .header-cnt-text {
+    // @include padding('top', 5px, -2);
     @include padding('right', 50px, -2);
     >h2 {
       font-size: 18px;
@@ -254,6 +308,7 @@ export default {
 
   .header-cnt-balance {
     font-size: 20px;
+    // min-height: 108px;
   }
   .eth-balance {
     color: $--text-yellow-color;

@@ -25,12 +25,22 @@
             </p>
           </div>
         </div>
-        <div class="v-flex d-flex col-flex info-cnt-box info-card-cnt task-current-box" style="z-index: 2;">
+        <div v-if="!owner" class="v-flex d-flex col-flex info-cnt-box info-card-cnt assets-estimated-box" style="z-index: 2;">
+          <p class="card-cnt-title">Estimated Value</p>
+          <div class="v-flex d-flex col-flex assets-estimated-cnt">
+            <p class="card-cnt-tip">Valued by USD</p>
+            <div class="v-flex d-flex col-flex f-auto-center card-cnt-box estimated-cnt-box">
+              <h1 class="TTFontBlack">${{ overviews.estimated || 0 | formatDecimal }}</h1>
+              <!-- <p class="">USD</p> -->
+            </div>
+          </div>
+        </div>
+        <div v-if="owner" class="v-flex d-flex col-flex info-cnt-box info-card-cnt task-current-box" style="z-index: 2;">
           <p class="card-cnt-title">Current task</p>
           <div v-if="!overviews.currentTask" class="v-flex d-flex col-flex task-current-unknow">
             <p class="card-cnt-tip">Task in progress</p>
             <div class="v-flex d-flex f-auto-center card-cnt-box">
-              <p>You have no tasks</p>
+              <p>{{ call }} have no tasks</p>
             </div>
           </div>
           <div v-if="overviews.currentTask" class="v-flex d-flex col-flex task-current-know">
@@ -65,7 +75,7 @@
           <div v-if="!overviews.completeTasks.total" class="v-flex d-flex col-flex f-justify-center task-completed-unknow">
             <p class="card-cnt-tip">Recent rewarded tasks</p>
             <div class="v-flex d-flex f-auto-center card-cnt-box">
-              <p>You have no tasks completed</p>
+              <p>{{ call }} have no tasks completed</p>
             </div>
           </div>
           <div v-if="overviews.completeTasks.total" class="v-flex d-flex col-flex task-completed-know">
@@ -128,6 +138,11 @@ export default {
         }
       }
     }
+  },
+  computed: {
+    call () {
+      return this.owner ? 'You' : 'He(She)'
+    }
   }
 }
 </script>
@@ -156,6 +171,9 @@ export default {
   }
   .card-cnt-box {
     color: #999;
+  }
+  .task-candy-box {
+    min-width: 250px;
   }
 
   // user-task-box
@@ -235,6 +253,17 @@ export default {
         margin-left: 3px;
         font-size: 12px;
       }
+    }
+  }
+
+  .estimated-cnt-box {
+    color: #4E47D3;
+    >h1 {
+      font-size: 48px;
+    }
+    >p {
+      font-size: 24px;
+      @include margin('top', 15px, 1);
     }
   }
 </style>

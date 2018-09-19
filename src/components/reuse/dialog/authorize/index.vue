@@ -165,7 +165,8 @@ export default {
     },
 
     closeTheme () {
-      return this.authorizeBool ? 'dark' : 'light'
+      // return this.authorizeBool ? 'dark' : 'light'
+      return 'light'
     },
 
     web3Error () {
