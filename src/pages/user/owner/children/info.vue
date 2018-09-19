@@ -486,7 +486,7 @@ export default {
   watch: {
     account (val) {
       console.log('---------- user info account', val)
-      if (val) this.initInfo()
+      if (val) this.initInfo(true)
     }
   },
   components: {
@@ -503,7 +503,8 @@ export default {
   },
   methods: {
     ...mapActions('user', [
-      actionTypes.USER_SET_USER_BY_TOKEN
+      actionTypes.USER_SET_USER_BY_TOKEN,
+      actionTypes.USER_SET_USER_HOME
     ]),
 
     // 初始化 黏贴板
@@ -523,9 +524,12 @@ export default {
     //   this.$refs.authorize.checkoutAuthorize({ crowdsale: true })
     // },
 
-    initInfo () {
+    initInfo (home = true) {
       this.getUserTransactions()
       this.getUserOverview()
+      if (home) {
+        this[actionTypes.USER_SET_USER_HOME]()
+      }
     },
 
     // 获取用户 overview 信息

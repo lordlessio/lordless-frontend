@@ -2,7 +2,7 @@
   <div id="lordless" :class="{ 'blur': blurs[0], 'transform': appOpt.transform, 'no-transform': !appOpt.transform }">
     <lordless-svg/>
     <Header ref="lordlessHeader" v-bind="headerOpt"/>
-    <div class="ld-main" :class="[{ 'no-header': !headerOpt.show || (headerOpt.show && (!headerOpt.scroll || !headerOpt.fixed)) }, { 'no-footer': !footerOpt.show }]">
+    <div class="ld-main" :class="[{ 'no-header': isMobile || !headerOpt.show || (headerOpt.show && headerOpt.fixed) }, { 'no-footer': !footerOpt.show }]">
       <!-- <div class="d-flex col-flex f-auto-center ld-error" v-if="web3Opt.error">
         <h1>出错啦！</h1>
         <p>{{ web3Opt.error }}</p>

@@ -32,7 +32,7 @@
         :openStatus="authorizeDialog"
         :avatar="avatar"
         :address="address"
-        @close="closeDialog"
+        @close="authorizeDialog = false"
         @telegram="$emit('telegram', $event)"></Telegram>
 
       <Status

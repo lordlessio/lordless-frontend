@@ -50,7 +50,7 @@
 
 <script>
 import DatasSkeletion from '@/components/skeletion/ldb/detail/tool/datas'
-import { nextAC } from 'utils/tool'
+import { nextAC, _setTimeout } from 'utils/tool'
 export default {
   props: {
     info: {
@@ -88,31 +88,31 @@ export default {
       countUp: {
         level: {
           isReady: false,
-          duration: 1.5,
+          duration: 1500,
           start: 0,
           end: 0
         },
         cAC: {
           isReady: false,
-          duration: 1.5,
+          duration: 1500,
           start: 0,
           end: 0
         },
         nAC: {
           isReady: false,
-          duration: 1.5,
+          duration: 1500,
           start: 0,
           end: 0
         },
         cAP: {
           isReady: false,
-          duration: 1.5,
+          duration: 1500,
           start: 0,
           end: 0
         },
         nAP: {
           isReady: false,
-          duration: 1.5,
+          duration: 1500,
           start: 0,
           end: 0
         }
@@ -120,9 +120,9 @@ export default {
     }
   },
   computed: {
-    ldbActiveness () {
-      return this.info.activeness
-    },
+    // ldbActiveness () {
+    //   return this.info.activeness
+    // },
     apLeft () {
       return this.info.apLeft
     }
@@ -133,7 +133,7 @@ export default {
      * 根据当前建筑等级，计算升级所需经验
      * 达到升级条件，改变建筑等级
      */
-    ldbActiveness (val) {
+    'info.activeness' (val) {
       const func = () => {
         return () => {
           let _this = this
@@ -193,15 +193,20 @@ export default {
           start: end,
           end,
           isReady: true,
-          duration: 1.5
+          duration: 1500
         })
         return
       }
       this.$set(this.countUp.level, 'end', end)
-      const timeOut = setTimeout(() => {
+
+      _setTimeout({ duration: this.countUp.level.duration }, () => {
         this.$set(this.countUp.level, 'start', end)
-        clearTimeout(timeOut)
-      }, this.countUp.level.duration)
+      })
+
+      // const timeOut = setTimeout(() => {
+      //   this.$set(this.countUp.level, 'start', end)
+      //   clearTimeout(timeOut)
+      // }, this.countUp.level.duration)
     },
 
     initCurrentACCU ({ start = this.countUp.cAC.start, end = this.countUp.cAC.end || this.info.activeness } = {}) {
@@ -210,15 +215,19 @@ export default {
           start: end,
           end,
           isReady: true,
-          duration: 1.5
+          duration: 1500
         })
         return
       }
       this.$set(this.countUp.cAC, 'end', end)
-      const timeOut = setTimeout(() => {
+
+      _setTimeout({ duration: this.countUp.cAC.duration }, () => {
         this.$set(this.countUp.cAC, 'start', end)
-        clearTimeout(timeOut)
-      }, this.countUp.cAC.duration)
+      })
+      // const timeOut = setTimeout(() => {
+      //   this.$set(this.countUp.cAC, 'start', end)
+      //   clearTimeout(timeOut)
+      // }, this.countUp.cAC.duration)
     },
 
     initNextACCU ({ start = this.countUp.nAC.start, end = this.countUp.nAC.end || nextAC(this.info.chain.level) } = {}) {
@@ -227,15 +236,19 @@ export default {
           start: end,
           end,
           isReady: true,
-          duration: 1.5
+          duration: 1500
         })
         return
       }
       this.$set(this.countUp.nAC, 'end', end)
-      const timeOut = setTimeout(() => {
+
+      _setTimeout({ duration: this.countUp.nAC.duration }, () => {
         this.$set(this.countUp.nAC, 'start', end)
-        clearTimeout(timeOut)
-      }, this.countUp.nAC.duration)
+      })
+      // const timeOut = setTimeout(() => {
+      //   this.$set(this.countUp.nAC, 'start', end)
+      //   clearTimeout(timeOut)
+      // }, this.countUp.nAC.duration)
     },
 
     initCurrentAPCU ({ start = this.countUp.cAP.start, end = this.countUp.cAP.end || this.info.apLeft } = {}) {
@@ -244,15 +257,19 @@ export default {
           start: end,
           end,
           isReady: true,
-          duration: 1.5
+          duration: 1500
         })
         return
       }
       this.$set(this.countUp.cAP, 'end', end)
-      const timeOut = setTimeout(() => {
+
+      _setTimeout({ duration: this.countUp.cAP.duration }, () => {
         this.$set(this.countUp.cAP, 'start', end)
-        clearTimeout(timeOut)
-      }, this.countUp.cAP.duration)
+      })
+      // const timeOut = setTimeout(() => {
+      //   this.$set(this.countUp.cAP, 'start', end)
+      //   clearTimeout(timeOut)
+      // }, this.countUp.cAP.duration)
     },
 
     initNextAPCU ({ start = this.countUp.nAP.start, end = this.countUp.nAP.end || this.info.ap } = {}) {
@@ -261,15 +278,26 @@ export default {
           start: end,
           end,
           isReady: true,
-          duration: 1.5
+          duration: 1500
         })
         return
       }
       this.$set(this.countUp.nAP, 'end', end)
-      const timeOut = setTimeout(() => {
+
+      _setTimeout({ duration: this.countUp.nAP.duration }, () => {
         this.$set(this.countUp.nAP, 'start', end)
-        clearTimeout(timeOut)
-      }, this.countUp.nAP.duration)
+      })
+      // let startt = 0
+      // const step = (timestamp) => {
+      //   if (!startt) startt = timestamp
+      //   if (timestamp - startt < this.countUp.nAP.duration) return window.requestAnimationFrame(step)
+      //   return this.$set(this.countUp.nAP, 'start', end)
+      // }
+      // return window.requestAnimationFrame(step)
+      // const timeOut = setTimeout(() => {
+      //   this.$set(this.countUp.nAP, 'start', end)
+      //   clearTimeout(timeOut)
+      // }, this.countUp.nAP.duration)
     }
   }
 }

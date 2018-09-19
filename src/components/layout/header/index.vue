@@ -52,7 +52,7 @@
     <div id="header-page-title" class="header-page-title sm-hidden" v-if="pageTitle">
       <div class="container text-center page-title-container">
         <p>{{ pageTitle }}</p>
-        <span class="inlin-block" @click.stop="toTop">
+        <span class="back-to-top inlin-block" @click.stop="toTop">
           <svg>
             <use xlink:href="#"/>
           </svg>
@@ -240,9 +240,14 @@ export default {
     &.toggle {
       transform: translateY(-100%);
       .header-page-title {
+        padding: 21px 0 20px;
         &::before {
           transform: translate(-50%, 0) translateZ(0);
         }
+      }
+      .back-to-top {
+        opacity: 1;
+        visibility: visible;
       }
     }
     &.fixed {
@@ -452,7 +457,7 @@ export default {
   .header-page-title {
     margin-top: -1px;
     position: relative;
-    padding: 21px 0 20px;
+    padding: 6px 0 20px;
     background-color: inherit;
     font-size: 36px;
     font-family: $--font-TTNormsBold;
@@ -492,6 +497,11 @@ export default {
         height: 20px;
       }
     }
+  }
+  .back-to-top {
+    opacity: 0;
+    visibility: hidden;
+    transition: all .3s;
   }
 
   /**

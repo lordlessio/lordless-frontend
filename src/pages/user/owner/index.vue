@@ -53,7 +53,7 @@
       </el-main>
     </el-container>
     <Authorize
-      ref="authorize"
+      ref="ownerAuthorize"
       :modelClose="false"
       :autoClose="false"
       @init="checkUser"
@@ -147,7 +147,7 @@ export default {
     },
 
     async checkUser () {
-      const authorize = this.$refs.authorize.checkoutAuthorize()
+      const authorize = this.$refs.ownerAuthorize.checkoutAuthorize()
       this.loading = !this.userInfo.address && !authorize
     },
 
@@ -160,14 +160,10 @@ export default {
       console.log('---- val', val, oVal)
       this.$nextTick(() => this.checkUser())
     }
+  },
+  mounted () {
+    this.$nextTick(() => this.checkUser())
   }
-  // mounted () {
-  //   this.$nextTick(() => {
-  //     if (this.userInfo._id) {
-  //       this.checkUser()
-  //     }
-  //   })
-  // }
 }
 </script>
 

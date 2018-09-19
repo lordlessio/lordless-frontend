@@ -18,6 +18,30 @@ window.requestAnimFrame = (function () {
            window.setTimeout(callback, 1000 / 60)
          }
 })()
+window.cancelAnimationFrame = (function () {
+  return window.cancelAnimationFrame ||
+         window.webkitCancelAnimationFrame ||
+         window.mozCancelAnimationFrame || function () {}
+})()
+
+export const _setTimeout = ({ duration = 1000 } = {}, cb) => {
+  return (function () {
+    let startt = 0
+    let requestId
+    const step = (timestamp) => {
+      if (!startt) startt = timestamp
+      if (timestamp - startt >= duration) {
+        window.cancelAnimationFrame(requestId)
+        requestId = 0
+        return cb()
+      }
+      requestId = window.requestAnimationFrame(step)
+      return requestId
+    }
+    requestId = window.requestAnimationFrame(step)
+    return requestId
+  })()
+}
 
 /**
  * 获取 data 数据类型

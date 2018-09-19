@@ -23,7 +23,7 @@ const _CountUp = {
     duration: {
       type: Number,
       required: false,
-      default: 2
+      default: 2000
     },
     options: {
       type: Object,
@@ -67,7 +67,7 @@ const _CountUp = {
         this.startVal,
         this.endVal,
         this.decimals,
-        this.duration,
+        this.duration / 1000,
         this.options
       )
 
