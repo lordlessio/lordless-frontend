@@ -63,37 +63,64 @@ const checkWeb3 = async () => {
 
   console.time('net word')
   // check network
-  const networkRes = await getNetwork(res.web3js)
+  getNetwork(res.web3js)
+    .then(nRes => {
+      if (nRes.error) {
+        res.error = nRes.error
+        return res
+      } else {
+        res.networkId = nRes.networkId
+      }
+    })
+  // const networkRes = await getNetwork(res.web3js)
   console.timeEnd('net word')
-  if (networkRes.error) {
-    res.error = networkRes.error
-    return res
-  } else {
-    res.networkId = networkRes.networkId
-  }
+  // if (networkRes.error) {
+  //   res.error = networkRes.error
+  //   return res
+  // } else {
+  //   res.networkId = networkRes.networkId
+  // }
 
   console.time('coinbaseRes word')
   // check coinbase
-  const coinbaseRes = await getCoinbase(res.web3js)
+  getCoinbase(res.web3js)
+    .then(cRes => {
+      if (cRes.error) {
+        res.error = cRes.error
+        return res
+      } else {
+        res.coinbase = cRes.coinbase
+        res.address = res.address || res.web3js.eth.defaultAccount
+      }
+    })
+  // const coinbaseRes = await getCoinbase(res.web3js)
   console.timeEnd('coinbaseRes word')
-  if (coinbaseRes.error) {
-    res.error = coinbaseRes.error
-    return res
-  } else {
-    res.coinbase = coinbaseRes.coinbase
-    res.address = res.address || res.web3js.eth.defaultAccount
-  }
+  // if (coinbaseRes.error) {
+  //   res.error = coinbaseRes.error
+  //   return res
+  // } else {
+  //   res.coinbase = coinbaseRes.coinbase
+  //   res.address = res.address || res.web3js.eth.defaultAccount
+  // }
 
   console.time('gasPriceRes word')
   // check gasPrice
-  const gasPriceRes = await getGasPrice(res.web3js)
+  getGasPrice(res.web3js)
+    .then(gRes => {
+      res.gasPrice = gRes.gasPrice
+    })
+  // const gasPriceRes = await getGasPrice(res.web3js)
   console.timeEnd('gasPriceRes word')
-  res.gasPrice = gasPriceRes.gasPrice
+  // res.gasPrice = gasPriceRes.gasPrice
 
   console.time('balance word')
   // check balance
-  const balanceRes = await getBalance(res.web3js, res.address)
-  res.balance = balanceRes.balance
+  getBalance(res.web3js, res.address)
+    .then(bRes => {
+      res.balance = bRes.balance
+    })
+  // const balanceRes = await getBalance(res.web3js, res.address)
+  // res.balance = balanceRes.balance
   console.timeEnd('balance word')
 
   return res

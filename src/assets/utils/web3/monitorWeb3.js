@@ -7,18 +7,7 @@ export const monitorWeb3 = () => {
   const { web3Opt } = store.state.web3
   let { balance, gasPrice, coinbase, networkId, web3js, error } = web3Opt
 
-  setInterval(async () => {
-    /**
-     * check gasPrice
-     */
-    const gasPriceRes = (await getGasPrice(web3js)) || {}
-    if (gasPriceRes.gasPrice !== gasPrice) {
-      gasPrice = gasPriceRes.gasPrice
-      store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { gasPrice: gasPriceRes.gasPrice || 0 })
-    }
-  }, 30000)
-
-  return setInterval(async () => {
+  const checkWeb3 = async () => {
     /**
      * check balance
      */
@@ -26,6 +15,12 @@ export const monitorWeb3 = () => {
     if (balanceRes.balance !== balance) {
       balance = balanceRes.balance
       store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { balance: balanceRes.balance || 0 })
+    }
+
+    const gasPriceRes = (await getGasPrice(web3js)) || {}
+    if (gasPriceRes.gasPrice !== gasPrice) {
+      gasPrice = gasPriceRes.gasPrice
+      store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { gasPrice: gasPriceRes.gasPrice || 0 })
     }
 
     /**
@@ -54,7 +49,7 @@ export const monitorWeb3 = () => {
     const cRes = await getCoinbase(web3js)
 
     if (cRes.error) {
-      error = nRes.error
+      error = cRes.error
       store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { error: nRes.error })
       return
     }
@@ -91,5 +86,18 @@ export const monitorWeb3 = () => {
       error = null
       store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { error: null })
     }
-  }, 600)
+  }
+
+  let nowt
+  const loopStep = async (timestamp) => {
+    if (!nowt) nowt = timestamp
+    if (timestamp - nowt > 1000) {
+      console.time('loopStep')
+      await checkWeb3()
+      console.timeEnd('loopStep')
+      nowt = timestamp
+    }
+    return window.requestAnimationFrame(loopStep)
+  }
+  return window.requestAnimationFrame(loopStep)
 }

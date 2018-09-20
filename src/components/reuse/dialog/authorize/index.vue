@@ -37,7 +37,6 @@
 
       <Status
         v-if="showStatus"
-        :openStatus="authorizeDialog"
         :type="statusType">
       </Status>
 
@@ -153,15 +152,15 @@ export default {
     },
 
     showStatus () {
-      return this.statusType
+      return !!this.statusType
     },
 
     authorizeBool () {
-      return this.address && !this.statusType
+      return !this.showStatus && this.address
     },
 
     signBool () {
-      return !this.statusType && !this.address
+      return !this.showStatus && !this.address
     },
 
     closeTheme () {
@@ -215,6 +214,7 @@ export default {
     },
 
     checkoutAuthorize ({ crowdsale = false, telegram = false } = {}) {
+      this.authorizeDialog = this.showStatus
       this.showSign = this.signBool
 
       // 检查用户信息是否ok
@@ -231,7 +231,7 @@ export default {
       console.log('---- status', this.statusType, !this.address)
 
       // 检查guide配置是否ok
-      if (this.statusType) {
+      if (this.showStatus) {
         this.authorizeDialog = true
         return false
       }
