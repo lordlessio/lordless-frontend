@@ -13,19 +13,19 @@
     @close="$emit('close')">
     <div class="text-center lordless-message-box lordless-meta-dialog">
       <h3 slot="title">
-        提示
+        Oops!
       </h3>
       <p class="d-flex f-align-center TTFontBold alert-main-cnt">
         <span class="v-flex">
-          当前暂不支持移动端使用<br>
-          请暂时前往PC端使用哦!
+          Mobile browser is not supported by Metamask.<br>
+          Enter the website below in Chrome/Firefox for desktop instead.
         </span>
       </p>
       <p slot="footer">
         <lordless-btn
           class="d-inline-flex f-align-center alert-btn"
           theme="blue"
-          @click="$root.$children[0].alertModel = false">确认</lordless-btn>
+          @click="$root.$children[0].alertModel = false">Confirm</lordless-btn>
       </p>
     </div>
   </el-dialog>
@@ -67,7 +67,7 @@ export default {
     margin-bottom: 30px;
   }
   .lordless-meta-dialog {
-    font-size: 18px;
+    font-size: 16px;
   }
   .alert-btn {
     padding: 8px 14px;
