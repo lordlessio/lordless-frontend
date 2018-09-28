@@ -11,12 +11,12 @@
       <div class="telegram-cnt-box">
         <div class="telegram-cnt-top">
           <p class="TTFontBolder">Wallet address</p>
-          <p class="TTFontNormal telegram-info-text">{{ address }}</p>
+          <p class="TTFontNormal text-ellipsis telegram-info-text">{{ address }}</p>
         </div>
         <p class="telegram-markline"></p>
         <div class="telegram-cnt-bottom">
           <p class="TTFontBolder">Telegram Authorize</p>
-          <p class="TTFontNormal telegram-info-text">Authorization the <a href="#" class="TTFontBolder">Telegram</a> to Receive Task</p>
+          <p class="sm-mar-t2 TTFontNormal telegram-info-text">Authorization the <a href="#" class="TTFontBolder">Telegram</a> to Receive Task</p>
         </div>
         <lordless-btn
           v-if="isOk"
@@ -169,11 +169,9 @@ export default {
     margin-top: 30px;
     font-size: 18px;
   }
-  .telegram-cnt-top {
-    margin-bottom: 30px;
-  }
   .telegram-info-text {
     font-size: 20px;
+    @include grid('font-size', 16px, -1);
     >a {
       color: $--text-yellow-color;
     }
@@ -182,7 +180,8 @@ export default {
     height: 0;
     border-bottom: 1px dashed #fff;
     @include width(50%, 1);
-    @include margin-around(30px, auto, 45px, auto, 1);
+    @include grid('margin', 30px auto 45px, 1);
+    @include grid('margin', 20px auto 25px, -1);
   }
   // .telegram-choose {
   //   width: 26px;
@@ -224,9 +223,10 @@ export default {
     }
   }
   .telegram-authorize-btn {
-    margin-top: 40px;
+    // margin-top: 40px;
     position: relative;
     min-height: 50px;
+    @include margin('top', 40px, 1.4);
     #telegram {
       position: relative;
       z-index: 2;

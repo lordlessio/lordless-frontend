@@ -4,6 +4,7 @@ import { sync } from 'vuex-router-sync'
 import store from '../store'
 
 import { mutationTypes } from '@/store/types'
+import { mobileBool } from 'utils/tool'
 
 import Sign from '@/pages/user/sign.vue'
 import Market from '@/pages/market'
@@ -29,6 +30,9 @@ import OwnerActivity from '@/pages/user/owner/children/activity'
 
 Vue.use(Router)
 
+const isMobile = mobileBool()
+console.log('----isMobile', isMobile)
+
 const router = new Router({
   mode: 'history',
   routes: [
@@ -37,7 +41,10 @@ const router = new Router({
       name: 'Market',
       component: Market,
       meta: {
-        title: 'Marketplace - LORDLESS'
+        title: 'Marketplace - LORDLESS',
+        header: {
+          show: !isMobile
+        }
       }
     },
     {
@@ -238,14 +245,14 @@ const router = new Router({
         },
         {
           path: '*',
-          redirect: '/map'
+          redirect: `${isMobile ? '/market' : '/map'}`
         }
       ]
     },
     {
       path: '*',
       name: 'other',
-      redirect: '/map'
+      redirect: `${isMobile ? '/market' : '/map'}`
     }
   ]
 })

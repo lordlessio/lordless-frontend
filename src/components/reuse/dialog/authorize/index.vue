@@ -120,6 +120,10 @@ export default {
       'isCrowdsaleApproved'
     ]),
 
+    isMobile () {
+      return this.$root.$children[0].isMobile
+    },
+
     address () {
       return this.userInfo._id
     },
@@ -213,9 +217,14 @@ export default {
       this.authorizeDialog = false
     },
 
-    checkoutAuthorize ({ crowdsale = false, telegram = false } = {}) {
-      this.authorizeDialog = this.showStatus
-      this.showSign = this.signBool
+    checkoutAuthorize ({ guide = false, crowdsale = false, telegram = false } = {}) {
+      // this.authorizeDialog = this.showStatus
+      // this.showSign = this.signBool
+
+      if (this.isMobile) {
+        this.$root.$children[0].alertModel = true
+        return
+      }
 
       // 检查用户信息是否ok
       if (!this.address) {
@@ -223,14 +232,31 @@ export default {
         return false
       }
 
-      if (!crowdsale && !telegram) return true
-
       this.initModels()
+
+      // 如果验证 telegram 并且用户没有授权 telegram,则执行
+      if (telegram && (!this.userInfo.telegram || !this.userInfo.telegram.id)) {
+        console.log('----- telegram')
+        this.authorizeDialog = true
+        this.$nextTick(() => {
+          this.showTelegram = true
+        })
+        return false
+      }
+
+      // 手动检查guide配置是否ok
+      if (guide && this.showStatus) {
+        this.authorizeDialog = true
+        return false
+      }
+
+      if (!crowdsale) return true
+
       console.log('---- this.statusType', this.statusType)
 
       console.log('---- status', this.statusType, !this.address)
 
-      // 检查guide配置是否ok
+      // crowdsale 前检查guide配置是否ok
       if (this.showStatus) {
         this.authorizeDialog = true
         return false
@@ -278,15 +304,6 @@ export default {
         return this.isCrowdsaleApproved
       }
 
-      // 如果验证 telegram 并且用户没有授权 telegram,则执行
-      if (telegram && (!this.userInfo.telegram || !this.userInfo.telegram.id)) {
-        console.log('----- telegram')
-        this.authorizeDialog = true
-        this.$nextTick(() => {
-          this.showTelegram = true
-        })
-        return false
-      }
       this.authorizeDialog = false
       return true
     },

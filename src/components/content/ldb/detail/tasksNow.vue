@@ -3,7 +3,7 @@
 
     <!-- ldb detail taskNow skeletion -->
     <!-- <transition name="ld-suspension-hide-fade"> -->
-      <task-now-skeletion v-if="loading"></task-now-skeletion>
+      <task-now-skeletion v-if="loading"/>
     <!-- </transition> -->
 
     <transition name="ld-hide-fade">
@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import TaskNowSkeletion from '@/components/skeletion/ldb/detail/tool/taskNow'
+import TaskNowSkeletion from '@/components/skeletion/ldb/detail/taskNow'
 
 import LdCarousel from '@/components/stories/carousel'
 import LdSliderBar from '@/components/stories/sliderBar'

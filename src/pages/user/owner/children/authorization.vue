@@ -114,7 +114,7 @@ export default {
     // 点击认证执行事件
     authorizeFunc (symbol) {
       switch (symbol) {
-        case 'marketplace': this.$refs.authorize.checkoutAuthorize({ crowdsale: true })
+        case 'marketplace': this.$refs.authorize.checkoutAuthorize({ guide: true, crowdsale: true })
           break
         case 'telegram': this.$refs.authorize.checkoutAuthorize({ telegram: true })
           break

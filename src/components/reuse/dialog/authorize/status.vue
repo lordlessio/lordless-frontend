@@ -37,7 +37,7 @@ export default {
           title: 'MetaMask network is unallow',
           content: 'Open MetaMask and Choose right network.',
           imgUrl: '/img/guide/status-main-network.png',
-          sType: 'height'
+          sType: 'auto'
         },
         browser: {
           title: 'Your browser is unsupported',

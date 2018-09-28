@@ -55,9 +55,10 @@ export default {
     },
 
     // 存储 userHome 信息
-    [mutationTypes.USER_SET_USER_HOME]: (state, { home = {}, update = false } = {}) => {
+    [mutationTypes.USER_SET_USER_HOME]: (state, { home, update = false } = {}) => {
+      console.log('home', home)
       if (!update) state.userHome = stringifyParse(home)
-      else state.userHome = stringifyParse(Object.assign({}, state.userHome, home))
+      else state.userHome = home ? stringifyParse(Object.assign({}, state.userHome, home)) : {}
     }
   },
   actions: {
@@ -163,7 +164,7 @@ export default {
     /**
      * 根据token获取用户home
      */
-    [actionTypes.USER_SET_USER_HOME]: async ({ commit }, { home = {}, update = false } = {}) => {
+    [actionTypes.USER_SET_USER_HOME]: async ({ commit }, { home, update = false } = {}) => {
       if (update) {
         commit(mutationTypes.USER_SET_USER_HOME, { home, update })
         return

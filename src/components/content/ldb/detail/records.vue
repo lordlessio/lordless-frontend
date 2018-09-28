@@ -3,7 +3,7 @@
 
     <!-- ldb detail records skeletion -->
     <!-- <transition name="ld-suspension-hide-fade"> -->
-      <records-skeletion v-if="loading"></records-skeletion>
+      <records-skeletion v-if="loading"/>
     <!-- </transition> -->
 
     <transition name="ld-hide-fade">
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import RecordsSkeletion from '@/components/skeletion/ldb/detail/tool/records'
+import RecordsSkeletion from '@/components/skeletion/ldb/detail/records'
 
 export default {
   props: {

@@ -1,43 +1,69 @@
 <template>
-  <div class="ldb-detail-main">
+  <div class="ldb-detail-main" :class="{ 'mobile': isMobile }">
     <ldb-header-tool
+      v-if="!isMobile"
       ref="ldbDetailHeader"
       :info="ldbInfo"
       :dialog="dialog"
       :isHome.sync="isHome"
       :tasks.sync="candyTasks"
       :loading="infoLoading"
-      :owner="ldbInfo.lord._id === userInfo._id"
+      :owner="owner"
       :userInfo="userInfo"
       @setHome="setHome"
-      @receive="receiveCandy">
-    </ldb-header-tool>
+      @receive="receiveCandy"/>
+    <mobile-header-tool
+      v-if="isMobile"
+      ref="ldbDetailHeader"
+      :info.sync="ldbInfo"
+      :dialog="dialog"
+      :isHome.sync="isHome"
+      :tasks.sync="candyTasks"
+      :loading="infoLoading"
+      :owner="owner"
+      :userInfo="userInfo"
+      @enter="contentShow = true"
+      @setHome="setHome"
+      @receive="receiveCandy"/>
     <section id="ldb-detail-content" class="ldb-detail-content" :class="{ 'show': contentShow }">
-      <div class="container md d-flex sm-col-flex">
+      <div class="container detail-container md d-flex sm-col-flex">
         <div class="detail-cnt-left v-flex">
           <ldb-datas-tool
+            v-if="!isMobile"
             ref="ldbDatas"
             :info.sync="ldbInfo"
             :loading="infoLoading"
-            @enter="contentShow = true">
-          </ldb-datas-tool>
+            @enter="contentShow = true"/>
 
           <tasks-now-tool
+            v-if="!isMobile"
             class="sm-hidden"
             :candies="ldbTasks | ldbGroupCandies"
             :tasks="ldbTasks | ldbGroupTasks"
             :ldbId="ldbInfo._id"
-            :owner="ldbInfo.lord.address === userInfo.address"
+            :owner="owner"
             :loading="ldbTaskLoading"
-            @receive="receiveTask">
-          </tasks-now-tool>
+            @receive="receiveTask"/>
+
+          <mobile-quests-tool
+            v-if="isMobile"
+            :quests="ldbTasks | ldbGroupTasks"
+            :ldbId="ldbInfo._id"
+            :owner="owner"
+            :loading="ldbTaskLoading"
+            @receive="receiveTask"/>
 
           <records-tool
+            v-if="!isMobile"
             :list="ldbRecords.list"
             :total="ldbRecords.total"
             :loading="recordsLoading"
-            @more="getLdbRecords({ more: true })">
-          </records-tool>
+            @more="getLdbRecords({ more: true })"/>
+
+          <mobile-records-tool
+            v-if="isMobile"
+            :list="ldbRecords.list"
+            :loading="recordsLoading"/>
 
           <!-- <approved-tasks-tool
             :list="[1,2]"
@@ -45,14 +71,13 @@
           </approved-tasks-tool> -->
 
         </div>
-        <div class="detail-cnt-right">
+        <div v-if="!isMobile" class="detail-cnt-right">
 
           <approved-tasks-tool
             ref="approvedTask"
             class="detail-approved-tasks"
             :ldbId="ldbInfo._id"
-            :loading="ldbTaskLoading">
-          </approved-tasks-tool>
+            :loading="ldbTaskLoading"/>
 
           <ldb-sale-tool
             :info.sync="ldbInfo"
@@ -61,8 +86,7 @@
             :loading="infoLoading"
             @buy="buyHandle"
             @sale="saleHandle"
-            @cancel="cancelSaleHandle">
-          </ldb-sale-tool>
+            @cancel="cancelSaleHandle"/>
           <!-- <ldb-candy-tool :list="candyLimits" :loading="ldbTaskLoading"></ldb-candy-tool> -->
 
         </div>
@@ -70,8 +94,7 @@
     </section>
     <Authorize
       ref="authorize"
-      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)">
-    </Authorize>
+      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)"/>
 
     <!-- <order-dialog
       v-model="orderModel"
@@ -90,19 +113,38 @@
       v-model="sellModel"
       :ldbInfo="ldbInfo"
       @pending="ldbSellPending"
-      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)">
-    </ldb-sell>
+      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)"/>
+
+    <mobile-sale-bar-tool
+      v-if="isMobile"
+      :info.sync="ldbInfo"
+      :pendings="ldbPendings"
+      :user="userInfo"
+      :loading="infoLoading"
+      @buy="buyHandle"
+      @sale="saleHandle"
+      @cancel="cancelSaleHandle"/>
   </div>
 </template>
 
 <script>
-import LdbHeaderTool from './tool/ldbHeader'
-import LdbDatasTool from './tool/ldbDatas'
-import TasksNowTool from './tool/tasksNow'
-import RecordsTool from './tool/records'
-import ApprovedTasksTool from './tool/approvedTasks'
-import LdbSaleTool from './tool/sale'
-import LdbCandyTool from './tool/candy'
+import LdbHeaderTool from './ldbHeader'
+import MobileHeaderTool from '@/components/content/_mobile/ldb/detail/ldbHeader'
+
+import LdbDatasTool from './ldbDatas'
+
+import TasksNowTool from './tasksNow'
+import MobileQuestsTool from '@/components/content/_mobile/ldb/detail/quests'
+
+import RecordsTool from './records'
+import MobileRecordsTool from '@/components/content/_mobile/ldb/detail/records'
+
+import ApprovedTasksTool from './approvedTasks'
+
+import LdbSaleTool from './sale'
+import MobileSaleBarTool from '@/components/content/_mobile/ldb/detail/saleBar'
+
+import LdbCandyTool from './candy'
 
 // import SketchFab from '@/components/sketchfab'
 
@@ -198,9 +240,16 @@ export default {
     }
   },
   computed: {
+    isMobile () {
+      return this.$root.$children[0].isMobile
+    },
 
     web3Opt () {
       return this.$root.$children[0].web3Opt
+    },
+
+    owner () {
+      return this.ldbInfo.lord._id === this.userInfo._id
     }
   },
   watch: {
@@ -230,11 +279,21 @@ export default {
   },
   components: {
     LdbHeaderTool,
+    MobileHeaderTool,
+
     LdbDatasTool,
+
     TasksNowTool,
+    MobileQuestsTool,
+
     RecordsTool,
+    MobileRecordsTool,
+
     ApprovedTasksTool,
+
     LdbSaleTool,
+    MobileSaleBarTool,
+
     LdbCandyTool,
 
     Authorize,
@@ -264,12 +323,20 @@ export default {
     //   })
     // },
 
-    async setHome (ldbInfo = this.ldbInfo) {
+    async setHome (reset, ldbInfo = this.ldbInfo) {
       const authorize = await this.$refs.authorize.checkoutAuthorize()
       if (!authorize) return
-      const res = await setHome({ ldbId: ldbInfo._id })
+
+      let res
+      // if (reset) {
+      //   res = await resetHome()
+      // } else
+      res = await setHome({ ldbId: ldbInfo._id })
+
       if (res.code === 1000) {
         this.$notify({
+          // type: `${reset ? 'warning' : 'success'}`,
+          // title: `Home ${reset ? 'reset' : 'set'} successfully!`,
           type: 'success',
           title: 'Home set successfully!',
           message: ``,
@@ -456,7 +523,7 @@ export default {
     async buyHandle ({ ldbInfo = this.ldbInfo, web3Opt = this.web3Opt, NFTsCrowdsale = this.NFTsCrowdsale } = {}) {
       try {
         // 检查市场权限
-        const authorize = await this.$refs.authorize.checkoutAuthorize()
+        const authorize = await this.$refs.authorize.checkoutAuthorize({ guide: true })
 
         const tokenId = ldbInfo.chain.tokenId
         if (!authorize || !tokenId) return
@@ -532,7 +599,12 @@ export default {
 
         // this.buyModel = true
       } catch (err) {
-        console.log('err', err)
+        this.$notify.error({
+          title: 'Error!',
+          message: err.message || 'unknow error',
+          position: 'bottom-right',
+          duration: 3500
+        })
       }
     },
 
@@ -542,7 +614,7 @@ export default {
     async saleHandle ({ ldbInfo = this.ldbInfo } = {}) {
       try {
         // 检查市场权限
-        const authorize = await this.$refs.authorize.checkoutAuthorize({ crowdsale: true })
+        const authorize = await this.$refs.authorize.checkoutAuthorize({ guide: true, crowdsale: true })
         console.log('sell --- authorize', authorize)
 
         const tokenId = ldbInfo.chain.tokenId
@@ -559,7 +631,7 @@ export default {
      */
     async cancelSaleHandle ({ ldbInfo = this.ldbInfo, NFTsCrowdsale = this.NFTsCrowdsale, web3Opt = this.web3Opt } = {}) {
       try {
-        const authorize = await this.$refs.authorize.checkoutAuthorize({ crowdsale: true })
+        const authorize = await this.$refs.authorize.checkoutAuthorize({ guide: true, crowdsale: true })
         const tokenId = ldbInfo.chain.tokenId
         if (!authorize || !tokenId) return
 
@@ -768,7 +840,7 @@ export default {
     },
 
     destory () {
-      this.$refs.approvedTask.clearApproved()
+      if (this.$refs.approvedTask) this.$refs.approvedTask.clearApproved()
       this.initStatus()
       this.initContractStatus()
       this.clearCInterval({ all: true })
@@ -802,6 +874,10 @@ export default {
   /deep/ .left-section-cnt {
       margin-top: 30px;
     }
+    &.mobile {
+      margin: 0 auto 80px;
+      max-width: 768px;
+    }
   }
 
   /**
@@ -826,11 +902,16 @@ export default {
     transform: translateY(0);
     z-index: 2;
     transition: opacity .15s ease-in-out, transform .45s ease-in-out;
+    @include margin('bottom', 35px, 1, -2);
     &.show {
       // animation: showContent .45s ease-in-out 1;
       opacity: 1;
-      transform: translateY(-80px);
+      @include grid('transform', translateY(-80px))
     }
+  }
+  .detail-container {
+    @include padding('left', 10px, 1, -2);
+    @include padding('right', 10px, 1, -2);
   }
 
   /* detail-cnt-right */

@@ -3,7 +3,7 @@
 
     <!-- ldb detail header skeletion -->
     <transition name="ld-suspension-hide-fade">
-      <header-skeletion v-if="loading" :class="{ 'dialog': dialog }"></header-skeletion>
+      <header-skeletion v-if="loading" :class="{ 'dialog': dialog }"/>
     </transition>
 
     <transition name="ld-hide-fade" @after-enter="afterEnter">
@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import HeaderSkeletion from '@/components/skeletion/ldb/detail/tool/header'
+import HeaderSkeletion from '@/components/skeletion/ldb/detail/header'
 
 import { addClass, removeClass, hasClass, transitionEvent, animationEndEvent, animationIterationEvent } from 'utils/tool'
 import { receiveAnimate } from 'utils/tool/animate'
@@ -233,60 +233,6 @@ export default {
     async setHome (ldbInfo = this.info) {
       if (this.isHome) return
       this.$emit('setHome')
-    },
-
-    // 已知抛物线两个点的坐标，求抛物线 二次项系数 Quadratic
-    getBezierQuadratic (a, b) {
-      const x1 = a.x
-      const y1 = a.y
-      const x2 = b.x
-      const y2 = b.y
-      return (x1 * y2 - y1 * x2) / (x1 * x2 * x2 - x1 * x1 * x2)
-    },
-
-    // 获取抛物线顶点
-    getVertex ({ v1, v2 = { x: 0, y: 0 }, speed = 1 } = {}) {
-      if (!v1) return null
-      const x2 = v1.x
-      const y2 = v1.y
-      const vx = x2 - v2.x
-      const vy = y2 - v2.y
-      const rate = vx > 0 ? 1 : -1
-
-      // 圆的半径
-      // x1 * x1 + x2 * x2 = r * r
-      const r = Math.sqrt(vx * vx + vy * vy) / 2
-      const vertex = {}
-
-      // vertex.x * vertex.x = r * r - (vy / 2) * (vy / 2) = r * r - (vy * vy / 4)
-      vertex.x = rate * (Math.sqrt(r * r - (vy * vy / 4)))
-      vertex.y = (r - (vy / 2))
-      return vertex
-    },
-
-    /**
-     * 抛物线公式
-     * @param {Number} rate 方向
-     * @param {Number} time 当前时间
-     * @param {Number} duration 持续时间
-     * @param {Number} a 纵向加速度
-     * @param {Number} sx 水平位移量
-     * @param {Number} sy 垂直位移量
-     * @return {Object} x, y 坐标
-     */
-    bezierPath ({ time = 0, duration = 1000, a = 980, sx = 1000, sy = 0 } = {}) {
-      const ta = duration / 1000
-      const t = time / 1000
-
-      // 根据总时间求出 x 轴及 y 轴方向的初速度
-      const v0x = sx / ta
-      const v0y = sy / ta - 1 / 2 * a * ta
-
-      // 物理抛物线
-      // s = v1 * t + 1 / 2 * a * t * t
-      const x = v0x * t
-      const y = v0y * t + 1 / 2 * a * t * t
-      return { x, y }
     },
 
     /**

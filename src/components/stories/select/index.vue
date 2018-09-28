@@ -57,25 +57,27 @@ export default {
 <style lang="scss" scoped>
 
 .lordless-sort-select {
-  /deep/ .el-input__inner {
-    width: 140px;
-    height: 34px;
-    line-height: 34px;
-    font-family: $--font-TTNormsMedium;
-    font-size: 16px;
-    color: #fff;
-    background-color: #4586FC;
-    border-radius: 20px;
-    border: none;
-  }
-  /deep/ .el-input {
-    .el-select__caret {
-      font-weight: bolder;
+  /deep/ {
+    .el-input__inner {
+      width: 140px;
+      height: 34px;
+      line-height: 34px;
+      font-family: $--font-TTNormsMedium;
+      font-size: 16px;
       color: #fff;
+      background-color: #4586FC;
+      border-radius: 20px;
+      border: none;
     }
-  }
-  /deep/ .el-input__icon {
-    line-height: 100%;
+    .el-input {
+      .el-select__caret {
+        font-weight: bolder;
+        color: #fff;
+      }
+    }
+    .el-input__icon {
+      line-height: 100%;
+    }
   }
   &.sm {
     /deep/ .el-input__inner {

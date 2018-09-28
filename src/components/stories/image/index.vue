@@ -97,6 +97,12 @@ export default {
         height: 100%;
       }
     }
+    &.auto {
+      >img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
     &.center {
 
     }

@@ -43,7 +43,7 @@
             </li> -->
             <li class="v-flex building-data-item">
               <p>{{ info.members }}</p>
-              <p>Members</p>
+              <p>Hunters</p>
             </li>
           </ul>
         </div>
@@ -114,12 +114,6 @@ export default {
             end: '#4586FC'
           }
         }
-        // activeness: {
-        //   gradient: {
-        //     start: '#4586FC',
-        //     end: '#4586FC'
-        //   }
-        // }
       }
     }
   },

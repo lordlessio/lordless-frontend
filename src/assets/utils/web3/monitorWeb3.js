@@ -92,9 +92,9 @@ export const monitorWeb3 = () => {
   const loopStep = async (timestamp) => {
     if (!nowt) nowt = timestamp
     if (timestamp - nowt > 1000) {
-      console.time('loopStep')
+      // console.time('loopStep')
       await checkWeb3()
-      console.timeEnd('loopStep')
+      // console.timeEnd('loopStep')
       nowt = timestamp
     }
     return window.requestAnimationFrame(loopStep)

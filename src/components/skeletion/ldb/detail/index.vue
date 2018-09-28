@@ -25,12 +25,12 @@
 </template>
 
 <script>
-import HeaderSkeletion from './tool/header'
-import TaskNowSkeletion from './tool/taskNow'
-import ApprovedSkeletion from './tool/approved'
-import DatasSkeletion from './tool/datas'
-import RecordsSkeletion from './tool/records'
-import SaleSkeletion from './tool/sale'
+import HeaderSkeletion from './header'
+import TaskNowSkeletion from './taskNow'
+import ApprovedSkeletion from './approved'
+import DatasSkeletion from './datas'
+import RecordsSkeletion from './records'
+import SaleSkeletion from './sale'
 export default {
   props: {
     visible: {

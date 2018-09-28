@@ -22,7 +22,7 @@
             </svg>
           </router-link>
         </span>
-        <span class="inline-block header-right-item" data-type="link">
+        <span v-if="!isMobile" class="inline-block header-right-item" data-type="link">
           <router-link to="/map">
             Map
           </router-link>
@@ -140,6 +140,11 @@ export default {
       // mobile: false
       headerScrollFunc: null,
       titleScrollFunc: null
+    }
+  },
+  computed: {
+    isMobile () {
+      return this.$root.$children[0].isMobile
     }
   },
   components: {

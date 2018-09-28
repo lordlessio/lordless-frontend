@@ -3,7 +3,7 @@
 
     <!-- ldb detail approved skeletion -->
     <!-- <transition name="ld-suspension-hide-fade"> -->
-      <approved-skeletion v-if="loading"></approved-skeletion>
+      <approved-skeletion v-if="loading"/>
     <!-- </transition> -->
 
     <transition name="ld-hide-fade">
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import ApprovedSkeletion from '@/components/skeletion/ldb/detail/tool/approved'
+import ApprovedSkeletion from '@/components/skeletion/ldb/detail/approved'
 
 import { getApprovedTask } from 'api'
 import { transitionEvent, addClass, removeClass } from 'utils/tool'

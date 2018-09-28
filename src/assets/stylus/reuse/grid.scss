@@ -11,6 +11,9 @@
   .#{$media}f-align-start {
     align-items: flex-start;
   }
+  .#{$media}f-align-stretch {
+    align-items: stretch;
+  }
   .#{$media}f-align-baseline {
     align-items: baseline;
   }

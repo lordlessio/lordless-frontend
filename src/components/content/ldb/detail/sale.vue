@@ -3,7 +3,7 @@
 
     <!-- ldb detail sale skeletion -->
     <!-- <transition name="ld-suspension-hide-fade"> -->
-      <sale-skeletion v-if="loading"></sale-skeletion>
+      <sale-skeletion v-if="loading"/>
     <!-- </transition> -->
 
     <transition name="ld-hide-fade">
@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import SaleSkeletion from '@/components/skeletion/ldb/detail/tool/sale'
+import SaleSkeletion from '@/components/skeletion/ldb/detail/sale'
 export default {
   props: {
     info: {

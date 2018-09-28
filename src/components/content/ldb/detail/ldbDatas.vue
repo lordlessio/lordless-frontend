@@ -3,7 +3,7 @@
 
     <!-- ldb detail datas skeletion -->
     <!-- <transition name="ld-suspension-hide-fade"> -->
-      <datas-skeletion v-if="loading"></datas-skeletion>
+      <datas-skeletion v-if="loading"/>
     <!-- </transition> -->
 
     <transition name="ld-hide-fade" @after-enter="datasEnter">
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import DatasSkeletion from '@/components/skeletion/ldb/detail/tool/datas'
+import DatasSkeletion from '@/components/skeletion/ldb/detail/datas'
 import { nextAC, _setTimeout } from 'utils/tool'
 export default {
   props: {

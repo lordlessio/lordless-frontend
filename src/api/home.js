@@ -6,6 +6,11 @@ module.exports = axios => {
       return axios.post('/api/home', params)
     },
 
+    // 根据 ldbId reset home
+    resetHome: (params) => {
+      return axios.put('/api/home', params)
+    },
+
     // 获取 home count
     getHomeCount: (params) => {
       return axios.get('/api/home/count', { params })

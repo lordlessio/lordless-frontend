@@ -148,7 +148,7 @@ export default {
 
     userAuthorize () {
       if (this.isCrowdsaleApproved) return
-      this.$refs.authorize.checkoutAuthorize({ crowdsale: true })
+      this.$refs.authorize.checkoutAuthorize({ guide: true, crowdsale: true })
     }
   },
   mounted () {

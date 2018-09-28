@@ -111,9 +111,11 @@ export default {
     left: 30px;
     top: 15px;
     color: #555;
+    line-height: 1;
     z-index: 2009;
     cursor: pointer;
     @include fontSize(30px, 0.85);
+    @include grid('left', 15px, -1);
   }
 
   .ld-slide-fade-enter-active, .ld-slide-fade-leave-active {

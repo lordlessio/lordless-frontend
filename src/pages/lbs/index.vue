@@ -289,6 +289,9 @@ export default {
       historyState(this.coordsPath)
     }
   },
+  beforeMount () {
+    if (this.$root.$children[0].isMobile) this.$router.push('/market')
+  },
   mounted () {
     this.$nextTick(() => {
       this[actionTypes.LDB_GET_HISTORY_SEARCH_LDBS]()
