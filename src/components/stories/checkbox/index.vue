@@ -1,6 +1,10 @@
 <template>
   <div class="checkbox-box">
-    <span class="inline-block checkbox-inner" :class="{ 'choose': value || choose }" @click.stop="toggleChoose"></span>
+    <span class="inline-block checkbox-inner" @click.stop="toggleChoose">
+      <svg>
+        <use :xlink:href="`#icon-radio-${(value || choose) ? 'selected' : 'unselected'}`"/>
+      </svg>
+    </span>
   </div>
 </template>
 
@@ -51,25 +55,26 @@ export default {
     height: 100%;
     background-color: inherit;
     cursor: pointer;
-    &::after {
-      content: "";
-      box-sizing: content-box;
-      border: 2px solid;
-      border-color: #fff;
-      border-left: 0;
-      border-top: 0;
-      height: 60%;
-      left: 50%;
-      position: absolute;
-      top: 17%;
-      transform: rotate(40deg) translateX(-50%);
-      width: 25%;
-      visibility: hidden;
-    }
-    &.choose {
-      &::after {
-        visibility: visible;
-      }
-    }
+    fill: #fff;
+    // &::after {
+    //   content: "";
+    //   box-sizing: content-box;
+    //   border: 2px solid;
+    //   border-color: #fff;
+    //   border-left: 0;
+    //   border-top: 0;
+    //   height: 60%;
+    //   left: 50%;
+    //   position: absolute;
+    //   top: 17%;
+    //   transform: rotate(40deg) translateX(-50%);
+    //   width: 25%;
+    //   visibility: hidden;
+    // }
+    // &.choose {
+    //   &::after {
+    //     visibility: visible;
+    //   }
+    // }
   }
 </style>

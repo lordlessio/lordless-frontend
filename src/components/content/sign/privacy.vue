@@ -65,10 +65,21 @@
     <p>Many of browsing software may originally be setup to accept cookies.</p>
     <p>User may refuse to accept cookies by activating the setting on users' browser that allows user to refuse the setting of cookies. User can find information on popular browsers and how to adjust the cookie preferences at the following websites:</p>
     <ol>
-      <li>Microsoft Internet Explorer</li>
-      <li>Mozilla Firefox</li>
-      <li>Google Chrome</li>
-      <li>Apple Safari</li>
+      <li>
+        <a target="_blank" href="https://support.microsoft.com/en-us/help/260971/description-of-cookies">Microsoft Internet Explorer</a>
+      </li>
+      <li>
+        <a target="_blank" href="https://privacy.microsoft.com/en-us/windows-10-microsoft-edge-and-privacy">Microsoft Edge</a>
+      </li>
+      <li>
+        <a target="_blank" href="https://support.mozilla.org/en-US/kb/enable-and-disable-cookies-website-preferences">Mozilla Firefox</a>
+      </li>
+      <li>
+        <a target="_blank" href="https://support.google.com/accounts/answer/61416">Google Chrome</a>
+      </li>
+      <li>
+        <a target="_blank" href="https://support.apple.com/kb/ph21411">Apple Safari</a>
+      </li>
     </ol>
     <p>The Users can change such configuration to reject to accept cookies, or display a notice in case of transmission of cookies; provided, however, if the User invalidates cookies, the whole or a part of the functions of the Services may not operate properly in some cases.</p>
     <strong>Information Sharing</strong>
@@ -129,8 +140,8 @@
     <p>The provisions of this Privacy Policy may be revised from time to time in some cases; provided, however, the Company shall not reduce the scope of the User’s any right under this Privacy Policy without an explicit permission of the User concerned.</p>
     <p>Any modification, amendment, or revision of the Privacy Policy shall be posted and displayed on this page; provided, however, any material change of the Privacy Policy shall be notified to the Users in more visible manners, such as by e-mail.</p>
     <strong>CONTACT</strong>
-    <p>If you have a technical or support question, please send us an email at eury@lordless.io.</p>
-    <p>If you have a privacy concern, complaint, or a question for the Data Protection Officer of Game, please contact the Company by sending an email at support@lordless.io. The Company will respond to questions or concerns within 30 days.</p>
+    <p>If you have a technical or support question, please send us an email at <a href="mailto:eury@lordless.io">eury@lordless.io</a>.</p>
+    <p>If you have a privacy concern, complaint, or a question for the Data Protection Officer of Game, please contact the Company by sending an email at <a href="mailto:support@lordless.io">support@lordless.io</a>. The Company will respond to questions or concerns within 30 days.</p>
   </div>
 </template>
 
@@ -142,6 +153,10 @@ export default {
 
 <style lang="scss" scoped>
   .lordless-privacy-box {
+    a {
+      color: inherit;
+      text-decoration: underline;
+    }
     .privacy-title {
       margin-top: 0;
       font-size: 24px;

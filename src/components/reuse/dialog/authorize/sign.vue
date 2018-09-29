@@ -333,28 +333,28 @@ export default {
     position: relative;
     margin-right: 5px;
     display: inline-block;
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     background-color: transparent;
     border-radius: 100%;
-    &::before {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      left: 0;
-      top: 0;
-      border: 1px solid #fff;
-      border-radius: inherit;
-      box-sizing: border-box;
-    }
-    &.active {
-      background-color: transparent;
-      /deep/ .checkbox-inner {
-        &::after {
-          border-color: #fff;
-        }
-      }
-    }
+    // &::before {
+    //   content: '';
+    //   position: absolute;
+    //   width: 100%;
+    //   height: 100%;
+    //   left: 0;
+    //   top: 0;
+    //   border: 1px solid #fff;
+    //   border-radius: inherit;
+    //   box-sizing: border-box;
+    // }
+    // &.active {
+    //   background-color: transparent;
+    //   /deep/ .checkbox-inner {
+    //     &::after {
+    //       border-color: #fff;
+    //     }
+    //   }
+    // }
   }
 </style>

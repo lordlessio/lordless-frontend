@@ -36,8 +36,6 @@
 </template>
 
 <script>
-import CheckBox from '@/components/stories/checkbox'
-
 import { metamaskMixins } from '@/mixins'
 
 import { mapState } from 'vuex'
@@ -84,9 +82,6 @@ export default {
     ETHERSCANURL () {
       return process.env.ETHERSCANURL
     }
-  },
-  components: {
-    CheckBox
   },
   methods: {
 

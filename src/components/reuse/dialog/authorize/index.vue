@@ -228,6 +228,7 @@ export default {
 
       // 检查用户信息是否ok
       if (!this.address) {
+        this.showSign = this.signBool
         this.authorizeDialog = true
         return false
       }

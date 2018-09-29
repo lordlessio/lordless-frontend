@@ -276,5 +276,13 @@
       <title>back</title>
       <path d="M18 7.875h-13.725l6.3-6.3-1.575-1.575-9 9 9 9 1.575-1.575-6.3-6.3h13.725z"></path>
     </symbol>
+    <symbol id="icon-radio-selected" viewBox="0 0 18 18">
+      <title>radio-selected</title>
+      <path d="M9 1.5c-4.14 0-7.5 3.36-7.5 7.5s3.36 7.5 7.5 7.5c4.14 0 7.5-3.36 7.5-7.5s-3.36-7.5-7.5-7.5zM7.5 12.75l-3.75-3.75 1.058-1.058 2.692 2.685 5.692-5.692 1.058 1.065z"></path>
+    </symbol>
+    <symbol id="icon-radio-unselected" viewBox="0 0 18 18">
+      <title>radio-unselected</title>
+      <path d="M9 1.5c-4.14 0-7.5 3.36-7.5 7.5s3.36 7.5 7.5 7.5c4.14 0 7.5-3.36 7.5-7.5s-3.36-7.5-7.5-7.5zM9 15c-3.315 0-6-2.685-6-6s2.685-6 6-6c3.315 0 6 2.685 6 6s-2.685 6-6 6z"></path>
+    </symbol>
   </svg>
 </template>

@@ -136,7 +136,7 @@
           <p class="footer-copyright">Copyright © 2017 - 2018 LORDLESS. All right reserved</p>
         </div>
       </div>
-      <p class="text-center ld-footer-term"><router-link class="hover-underline" to="/terms">Term of use</router-link> & <router-link class="hover-underline" to="/policy">Privacy policy</router-link></p>
+      <p class="text-center ld-footer-term"><router-link class="hover-underline" to="/terms">Term of use</router-link> & <router-link class="hover-underline" to="/privacy">Privacy policy</router-link></p>
     </div>
   </footer>
 </template>
