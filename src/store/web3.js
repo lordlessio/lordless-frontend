@@ -14,7 +14,7 @@ export default {
       coinbase: null,
       error: null,
       web3js: { default: true },
-      isInjected: false,
+      isConnected: false,
       networkId: null
     },
     defaultWeb3Opt: {
@@ -35,7 +35,7 @@ export default {
       web3js: { default: true },
 
       // 是否注入了web3
-      isInjected: false,
+      isConnected: false,
 
       // 网络网段
       networkId: null

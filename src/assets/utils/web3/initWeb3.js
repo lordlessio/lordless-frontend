@@ -8,6 +8,7 @@ import { actionTypes } from '@/store/types'
 export const initWeb3 = async (callback) => {
   const res = await checkWeb3()
   console.log('init web3 web3Opt:', res)
+  window.web31 = res
   // 注册 web3 状态
   await store.dispatch(`web3/${actionTypes.WEB3_SET_WEB3_INFO}`, res)
 
@@ -26,7 +27,7 @@ const checkWeb3 = async () => {
   const res = {
     error: null,
     web3js: { default: true },
-    isInjected: false,
+    isConnected: false,
     balance: 0,
     gasPrice: 0,
     networkId: '',
@@ -40,7 +41,7 @@ const checkWeb3 = async () => {
     const web3js = new Web3(web3.currentProvider)
 
     res.web3js = web3js
-    res.isInjected = web3js.isConnected()
+    res.isConnected = web3js.isConnected()
     res.address = web3js.eth.defaultAccount
 
     const currentAddress = window.localStorage.getItem('currentAddress')

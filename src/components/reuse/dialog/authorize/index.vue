@@ -36,7 +36,7 @@
         @telegram="$emit('telegram', $event)"></Telegram>
 
       <Status
-        v-if="showStatus"
+        v-if="showStatus && !hideStatus"
         :type="statusType">
       </Status>
 
@@ -95,7 +95,7 @@ export default {
     return {
       authorizeDialog: false,
 
-      isInit: false,
+      // isInit: false,
 
       showSign: false,
 
@@ -134,7 +134,8 @@ export default {
 
     unMetamask () {
       const web3Opt = this.$root.$children[0].web3Opt
-      return !web3Opt.web3js || !web3Opt.networkId || !web3Opt.isInjected
+      window.web3Opt = web3Opt
+      return !web3Opt.web3js || !web3Opt.networkId || !web3Opt.isConnected
     },
 
     lockedMetamask () {
@@ -159,6 +160,10 @@ export default {
       return !!this.statusType
     },
 
+    hideStatus () {
+      return this.showTelegram
+    },
+
     authorizeBool () {
       return !this.showStatus && this.address
     },
@@ -181,16 +186,15 @@ export default {
       const browserInit = !this.browser.default
 
       const web3Opt = this.$root.$children[0].web3Opt
-      const web3Init = !web3Opt.web3js.default && !web3Opt.error
+      const web3Init = !web3Opt.web3js.default
       // const userInit = !this.userInfo.default
       console.log('browserInit', browserInit, web3Init)
-      if (browserInit && web3Init) {
-        console.log('----------- authorize init')
-        this.isInit = true
-        return true
-      }
-      this.isInit = false
-      return false
+      // if (browserInit && web3Init) {
+      //   this.isInit = true
+      //   return true
+      // }
+
+      return browserInit && web3Init
     },
 
     account () {
@@ -218,34 +222,35 @@ export default {
     },
 
     checkoutAuthorize ({ guide = false, crowdsale = false, telegram = false } = {}) {
-      // this.authorizeDialog = this.showStatus
-      // this.showSign = this.signBool
-
+      // 如果是移动端，直接弹出
       if (this.isMobile) {
         this.$root.$children[0].alertModel = true
         return
       }
 
-      // 检查用户信息是否ok
+      // 如果用户不存在，打开对话框，执行下行阻断
       if (!this.address) {
         this.showSign = this.signBool
         this.authorizeDialog = true
         return false
       }
 
+      // 检测之前初始化状态
       this.initModels()
 
-      // 如果验证 telegram 并且用户没有授权 telegram,则执行
+      // 如果验证 telegram 并且用户没有授权 telegram,则执行并下行阻断
       if (telegram && (!this.userInfo.telegram || !this.userInfo.telegram.id)) {
         console.log('----- telegram')
         this.authorizeDialog = true
-        this.$nextTick(() => {
-          this.showTelegram = true
-        })
+        this.showTelegram = true
         return false
       }
 
-      // 手动检查guide配置是否ok
+      /**
+       * 手动检查 guide 配置是否ok
+       *
+       * 如果只需要检查 guide 配置，执行此判断
+       */
       if (guide && this.showStatus) {
         this.authorizeDialog = true
         return false
@@ -257,12 +262,18 @@ export default {
 
       console.log('---- status', this.statusType, !this.address)
 
-      // crowdsale 前检查guide配置是否ok
+      /**
+       * crowdsale 前检查guide配置是否ok
+       *
+       * 如果用户之前登陆过，本地存有信息，下次登陆就不需要重新授权，所以可能会在 guide 配置不完善的时候登陆
+       * 因为执行合约操作，必须需要 guide 配置完善，所以需要手动检查一下 guide
+       */
       if (this.showStatus) {
         this.authorizeDialog = true
         return false
       }
 
+      // 如果 web3 error
       if (this.web3Error) {
         this.$notify.error({
           title: 'Error!',
@@ -270,9 +281,10 @@ export default {
           position: 'bottom-right',
           duration: 3500
         })
-        // return false
+        return false
       }
-      if (!this.isInit) {
+
+      if (!this.authorizeInit) {
         this.$notify({
           type: 'warning',
           title: 'web3 init...',
@@ -280,26 +292,15 @@ export default {
           position: 'bottom-right',
           duration: 3500
         })
+        return false
       }
-      if (!this.isInit) return false
+      // if (!this.authorizeInit) return false
 
-      // if (this.statusType) {
-      //   this.authorizeDialog = true
-      //   return false
-      // }
-
-      // if (!this.authorizeBool) {
-      //   this.authorizeDialog = false
-      //   return true
-      // }
-      // if (!this.crowdsale || !crowdsale) {
-      //   this.authorizeDialog = false
-      //   return true
-      // }
       if (crowdsale) {
         this.showCrowsale = true
         console.log('---- authorize crowdsale', this.$refs.crowdsale)
-        // 检查市场合约权限
+
+        // 检查市场合约权限， 如果 isCrowdsaleApproved 为 true，代表市场已授权
         this.authorizeDialog = !this.isCrowdsaleApproved
         // const crowdsaleBool = await this.checkCrowdsale()
         return this.isCrowdsaleApproved
