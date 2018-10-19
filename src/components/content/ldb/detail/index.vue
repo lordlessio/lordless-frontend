@@ -523,10 +523,10 @@ export default {
     async buyHandle ({ ldbInfo = this.ldbInfo, web3Opt = this.web3Opt, NFTsCrowdsale = this.NFTsCrowdsale } = {}) {
       try {
         // 检查市场权限
-        const authorize = await this.$refs.authorize.checkoutAuthorize({ guide: true })
+        const authorize = this.$refs.authorize.checkoutAuthorize({ guide: true })
 
         const tokenId = ldbInfo.chain.tokenId
-        if (!authorize || !tokenId) return
+        if (!authorize || (!tokenId && tokenId !== 0)) return
 
         // 根据 tokenId 获取建筑链上信息
         const ldb = await NFTsCrowdsale.methods('getAuction', [tokenId])

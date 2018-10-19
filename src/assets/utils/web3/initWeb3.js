@@ -18,7 +18,7 @@ export const initWeb3 = async (callback) => {
   if (res.error) return callback ? callback(res) : res
 
   // 监听 web3 动态
-  monitorWeb3()
+  monitorWeb3(res)
 
   return callback ? callback(res) : res
 }
@@ -62,67 +62,41 @@ const checkWeb3 = async () => {
     // window.web3js = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
   }
 
-  console.time('net word')
+  console.time('web3 init')
   // check network
-  getNetwork(res.web3js)
-    .then(nRes => {
-      if (nRes.error) {
-        res.error = nRes.error
-        return res
-      } else {
-        res.networkId = nRes.networkId
-      }
-    })
+  await Promise.all(
+    [
+      getNetwork(res.web3js)
+        .then(nRes => {
+          if (nRes.error) {
+            res.error = nRes.error
+          } else {
+            res.networkId = nRes.networkId
+          }
+        }),
+      getCoinbase(res.web3js)
+        .then(cRes => {
+          if (cRes.error) {
+            res.error = cRes.error
+            // return res
+          } else {
+            res.coinbase = cRes.coinbase
+            res.address = res.address || res.web3js.eth.defaultAccount
+          }
+        }),
+
+      getGasPrice(res.web3js)
+        .then(gRes => {
+          res.gasPrice = gRes.gasPrice
+        }),
+
+      getBalance(res.web3js, res.address)
+        .then(bRes => {
+          res.balance = bRes.balance
+        })
+    ]
+  )
   // const networkRes = await getNetwork(res.web3js)
-  console.timeEnd('net word')
-  // if (networkRes.error) {
-  //   res.error = networkRes.error
-  //   return res
-  // } else {
-  //   res.networkId = networkRes.networkId
-  // }
-
-  console.time('coinbaseRes word')
-  // check coinbase
-  getCoinbase(res.web3js)
-    .then(cRes => {
-      if (cRes.error) {
-        res.error = cRes.error
-        return res
-      } else {
-        res.coinbase = cRes.coinbase
-        res.address = res.address || res.web3js.eth.defaultAccount
-      }
-    })
-  // const coinbaseRes = await getCoinbase(res.web3js)
-  console.timeEnd('coinbaseRes word')
-  // if (coinbaseRes.error) {
-  //   res.error = coinbaseRes.error
-  //   return res
-  // } else {
-  //   res.coinbase = coinbaseRes.coinbase
-  //   res.address = res.address || res.web3js.eth.defaultAccount
-  // }
-
-  console.time('gasPriceRes word')
-  // check gasPrice
-  getGasPrice(res.web3js)
-    .then(gRes => {
-      res.gasPrice = gRes.gasPrice
-    })
-  // const gasPriceRes = await getGasPrice(res.web3js)
-  console.timeEnd('gasPriceRes word')
-  // res.gasPrice = gasPriceRes.gasPrice
-
-  console.time('balance word')
-  // check balance
-  getBalance(res.web3js, res.address)
-    .then(bRes => {
-      res.balance = bRes.balance
-    })
-  // const balanceRes = await getBalance(res.web3js, res.address)
-  // res.balance = balanceRes.balance
-  console.timeEnd('balance word')
-
+  console.timeEnd('web3 init')
   return res
 }

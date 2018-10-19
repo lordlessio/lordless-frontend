@@ -2,9 +2,9 @@ import store from '@/store'
 import { getNetwork, getCoinbase, getBalance, getGasPrice } from './utils'
 import { actionTypes } from '@/store/types'
 
-export const monitorWeb3 = () => {
+export const monitorWeb3 = (web3Opt) => {
   // const APPROVED_NETWORKID = '5777'
-  const { web3Opt } = store.state.web3
+  // const { web3Opt } = store.state.web3
   let { balance, gasPrice, coinbase, networkId, web3js, error } = web3Opt
 
   const checkWeb3 = async () => {
