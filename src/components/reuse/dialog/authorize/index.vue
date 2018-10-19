@@ -134,7 +134,6 @@ export default {
 
     unMetamask () {
       const web3Opt = this.$root.$children[0].web3Opt
-      window.web3Opt = web3Opt
       return !web3Opt.web3js || !web3Opt.networkId || !web3Opt.isConnected
     },
 

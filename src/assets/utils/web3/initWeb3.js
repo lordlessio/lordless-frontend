@@ -8,7 +8,7 @@ import { actionTypes } from '@/store/types'
 export const initWeb3 = async (callback) => {
   const res = await checkWeb3()
   console.log('init web3 web3Opt:', res)
-  window.web31 = res
+
   // 注册 web3 状态
   await store.dispatch(`web3/${actionTypes.WEB3_SET_WEB3_INFO}`, res)
 
