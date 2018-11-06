@@ -1,9 +1,10 @@
 'use strict'
 const merge = require('webpack-merge')
 // const devEnv = require('./dev.env')
+const prodEnv = require('./prod.env')
 const contract = JSON.stringify(require('../.contract/ropsten.json'))
 
-module.exports = merge({
+module.exports = merge(prodEnv, {
   NODE_ENV: '"ropsten"',
   LDBICON_ORIGIN: '"//cdn.lordlessio.com"',
   OSSFOLDERPATH: 'ropsten_dist',
