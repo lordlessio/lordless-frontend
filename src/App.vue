@@ -114,33 +114,33 @@ export default {
 
     closeTip () {
       this[actionTypes.LAYOUT_SET_MESSAGE_TIP]({ show: false })
-    },
+    }
 
     // 监听主网络环境
-    listenNetWork () {
-      web3js.version.getNetwork((err, netId) => {
-        console.log('getNetwork err', err, netId)
-        switch (netId) {
-          case '1':
-            console.log('1：This is mainnet')
-            break
-          case '2':
-            console.log('2：This is the deprecated Morden test network.')
-            break
-          case '3':
-            console.log('3：This is the ropsten test network.')
-            break
-          case '4':
-            console.log('4：This is the Rinkeby test network.')
-            break
-          case '42':
-            console.log('42：This is the Kovan test network.')
-            break
-          default:
-            console.log('other：This is an unknown network.')
-        }
-      })
-    }
+    // listenNetWork () {
+    //   web3js.version.getNetwork((err, netId) => {
+    //     console.log('getNetwork err', err, netId)
+    //     switch (netId) {
+    //       case '1':
+    //         console.log('1：This is mainnet')
+    //         break
+    //       case '2':
+    //         console.log('2：This is the deprecated Morden test network.')
+    //         break
+    //       case '3':
+    //         console.log('3：This is the ropsten test network.')
+    //         break
+    //       case '4':
+    //         console.log('4：This is the Rinkeby test network.')
+    //         break
+    //       case '42':
+    //         console.log('42：This is the Kovan test network.')
+    //         break
+    //       default:
+    //         console.log('other：This is an unknown network.')
+    //     }
+    //   })
+    // }
   },
   beforeMount () {
     this.isMobile = mobileBool()

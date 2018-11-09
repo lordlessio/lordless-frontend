@@ -235,6 +235,14 @@ export default {
         cb: () => {
           this.$emit('success')
           this.metamaskChoose = false
+
+          this.$set(this.signInputs.nickName, 'model', '')
+          this.$set(this.signInputs.email, 'model', '')
+          this.$set(this, 'termModels', {
+            terms: false,
+            privacy: false,
+            notice: false
+          })
         }})
     }
   },
