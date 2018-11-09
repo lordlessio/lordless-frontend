@@ -32,7 +32,7 @@ export const getGasPrice = (web3js) => {
     try {
       web3js.eth.getGasPrice((err, res) => {
         if (err) reject(err)
-        else resolve({ gasPrice: Number(res) })
+        else resolve({ gasPrice: res ? res.toNumber() : 0 })
       })
     } catch (err) {
       resolve({ error: err.message || 'getGasPrice error', gasPrice: 0 })
@@ -46,7 +46,7 @@ export const getBalance = (web3js, address) => {
     try {
       web3js.eth.getBalance(address, (error, balance) => {
         if (error) resolve({ balance: 0 })
-        else resolve({ balance: balance.toNumber() || 0 })
+        else resolve({ balance: balance ? balance.toNumber() : 0 })
       })
     } catch (err) {
       resolve({ balance: 0 })

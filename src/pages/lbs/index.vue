@@ -139,11 +139,13 @@ export default {
         this.ldbs = ldbs
         console.log('ldbs', ldbs)
         this.$nextTick(() => {
-          this.$refs.lordMap.createImageMarkers(ldbs)
-          // this.$refs.lordMap.createPointLayer(ldbs)
-          this.$refs.lordMap.createPointMarkers(ldbs)
-          // this.$refs.lordMap.createMarkers(this.test_ldbs)
-          this.flyToLdb()
+          if (this.$refs.lordMap) {
+            this.$refs.lordMap.createImageMarkers(ldbs)
+            // this.$refs.lordMap.createPointLayer(ldbs)
+            this.$refs.lordMap.createPointMarkers(ldbs)
+            // this.$refs.lordMap.createMarkers(this.test_ldbs)
+            this.flyToLdb()
+          }
         })
       }
     },
