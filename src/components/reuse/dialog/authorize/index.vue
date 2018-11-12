@@ -41,9 +41,9 @@
       </Status>
 
       <Sign
-        v-model="showSign"
         ref="signAuthorize"
-        :visible="authorizeDialog"
+        v-model="authorizeDialog"
+        :visible="showSign"
         :account="account"
         @success="checkoutAuthorize()">
       </Sign>
@@ -211,6 +211,36 @@ export default {
     //   return this.$root.$children[0].metaOpen
     // }
   },
+  watch: {
+
+    showStatus (val) {
+      if (val) {
+        this.initModels()
+        this.checkoutAuthorize()
+      }
+    },
+
+    // 监听用户登陆信息地址
+    address (val) {
+      // 如果地址有效，并且不允许市场判断,关闭
+      if (!this.crowdsale && val) this.authorizeDialog = false
+    },
+    authorizeDialog (val) {
+      this.$emit('blurs', val)
+    },
+
+    // 如果切换了账号，关闭对话框
+    account (val, oVal) {
+      if (!this.autoClose || !this.oVal) return
+      console.log('------------ account', val, oVal)
+      this.checkoutAuthorize()
+      // this.authorizeDialog = false
+    },
+
+    authorizeInit (val) {
+      if (val) this.$emit('init')
+    }
+  },
   components: {
     Telegram,
     Crowdsale,
@@ -333,29 +363,6 @@ export default {
         })
       }
       this.$emit('pending', { tx })
-    }
-  },
-  watch: {
-
-    // 监听用户登陆信息地址
-    address (val) {
-      // 如果地址有效，并且不允许市场判断,关闭
-      if (!this.crowdsale && val) this.authorizeDialog = false
-    },
-    authorizeDialog (val) {
-      this.$emit('blurs', val)
-    },
-
-    // 如果切换了账号，关闭对话框
-    account (val, oVal) {
-      if (!this.autoClose || !this.oVal) return
-      console.log('------------ account', val, oVal)
-      this.checkoutAuthorize()
-      // this.authorizeDialog = false
-    },
-
-    authorizeInit (val) {
-      if (val) this.$emit('init')
     }
   }
 }

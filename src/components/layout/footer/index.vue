@@ -70,6 +70,11 @@
                     FAQs
                   </a>
                 </li>
+                <li>
+                  <a href="http://blocklens.io" target="_blank">
+                    Blocklens
+                  </a>
+                </li>
                 <!-- <li>
                   <router-link to="/terms">Terms</router-link>
                 </li>
