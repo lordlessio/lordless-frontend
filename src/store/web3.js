@@ -15,7 +15,8 @@ export default {
       error: null,
       web3js: { default: true },
       isConnected: false,
-      networkId: null
+      networkId: null,
+      loading: true
     },
     defaultWeb3Opt: {
 
@@ -38,7 +39,9 @@ export default {
       isConnected: false,
 
       // 网络网段
-      networkId: null
+      networkId: null,
+
+      loading: true
     }
   },
   mutations: {

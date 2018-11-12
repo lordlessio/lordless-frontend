@@ -1,90 +1,92 @@
 <template>
   <div v-if="value" class="text-center authorize-sign-box">
-    <div class="authorize-login-container" v-if="!register">
-      <div class="inline-block lordless-shadow" :style="`border-radius: ${avatar.radius};`">
-        <lordless-blockies
-          :scale="avatar.scale"
-          :radius="avatar.radius"
-          :seed="account"
-          theme="light"/>
-      </div>
-      <div class="login-cnt-box">
-        <div class="login-cnt-top">
-          <p class="TTFontBolder">Wallet address</p>
-          <p class="login-info-text">{{ account }}</p>
+    <transition name="ld-hide-fade">
+      <div v-if="!isRegister || userChecking" class="authorize-login-container">
+        <div class="inline-block lordless-shadow" :style="`border-radius: ${avatar.radius};`">
+          <lordless-blockies
+            :scale="avatar.scale"
+            :radius="avatar.radius"
+            :seed="account"
+            theme="light"/>
         </div>
-        <p class="login-markline"></p>
-        <div>
-          <lordless-btn
-            class="TTFontBolder lordless-message-btn login-btn"
-            theme="deep-blue"
-            shadow
-            :loading="userChecking"
-            :disabled="userChecking"
-            @click="relogin">Login</lordless-btn>
-        </div>
-      </div>
-    </div>
-    <div class="authorize-sign-container" v-if="register">
-      <h1 class="TTFontBolder">Create Account</h1>
-      <div class="text-left authorize-sign-cnt">
-        <p>We use your email to send you notifications around collectible activity such as ones you buy and sell. We'll never share your email with anyone else.</p>
-        <div class="authorize-sign-input">
-          <ld-input
-            v-model="signInputs.email.model"
-            :theme="signInputs.email.theme"
-            :placeholder="signInputs.email.placeholder"
-            required
-            :regex="signInputs.email.regex"
-            @change="emailChange"
-            @blur="emailBlur">
-          </ld-input>
-        </div>
-        <p>For display purposes only (we show it instead of your wallet address). It doesn't need to be unique.</p>
-        <div class="authorize-sign-input">
-          <ld-input
-            v-model="signInputs.nickName.model"
-            type="text"
-            :placeholder="signInputs.nickName.placeholder"
-            :maxlength="signInputs.nickNamemaxlength"
-            @change="nicknameChange"
-            @blur="nickNameBlur">
-          </ld-input>
-        </div>
-        <div class="authorize-terms-box">
-          <p>Please read our <span @click.stop="termsModel = true">Terms of Use</span> and <span @click.stop="privacyModel = true">Privacy Policy</span>.</p>
-          <div class="d-flex f-align-center authorize-terms-item">
-            <div class="authorize-sign-checkbox" :class="{ 'active': termModels.terms }">
-              <check-box v-model="termModels.terms"/>
-            </div>
-            <span>I have read and agree to the LORDLESS Terms of Use.</span>
+        <div class="login-cnt-box">
+          <div class="login-cnt-top">
+            <p class="TTFontBolder">Wallet address</p>
+            <p class="login-info-text">{{ account || 'Welcome to LORDLESS!' }}</p>
           </div>
-          <div class="d-flex f-align-center authorize-terms-item">
-            <div class="authorize-sign-checkbox" :class="{ 'active': termModels.privacy }">
-              <check-box v-model="termModels.privacy"/>
-            </div>
-            <span>I have read and agree to the LORDLESS Privacy Policy.</span>
-          </div>
-          <div class="d-flex f-align-center authorize-terms-item">
-            <div class="authorize-sign-checkbox" :class="{ 'active': termModels.notice }">
-              <check-box v-model="termModels.notice"/>
-            </div>
-            <span>I wish to receive marketing updates (optional).</span>
+          <p class="login-markline"></p>
+          <div>
+            <lordless-btn
+              class="TTFontBolder lordless-message-btn login-btn"
+              theme="deep-blue"
+              shadow
+              :loading="userChecking"
+              :disabled="userChecking"
+              @click="relogin">Login</lordless-btn>
           </div>
         </div>
       </div>
-      <lordless-btn
-        class="TTFontBolder lordless-message-btn"
-        theme="deep-blue"
-        shadow
-        :disabled="!signRequired"
-        @click="signUp">Sign Up</lordless-btn>
-    </div>
+      <div v-else class="authorize-sign-container">
+        <h1 class="TTFontBolder">Create Account</h1>
+        <div class="text-left authorize-sign-cnt">
+          <p>We use your email to send you notifications around collectible activity such as ones you buy and sell. We'll never share your email with anyone else.</p>
+          <div class="authorize-sign-input">
+            <ld-input
+              v-model="signInputs.email.model"
+              :theme="signInputs.email.theme"
+              :placeholder="signInputs.email.placeholder"
+              required
+              :regex="signInputs.email.regex"
+              @change="emailChange"
+              @blur="emailBlur">
+            </ld-input>
+          </div>
+          <p>For display purposes only (we show it instead of your wallet address). It doesn't need to be unique.</p>
+          <div class="authorize-sign-input">
+            <ld-input
+              v-model="signInputs.nickName.model"
+              type="text"
+              :placeholder="signInputs.nickName.placeholder"
+              :maxlength="signInputs.nickNamemaxlength"
+              @change="nicknameChange"
+              @blur="nickNameBlur">
+            </ld-input>
+          </div>
+          <div class="authorize-terms-box">
+            <p>Please read our <span @click.stop="termDialogModel = true">Terms of Use</span> and <span @click.stop="privacyDialogModel = true">Privacy Policy</span>.</p>
+            <div class="d-flex f-align-center authorize-terms-item">
+              <div class="authorize-sign-checkbox" :class="{ 'active': termModels.terms }">
+                <check-box v-model="termModels.terms"/>
+              </div>
+              <span>I have read and agree to the LORDLESS Terms of Use.</span>
+            </div>
+            <div class="d-flex f-align-center authorize-terms-item">
+              <div class="authorize-sign-checkbox" :class="{ 'active': termModels.privacy }">
+                <check-box v-model="termModels.privacy"/>
+              </div>
+              <span>I have read and agree to the LORDLESS Privacy Policy.</span>
+            </div>
+            <div class="d-flex f-align-center authorize-terms-item">
+              <div class="authorize-sign-checkbox" :class="{ 'active': termModels.notice }">
+                <check-box v-model="termModels.notice"/>
+              </div>
+              <span>I wish to receive marketing updates (optional).</span>
+            </div>
+          </div>
+        </div>
+        <lordless-btn
+          class="TTFontBolder lordless-message-btn"
+          theme="deep-blue"
+          shadow
+          :disabled="!signRequired"
+          @click="signUp">Sign Up</lordless-btn>
+      </div>
+    </transition>
     <terms-dialog
-      v-model="termsModel"
+      v-model="termDialogModel"
       @agree="termAgree('terms')"/>
     <privacy-dialog
-      v-model="privacyModel"
+      v-model="privacyDialogModel"
       @agree="termAgree('privacy')"/>
   </div>
 </template>
@@ -108,7 +110,7 @@ export default {
       type: Boolean,
       default: false
     },
-    openStatus: {
+    visible: {
       type: Boolean,
       default: false
     },
@@ -120,15 +122,19 @@ export default {
           radius: '20px'
         }
       }
+    },
+    account: {
+      type: String,
+      default: 'Welcome to LORDLESS!'
     }
   },
   data: () => {
     return {
       userChecking: false,
-      register: false,
+      isRegister: false,
 
-      termsModel: false,
-      privacyModel: false,
+      termDialogModel: false,
+      privacyDialogModel: false,
 
       // 条款状态
       termModels: {
@@ -156,13 +162,25 @@ export default {
     }
   },
   computed: {
-    account () {
-      return this.$root.$children[0].web3Opt.address || window.localStorage.getItem('currentAddress')
-    },
+
+    // 判断注册信息格式是否有效
     signRequired () {
       const { nickName, email } = this.signInputs
       const { terms, privacy } = this.termModels
       return terms && privacy && nickName.required && email.required
+    }
+  },
+  watch: {
+    visible (val) {
+      if (val) this.checkRegister()
+      else this.reset()
+    },
+
+    // 监听 account改变并且 sign dialog 在打开情况下，重新 check register
+    account (val) {
+      if (val && this.visible) {
+        this.checkRegister()
+      }
     }
   },
   components: {
@@ -177,21 +195,24 @@ export default {
       actionTypes.USER_META_LOGIN
     ]),
 
+    // 重新登陆
     relogin () {
       if (this.userChecking) return
+
       // metamask 是否被打开
       this.metamaskChoose = true
       this[actionTypes.USER_META_LOGIN]({ cb: (err) => {
-        if (!err) this.$emit('success')
         this.metamaskChoose = false
+        if (!err) this.$emit('success')
       }})
     },
 
+    // 检查用户是否已经注册过
     async checkRegister (address = this.account) {
       console.log('check user sign')
       this.userChecking = true
       const res = await getUserByAddress(address)
-      if (res.code === 1000 && !res.data) this.register = true
+      if (res.code === 1000 && !res.data) this.isRegister = true
       else if (res.code !== 1000) {
         this.$notify.error({
           title: 'error!',
@@ -199,8 +220,27 @@ export default {
           position: 'bottom-right',
           duration: 2500
         })
-      } else this.register = false
+      } else this.isRegister = false
       this.userChecking = false
+    },
+
+    // 注册账户
+    signUp () {
+      if (!this.signRequired) return
+      const { email, nickName } = this.signInputs
+
+      // metamask 控制开关
+      this.metamaskChoose = true
+      this[actionTypes.USER_META_LOGIN]({
+        nickName: nickName.model,
+        email: email.model,
+        cb: () => {
+          this.metamaskChoose = false
+
+          this.reset()
+
+          this.$emit('success')
+        }})
     },
 
     emailChange ({ required }) {
@@ -223,32 +263,15 @@ export default {
       this.$set(this.termModels, type, true)
     },
 
-    signUp () {
-      if (!this.signRequired) return
-      const { email, nickName } = this.signInputs
-
-      // metamask 是否被打开
-      this.metamaskChoose = true
-      this[actionTypes.USER_META_LOGIN]({
-        nickName: nickName.model,
-        email: email.model,
-        cb: () => {
-          this.$emit('success')
-          this.metamaskChoose = false
-
-          this.$set(this.signInputs.nickName, 'model', '')
-          this.$set(this.signInputs.email, 'model', '')
-          this.$set(this, 'termModels', {
-            terms: false,
-            privacy: false,
-            notice: false
-          })
-        }})
-    }
-  },
-  watch: {
-    openStatus (val) {
-      if (val && this.value) this.checkRegister()
+    reset () {
+      this.$set(this.signInputs.nickName, 'model', '')
+      this.$set(this.signInputs.email, 'model', '')
+      this.$set(this, 'termModels', {
+        terms: false,
+        privacy: false,
+        notice: false
+      })
+      this.isRegister = false
     }
   },
   mounted () {

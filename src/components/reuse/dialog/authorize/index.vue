@@ -36,14 +36,15 @@
         @telegram="$emit('telegram', $event)"></Telegram>
 
       <Status
-        v-if="showStatus && !hideStatus"
+        v-show="showStatus && !hideStatus"
         :type="statusType">
       </Status>
 
       <Sign
-        ref="signAuthorize"
         v-model="showSign"
-        :openStatus="authorizeDialog"
+        ref="signAuthorize"
+        :visible="authorizeDialog"
+        :account="account"
         @success="checkoutAuthorize()">
       </Sign>
     </div>
@@ -110,49 +111,53 @@ export default {
     }
   },
   computed: {
+    ...mapState('web3', [
+      'web3Opt'
+    ]),
     ...mapState('user', [
       'userInfo'
     ]),
     ...mapState('status', [
       'browser'
     ]),
+    ...mapState('layout', [
+      'metaOpen'
+    ]),
     ...mapState('contract', [
       'isCrowdsaleApproved'
     ]),
 
+    // 是否是移动端
     isMobile () {
       return this.$root.$children[0].isMobile
     },
 
+    // 登陆之后的用户地址
     address () {
       return this.userInfo._id
     },
 
-    unBrowser () {
-      return !this.browser.Chrome && !this.browser.Firefox
-    },
-
-    unMetamask () {
-      const web3Opt = this.$root.$children[0].web3Opt
-      return !web3Opt.web3js || !web3Opt.networkId || !web3Opt.isConnected
-    },
-
-    lockedMetamask () {
-      const web3Opt = this.$root.$children[0].web3Opt
-      return !web3Opt.address
-    },
-
-    unallowMetamask () {
-      const web3Opt = this.$root.$children[0].web3Opt
-      return parseInt(web3Opt.networkId) !== parseInt(process.env.APPROVED_NETWORK_ID)
-    },
-
+    // web3 连接状态
     statusType () {
-      if (this.unBrowser) return 'browser'
-      else if (this.unMetamask) return 'missing'
-      else if (this.lockedMetamask) return 'locked'
-      else if (this.unallowMetamask) return 'network'
-      else return null
+      const web3Opt = this.web3Opt
+
+      const web3Loading = web3Opt.loading
+
+      const unBrowser = !this.browser.Chrome && !this.browser.Firefox
+
+      const unMetamask = web3Opt.web3js.default || !web3Opt.networkId || !web3Opt.isConnected
+
+      const lockedMetamask = !web3Opt.address
+
+      const unallowMetamask = parseInt(web3Opt.networkId) !== parseInt(process.env.APPROVED_NETWORK_ID)
+
+      switch (true) {
+        case !web3Loading && unBrowser: return 'browser'
+        case !web3Loading && unMetamask: return 'missing'
+        case !web3Loading && lockedMetamask: return 'locked'
+        case !web3Loading && unallowMetamask: return 'network'
+        default: return null
+      }
     },
 
     showStatus () {
@@ -177,32 +182,34 @@ export default {
     },
 
     web3Error () {
-      return this.$root.$children[0].web3Opt.error
+      return this.web3Opt.error
     },
 
-    // 合约内部状态初始化状态
+    // web3初始化状态
     authorizeInit () {
+      // 浏览器检测初始化状态
       const browserInit = !this.browser.default
 
-      const web3Opt = this.$root.$children[0].web3Opt
-      const web3Init = !web3Opt.web3js.default
-      // const userInit = !this.userInfo.default
-      console.log('browserInit', browserInit, web3Init)
-      // if (browserInit && web3Init) {
-      //   this.isInit = true
-      //   return true
-      // }
+      const _web3js = this.web3Opt.web3js
 
-      return browserInit && web3Init
+      // web3 是否在加载
+      const web3Init = !_web3js.default
+
+      // unlocked 表示当前环境没有 web3
+      const unlockedWeb3 = _web3js.unlocked
+      // const userInit = !this.userInfo.default
+      console.log('browserInit', browserInit, web3Init, unlockedWeb3)
+
+      return unlockedWeb3 || (browserInit && web3Init)
     },
 
     account () {
-      return this.$root.$children[0].web3Opt.address
-    },
-
-    metaOpen () {
-      return this.$root.$children[0].metaOpen
+      return this.$root.$children[0].web3Opt.address || window.localStorage.getItem('currentAddress')
     }
+
+    // metaOpen () {
+    //   return this.$root.$children[0].metaOpen
+    // }
   },
   components: {
     Telegram,
@@ -223,7 +230,7 @@ export default {
     checkoutAuthorize ({ guide = false, crowdsale = false, telegram = false } = {}) {
       // 如果是移动端，直接弹出
       if (this.isMobile) {
-        this.$root.$children[0].alertModel = true
+        this.$root.$children[0].mobileAlertModel = true
         return
       }
 
@@ -259,8 +266,6 @@ export default {
 
       console.log('---- this.statusType', this.statusType)
 
-      console.log('---- status', this.statusType, !this.address)
-
       /**
        * crowdsale 前检查guide配置是否ok
        *
@@ -293,7 +298,6 @@ export default {
         })
         return false
       }
-      // if (!this.authorizeInit) return false
 
       if (crowdsale) {
         this.showCrowsale = true
@@ -315,6 +319,7 @@ export default {
       this.showSign = false
     },
 
+    // 市场授权 pending 状态处理
     crowdsalePending ({ tx, pass = false }, address = this.address) {
       if (pass) {
         this[actionTypes.CONTRACT_CHECK_CROWDSALE](address)
@@ -343,8 +348,10 @@ export default {
 
     // 如果切换了账号，关闭对话框
     account (val, oVal) {
-      if (!this.autoClose) return
-      this.authorizeDialog = false
+      if (!this.autoClose || !this.oVal) return
+      console.log('------------ account', val, oVal)
+      this.checkoutAuthorize()
+      // this.authorizeDialog = false
     },
 
     authorizeInit (val) {

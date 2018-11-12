@@ -1,9 +1,10 @@
 'use strict'
 
 import store from '@/store'
-import { getNetwork, getCoinbase, getBalance, getGasPrice } from './utils'
+import { initStorageUser, getNetwork, getCoinbase, getBalance, getGasPrice } from './utils'
 import { monitorWeb3 } from './monitorWeb3'
 import { actionTypes } from '@/store/types'
+
 // 初始化 web3js
 export const initWeb3 = async (callback) => {
   const res = await checkWeb3()
@@ -25,6 +26,7 @@ export const initWeb3 = async (callback) => {
 
 const checkWeb3 = async () => {
   const res = {
+    loading: true,
     error: null,
     web3js: { default: true },
     isConnected: false,
@@ -42,20 +44,27 @@ const checkWeb3 = async () => {
 
     res.web3js = web3js
     res.isConnected = web3js.isConnected()
-    res.address = web3js.eth.defaultAccount
+    res.address = web3js.eth.defaultAccount || web3.eth.accounts[0]
 
-    const currentAddress = window.localStorage.getItem('currentAddress')
-    if (web3js.eth.defaultAccount && currentAddress !== web3js.eth.defaultAccount) {
-      window.localStorage.setItem('currentAddress', web3js.eth.defaultAccount)
-      // 获取本地用户
-      store.dispatch(`user/${actionTypes.USER_SET_USER_BY_TOKEN}`)
-    }
+    // 初始化 localStorage currentAddress
+    initStorageUser(web3js.eth.defaultAccount)
+
+    // // 获取本地缓存中的 currentAddress
+    // const currentAddress = window.localStorage.getItem('currentAddress')
+
+    // // 如果 currentAddress 不等于当前地址，更改 currentAddress
+    // if (web3js.eth.defaultAccount && currentAddress !== web3js.eth.defaultAccount) {
+    //   window.localStorage.setItem('currentAddress', web3js.eth.defaultAccount)
+    //   // 获取本地用户
+    //   store.dispatch(`user/${actionTypes.USER_SET_USER_BY_TOKEN}`)
+    // }
 
     // 测试使用
     // window.web3js = web3js
   } else {
-    res.web3js = { default: false }
-    res.error = 'Unable to connect to Web3'
+    res.web3js = { default: false, unlocked: true }
+    res.error = 'Unable to connect Web3'
+    res.loading = false
     return res
     // console.log('No web3? You should consider trying MetaMask!')
     // // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
@@ -64,38 +73,47 @@ const checkWeb3 = async () => {
 
   console.time('web3 init')
   // check network
-  await Promise.all(
-    [
-      getNetwork(res.web3js)
-        .then(nRes => {
-          if (nRes.error) {
-            res.error = nRes.error
-          } else {
-            res.networkId = nRes.networkId
-          }
-        }),
-      getCoinbase(res.web3js)
-        .then(cRes => {
-          if (cRes.error) {
-            res.error = cRes.error
-            // return res
-          } else {
-            res.coinbase = cRes.coinbase
-            res.address = res.address || res.web3js.eth.defaultAccount
-          }
-        }),
+  try {
+    await Promise.all(
+      [
+        getNetwork(res.web3js)
+          .then(({ error, networkId }) => {
+            if (error) {
+              res.error = error
+            }
+            res.networkId = networkId
+          }),
+        getCoinbase(res.web3js)
+          .then(({ error, coinbase }) => {
+            if (error) {
+              res.error = error
+            }
+            res.coinbase = coinbase
+            res.address = coinbase || res.web3js.eth.defaultAccount
+          }),
 
-      getGasPrice(res.web3js)
-        .then(gRes => {
-          res.gasPrice = gRes.gasPrice
-        }),
+        getGasPrice(res.web3js)
+          .then(({ error, gasPrice }) => {
+            if (error) {
+              res.error = error
+            }
+            res.gasPrice = gasPrice
+          }),
 
-      getBalance(res.web3js, res.address)
-        .then(bRes => {
-          res.balance = bRes.balance
-        })
-    ]
-  )
+        getBalance(res.web3js, res.address)
+          .then(({ error, balance }) => {
+            if (error) {
+              res.error = error
+            }
+            res.balance = balance
+          })
+      ]
+    )
+  } catch (err) {
+    console.log(' init web3 error', err)
+  }
+
+  res.loading = false
   // const networkRes = await getNetwork(res.web3js)
   console.timeEnd('web3 init')
   return res
