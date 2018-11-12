@@ -240,6 +240,10 @@ export default {
     authorizeInit (val) {
       if (val) this.$emit('init')
     }
+
+    // metaOpen () {
+    //   return this.$root.$children[0].metaOpen
+    // }
   },
   components: {
     Telegram,
