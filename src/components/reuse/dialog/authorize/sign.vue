@@ -1,5 +1,5 @@
 <template>
-  <div v-if="value" class="text-center authorize-sign-box">
+  <div v-if="visible" class="text-center authorize-sign-box">
     <transition name="ld-hide-fade">
       <div v-if="!isRegister || userChecking" class="authorize-login-container">
         <div class="inline-block lordless-shadow" :style="`border-radius: ${avatar.radius};`">
@@ -171,14 +171,14 @@ export default {
     }
   },
   watch: {
-    visible (val) {
+    value (val) {
       if (val) this.checkRegister()
       else this.reset()
     },
 
     // 监听 account改变并且 sign dialog 在打开情况下，重新 check register
     account (val) {
-      if (val && this.visible) {
+      if (val && this.value) {
         this.checkRegister()
       }
     }
