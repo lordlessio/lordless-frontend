@@ -79,7 +79,8 @@ export default {
      * metaMask login
      */
     [actionTypes.USER_META_LOGIN]: ({ state, commit, dispatch }, { email, nickName, cb } = {}) => {
-      const { web3js, address } = web3Store.state.web3Opt
+      const _address = window.localStorage.getItem('currentAddress')
+      const { web3js, address = _address } = web3Store.state.web3Opt
       if (!address) return
 
       // 登陆
@@ -88,7 +89,7 @@ export default {
         if (res.code === 1000) {
           dispatch(actionTypes.USER_SET_USER_TOKEN, ({ address: addr, token: res.token }))
           await dispatch(actionTypes.USER_SET_USER_BY_TOKEN)
-          if (cb) cb()
+          cb && cb()
         }
       }
       // 取消 expired 状态
@@ -96,11 +97,11 @@ export default {
       const str = web3js.toHex('lordless')
 
       // 调起 metamask personal_sign 方法
-      web3js.personal.sign(str, web3js.eth.defaultAccount, (err, result) => {
+      web3js.personal.sign(str, address, (err, result) => {
         if (!err) {
           if (result) loginFunc(result, address)
         } else {
-          if (cb) cb(err)
+          cb && cb(err)
         }
       })
     },

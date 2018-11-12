@@ -20,7 +20,7 @@
       @close="closeTip">
     </msg-tip> -->
     <meta-tip v-model="metaOpen"/>
-    <alert v-model="alertModel" desc="目前不支持移动端领取哦，请前往PC端注册使用吧。"/>
+    <alert v-model="mobileAlertModel" desc="目前不支持移动端领取哦，请前往PC端注册使用吧。"/>
   </div>
 </template>
 
@@ -44,7 +44,7 @@ export default {
   },
   data: () => {
     return {
-      alertModel: false,
+      mobileAlertModel: false,
       isMobile: false,
       reloginDialog: false
     }

@@ -1,5 +1,5 @@
 import store from '@/store'
-import { getNetwork, getCoinbase, getBalance, getGasPrice } from './utils'
+import { initStorageUser, getNetwork, getCoinbase, getBalance, getGasPrice } from './utils'
 import { actionTypes } from '@/store/types'
 
 export const monitorWeb3 = (web3Opt) => {
@@ -69,9 +69,10 @@ export const monitorWeb3 = (web3Opt) => {
 
       // 如果 newCoinbase 存在，则证明是切换账号，或重新登陆
       if (newCoinbase) {
-        window.localStorage.setItem('currentAddress', newCoinbase)
-        // 重新获取用户信息
-        store.dispatch(`user/${actionTypes.USER_SET_USER_BY_TOKEN}`)
+        initStorageUser(newCoinbase)
+        // window.localStorage.setItem('currentAddress', newCoinbase)
+        // // 重新获取用户信息
+        // store.dispatch(`user/${actionTypes.USER_SET_USER_BY_TOKEN}`)
 
         // 重新初始化合约
         store.dispatch(`contract/${actionTypes.CONTRACT_INIT_INSTANCE}`, { monitor: true })

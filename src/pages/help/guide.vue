@@ -10,8 +10,8 @@
           <li class="status-cnt-item">
             <div class="d-flex status-cnt-container">
               <div class="d-flex f-align-end status-cnt-symbol">
-                <span :class="[`lordless-symbol-${unBrowser ? 'close' : 'check'}`, 'lg']">
-                  <i :class="[`el-icon-${unBrowser ? 'close' : 'check'}`]"></i>
+                <span class="lordless-symbol-icon lg" :class="browserStatus">
+                  <i :class="`el-icon-${browserStatus}`"></i>
                 </span>
                 <span class="inline-block mar-l1 text-upper text-color-third">STEP1</span>
               </div>
@@ -28,8 +28,8 @@
           <li class="status-cnt-item">
             <div class="d-flex status-cnt-container">
               <div class="d-flex f-align-end status-cnt-symbol">
-                <span :class="[`lordless-symbol-${(unMetamask || lockedMetamask) ? 'close' : 'check'}`, 'lg']">
-                  <i :class="[`el-icon-${(unMetamask || lockedMetamask) ? 'close' : 'check'}`]"></i>
+                <span class="lordless-symbol-icon lg" :class="metaMaskStatus">
+                  <i :class="`el-icon-${metaMaskStatus}`"></i>
                 </span>
                 <span class="inline-block mar-l1 text-upper text-color-third">STEP2</span>
               </div>
@@ -50,8 +50,8 @@
           <li class="status-cnt-item">
             <div class="d-flex status-cnt-container">
               <div class="d-flex f-align-end status-cnt-symbol">
-                <span :class="[`lordless-symbol-${unOwnEthBalance ? 'close' : 'check'}`, 'lg']">
-                  <i :class="[`el-icon-${unOwnEthBalance ? 'close' : 'check'}`]"></i>
+                <span class="lordless-symbol-icon lg" :class="ethBalanceStatus">
+                  <i :class="[`el-icon-${ethBalanceStatus}`]"></i>
                 </span>
                 <span class="inline-block mar-l1 text-upper text-color-third">STEP3</span>
               </div>
@@ -124,23 +124,54 @@ export default {
     ...mapState('status', [
       'browser'
     ]),
+    ...mapState('web3', [
+      'web3Opt'
+    ]),
+
     unBrowser () {
       return !this.browser.Chrome && !this.browser.Firefox
     },
 
+    browserStatus () {
+      const browser = this.browser
+      switch (true) {
+        case browser.default: return 'loading'
+        case this.unBrowser: return 'close'
+        default: return 'check'
+      }
+    },
+
     unMetamask () {
-      const web3Opt = this.$root.$children[0].web3Opt
+      const web3Opt = this.web3Opt
       return !web3Opt.web3js || !web3Opt.networkId || !web3Opt.isConnected
     },
 
     lockedMetamask () {
-      const web3Opt = this.$root.$children[0].web3Opt
+      const web3Opt = this.web3Opt
       return !web3Opt.address
     },
 
+    metaMaskStatus () {
+      const web3Opt = this.web3Opt
+      switch (true) {
+        case web3Opt.loading: return 'loading'
+        case this.unMetamask || this.lockedMetamask: return 'close'
+        default: return 'check'
+      }
+    },
+
     unOwnEthBalance () {
-      const web3Opt = this.$root.$children[0].web3Opt
+      const web3Opt = this.web3Opt
       return !web3Opt.balance
+    },
+
+    ethBalanceStatus () {
+      const web3Opt = this.web3Opt
+      switch (true) {
+        case web3Opt.loading: return 'loading'
+        case this.unOwnEthBalance: return 'close'
+        default: return 'check'
+      }
     },
 
     finishStatus () {
