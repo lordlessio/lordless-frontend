@@ -25,7 +25,7 @@
         <lordless-btn
           class="d-inline-flex f-align-center alert-btn"
           theme="blue"
-          @click="$root.$children[0].mobileAlertModel = false">Confirm</lordless-btn>
+          @click="$emit('input', false)">Confirm</lordless-btn>
       </p>
     </div>
   </el-dialog>

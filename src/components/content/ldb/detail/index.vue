@@ -531,10 +531,11 @@ export default {
         // 根据 tokenId 获取建筑链上信息
         const ldb = await NFTsCrowdsale.methods('getAuction', [tokenId])
         console.log('buy => submitBuy --- getAuction:', ldb[2].toNumber(), tokenId)
+        // alert(ldb[2].toNumber())
 
         this.metamaskChoose = true
 
-        const { gasPrice } = web3Opt
+        const { gasPrice, address } = web3Opt
 
         // 传输的合约参数
         const payByEth = {
@@ -547,55 +548,45 @@ export default {
         const gas = (await NFTsCrowdsale.estimateGas(payByEth.name, payByEth.values)) || 600000
 
         // 根据链上信息购买建筑
-        NFTsCrowdsale.methods(payByEth.name, payByEth.values.concat([{ gas, gasPrice, value: ldb[2] }]))
-          .then(tx => {
-            console.log('----- buyHandle tx', tx)
-            // this.buyPending = true
-            this.metamaskChoose = false
+        const params = {
+          gas,
+          gasPrice,
+          data: NFTsCrowdsale.payByEth.getData(tokenId),
+          value: ldb[2],
+          // memo: 'buy a tavern by lordless',
+          // feeCustomizable: true,
+          to: NFTsCrowdsale.address,
+          from: address
+        }
 
-            this.checkTxEvent({ tx, action: payByEth.name, tokenId }, () => {
-              this.$router.push('/owner/activity')
-            })
+        // 使用自有封装对象
+        window.lordlessMethods.buy(params).then(tx => {
+          console.log('----- buyHandle tx', tx)
+          // this.buyPending = true
+          this.metamaskChoose = false
 
-            // 修改 isBuying 状态
-            // this.$set(this.ldbPendings, 'isBuying', true)
-            // this.$nextTick(() => this.$router.push('/owner/activity'))
-
-            // const loop = () => {
-            //   // 轮询 tx 状态
-            //   this.checkTxEvent({ tx, action: payByEth.name, tokenId }, ({ data, err }) => {
-            //     if (err) return
-            //     if (data.isPending) return loop()
-
-            //     // 关闭 buy dialog
-            //     // this.buyModel = false
-
-            //     this.$set(this.ldbPendings, 'isBuying', false)
-
-            //     // 购买完毕，改变 ldbInfo
-            //     // 改变市场状态
-            //     this.$set(this.ldbInfo.chain.auction, 'isOnAuction', false)
-
-            //     // 改变领主信息
-            //     if (this.userInfo.address && this.userInfo.address !== this.ldbInfo.lord.address) {
-            //       this.$set(this.ldbInfo, 'lord', this.userInfo)
-            //     }
-
-            //     this.$set(this.ldbRecords, 'list', [].concat(this.ldbRecords.list, data))
-            //     this.$set(this.ldbRecords, 'total', this.ldbRecords.total + 1)
-
-            //     this.$nextTick(() => {
-            //       // this.orderModel = true
-            //       // this.checkOwner(tokenId)
-            //     })
-            //   })
-            // }
-            // loop()
+          this.checkTxEvent({ tx, action: payByEth.name, tokenId }, () => {
+            this.$router.push('/owner/activity')
           })
+        })
           .catch((err) => {
             console.log('err', err)
             this.metamaskChoose = false
           })
+        // NFTsCrowdsale.methods(payByEth.name, payByEth.values.concat([{ gas, gasPrice, value: ldb[2] }]))
+        //   .then(tx => {
+        //     console.log('----- buyHandle tx', tx)
+        //     // this.buyPending = true
+        //     this.metamaskChoose = false
+
+        //     this.checkTxEvent({ tx, action: payByEth.name, tokenId }, () => {
+        //       this.$router.push('/owner/activity')
+        //     })
+        //   })
+        //   .catch((err) => {
+        //     console.log('err', err)
+        //     this.metamaskChoose = false
+        //   })
 
         // this.buyModel = true
       } catch (err) {

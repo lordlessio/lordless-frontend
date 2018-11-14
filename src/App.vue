@@ -3,6 +3,7 @@
     <lordless-svg/>
     <Header ref="lordlessHeader" v-bind="headerOpt"/>
     <div class="ld-main" :class="[{ 'no-header': isMobile || !headerOpt.show || (headerOpt.show && headerOpt.fixed) }, { 'no-footer': !footerOpt.show }]">
+      <!-- <p v-for="item of Object.keys(this.web3Opt)" :key="item" style="margin-top: 60px;color: #555;font-size: 14px;">{{ item }} - {{ web3Opt[item] ? web3Opt[item].toString() : 'null' }}</p> -->
       <!-- <div class="d-flex col-flex f-auto-center ld-error" v-if="web3Opt.error">
         <h1>出错啦！</h1>
         <p>{{ web3Opt.error }}</p>
@@ -40,7 +41,23 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'App',
   async created () {
-    if (this.web3Opt.web3js.default) initWeb3()
+    this.web3Opt.web3js.default && initWeb3(({ loading, isConnected }) => {
+      if (!loading && !isConnected) {
+        this.$notify.error({
+          title: 'Error!',
+          message: 'Web3 init failed',
+          position: 'bottom-right',
+          duration: 2500
+        })
+      } else if (isConnected) {
+        this.$notify.success({
+          title: 'Success!',
+          message: 'Web3 is onReady!',
+          position: 'bottom-right',
+          duration: 2500
+        })
+      }
+    })
   },
   data: () => {
     return {
@@ -48,14 +65,6 @@ export default {
       isMobile: false,
       reloginDialog: false
     }
-  },
-  components: {
-    Header,
-    Footer,
-    // MsgTip,
-    MetaTip,
-    Alert,
-    LordlessSvg
   },
   computed: {
     ...mapState('layout', {
@@ -95,6 +104,14 @@ export default {
     headerOpt (val) {
       this.$nextTick(() => this.$refs.lordlessHeader.init())
     }
+  },
+  components: {
+    Header,
+    Footer,
+    // MsgTip,
+    MetaTip,
+    Alert,
+    LordlessSvg
   },
   methods: {
     // ...mapActions('region', [

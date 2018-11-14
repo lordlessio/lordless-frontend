@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="authorizeDialog"
-    :custom-class="`inline-block lordless-dialog message-dialog no-header transparent center ${metaOpen ? 'blur' : ''}`"
+    :custom-class="`inline-block lordless-dialog message-dialog no-header transparent center mobile-center ${metaOpen ? 'blur' : ''}`"
     width="100%"
     append-to-body
     center
@@ -36,7 +36,7 @@
         @telegram="$emit('telegram', $event)"></Telegram>
 
       <Status
-        v-show="showStatus && !hideStatus"
+        v-if="showStatus && !hideStatus"
         :type="statusType">
       </Status>
 
@@ -143,13 +143,17 @@ export default {
 
       const web3Loading = web3Opt.loading
 
-      const unBrowser = !this.browser.Chrome && !this.browser.Firefox
+      const unBrowser = !this.isMobile && !this.browser.Chrome && !this.browser.Firefox
+      // const unBrowser = false
 
       const unMetamask = web3Opt.web3js.default || !web3Opt.networkId || !web3Opt.isConnected
+      // const unMetamask = false
 
       const lockedMetamask = !web3Opt.address
+      // const lockedMetamask = false
 
-      const unallowMetamask = parseInt(web3Opt.networkId) !== parseInt(process.env.APPROVED_NETWORK_ID)
+      // const unallowMetamask = !this.isMobile && parseInt(web3Opt.networkId) !== parseInt(process.env.APPROVED_NETWORK_ID)
+      const unallowMetamask = false
 
       switch (true) {
         case !web3Loading && unBrowser: return 'browser'
@@ -190,17 +194,17 @@ export default {
       // 浏览器检测初始化状态
       const browserInit = !this.browser.default
 
-      const _web3js = this.web3Opt.web3js
-
       // web3 是否在加载
-      const web3Init = !_web3js.default
+      const { loading } = this.web3Opt
+
+      const _web3js = this.web3Opt.web3js
 
       // unlocked 表示当前环境没有 web3
       const unlockedWeb3 = _web3js.unlocked
       // const userInit = !this.userInfo.default
-      console.log('browserInit', browserInit, web3Init, unlockedWeb3)
+      console.log('browserInit', browserInit, loading, unlockedWeb3)
 
-      return unlockedWeb3 || (browserInit && web3Init)
+      return unlockedWeb3 || (browserInit && !loading)
     },
 
     account () {
@@ -214,9 +218,8 @@ export default {
   watch: {
 
     showStatus (val) {
-      if (val) {
+      if (val && this.authorizeInit) {
         this.initModels()
-        this.checkoutAuthorize()
       }
     },
 
@@ -261,12 +264,27 @@ export default {
       this.authorizeDialog = false
     },
 
-    checkoutAuthorize ({ guide = false, crowdsale = false, telegram = false } = {}) {
-      // 如果是移动端，直接弹出
-      if (this.isMobile) {
-        this.$root.$children[0].mobileAlertModel = true
-        return
+    isMobileRead () {
+      const { loading, isConnected } = this.web3Opt
+
+      switch (true) {
+        // 如果是移动端，并且 !locked 返回 false
+        case this.isMobile && !loading && !isConnected:
+          this.$root.$children[0].mobileAlertModel = true
+          return false
+
+        // 如果不是移动端，或者移动端含有 web3，返回 true
+        default: return true
       }
+    },
+
+    checkoutAuthorize ({ guide = false, crowdsale = false, telegram = false } = {}) {
+      if (!this.isMobileRead()) return
+      // 如果是移动端，直接弹出
+      // if (this.isMobile) {
+      //   this.$root.$children[0].mobileAlertModel = true
+      //   return
+      // }
 
       // 如果用户不存在，打开对话框，执行下行阻断
       if (!this.address) {

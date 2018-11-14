@@ -305,9 +305,10 @@ export default {
      * 领取糖果
      */
     async receiveCandy (task) {
-      this.$root.$children[0].mobileAlertModel = true
+      // this.$root.$children[0].mobileAlertModel = true
+
       // 移动端，暂时阻断
-      if (task) return
+      // if (task) return
       if (task.status !== 'processing') return
 
       this.receiveBoxShow = true
@@ -360,66 +361,6 @@ export default {
         candy.removeEventListener(transitionEvent(), func)
       }
       candy.addEventListener(transitionEvent(), func)
-
-      // const intoBoxCandy = document.getElementById('receive-box-candy')
-
-      // const cloneCandyId = `clone_${candyId}`
-
-      // receiveAnimate(cCandy, document.getElementById('header-receive-box'), { duration: 500 }, ({ boxCenter, coords, beforeEnd }) => {
-      //   if (!hasClass('animate', rbox)) addClass('animate', rbox)
-      //   else rbox.style.animationPlayState = 'running'
-
-      //   const rboxFunc = () => {
-      //     rbox.removeEventListener(animationIterationEvent(), rboxFunc)
-      //     rbox.style.animationPlayState = 'paused'
-
-      //     animateAfter = true
-      //     removeCandy()
-      //   }
-      //   rbox.addEventListener(animationIterationEvent(), rboxFunc)
-
-      //   const eatFunc = () => {
-      //     console.log('-------- eatFunc')
-      //     const cloneCandy = document.getElementById(cloneCandyId)
-      //     cloneCandy.removeEventListener(animationEndEvent(), eatFunc)
-      //     // cloneCandy.style.animationPlayState = 'paused'
-      //     addClass('hidden', cloneCandy)
-
-      //     intoBoxCandy.style = ''
-
-      //     // 如果当前糖果是box关闭前的最后那个糖果，关闭box
-      //     if (this.receiveEndCandy === candyId) {
-      //       rbox.style = ''
-      //       removeClass('animate', rbox)
-      //       setTimeout(() => {
-      //         this.receiveBoxShow = false
-      //       }, 0)
-      //     }
-      //   }
-
-      //   if (intoBoxCandy.firstChild) intoBoxCandy.removeChild(intoBoxCandy.firstChild)
-
-      //   const cloneCandy = cCandy.cloneNode(true)
-
-      //   cloneCandy.setAttribute('id', cloneCandyId)
-      //   cloneCandy.style = ''
-      //   cloneCandy.className = 'receive-clone-candy animate'
-      //   intoBoxCandy.appendChild(cloneCandy)
-
-      //   document.getElementById(cloneCandyId).addEventListener(animationEndEvent(), eatFunc)
-
-      //   const ccr = cCandy.getClientRects()[0]
-      //   const ibcr = document.getElementById('receive-box-container').getClientRects()[0]
-
-      //   const ibcleft = ccr.left - ibcr.left
-      //   const ibctop = ccr.top - ibcr.top
-      //   intoBoxCandy.style = `transform: translate3d(${ibcleft}px, ${ibctop}px, 0);`
-
-      //   if (!iserror) {
-      //     addClass('hidden', cCandy)
-      //   }
-      //   cCandy.style.transform = ''
-      // })
 
       this.$emit('receive', task, ({ errorMsg, data } = {}) => {
         if (!data) {

@@ -44,8 +44,12 @@
             </svg>
           </a>
         </span>
-        <div class="header-right-item user-item sm-hidden" data-type="link">
-          <user-avatar class="user-avatar" :theme="theme === 'dark' ? 'light' : 'dark'" :showText="false"></user-avatar>
+        <div class="header-right-item user-item" data-type="link">
+          <user-avatar
+            class="user-avatar"
+            :theme="theme === 'dark' ? 'light' : 'dark'"
+            :showText="false"
+            :leftInfo="!isMobile"/>
         </div>
       </div>
     </div>
@@ -548,7 +552,7 @@ export default {
       top: 0;
       left: 0;
       width: 100%;
-      z-index: 99;
+      z-index: 2299;
       // line-height: 60px;
     }
     // .header-logo {

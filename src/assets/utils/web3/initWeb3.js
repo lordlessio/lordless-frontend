@@ -1,13 +1,19 @@
 'use strict'
 
 import store from '@/store'
-import { initStorageUser, getNetwork, getCoinbase, getBalance, getGasPrice } from './utils'
+import { mobileReady } from './mobileReady'
+import { initStorageUser, getNetwork, getAccount, getBalance, getGasPrice } from './utils'
+
+import { profillMethods } from './profill'
+
 import { monitorWeb3 } from './monitorWeb3'
 import { actionTypes } from '@/store/types'
 
 // 初始化 web3js
 export const initWeb3 = async (callback) => {
+  await mobileReady()
   const res = await checkWeb3()
+
   console.log('init web3 web3Opt:', res)
 
   // 注册 web3 状态
@@ -17,6 +23,9 @@ export const initWeb3 = async (callback) => {
   store.dispatch(`contract/${actionTypes.CONTRACT_INIT_INSTANCE}`)
 
   if (res.error) return callback ? callback(res) : res
+
+  // profill methods
+  profillMethods(res.web3js)
 
   // 监听 web3 动态
   monitorWeb3(res)
@@ -33,7 +42,7 @@ const checkWeb3 = async () => {
     balance: 0,
     gasPrice: 0,
     networkId: '',
-    coinbase: '',
+    // coinbase: '',
     address: ''
   }
 
@@ -44,10 +53,10 @@ const checkWeb3 = async () => {
 
     res.web3js = web3js
     res.isConnected = web3js.isConnected()
-    res.address = web3js.eth.defaultAccount || web3.eth.accounts[0]
+    // res.address = web3js.eth.defaultAccount || web3.eth.accounts[0]
 
-    // 初始化 localStorage currentAddress
-    initStorageUser(web3js.eth.defaultAccount)
+    // // 初始化 localStorage currentAddress
+    // initStorageUser(web3js.eth.defaultAccount)
 
     // // 获取本地缓存中的 currentAddress
     // const currentAddress = window.localStorage.getItem('currentAddress')
@@ -83,14 +92,26 @@ const checkWeb3 = async () => {
             }
             res.networkId = networkId
           }),
-        getCoinbase(res.web3js)
-          .then(({ error, coinbase }) => {
+        getAccount(res.web3js)
+          .then(({ error, account }) => {
             if (error) {
               res.error = error
             }
-            res.coinbase = coinbase
-            res.address = coinbase || res.web3js.eth.defaultAccount
+            res.address = account
+
+            // 初始化 localStorage currentAddress
+            initStorageUser(account)
           }),
+        // coinbase 在某些环境下不支持，所以暂时不使用
+        // getCoinbase(res.web3js)
+        //   .then(({ error, coinbase }) => {
+        //     if (error) {
+        //       res.error = error
+        //     }
+        //     alert(coinbase)
+        //     res.coinbase = coinbase
+        //     res.address = coinbase || res.web3js.eth.defaultAccount
+        //   }),
 
         getGasPrice(res.web3js)
           .then(({ error, gasPrice }) => {

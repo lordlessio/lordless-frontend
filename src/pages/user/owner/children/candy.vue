@@ -28,7 +28,7 @@
           <el-tab-pane
             label="Balance"
             name="balance">
-            <div v-if="candyLoading" class="user-candy-skeletion">
+            <!-- <div v-if="candyLoading" class="user-candy-skeletion">
               <p></p>
               <div class="d-flex f-justify-around" v-for="item of [1,2]" :key="item">
                 <p class="skeletion-breath"></p>
@@ -36,10 +36,19 @@
                 <p class="skeletion-breath"></p>
                 <p class="skeletion-breath"></p>
               </div>
-            </div>
+            </div> -->
             <transition name="ld-hide-fade">
+              <div v-if="candyLoading" class="user-candy-skeletion">
+                <p></p>
+                <div class="d-flex f-justify-around" v-for="item of [1,2]" :key="item">
+                  <p class="skeletion-breath"></p>
+                  <p class="skeletion-breath"></p>
+                  <p class="skeletion-breath"></p>
+                  <p class="skeletion-breath"></p>
+                </div>
+              </div>
               <div
-                v-if="!userAssets.length && !candyLoading"
+                v-else-if="!userAssets.length && !candyLoading"
                 class="d-flex v-flex col-flex f-auto-center text-center no-asset-box absolute">
                 <svg>
                   <use xlink:href="#icon-no-candy"/>
@@ -56,9 +65,7 @@
                   </span>
                 </div>
               </div>
-            </transition>
-            <transition name="ld-hide-fade">
-              <div v-show="userAssets.length && !candyLoading" class="relative">
+              <div v-else class="relative">
                 <div class="d-flex f-align-center text-center candy-tabs-title">
                   <el-col :span="5" :xs="8">Asset</el-col>
                   <el-col :span="5" :xs="8">Quantity</el-col>
@@ -106,7 +113,7 @@
             :disabled="!userAssets.length"
             label="History"
             name="history">
-            <div v-if="candyLoading" class="user-candy-skeletion">
+            <!-- <div v-if="candyLoading" class="user-candy-skeletion">
               <p></p>
               <div class="d-flex f-justify-around" v-for="item of [1,2]" :key="item">
                 <p class="skeletion-breath"></p>
@@ -114,10 +121,19 @@
                 <p class="skeletion-breath"></p>
                 <p class="skeletion-breath"></p>
               </div>
-            </div>
+            </div> -->
             <transition name="ld-hide-fade">
+              <div v-if="candyLoading" class="user-candy-skeletion">
+                <p></p>
+                <div class="d-flex f-justify-around" v-for="item of [1,2]" :key="item">
+                  <p class="skeletion-breath"></p>
+                  <p class="skeletion-breath"></p>
+                  <p class="skeletion-breath"></p>
+                  <p class="skeletion-breath"></p>
+                </div>
+              </div>
               <div
-                v-if="!userRecords.total && !candyLoading"
+                v-else-if="!userRecords.total && !candyLoading"
                 class="d-flex v-flex col-flex f-auto-center text-center no-asset-box absolute">
                 <svg>
                   <use xlink:href="#icon-no-candy"/>
@@ -134,9 +150,7 @@
                   </span>
                 </div>
               </div>
-            </transition>
-            <transition name="ld-hide-fade">
-              <div v-show="userRecords.total && !candyLoading" class="v-flex relative candy-rewards-box">
+              <div v-else class="v-flex relative candy-rewards-box">
                 <div class="d-flex f-align-center text-center candy-tabs-title">
                   <el-col :span="aside.show ? 8 : 4" :xs="8">Asset</el-col>
                   <el-col :span="aside.show ? 8 : 6" :xs="8">Type</el-col>
@@ -348,7 +362,7 @@ export default {
       'userInfo'
     ]),
     showPagination () {
-      return this.candyTab !== 'balance'
+      return this.candyTab !== 'balance' && this.userRecords.total && !this.candyLoading
     },
     pageScrollPE () {
       return document.getElementById('user-main-content')

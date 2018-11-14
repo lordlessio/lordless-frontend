@@ -34,7 +34,7 @@
     @include grid('transform', translate(-50%, -50%), 1);
   }
   &.mobile-center {
-    @include grid('top', 50%, -1);
+    @include grid('top', 45%, -1);
     @include grid('transform', translate(0, -50%), -1);
   }
 }
@@ -64,7 +64,7 @@
 
   left: 50%;
   transform: translateX(-50%);
-  @include grid('padding', 50px 30px, -1);
+  @include grid('padding', 50px 20px 20px 20px, -1);
   @include viewport-unit('width', 100vw, 40px);
 }
 .lordless-message-close {
@@ -182,19 +182,19 @@
   width: 100%;
   color: #777777;
   fill: #bbb;
-  font-size: 16px;
+  @include fontSize(16px, 1.15);
   @include margin('top', 50px, 1, -2);
   >svg {
     width: 180px;
     height: 180px;
-    @include width(150px, 1, -2);
-    @include height(150px, 1, -2);
+    @include width(100px, 1, -2);
+    @include height(100px, 1, -2);
   }
   >p {
     margin-top: 15px;
     color: #bbb;
     // font-size: 24px;
-    @include fontSize(24px, 1.2);
+    @include fontSize(24px, 1.4);
   }
   >div {
     margin-top: 25px;
@@ -205,6 +205,8 @@
     font-size: 16px;
     color: #4E47D3;
     border-radius: 5px;
+    @include fontSize(16px, 1.15);
+    @include padding('padding', 6px 8px, -1);
   }
 }
 

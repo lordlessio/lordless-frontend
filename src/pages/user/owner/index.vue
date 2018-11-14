@@ -69,12 +69,9 @@ import LdHeader from '@/components/layout/header'
 import Authorize from '@/components/reuse/dialog/authorize'
 // import Loading from '@/components/stories/loading'
 
-import { dialogMixins } from '@/mixins'
-
-import { actionTypes } from '@/store/types'
-import { mapState, mapActions } from 'vuex'
+import { dialogMixins, userMixins } from '@/mixins'
 export default {
-  mixins: [ dialogMixins ],
+  mixins: [ dialogMixins, userMixins ],
   data: () => {
     return {
       navgations: [
@@ -124,11 +121,6 @@ export default {
       loading: true
     }
   },
-  computed: {
-    ...mapState('user', [
-      'userInfo'
-    ])
-  },
   components: {
     // Loading,
 
@@ -137,10 +129,6 @@ export default {
     Authorize
   },
   methods: {
-    ...mapActions('user', [
-      actionTypes.USER_SET_USER_BY_TOKEN,
-      actionTypes.USER_LOGOUT
-    ]),
 
     fCloseAuthorize () {
       if (this.loading) this.$router.push('/')
@@ -149,10 +137,6 @@ export default {
     async checkUser () {
       const authorize = this.$refs.ownerAuthorize.checkoutAuthorize()
       this.loading = !this.userInfo.address && !authorize
-    },
-
-    async logout () {
-      await this[actionTypes.USER_LOGOUT]({ reset: true })
     }
   },
   watch: {

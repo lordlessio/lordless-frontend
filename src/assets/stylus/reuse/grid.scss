@@ -257,6 +257,7 @@
     display: inline-block;
     width: 100%;
     color: inherit;
+    font-family: inherit;
     font-size: inherit;
     height: inherit;
     line-height: inherit;
@@ -306,6 +307,9 @@
   }
   .#{$media}text-center {
     text-align: center;
+  }
+  .#{$media}text-break {
+    word-break: break-all;
   }
   .#{$media}text-nowrap {
     white-space: nowrap;

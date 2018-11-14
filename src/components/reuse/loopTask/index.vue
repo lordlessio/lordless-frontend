@@ -56,7 +56,7 @@ export default {
   data: () => {
     return {
       task: null,
-      loopInterval: null,
+      loopTimeout: null,
       loading: true
     }
   },
@@ -95,16 +95,15 @@ export default {
     loopTask () {
       this.clearLoop()
       this.getCurrentTask()
-      this.loopInterval = setInterval(() => {
-        this.getCurrentTask()
+      this.loopTimeout = setTimeout(() => {
+        this.loopTask()
       }, 5000)
     },
-    clearLoop (interval = this.loopInterval) {
-      if (interval) {
-        clearInterval(interval)
-        interval = null
+    clearLoop (timeout = this.loopTimeout) {
+      if (timeout) {
+        clearTimeout(timeout)
       }
-      this.loopInterval = null
+      this.loopTimeout = null
       return null
     }
   },

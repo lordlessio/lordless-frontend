@@ -10,7 +10,7 @@ import {
 } from 'date-fns'
 import store from '@/store'
 
-window.requestAnimFrame = (function () {
+window.requestAnimationFrame = (function () {
   return window.requestAnimationFrame ||
          window.webkitRequestAnimationFrame ||
          window.mozRequestAnimationFrame ||

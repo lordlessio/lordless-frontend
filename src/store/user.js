@@ -80,7 +80,7 @@ export default {
      */
     [actionTypes.USER_META_LOGIN]: ({ state, commit, dispatch }, { email, nickName, cb } = {}) => {
       const _address = window.localStorage.getItem('currentAddress')
-      const { web3js, address = _address } = web3Store.state.web3Opt
+      const { address = _address } = web3Store.state.web3Opt
       if (!address) return
 
       // 登陆
@@ -94,10 +94,10 @@ export default {
       }
       // 取消 expired 状态
       commit(mutationTypes.USER_SET_USER_EXPIRED, false)
-      const str = web3js.toHex('lordless')
+      const message = 'lordless'
 
-      // 调起 metamask personal_sign 方法
-      web3js.personal.sign(str, address, (err, result) => {
+      // 调用封装的 sign 方法
+      window.lordlessMethods.sign(message, address).then(({ err, result }) => {
         if (!err) {
           if (result) loginFunc(result, address)
         } else {

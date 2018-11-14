@@ -11,7 +11,7 @@ export default {
       balance: 0,
       gasPrice: 0,
       address: null,
-      coinbase: null,
+      // coinbase: null,
       error: null,
       web3js: { default: true },
       isConnected: false,
@@ -27,7 +27,7 @@ export default {
       address: null,
 
       // coinbase 地址
-      coinbase: null,
+      // coinbase: null,
 
       // 错误信息
       error: null,

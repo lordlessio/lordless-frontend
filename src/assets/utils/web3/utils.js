@@ -41,6 +41,20 @@ export const getCoinbase = (web3js) => {
   })
 }
 
+// generator getAccount func
+export const getAccount = (web3js) => {
+  return new Promise((resolve, reject) => {
+    try {
+      web3js.eth.getAccounts((error, accounts) => {
+        if (error) return resolve({ error: error.message || 'Account error', account: '' })
+        resolve({ account: (accounts[0] || '').toString() })
+      })
+    } catch (err) {
+      resolve({ error: err.message || 'Coinbase error', account: '' })
+    }
+  })
+}
+
 // generator getGasPrice func
 export const getGasPrice = (web3js) => {
   return new Promise((resolve, reject) => {
