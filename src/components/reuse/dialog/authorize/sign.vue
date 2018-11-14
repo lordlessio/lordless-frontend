@@ -12,7 +12,7 @@
         <div class="login-cnt-box">
           <div class="login-cnt-top">
             <p class="TTFontBolder">Wallet address</p>
-            <p class="login-info-text">{{ account || 'Welcome to LORDLESS!' }}</p>
+            <p class="text-break login-info-text">{{ account || 'Welcome to LORDLESS!' }}</p>
           </div>
           <p class="login-markline"></p>
           <div>
@@ -309,10 +309,10 @@ export default {
     }
   }
   .login-markline {
+    margin: 15px auto 30px;
     height: 0;
     border-bottom: 1px dashed #fff;
-    @include width(50%, 1);
-    @include margin-around(15px, auto, 30px, auto, 1);
+    @include width(90%, 1);
   }
   // .authorize-sign-box {
   //   max-width: 600px;
@@ -355,7 +355,8 @@ export default {
     }
   }
   .authorize-terms-item {
-    font-size: 18px;
+    // font-size: 18px;
+    @include fontSize(18px, 1.15);
     &:not(:first-of-type) {
       margin-top: 8px;
     }

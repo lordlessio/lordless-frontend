@@ -127,18 +127,22 @@ export default {
 
     async checkCrowdsaleEvent ({ address, TavernNFTs = this.TavernNFTs, NFTsCrowdsale = this.NFTsCrowdsale } = {}, cb) {
       if (!address) return
-      let interval = null
-      // 创建新定时器实例
-      interval = setInterval(async () => {
-        const bool = await TavernNFTs.methods('isApprovedForAll', [address, NFTsCrowdsale.address])
-        if (bool) {
-          clearInterval(interval)
-          interval = null
-          // this.clearCInterval({ index })
-          if (cb) cb()
-        }
-      }, 5000)
 
+      let timeout = null
+      const loopFunc = () => {
+        // 创建新定时器实例
+        timeout = setTimeout(async () => {
+          const bool = await TavernNFTs.methods('isApprovedForAll', [address, NFTsCrowdsale.address])
+          if (bool) {
+            cb && cb()
+            return
+          }
+          clearTimeout(timeout)
+          timeout = null
+
+          loopFunc()
+        }, 5000)
+      }
       // this.intervals[index] = interval
     },
 

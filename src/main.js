@@ -5,6 +5,7 @@ import Vue from 'vue'
 import Lordless from './App.vue'
 import router from './router'
 import store from './store'
+import FastClick from 'fastclick'
 
 import './plugins'
 
@@ -45,6 +46,8 @@ const i18n = new VueI18n({
 ElementLocale.i18n((key, value) => i18n.t(key, value))
 
 Vue.config.productionTip = false
+
+FastClick.attach(document.body)
 
 /* eslint-disable no-new */
 new Vue({

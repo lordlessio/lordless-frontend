@@ -14,6 +14,7 @@ const initContract = (json, web3js) => {
     value: (name, values) => {
       return new Promise((resolve, reject) => {
         contract[name].estimateGas(...values, (err, res) => {
+          console.log('err', err)
           if (err) return resolve(0)
           return resolve(res)
         })

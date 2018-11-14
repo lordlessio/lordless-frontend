@@ -28,6 +28,9 @@ export default {
     height: 54px;
     border-radius: 100%;
     box-sizing: border-box;
+    @include padding(-1, 6px, 1, -1);
+    @include width(40px, 1, -1);
+    @include height(40px, 1, -1);
     &::before {
       content: 'BETA';
       position: absolute;
@@ -40,6 +43,7 @@ export default {
       border-radius: 2px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, .25);
       transform: scale(.75) translateX(60%);
+      @include grid('transform', scale(.6) translateX(80%), -1);
     }
     svg {
       fill: inherit;

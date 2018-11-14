@@ -75,7 +75,7 @@ export default {
   data: () => {
     return {
       approvedTask: null,
-      approvedInterval: null
+      approvedTimeout: null
     }
   },
   watch: {
@@ -85,7 +85,7 @@ export default {
     },
     loading (val) {
       if (!val) {
-        this.approvedIntervalFunc()
+        this.approvedTimeoutFunc()
       }
     }
   },
@@ -112,22 +112,23 @@ export default {
         addClass('animate', dom)
       })
     },
-    async approvedIntervalFunc () {
+    async approvedTimeoutFunc () {
       this.getApprovedTask()
       this.clearApproved()
-      this.approvedInterval = setInterval(() => {
-        this.getApprovedTask()
+
+      this.approvedTimeout = setTimeout(() => {
+        this.approvedTimeoutFunc()
       }, 10000)
     },
     clearApproved () {
-      removeClass('animate', document.getElementById('approved-item-container'))
-      if (this.approvedInterval) {
-        clearInterval(this.approvedInterval)
-        this.approvedInterval = null
+      if (this.approvedTimeout) {
+        clearTimeout(this.approvedTimeout)
+        this.approvedTimeout = null
       }
     }
   },
   beforeDestroy () {
+    removeClass('animate', document.getElementById('approved-item-container'))
     this.clearApproved()
   }
 }
@@ -182,7 +183,7 @@ export default {
   .approved-item-container {
     min-height: 300px;
     opacity: 1;
-    transition: opacity .25s ease-in-out;
+    transition: opacity .4s cubic-bezier(0.4, 0, 0.2, 1);
     &.animate {
       opacity: 0;
       &::before {
@@ -219,7 +220,7 @@ export default {
       font-size: 18px;
       color: #777;
       transform: translateY(0);
-      transition: transform .25s ease-in-out;
+      transition: transform .4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     &::before {
       content: '';
@@ -231,7 +232,7 @@ export default {
       // background-image: linear-gradient(45deg, #16222A, #3A6073);
       background-color: $--text-blue-color;
       transform: skewY(15deg) translateY(0);
-      transition: transform .25s ease-in-out;
+      transition: transform .4s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: -1;
     }
   }
@@ -247,7 +248,7 @@ export default {
       background-color: #fff;
       box-sizing: border-box;
       box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .25);
-      transition: left .25s ease-in-out;
+      transition: left .4s cubic-bezier(0.4, 0, 0.2, 1);
       &:not(:first-of-type) {
         margin-left: -15px;
         z-index: -1;
@@ -256,7 +257,7 @@ export default {
   }
   .approved-task-rewards {
     transform: translateY(0);
-    transition: transform .25s ease-in-out;
+    transition: .4s cubic-bezier(0.4, 0, 0.2, 1);
     >div {
       >h3 {
         margin-top: 10px;

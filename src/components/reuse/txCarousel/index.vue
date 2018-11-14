@@ -96,7 +96,7 @@ export default {
   data: () => {
     return {
       loopInstance: null,
-      intervalTx: null,
+      // timeoutTx: null,
       loading: true,
       loop: true,
       loopStart: false,
@@ -114,14 +114,18 @@ export default {
       return []
     },
 
-    intervalTxs () {
-      let intervalTx = setInterval(() => {
-        if (!this.loopStart) this.initLoop()
-        else this.getTxs()
-      }, 15000)
+    timeoutTxs () {
+      let timeoutTx
+      const func = () => {
+        timeoutTx = setTimeout(() => {
+          if (!this.loopStart) this.initLoop()
+          else this.getTxs()
+          func()
+        }, 15000)
+      }
       this.$once('hook:beforeDestroy', () => {
-        clearInterval(intervalTx)
-        intervalTx = null
+        clearTimeout(timeoutTx)
+        timeoutTx = null
       })
     },
 
@@ -157,7 +161,7 @@ export default {
     async init () {
       this.loading = true
       await this.initLoop()
-      // this.intervalTxs()
+      // this.timeoutTxs()
       this.loading = false
     },
 

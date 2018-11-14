@@ -3,6 +3,7 @@ module.exports = axios => {
 
     // 根据 地址获取用户信息
     getUserByAddress: (address) => {
+      // address = address.toLocaleLowerCase()
       return axios.get(`/api/user/${address}`)
     },
 

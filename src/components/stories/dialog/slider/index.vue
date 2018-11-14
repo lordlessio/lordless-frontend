@@ -19,7 +19,7 @@ import DialogMask from './tool/mask'
 import { addClass, removeClass } from 'utils/tool'
 
 import { actionTypes } from '@/store/types'
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   props: {
     visible: {
@@ -31,6 +31,11 @@ export default {
     return {
       dialogModel: vm.visible
     }
+  },
+  computed: {
+    ...mapState('layout', {
+      appOpt: 'app'
+    })
   },
   watch: {
     visible (val) {
@@ -51,7 +56,7 @@ export default {
     ]),
     openModel () {
       this.$emit('open')
-      this[actionTypes.LAYOUT_SET_APP_OPTIONS]({ transform: true })
+      this.appOpt.transform && this[actionTypes.LAYOUT_SET_APP_OPTIONS]({ transform: true })
       addClass('overflow-hidden', document.body)
     },
     closeModel () {
