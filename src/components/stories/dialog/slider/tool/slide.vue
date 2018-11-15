@@ -88,7 +88,8 @@ export default {
 <style lang="scss" scoped>
 
   .ld-dialog-slide {
-    position: fixed;
+    // position: fixed;
+    position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
@@ -107,7 +108,8 @@ export default {
   }
 
   .dialog-ldb-close {
-    position: fixed;
+    // position: fixed;
+    position: absolute;
     left: 30px;
     top: 15px;
     color: #555;

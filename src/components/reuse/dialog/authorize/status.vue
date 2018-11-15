@@ -1,5 +1,5 @@
 <template>
-  <div class="authorize-status-box">
+  <div class="authorize-status-box" @touchmove.stop>
     <div class="authorize-status-container text-center">
       <h1 class="TTFontBolder">{{ infos[type].title }}</h1>
       <p>{{ infos[type].content }}</p>

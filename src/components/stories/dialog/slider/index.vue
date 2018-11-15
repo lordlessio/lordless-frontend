@@ -16,11 +16,13 @@
 import DialogSlide from './tool/slide'
 import DialogMask from './tool/mask'
 
-import { addClass, removeClass } from 'utils/tool'
-
 import { actionTypes } from '@/store/types'
 import { mapState, mapActions } from 'vuex'
+
+import { layoutMixins } from '@/mixins'
 export default {
+  name: 'lordless-slider',
+  mixins: [layoutMixins],
   props: {
     visible: {
       type: Boolean,
@@ -40,7 +42,7 @@ export default {
   watch: {
     visible (val) {
       this.dialogModel = val
-      removeClass('overflow-hidden', document.body)
+      this.freeScroll()
     },
     dialogModel (val) {
       this.$emit('update:visible', val)
@@ -57,17 +59,17 @@ export default {
     openModel () {
       this.$emit('open')
       this.appOpt.transform && this[actionTypes.LAYOUT_SET_APP_OPTIONS]({ transform: true })
-      addClass('overflow-hidden', document.body)
+      this.prohibitScroll()
     },
     closeModel () {
       this.$emit('close')
       this[actionTypes.LAYOUT_SET_APP_OPTIONS]({ transform: false })
-      removeClass('overflow-hidden', document.body)
+      this.freeScroll()
     }
   },
   destroyed () {
     this[actionTypes.LAYOUT_SET_APP_OPTIONS]({ transform: false })
-    removeClass('overflow-hidden', document.body)
+    this.freeScroll()
   }
 }
 </script>

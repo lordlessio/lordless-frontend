@@ -76,7 +76,7 @@
       <div class="text-center lordless-status-questions">
         <h2>Common questions</h2>
         <div class="status-questions-cnt">
-          <ul class="text-left d-flex">
+          <ul class="text-left d-flex sm-col-flex">
             <li class="v-flex questions-cnt-item">
               <div class="questions-cnt-header">
                 Why do you need my mobile phone number?
@@ -308,7 +308,8 @@ export default {
     overflow: hidden;
     box-shadow: 5px 5px 20px 0 rgba(0, 0, 0, .15);
     &:not(:first-of-type) {
-      margin-left: 40px;
+      @include margin('left', 40px, -2);
+      @include margin('top', 20px, 1, -2);
     }
   }
   .questions-cnt-header {
@@ -321,5 +322,15 @@ export default {
     padding: 24px 22px;
     font-size: 16px;
     @include TTFontNormal();
+  }
+
+  @media screen and (max-width: 768px) {
+    .lordless-status-box {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+    .status-cnt-item {
+      box-shadow: 0px 5px 10px 0 rgba(0, 0, 0, 0.3);
+    }
   }
 </style>

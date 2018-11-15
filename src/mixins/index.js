@@ -4,6 +4,7 @@ const dialogMixins = require('./dialog')
 const metamaskMixins = require('./metamask')
 const checkMobile = require('./checkMobile')
 const userMixins = require('./user')
+const layoutMixins = require('./layout')
 
 // console.log('contractMixins', contractMixins)
 // // export const loginMixins = login
@@ -12,5 +13,6 @@ module.exports = {
   dialogMixins: dialogMixins.default,
   metamaskMixins: metamaskMixins.default,
   checkMobileMixins: checkMobile.default,
-  userMixins: userMixins.default
+  userMixins: userMixins.default,
+  layoutMixins: layoutMixins.default
 }

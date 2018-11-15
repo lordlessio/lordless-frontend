@@ -1,7 +1,9 @@
 
 // 一级 DOM 布局样式
 #lordless {
+  position: relative;
   height: 100%;
+  @include overflow();
 }
 .ld-main {
   // margin-bottom: -150px;

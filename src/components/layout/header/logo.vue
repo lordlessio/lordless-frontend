@@ -28,9 +28,9 @@ export default {
     height: 54px;
     border-radius: 100%;
     box-sizing: border-box;
-    @include padding(-1, 6px, 1, -1);
-    @include width(40px, 1, -1);
-    @include height(40px, 1, -1);
+    @include grid('padding', 6px, -1);
+    @include grid('width', 40px, -1);
+    @include grid('height', 40px, -1);
     &::before {
       content: 'BETA';
       position: absolute;

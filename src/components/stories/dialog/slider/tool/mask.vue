@@ -3,7 +3,8 @@
     <div
       v-if="visible"
       class="alone-layer ld-ldb-dialog"
-      @click="$emit('update:visible', false)">
+      @click="$emit('update:visible', false)"
+      @touchmove.prevent>
     </div>
   </transition>
 </template>
@@ -42,7 +43,8 @@ export default {
 
 <style lang="scss" scoped>
   .ld-ldb-dialog {
-    position: fixed;
+    // position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
