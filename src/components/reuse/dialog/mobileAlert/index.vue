@@ -11,7 +11,7 @@
     :show-close="false"
     @open="$emit('open')"
     @close="$emit('close')">
-    <div class="text-center lordless-message-box lordless-meta-dialog">
+    <!-- <div class="text-center lordless-message-box lordless-meta-dialog">
       <h3 slot="title">
         Oops!
       </h3>
@@ -27,8 +27,8 @@
           theme="blue"
           @click="$emit('input', false)">Confirm</lordless-btn>
       </p>
-    </div>
-    <!-- <div class="text-center lordless-message-box lordless-meta-dialog">
+    </div> -->
+    <div class="text-center lordless-message-box lordless-meta-dialog" @touchmove.prevent>
       <span
         @click.stop="closeDialog"
         class="inline-block line-height-1 lordless-message-close">
@@ -43,20 +43,25 @@
           Please download the wallet beblow to play our game inside.
         </span>
       </p>
-      <p class="d-flex f-auto-center alert-wallets">
+      <p class="d-flex f-wrap f-align-center alert-wallets" :class="{ 'f-justify-around': wallets.length > 1, 'f-justify-center': wallets.length <= 1 }">
         <lordless-btn
+          v-for="(item, index) of wallets"
+          :key="index"
           class="d-inline-flex f-align-center alert-wallet-btn"
-          theme="blue"
-          @click="$emit('input', false)">
-          可可钱包
+          theme="blue">
+          <a class="line-height-0 inline-block" target="_blank" :href="item.link">
+            <img :src="item.logo"/>
+          </a>
         </lordless-btn>
       </p>
-    </div> -->
+    </div>
   </el-dialog>
 </template>
 
 <script>
+import { layoutMixins } from '@/mixins'
 export default {
+  mixins: [layoutMixins],
   props: {
     value: {
       type: Boolean,
@@ -69,7 +74,14 @@ export default {
   },
   data: () => {
     return {
-      tipModel: false
+      tipModel: false,
+      wallets: [
+        {
+          name: 'coco-wallet',
+          logo: '/static/svg/wallet/coco_en.svg',
+          link: 'http://cocowallet.com.cn/'
+        }
+      ]
     }
   },
   watch: {
@@ -94,16 +106,20 @@ export default {
       font-size: 24px;
     }
   }
-  // .alert-main-cnt {
-  //   margin-top: 14px;
-  //   font-size: 16px;
-  // }
-  // .alert-wallets {
-  //   margin-top: 30px;
-  // }
-  // .alert-wallet-btn {
-  //   padding: 15px;
-  // }
+  .alert-main-cnt {
+    margin-top: 14px;
+    font-size: 16px;
+  }
+  .alert-wallets {
+    margin-top: 20px;
+  }
+  .alert-wallet-btn {
+    margin-top: 15px;
+    padding: 8px 15px;
+    img {
+      height: 40px;
+    }
+  }
 
 
   // oops style

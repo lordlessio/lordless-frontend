@@ -21,7 +21,7 @@
       @close="closeTip">
     </msg-tip> -->
     <meta-tip v-model="metaOpen"/>
-    <alert v-model="mobileAlertModel" desc="目前不支持移动端领取哦，请前往PC端注册使用吧。"/>
+    <mobile-alert v-model="mobileAlertModel"/>
   </div>
 </template>
 
@@ -31,7 +31,7 @@ import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
 // import MsgTip from '@/components/stories/message'
 import MetaTip from '@/components/reuse/dialog/metaTip'
-import Alert from '@/components/reuse/dialog/alert'
+import MobileAlert from '@/components/reuse/dialog/mobileAlert'
 import { mobileBool } from 'utils/tool'
 
 import { initWeb3 } from '@/assets/utils/web3/initWeb3'
@@ -110,7 +110,7 @@ export default {
     Footer,
     // MsgTip,
     MetaTip,
-    Alert,
+    MobileAlert,
     LordlessSvg
   },
   methods: {

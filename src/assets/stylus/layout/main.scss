@@ -16,6 +16,14 @@ body, html {
   @include viewport-unit(width, 100vw);
 }
 
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom); /* 在 iphone x + 中本句才会生效 */
+  padding-left: env(safe-area-inset-left);
+  box-sizing: border-box;
+}
+
 div {
   box-sizing: border-box;
 }

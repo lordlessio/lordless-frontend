@@ -35,9 +35,7 @@ export default {
       detailModel: false,
 
       // ldb current detail Info
-      detailInfo: {},
-
-      popstate: false
+      detailInfo: {}
     }
   },
   components: {
@@ -54,7 +52,7 @@ export default {
   watch: {
     detailModel (val) {
       // 如果对话框关闭，改变浏览器地址为详情页面地址
-      if (!val && this.popstate) {
+      if (!val) {
         historyState(this.marketPath || this.$route.path)
       }
     }
@@ -91,13 +89,12 @@ export default {
     //   this.getLdbs({ pn })
     // })
     // window.addEventListener('popstate', () => {
-    //   this.popstate = true
     //   console.log('=====', this.$route)
-    //   // this.$nextTick(() => {
-    //   //   if (location.pathname === '/market') {
-    //   //     this.detailModel = false
-    //   //   }
-    //   // })
+    //   this.$nextTick(() => {
+    //     if (location.pathname === '/market') {
+    //       this.detailModel = false
+    //     }
+    //   })
     // })
   }
 }

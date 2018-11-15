@@ -25,21 +25,20 @@
         :openStatus="authorizeDialog"
         :avatar="avatar"
         :address="address"
-        @pending="crowdsalePending"></Crowdsale>
+        @pending="crowdsalePending"/>
 
       <Telegram
         ref="telegram"
-        v-model="showTelegram"
+        :visible.sync="showTelegram"
         :openStatus="authorizeDialog"
         :avatar="avatar"
         :address="address"
         @close="authorizeDialog = false"
-        @telegram="$emit('telegram', $event)"></Telegram>
+        @telegram="$emit('telegram', $event)"/>
 
       <Status
         v-if="showStatus && !hideStatus"
-        :type="statusType">
-      </Status>
+        :type="statusType"/>
 
       <Sign
         ref="signAuthorize"
@@ -47,8 +46,7 @@
         :visible="showSign"
         :account="account"
         :web3Loading="web3Opt.loading"
-        @success="checkoutAuthorize()">
-      </Sign>
+        @success="checkoutAuthorize()"/>
     </div>
   </el-dialog>
 </template>
@@ -321,7 +319,9 @@ export default {
       if (telegram && (!this.userInfo.telegram || !this.userInfo.telegram.id)) {
         console.log('----- telegram')
         this.authorizeDialog = true
-        this.showTelegram = true
+        this.$nextTick(() => {
+          this.showTelegram = true
+        })
         return false
       }
 
