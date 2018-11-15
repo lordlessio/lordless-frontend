@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="authorizeDialog"
-    :custom-class="`inline-block lordless-dialog message-dialog no-header transparent center mobile-center ${metaOpen ? 'blur' : ''}`"
+    :custom-class="`inline-block lordless-dialog message-dialog no-header transparent center ${metaOpen ? 'blur' : ''}`"
     width="100%"
     append-to-body
     center
@@ -10,8 +10,9 @@
     :close-on-press-escape="false"
     :show-close="false"
     @open="$emit('open')"
-    @close="$emit('close')">
-    <div class="lordless-message-box">
+    @close="$emit('close')"
+    @closed="authorizeClosed">
+    <div class="lordless-message-box" @touchmove.prevent>
       <span
         @click.stop="closeDialog"
         class="inline-block line-height-1 lordless-message-close"
@@ -45,6 +46,7 @@
         v-model="authorizeDialog"
         :visible="showSign"
         :account="account"
+        :web3Loading="web3Opt.loading"
         @success="checkoutAuthorize()">
       </Sign>
     </div>
@@ -141,7 +143,8 @@ export default {
     statusType () {
       const web3Opt = this.web3Opt
 
-      const web3Loading = web3Opt.loading
+      // const web3Loading = web3Opt.loading
+      const authorizeInit = this.authorizeInit
 
       const unBrowser = !this.isMobile && !this.browser.Chrome && !this.browser.Firefox
       // const unBrowser = false
@@ -152,14 +155,14 @@ export default {
       const lockedMetamask = !web3Opt.address
       // const lockedMetamask = false
 
-      // const unallowMetamask = !this.isMobile && parseInt(web3Opt.networkId) !== parseInt(process.env.APPROVED_NETWORK_ID)
-      const unallowMetamask = false
+      const unallowMetamask = process.env.NODE_ENV !== 'development' && parseInt(web3Opt.networkId) !== parseInt(process.env.APPROVED_NETWORK_ID)
+      // const unallowMetamask = false
 
       switch (true) {
-        case !web3Loading && unBrowser: return 'browser'
-        case !web3Loading && unMetamask: return 'missing'
-        case !web3Loading && lockedMetamask: return 'locked'
-        case !web3Loading && unallowMetamask: return 'network'
+        case authorizeInit && unBrowser: return 'browser'
+        case authorizeInit && unMetamask: return 'missing'
+        case authorizeInit && lockedMetamask: return 'locked'
+        case authorizeInit && unallowMetamask: return 'network'
         default: return null
       }
     },
@@ -241,7 +244,17 @@ export default {
     },
 
     authorizeInit (val) {
-      if (val) this.$emit('init')
+      if (val) {
+        this.$emit('init')
+
+        const { loading, isConnected } = this.web3Opt
+        if (this.isMobile && !loading && !isConnected) {
+          this.authorizeDialog = false
+          this.$nextTick(() => {
+            this.$root.$children[0].mobileAlertModel = true
+          })
+        }
+      }
     }
 
     // metaOpen () {
@@ -259,6 +272,11 @@ export default {
       actionTypes.CONTRACT_CHECK_CROWDSALE
     ]),
 
+    authorizeClosed () {
+      // console.log('this.signAuthorize', this.$refs.signAuthorize)
+      this.$refs.signAuthorize && this.$refs.signAuthorize.reset()
+    },
+
     closeDialog () {
       this.$emit('fClose')
       this.authorizeDialog = false
@@ -270,7 +288,10 @@ export default {
       switch (true) {
         // 如果是移动端，并且 !locked 返回 false
         case this.isMobile && !loading && !isConnected:
-          this.$root.$children[0].mobileAlertModel = true
+          this.authorizeDialog = false
+          this.$nextTick(() => {
+            this.$root.$children[0].mobileAlertModel = true
+          })
           return false
 
         // 如果不是移动端，或者移动端含有 web3，返回 true

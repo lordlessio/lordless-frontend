@@ -207,11 +207,40 @@
       }
     }
     &.dialog {
+      text-align: left;
       .terms-title {
         font-size: 20px;
       }
       strong {
         font-size: 22px;
+      }
+    }
+    &.light {
+      color: #fff;
+      font-family: $--font-TTNormsMedium;
+      .term-title, p, strong {
+        color: inherit;
+        font-family: inherit;
+      }
+      ul {
+        >li {
+          color: inherit;
+          font-family: inherit;
+          .terms-li-title {
+            color: inherit;
+            font-family: inherit;
+          }
+          &::before {
+            color: inherit;
+            font-family: inherit;
+          }
+        }
+      }
+      ol {
+        >li {
+          color: inherit;
+          font-family: inherit;
+        }
       }
     }
   }

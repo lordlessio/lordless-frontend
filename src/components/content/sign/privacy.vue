@@ -224,11 +224,40 @@ export default {
       }
     }
     &.dialog {
+      text-align: left;
       .privacy-title {
         font-size: 20px;
       }
       strong {
         font-size: 22px;
+      }
+    }
+    &.light {
+      color: #fff;
+      font-family: $--font-TTNormsMedium;
+      .privacy-title, p, strong {
+        color: inherit;
+        font-family: inherit;
+      }
+      ul {
+        >li {
+          color: inherit;
+          font-family: inherit;
+          .privacy-li-title {
+            color: inherit;
+            font-family: inherit;
+          }
+          &::before {
+            color: inherit;
+            font-family: inherit;
+          }
+        }
+      }
+      ol {
+        >li {
+          color: inherit;
+          font-family: inherit;
+        }
       }
     }
   }

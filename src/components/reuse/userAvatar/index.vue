@@ -1,8 +1,8 @@
 <template>
   <div
     class="alone-layer cursor-pointer user-avatar-box"
-    :class="[{ 'shadow': shadow && userInfo.address }, theme]"
-    :style="`font-size: ${fontSize};border-radius: ${radius};`"
+    :class="[{ 'shadow': shadow && userInfo.address, 'mobile': mobile }, theme]"
+    :style="`border-radius: ${radius};`"
     @click="$router.push(`/owner/info`)">
     <div class="d-flex f-align-end" v-if="userInfo.address">
       <div class="v-flex d-flex f-align-center">
@@ -28,7 +28,7 @@
           :theme="theme">
         </lordless-blockies>
       </div>
-      <p class="lg-hidden user-avatar-logout" @click.stop="logout">Logout</p>
+      <!-- <p class="lg-hidden user-avatar-logout" @click.stop="logout">Logout</p> -->
     </div>
     <lordless-btn
       v-if="!userInfo.address && !tip"
@@ -65,10 +65,10 @@ export default {
       type: String,
       default: '10px'
     },
-    fontSize: {
-      type: String,
-      default: '20px'
-    },
+    // fontSize: {
+    //   type: String,
+    //   default: '20px'
+    // },
     loginText: {
       type: String,
       default: 'Get started'
@@ -88,6 +88,10 @@ export default {
 
     // 是否从 headerTip 引用
     tip: {
+      type: Boolean,
+      default: false
+    },
+    mobile: {
       type: Boolean,
       default: false
     }
@@ -131,6 +135,16 @@ export default {
         }
       }
     }
+    &.mobile {
+      .user-avatar-info {
+        >p {
+          font-size: 14px;
+        }
+      }
+      .top-login-text {
+        font-size: 16px;
+      }
+    }
   }
   .user-avatar-info {
     >p {
@@ -164,7 +178,7 @@ export default {
     color: $--text-blue-purple-color;
     font-size: 18px;
   }
-  .user-avatar-logout {
-    font-size: 16px;
-  }
+  // .user-avatar-logout {
+  //   font-size: 16px;
+  // }
 </style>

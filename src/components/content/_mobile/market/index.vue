@@ -115,9 +115,13 @@ import MobileBuildingCard from '@/components/reuse/_mobile/card/building'
 import MobileSkeletionBuilding from '@/components/skeletion/_mobile/building'
 import SkeletionPager from '@/components/skeletion/pagination'
 
+import { layoutMixins } from '@/mixins'
+
 // import throttle from 'lodash/throttle'
 
 export default {
+  name: 'lordless-market',
+  mixins: [layoutMixins],
   data: () => {
     return {
       // ldb 建筑列表
@@ -169,9 +173,9 @@ export default {
   watch: {
     sortOpen (val) {
       if (val) {
-        addClass('overflow-hidden', document.body)
+        this.prohibitScroll()
       } else {
-        removeClass('overflow-hidden', document.body)
+        this.freeScroll()
       }
     }
   },
@@ -264,7 +268,7 @@ export default {
       const pdom = document.getElementById('market-sort-section')
       const sdom = document.getElementById('mobile-market-sort')
       const func = () => {
-        const y = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
+        const y = document.getElementById('lordless').scrollTop
         const bool = hasClass('fixed', sdom)
         if (y <= h && bool) {
           removeClass('fixed', sdom)
@@ -274,13 +278,13 @@ export default {
           document.body.appendChild(sdom)
         }
       }
-      document.addEventListener('scroll', func)
+      document.getElementById('lordless').addEventListener('scroll', func)
       this.$once('hook:beforeDestroy', () => {
         this.sortOpen = false
         if (!pdom.firstChild) {
           pdom.appendChild(sdom)
         }
-        document.removeEventListener('scroll', func)
+        document.getElementById('lordless').removeEventListener('scroll', func)
       })
     }
   },
@@ -345,7 +349,8 @@ export default {
   .mobile-market-sort {
     z-index: 1;
     &.fixed {
-      position: fixed;
+      // position: fixed;
+      position: absolute;
       top: 0;
       left: 0;
       width: 100%;

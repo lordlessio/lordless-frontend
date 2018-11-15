@@ -35,7 +35,9 @@ export default {
       detailModel: false,
 
       // ldb current detail Info
-      detailInfo: {}
+      detailInfo: {},
+
+      popstate: false
     }
   },
   components: {
@@ -52,7 +54,7 @@ export default {
   watch: {
     detailModel (val) {
       // 如果对话框关闭，改变浏览器地址为详情页面地址
-      if (!val) {
+      if (!val && this.popstate) {
         historyState(this.marketPath || this.$route.path)
       }
     }
@@ -73,6 +75,7 @@ export default {
      * 对话框关闭触发函数
      */
     dialogClose (info) {
+      console.log('dialogClose')
       this.$refs.market.changeLdbs(info)
     },
 
@@ -86,6 +89,15 @@ export default {
     // this.$nextTick(() => {
     //   const pn = parseInt(this.$route.query.page || 1)
     //   this.getLdbs({ pn })
+    // })
+    // window.addEventListener('popstate', () => {
+    //   this.popstate = true
+    //   console.log('=====', this.$route)
+    //   // this.$nextTick(() => {
+    //   //   if (location.pathname === '/market') {
+    //   //     this.detailModel = false
+    //   //   }
+    //   // })
     // })
   }
 }

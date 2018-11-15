@@ -5,8 +5,14 @@
       @opened="dialogOpen"
       @close="dialogClose">
       <!-- <ldb-detail-skeletion :visible="loading" dialog></ldb-detail-skeletion> -->
-      <div class="sm-hidden text-nowrap ldb-detail-dialog-tip">
-        <header-tip :market="false" leftInfo></header-tip>
+      <div class="text-nowrap ldb-detail-dialog-tip">
+        <header-tip
+          :market="false"
+          :leftInfo="!isMobile"
+          :scale="isMobile ? 6 : 8"
+          :mobile="isMobile"
+          :loginText="isMobile ? 'Started' : 'Get Started'"/>
+
       </div>
       <ldb-detail
         v-if="!loading"
@@ -47,6 +53,23 @@ export default {
   computed: {
     blurs () {
       return this.$root.$children[0].blurs
+    },
+    isMobile () {
+      return this.$root.$children[0].isMobile
+    }
+  },
+  watch: {
+    value (val) {
+      this.loading = true
+      this.detailModel = val
+      // if (val) {
+      //   setTimeout(() => {
+      //     this.$emit('input', false)
+      //   }, 3000)
+      // }
+    },
+    detailModel (val) {
+      this.$emit('input', val)
     }
   },
   components: {
@@ -95,15 +118,6 @@ export default {
     // const ldbDetail = this.$refs.ldbDetail
     // if (ldbDetail) ldbDetail.checkOwner(tokenId)
     // }
-  },
-  watch: {
-    value (val) {
-      this.loading = true
-      this.detailModel = val
-    },
-    detailModel (val) {
-      this.$emit('input', val)
-    }
   }
 }
 </script>
@@ -116,9 +130,11 @@ export default {
   }
   .ldb-detail-dialog-tip {
     position: absolute;
-    left: 0;
+    // left: 0;
     top: 5px;
     // transform: translateX(50%);
     z-index: 9;
+    @include grid('let', 0, 1);
+    @include grid('right', 5px, -1);
   }
 </style>

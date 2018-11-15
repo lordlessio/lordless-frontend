@@ -116,7 +116,7 @@ export default {
     border-bottom-color: inherit;
     &.default {
       .lordless-input-tip {
-        color: $--text-third-color;
+        color: inherit;
         &.small {
           color: #fff;
         }
@@ -144,15 +144,16 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    font-size: 18px;
+    font-size: inherit;
     height: inherit;
     line-height: inherit;
     color: inherit;
     transition: all .15s ease-in;
     transform-origin: 0 0;
     z-index: 0;
+    // @include fontSize(18px, 1.125);
     &:not(.small) {
-      color: $--text-third-color;
+      color: inherit;
     }
     &.small {
       top: 0;

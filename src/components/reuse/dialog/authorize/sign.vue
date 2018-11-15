@@ -1,7 +1,7 @@
 <template>
   <div v-if="visible" class="text-center authorize-sign-box">
-    <transition name="ld-hide-fade">
-      <div v-if="!isRegister || userChecking" class="authorize-login-container">
+    <transition name="ld-sign-dialog-fade">
+      <div v-if="web3Loading || !isRegister || userChecking" class="authorize-login-container">
         <div class="inline-block lordless-shadow" :style="`border-radius: ${avatar.radius};`">
           <lordless-blockies
             :scale="avatar.scale"
@@ -20,17 +20,45 @@
               class="TTFontBolder lordless-message-btn login-btn"
               theme="deep-blue"
               shadow
-              :loading="userChecking"
-              :disabled="userChecking"
+              :loading="web3Loading || userChecking"
+              :disabled="web3Loading || userChecking"
               @click="relogin">Login</lordless-btn>
           </div>
         </div>
       </div>
-      <div v-else class="authorize-sign-container">
+      <div v-else-if="termsDialogModel">
+        <div class="authorize-sign-terms authorize-sign-term">
+          <h1 class="TTFontBolder">Term of use</h1>
+          <div class="overflow term-cnt-box">
+            <terms class="dialog light"/>
+          </div>
+          <p class="term-btn-box">
+            <lordless-btn
+              class="d-inline-flex f-align-center term-btn"
+              theme="blue"
+              @click="termAgree('terms')">Done</lordless-btn>
+          </p>
+        </div>
+      </div>
+      <div v-else-if="privacyDialogModel">
+        <div class="authorize-sign-terms authorize-sign-privacy">
+          <h1 class="TTFontBolder">Term of use</h1>
+          <div class="overflow term-cnt-box">
+            <privacy class="dialog light"/>
+          </div>
+          <p class="term-btn-box">
+            <lordless-btn
+              class="d-inline-flex f-align-center term-btn"
+              theme="blue"
+              @click="termAgree('privacy')">Done</lordless-btn>
+          </p>
+        </div>
+      </div>
+      <div v-else class="authorize-sign-container" @touchmove.stop>
         <h1 class="TTFontBolder">Create Account</h1>
         <div class="text-left authorize-sign-cnt">
           <p>We use your email to send you notifications around collectible activity such as ones you buy and sell. We'll never share your email with anyone else.</p>
-          <div class="authorize-sign-input">
+          <div class="authorize-sign-input authorize-sign-email">
             <ld-input
               v-model="signInputs.email.model"
               :theme="signInputs.email.theme"
@@ -41,8 +69,8 @@
               @blur="emailBlur">
             </ld-input>
           </div>
-          <p>For display purposes only (we show it instead of your wallet address). It doesn't need to be unique.</p>
-          <div class="authorize-sign-input">
+          <p class="sm-hidden">For display purposes only (we show it instead of your wallet address). It doesn't need to be unique.</p>
+          <div class="authorize-sign-input authorize-sign-nickname">
             <ld-input
               v-model="signInputs.nickName.model"
               type="text"
@@ -53,7 +81,7 @@
             </ld-input>
           </div>
           <div class="authorize-terms-box">
-            <p>Please read our <span @click.stop="termDialogModel = true">Terms of Use</span> and <span @click.stop="privacyDialogModel = true">Privacy Policy</span>.</p>
+            <p>Please read our <span @click.stop="termsDialogModel = true">Terms of Use</span> and <span @click.stop="privacyDialogModel = true">Privacy Policy</span>.</p>
             <div class="d-flex f-align-center authorize-terms-item">
               <div class="authorize-sign-checkbox" :class="{ 'active': termModels.terms }">
                 <check-box v-model="termModels.terms"/>
@@ -82,12 +110,12 @@
           @click="signUp">Sign Up</lordless-btn>
       </div>
     </transition>
-    <terms-dialog
+    <!-- <terms-dialog
       v-model="termDialogModel"
       @agree="termAgree('terms')"/>
     <privacy-dialog
       v-model="privacyDialogModel"
-      @agree="termAgree('privacy')"/>
+      @agree="termAgree('privacy')"/> -->
   </div>
 </template>
 
@@ -96,6 +124,9 @@ import LdInput from '@/components/stories/input'
 import CheckBox from '@/components/stories/checkbox'
 import TermsDialog from '@/components/reuse/dialog/sign/terms.vue'
 import PrivacyDialog from '@/components/reuse/dialog/sign/privacy.vue'
+
+import Privacy from '@/components/content/sign/privacy.vue'
+import Terms from '@/components/content/sign/terms.vue'
 
 import { getUserByAddress } from 'api'
 
@@ -126,6 +157,10 @@ export default {
     account: {
       type: String,
       default: 'Welcome to LORDLESS!'
+    },
+    web3Loading: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => {
@@ -133,7 +168,7 @@ export default {
       userChecking: false,
       isRegister: false,
 
-      termDialogModel: false,
+      termsDialogModel: false,
       privacyDialogModel: false,
 
       // 条款状态
@@ -173,7 +208,6 @@ export default {
   watch: {
     value (val) {
       if (val) this.checkRegister()
-      else this.reset()
     },
 
     // 监听 account改变并且 sign dialog 在打开情况下，重新 check register
@@ -188,7 +222,10 @@ export default {
     CheckBox,
 
     TermsDialog,
-    PrivacyDialog
+    PrivacyDialog,
+
+    Privacy,
+    Terms
   },
   methods: {
     ...mapActions('user', [
@@ -260,6 +297,7 @@ export default {
     },
 
     termAgree (type) {
+      this[`${type}DialogModel`] = false
       this.$set(this.termModels, type, true)
     },
 
@@ -271,6 +309,8 @@ export default {
         privacy: false,
         notice: false
       })
+      this.termsDialogModel = false
+      this.privacyDialogModel = false
       this.isRegister = false
     }
   },
@@ -312,7 +352,7 @@ export default {
     margin: 15px auto 30px;
     height: 0;
     border-bottom: 1px dashed #fff;
-    @include width(90%, 1);
+    @include width(60%, 0.75);
   }
   // .authorize-sign-box {
   //   max-width: 600px;
@@ -324,8 +364,9 @@ export default {
   // }
   .authorize-sign-container {
     >h1 {
-      @include margin('bottom', 40px, 1);
-      @include fontSize(36px, 1.2);
+      margin-bottom: 40px;
+      @include margin('bottom', 16px, 1, -1);
+      @include fontSize(36px, 1.5);
     }
     >p {
       @include fontSize(14px, 1);
@@ -335,7 +376,7 @@ export default {
     }
   }
   .authorize-terms-box {
-    padding-top: 30px;
+    // padding-top: 30px;
     >p {
       margin-bottom: 10px;
       >span {
@@ -345,15 +386,16 @@ export default {
     }
   }
   .authorize-sign-input {
-    margin: 25px auto 30px;
+    margin: 0 auto;
     width: 250px;
     line-height: 30px;
     font-size: 18px;
+    color: #fff;
     overflow: hidden;
-    ::placeholder {
-      color: #ddd;
-    }
+    @include margin('top', 25px, -2);
+    @include margin('bottom', 30px, -2);
   }
+
   .authorize-terms-item {
     // font-size: 18px;
     @include fontSize(18px, 1.15);
@@ -388,5 +430,47 @@ export default {
     //     }
     //   }
     // }
+  }
+  .authorize-sign-terms {
+    >h1 {
+      margin-bottom: 5px;
+      font-size: 24px;
+    }
+  }
+  .term-cnt-box {
+    padding-right: 10px;
+    margin-right: -10px;
+    color: #fff;
+    min-height: 300px;
+    @include viewport-unit('height', 55vh);
+    &::-webkit-scrollbar {
+      width: 7px;
+    }
+    &::-webkit-scrollbar-thumb {
+      // height: 10px;
+      background: #fff;
+      border-radius: 5px;
+    }
+  }
+  .term-btn-box {
+    margin-top: 30px;
+  }
+  .term-btn {
+    padding: 12px 15px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .authorize-sign-input {
+      width: 230px;
+      line-height: 24px;
+      font-size: 16px;
+    }
+    .authorize-sign-email {
+      margin-top: 8px;
+    }
+    .authorize-sign-nickname {
+      margin-top: 14px;
+      margin-bottom: 16px;
+    }
   }
 </style>

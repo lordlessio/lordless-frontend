@@ -12,8 +12,8 @@
           <p></p>
         </div> -->
       </div>
-      <div @click.stop="toggleHeader" id="header-mask" class="header-mask"></div>
-      <div @click.stop="headerItemClick" class="v-flex lg-d-flex lg-f-align-center lg-f-justify-end header-text navbar-sidebar">
+      <div @click.stop="toggleHeader" @touchmove.prevent id="header-mask" class="header-mask"></div>
+      <div @click.stop="headerItemClick" @touchmove.prevent class="v-flex d-flex sm-col-flex lg-f-align-center lg-f-justify-end header-text navbar-sidebar">
         <span class="uppercase lg-hidden header-right-item header-close-item sm-text-center">
           <span @click.stop="toggleHeader" class="ld-close-icon"></span>
           <router-link to="/" class="header-sm-logo">
@@ -47,10 +47,19 @@
         <div class="header-right-item user-item" data-type="link">
           <user-avatar
             class="user-avatar"
-            :theme="theme === 'dark' ? 'light' : 'dark'"
+            :scale="isMobile ? 7 : 8"
+            :theme="isMobile ? 'light' : theme === 'dark' ? 'light' : 'dark'"
             :showText="false"
-            :leftInfo="!isMobile"/>
+            leftInfo/>
         </div>
+        <p class="d-flex row-flex align-baseline lg-hidden header-right-item header-logout" data-type="link" @click.stop="logout">
+          <span class="line-height-0 inline-block header-logout-icon">
+            <svg>
+              <use xlink:href="#icon-logout"/>
+            </svg>
+          </span>
+          <span class="inline-block">Logout</span>
+        </p>
       </div>
     </div>
     <div id="header-page-title" class="header-page-title sm-hidden" v-if="pageTitle">
@@ -73,9 +82,9 @@ import { scrollToTop } from 'utils/tool/animate'
 import throttle from 'lodash/throttle'
 import UserAvatar from '@/components/reuse/userAvatar'
 import HeaderLogo from './logo'
-import { checkMobileMixins } from '@/mixins'
+import { checkMobileMixins, userMixins } from '@/mixins'
 export default {
-  mixins: [ checkMobileMixins ],
+  mixins: [ checkMobileMixins, userMixins ],
   props: {
 
     // 显示选项
@@ -161,7 +170,7 @@ export default {
       toggleClass('show-sidebar', document.getElementById('ld-header'))
     },
     toTop () {
-      const before = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
+      const before = document.getElementById('lordless').scrollTop
       return scrollToTop({ before })
     },
     // destroy () {
@@ -180,12 +189,12 @@ export default {
       this.titleScroll()
     },
     headerScroll () {
-      if (this.headerScrollFunc) document.removeEventListener('scroll', this.headerScrollFunc)
+      if (this.headerScrollFunc) document.getElementById('lordless').removeEventListener('scroll', this.headerScrollFunc)
       this.headerScrollFunc = null
       if (!this.scroll || this.pageTitle) return
       let navbarInverse = false
       const func = () => {
-        const scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
+        const scrollTop = document.getElementById('lordless').scrollTop
         if (!navbarInverse && scrollTop > 50) {
           addClass('inverse', document.getElementById('ld-header'))
           navbarInverse = true
@@ -197,15 +206,15 @@ export default {
       func()
 
       this.headerScrollFunc = throttle(func, 300)
-      document.addEventListener('scroll', throttle(func, 300))
+      document.getElementById('lordless').addEventListener('scroll', throttle(func, 300))
 
       this.$once('hook:beforeDestroy', () => {
-        document.removeEventListener('scroll', throttle(func, 300))
+        document.getElementById('lordless').removeEventListener('scroll', throttle(func, 300))
       })
     },
 
     titleScroll () {
-      if (this.titleScrollFunc) document.removeEventListener('scroll', this.titleScrollFunc)
+      if (this.titleScrollFunc) document.getElementById('lordless').removeEventListener('scroll', this.titleScrollFunc)
       this.titleScrollFunc = null
 
       if (!this.scroll || !this.pageTitle) return
@@ -213,7 +222,7 @@ export default {
       const headerHeight = document.getElementById('ld-header').offsetHeight
       let bool = true
       const func = () => {
-        const scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
+        const scrollTop = document.getElementById('lordless').scrollTop
         if (bool && scrollTop >= headerHeight) {
           bool = false
           addClass('toggle', document.getElementById('ld-header'))
@@ -225,10 +234,10 @@ export default {
       func()
 
       this.titleScrollFunc = func
-      document.addEventListener('scroll', func)
+      document.getElementById('lordless').addEventListener('scroll', func)
 
       this.$once('hook:beforeDestroy', () => {
-        document.removeEventListener('scroll', func)
+        document.getElementById('lordless').removeEventListener('scroll', func)
       })
     }
   },
@@ -261,6 +270,7 @@ export default {
     }
     &.fixed {
       position: fixed;
+      // position: absolute;
       top: 0;
       left: 0;
     }
@@ -422,12 +432,27 @@ export default {
       height: 24px;
     }
     &.user-item {
-      margin-left: 60px;
+      @include grid('margin-left', 60px, 1);
       height: 100%;
       .user-avatar {
         height: 48px;
       }
     }
+  }
+  .header-logout {
+    margin-bottom: 50px;
+    // text-decoration: underline;
+  }
+  .header-logout-icon {
+    margin-right: 6px;
+    // width: 24px;
+    // height: 24px;
+    >svg {
+      width: 20px;
+      height: 20px;
+    }
+    // color: $--text-red-color;
+    // fill: $--text-red-color;
   }
 
   .navbar-right {
@@ -579,8 +604,9 @@ export default {
       transition: transform .3s ease-in-out .15s;
       // .overflow();
       .header-right-item {
-        margin: 20px 0 20px 25px;
-        display: block;
+        margin-top: 20px;
+        // margin: 20px 0 20px 25px;
+        // display: block;
         font-size: 16px;
         line-height: 1.4;
         fill: #fff !important;
@@ -594,6 +620,7 @@ export default {
         position: relative;
         margin: 0 0 10px;
         height: 70px;
+        line-height: 70px;
         border-bottom: 1px solid #393b7e;
       }
       .ld-close-icon {

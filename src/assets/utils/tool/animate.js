@@ -194,7 +194,7 @@ export const scrollToTop = ({ target = null, before = document.documentElement.s
     if (top <= end) top = end
 
     if (target) target.scrollTop = top
-    else document.documentElement.scrollTop = top
+    else document.getElementById('lordless').scrollTop = top
     if (t >= duration) {
       if (cb) return cb()
       return true
