@@ -374,7 +374,7 @@ export default {
           // restart candy animation
           iserror = true
           removeClass('hidden', cCandy)
-          removeClass('move', cCandy)
+          removeClass('animate', candy)
           return
         }
 

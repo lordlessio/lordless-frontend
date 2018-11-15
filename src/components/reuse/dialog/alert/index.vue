@@ -11,7 +11,7 @@
     :show-close="false"
     @open="$emit('open')"
     @close="$emit('close')">
-    <!-- <div class="text-center lordless-message-box lordless-meta-dialog">
+    <div class="text-center lordless-message-box lordless-meta-dialog">
       <h3 slot="title">
         Oops!
       </h3>
@@ -27,8 +27,8 @@
           theme="blue"
           @click="$emit('input', false)">Confirm</lordless-btn>
       </p>
-    </div> -->
-    <div class="text-center lordless-message-box lordless-meta-dialog">
+    </div>
+    <!-- <div class="text-center lordless-message-box lordless-meta-dialog">
       <span
         @click.stop="closeDialog"
         class="inline-block line-height-1 lordless-message-close">
@@ -51,13 +51,7 @@
           可可钱包
         </lordless-btn>
       </p>
-      <!-- <p slot="footer">
-        <lordless-btn
-          class="d-inline-flex f-align-center alert-btn"
-          theme="blue"
-          @click="$emit('input', false)">Confirm</lordless-btn>
-      </p> -->
-    </div>
+    </div> -->
   </el-dialog>
 </template>
 
@@ -100,16 +94,20 @@ export default {
       font-size: 24px;
     }
   }
-  .alert-main-cnt {
-    margin-top: 14px;
-    font-size: 16px;
-  }
-  .alert-wallets {
-    margin-top: 30px;
-  }
-  .alert-wallet-btn {
-    padding: 15px;
-  }
+  // .alert-main-cnt {
+  //   margin-top: 14px;
+  //   font-size: 16px;
+  // }
+  // .alert-wallets {
+  //   margin-top: 30px;
+  // }
+  // .alert-wallet-btn {
+  //   padding: 15px;
+  // }
+
+
+  // oops style
+
   // .alert-main-cnt {
   //   margin-top: 25px;
   //   margin-bottom: 30px;
