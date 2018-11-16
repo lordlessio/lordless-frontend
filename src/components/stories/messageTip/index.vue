@@ -87,8 +87,8 @@ export default {
       cursor: pointer;
     }
     &.fixed {
-      // position: fixed;
-      position: absolute;
+      position: fixed;
+      // position: absolute;
       bottom: 0;
       left: 0;
       height: initial;

@@ -1,8 +1,8 @@
 <template>
   <div class="d-flex user-authorization-box">
     <div class="d-flex v-flex col-flex user-authorization-container">
-      <h1 class="text-cap user-authorization-title">authorization</h1>
-      <div class="user-authorization-cnt">
+      <h1 class="text-cap owner-children-title">authorization</h1>
+      <div class="onwer-children-cnt user-authorization-cnt">
         <el-row :gutter="20" class="authorization-cnt-container">
           <el-col
             :xs="24" :sm="8"
@@ -189,13 +189,9 @@ export default {
       }
     }
   }
-  .user-authorization-title {
-    font-size: 36px;
-    color: #999;
-  }
-  .user-authorization-cnt {
-    margin-top: 35px;
-  }
+  // .user-authorization-cnt {
+  //   margin-top: 35px;
+  // }
   .authorization-cnt-container {
 
   }

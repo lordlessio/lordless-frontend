@@ -1,7 +1,7 @@
 <template>
   <div id="lordless" :class="{ 'blur': blurs[0], 'transform': appOpt.transform, 'no-transform': !appOpt.transform }">
     <lordless-svg/>
-    <Header ref="lordlessHeader" v-bind="headerOpt"/>
+    <Header ref="lordlessHeader" v-bind="headerOpt" :zIndex="isMobile ? 2299 : 99"/>
     <div class="ld-main" :class="[{ 'no-header': isMobile || !headerOpt.show || (headerOpt.show && headerOpt.fixed) }, { 'no-footer': !footerOpt.show }]">
       <!-- <p v-for="item of Object.keys(this.web3Opt)" :key="item" style="margin-top: 60px;color: #555;font-size: 14px;">{{ item }} - {{ web3Opt[item] ? web3Opt[item].toString() : 'null' }}</p> -->
       <!-- <div class="d-flex col-flex f-auto-center ld-error" v-if="web3Opt.error">

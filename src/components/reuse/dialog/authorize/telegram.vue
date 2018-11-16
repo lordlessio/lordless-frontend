@@ -125,6 +125,14 @@ export default {
       el.onload = () => {
         this.telegramReady = true
       }
+      el.onerror = (err) => {
+        this.$notify.error({
+          title: 'Telegram error!',
+          message: err.message,
+          position: 'bottom-right',
+          duration: 3500
+        })
+      }
       window.onTelegramAuth = async (user) => {
         const res = await putUserTgAuth(user)
         if (res.code === 1000) {

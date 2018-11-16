@@ -268,7 +268,7 @@ export default {
       const pdom = document.getElementById('market-sort-section')
       const sdom = document.getElementById('mobile-market-sort')
       const func = () => {
-        const y = document.getElementById('lordless').scrollTop
+        const y = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
         const bool = hasClass('fixed', sdom)
         if (y <= h && bool) {
           removeClass('fixed', sdom)
@@ -278,13 +278,13 @@ export default {
           document.body.appendChild(sdom)
         }
       }
-      document.getElementById('lordless').addEventListener('scroll', func)
+      document.addEventListener('scroll', func)
       this.$once('hook:beforeDestroy', () => {
         this.sortOpen = false
         if (!pdom.firstChild) {
           pdom.appendChild(sdom)
         }
-        document.getElementById('lordless').removeEventListener('scroll', func)
+        document.removeEventListener('scroll', func)
       })
     }
   },
@@ -349,8 +349,8 @@ export default {
   .mobile-market-sort {
     z-index: 1;
     &.fixed {
-      // position: fixed;
-      position: absolute;
+      position: fixed;
+      // position: absolute;
       top: 0;
       left: 0;
       width: 100%;

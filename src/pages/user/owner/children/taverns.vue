@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex user-building-box">
     <div class="d-flex v-flex col-flex user-candy-container">
-      <h1 class="text-cap user-building-title">Taverns</h1>
+      <h1 class="text-cap owner-children-title">Taverns</h1>
       <transition name="ld-hide-in-fade">
         <div
           v-if="!buildings.total && !saleBuildings.total && !loading"
@@ -20,7 +20,7 @@
       </transition>
       <div
         v-if="loading || buildings.total || saleBuildings.total"
-        class="v-flex user-building-tabs">
+        class="v-flex  relative onwer-children-cnt user-building-tabs">
         <el-tabs
           v-model="buildingTab"
           @tab-click="chooseTab">
@@ -329,11 +329,6 @@ export default {
     margin-bottom: 50px;
   }
 
-  .user-building-title {
-    font-size: 36px;
-    color: #999;
-  }
-
   .ld-building-pagination {
     position: absolute;
     left: 0;
@@ -363,11 +358,11 @@ export default {
     }
   }
 
-  .user-building-tabs {
-    position: relative;
-    @include margin('top', 35px, 1);
-    @include margin('bottom', 150px, 1);
-  }
+  // .user-building-tabs {
+  //   position: relative;
+  //   @include margin('top', 35px, 1);
+  //   @include margin('bottom', 150px, 1);
+  // }
   .user-no-sale-buildings {
     position: absolute;
     top: 50%;

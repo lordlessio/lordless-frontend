@@ -47,7 +47,7 @@ ElementLocale.i18n((key, value) => i18n.t(key, value))
 
 Vue.config.productionTip = false
 
-FastClick.attach(document.getElementById('lordless'))
+FastClick.attach(document.body)
 
 /* eslint-disable no-new */
 new Vue({

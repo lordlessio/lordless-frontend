@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex user-candy-box">
     <div class="d-flex v-flex col-flex user-candy-container">
-      <h1 class="d-flex f-align-baseline text-cap user-candy-title">
+      <h1 class="d-flex f-align-baseline text-cap owner-children-title">
         <span class="v-flex">Candy</span>
         <el-tooltip class="item" effect="dark" content="Coming soon" placement="left">
           <span>
@@ -20,7 +20,7 @@
         </el-tooltip>
       </h1>
       <div
-        class="v-flex d-flex user-candy-tabs">
+        class="v-flex d-flex relative onwer-children-cnt user-candy-tabs">
         <el-tabs
           class="relative v-flex"
           v-model="candyTab"
@@ -486,10 +486,6 @@ export default {
     }
   }
 
-  .user-candy-title {
-    font-size: 36px;
-    color: #999;
-  }
   .user-withdraw-btn {
     padding: 10px 15px;
     font-size: 16px;
@@ -530,11 +526,11 @@ export default {
     bottom: -70px;
   }
 
-  .user-candy-tabs {
-    position: relative;
-    @include margin('top', 35px, 1);
-    @include margin('bottom', 120px, 1);
-  }
+  // .user-candy-tabs {
+  //   position: relative;
+  //   @include margin('top', 35px, 1);
+  //   @include margin('bottom', 120px, 1);
+  // }
 
   .candy-tabs-title {
     color:#bbb;

@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex user-tasks-box">
     <div class="d-flex v-flex col-flex user-candy-container">
-      <h1 class="text-cap user-tasks-title">Tasks</h1>
+      <h1 class="text-cap owner-children-title">Tasks</h1>
       <div
-        class="v-flex user-tasks-tabs">
+        class="v-flex relative onwer-children-cnt">
         <el-tabs
           v-model="taskTab"
           @tab-click="chooseTab">
@@ -272,6 +272,9 @@ export default {
     ...mapState('user', [
       'userInfo'
     ]),
+    ...mapState('status', {
+      popstateModel: 'popstate'
+    }),
     pageScrollPE () {
       return document.getElementById('user-main-content')
     },
@@ -286,6 +289,17 @@ export default {
         return this.tasks.length
       }
       return this.taskRewards.lnegth
+    }
+  },
+  watch: {
+    userInfo (val, oval) {
+      this.getTasks()
+    },
+    popstateModel (val) {
+      console.log('popstate', val, location.pathname)
+      if (val && location.pathname.includes('/owner/tasks')) {
+        this.detailModel = false
+      }
     }
   },
   components: {
@@ -366,12 +380,7 @@ export default {
      * 对话框关闭触发函数
      */
     dialogClose () {
-      historyState(this.$route.path)
-    }
-  },
-  watch: {
-    userInfo (val, oval) {
-      this.getTasks()
+      if (!this.popstateModel) historyState(this.$route.path)
     }
   },
   mounted () {
@@ -476,22 +485,12 @@ export default {
     }
   }
 
-  .user-tasks-title {
-    font-size: 36px;
-    color: #999;
-  }
-
   .ld-tasks-pagination {
     position: absolute;
     left: 0;
     bottom: -100px;
   }
 
-   .user-tasks-tabs {
-    position: relative;
-    @include margin('top', 35px, 1);
-    @include margin('bottom', 50px, 1);
-  }
   .user-no-sale-tasks {
     // width: 100%;
     // @include margin('top', 50px, 1, -2);

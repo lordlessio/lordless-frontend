@@ -63,8 +63,8 @@ export default {
     height: 100%;
     // el-popup-parent--hidden
     &.fixed {
-      // position: fixed;
-      position: absolute;
+      position: fixed;
+      // position: absolute;
     }
     &.absolute {
       position: absolute;

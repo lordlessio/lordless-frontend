@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex user-activity-box">
     <div class="d-flex v-flex col-flex user-activity-container">
-      <h1 class="text-cap user-activity-title">activity</h1>
+      <h1 class="text-cap owner-children-title">activity</h1>
       <div
         v-if="!activities.total && !loading"
         class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
@@ -18,7 +18,7 @@
       </div>
       <div
         v-if="activities.total"
-        class="v-flex user-activity-tabs">
+        class="v-flex  relative onwer-children-cnt user-activity-tabs">
         <el-tabs
           v-model="activityTab">
           <el-tab-pane
@@ -170,11 +170,6 @@ export default {
     }
   }
 
-  .user-activity-title {
-    font-size: 36px;
-    color: #999;
-  }
-
   .ld-activity-pagination {
     position: absolute;
     left: 0;
@@ -229,11 +224,11 @@ export default {
     }
   }
 
-   .user-activity-tabs {
-    position: relative;
-    @include margin('top', 35px, 1);
-    @include margin('bottom', 150px, 1);
-  }
+  // .user-activity-tabs {
+  //   position: relative;
+  //   @include margin('top', 35px, 1);
+  //   @include margin('bottom', 150px, 1);
+  // }
   .user-no-sale-activity {
     position: absolute;
     top: 50%;

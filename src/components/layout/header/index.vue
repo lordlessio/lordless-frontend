@@ -1,5 +1,5 @@
 <template>
-  <header id="ld-header" class="ld-header" :class="[{ 'fixed': fixed }, { 'inverse': inverse && !scroll }, { 'transparent': transparent }, { 'inherit': inherit }, { 'margin': pageTitle }, theme]" v-if="show">
+  <header id="ld-header" class="ld-header" :style="`z-index: ${zIndex};`" :class="[{ 'fixed': fixed }, { 'inverse': inverse && !scroll }, { 'transparent': transparent }, { 'inherit': inherit }, { 'margin': pageTitle }, theme]" v-if="show">
     <div class="relative container header-container d-flex f-align-center">
       <div class="text-left inline-block header-left" :class="{ 'lg-hidden': !logo.pc, 'sm-hidden': !logo.mobile }" v-if="logo.show">
         <header-logo :theme="theme"></header-logo>
@@ -144,6 +144,11 @@ export default {
     theme: {
       type: String,
       default: 'dark'
+    },
+
+    zIndex: {
+      type: Number,
+      default: 2299
     }
   },
   data: () => {
@@ -170,7 +175,7 @@ export default {
       toggleClass('show-sidebar', document.getElementById('ld-header'))
     },
     toTop () {
-      const before = document.getElementById('lordless').scrollTop
+      const before = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
       return scrollToTop({ before })
     },
     // destroy () {
@@ -189,12 +194,12 @@ export default {
       this.titleScroll()
     },
     headerScroll () {
-      if (this.headerScrollFunc) document.getElementById('lordless').removeEventListener('scroll', this.headerScrollFunc)
+      if (this.headerScrollFunc) document.removeEventListener('scroll', this.headerScrollFunc)
       this.headerScrollFunc = null
       if (!this.scroll || this.pageTitle) return
       let navbarInverse = false
       const func = () => {
-        const scrollTop = document.getElementById('lordless').scrollTop
+        const scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
         if (!navbarInverse && scrollTop > 50) {
           addClass('inverse', document.getElementById('ld-header'))
           navbarInverse = true
@@ -206,15 +211,15 @@ export default {
       func()
 
       this.headerScrollFunc = throttle(func, 300)
-      document.getElementById('lordless').addEventListener('scroll', throttle(func, 300))
+      document.addEventListener('scroll', throttle(func, 300))
 
       this.$once('hook:beforeDestroy', () => {
-        document.getElementById('lordless').removeEventListener('scroll', throttle(func, 300))
+        document.removeEventListener('scroll', throttle(func, 300))
       })
     },
 
     titleScroll () {
-      if (this.titleScrollFunc) document.getElementById('lordless').removeEventListener('scroll', this.titleScrollFunc)
+      if (this.titleScrollFunc) document.removeEventListener('scroll', this.titleScrollFunc)
       this.titleScrollFunc = null
 
       if (!this.scroll || !this.pageTitle) return
@@ -222,7 +227,7 @@ export default {
       const headerHeight = document.getElementById('ld-header').offsetHeight
       let bool = true
       const func = () => {
-        const scrollTop = document.getElementById('lordless').scrollTop
+        const scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
         if (bool && scrollTop >= headerHeight) {
           bool = false
           addClass('toggle', document.getElementById('ld-header'))
@@ -234,10 +239,10 @@ export default {
       func()
 
       this.titleScrollFunc = func
-      document.getElementById('lordless').addEventListener('scroll', func)
+      document.addEventListener('scroll', func)
 
       this.$once('hook:beforeDestroy', () => {
-        document.getElementById('lordless').removeEventListener('scroll', func)
+        document.removeEventListener('scroll', func)
       })
     }
   },
@@ -577,7 +582,7 @@ export default {
       top: 0;
       left: 0;
       width: 100%;
-      z-index: 2299;
+      // z-index: 2299;
       // line-height: 60px;
     }
     // .header-logo {

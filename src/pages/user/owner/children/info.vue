@@ -571,7 +571,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '@/assets/stylus/reuse/single/user_info.scss';
+  @import '@/assets/stylus/reuse/single/user_detail.scss';
 
   .user-info-box {
     padding: 30px;

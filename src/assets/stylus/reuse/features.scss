@@ -120,8 +120,8 @@
     padding: 0;
   }
   .dialog-ldb-close {
-    // position: fixed;
-    position: absolute;
+    position: fixed;
+    // position: absolute;
     right: 30px;
     top: 15px;
     color: #fff;
@@ -184,12 +184,18 @@
 /**
  *  no-asset-box  --- begin
  */
- .no-asset-box {
+.no-asset-box {
   width: 100%;
   color: #777777;
   fill: #bbb;
   @include fontSize(16px, 1.15);
   @include margin('top', 50px, 1, -2);
+  &.absolute {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
   >svg {
     width: 180px;
     height: 180px;
@@ -217,14 +223,14 @@
 }
 
 @media screen and (min-width: 769px) {
-  .no-asset-box {
-    &.absolute {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-  }
+  // .no-asset-box {
+  //   &.absolute {
+  //     position: absolute;
+  //     top: 50%;
+  //     left: 50%;
+  //     transform: translate(-50%, -50%);
+  //   }
+  // }
 }
 
 /**

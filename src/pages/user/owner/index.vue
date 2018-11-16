@@ -8,7 +8,7 @@
     </Loading> -->
     <aside class="d-flex lg-col-flex sm-row-flex ld-user-navgation">
       <div class="d-flex f-auto-center user-navgation-logo sm-hidden">
-        <header-logo theme="deep-blue"></header-logo>
+        <header-logo theme="deep-blue"/>
       </div>
       <div class="d-flex col-flex v-flex">
         <ul class="d-flex v-flex sm-row-flex lg-col-flex user-navgation-list">
@@ -116,7 +116,8 @@ export default {
         showLogo: false,
         inverse: false,
         transparent: true,
-        inherit: true
+        inherit: true,
+        zIndex: 99
       },
       loading: true
     }
@@ -150,6 +151,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  @import '@/assets/stylus/reuse/single/user_info.scss';
+</style>
 
 <style lang="scss" scoped>
   .owner-cnt-fade-enter-active {
@@ -249,7 +254,9 @@ export default {
   }
 
   .ld-user-content {
-    padding: 90px 0 0;
+    padding: 0;
+    @include padding('top', 90px, -2);
+    @include padding('top', 70px, 1, -2);
     background-color: #f4f4f4;
     @include overflow();
   }

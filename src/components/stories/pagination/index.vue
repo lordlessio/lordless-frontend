@@ -56,7 +56,7 @@ export default {
     currentP (val) {
       if (this.scrollE) {
         const top = this.scrollE.offsetTop - this.scrollOffset
-        this.scrollPE ? this.scrollPE.scrollTop = top : document.getElementById('lordless').scrollTop = top
+        this.scrollPE ? this.scrollPE.scrollTop = top : document.body.scrollTop = top
       }
       this.$emit('currentChange', val)
     }

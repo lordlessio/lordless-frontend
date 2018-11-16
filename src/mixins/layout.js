@@ -9,10 +9,10 @@ export default {
   },
   methods: {
     prohibitScroll () {
-      addClass('overflow-hidden', document.getElementById('lordless'))
+      addClass('overflow-hidden', document.body)
     },
     freeScroll () {
-      removeClass('overflow-hidden', document.getElementById('lordless'))
+      removeClass('overflow-hidden', document.body)
     }
   }
 }

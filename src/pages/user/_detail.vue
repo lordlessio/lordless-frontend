@@ -408,7 +408,7 @@ export default {
 
 <style lang="scss">
 
-  @import '@/assets/stylus/reuse/single/user_info.scss';
+  @import '@/assets/stylus/reuse/single/user_detail.scss';
 
   .ld-detail-user-box {
     padding-top: 130px;

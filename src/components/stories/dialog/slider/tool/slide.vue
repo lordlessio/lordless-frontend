@@ -1,7 +1,7 @@
 <template>
-  <transition name="ld-slide-fade"
-    @after-enter="$emit('opened')"
-    @after-leave="$emit('closed')">
+  <transition :name="popstateModel ? 'ld-hide-in-fade' : 'ld-slide-fade'"
+    @after-leave="afterLeave"
+    @after-enter="$emit('opened')">
     <div
       v-if="visible"
       ref="slide"
@@ -27,6 +27,12 @@ export default {
     appendToBody: {
       type: Boolean,
       default: true
+    },
+
+    // popstate 改变状态
+    popstateModel: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => {
@@ -52,6 +58,10 @@ export default {
     }
   },
   methods: {
+    afterLeave () {
+      console.log(' -- slide after leave popstate', this.popstateModel)
+      this.$emit('closed')
+    },
     destroy () {
       // if appendToBody is true, remove DOM node after destroy
       if (this.appendToBody && this.$el && this.$el.parentNode) {
@@ -88,8 +98,8 @@ export default {
 <style lang="scss" scoped>
 
   .ld-dialog-slide {
-    // position: fixed;
-    position: absolute;
+    position: fixed;
+    // position: absolute;
     top: 0;
     right: 0;
     bottom: 0;

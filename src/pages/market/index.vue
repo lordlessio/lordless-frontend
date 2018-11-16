@@ -26,6 +26,8 @@ import DetailDialog from '@/components/reuse/dialog/ldb/detail'
 
 import { historyState } from 'utils/tool'
 
+import { mapState } from 'vuex'
+
 export default {
   data: () => {
     return {
@@ -45,15 +47,18 @@ export default {
     DetailDialog
   },
   computed: {
+    ...mapState('status', {
+      popstateModel: 'popstate'
+    }),
     isMobile () {
       return this.$root.$children[0].isMobile
     }
   },
   watch: {
-    detailModel (val) {
-      // 如果对话框关闭，改变浏览器地址为详情页面地址
-      if (!val) {
-        historyState(this.marketPath || this.$route.path)
+    popstateModel (val) {
+      console.log('popstate', val, location.pathname)
+      if (val && location.pathname.includes('/market')) {
+        this.detailModel = false
       }
     }
   },
@@ -73,6 +78,9 @@ export default {
      * 对话框关闭触发函数
      */
     dialogClose (info) {
+      // 如果对话框关闭，改变浏览器地址为详情页面地址
+      if (!this.popstateModel) historyState(this.marketPath || this.$route.path)
+      // else this.$root.$children[0].popstate = false
       console.log('dialogClose')
       this.$refs.market.changeLdbs(info)
     },
@@ -87,14 +95,6 @@ export default {
     // this.$nextTick(() => {
     //   const pn = parseInt(this.$route.query.page || 1)
     //   this.getLdbs({ pn })
-    // })
-    // window.addEventListener('popstate', () => {
-    //   console.log('=====', this.$route)
-    //   this.$nextTick(() => {
-    //     if (location.pathname === '/market') {
-    //       this.detailModel = false
-    //     }
-    //   })
     // })
   }
 }

@@ -7,7 +7,8 @@ import { actionTypes, mutationTypes } from './types'
 export default {
   namespaced: true,
   state: {
-    browser: { default: true }
+    browser: { default: true },
+    popstate: false
   },
   mutations: {
 
@@ -17,6 +18,10 @@ export default {
      */
     [mutationTypes.STATUS_SET_BROWSER]: (state, payload = {}) => {
       state.browser = payload
+    },
+
+    [mutationTypes.STATUS_SET_POPSTATE]: (state, payload = false) => {
+      state.popstate = payload
     }
   },
   actions: {
