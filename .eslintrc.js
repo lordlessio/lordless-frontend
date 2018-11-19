@@ -36,6 +36,7 @@ module.exports = {
     Sketchfab: true,
     mapboxgl: true,
     imToken: true,
-    lordlessMethods: true
+    lordlessMethods: true,
+    AMap: true,
   }
 }

@@ -31,8 +31,10 @@
           </span>
         </lordless-btn>
         <div v-show="!userInfo.telegram || !userInfo.telegram.id" class="d-flex f-auto-center telegram-authorize-btn">
-          <p v-if="!telegramReady" class="d-flex f-align-baseline customize-loading">loading <span class="line-height-1"><i class="el-icon-loading"></i></span></p>
-          <div class="d-flex f-auto-center" :id="telegramContainer"></div>
+          <!-- <p v-if="!telegramReady" class="d-flex f-align-baseline customize-loading">loading <span class="line-height-1"><i class="el-icon-loading"></i></span></p> -->
+          <div class="d-flex f-auto-center" :id="telegramContainer">
+            <iframe src="/static/iframe/iframe2.html"></iframe>
+          </div>
         </div>
       </div>
     </div>
@@ -120,7 +122,8 @@ export default {
       el.setAttribute('data-userpic', false)
       el.setAttribute('data-onauth', 'onTelegramAuth(user)')
       el.setAttribute('data-request-access', 'write')
-      // document.body.appendChild(el)
+      // el.setAttribute('data-auth-url', location.href)
+
       document.getElementById(this.telegramContainer).appendChild(el)
       el.onload = () => {
         this.telegramReady = true

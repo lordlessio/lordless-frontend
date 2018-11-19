@@ -28,6 +28,311 @@ import OwnerTasks from '@/pages/user/owner/children/tasks'
 import OwnerAuthorization from '@/pages/user/owner/children/authorization'
 import OwnerActivity from '@/pages/user/owner/children/activity'
 
+// mobile page
+import MobileIndex from '@/pages/_mobile'
+import MobileMarket from '@/pages/_mobile/market'
+import MobileCandy from '@/pages/_mobile/candy'
+import MobileQuest from '@/pages/_mobile/quest'
+import MobileUser from '@/pages/_mobile/user'
+
+// mobile routes
+const mobileRoutes = [
+  {
+    path: '/',
+    name: 'mobile-page',
+    component: MobileIndex,
+    children: [
+      {
+        path: 'market',
+        name: 'mobile-marketplace',
+        component: MobileMarket,
+        meta: {
+          title: 'Marketplace - LORDLESS',
+          header: {
+            show: false
+          },
+          footer: {
+            show: false
+          }
+        }
+      },
+      {
+        path: 'candy',
+        name: 'mobile-user-candy',
+        component: MobileCandy,
+        meta: {
+          title: 'Candy - LORDLESS',
+          header: {
+            show: false
+          },
+          footer: {
+            show: false
+          }
+        }
+      },
+      {
+        path: 'quest',
+        name: 'mobile-user-quest',
+        component: MobileQuest,
+        meta: {
+          title: 'Quest - LORDLESS',
+          header: {
+            show: false
+          },
+          footer: {
+            show: false
+          }
+        }
+      },
+      {
+        path: 'user',
+        name: 'mobile-user-info',
+        component: MobileUser,
+        meta: {
+          title: 'User - LORDLESS',
+          header: {
+            show: false
+          },
+          footer: {
+            show: false
+          }
+        }
+      },
+      {
+        path: '*',
+        redirect: '/market'
+      }
+    ]
+  },
+  {
+    path: '*',
+    name: 'other',
+    redirect: '/market'
+  }
+]
+
+// pc端 routes
+const routes = [
+  {
+    path: '/market',
+    name: 'Market',
+    component: Market,
+    meta: {
+      title: 'Marketplace - LORDLESS',
+      header: {
+        show: true
+      }
+    }
+  },
+  {
+    path: '/map',
+    name: 'Lbs',
+    component: Lbs,
+    meta: {
+      title: 'Map - LORDLESS',
+      header: {
+        show: false
+      },
+      footer: {
+        show: false
+      }
+    }
+  },
+  {
+    path: '/tavern/:ldbId',
+    name: 'TavernDetail',
+    component: TavernDetail,
+    meta: {
+      title: 'Tavern - LORDLESS',
+      header: {
+        fixed: true,
+        scroll: true,
+        transparent: true
+      }
+    }
+  },
+  {
+    path: '/task/:taskId',
+    name: 'taskDetail',
+    component: TaskDetail,
+    meta: {
+      title: 'Quest - LORDLESS',
+      header: {
+        fixed: true,
+        scroll: true,
+        transparent: true
+      }
+    }
+  },
+  {
+    path: '/guide',
+    name: 'guide',
+    component: Guide,
+    meta: {
+      title: 'Guide - LORDLESS ',
+      header: {
+        fixed: true,
+        scroll: true,
+        transparent: false
+      }
+    }
+  },
+  {
+    path: '/terms',
+    name: 'terms',
+    component: Terms,
+    meta: {
+      title: 'Terms - LORDLESS ',
+      header: {
+        pageTitle: 'LORDLESS Term of Use',
+        fixed: true,
+        scroll: true,
+        transparent: false
+      }
+    }
+  },
+  {
+    path: '/privacy',
+    name: 'privacy',
+    component: Privacy,
+    meta: {
+      title: 'Privacy - LORDLESS ',
+      header: {
+        pageTitle: 'LORDLESS Privacy policy',
+        fixed: true,
+        scroll: true,
+        transparent: false
+      }
+    }
+  },
+  {
+    path: '/sign',
+    name: 'lordless-sign',
+    component: Sign,
+    meta: {
+      title: 'Sign - LORDLESS',
+      header: {
+        fixed: true,
+        transparent: true
+      }
+    }
+  },
+  {
+    path: '/user/:address',
+    name: 'userDetail',
+    component: UserDetail,
+    meta: {
+      title: 'USER - LORDLESS'
+    }
+  },
+  {
+    path: '/owner',
+    name: 'owner',
+    component: Owner,
+    children: [
+      {
+        path: 'info',
+        name: 'OwnerInfo',
+        component: OwnerInfo,
+        meta: {
+          title: 'Overview - LORDLESS',
+          navgation: 'overview',
+          header: {
+            show: false
+          },
+          footer: {
+            show: false
+          }
+        }
+      },
+      {
+        path: 'candy',
+        name: 'Owner-candy',
+        component: OwnerCandy,
+        meta: {
+          title: 'My Candies - LORDLESS',
+          navgation: 'candy',
+          header: {
+            show: false
+          },
+          footer: {
+            show: false
+          }
+        }
+      },
+      {
+        path: 'taverns',
+        name: 'Owner-taverns',
+        component: OwnerTaverns,
+        meta: {
+          title: 'My Taverns - LORDLESS',
+          navgation: 'taverns',
+          header: {
+            show: false
+          },
+          footer: {
+            show: false
+          }
+        }
+      },
+      {
+        path: 'tasks',
+        name: 'Owner-tasks',
+        component: OwnerTasks,
+        meta: {
+          title: 'My Quests - LORDLESS',
+          navgation: 'tasks',
+          header: {
+            show: false
+          },
+          footer: {
+            show: false
+          }
+        }
+      },
+      {
+        path: 'authorization',
+        name: 'Owner-authorization',
+        component: OwnerAuthorization,
+        meta: {
+          title: 'Authorization - LORDLESS',
+          navgation: 'authorization',
+          header: {
+            show: false
+          },
+          footer: {
+            show: false
+          }
+        }
+      },
+      {
+        path: 'activity',
+        name: 'Owner-activity',
+        component: OwnerActivity,
+        meta: {
+          title: 'My Activities - LORDLESS',
+          navgation: 'activity',
+          header: {
+            show: false
+          },
+          footer: {
+            show: false
+          }
+        }
+      },
+      {
+        path: '*',
+        redirect: '/map'
+      }
+    ]
+  },
+  {
+    path: '*',
+    name: 'other',
+    redirect: '/map'
+  }
+]
+
 Vue.use(Router)
 
 const isMobile = mobileBool()
@@ -35,226 +340,7 @@ console.log('----isMobile', isMobile)
 
 const router = new Router({
   mode: 'history',
-  routes: [
-    {
-      path: '/market',
-      name: 'Market',
-      component: Market,
-      meta: {
-        title: 'Marketplace - LORDLESS',
-        header: {
-          show: !isMobile
-        }
-      }
-    },
-    {
-      path: '/map',
-      name: 'Lbs',
-      component: Lbs,
-      meta: {
-        title: 'Map - LORDLESS',
-        header: {
-          show: false
-        },
-        footer: {
-          show: false
-        }
-      }
-    },
-    {
-      path: '/tavern/:ldbId',
-      name: 'TavernDetail',
-      component: TavernDetail,
-      meta: {
-        title: 'Tavern - LORDLESS',
-        header: {
-          fixed: true,
-          scroll: true,
-          transparent: true
-        }
-      }
-    },
-    {
-      path: '/task/:taskId',
-      name: 'taskDetail',
-      component: TaskDetail,
-      meta: {
-        title: 'Quest - LORDLESS',
-        header: {
-          fixed: true,
-          scroll: true,
-          transparent: true
-        }
-      }
-    },
-    {
-      path: '/guide',
-      name: 'guide',
-      component: Guide,
-      meta: {
-        title: 'Guide - LORDLESS ',
-        header: {
-          fixed: true,
-          scroll: true,
-          transparent: false
-        }
-      }
-    },
-    {
-      path: '/terms',
-      name: 'terms',
-      component: Terms,
-      meta: {
-        title: 'Terms - LORDLESS ',
-        header: {
-          pageTitle: 'LORDLESS Term of Use',
-          fixed: true,
-          scroll: true,
-          transparent: false
-        }
-      }
-    },
-    {
-      path: '/privacy',
-      name: 'privacy',
-      component: Privacy,
-      meta: {
-        title: 'Privacy - LORDLESS ',
-        header: {
-          pageTitle: 'LORDLESS Privacy policy',
-          fixed: true,
-          scroll: true,
-          transparent: false
-        }
-      }
-    },
-    {
-      path: '/sign',
-      name: 'lordless-sign',
-      component: Sign,
-      meta: {
-        title: 'Sign - LORDLESS',
-        header: {
-          fixed: true,
-          transparent: true
-        }
-      }
-    },
-    {
-      path: '/user/:address',
-      name: 'userDetail',
-      component: UserDetail,
-      meta: {
-        title: 'USER - LORDLESS'
-      }
-    },
-    {
-      path: '/owner',
-      name: 'owner',
-      component: Owner,
-      children: [
-        {
-          path: 'info',
-          name: 'OwnerInfo',
-          component: OwnerInfo,
-          meta: {
-            title: 'Overview - LORDLESS',
-            navgation: 'overview',
-            header: {
-              show: false
-            },
-            footer: {
-              show: false
-            }
-          }
-        },
-        {
-          path: 'candy',
-          name: 'Owner-candy',
-          component: OwnerCandy,
-          meta: {
-            title: 'My Candies - LORDLESS',
-            navgation: 'candy',
-            header: {
-              show: false
-            },
-            footer: {
-              show: false
-            }
-          }
-        },
-        {
-          path: 'taverns',
-          name: 'Owner-taverns',
-          component: OwnerTaverns,
-          meta: {
-            title: 'My Taverns - LORDLESS',
-            navgation: 'taverns',
-            header: {
-              show: false
-            },
-            footer: {
-              show: false
-            }
-          }
-        },
-        {
-          path: 'tasks',
-          name: 'Owner-tasks',
-          component: OwnerTasks,
-          meta: {
-            title: 'My Quests - LORDLESS',
-            navgation: 'tasks',
-            header: {
-              show: false
-            },
-            footer: {
-              show: false
-            }
-          }
-        },
-        {
-          path: 'authorization',
-          name: 'Owner-authorization',
-          component: OwnerAuthorization,
-          meta: {
-            title: 'Authorization - LORDLESS',
-            navgation: 'authorization',
-            header: {
-              show: false
-            },
-            footer: {
-              show: false
-            }
-          }
-        },
-        {
-          path: 'activity',
-          name: 'Owner-activity',
-          component: OwnerActivity,
-          meta: {
-            title: 'My Activities - LORDLESS',
-            navgation: 'activity',
-            header: {
-              show: false
-            },
-            footer: {
-              show: false
-            }
-          }
-        },
-        {
-          path: '*',
-          redirect: `${isMobile ? '/market' : '/map'}`
-        }
-      ]
-    },
-    {
-      path: '*',
-      name: 'other',
-      redirect: `${isMobile ? '/market' : '/map'}`
-    }
-  ]
+  routes: isMobile ? mobileRoutes : routes
 })
 
 /**

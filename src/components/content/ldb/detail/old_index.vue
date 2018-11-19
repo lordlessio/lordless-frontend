@@ -289,7 +289,7 @@ import LdButton from '@/components/stories/button'
 import LdLoading from '@/components/stories/loading'
 import Blockies from '@/components/stories/blockies'
 
-import SketchFab from '@/components/sketchfab'
+import SketchFab from '@/components/reuse/sketchfab'
 
 import Authorize from '@/components/reuse/dialog/authorize'
 import OrderDialog from '@/components/reuse/dialog/ldb/order'
