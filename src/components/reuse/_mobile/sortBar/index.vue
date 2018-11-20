@@ -1,20 +1,24 @@
 <template>
-  <section id="mobile-sort-bar" class="relative mobile-sort-bar">
+  <section id="mobile-sort-bar" class="relative mobile-sort-bar" :class="{ 'inherit-height': inheritHeight }">
     <div id="sort-bar-box" class="alone-layer lg-d-flex f-align-center relative sort-bar-box">
       <div class="relative sort-bar-container" :class="{ 'sort': openModel }">
         <div class="d-flex f-align-center sort-bar-cnt">
-          <div class="alone-layer d-flex f-align-center mobile-sort-select" @click="toggleBar">
+          <div
+            v-if="showSort"
+            class="alone-layer d-flex f-align-center mobile-sort-select"
+            @click="toggleBar">
             <span class="inline-block sort-bar-label">{{ sortItems[sortModel] }}</span>
             <span class="inline-block sort-bar-icon">
               <i class="el-icon el-icon-caret-top"></i>
             </span>
           </div>
           <switch-input
+            v-if="showOrder"
             class="mobile-switch-input"
             v-model="orderModel"
             :items="orderItems"
             @change="orderChange"/>
-          <p class="v-flex text-right mobile-sort-total">Total {{ total }}</p>
+          <p v-if="showTotal" class="v-flex text-right mobile-sort-total">Total {{ total }}</p>
         </div>
         <ul class="sort-bar-list">
           <li
@@ -61,11 +65,27 @@ export default {
         ]
       }
     },
+    showSort: {
+      type: Boolean,
+      default: true
+    },
+    showOrder: {
+      type: Boolean,
+      default: true
+    },
+    showTotal: {
+      type: Boolean,
+      default: true
+    },
     total: {
       type: Number,
       default: 0
     },
     static: {
+      type: Boolean,
+      default: false
+    },
+    inheritHeight: {
       type: Boolean,
       default: false
     },
@@ -181,7 +201,7 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      if (!this.static) this.sortBarScroll()
+      if (!this.static && this.showSort) this.sortBarScroll()
     })
   }
 }
@@ -194,6 +214,12 @@ export default {
   .mobile-sort-bar {
     height: 60px;
     z-index: 9;
+    &.inherit-height {
+      height: inherit;
+      .sort-bar-cnt {
+        padding: 0;
+      }
+    }
   }
   .sort-bar-box {
     z-index: 1;

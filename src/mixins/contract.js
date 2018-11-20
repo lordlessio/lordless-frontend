@@ -133,16 +133,21 @@ export default {
         // 创建新定时器实例
         timeout = setTimeout(async () => {
           const bool = await TavernNFTs.methods('isApprovedForAll', [address, NFTsCrowdsale.address])
-          if (bool) {
-            cb && cb()
-            return
-          }
+
           clearTimeout(timeout)
           timeout = null
 
-          loopFunc()
+          if (bool) {
+            return cb && cb()
+          } else {
+            return loopFunc()
+          }
         }, 5000)
       }
+      this.$once('hook:beforeDestroy', () => {
+        timeout && clearTimeout(timeout)
+      })
+      return loopFunc()
       // this.intervals[index] = interval
     },
 
@@ -158,53 +163,50 @@ export default {
       }
       if (!loop) return cb()
 
-      const index = this.intervals.length
-      let interval = this.intervals[index]
-      // 初始化实例
-      if (interval) this.clearCInterval({ index })
-
       // 创建新定时器实例
-      interval = setInterval(async () => {
-        const res = await getActivityByTx({ tx })
+      let timeout = null
+      const loopFunc = () => {
+        timeout = setTimeout(async () => {
+          clearTimeout(timeout)
+          timeout = null
 
-        const cbData = { data: res.data }
-        console.log('cbData', cbData)
-        // 如果当前合约执行完毕，清除定时器，执行回调
-        if (res.code === 1000 && res.data && !res.data.isPending) {
-          if (cb) cb(cbData)
-          this.clearCInterval({ index })
-        } else if (res.code !== 1000) {
-          cbData.err = res.errorMsg
-          if (cb) cb(cbData)
-          this.clearCInterval({ index })
-        } else {
-          if (cb) cb(cbData)
-          this.clearCInterval({ index })
-        }
-      }, 5000)
+          const res = await getActivityByTx({ tx })
 
-      this.intervals[index] = interval
+          const cbData = { data: res.data }
+          console.log('cbData', cbData)
 
-      return interval
-    },
+          if (res.code !== 1000) {
+            cbData.err = res.errorMsg
+          }
+
+          if (res.code !== 1000 || res.data) return cb && cb(cbData)
+
+          return loopFunc()
+        }, 5000)
+      }
+      this.$once('hook:beforeDestroy', () => {
+        timeout && clearTimeout(timeout)
+      })
+      return loopFunc()
+    }
 
     /**
      * 清除 tx interval
      * @param {Object} interval 定时器实例
      */
-    clearCInterval ({ index = 0, all = false } = {}) {
-      const intervals = this.intervals || []
-      if (!all && !intervals[index]) return
-      if (all) {
-        intervals.map(item => clearInterval(item))
-        this.intervals = []
-      } else {
-        clearInterval(intervals[index])
-        this.$set(this.intervals, index, null)
-      }
-    }
-  },
-  beforeDestroy () {
-    this.clearCInterval({ all: true })
+  //   clearCInterval ({ index = 0, all = false } = {}) {
+  //     const intervals = this.intervals || []
+  //     if (!all && !intervals[index]) return
+  //     if (all) {
+  //       intervals.map(item => clearInterval(item))
+  //       this.intervals = []
+  //     } else {
+  //       clearInterval(intervals[index])
+  //       this.$set(this.intervals, index, null)
+  //     }
+  //   }
   }
+  // beforeDestroy () {
+  //   this.clearCInterval({ all: true })
+  // }
 }

@@ -32,7 +32,8 @@ export default {
           // navbarText: 'Marketplace',
           logo: 'shop',
           name: 'Market',
-          route: 'market',
+          route: '/market',
+          match: /\/market/,
           active: true
           // scroll: true
         },
@@ -40,7 +41,8 @@ export default {
           // navbarText: 'candy',
           logo: 'candy',
           name: 'Candies',
-          route: 'candy',
+          route: '/owner/candy',
+          match: /\/owner\/candy/,
           active: false
           // scroll: false
         },
@@ -48,7 +50,8 @@ export default {
           // navbarText: 'quest',
           logo: 'quest',
           name: 'Quests',
-          route: 'quest',
+          route: '/owner/quest/candy',
+          match: /\/owner\/quest\//,
           active: false
           // scroll: false
         },
@@ -56,7 +59,8 @@ export default {
           // navbarText: 'person',
           logo: 'person',
           name: 'Me',
-          route: 'user',
+          route: '/owner/user',
+          match: /\/owner\/user/,
           active: false
           // scroll: false
         }
@@ -91,10 +95,24 @@ export default {
         })
       }
       scrollToTop()
+    },
+
+    rewriteNavigation (route = '/market', navigations = this.navigations) {
+      this.navigations = navigations.map(item => {
+        item.active = false
+        if (route.match(item.match)) {
+          item.active = true
+        }
+        return item
+      })
     }
   },
   mounted () {
     document.body.appendChild(this.$el)
+    this.$nextTick(() => {
+      const route = this.$route.path
+      this.rewriteNavigation(route)
+    })
   }
 }
 </script>

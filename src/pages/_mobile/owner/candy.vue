@@ -1,6 +1,5 @@
 <template>
   <div class="mobile-candy-page">
-    <mobile-nav-bar text="Candies"/>
     <mobile-candy/>
   </div>
 </template>
@@ -15,6 +14,6 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 
 </style>

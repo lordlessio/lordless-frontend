@@ -29,37 +29,37 @@ import OwnerAuthorization from '@/pages/user/owner/children/authorization'
 import OwnerActivity from '@/pages/user/owner/children/activity'
 
 // mobile page
-import MobileIndex from '@/pages/_mobile'
 import MobileMarket from '@/pages/_mobile/market'
-import MobileCandy from '@/pages/_mobile/candy'
-import MobileQuest from '@/pages/_mobile/quest'
-import MobileUser from '@/pages/_mobile/user'
+import MobileOwnerIndex from '@/pages/_mobile/owner'
+import MobileOwnerCandy from '@/pages/_mobile/owner/candy'
+import MobileOwnerQuest from '@/pages/_mobile/owner/_quest'
+import MobileOwnerUser from '@/pages/_mobile/owner/user'
 
 // mobile routes
 const mobileRoutes = [
   {
-    path: '/',
-    name: 'mobile-page',
-    component: MobileIndex,
-    children: [
-      {
-        path: 'market',
-        name: 'mobile-marketplace',
-        component: MobileMarket,
-        meta: {
-          title: 'Marketplace - LORDLESS',
-          header: {
-            show: false
-          },
-          footer: {
-            show: false
-          }
-        }
+    path: '/market',
+    name: 'mobile-marketplace',
+    component: MobileMarket,
+    meta: {
+      title: 'Marketplace - LORDLESS',
+      header: {
+        show: false
       },
+      footer: {
+        show: false
+      }
+    }
+  },
+  {
+    path: '/owner/',
+    name: 'mobile-page',
+    component: MobileOwnerIndex,
+    children: [
       {
         path: 'candy',
         name: 'mobile-user-candy',
-        component: MobileCandy,
+        component: MobileOwnerCandy,
         meta: {
           title: 'Candy - LORDLESS',
           header: {
@@ -71,9 +71,9 @@ const mobileRoutes = [
         }
       },
       {
-        path: 'quest',
+        path: 'quest/:type',
         name: 'mobile-user-quest',
-        component: MobileQuest,
+        component: MobileOwnerQuest,
         meta: {
           title: 'Quest - LORDLESS',
           header: {
@@ -87,7 +87,7 @@ const mobileRoutes = [
       {
         path: 'user',
         name: 'mobile-user-info',
-        component: MobileUser,
+        component: MobileOwnerUser,
         meta: {
           title: 'User - LORDLESS',
           header: {

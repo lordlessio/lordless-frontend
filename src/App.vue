@@ -12,7 +12,6 @@
         <p>{{ web3Opt.error }}</p>
       </div> -->
       <router-view/>
-      <!-- <Relogin v-model="userExpired" :address="web3Opt.address"></Relogin> -->
     </div>
     <Footer v-bind="footerOpt"/>
     <!-- <msg-tip
@@ -82,9 +81,6 @@ export default {
     }),
     ...mapState('web3', [
       'web3Opt'
-    ]),
-    ...mapState('user', [
-      'userExpired'
     ]),
     ...mapState('contract', [
       'isCrowdsaleApproved'

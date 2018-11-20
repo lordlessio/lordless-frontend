@@ -16,10 +16,7 @@ export default {
     userInfo: { default: true },
 
     // user single 用户信息
-    uSingleInfo: {},
-
-    // 用户是否过期
-    userExpired: false
+    uSingleInfo: {}
   },
   mutations: {
 
@@ -47,11 +44,6 @@ export default {
       const tokenObj = getObjStorage()
       tokenObj[address] = token
       window.localStorage.setItem('lordless_tokens', JSON.stringify(tokenObj))
-    },
-
-    // 改变 userExpired 状态
-    [mutationTypes.USER_SET_USER_EXPIRED]: (state, payload = true) => {
-      state.userExpired = Boolean(payload)
     },
 
     // 存储 userHome 信息
@@ -92,8 +84,7 @@ export default {
           cb && cb()
         }
       }
-      // 取消 expired 状态
-      commit(mutationTypes.USER_SET_USER_EXPIRED, false)
+
       const message = 'lordless'
 
       // 调用封装的 sign 方法
@@ -112,18 +103,15 @@ export default {
     [actionTypes.USER_SET_USER_BY_TOKEN]: async ({ state, commit }) => {
       // 根据token请求用户信息
       const res = await getUserByToken()
+      console.log('--- get user by token', res)
+
       if (res.code === 1000 && res.data) {
         commit(mutationTypes.USER_SET_USER_INFO, res.data)
-        if (state.userExpired) commit(mutationTypes.USER_SET_USER_EXPIRED, false)
-        return true
-      }
-      if (res.code === 9001 && res.errorMsg === 'jwt expired') {
-        commit(mutationTypes.USER_SET_USER_EXPIRED, true)
-        commit(mutationTypes.USER_SET_USER_INFO, {})
+      } else if (res.code === 9001) {
+        commit(mutationTypes.USER_SET_USER_INFO, { default: false })
       } else {
         commit(mutationTypes.USER_SET_USER_INFO, { default: true })
       }
-      commit(mutationTypes.USER_SET_USER_INFO)
       return false
     },
 
@@ -148,12 +136,6 @@ export default {
     // 存储 用户 token 到本地
     [actionTypes.USER_SET_USER_TOKEN]: ({ commit }, payload) => {
       commit(mutationTypes.USER_SET_USER_TOKEN, payload)
-    },
-
-    // 改变 user expired
-    [actionTypes.USER_SET_USER_EXPIRED]: ({ commit }, payload) => {
-      payload = Boolean(payload)
-      commit(mutationTypes.USER_SET_USER_EXPIRED, payload)
     },
 
     // 改变用户ap

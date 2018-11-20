@@ -31,10 +31,8 @@
           </span>
         </lordless-btn>
         <div v-show="!userInfo.telegram || !userInfo.telegram.id" class="d-flex f-auto-center telegram-authorize-btn">
-          <!-- <p v-if="!telegramReady" class="d-flex f-align-baseline customize-loading">loading <span class="line-height-1"><i class="el-icon-loading"></i></span></p> -->
-          <div class="d-flex f-auto-center" :id="telegramContainer">
-            <iframe src="/static/iframe/iframe2.html"></iframe>
-          </div>
+          <p v-if="!telegramReady" class="d-flex f-align-baseline customize-loading">loading <span class="line-height-1"><i class="el-icon-loading"></i></span></p>
+          <div class="d-flex f-auto-center" :id="telegramContainer"></div>
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@
     <icon-svg/>
     <user-svg/>
     <task-svg/>
+    <wallets-svg/>
   </div>
 </template>
 
@@ -14,13 +15,15 @@ import MapSvg from './map'
 import IconSvg from './icon'
 import UserSvg from './user'
 import TaskSvg from './task'
+import WalletsSvg from './wallets'
 export default {
   components: {
     GradientSvg,
     MapSvg,
     IconSvg,
     UserSvg,
-    TaskSvg
+    TaskSvg,
+    WalletsSvg
   },
   mounted () {
     document.body.appendChild(this.$el)

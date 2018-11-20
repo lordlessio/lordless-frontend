@@ -834,7 +834,7 @@ export default {
       if (this.$refs.approvedTask) this.$refs.approvedTask.clearApproved()
       this.initStatus()
       this.initContractStatus()
-      this.clearCInterval({ all: true })
+      // this.clearCInterval({ all: true })
 
       this.ldbInfo = null
       this.ldbRecords = null
