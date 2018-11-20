@@ -77,9 +77,19 @@ export default {
       tipModel: false,
       wallets: [
         {
+          name: 'AlphaWallet',
+          logo: '/static/svg/wallet/alphawallet_en.svg',
+          link: 'https://alphawallet.com/'
+        },
+        {
           name: 'coco-wallet',
           logo: '/static/svg/wallet/coco_en.svg',
           link: 'http://cocowallet.com.cn/'
+        },
+        {
+          name: 'Buntoy',
+          logo: '/static/svg/wallet/buntoy_en.svg',
+          link: 'https://www.buntoy.com/'
         }
       ]
     }
@@ -117,6 +127,7 @@ export default {
     margin-top: 15px;
     padding: 8px 15px;
     img {
+      width: 120px;
       height: 40px;
     }
   }
