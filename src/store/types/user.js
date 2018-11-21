@@ -18,7 +18,7 @@ const actionTypes = {
   USER_SET_USER_TOKEN: 'setUserToken',
   USER_GET_TOKEN_BY_ADDRESS: 'getTokenByAddress',
   USER_LOGOUT: 'userLogout',
-  USER_UPT_USER_AP: 'userUptUserAp',
+  USER_UPT_USER_PARAMS: 'userUptUserParams',
   USER_SET_USER_HOME: 'userSetUserHome'
 }
 

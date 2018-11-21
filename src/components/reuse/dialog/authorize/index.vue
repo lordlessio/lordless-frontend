@@ -283,6 +283,7 @@ export default {
       switch (true) {
         // 如果是移动端，并且 !locked 返回 false
         case this.isMobile && !loading && !isConnected:
+        // case this.isMobile:
           this.authorizeDialog = false
           this.$nextTick(() => {
             this.$root.$children[0].mobileAlertModel = true

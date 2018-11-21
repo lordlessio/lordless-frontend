@@ -3,11 +3,11 @@
     <div class="mobile-connect-container">
       <p class="mobile-connect-icon">
         <svg>
-          <use xlink:href="#icon-no-candy"/>
+          <use xlink:href="#icon-wallet"/>
         </svg>
       </p>
-      <p class="TTFontBolder text-break mobile-connect-address">0x106bc5579b16840a7928726504e0c0a136d7b541</p>
-      <p class="mobile-connect-desc">For external wallets, we will need to verify the ownership of your account by having you sign a message. This verification step will help to ensure your transaction information stays secure and private.</p>
+      <p class="TTFontBolder text-break mobile-connect-address">{{ account }}</p>
+      <p class="mobile-connect-desc">For external wallets, we will need to verify the ownership of your account by having you sign a message.<br>This verification step will help to ensure your transaction information stays secure and private.</p>
       <div class="mobile-connect-btns">
         <lordless-btn class="TTFontBolder mobile-connect-btn" theme="blue" inverse shadow @click="$emit('connect')">Connect</lordless-btn>
       </div>
@@ -22,12 +22,18 @@ export default {
     return {
       loading: true
     }
+  },
+  computed: {
+    account () {
+      return this.$root.$children[0].web3Opt.address || window.localStorage.getItem('currentAddress')
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
   .mobile-connect-box {
+    padding-top: 52px;
     @include viewport-unit(min-height, 100vh, 112px);
   }
   .mobile-connect-container {

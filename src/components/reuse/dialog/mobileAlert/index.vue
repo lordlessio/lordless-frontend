@@ -34,7 +34,9 @@
         class="inline-block line-height-1 lordless-message-close">
         <i class="el-icon-close"></i>
       </span>
-      <h3 slot="title">
+
+      <mobile-wallets dialog/>
+      <!-- <h3 slot="title">
         No wallet available
       </h3>
       <p class="d-flex f-align-center TTFontBold alert-main-cnt">
@@ -53,12 +55,13 @@
             <img :src="item.logo"/>
           </a>
         </lordless-btn>
-      </p>
+      </p> -->
     </div>
   </el-dialog>
 </template>
 
 <script>
+import MobileWallets from '@/components/reuse/_mobile/wallets'
 import { layoutMixins } from '@/mixins'
 export default {
   mixins: [layoutMixins],
@@ -100,6 +103,9 @@ export default {
       this.$emit('blurs', val)
     }
   },
+  components: {
+    MobileWallets
+  },
   methods: {
     closeDialog () {
       this.$emit('input', false)
@@ -110,27 +116,27 @@ export default {
 
 <style lang="scss" scoped>
   .lordless-message-box {
-    padding-top: 30px;
-    padding-bottom: 30px;
-    >h3 {
-      font-size: 24px;
-    }
+    padding-top: 50px;
+    padding-bottom: 50px;
+    // >h3 {
+    //   font-size: 24px;
+    // }
   }
-  .alert-main-cnt {
-    margin-top: 14px;
-    font-size: 16px;
-  }
-  .alert-wallets {
-    margin-top: 20px;
-  }
-  .alert-wallet-btn {
-    margin-top: 15px;
-    padding: 8px 15px;
-    img {
-      width: 120px;
-      height: 40px;
-    }
-  }
+  // .alert-main-cnt {
+  //   margin-top: 14px;
+  //   font-size: 16px;
+  // }
+  // .alert-wallets {
+  //   margin-top: 20px;
+  // }
+  // .alert-wallet-btn {
+  //   margin-top: 15px;
+  //   padding: 8px 15px;
+  //   img {
+  //     width: 120px;
+  //     height: 40px;
+  //   }
+  // }
 
 
   // oops style

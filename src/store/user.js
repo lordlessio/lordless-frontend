@@ -4,7 +4,7 @@
 
 import { mutationTypes, actionTypes } from './types'
 import { getUserByAddress, getUserByToken, getUserHome, login } from '../api'
-import { stringifyParse, getObjStorage } from 'utils/tool'
+import { stringifyParse, getObjStorage, nextAC } from 'utils/tool'
 import web3Store from './web3'
 export default {
   namespaced: true,
@@ -137,10 +137,21 @@ export default {
       commit(mutationTypes.USER_SET_USER_TOKEN, payload)
     },
 
-    // 改变用户ap
-    [actionTypes.USER_UPT_USER_AP]: ({ commit, state }, ap) => {
-      if (!ap) return
-      commit(mutationTypes.USER_UPT_USER_INFO, { ap: state.userInfo.ap - ap })
+    // 改变用户参数
+    [actionTypes.USER_UPT_USER_PARAMS]: ({ commit, state }, { ap = 0, activeness = 0 }) => {
+      if (!state.userInfo._id) return
+      ap && commit(mutationTypes.USER_UPT_USER_INFO, { ap: state.userInfo.ap - ap })
+
+      // 增加用户经验，根据当前经验判读是否增加用户等级
+      if (activeness) {
+        let level = state.userInfo.level
+        const _activeness = state.userInfo.activeness + activeness
+        const acleft = nextAC(level)
+        if ((acleft - _activeness) <= 0) {
+          level++
+        }
+        commit(mutationTypes.USER_UPT_USER_INFO, { activeness: _activeness, level })
+      }
     },
 
     /**

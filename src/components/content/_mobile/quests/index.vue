@@ -214,11 +214,17 @@ export default {
 
       // sortBar options
       bountyStatus: -2,
+      bountyStatusFilters: {
+        'all': -2,
+        'under': 0,
+        'approved': 1,
+        'rejected': -1
+      },
       bountySortItems: {
         'all': 'All',
         'under': 'Under way',
-        'appr': 'Approved',
-        'reject': 'Rejected'
+        'approved': 'Approved',
+        'rejected': 'Rejected'
       }
     }
   },
@@ -302,12 +308,13 @@ export default {
      */
     async getTasks ({ pn = 1, ps = 10, status = this.bountyStatus, type = this.taskTab } = {}) {
       const _type = this.tabFilters[type]
+      const _status = this.bountyStatusFilters[status]
 
       this.taskTab = type
 
       this.loading = true
 
-      const params = { pn, ps, type: _type, status }
+      const params = { pn, ps, type: _type, status: _status }
 
       let data = null
       try {

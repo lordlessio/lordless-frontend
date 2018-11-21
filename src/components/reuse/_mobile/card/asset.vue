@@ -8,12 +8,12 @@
       </p>
       <div class="v-flex card-candy-cnt">
         <p>
-          <span>10k ZRX</span>
-          <span class="candy-price">× $0.04531</span>
+          <span>{{ info.count | formatDecimal }} {{ info.candy.symbol }}</span>
+          <span class="candy-price">× $ {{ 1 / info.candy.USD2TokenCount | formatDecimal }}</span>
         </p>
-        <p class="TTFontBolder candy-value">≈$453.1</p>
+        <p class="TTFontBolder candy-value">≈ $ {{ info.count / info.candy.USD2TokenCount | formatDecimal }}</p>
       </div>
-      <p class="card-candy-percent">54.3%</p>
+      <p class="card-candy-percent">{{ info.value / totalValue | formatDecimal({ len: 2, percentage: true }) }}%</p>
     </div>
   </div>
 </template>
@@ -25,6 +25,10 @@ export default {
     info: {
       type: Object,
       default: () => {}
+    },
+    totalValue: {
+      type: Number,
+      default: 0
     }
   }
 }

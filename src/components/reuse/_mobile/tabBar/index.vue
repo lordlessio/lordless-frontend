@@ -8,7 +8,7 @@
           :data-active="item.active.toString()" :data-index="index">
           <span class="inline-block">
             <svg>
-              <use xlink:href="#icon-eye"/>
+              <use :xlink:href="`${item.active ? item.activeIcon : item.icon}`"/>
             </svg>
           </span>
           <span class="inline-block text-cap">{{ item.name }}</span>
@@ -29,28 +29,32 @@ export default {
       activeIndex: 0,
       navigations: [
         {
-          logo: 'shop',
+          icon: '#icon-tab-marketplace',
+          activeIcon: '#icon-tab-marketplace',
           name: 'Market',
           route: '/market',
           match: /\/market/,
           active: true
         },
         {
-          logo: 'candy',
+          icon: '#icon-candy_unselected',
+          activeIcon: '#icon-candy_selected',
           name: 'Candies',
           route: '/owner/candy',
           match: /\/owner\/candy/,
           active: false
         },
         {
-          logo: 'quest',
+          icon: '#icon-quest',
+          activeIcon: '#icon-quest',
           name: 'Quests',
           route: '/owner/quest',
           match: /\/owner\/quest/,
           active: false
         },
         {
-          logo: 'person',
+          icon: '#icon-user_unselected',
+          activeIcon: '#icon-user_selected',
           name: 'Me',
           route: '/owner/info',
           match: /\/owner\/(info|activities|taverns|authorization|general)/,

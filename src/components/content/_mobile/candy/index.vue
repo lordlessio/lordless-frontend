@@ -1,15 +1,15 @@
 <template>
   <div class="d-flex col-flex mobile-candies-box">
     <asset-sort-bar
-      v-if="loading || assets.length"
+      v-if="loading || assets.total"
       :sortItems="sortItems"
-      :total="assets.length"
+      :total="assets.total"
       static
       @sort="sortChange"
       @order="orderChange"/>
     <transition name="ld-hide-fade" mode="out-in">
       <mobile-asset-skeletion v-if="loading"/>
-      <div v-else-if="!loading && !assets.length" class="v-flex d-flex f-auto-center children-none-data-box none-candies-box">
+      <div v-else-if="!loading && !assets.total" class="v-flex d-flex f-auto-center children-none-data-box none-candies-box">
         <div class="children-none-data-container none-candies-container">
           <p class="children-none-data-icon">
             <svg>
@@ -22,13 +22,13 @@
           </div>
         </div>
       </div>
-      <div v-else-if="!loading && assets.length" class="v-flex d-flex col-flex mobile-candies-container">
+      <div v-else-if="!loading && assets.total" class="v-flex d-flex col-flex mobile-candies-container">
         <div class="v-flex candies-main-cnt">
           <ul class="candies-list">
             <li
               class="candies-item"
-              v-for="asset of assets" :key="asset._id">
-              <mobile-asset-card :info="asset"/>
+              v-for="(asset, index) of assets.list" :key="index">
+              <mobile-asset-card :info="asset" :totalValue="assets.totalValue"/>
             </li>
           </ul>
         </div>
@@ -53,7 +53,7 @@ export default {
       loading: true,
       assets: [],
 
-      assetOrder: 'desc',
+      assetOrder: -1,
 
       assetSort: 'alphabe',
       sortItems: {
@@ -76,20 +76,39 @@ export default {
   methods: {
     sortChange (sort) {
       this.assetSort = sort
-      this.getAssets({ sort })
+      this.reSortAssets({ sort })
     },
     orderChange (order) {
       this.assetOrder = order
-      this.getAssets({ order })
+      this.reSortAssets({ order })
     },
-    candyConnect () {
 
+    // 重排 assets 数据
+    reSortAssets ({ sort = this.assetSort, order = this.assetOrder } = {}, data = this.assets) {
+      const _data = JSON.parse(JSON.stringify(data))
+      let _list = _data.list || []
+      order = parseInt(order)
+      if (sort === 'alphabe') {
+        _list = _list.sort((a, b) => {
+          if (a.candy.symbol > b.candy.symbol) return order
+          else return -1 * order
+        })
+      } else {
+        _list = _list.sort((a, b) => {
+          return (a.value - b.value) * order
+        })
+      }
+      _data.list = _list
+      console.log('_data', _data.list.map(item => item.candy.symbol))
+      this.$set(this, 'assets', _data)
     },
-    async getAssets ({ sort, order } = {}) {
+
+    // 获取用户 assets
+    async getAssets () {
       this.loading = true
-      const res = await getUserAssets({ sort, order })
+      const res = await getUserAssets()
       if (res.code === 1000 && res.data) {
-        this.assets = res.data
+        this.reSortAssets({}, res.data)
       }
       this.loading = false
     }
@@ -105,7 +124,7 @@ export default {
 
 <style lang="scss" scoped>
   .mobile-candies-box {
-    // @include viewport-unit(min-height, 100vh, 112px);
+    @include viewport-unit(min-height, 100vh, 112px);
   }
   .candies-main-cnt {
     margin-top: 10px;

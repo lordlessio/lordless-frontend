@@ -1,7 +1,7 @@
 <template>
   <div class="mobile-main-page">
     <mobile-nav-bar
-      v-show="scrollOpt.show"
+      v-show="(scrollOpt.show && (!connectModel || !web3Model)) || connectModel || web3Model"
       v-bind="scrollOpt"
       @history="$router.push('/owner/info')"/>
     <router-view v-if="pageShow" class="mobile-children-page"/>
@@ -37,13 +37,15 @@ export default {
         history: false,
         text: 'Candies',
         scroll: false,
+        withdraw: false,
         scrollMark: 0
       },
       navbarTexts: [
         {
           text: 'Candies',
           match: /\/owner\/candy/,
-          show: true
+          show: true,
+          withdraw: true
         },
         {
           text: 'Quests',
@@ -89,6 +91,7 @@ export default {
     web3Model () {
       const { loading, isConnected } = this.web3Opt
       return this.isMobile && !loading && !isConnected
+      // return this.isMobile
     },
     connectModel () {
       return !this.userInfo.default && !this.userInfo._id
