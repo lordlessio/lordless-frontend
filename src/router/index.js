@@ -32,8 +32,12 @@ import OwnerActivity from '@/pages/user/owner/children/activity'
 import MobileMarket from '@/pages/_mobile/market'
 import MobileOwnerIndex from '@/pages/_mobile/owner'
 import MobileOwnerCandy from '@/pages/_mobile/owner/candy'
-import MobileOwnerQuest from '@/pages/_mobile/owner/_quest'
-import MobileOwnerUser from '@/pages/_mobile/owner/user'
+import MobileOwnerQuest from '@/pages/_mobile/owner/quest'
+
+import MobileMeInfo from '@/pages/_mobile/owner/_user/info'
+import MobileMeActivity from '@/pages/_mobile/owner/_user/activity'
+import MobileMeAuthorization from '@/pages/_mobile/owner/_user/authorization'
+import MobileMeTaverns from '@/pages/_mobile/owner/_user/taverns'
 
 // mobile routes
 const mobileRoutes = [
@@ -71,7 +75,7 @@ const mobileRoutes = [
         }
       },
       {
-        path: 'quest/:type',
+        path: 'quest',
         name: 'mobile-user-quest',
         component: MobileOwnerQuest,
         meta: {
@@ -85,11 +89,56 @@ const mobileRoutes = [
         }
       },
       {
-        path: 'user',
-        name: 'mobile-user-info',
-        component: MobileOwnerUser,
+        path: 'info',
+        name: 'mobile-owner-info',
+        component: MobileMeInfo,
         meta: {
-          title: 'User - LORDLESS',
+          title: 'OwnerInfo - LORDLESS',
+          header: {
+            show: false
+          },
+          footer: {
+            show: false
+          }
+        }
+      },
+      {
+        path: 'activities',
+        name: 'mobile-owner-activities',
+        component: MobileMeActivity,
+        meta: {
+          title: 'Owner Activities - LORDLESS',
+          navText: 'Activities',
+          header: {
+            show: false
+          },
+          footer: {
+            show: false
+          }
+        }
+      },
+      {
+        path: 'authorization',
+        name: 'mobile-owner-authorization',
+        component: MobileMeAuthorization,
+        meta: {
+          title: 'Owner Authorization - LORDLESS',
+          navText: 'Authorization',
+          header: {
+            show: false
+          },
+          footer: {
+            show: false
+          }
+        }
+      },
+      {
+        path: 'taverns',
+        name: 'mobile-me-taverns',
+        component: MobileMeTaverns,
+        meta: {
+          title: 'Owner Taverns - LORDLESS',
+          navText: 'Taverns',
           header: {
             show: false
           },

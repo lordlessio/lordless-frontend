@@ -1,17 +1,13 @@
 <template>
   <div class="m-building-card" :class="{ 'shadow': shadow }">
     <figure class="d-flex f-align-stretch" @click="$emit('choose', info)">
-      <div class="relative m-building-header" :class="`building-popularity-${info.chain.popularity}`">
-        <div class="m-building-level">
-          <img alt="tavern popularity image" :src="`/img/tavern/ldb-level-${info.chain.popularity}.png` | originSource({ size: 80 })"/>
-        </div>
-        <div class="relative building-header-container">
-          <img alt="tavern curve" class="m-building-curve" :src="'/svg/curve.svg' | originSource({ size: -1 })">
-          <lordless-img
-            alt="tavern preview"
-            :src="info.ldbIcon.source.preview | reldbIcon"/>
-          <span class="m-building-bg" :style="`background-image: url(${originSource('/svg/sale-bg.svg', { size: -1 })})`"></span>
-        </div>
+      <div class="building-header-container">
+        <lordless-tavern-poster
+          :src="info.ldbIcon.source.preview"
+          :popularity="info.chain.popularity"
+          isMobile
+          shadow
+          showPopularity/>
       </div>
       <div class="v-flex d-flex col-flex f-justify-between m-building-info">
         <figcaption>
@@ -75,26 +71,9 @@ export default {
       box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, .1);
     }
   }
-  .m-building-header {
-    border-radius: 5px;
-    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, .25);
-  }
   .building-header-container {
     width: 120px;
     height: 120px;
-    border-radius: 5px;
-    overflow: hidden;
-  }
-  .m-building-level {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    width: 40px;
-    height: 40px;
-    z-index: 3;
-    >img {
-      width: 100%;
-    }
   }
   .m-building-sale {
     width: 42px;
@@ -106,26 +85,6 @@ export default {
     &.presale {
       width: 62px;
     }
-  }
-  .m-building-curve {
-    position: absolute;
-    left: 0;
-    bottom: -1px;
-    width: 100%;
-    z-index: 3;
-  }
-  .m-building-bg {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background-size: 200%;
-    background-position-x: 50%;
-    background-position-y: 45%;
-    opacity: .3;
-    background-repeat: no-repeat;
   }
 
   .m-building-info {

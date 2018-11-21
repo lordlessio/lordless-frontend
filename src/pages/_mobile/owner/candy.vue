@@ -15,5 +15,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+  .mobile-candy-page {
+    padding-top: 52px;
+    @include viewport-unit(min-height, 100vh, 60px);
+  }
 </style>

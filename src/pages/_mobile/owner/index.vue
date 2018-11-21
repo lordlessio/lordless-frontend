@@ -1,6 +1,9 @@
 <template>
   <div class="mobile-main-page">
-    <mobile-nav-bar v-if="showNavbar" text="Candies"/>
+    <mobile-nav-bar
+      v-show="scrollOpt.show"
+      v-bind="scrollOpt"
+      @history="$router.push('/owner/info')"/>
     <router-view v-if="pageShow" class="mobile-children-page"/>
     <mobile-wallets v-if="web3Model"/>
     <mobile-connect
@@ -10,8 +13,7 @@
       ref="ownerAuthorize"
       :modelClose="false"
       :autoClose="false"
-      @blurs="dialogSetBlurs"
-      @fClose="$router.push('/market')">
+      @blurs="dialogSetBlurs">
     </Authorize>
   </div>
 </template>
@@ -30,7 +32,51 @@ export default {
     return {
       // web3Model: false
       // connectModel: false
-      showNavbar: true
+      scrollOpt: {
+        show: false,
+        history: false,
+        text: 'Candies',
+        scroll: false,
+        scrollMark: 0
+      },
+      navbarTexts: [
+        {
+          text: 'Candies',
+          match: /\/owner\/candy/,
+          show: true
+        },
+        {
+          text: 'Quests',
+          match: /\/owner\/quest/,
+          show: false
+        },
+        {
+          text: 'Me',
+          match: /\/owner\/info/,
+          show: false
+        },
+        {
+          text: 'Activities',
+          match: /\/owner\/activities/,
+          show: true,
+          // scrollMark: 0,
+          history: true
+        },
+        {
+          text: 'Taverns',
+          match: /\/owner\/taverns/,
+          show: true,
+          // scrollMark: 0,
+          history: true
+        },
+        {
+          text: 'Authorization',
+          match: /\/owner\/authorization/,
+          show: true,
+          // scrollMark: 0,
+          history: true
+        }
+      ]
     }
   },
   computed: {
@@ -54,6 +100,9 @@ export default {
   watch: {
     '$route' (route) {
       this.checkRoute(route)
+    },
+    userInfo (val, oVal) {
+      this.$nextTick(() => this.checkUser())
     }
   },
   components: {
@@ -63,11 +112,23 @@ export default {
   },
   methods: {
 
-    checkRoute (route = this.$route) {
-      if (route.path.match(/\/owner\/quest/)) {
-        this.showNavbar = false
-      } else {
-        this.showNavbar = true
+    checkRoute (route = this.$route, navbarTexts = this.navbarTexts) {
+      const opt = {
+        show: false,
+        history: false,
+        text: 'Candies',
+        scroll: false,
+        scrollMark: 0
+      }
+
+      for (const item of navbarTexts) {
+        if (route.path.match(item.match)) {
+          this.$set(this, 'scrollOpt', Object.assign({}, opt, item))
+          this.$nextTick(() => {
+            console.log('check route', item, (this.scrollOpt.show && (!this.connectModel || !this.web3Model)) || this.connectModel || this.web3Model)
+          })
+          break
+        }
       }
     },
 
@@ -85,8 +146,8 @@ export default {
   .mobile-main-page {
     margin: 0 auto;
     max-width: 768px;
-    background-color: #f8f8f8;
-    @include viewport-unit(min-height, 100vh);
+    // background-color: #f8f8f8;
+    // @include viewport-unit(min-height, 100vh);
   }
   .mobile-children-page {
     // padding: 0 20px;

@@ -5,7 +5,15 @@ import { actionTypes } from '@/store/types'
 export const monitorWeb3 = (web3Opt) => {
   // const APPROVED_NETWORKID = '5777'
   // const { web3Opt } = store.state.web3
-  let { balance, gasPrice, address, networkId, web3js, error } = web3Opt
+  let { balance, address, networkId, web3js, error } = web3Opt
+
+  // gasprice 全局只请求一次
+  getGasPrice(web3js)
+    .then(({ error, gasPrice }) => {
+      if (!error) {
+        store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { gasPrice: gasPrice || 0 })
+      }
+    })
 
   const checkWeb3 = async () => {
     /**
@@ -17,11 +25,11 @@ export const monitorWeb3 = (web3Opt) => {
       store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { balance: balanceRes.balance || 0 })
     }
 
-    const gasPriceRes = (await getGasPrice(web3js)) || {}
-    if (gasPriceRes.gasPrice !== gasPrice) {
-      gasPrice = gasPriceRes.gasPrice
-      store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { gasPrice: gasPriceRes.gasPrice || 0 })
-    }
+    // const gasPriceRes = (await getGasPrice(web3js)) || {}
+    // if (gasPriceRes.gasPrice !== gasPrice) {
+    //   gasPrice = gasPriceRes.gasPrice
+    //   store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { gasPrice: gasPriceRes.gasPrice || 0 })
+    // }
 
     /**
      * check network

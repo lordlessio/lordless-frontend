@@ -78,7 +78,7 @@ export default {
   .bounty-skeletion-timeline {
     padding-top: 12px;
     margin-top: 12px;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid rgba(221, 221, 221, .5);
     >p {
       height: 18px;
     }

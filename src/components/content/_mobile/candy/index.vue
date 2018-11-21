@@ -105,7 +105,7 @@ export default {
 
 <style lang="scss" scoped>
   .mobile-candies-box {
-    @include viewport-unit(min-height, 100vh, 112px);
+    // @include viewport-unit(min-height, 100vh, 112px);
   }
   .candies-main-cnt {
     margin-top: 10px;

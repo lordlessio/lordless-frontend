@@ -29,42 +29,39 @@ export default {
       activeIndex: 0,
       navigations: [
         {
-          // navbarText: 'Marketplace',
           logo: 'shop',
           name: 'Market',
           route: '/market',
           match: /\/market/,
           active: true
-          // scroll: true
         },
         {
-          // navbarText: 'candy',
           logo: 'candy',
           name: 'Candies',
           route: '/owner/candy',
           match: /\/owner\/candy/,
           active: false
-          // scroll: false
         },
         {
-          // navbarText: 'quest',
           logo: 'quest',
           name: 'Quests',
-          route: '/owner/quest/candy',
-          match: /\/owner\/quest\//,
+          route: '/owner/quest',
+          match: /\/owner\/quest/,
           active: false
-          // scroll: false
         },
         {
-          // navbarText: 'person',
           logo: 'person',
           name: 'Me',
-          route: '/owner/user',
-          match: /\/owner\/user/,
+          route: '/owner/info',
+          match: /\/owner\/(info|activities|taverns|authorization|general)/,
           active: false
-          // scroll: false
         }
       ]
+    }
+  },
+  watch: {
+    '$route' (route) {
+      this.rewriteNavigation(route.path)
     }
   },
   methods: {
@@ -80,8 +77,15 @@ export default {
 
     chooseBar (e) {
       const { active, index } = this.getAttr(e.target)
-      if (!active || active === 'true') return
-      else {
+      if (!active) return
+      else if (active === 'true') {
+        for (let i = 0; i < this.navigations.length; i++) {
+          if (parseInt(index) === i && this.$route.path !== this.navigations[i].route) {
+            this.$router.push(this.navigations[i].route)
+            break
+          }
+        }
+      } else {
         this.navigations = this.navigations.map((item, i) => {
           const obj = {}
           if (item.active) obj.active = false
@@ -90,7 +94,6 @@ export default {
             obj.active = true
             this.$router.push(item.route)
           }
-          console.log('--- ', index, obj, Object.assign({}, item, obj))
           return Object.assign({}, item, obj)
         })
       }

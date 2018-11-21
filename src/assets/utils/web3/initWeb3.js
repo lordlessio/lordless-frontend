@@ -2,7 +2,7 @@
 
 import store from '@/store'
 import { mobileReady } from './mobileReady'
-import { initStorageUser, getNetwork, getAccount, getBalance, getGasPrice } from './utils'
+import { initStorageUser, getNetwork, getAccount, getBalance } from './utils'
 
 import { profillMethods } from './profill'
 
@@ -102,24 +102,14 @@ const checkWeb3 = async () => {
             // 初始化 localStorage currentAddress
             initStorageUser(account)
           }),
-        // coinbase 在某些环境下不支持，所以暂时不使用
-        // getCoinbase(res.web3js)
-        //   .then(({ error, coinbase }) => {
+
+        // getGasPrice(res.web3js)
+        //   .then(({ error, gasPrice }) => {
         //     if (error) {
         //       res.error = error
         //     }
-        //     alert(coinbase)
-        //     res.coinbase = coinbase
-        //     res.address = coinbase || res.web3js.eth.defaultAccount
+        //     res.gasPrice = gasPrice
         //   }),
-
-        getGasPrice(res.web3js)
-          .then(({ error, gasPrice }) => {
-            if (error) {
-              res.error = error
-            }
-            res.gasPrice = gasPrice
-          }),
 
         getBalance(res.web3js, res.address)
           .then(({ error, balance }) => {

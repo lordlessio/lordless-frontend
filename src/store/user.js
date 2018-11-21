@@ -48,7 +48,6 @@ export default {
 
     // 存储 userHome 信息
     [mutationTypes.USER_SET_USER_HOME]: (state, { home, update = false } = {}) => {
-      console.log('home', home)
       if (!update) state.userHome = stringifyParse(home)
       else state.userHome = home ? stringifyParse(Object.assign({}, state.userHome, home)) : {}
     }

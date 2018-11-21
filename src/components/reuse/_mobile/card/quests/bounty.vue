@@ -1,5 +1,5 @@
 <template>
-  <div class="mobile-bounty-card" :class="{ 'bottoms': bottoms }">
+  <div class="full-width mobile-bounty-card" :class="{ 'bottoms': bottoms, 'transparent': transparent }">
     <div class="d-flex row-flex mobile-bounty-container">
       <p class="line-height-0 bounty-symbol-icon">
         <svg>
@@ -9,22 +9,24 @@
       <div class="v-flex bounty-card-cnt">
         <div class="d-flex row-flex bounty-info-box">
           <div class="v-flex bounty-card-info">
-            <p class="bounty-info-title">Follow ZRX telegram</p>
+            <p class="bounty-info-title">{{ info.ldbTaskType.name }}</p>
             <p class="bounty-info-second">
-              <span class="inline-block">罗斯福公馆</span>
-              <span class="inline-block bounty-candy-symbol">ZRX</span>
+              <span class="inline-block">{{ info.ldb.info.name.zh }}</span>
+              <span class="inline-block text-upper bounty-candy-symbol">{{ info.reward.candy.symbol }}</span>
             </p>
-            <p class="bottoms-up-info-date">Aug 14 2018 12:32:10</p>
-            <p class="bounty-info-status approved">Approved</p>
+            <p class="bottoms-up-info-date">{{ info.update_at | dateFormat('MMM. DD YYYY HH:mm:ss') }}</p>
+            <p class="inline-block bounty-info-status" :class="info.status === 0 ? 'under' : info.status === 1 ? 'approved' : 'rejected'">
+              {{ info.status === 0 ? 'Under way' : info.status === 1 ? 'Approved' : 'Rejected' }}
+            </p>
           </div>
           <div class="text-right bounty-candy-value">
-            <p class="TTFontBolder bounty-candy-count">+ 1.2</p>
-            <p class="bounty-candy-price">≈ $0.53</p>
+            <p class="TTFontBolder bounty-candy-count">+ {{ info.executor.reward.count | formatDecimal }}</p>
+            <p class="bounty-candy-price">≈ $ {{ info.executor.reward.count / info.reward.candy.USD2TokenCount | formatDecimal }}</p>
           </div>
         </div>
         <div class="d-flex row-flex bounty-timeline-box">
-          <p class="bounty-timeline-status">Completed on</p>
-          <p class="bounty-timeline-date">Aug 14 2018 12:32:10</p>
+          <p class="bounty-timeline-status">{{ info.status === 0 ? 'Due on' : info.status === 1 ? 'Completed on' : 'Over due on' }}</p>
+          <p class="v-flex text-right bounty-timeline-date">{{ info.status === 1 ? info.roundId.update_at : info.roundId.endAt | dateFormat('MMM. DD YYYY HH:mm:ss') }}</p>
         </div>
       </div>
     </div>
@@ -42,6 +44,10 @@ export default {
     bottoms: {
       type: Boolean,
       default: false
+    },
+    transparent: {
+      type: Boolean,
+      default: false
     }
   }
 }
@@ -52,6 +58,9 @@ export default {
     padding: 20px 16px;
     background-color: #fff;
     border-radius: 5px;
+    &.transparent {
+      background-color: transparent;
+    }
     &.bottoms {
       .bounty-info-status, .bounty-timeline-box {
         display: none;
@@ -85,8 +94,8 @@ export default {
   }
   .bounty-candy-symbol {
     position: relative;
-    padding-left: 11px;
-    margin-left: 10px;
+    padding-left: 7px;
+    margin-left: 6px;
     &::before {
       content: '';
       position: absolute;
@@ -109,6 +118,7 @@ export default {
     padding: 4px 8px;
     font-size: 12px;
     color: #fff;
+    border-radius: 5px;
     &.approved {
       background-color: #69D1C3;
     }
@@ -121,18 +131,22 @@ export default {
   }
 
   .bounty-candy-value {
+    font-size: 16px;
     color: #4586fc;
   }
+  .bounty-candy-price {
+    font-size: 14px;
+  }
   .bounty-timeline-box {
+    margin-top: 12px;
     padding-top: 12px;
+    font-size: 14px;
     border-top: 1px solid #ddd;
   }
   .bounty-timeline-status {
-    font-size: 12px;
     color: #bbb;
   }
   .bounty-timeline-date {
-    font-size: 14px;
     color: #777;
   }
 </style>

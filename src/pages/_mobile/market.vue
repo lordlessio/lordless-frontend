@@ -1,6 +1,6 @@
 <template>
   <div class="mobile-market-page">
-    <mobile-nav-bar text="Marketplace" :scroll="true"/>
+    <mobile-nav-bar text="Marketplace" fixed scroll/>
     <mobile-market-page
       ref="market"
       @path="pathChange"

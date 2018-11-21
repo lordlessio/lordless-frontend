@@ -3,6 +3,7 @@
     <div id="sort-bar-box" class="alone-layer lg-d-flex f-align-center relative sort-bar-box">
       <div class="relative sort-bar-container" :class="{ 'sort': openModel }">
         <div class="d-flex f-align-center sort-bar-cnt">
+          <slot></slot>
           <div
             v-if="showSort"
             class="alone-layer d-flex f-align-center mobile-sort-select"
@@ -20,7 +21,7 @@
             @change="orderChange"/>
           <p v-if="showTotal" class="v-flex text-right mobile-sort-total">Total {{ total }}</p>
         </div>
-        <ul class="sort-bar-list">
+        <ul class="sort-bar-list" :style="`height: ${openModel ? sortListHeight : 0}px;`">
           <li
             v-for="(sort, index) of Object.keys(sortItems)" :key="index"
             class="d-flex f-align-center f-justify-between mobile-sort-item"
@@ -48,7 +49,7 @@ export default {
   props: {
     sortItems: {
       type: Object,
-      default: () => []
+      default: () => {}
     },
 
     orderItems: {
@@ -95,6 +96,7 @@ export default {
     }
   },
   data: (vm) => {
+    console.log('------ sort bar', vm.sortItems)
     return {
       openModel: false,
 
@@ -109,6 +111,9 @@ export default {
   computed: {
     isMobile () {
       return this.$root.$children[0].isMobile
+    },
+    sortListHeight () {
+      return 54 * Object.keys(this.sortItems).length
     }
   },
   watch: {
@@ -216,9 +221,6 @@ export default {
     z-index: 9;
     &.inherit-height {
       height: inherit;
-      .sort-bar-cnt {
-        padding: 0;
-      }
     }
   }
   .sort-bar-box {
@@ -269,7 +271,7 @@ export default {
         transform: rotate(180deg);
       }
       .sort-bar-list {
-        height: 162px;
+        // height: 162px;
         visibility: visible;
         transition: all .15s ease-in-out, visibility 0s 0s;
       }
@@ -289,7 +291,8 @@ export default {
   }
 
   .sort-bar-label {
-    width: 80px;
+    margin-right: 5px;
+    width: initial;
     overflow: hidden;
   }
 

@@ -1,6 +1,13 @@
 <template>
-  <section id="mobile-nav-bar" class="TTFontBolder text-center mobile-nav-bar" :class="{ 'is-static': !scroll }">
-    <p class="text-cap">{{ text }}</p>
+  <section id="mobile-nav-bar" class="TTFontBolder text-center mobile-nav-bar" :class="{ 'is-static': !fixed, 'is-active': fixed && !scroll }">
+    <div class="relative">
+      <p class="TTFontBolder nav-history-icon" v-show="history" @click.stop="$emit('history')">
+        <svg>
+          <use xlink:href="#icon-arrow-line-left"/>
+        </svg>
+      </p>
+      <p class="text-cap">{{ text }}</p>
+    </div>
   </section>
 </template>
 
@@ -13,9 +20,21 @@ export default {
       type: String,
       default: 'Marketplace'
     },
+    history: {
+      type: Boolean,
+      default: false
+    },
+    fixed: {
+      type: Boolean,
+      default: true
+    },
     scroll: {
       type: Boolean,
       default: false
+    },
+    scrollMark: {
+      type: Number,
+      default: 150
     }
   },
   data: () => {
@@ -30,12 +49,13 @@ export default {
       // if (!this.scroll || this.pageTitle) return
       let navbarInverse = false
       const dom = document.getElementById('mobile-nav-bar')
+      const scrollMark = this.scrollMark
       const func = () => {
         const scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
-        if (!navbarInverse && scrollTop > 150) {
+        if (!navbarInverse && scrollTop >= scrollMark) {
           addClass('is-active', dom)
           navbarInverse = true
-        } else if (navbarInverse && scrollTop <= 150) {
+        } else if (navbarInverse && scrollTop < scrollMark) {
           removeClass('is-active', dom)
           navbarInverse = false
         }
@@ -48,12 +68,13 @@ export default {
       this.$once('hook:beforeDestroy', () => {
         removeClass('is-active', dom)
         document.removeEventListener('scroll', func)
+        this.$el.parentNode.removeChild(this.$el)
       })
     }
   },
   mounted () {
     this.$nextTick(() => {
-      if (this.scroll) {
+      if (this.scroll || this.fixed) {
         document.body.appendChild(this.$el)
         this.scrollListener()
       }
@@ -83,5 +104,14 @@ export default {
       opacity: 1;
       z-index: 99;
     }
+  }
+  .nav-history-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    width: 20px;
+    height: 20px;
+    fill: #fff;
+    transform: translateY(-50%);
   }
 </style>

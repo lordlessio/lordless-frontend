@@ -2,14 +2,15 @@
   <div class="mobile-quests-box">
     <el-tabs
       v-model="taskTab"
+      stretch
       @tab-click="chooseTab">
       <el-tab-pane
         label="Bottoms up"
-        name="candy">
+        name="bottoms">
         <transition name="ld-hide-fade" mode="out-in">
-          <mobile-bottoms-up-skeletion v-if="loading"/>
+          <mobile-bottoms-up-skeletion class="quest-cnt-box" v-if="loading"/>
           <div
-            v-else-if="!loading && !infos.candy.total"
+            v-else-if="!loading && !infos.bottoms.total"
             class="d-flex f-auto-center mobile-quests-empty mobile-bounty-empty">
             <div class="quests-empty-container">
               <p class="quests-empty-icon">
@@ -23,38 +24,51 @@
               </div>
             </div>
           </div>
-          <div v-else class="quest-item-content">
+          <div v-else ref="bottomsQuestCnt" class="quest-cnt-box quest-item-content">
             <ul>
               <li
                 class="quest-item"
-                v-for="candy of infos.candy.list" :key="candy._id">
+                v-for="bottoms of infos.bottoms.list" :key="bottoms._id">
                 <mobile-quest-bounty
                   bottoms
-                  :info="candy"/>
+                  :info="bottoms"/>
               </li>
             </ul>
+            <div class="quest-pagination-box">
+              <lordless-pagination
+                :scrollE="bottomsPageScrollE"
+                :scrollOffset="150"
+                class="quest-pagination-pages"
+                :total="infos.bottoms.total"
+                :currentPage="infos.bottoms.pn"
+                :size="infos.bottoms.ps"
+                theme="blue"
+                background
+                @currentChange="changePage($event, 'bottoms')"/>
+            </div>
           </div>
         </transition>
       </el-tab-pane>
       <el-tab-pane
         class="relative"
         label="Bounty"
-        name="tasks">
+        name="bounty">
         <div class="d-flex tasks-sort-box">
-          <span>Filter by</span>
           <mobile-sort-bar
             class="v-flex tasks-sort-bar"
-            :sortItems="taskSortItems"
+            :sortItems="bountySortItems"
             static
             inheritHeight
             :showOrder="false"
             :showTotal="false"
-            @sort="candySortChange"/>
+            @sort="bountySortChange">
+            <span class="tasks-sort-title">Filter by</span>
+          </mobile-sort-bar>
         </div>
         <transition name="ld-hide-fade" mode="out-in">
-          <mobile-bounty-skeletion v-if="loading"/>
+          <mobile-bounty-skeletion class="quest-cnt-box" v-if="loading"/>
           <div
-            v-else-if="!loading && !infos.tasks.total"
+            v-else-if="!loading && !infos.bounty.total"
             class="d-flex f-auto-center mobile-quests-empty mobile-bounty-empty">
             <div class="quests-empty-container">
               <p class="quests-empty-icon">
@@ -68,22 +82,73 @@
               </div>
             </div>
           </div>
-          <div v-else class="quest-item-content quest-tasks-content">
+          <div v-else ref="bountyQuestCnt" class="quest-cnt-box quest-item-content quest-tasks-content">
             <ul>
               <li
                 class="quest-item"
-                v-for="task of infos.tasks.list" :key="task._id">
+                v-for="bounty of infos.bounty.list" :key="bounty._id">
                 <mobile-quest-bounty
-                  :info="task"/>
+                  :info="bounty"/>
               </li>
             </ul>
+            <div class="quest-pagination-box">
+              <lordless-pagination
+                :scrollE="bountyPageScrollE"
+                :scrollOffset="150"
+                class="quest-pagination-pages"
+                :total="infos.bounty.total"
+                :currentPage="infos.bounty.pn"
+                :size="infos.bounty.ps"
+                theme="blue"
+                background
+                @currentChange="changePage($event, 'bounty')"/>
+            </div>
           </div>
         </transition>
       </el-tab-pane>
       <el-tab-pane
         label="Reward"
-        name="lord">
-        lord reward
+        name="reward">
+        <transition name="ld-hide-fade" mode="out-in">
+          <mobile-reward-skeletion class="quest-cnt-box" v-if="loading"/>
+          <div
+            v-else-if="!loading && !infos.reward.total"
+            class="d-flex f-auto-center mobile-quests-empty mobile-bounty-empty">
+            <div class="quests-empty-container">
+              <p class="quests-empty-icon">
+                <svg>
+                  <use xlink:href="#icon-no-candy"/>
+                </svg>
+              </p>
+              <p class="quests-empty-desc">You have no taverns now.</p>
+              <div class="quests-empty-btns">
+                <lordless-btn class="quests-empty-btn" theme="blue" inverse shadow @click="$route.push('/market')">Buy a tavern</lordless-btn>
+              </div>
+            </div>
+          </div>
+          <div v-else ref="rewardQuestCnt" class="quest-cnt-box quest-item-content">
+            <ul>
+              <li
+                class="quest-item"
+                v-for="reward of infos.reward.list" :key="reward._id">
+                <mobile-quest-reward
+                  :info="reward"/>
+              </li>
+            </ul>
+            <div class="quest-pagination-box">
+              <lordless-pagination
+                :scrollE="rewardPageScrollE"
+                :scrollOffset="150"
+                class="quest-pagination-pages"
+                :total="infos.reward.total"
+                :currentPage="infos.reward.pn"
+                :size="infos.reward.ps"
+                theme="blue"
+                background
+                @currentChange="changePage($event, 'reward')"/>
+            </div>
+          </div>
+        </transition>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -91,10 +156,13 @@
 
 <script>
 import MobileQuestBounty from '@/components/reuse/_mobile/card/quests/bounty'
+import MobileQuestReward from '@/components/reuse/_mobile/card/quests/reward'
+
 import MobileSortBar from '@/components/reuse/_mobile/sortBar'
 
 import MobileBottomsUpSkeletion from '@/components/skeletion/_mobile/quests/bottomsUp'
 import MobileBountySkeletion from '@/components/skeletion/_mobile/quests/bounty'
+import MobileRewardSkeletion from '@/components/skeletion/_mobile/quests/reward'
 
 import { getUserTasks } from 'api'
 import { historyState } from 'utils/tool'
@@ -103,40 +171,40 @@ export default {
   props: {
     type: {
       type: String,
-      default: 'candy'
+      default: 'bottoms'
     }
   },
   data: () => {
     return {
+      popstateModel: false,
+      tabFilters: {
+        bottoms: 'candy',
+        bounty: 'tasks',
+        reward: 'lord'
+      },
+
       // 当前 tab 区域
-      taskTab: 'candy',
+      taskTab: 'bottoms',
 
       // 改变之前的 tab 区域
-      currentTab: 'candy',
-
-      taskInfos: {
-        pn: 1,
-        ps: 10,
-        list: [],
-        total: 0
-      },
+      currentTab: 'bottoms',
 
       loading: true,
 
       infos: {
-        candy: {
+        bottoms: {
           pn: 1,
           ps: 10,
           list: [],
           total: 0
         },
-        tasks: {
+        bounty: {
           pn: 1,
           ps: 10,
           list: [],
           total: 0
         },
-        lord: {
+        reward: {
           pn: 1,
           ps: 10,
           list: [],
@@ -145,29 +213,61 @@ export default {
       },
 
       // sortBar options
-      taskStatus: -2,
-      taskSortItems: {
-        '-2': 'All',
-        0: 'Under way',
-        1: 'Approved',
-        '-1': 'Rejected'
+      bountyStatus: -2,
+      bountySortItems: {
+        'all': 'All',
+        'under': 'Under way',
+        'appr': 'Approved',
+        'reject': 'Rejected'
+      }
+    }
+  },
+  computed: {
+    bottomsPageScrollE () {
+      return this.$refs.bottomsQuestCnt
+    },
+    bountyPageScrollE () {
+      return this.$refs.bountyQuestCnt
+    },
+    rewardPageScrollE () {
+      return this.$refs.rewardQuestCnt
+    }
+  },
+  watch: {
+    popstateModel (val) {
+      if (val) {
+        this.taskTab = this.$route.query.type || 'bottoms'
+        this.popstateModel = false
       }
     }
   },
   components: {
+    MobileQuestReward,
     MobileQuestBounty,
     MobileSortBar,
 
     MobileBottomsUpSkeletion,
-    MobileBountySkeletion
+    MobileBountySkeletion,
+    MobileRewardSkeletion
   },
   methods: {
 
+    async changePage (page, type = 'bottoms') {
+      if (page === this.infos[type].pn) return
+
+      this.$set(this.infos[type], 'pn', page)
+      this.$nextTick(async () => {
+        const data = await this.getTasks(this.infos[type])
+        data && this.$set(this.infos, type, data)
+      })
+      console.log('page', page, this.infos[type].pn)
+    },
+
     /**
-     * candy sort 事件
+     * bounty sort 事件
      */
-    async candySortChange (status) {
-      this.taskStatus = status
+    async bountySortChange (status) {
+      this.bountyStatus = status
       const data = await this.getTasks({ status })
       data && this.$set(this.infos, this.taskTab, data)
     },
@@ -175,7 +275,7 @@ export default {
     /**
      * 根据 type 初始化 quest
      */
-    async initQuest (type = 'candy') {
+    async initQuest (type = 'bottoms') {
       const data = await this.getTasks(Object.assign({}, this.infos[type], { type }))
       data && this.$set(this.infos, type, data)
     },
@@ -183,13 +283,14 @@ export default {
     /**
      * choose tab
      */
-    chooseTab (type) {
+    chooseTab () {
       if (this.currentTab === this.taskTab) return
 
-      historyState(`/owner/quest/${this.taskTab}`)
+      historyState(`/owner/quest?type=${this.taskTab}`)
       this.currentTab = this.taskTab
-      this.taskStatus = -2
+      this.bountyStatus = -2
 
+      if (this.infos[this.taskTab].total) return
       this.$nextTick(async () => {
         const data = await this.getTasks(this.infos[this.taskTab])
         data && this.$set(this.infos, this.taskTab, data)
@@ -199,12 +300,14 @@ export default {
     /**
      * 获取 task 基础事件
      */
-    async getTasks ({ pn = 1, ps = 10, status = this.taskStatus, type = this.taskTab } = {}) {
+    async getTasks ({ pn = 1, ps = 10, status = this.bountyStatus, type = this.taskTab } = {}) {
+      const _type = this.tabFilters[type]
+
       this.taskTab = type
 
       this.loading = true
 
-      const params = { pn, ps, type, status }
+      const params = { pn, ps, type: _type, status }
 
       let data = null
       try {
@@ -218,11 +321,24 @@ export default {
       }
 
       return data
+    },
+
+    /**
+     * window popstate 监听事件
+     */
+    popstateListener () {
+      if (this.popstateModel) return
+      this.popstateModel = true
     }
   },
+  beforeDestroy () {
+    window.removeEventListener('popstate', this.popstateListener)
+  },
   mounted () {
+    // 监听 popstate 事件，主要用于 pushState 监听
+    window.addEventListener('popstate', this.popstateListener)
     this.$nextTick(() => {
-      const type = this.$route.params.type
+      const type = this.$route.query.type
       this.initQuest(type)
     })
   }
@@ -231,11 +347,11 @@ export default {
 
 <style lang="scss" scoped>
 
-.quest-item-content {
+.quest-cnt-box {
   padding: 24px 20px;
-  padding-top: 24px;
-  padding-bottom: 24px;
   box-sizing: border-box;
+}
+.quest-item-content {
   @include overflow();
   @include viewport-unit(height, 100vh, 112px);
 }
@@ -246,11 +362,14 @@ export default {
   }
 }
 .quest-tasks-content {
-  padding-top: 35px;
+  padding-top: 59px;
   box-sizing: border-box;
 }
 
 /deep/ {
+  // .el-tabs__nav {
+  //   margin: 0 auto;
+  // }
   .el-tabs__header {
     margin: 0;
     padding: 6.5px 20px;
@@ -279,16 +398,19 @@ export default {
 }
 
 .tasks-sort-box {
-  padding: 0 20px;
   position: absolute;
-  top: 10px;
+  top: 0;
   left: 0;
   width: 100%;
+}
+.tasks-sort-title {
+  margin-right: 15px;
+  font-size: 16px;
   color: #999;
 }
-.tasks-sort-bar {
-  margin-left: 12px;
-}
+// .tasks-sort-bar {
+//   margin-left: 12px;
+// }
 
 /**
  *  mobile-quests-empty -- begin
@@ -328,4 +450,7 @@ export default {
  *  mobile-quests-empty -- end
  */
 
+.quest-pagination-box {
+  margin-top: 35px;
+}
 </style>
