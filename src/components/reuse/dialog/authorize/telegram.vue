@@ -120,7 +120,8 @@ export default {
       el.setAttribute('data-userpic', false)
       el.setAttribute('data-onauth', 'onTelegramAuth(user)')
       el.setAttribute('data-request-access', 'write')
-      // document.body.appendChild(el)
+      // el.setAttribute('data-auth-url', location.href)
+
       document.getElementById(this.telegramContainer).appendChild(el)
       el.onload = () => {
         this.telegramReady = true

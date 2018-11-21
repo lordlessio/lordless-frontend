@@ -2,23 +2,15 @@
   <div class="text-center cursor-pointer alone-layer ld-building-card" :class="[{ 'sale': sale || presale, 'shadow': shadow }]">
     <figure @click="$emit('choose', info)">
       <div class="building-card-top">
-        <div class="building-header" :class="`building-popularity-${info.chain.popularity}`">
-          <div class="building-level">
-            <img alt="tavern popularity image" :src="`/img/tavern/ldb-level-${info.chain.popularity}.png` | originSource({ size: 120 })"/>
-          </div>
-          <img alt="tavern curve" class="building-curve" :src="'/svg/curve.svg' | originSource({ size: -1 })">
-          <lordless-img
-            alt="tavern preview"
-            :src="info.ldbIcon.source.preview | reldbIcon"/>
-          <span class="building-sale-bg" :style="`background-image: url(${originSource('/svg/sale-bg.svg', { size: -1 })})`"></span>
-          <p class="d-flex col-flex f-auto-center building-sale-tag">
-            <span class="building-sale-svg">
-              <svg>
-                <use :xlink:href="`#icon-${presale ? 'presale' : 'sale'}`"/>
-              </svg>
-            </span>
-            <span class="building-sale-price">{{ info.chain.auction.price | weiToEth }} ETH</span>
-          </p>
+
+        <div class="building-header">
+          <lordless-tavern-poster
+            :src="info.ldbIcon.source.preview"
+            :popularity="info.chain.popularity"
+            :presale="presale"
+            :salePrice="info.chain.auction.price"
+            showPopularity
+            showSale/>
         </div>
         <div class="building-main-cnt">
           <h2 class="building-name">{{ info.name.zh }}</h2>
@@ -146,68 +138,7 @@ export default {
    *  building-header  --- begin
    */
   .building-header {
-    position: relative;
     height: 300px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    >.image-box {
-      z-index: 2;
-    }
-  }
-  .building-level {
-    position: absolute;
-    top: -15px;
-    right: -15px;
-    width: 80px;
-    height: 80px;
-    z-index: 3;
-    >img {
-      width: 100%;
-    }
-  }
-  .building-sale-bg {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    // background-image: url('~static/svg/single/sale-bg.svg');
-    background-size: 200%;
-    background-position-x: 50%;
-    background-position-y: 45%;
-    opacity: .3;
-    background-repeat: no-repeat;
-  }
-  .building-sale-tag {
-    position: absolute;
-    left: 0;
-    top: 15px;
-    width: 100%;
-    visibility: hidden;
-    z-index: 5;
-  }
-  .building-sale-svg {
-    margin-right: 5px;
-    display: inline-block;
-    height: 15px;
-    fill: $--text-blue-color;
-  }
-  .building-sale-price {
-    margin-top: 10px;
-    padding: 4px 12px;
-    color: #fff;
-    font-size: 16px;
-    background-image: linear-gradient(to right, #3588FD, #00C0EB);
-    border-radius: 20px;
-  }
-
-  .building-curve {
-    position: absolute;
-    left: 0;
-    bottom: -1px;
-    width: 100%;
-    z-index: 3;
   }
 
   /**

@@ -110,12 +110,6 @@
           @click="signUp">Sign Up</lordless-btn>
       </div>
     </transition>
-    <!-- <terms-dialog
-      v-model="termDialogModel"
-      @agree="termAgree('terms')"/>
-    <privacy-dialog
-      v-model="privacyDialogModel"
-      @agree="termAgree('privacy')"/> -->
   </div>
 </template>
 

@@ -354,6 +354,13 @@
 .skeletion-breath {
   animation: skeletionBreath .75s ease-in-out infinite alternate;
 }
+.skeletion-icon {
+  background-color: $--skeletion-dark;
+  fill: #fff;
+  border-radius: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
 
 @keyframes skeletionBreath {
   0% {

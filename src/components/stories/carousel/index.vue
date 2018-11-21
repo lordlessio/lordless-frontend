@@ -24,6 +24,7 @@
   </el-carousel>
 </template>
 <script>
+import { _setTimeout } from 'utils/tool'
 export default {
   props: {
     type: {
@@ -63,9 +64,9 @@ export default {
       if (bool || this.carouselLoading) return
       this.$refs.taskCarousel[value]()
       this.carouselLoading = true
-      setTimeout(() => {
+      _setTimeout({ duration: 300 }, () => {
         this.carouselLoading = false
-      }, 300)
+      })
     },
     carouselChange (index, old) {
       // 改变 canousel 按钮状态

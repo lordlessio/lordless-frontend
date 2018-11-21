@@ -309,9 +309,12 @@ export default {
           if (this.receiveEndCandy === candyId) {
             rbox.style = ''
             removeClass('animate', rbox)
-            setTimeout(() => {
+            this.$nextTick(() => {
               this.receiveBoxShow = false
-            }, 0)
+            })
+            // setTimeout(() => {
+            //   this.receiveBoxShow = false
+            // }, 0)
           }
         }
 

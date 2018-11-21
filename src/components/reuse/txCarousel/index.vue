@@ -114,7 +114,7 @@ export default {
       return []
     },
 
-    timeoutTxs () {
+    loopTxs () {
       let timeoutTx
       const func = () => {
         timeoutTx = setTimeout(() => {
@@ -161,7 +161,7 @@ export default {
     async init () {
       this.loading = true
       await this.initLoop()
-      // this.timeoutTxs()
+      // this.loopTxs()
       this.loading = false
     },
 
@@ -219,8 +219,8 @@ export default {
       const func = () => {
         if (instance) instance = this.clearLoop(instance)
         instance = setTimeout(() => {
-          this.change(height)
           this.clearLoop(instance)
+          this.change(height)
           return func()
         }, this.dulation)
         return instance

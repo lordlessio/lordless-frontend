@@ -64,8 +64,8 @@
 </template>
 
 <script>
-import HeaderLogo from '@/components/layout/header/logo'
-import LdHeader from '@/components/layout/header'
+import HeaderLogo from '@/components/content/layout/header/logo'
+import LdHeader from '@/components/content/layout/header'
 import Authorize from '@/components/reuse/dialog/authorize'
 // import Loading from '@/components/stories/loading'
 

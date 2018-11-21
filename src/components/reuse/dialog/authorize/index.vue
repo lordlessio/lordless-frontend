@@ -22,7 +22,6 @@
       <Crowdsale
         ref="crowdsale"
         v-model="showCrowsale"
-        :openStatus="authorizeDialog"
         :avatar="avatar"
         :address="address"
         @pending="crowdsalePending"/>
@@ -30,7 +29,6 @@
       <Telegram
         ref="telegram"
         :visible.sync="showTelegram"
-        :openStatus="authorizeDialog"
         :avatar="avatar"
         :address="address"
         @close="authorizeDialog = false"
@@ -46,7 +44,7 @@
         :visible="showSign"
         :account="account"
         :web3Loading="web3Opt.loading"
-        @success="checkoutAuthorize()"/>
+        @success="authorizeDialog = false"/>
     </div>
   </el-dialog>
 </template>
@@ -202,7 +200,6 @@ export default {
 
       // unlocked 表示当前环境没有 web3
       const unlockedWeb3 = _web3js.unlocked
-      // const userInit = !this.userInfo.default
       console.log('browserInit', browserInit, loading, unlockedWeb3)
 
       return unlockedWeb3 || (browserInit && !loading)
@@ -243,14 +240,14 @@ export default {
 
     authorizeInit (val) {
       if (val) {
+        const { loading, isConnected } = this.web3Opt
         this.$emit('init')
 
-        const { loading, isConnected } = this.web3Opt
         if (this.isMobile && !loading && !isConnected) {
           this.authorizeDialog = false
-          this.$nextTick(() => {
-            this.$root.$children[0].mobileAlertModel = true
-          })
+          // this.$nextTick(() => {
+          //   this.$root.$children[0].mobileAlertModel = true
+          // })
         }
       }
     }
@@ -298,7 +295,8 @@ export default {
     },
 
     checkoutAuthorize ({ guide = false, crowdsale = false, telegram = false } = {}) {
-      if (!this.isMobileRead()) return
+      if (!this.isMobileRead()) return false
+
       // 如果是移动端，直接弹出
       // if (this.isMobile) {
       //   this.$root.$children[0].mobileAlertModel = true

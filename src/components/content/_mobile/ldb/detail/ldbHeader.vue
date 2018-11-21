@@ -171,6 +171,7 @@ export default {
   },
   data: (vm) => {
     return {
+      apTimer: null,
       rendered: false,
       // animate: false,
       candyCoords: {},
@@ -208,16 +209,15 @@ export default {
      */
     apLeft (val) {
       const func = () => {
-        return () => {
-          let _this = this
-          clearTimeout(_this.apTimer)
-          _this.apTimer = null
-          _this.apTimer = setTimeout(() => {
-            _this.initCurrentAPCU({ end: val })
-          }, 600)
-        }
+        clearTimeout(this.apTimer)
+        this.apTimer = null
+        this.apTimer = setTimeout(() => {
+          this.initCurrentAPCU({ end: val })
+          clearTimeout(this.apTimer)
+          this.apTimer = null
+        }, 600)
       }
-      func()()
+      func()
     },
 
     // 监听外部传入的总任务，如果和 allTasks 不相等，重新生成 candyTasks

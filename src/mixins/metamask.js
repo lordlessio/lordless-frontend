@@ -13,7 +13,7 @@ export default {
   },
   watch: {
     metamaskChoose (val) {
-      console.log('metamaskChoose', val)
+      console.log('-- metamask mixins metamaskChoose', val)
       this[mutationTypes.LAYOUT_SET_META_OPEN](val)
     }
   }

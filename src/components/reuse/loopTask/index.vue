@@ -101,7 +101,7 @@ export default {
     },
     clearLoop (timeout = this.loopTimeout) {
       if (timeout) {
-        clearTimeout(timeout)
+        clearTimeout(this.loopTimeout)
       }
       this.loopTimeout = null
       return null

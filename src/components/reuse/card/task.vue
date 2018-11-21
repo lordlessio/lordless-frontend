@@ -13,7 +13,7 @@
             <span v-else-if="info.status === -1" class="task-status reject">Rejected</span>
           </h2>
           <div class="ld-task-status">
-            <p class="d-flex f-auto-center task-status-serial">
+            <p class="d-flex f-align-center task-status-serial">
               <span class="line-height-0"># {{ info._id }}</span>
               <span class="text-cap task-tip">{{ info.ldbTaskType.taskType === 1 ? 'Daily' :'Telegram' }}</span>
             </p>
@@ -62,7 +62,7 @@
             </div>
             <div class="v-flex reward-cnt-item">
               <p>Related Tavern</p>
-              <p>#{{ info.ldb.info }}</p>
+              <p>#{{ info.ldb.info._id }}</p>
               <h2 class="color-blue">+{{ info.ldb.activeness }} <span>ac</span></h2>
             </div>
             <div class="reward-cnt-item">

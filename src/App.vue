@@ -1,6 +1,9 @@
 <template>
   <div id="lordless" :class="{ 'blur': blurs[0], 'transform': appOpt.transform, 'no-transform': !appOpt.transform }">
     <lordless-svg/>
+
+    <mobile-tab-bar v-if="isMobile"/>
+
     <Header ref="lordlessHeader" v-bind="headerOpt" :zIndex="isMobile ? 2299 : 99"/>
     <div class="ld-main" :class="[{ 'no-header': isMobile || !headerOpt.show || (headerOpt.show && headerOpt.fixed) }, { 'no-footer': !footerOpt.show }]">
       <!-- <p v-for="item of Object.keys(this.web3Opt)" :key="item" style="margin-top: 60px;color: #555;font-size: 14px;">{{ item }} - {{ web3Opt[item] ? web3Opt[item].toString() : 'null' }}</p> -->
@@ -9,7 +12,6 @@
         <p>{{ web3Opt.error }}</p>
       </div> -->
       <router-view/>
-      <!-- <Relogin v-model="userExpired" :address="web3Opt.address"></Relogin> -->
     </div>
     <Footer v-bind="footerOpt"/>
     <!-- <msg-tip
@@ -26,9 +28,11 @@
 </template>
 
 <script>
-import LordlessSvg from '@/components/lordlessSvg'
-import Header from '@/components/layout/header'
-import Footer from '@/components/layout/footer'
+import MobileTabBar from '@/components/reuse/_mobile/tabBar'
+
+import LordlessSvg from '@/components/reuse/lordlessSvg'
+import Header from '@/components/content/layout/header'
+import Footer from '@/components/content/layout/footer'
 // import MsgTip from '@/components/stories/message'
 import MetaTip from '@/components/reuse/dialog/metaTip'
 import MobileAlert from '@/components/reuse/dialog/mobileAlert'
@@ -78,9 +82,6 @@ export default {
     ...mapState('web3', [
       'web3Opt'
     ]),
-    ...mapState('user', [
-      'userExpired'
-    ]),
     ...mapState('contract', [
       'isCrowdsaleApproved'
     ]),
@@ -108,6 +109,8 @@ export default {
   components: {
     Header,
     Footer,
+    MobileTabBar,
+
     // MsgTip,
     MetaTip,
     MobileAlert,

@@ -25,6 +25,15 @@ window.cancelAnimationFrame = (function () {
 })()
 
 export const _setTimeout = ({ duration = 1000 } = {}, cb) => {
+  let timer = null
+  timer = setTimeout(() => {
+    clearTimeout(timer)
+    timer = null
+    return cb && cb()
+  }, duration)
+}
+
+export const _setTimeoutFrame = ({ duration = 1000 } = {}, cb) => {
   return (function () {
     let startt = 0
     let requestId

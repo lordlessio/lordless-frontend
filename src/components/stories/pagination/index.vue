@@ -1,5 +1,5 @@
 <template>
-  <div class="alone-layer ld-pagination-box TTFontBold" :class="{ 'background': background }">
+  <div class="TTFontBold alone-layer ld-pagination-box" :class="[ theme, { 'background': background } ]">
     <el-pagination
       class="d-flex f-align-center"
       :layout="layout"
@@ -45,6 +45,10 @@ export default {
     currentPage: {
       type: Number,
       default: 1
+    },
+    theme: {
+      type: String,
+      default: 'deep-blue'
     }
   },
   data: (vm) => {
@@ -68,60 +72,83 @@ export default {
   .ld-pagination-box {
     display: inline-block;
     &.background {
-      /deep/ .el-pagination {
-        padding: 5px 0;
-        background-color: #fff;
-        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1);
-        border-radius: 3px;
-        font-weight: normal;
-        @include padding('left', 15px, 1, -2);
-        @include padding('right', 15px, 1, -2);
-      }
-      /deep/ .el-pager {
-        li {
-          &.active {
-            color: #fff;
-            background-color: #4E47D3;
+      &.deep-blue {
+        /deep/ {
+          .el-pager {
+            li {
+              &.active {
+                background-color: #4E47D3;
+              }
+            }
           }
         }
       }
-    }
-    /deep/ .el-pager {
-      li {
-        padding: 0 5px;
-        margin: 0;
-        min-width: 32px;
-        height: 32px;
-        line-height: 32px;
-        font-size: 16px;
-        border-radius: 5px;
-      }
-      .more {
-        &::before {
-          line-height: 32px;
+      &.blue {
+        /deep/ {
+          .el-pager {
+            li {
+              &.active {
+                background-color: #4586fc;
+              }
+            }
+          }
         }
       }
-    }
-    /deep/ .el-pagination {
-      .btn-next, .btn-prev {
-        height: 32px;
-        line-height: 32px;
-        @include grid('display', none, -1);
-        .el-icon {
-          font-size: 16px;
+      /deep/ {
+        .el-pagination {
+          padding: 5px 0;
+          background-color: #fff;
+          box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1);
+          border-radius: 3px;
+          font-weight: normal;
+          @include padding('left', 15px, 1, -2);
+          @include padding('right', 15px, 1, -2);
         }
-      }
-      .btn-prev {
-        padding-left: 10px;
-        padding-right: 15px;
-        margin-right: 15px;
-        border-right: 1px solid #BBBBBB;
-      }
-      .btn-next {
-        padding-right: 10px;
-        padding-left: 15px;
-        margin-left: 15px;
-        border-left: 1px solid #BBBBBB;
+        .el-pager {
+          li {
+            &.active {
+              color: #fff;
+            }
+          }
+        }
+        .el-pager {
+          li {
+            padding: 0 5px;
+            margin: 0;
+            min-width: 32px;
+            height: 32px;
+            line-height: 32px;
+            font-size: 16px;
+            border-radius: 5px;
+          }
+          .more {
+            &::before {
+              line-height: 32px;
+            }
+          }
+        }
+        .el-pagination {
+          .btn-next, .btn-prev {
+            height: 32px;
+            line-height: 32px;
+            @include grid('display', none, -1);
+            .el-icon {
+              font-size: 16px;
+            }
+          }
+          .btn-prev {
+            padding-left: 10px;
+            padding-right: 15px;
+            margin-right: 15px;
+            border-right: 1px solid #BBBBBB;
+          }
+          .btn-next {
+            padding-right: 10px;
+            padding-left: 15px;
+            margin-left: 15px;
+            border-left: 1px solid #BBBBBB;
+          }
+        }
       }
     }
   }
