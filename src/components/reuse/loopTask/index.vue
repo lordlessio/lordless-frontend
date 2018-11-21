@@ -2,14 +2,18 @@
   <transition name="loop-task-fade">
     <div v-if="task" class="ld-loop-task sm-hidden">
       <div id="loop-task-container" class="d-flex f-align-center loop-task-container" :style="`background-image: url(${originSource('/svg/graphic-curve-tr-blue.svg', { size: -1 })})`">
-        <div class="building-poster" :class="`building-popularity-${task.ldb.info.chain.popularity}`">
-          <lordless-img
+        <div class="building-poster">
+          <lordless-tavern-poster
+            shadow
+            :src="task.ldb.info.ldbIcon.source.preview"
+            :popularity="task.ldb.info.chain.popularity"/>
+          <!-- <lordless-img
             alt="tavern preview"
             type="span"
             absolute
             :src="task.ldb.info.ldbIcon.source.preview | reldbIcon('map')"/>
             <span class="building-sale-bg" :style="`background-image: url(${originSource('/svg/sale-bg.svg', { size: -1 })})`"></span>
-            <img alt="tavern curve" class="ldb-curve" :src="'/svg/curve.svg' | originSource({ size: -1 })">
+            <img alt="tavern curve" class="ldb-curve" :src="'/svg/curve.svg' | originSource({ size: -1 })"> -->
         </div>
         <div class="v-flex loop-task-cnt">
           <p><link-symbol :link="`/task/${task._id}`">{{ task.ldbTaskType.name }}</link-symbol></p>
@@ -154,15 +158,15 @@ export default {
     }
   }
   .building-poster {
-    position: relative;
+    // position: relative;
     width: 128px;
     height: 128px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px 0px rgba(0, 0, 0, 0.25);
+    // border-radius: 5px;
+    // box-shadow: 0 2px 5px 0px rgba(0, 0, 0, 0.25);
     transition: opacity .4s ease-in-out;
-    >.image-box {
-      z-index: 2;
-    }
+    // >.image-box {
+    //   z-index: 2;
+    // }
   }
   .building-sale-bg {
     position: absolute;

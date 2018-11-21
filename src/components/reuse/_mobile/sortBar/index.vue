@@ -57,10 +57,10 @@ export default {
       default: () => {
         return [
           {
-            value: 'desc',
+            value: -1,
             label: 'Descending'
           }, {
-            value: 'asc',
+            value: 1,
             label: 'Ascending'
           }
         ]

@@ -45,13 +45,13 @@
             :loading="ldbTaskLoading"
             @receive="receiveTask"/>
 
-          <mobile-quests-tool
+          <!-- <mobile-quests-tool
             v-if="isMobile"
             :quests="ldbTasks | ldbGroupTasks"
             :ldbId="ldbInfo._id"
             :owner="owner"
             :loading="ldbTaskLoading"
-            @receive="receiveTask"/>
+            @receive="receiveTask"/> -->
 
           <records-tool
             v-if="!isMobile"
@@ -134,7 +134,7 @@ import MobileHeaderTool from '@/components/content/_mobile/ldb/detail/ldbHeader'
 import LdbDatasTool from './ldbDatas'
 
 import TasksNowTool from './tasksNow'
-import MobileQuestsTool from '@/components/content/_mobile/ldb/detail/quests'
+// import MobileQuestsTool from '@/components/content/_mobile/ldb/detail/quests'
 
 import RecordsTool from './records'
 import MobileRecordsTool from '@/components/content/_mobile/ldb/detail/records'
@@ -284,7 +284,7 @@ export default {
     LdbDatasTool,
 
     TasksNowTool,
-    MobileQuestsTool,
+    // MobileQuestsTool,
 
     RecordsTool,
     MobileRecordsTool,
@@ -303,7 +303,7 @@ export default {
   },
   methods: {
     ...mapActions('user', [
-      actionTypes.USER_UPT_USER_AP,
+      actionTypes.USER_UPT_USER_PARAMS,
       actionTypes.USER_SET_USER_BY_TOKEN,
       actionTypes.USER_SET_USER_HOME
     ]),
@@ -761,8 +761,8 @@ export default {
           duration: 1500
         })
 
-        // 根据消耗的ap值，手动更新 userInfo 的ap值
-        this[actionTypes.USER_UPT_USER_AP](res.data.apCost)
+        // 根据消耗的ap值及得到的经验值，手动更新 userInfo 的ap值及经验值
+        this[actionTypes.USER_UPT_USER_PARAMS]({ ap: res.data.apCost, activeness: res.data.executor.activeness })
 
         // 根据返回的建筑经验，修改当前建筑经验
         this.$set(this.ldbInfo, 'activeness', this.ldbInfo.activeness + res.data.ldb.activeness)
@@ -812,7 +812,7 @@ export default {
         cbData.data = res.data
 
         // 根据消耗的ap值，手动更新 userInfo 的ap值
-        this[actionTypes.USER_UPT_USER_AP](res.data.apCost)
+        this[actionTypes.USER_UPT_USER_PARAMS](res.data.apCost)
 
         console.log('ldbInfo', this.ldbInfo)
         // 根据返回的建筑经验，修改当前建筑经验

@@ -11,7 +11,7 @@
       <div class="crowdsale-cnt-box">
         <div class="crowdsale-cnt-top">
           <p class="TTFontBolder">Wallet address</p>
-          <p class="TTFontNormal crowdsale-info-text">{{ address }}</p>
+          <p class="TTFontNormal text-break crowdsale-info-text">{{ address }}</p>
         </div>
         <p class="crowdsale-markline"></p>
         <div class="crowdsale-cnt-bottom">
@@ -176,6 +176,7 @@ export default {
     }
   }
   .crowdsale-markline {
+    margin: 15px auto 25px;
     height: 0;
     border-bottom: 1px dashed #fff;
     @include width(50%, 1);

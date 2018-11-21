@@ -1,12 +1,21 @@
 <template>
   <section id="mobile-nav-bar" class="TTFontBolder text-center mobile-nav-bar" :class="{ 'is-static': !fixed, 'is-active': fixed && !scroll }">
     <div class="relative">
-      <p class="TTFontBolder nav-history-icon" v-show="history" @click.stop="$emit('history')">
+      <p class="TTFontBolder nav-history-icon" v-if="history" @click.stop="$emit('history')">
         <svg>
           <use xlink:href="#icon-arrow-line-left"/>
         </svg>
       </p>
       <p class="text-cap">{{ text }}</p>
+      <p class="line-height-0 nav-withdraw" v-if="withdraw" @click.stop="withdrawTip = true">
+        <el-tooltip v-model="withdrawTip" effect="dark" content="Coming soon" placement="left" :hide-after="3000">
+          <span class="inline-block line-height-0 nav-withdraw-icon">
+            <svg>
+              <use xlink:href="#icon-withdraw"/>
+            </svg>
+          </span>
+        </el-tooltip>
+      </p>
     </div>
   </section>
 </template>
@@ -21,6 +30,10 @@ export default {
       default: 'Marketplace'
     },
     history: {
+      type: Boolean,
+      default: false
+    },
+    withdraw: {
       type: Boolean,
       default: false
     },
@@ -39,7 +52,8 @@ export default {
   },
   data: () => {
     return {
-      navbarScrollFunc: null
+      navbarScrollFunc: null,
+      withdrawTip: false
     }
   },
   methods: {
@@ -68,7 +82,7 @@ export default {
       this.$once('hook:beforeDestroy', () => {
         removeClass('is-active', dom)
         document.removeEventListener('scroll', func)
-        this.$el.parentNode.removeChild(this.$el)
+        this.$el && this.$el.parentNode.removeChild(this.$el)
       })
     }
   },
@@ -113,5 +127,16 @@ export default {
     height: 20px;
     fill: #fff;
     transform: translateY(-50%);
+  }
+  .nav-withdraw {
+    position: absolute;
+    right: 20px;
+    top: 55%;
+    transform: translateY(-50%);
+  }
+  .nav-withdraw-icon {
+    width: 22px;
+    height: 22px;
+    fill: #fff;
   }
 </style>

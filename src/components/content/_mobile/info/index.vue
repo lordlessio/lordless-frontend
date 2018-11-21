@@ -35,7 +35,7 @@
       </div>
       <div class="mobile-user-card user-progress-box user-level-box">
         <p class="d-flex user-progress-title">
-          <span class="user-progress-name">Level</span>
+          <span class="user-progress-name">Level {{ userInfo.level }}</span>
           <span class="v-flex text-right">{{ userInfo.activeness }}<span class="user-progress-next">/{{ nextActiveness }}</span></span>
         </p>
         <div class="user-progress-bar user-level-progress">
@@ -59,11 +59,12 @@
             :max="userInfo.maxAp"
             :gradient="apProgress.gradient"/>
         </div>
-        <p class="user-progress-desc recover-at" v-if="new Date(overviews.recoverAt) - new Date() + 5000 > 0">
+        <p class="d-flex user-progress-desc recover-at" v-if="new Date(overviews.recoverAt) - new Date() + 5000 > 0">
           <countdown class="task-status-time" @countdownend="initInfo" :time="new Date(overviews.recoverAt) - new Date() + 5000" :interval="1000" tag="p">
             <!-- <template slot-scope="props">{{ parseInt(props.days) || props.hours || props.minutes || props.seconds }}{{ parseInt(props.days) ? 'd' : (props.hours ? 'h' : (props.minutes ? 'm' : props.seconds ? 's' : '')) }}</template> -->
             <template slot-scope="props">{{ props | formatDue(3) }}</template>
           </countdown>
+          to refill.
         </p>
       </div>
       <div class="mobile-user-card user-home-box">
@@ -114,7 +115,7 @@
           </div>
         </div>
       </div>
-      <div class="mobile-user-card user-childrens-box">
+      <div v-if="false" class="mobile-user-card user-childrens-box">
         <div class="user-childrens-container">
           <ul>
             <li
@@ -131,7 +132,7 @@
               </div>
               <span class="inline-block user-children-jump-icon">
                 <svg>
-                  <use xlink:href="#icon-arrow-up"/>
+                  <use xlink:href="#icon-arrow-line-right"/>
                 </svg>
               </span>
             </li>
@@ -142,14 +143,14 @@
         <div class="v-flex d-flex f-align-center user-children-cnt">
           <span class="inline-block user-children-icon logout">
             <svg>
-              <use xlink:href="#icon-logout"/>
+              <use xlink:href="#icon-mobile-logout"/>
             </svg>
           </span>
           <span>Logout</span>
         </div>
         <span class="inline-block user-children-jump-icon">
           <svg>
-            <use xlink:href="#icon-arrow-up"/>
+            <use xlink:href="#icon-arrow-line-right"/>
           </svg>
         </span>
       </div>
@@ -176,7 +177,7 @@ export default {
         {
           name: 'Taverns',
           route: '/owner/taverns',
-          icon: '#icon-activity_selected'
+          icon: '#icon-beer'
         },
         {
           name: 'Authorization',
@@ -377,6 +378,9 @@ export default {
       margin-top: 8px;
     }
   }
+  .task-status-time {
+    width: 110px;
+  }
   /**
    *  user-progress-box  -- end
    */
@@ -465,14 +469,14 @@ export default {
     height: 22px;
     fill: #7D72F0;
     &.logout {
-      fill: $--text-red-color;
+      fill: #F5515F;
     }
   }
   .user-children-jump-icon {
-    width: 24px;
-    height: 24px;
+    width: 14px;
+    height: 14px;
     fill: #bbb;
-    transform: rotate(90deg);
+    // transform: rotate(90deg);
   }
   /**
    *  user-childrens-box  -- end
