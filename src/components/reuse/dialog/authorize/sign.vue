@@ -29,7 +29,7 @@
       <div v-else-if="termsDialogModel">
         <div class="authorize-sign-terms authorize-sign-term">
           <h1 class="TTFontBolder">Term of use</h1>
-          <div class="overflow term-cnt-box">
+          <div class="overflow term-cnt-box" @touchmove.stop>
             <terms class="dialog light"/>
           </div>
           <p class="term-btn-box">

@@ -541,8 +541,8 @@ export default {
    * market-pagination-box     --begin
    */
   .market-pagination-box {
-    margin-top: 50px;
-    margin-bottom: 60px;
+    margin-top: 25px;
+    margin-bottom: 35px;
   }
   .market-pagination-switch {
     font-size: 18px;

@@ -68,7 +68,7 @@
 
   left: 50%;
   transform: translateX(-50%);
-  @include grid('padding', 50px 20px 20px 20px, -1);
+  @include grid('padding', 35px 20px 20px 20px, -1);
   @include viewport-unit('width', 100vw, 40px);
 }
 .lordless-message-close {

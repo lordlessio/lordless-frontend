@@ -7,7 +7,8 @@
     <tavern-dialog
       v-model="detailModel"
       :ldbId="tavernId"
-      @close="dialogClose"/>
+      @close="dialogClose"
+      @tipClick="detailModel = false"/>
   </div>
 </template>
 

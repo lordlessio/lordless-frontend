@@ -11,7 +11,8 @@
           :leftInfo="!isMobile"
           :scale="isMobile ? 6 : 8"
           :mobile="isMobile"
-          :loginText="isMobile ? 'Started' : 'Get Started'"/>
+          :loginText="isMobile ? 'Started' : 'Get Started'"
+          @click="$emit('tipClick')"/>
 
       </div>
       <ldb-detail

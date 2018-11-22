@@ -3,7 +3,7 @@
     class="alone-layer cursor-pointer user-avatar-box"
     :class="[{ 'shadow': shadow && userInfo.address, 'mobile': mobile }, theme]"
     :style="`border-radius: ${radius};`"
-    @click="$router.push(`/owner/info`)">
+    @click.stop="clickHandle">
     <div class="d-flex f-align-end" v-if="userInfo.address">
       <div class="v-flex d-flex f-align-center">
         <div class="text-right user-avatar-info" :class="{ 'order-1 left-margin': leftInfo }" v-if="showInfo">
@@ -95,9 +95,19 @@ export default {
       type: Boolean,
       default: false
     }
+    // emitLink: {
+    //   type: Boolean,
+    //   default: false
+    // }
   },
   components: {
     Authorize
+  },
+  methods: {
+    clickHandle () {
+      this.$router.push(`/owner/info`)
+      this.$emit('click')
+    }
   }
 }
 </script>

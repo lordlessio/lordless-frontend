@@ -20,7 +20,7 @@
               </p>
               <p class="quests-empty-desc">You have not claimed any candy.</p>
               <div class="quests-empty-btns">
-                <lordless-btn class="quests-empty-btn" theme="blue" inverse shadow @click="$route.push('/market')">Bottoms up</lordless-btn>
+                <lordless-btn class="quests-empty-btn" theme="blue" inverse shadow @click="$router.push('/market')">Bottoms up</lordless-btn>
               </div>
             </div>
           </div>
@@ -78,7 +78,7 @@
               </p>
               <p class="quests-empty-desc">You have not apply any quests now.</p>
               <div class="quests-empty-btns">
-                <lordless-btn class="quests-empty-btn" theme="blue" inverse shadow @click="$route.push('/market')">Apply a quest</lordless-btn>
+                <lordless-btn class="quests-empty-btn" theme="blue" inverse shadow @click="$router.push('/market')">Apply a quest</lordless-btn>
               </div>
             </div>
           </div>
@@ -122,7 +122,7 @@
               </p>
               <p class="quests-empty-desc">You have no taverns now.</p>
               <div class="quests-empty-btns">
-                <lordless-btn class="quests-empty-btn" theme="blue" inverse shadow @click="$route.push('/market')">Buy a tavern</lordless-btn>
+                <lordless-btn class="quests-empty-btn" theme="blue" inverse shadow @click="$router.push('/market')">Buy a tavern</lordless-btn>
               </div>
             </div>
           </div>

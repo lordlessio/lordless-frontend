@@ -46,21 +46,22 @@ export default {
   name: 'App',
   async created () {
     this.web3Opt.web3js.default && initWeb3().then(({ loading, isConnected }) => {
-      if (!loading && !isConnected) {
-        this.$notify.error({
-          title: 'Error!',
-          message: 'Web3 init failed',
-          position: 'bottom-right',
-          duration: 2500
-        })
-      } else if (isConnected) {
-        this.$notify.success({
-          title: 'Success!',
-          message: 'Web3 is onReady!',
-          position: 'bottom-right',
-          duration: 2500
-        })
-      }
+      console.log(' --- web3 init')
+      // if (!loading && !isConnected) {
+      //   this.$notify.error({
+      //     title: 'Error!',
+      //     message: 'Web3 init failed',
+      //     position: 'bottom-right',
+      //     duration: 2500
+      //   })
+      // } else if (isConnected) {
+      //   this.$notify.success({
+      //     title: 'Success!',
+      //     message: 'Web3 is onReady!',
+      //     position: 'bottom-right',
+      //     duration: 2500
+      //   })
+      // }
     })
   },
   data: () => {

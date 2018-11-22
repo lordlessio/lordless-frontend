@@ -1,6 +1,17 @@
 <template>
   <div v-if="value" class="crowdsale-box">
-    <div class="text-center crowdsale-container">
+    <div v-if="isMobile" class="text-center mobile-crowdsale-container">
+      <h2>Authorization</h2>
+      <p>Authorize the Marketplace contract to operate tarven</p>
+      <lordless-btn
+        class="TTFontBolder lordless-message-btn crowdsale-btn"
+        theme="blue"
+        shadow
+        :loading="crowdsalePending"
+        :disabled="crowdsalePending"
+        @click="chooseCrowdsale">Confirm</lordless-btn>
+    </div>
+    <div v-else class="text-center crowdsale-container">
       <div class="inline-block lordless-shadow" :style="`border-radius: ${avatar.radius};`">
         <lordless-blockies
           :scale="avatar.scale"
@@ -81,6 +92,10 @@ export default {
 
     ETHERSCANURL () {
       return process.env.ETHERSCANURL
+    },
+
+    isMobile () {
+      return this.$root.$children[0].isMobile
     }
   },
   methods: {
@@ -151,6 +166,18 @@ export default {
   .crowdsale-box {
     padding-bottom: 10px;
     border-radius: 5px;
+  }
+  .mobile-crowdsale-container {
+    >h2 {
+      font-size: 24px;
+    }
+    >p {
+      margin-top: 12px;
+      font-size: 16px;
+    }
+    .lordless-message-btn {
+      margin-top: 35px;
+    }
   }
   .crowdsale-container {
     position: relative;

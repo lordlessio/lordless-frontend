@@ -7,7 +7,8 @@
         :leftInfo="leftInfo"
         :scale="scale"
         :mobile="mobile"
-        :loginText="loginText"/>
+        :loginText="loginText"
+        @click="$emit('click')"/>
     </div>
   </div>
 </template>
@@ -36,6 +37,10 @@ export default {
       type: String,
       default: 'Get started'
     }
+    // emitLink: {
+    //   type: Boolean,
+    //   default: false
+    // }
   },
   components: {
     UserAvatar
