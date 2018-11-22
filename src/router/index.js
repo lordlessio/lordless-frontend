@@ -65,13 +65,13 @@ const mobileRoutes = [
         name: 'mobile-user-candy',
         component: MobileOwnerCandy,
         meta: {
-          title: 'Candy - LORDLESS',
-          header: {
-            show: false
-          },
-          footer: {
-            show: false
-          }
+          title: 'Candy - LORDLESS'
+          // header: {
+          //   show: false
+          // },
+          // footer: {
+          //   show: false
+          // }
         }
       },
       {
@@ -79,13 +79,13 @@ const mobileRoutes = [
         name: 'mobile-user-quest',
         component: MobileOwnerQuest,
         meta: {
-          title: 'Quest - LORDLESS',
-          header: {
-            show: false
-          },
-          footer: {
-            show: false
-          }
+          title: 'Quest - LORDLESS'
+          // header: {
+          //   show: false
+          // },
+          // footer: {
+          //   show: false
+          // }
         }
       },
       {
@@ -93,13 +93,13 @@ const mobileRoutes = [
         name: 'mobile-owner-info',
         component: MobileMeInfo,
         meta: {
-          title: 'OwnerInfo - LORDLESS',
-          header: {
-            show: false
-          },
-          footer: {
-            show: false
-          }
+          title: 'OwnerInfo - LORDLESS'
+          // header: {
+          //   show: false
+          // },
+          // footer: {
+          //   show: false
+          // }
         }
       },
       {
@@ -108,13 +108,13 @@ const mobileRoutes = [
         component: MobileMeActivity,
         meta: {
           title: 'Owner Activities - LORDLESS',
-          navText: 'Activities',
-          header: {
-            show: false
-          },
-          footer: {
-            show: false
-          }
+          navText: 'Activities'
+          // header: {
+          //   show: false
+          // },
+          // footer: {
+          //   show: false
+          // }
         }
       },
       {
@@ -123,13 +123,13 @@ const mobileRoutes = [
         component: MobileMeAuthorization,
         meta: {
           title: 'Owner Authorization - LORDLESS',
-          navText: 'Authorization',
-          header: {
-            show: false
-          },
-          footer: {
-            show: false
-          }
+          navText: 'Authorization'
+          // header: {
+          //   show: false
+          // },
+          // footer: {
+          //   show: false
+          // }
         }
       },
       {
@@ -138,13 +138,13 @@ const mobileRoutes = [
         component: MobileMeTaverns,
         meta: {
           title: 'Owner Taverns - LORDLESS',
-          navText: 'Taverns',
-          header: {
-            show: false
-          },
-          footer: {
-            show: false
-          }
+          navText: 'Taverns'
+          // header: {
+          //   show: false
+          // },
+          // footer: {
+          //   show: false
+          // }
         }
       },
       {

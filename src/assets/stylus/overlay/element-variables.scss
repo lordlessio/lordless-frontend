@@ -24,11 +24,20 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import 'element-ui/lib/theme-chalk/display.css';
 
 
+.el-dialog__wrapper {
+  // position: fixed;
+  // position: sticky;
+  position: absolute;
+  // overflow: hidden;
+  @include viewport-unit('min-height', 100vh);
+}
 // 覆盖初始样式
 .v-modal {
+  // position: absolute;
   opacity: 1;
   background-color: rgba(255, 255, 255, 0.5);
   pointer-events: none;
+  // @include viewport-unit('height', 100vh);
 }
 
 .lordless-autocomplete {

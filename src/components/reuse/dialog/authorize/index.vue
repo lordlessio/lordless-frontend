@@ -12,7 +12,7 @@
     @open="$emit('open')"
     @close="$emit('close')"
     @closed="authorizeClosed">
-    <div class="lordless-message-box" @touchmove.prevent>
+    <div class="lordless-message-box">
       <span
         @click.stop="closeDialog"
         class="inline-block line-height-1 lordless-message-close"
@@ -54,6 +54,8 @@ import Telegram from './telegram'
 import Crowdsale from './crowdsale'
 import Status from './status'
 import Sign from './sign'
+
+import { addClass, removeClass } from 'utils/tool'
 
 import { contractMixins } from '@/mixins'
 
@@ -227,6 +229,12 @@ export default {
       if (!this.crowdsale && val) this.authorizeDialog = false
     },
     authorizeDialog (val) {
+      const lordless = document.getElementById('lordless')
+      if (val) {
+        this.$nextTick(() => addClass('mobile-dialog-open', lordless))
+      } else {
+        removeClass('mobile-dialog-open', lordless)
+      }
       this.$emit('blurs', val)
     },
 

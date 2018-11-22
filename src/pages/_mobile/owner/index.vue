@@ -4,7 +4,7 @@
       v-show="(scrollOpt.show && (!connectModel || !web3Model)) || connectModel || web3Model"
       v-bind="scrollOpt"
       @history="$router.push('/owner/info')"/>
-    <router-view v-if="pageShow" class="mobile-children-page"/>
+    <router-view v-show="pageShow" class="mobile-children-page"/>
     <div
       v-if="web3Model || connectModel || web3Loading"
       class="d-flex mobile-plugins-box">
@@ -20,11 +20,10 @@
         @connect="checkUser"/>
     </div>
     <Authorize
-      ref="ownerAuthorize"
+      ref="mobileOwnerAuthorize"
       :modelClose="false"
       :autoClose="false"
-      @blurs="dialogSetBlurs">
-    </Authorize>
+      @blurs="dialogSetBlurs"/>
   </div>
 </template>
 
@@ -33,11 +32,11 @@ import MobileConnect from '@/components/reuse/_mobile/connect'
 import MobileWallets from '@/components/reuse/_mobile/wallets'
 import Authorize from '@/components/reuse/dialog/authorize'
 
-import { userMixins, dialogMixins } from '@/mixins'
+import { dialogMixins } from '@/mixins'
 import { mapState } from 'vuex'
 export default {
   name: 'mobile-owner-index',
-  mixins: [userMixins, dialogMixins],
+  mixins: [dialogMixins],
   data: () => {
     return {
       // web3Model: false
@@ -95,6 +94,9 @@ export default {
     ...mapState('web3', [
       'web3Opt'
     ]),
+    ...mapState('user', [
+      'userInfo'
+    ]),
     isMobile () {
       return this.$root.$children[0].isMobile
     },
@@ -149,11 +151,11 @@ export default {
     },
 
     async checkUser () {
-      this.$refs.ownerAuthorize.checkoutAuthorize()
+      this.$refs.mobileOwnerAuthorize.checkoutAuthorize()
     }
   },
   mounted () {
-    this.checkRoute()
+    this.$nextTick(() => this.checkRoute())
   }
 }
 </script>

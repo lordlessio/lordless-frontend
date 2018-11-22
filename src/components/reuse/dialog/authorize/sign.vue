@@ -1,115 +1,111 @@
 <template>
   <div v-if="visible" class="text-center authorize-sign-box">
-    <transition name="ld-sign-dialog-fade">
-      <div v-if="web3Loading || !isRegister || userChecking" class="authorize-login-container">
-        <div class="inline-block lordless-shadow" :style="`border-radius: ${avatar.radius};`">
-          <lordless-blockies
-            :scale="avatar.scale"
-            :radius="avatar.radius"
-            :seed="account"
-            theme="light"/>
+    <div v-if="web3Loading || !isRegister || userChecking" class="authorize-login-container">
+      <div class="inline-block lordless-shadow" :style="`border-radius: ${avatar.radius};`">
+        <lordless-blockies
+          :scale="avatar.scale"
+          :radius="avatar.radius"
+          :seed="account"
+          theme="light"/>
+      </div>
+      <div class="login-cnt-box">
+        <div class="login-cnt-top">
+          <p class="TTFontBolder">Wallet address</p>
+          <p class="text-break login-info-text">{{ account || 'Welcome to LORDLESS!' }}</p>
         </div>
-        <div class="login-cnt-box">
-          <div class="login-cnt-top">
-            <p class="TTFontBolder">Wallet address</p>
-            <p class="text-break login-info-text">{{ account || 'Welcome to LORDLESS!' }}</p>
-          </div>
-          <p class="login-markline"></p>
-          <div>
-            <lordless-btn
-              class="TTFontBolder lordless-message-btn login-btn"
-              theme="deep-blue"
-              shadow
-              :loading="web3Loading || userChecking"
-              :disabled="web3Loading || userChecking"
-              @click="relogin">Login</lordless-btn>
-          </div>
+        <p class="login-markline"></p>
+        <div>
+          <lordless-btn
+            class="TTFontBolder lordless-message-btn login-btn"
+            theme="deep-blue"
+            shadow
+            :loading="web3Loading || userChecking"
+            :disabled="web3Loading || userChecking"
+            @click="relogin">Login</lordless-btn>
         </div>
       </div>
-      <div v-else-if="termsDialogModel">
-        <div class="authorize-sign-terms authorize-sign-term">
-          <h1 class="TTFontBolder">Term of use</h1>
-          <div class="overflow term-cnt-box" @touchmove.stop>
-            <terms class="dialog light"/>
-          </div>
-          <p class="term-btn-box">
-            <lordless-btn
-              class="d-inline-flex f-align-center term-btn"
-              theme="blue"
-              @click="termAgree('terms')">Done</lordless-btn>
-          </p>
+    </div>
+    <div v-else-if="termsDialogModel">
+      <div class="authorize-sign-terms authorize-sign-term">
+        <h1 class="TTFontBolder">Term of use</h1>
+        <div class="overflow term-cnt-box">
+          <terms class="dialog light"/>
         </div>
+        <p class="term-btn-box">
+          <lordless-btn
+            class="d-inline-flex f-align-center term-btn"
+            theme="blue"
+            @click="termAgree('terms')">Done</lordless-btn>
+        </p>
       </div>
-      <div v-else-if="privacyDialogModel">
-        <div class="authorize-sign-terms authorize-sign-privacy">
-          <h1 class="TTFontBolder">Term of use</h1>
-          <div class="overflow term-cnt-box">
-            <privacy class="dialog light"/>
-          </div>
-          <p class="term-btn-box">
-            <lordless-btn
-              class="d-inline-flex f-align-center term-btn"
-              theme="blue"
-              @click="termAgree('privacy')">Done</lordless-btn>
-          </p>
+    </div>
+    <div v-else-if="privacyDialogModel">
+      <div class="authorize-sign-terms authorize-sign-privacy">
+        <h1 class="TTFontBolder">Term of use</h1>
+        <div class="overflow term-cnt-box">
+          <privacy class="dialog light"/>
         </div>
+        <p class="term-btn-box">
+          <lordless-btn
+            class="d-inline-flex f-align-center term-btn"
+            theme="blue"
+            @click="termAgree('privacy')">Done</lordless-btn>
+        </p>
       </div>
-      <div v-else class="authorize-sign-container" @touchmove.stop>
-        <h1 class="TTFontBolder">Create Account</h1>
-        <div class="text-left authorize-sign-cnt">
-          <p>We use your email to send you notifications around collectible activity such as ones you buy and sell. We'll never share your email with anyone else.</p>
-          <div class="authorize-sign-input authorize-sign-email">
-            <ld-input
-              v-model="signInputs.email.model"
-              :theme="signInputs.email.theme"
-              :placeholder="signInputs.email.placeholder"
-              required
-              :regex="signInputs.email.regex"
-              @change="emailChange"
-              @blur="emailBlur">
-            </ld-input>
-          </div>
-          <p class="sm-hidden">For display purposes only (we show it instead of your wallet address). It doesn't need to be unique.</p>
-          <div class="authorize-sign-input authorize-sign-nickname">
-            <ld-input
-              v-model="signInputs.nickName.model"
-              type="text"
-              :placeholder="signInputs.nickName.placeholder"
-              :maxlength="signInputs.nickNamemaxlength"
-              @change="nicknameChange"
-              @blur="nickNameBlur">
-            </ld-input>
-          </div>
-          <div class="authorize-terms-box">
-            <p>Please read our <span @click.stop="termsDialogModel = true">Terms of Use</span> and <span @click.stop="privacyDialogModel = true">Privacy Policy</span>.</p>
-            <div class="d-flex f-align-center authorize-terms-item">
-              <div class="authorize-sign-checkbox" :class="{ 'active': termModels.terms }">
-                <check-box v-model="termModels.terms"/>
-              </div>
-              <span>I have read and agree to the LORDLESS Terms of Use.</span>
+    </div>
+    <div v-else class="authorize-sign-container">
+      <h1 class="TTFontBolder">Create Account</h1>
+      <div class="text-left authorize-sign-cnt">
+        <p>We use your email to send you notifications around collectible activity such as ones you buy and sell. We'll never share your email with anyone else.</p>
+        <div class="authorize-sign-input authorize-sign-email">
+          <ld-input
+            v-model="signInputs.email.model"
+            :theme="signInputs.email.theme"
+            :placeholder="signInputs.email.placeholder"
+            required
+            :regex="signInputs.email.regex"
+            @change="emailChange"
+            @blur="emailBlur"/>
+        </div>
+        <p class="sm-hidden">For display purposes only (we show it instead of your wallet address). It doesn't need to be unique.</p>
+        <div class="authorize-sign-input authorize-sign-nickname">
+          <ld-input
+            v-model="signInputs.nickName.model"
+            type="text"
+            :placeholder="signInputs.nickName.placeholder"
+            :maxlength="signInputs.nickNamemaxlength"
+            @change="nicknameChange"
+            @blur="nickNameBlur"/>
+        </div>
+        <div class="authorize-terms-box">
+          <p>Please read our <span @click.stop="termsDialogModel = true">Terms of Use</span> and <span @click.stop="privacyDialogModel = true">Privacy Policy</span>.</p>
+          <div class="d-flex f-align-center authorize-terms-item">
+            <div class="authorize-sign-checkbox" :class="{ 'active': termModels.terms }">
+              <check-box v-model="termModels.terms"/>
             </div>
-            <div class="d-flex f-align-center authorize-terms-item">
-              <div class="authorize-sign-checkbox" :class="{ 'active': termModels.privacy }">
-                <check-box v-model="termModels.privacy"/>
-              </div>
-              <span>I have read and agree to the LORDLESS Privacy Policy.</span>
+            <span @click.stop="chooseTerm('terms')">I have read and agree to the LORDLESS Terms of Use.</span>
+          </div>
+          <div class="d-flex f-align-center authorize-terms-item">
+            <div class="authorize-sign-checkbox" :class="{ 'active': termModels.privacy }">
+              <check-box v-model="termModels.privacy"/>
             </div>
-            <div class="d-flex f-align-center authorize-terms-item">
-              <div class="authorize-sign-checkbox" :class="{ 'active': termModels.notice }">
-                <check-box v-model="termModels.notice"/>
-              </div>
-              <span>I wish to receive marketing updates (optional).</span>
+            <span @click.stop="chooseTerm('privacy')">I have read and agree to the LORDLESS Privacy Policy.</span>
+          </div>
+          <div class="d-flex f-align-center authorize-terms-item">
+            <div class="authorize-sign-checkbox" :class="{ 'active': termModels.notice }">
+              <check-box v-model="termModels.notice"/>
             </div>
+            <span @click.stop="chooseTerm('notice')">I wish to receive marketing updates (optional).</span>
           </div>
         </div>
-        <lordless-btn
-          class="TTFontBolder lordless-message-btn"
-          theme="deep-blue"
-          shadow
-          :disabled="!signRequired"
-          @click="signUp">Sign Up</lordless-btn>
       </div>
-    </transition>
+      <lordless-btn
+        class="TTFontBolder lordless-message-btn"
+        theme="deep-blue"
+        shadow
+        :disabled="!signRequired"
+        @click="signUp">Sign Up</lordless-btn>
+    </div>
   </div>
 </template>
 
@@ -225,6 +221,10 @@ export default {
     ...mapActions('user', [
       actionTypes.USER_META_LOGIN
     ]),
+
+    chooseTerm (type) {
+      this.$set(this.termModels, type, !this.termModels[type])
+    },
 
     // 重新登陆
     relogin () {

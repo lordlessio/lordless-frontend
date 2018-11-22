@@ -6,7 +6,7 @@
     append-to-body
     center
     top="0"
-    :close-on-click-modal="false"
+    :close-on-click-modal="true"
     :close-on-press-escape="false"
     :show-close="false"
     @open="$emit('open')"
@@ -28,7 +28,7 @@
           @click="$emit('input', false)">Confirm</lordless-btn>
       </p>
     </div> -->
-    <div class="text-center lordless-message-box lordless-meta-dialog" @touchmove.prevent>
+    <div class="text-center lordless-message-box lordless-meta-dialog">
       <span
         @click.stop="closeDialog"
         class="inline-block line-height-1 lordless-message-close">
@@ -63,6 +63,7 @@
 <script>
 import MobileWallets from '@/components/reuse/_mobile/wallets'
 import { layoutMixins } from '@/mixins'
+import { addClass, removeClass } from 'utils/tool'
 export default {
   mixins: [layoutMixins],
   props: {
@@ -101,6 +102,14 @@ export default {
     value (val) {
       this.tipModel = val
       this.$emit('blurs', val)
+    },
+    tipModel (val) {
+      const lordless = document.getElementById('lordless')
+      if (val) {
+        addClass('mobile-dialog-open', lordless)
+      } else {
+        removeClass('mobile-dialog-open', lordless)
+      }
     }
   },
   components: {

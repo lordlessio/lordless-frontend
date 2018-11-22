@@ -4,16 +4,11 @@
 
     <mobile-tab-bar v-if="isMobile"/>
 
-    <Header ref="lordlessHeader" v-bind="headerOpt" :zIndex="isMobile ? 2299 : 99"/>
+    <Header v-if="!isMobile" ref="lordlessHeader" v-bind="headerOpt" :zIndex="isMobile ? 2299 : 99"/>
     <div class="ld-main" :class="[{ 'no-header': isMobile || !headerOpt.show || (headerOpt.show && headerOpt.fixed) }, { 'no-footer': !footerOpt.show }]">
-      <!-- <p v-for="item of Object.keys(this.web3Opt)" :key="item" style="margin-top: 60px;color: #555;font-size: 14px;">{{ item }} - {{ web3Opt[item] ? web3Opt[item].toString() : 'null' }}</p> -->
-      <!-- <div class="d-flex col-flex f-auto-center ld-error" v-if="web3Opt.error">
-        <h1>出错啦！</h1>
-        <p>{{ web3Opt.error }}</p>
-      </div> -->
       <router-view/>
     </div>
-    <Footer v-bind="footerOpt"/>
+    <Footer v-if="!isMobile" v-bind="footerOpt"/>
     <!-- <msg-tip
       v-model="msgTip.show"
       :text="msgTip.text"
@@ -45,7 +40,7 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'App',
   async created () {
-    this.web3Opt.web3js.default && initWeb3().then(({ loading, isConnected }) => {
+    initWeb3().then(({ loading, isConnected }) => {
       console.log(' --- web3 init')
       // if (!loading && !isConnected) {
       //   this.$notify.error({
@@ -85,26 +80,11 @@ export default {
     ]),
     ...mapState('contract', [
       'isCrowdsaleApproved'
-    ]),
-
-    // 是否登陆了 metamask
-    web3Login () {
-      return this.web3Opt.address
-    },
-
-    // web3 Network 环境是否正常
-    web3IsNetwork () {
-      return this.web3Opt.networkId === process.env.APPROVED_NETWORK_ID
-    },
-
-    // web3 整体状态是否正常
-    web3IsValidate () {
-      return this.web3Opt.networkId === process.env.APPROVED_NETWORK_ID && this.web3Opt.address
-    }
+    ])
   },
   watch: {
     headerOpt (val) {
-      this.$nextTick(() => this.$refs.lordlessHeader.init())
+      this.$nextTick(() => this.$refs.lordlessHeader && this.$refs.lordlessHeader.init())
     }
   },
   components: {
