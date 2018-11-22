@@ -6,11 +6,14 @@
       @history="$router.push('/owner/info')"/>
     <router-view v-if="pageShow" class="mobile-children-page"/>
     <div
-      v-if="web3Model || connectModel"
+      v-if="web3Model || connectModel || web3Loading"
       class="d-flex mobile-plugins-box">
+      <div v-if="web3Loading" class="v-flex d-flex f-auto-center mobile-plugins-loading">
+        <i class="el-icon-loading"></i>
+      </div>
       <mobile-wallets
         class="v-flex"
-        v-if="web3Model"/>
+        v-else-if="web3Model"/>
       <mobile-connect
         class="v-flex"
         v-else
@@ -95,6 +98,9 @@ export default {
     isMobile () {
       return this.$root.$children[0].isMobile
     },
+    web3Loading () {
+      return this.web3Opt.loading
+    },
     web3Model () {
       const { loading, isConnected } = this.web3Opt
       return this.isMobile && !loading && !isConnected
@@ -104,7 +110,7 @@ export default {
       return !this.userInfo.default && !this.userInfo._id
     },
     pageShow () {
-      return !this.connectModel && !this.web3Model
+      return !this.connectModel && !this.web3Model && !this.web3Loading
     }
   },
   watch: {
@@ -160,8 +166,13 @@ export default {
     // @include viewport-unit(min-height, 100vh, 112px);
   }
   .mobile-plugins-box {
-    padding-top: 40px;
-    @include viewport-unit(min-height, 100vh, 90px);
+    // margin-top: 40px;
+    // padding-bottom: 40px;
+    @include viewport-unit(min-height, 100vh, 50px);
+  }
+  .mobile-plugins-loading {
+    font-size: 30px;
+    color: #999;
   }
   .mobile-children-page {
     // padding: 0 20px;

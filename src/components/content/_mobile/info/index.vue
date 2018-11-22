@@ -14,7 +14,7 @@
           <div class="mobile-user-holdings">
             <h2>Estimated holdings value</h2>
             <div class="d-flex f-align-center user-holdings-cnt">
-              <div class="v-flex user-holdings-item">
+              <!-- <div class="v-flex user-holdings-item">
                 <p>In ETH</p>
                 <p class="TTFontBolder d-flex row-flex f-auto-center holdings-value">
                   <svg>
@@ -22,7 +22,7 @@
                   </svg>
                   <span>{{ ethBalance | formatDecimal }}</span>
                 </p>
-              </div>
+              </div> -->
               <div class="v-flex user-holdings-item right">
                 <p>In USD</p>
                 <p class="TTFontBolder holdings-value">
