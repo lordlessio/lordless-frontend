@@ -9,7 +9,7 @@
           shadow
           showPopularity/>
       </div>
-      <div class="v-flex d-flex col-flex f-justify-between m-building-info">
+      <div class="v-flex d-flex col-flex m-building-info">
         <figcaption>
           <p class="m-building-sale" :class="{ 'presale': presale }">
             <svg>
@@ -23,6 +23,19 @@
           <div class="d-flex">
             <p class="v-flex">Level <span>{{ info.chain.level || 0 }}</span></p>
             <p class="v-flex">Hunters <span>{{ info.members || 0 }}</span></p>
+          </div>
+          <div class="building-apleft-bar">
+            <p class="d-flex f-justify-between">
+              <span>AP</span>
+              <span>{{ info.apLeft }}</span>
+            </p>
+            <div class="apleft-progress-bar">
+              <lordless-progress
+                :current="info.apLeft"
+                :max="info.ap"
+                :underColor="apProgress.underColor"
+                :gradient="apProgress.gradient"/>
+            </div>
           </div>
           <h3 class="text-upper">{{ info.chain.auction.price | weiToEth }} ETH</h3>
         </div>
@@ -42,6 +55,18 @@ export default {
     shadow: {
       type: Boolean,
       default: true
+    }
+  },
+  data: () => {
+    return {
+      apProgress: {
+        underColor: '#ddd',
+        gradient: {
+          direction: 'to right',
+          start: '#4586FC',
+          end: '#4586FC'
+        }
+      }
     }
   },
   computed: {
@@ -99,7 +124,7 @@ export default {
       color: #999;
     }
     span {
-      color: #555;
+      color: #777;
     }
     h3 {
       margin-top: 3px;
@@ -109,5 +134,18 @@ export default {
   .m-building-name {
     color: #555;
     font-weight: 500;
+  }
+  .building-apleft-bar {
+    margin-top: 10px;
+    margin-bottom: 14px;
+    font-size: 14px;
+    span {
+      color: #999;
+    }
+  }
+  .apleft-progress-bar {
+    height: 6px;
+    border-radius: 5px;
+    overflow: hidden;
   }
 </style>

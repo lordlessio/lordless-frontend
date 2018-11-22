@@ -1,11 +1,11 @@
 <template>
   <el-dialog
     :visible.sync="tipModel"
-    :custom-class="`inline-block lordless-dialog message-dialog center mobile-center no-header transparent`"
+    :custom-class="`inline-block lordless-dialog message-dialog center no-header transparent`"
     width="100%"
     append-to-body
     center
-    top="-50px"
+    top="0"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :show-close="false"

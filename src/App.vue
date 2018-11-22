@@ -45,7 +45,7 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'App',
   async created () {
-    this.web3Opt.web3js.default && initWeb3(({ loading, isConnected }) => {
+    this.web3Opt.web3js.default && initWeb3().then(({ loading, isConnected }) => {
       if (!loading && !isConnected) {
         this.$notify.error({
           title: 'Error!',

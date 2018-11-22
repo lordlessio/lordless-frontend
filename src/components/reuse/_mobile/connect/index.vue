@@ -33,8 +33,7 @@ export default {
 
 <style lang="scss" scoped>
   .mobile-connect-box {
-    padding-top: 52px;
-    @include viewport-unit(min-height, 100vh, 112px);
+    // height: 100%;
   }
   .mobile-connect-container {
     margin: 0 auto;

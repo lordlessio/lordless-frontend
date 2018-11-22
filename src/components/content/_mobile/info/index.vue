@@ -265,8 +265,8 @@ export default {
       position: absolute;
       top: 0;
       left: 50%;
-      width: 130%;
-      height: 280px;
+      width: 120%;
+      height: 200px;
       background-image: linear-gradient(-45deg, #7D72F0, #1613B0);
       border-bottom-left-radius: 100%;
       border-bottom-right-radius: 100%;
@@ -274,7 +274,7 @@ export default {
     }
   }
   .mobile-user-container {
-    padding: 170px 20px 30px;
+    padding: 100px 20px 30px;
     z-index: 1;
   }
   .mobile-user-card {

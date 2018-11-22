@@ -10,7 +10,7 @@ import { monitorWeb3 } from './monitorWeb3'
 import { actionTypes } from '@/store/types'
 
 // 初始化 web3js
-export const initWeb3 = async (callback) => {
+export const initWeb3 = async () => {
   await mobileReady()
   const res = await checkWeb3()
 
@@ -22,7 +22,7 @@ export const initWeb3 = async (callback) => {
   // 注册合约
   store.dispatch(`contract/${actionTypes.CONTRACT_INIT_INSTANCE}`)
 
-  if (res.error) return callback ? callback(res) : res
+  if (res.error) return Promise.resolve(res)
 
   // profill methods
   profillMethods(res.web3js)
@@ -30,7 +30,7 @@ export const initWeb3 = async (callback) => {
   // 监听 web3 动态
   monitorWeb3(res)
 
-  return callback ? callback(res) : res
+  return Promise.resolve(res)
 }
 
 const checkWeb3 = async () => {

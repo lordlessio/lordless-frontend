@@ -5,10 +5,17 @@
       v-bind="scrollOpt"
       @history="$router.push('/owner/info')"/>
     <router-view v-if="pageShow" class="mobile-children-page"/>
-    <mobile-wallets v-if="web3Model"/>
-    <mobile-connect
-      v-else-if="connectModel"
-      @connect="checkUser"/>
+    <div
+      v-if="web3Model || connectModel"
+      class="d-flex mobile-plugins-box">
+      <mobile-wallets
+        class="v-flex"
+        v-if="web3Model"/>
+      <mobile-connect
+        class="v-flex"
+        v-else
+        @connect="checkUser"/>
+    </div>
     <Authorize
       ref="ownerAuthorize"
       :modelClose="false"
@@ -150,7 +157,11 @@ export default {
     margin: 0 auto;
     max-width: 768px;
     // background-color: #f8f8f8;
-    // @include viewport-unit(min-height, 100vh);
+    // @include viewport-unit(min-height, 100vh, 112px);
+  }
+  .mobile-plugins-box {
+    padding-top: 40px;
+    @include viewport-unit(min-height, 100vh, 90px);
   }
   .mobile-children-page {
     // padding: 0 20px;

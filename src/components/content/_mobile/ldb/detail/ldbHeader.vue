@@ -99,6 +99,13 @@
                       :max="countUp.nAP.end"
                       :gradient="progress.gradient"/>
                   </div>
+                  <p class="d-flex user-progress-desc recover-at" v-if="new Date(info.recoverAt) - new Date() + 5000 > 0">
+                    <countdown class="task-status-time" @countdownend="$emit('refresh')" :time="new Date(info.recoverAt) - new Date() + 5000" :interval="1000" tag="p">
+                      <!-- <template slot-scope="props">{{ parseInt(props.days) || props.hours || props.minutes || props.seconds }}{{ parseInt(props.days) ? 'd' : (props.hours ? 'h' : (props.minutes ? 'm' : props.seconds ? 's' : '')) }}</template> -->
+                      <template slot-scope="props">{{ props | formatDue(3) }}</template>
+                    </countdown>
+                    to refill.
+                  </p>
                 </div>
                 <figcaption class="d-flex f-align-center">
                   <div class="v-flex d-flex f-align-center detail-lord-box">
@@ -201,6 +208,11 @@ export default {
           end: 0
         }
       }
+    }
+  },
+  computed: {
+    apLeft () {
+      return this.info.apLeft
     }
   },
   watch: {
@@ -617,6 +629,17 @@ export default {
     height: 27px;
     border-radius: 5px;
     overflow: hidden;
+  }
+  .user-progress-desc {
+    margin-top: 3px;
+    font-size: 14px;
+    color: #bbb;
+    &.recover-at {
+      margin-top: 8px;
+    }
+  }
+  .task-status-time {
+    width: 110px;
   }
 
   // header-candy-layer

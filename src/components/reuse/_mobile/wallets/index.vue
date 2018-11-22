@@ -71,10 +71,9 @@ export default {
 <style lang="scss" scoped>
   .mobile-wallets-box {
     position: relative;
-    padding-top: 52px;
-    box-sizing: border-box;
+    // height: 100%;
     background-color: transparent;
-    @include viewport-unit(min-height, 100vh, 60px);
+    // @include viewport-unit(min-height, 100vh, 60px);
     &::before {
       content: '';
       position: absolute;
@@ -90,9 +89,13 @@ export default {
       transform: rotate(180deg);
     }
     &.dialog {
+      padding-top: 0;
       margin: 0 auto;
       width: 85%;
       min-height: inherit;
+      &::before {
+        display: none;
+      }
       .mobile-wallets-title, .mobile-wallets-desc {
         color: #fff;
       }

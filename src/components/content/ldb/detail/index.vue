@@ -24,7 +24,8 @@
       :userInfo="userInfo"
       @enter="contentShow = true"
       @setHome="setHome"
-      @receive="receiveCandy"/>
+      @receive="receiveCandy"
+      @refresh="init(ldbInfo._id)"/>
     <section id="ldb-detail-content" class="ldb-detail-content" :class="{ 'show': contentShow }">
       <div class="container detail-container md d-flex sm-col-flex">
         <div class="detail-cnt-left v-flex">

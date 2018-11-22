@@ -82,15 +82,17 @@ export default {
       this.$once('hook:beforeDestroy', () => {
         removeClass('is-active', dom)
         document.removeEventListener('scroll', func)
-        this.$el && this.$el.parentNode.removeChild(this.$el)
       })
     }
+  },
+  beforeDestroy () {
+    this.$el && this.$el.parentNode.removeChild(this.$el)
   },
   mounted () {
     this.$nextTick(() => {
       if (this.scroll || this.fixed) {
         document.body.appendChild(this.$el)
-        this.scrollListener()
+        this.scroll && this.scrollListener()
       }
     })
   }
@@ -99,11 +101,13 @@ export default {
 
 <style lang="scss" scoped>
   .mobile-nav-bar {
-    padding: 12px 0;
+    // padding: 12px 0;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
+    height: 40px;
+    line-height: 40px;
     background-color: #4586fc;
     font-size: 20px;
     color: #fff;

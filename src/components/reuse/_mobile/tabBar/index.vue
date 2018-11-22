@@ -1,7 +1,7 @@
 <template>
   <section class="lordless-tab-bar">
     <!-- <mobile-nav-bar :text="navigations[activeIndex].navbarText" :scroll="navigations[activeIndex].scroll"/> -->
-    <ul class="d-flex" @click.stop="chooseBar">
+    <ul class="d-flex tab-bar-ul" @click.stop="chooseBar">
       <li v-for="(item, index) of navigations" :key="index"
         class="v-flex text-center tab-bar-item" :class="{ 'is-active': item.active }">
         <p class="d-inline-flex col-flex f-auto-center"
@@ -37,24 +37,24 @@ export default {
           active: true
         },
         {
-          icon: '#icon-candy_unselected',
-          activeIcon: '#icon-candy_selected',
+          icon: '#icon-tab-candy_unselected',
+          activeIcon: '#icon-tab-candy_selected',
           name: 'Candies',
           route: '/owner/candy',
           match: /\/owner\/candy/,
           active: false
         },
         {
-          icon: '#icon-quest',
-          activeIcon: '#icon-quest',
+          icon: '#icon-tab-quest',
+          activeIcon: '#icon-tab-quest',
           name: 'Quests',
           route: '/owner/quest',
           match: /\/owner\/quest/,
           active: false
         },
         {
-          icon: '#icon-user_unselected',
-          activeIcon: '#icon-user_selected',
+          icon: '#icon-tab-user_unselected',
+          activeIcon: '#icon-tab-user_selected',
           name: 'Me',
           route: '/owner/info',
           match: /\/owner\/(info|activities|taverns|authorization|general)/,
@@ -126,16 +126,22 @@ export default {
 
 <style lang="scss" scoped>
 .lordless-tab-bar {
-  padding: 10px 0;
+  // padding: 10px 0;
   position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
+  height: 50px;
   background-color: #fff;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.36);
   z-index: 100;
 }
+.tab-bar-ul {
+  margin-top: 5px;
+  // height: 50px;
+}
 .tab-bar-item {
+  height: initial;
   font-size: 10px;
   color: #999;
   fill: #999;
