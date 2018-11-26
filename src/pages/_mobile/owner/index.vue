@@ -32,15 +32,13 @@ import MobileConnect from '@/components/reuse/_mobile/connect'
 import MobileWallets from '@/components/reuse/_mobile/wallets'
 import Authorize from '@/components/reuse/dialog/authorize'
 
-import { dialogMixins } from '@/mixins'
+import { dialogMixins, publicMixins } from '@/mixins'
 import { mapState } from 'vuex'
 export default {
   name: 'mobile-owner-index',
-  mixins: [dialogMixins],
+  mixins: [dialogMixins, publicMixins],
   data: () => {
     return {
-      // web3Model: false
-      // connectModel: false
       scrollOpt: {
         show: false,
         history: false,
@@ -70,43 +68,33 @@ export default {
           text: 'Activities',
           match: /\/owner\/activities/,
           show: true,
-          // scrollMark: 0,
           history: true
         },
         {
           text: 'Taverns',
           match: /\/owner\/taverns/,
           show: true,
-          // scrollMark: 0,
           history: true
         },
         {
           text: 'Authorization',
           match: /\/owner\/authorization/,
           show: true,
-          // scrollMark: 0,
           history: true
         }
       ]
     }
   },
   computed: {
-    ...mapState('web3', [
-      'web3Opt'
-    ]),
     ...mapState('user', [
       'userInfo'
     ]),
-    isMobile () {
-      return this.$root.$children[0].isMobile
-    },
     web3Loading () {
       return this.web3Opt.loading
     },
     web3Model () {
       const { loading, isConnected } = this.web3Opt
       return this.isMobile && !loading && !isConnected
-      // return this.isMobile
     },
     connectModel () {
       return !this.userInfo.default && !this.userInfo._id
@@ -119,7 +107,7 @@ export default {
     '$route' (route) {
       this.checkRoute(route)
     },
-    userInfo (val, oVal) {
+    account (val, oVal) {
       this.$nextTick(() => this.checkUser())
     }
   },

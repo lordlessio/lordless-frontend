@@ -105,11 +105,11 @@ export const monitorWeb3 = (web3Opt) => {
 
     // 如果logout metamask 或者切换 metamask 账号，退出登陆
     if ((newAccount !== address)) {
-      console.log('count', address, newAccount)
+      console.log('monitor account', address, newAccount)
       address = newAccount
 
       // 修改 web3Opt
-      store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { address: newAccount.toString() })
+      store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { address: newAccount.toString().toLocaleLowerCase() })
 
       // 用户登出
       store.dispatch(`user/${actionTypes.USER_LOGOUT}`)
@@ -144,6 +144,7 @@ export const monitorWeb3 = (web3Opt) => {
       await checkWeb3()
       // console.timeEnd('loopStep')
       nowt = timestamp
+      return window.requestAnimationFrame(loopStep)
     }
     return window.requestAnimationFrame(loopStep)
   }

@@ -9,7 +9,7 @@ module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   port,
   LDBICON_ORIGIN: '"//lordless.oss-cn-hongkong.aliyuncs.com"',
-  BACKEND_SERVER: '"//10.229.6.223:80/lordless"',
+  BACKEND_SERVER: '"//10.229.6.223:8080/lordless"',
   // BACKEND_SERVER: `"//ropsten.lordless.games"`,
   ETHERSCANURL: '"https://ropsten.etherscan.io/"',
   APPROVED_NETWORK_ID: 5777,

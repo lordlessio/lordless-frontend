@@ -34,6 +34,10 @@ export default {
       type: Boolean,
       default: false
     }
+    // isMobile: {
+    //   type: Boolean,
+    //   default: false
+    // }
   },
   data: () => {
     return {
@@ -109,6 +113,9 @@ export default {
     will-change: transform;
     @include width(90%, -2);
     @include width(100%, 1, -2);
+    // &.is-mobile {
+    //   position: absolute;
+    // }
   }
   .ld-slide-container {
     position: relative;

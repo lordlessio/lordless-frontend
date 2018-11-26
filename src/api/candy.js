@@ -7,6 +7,9 @@ module.exports = axios => {
     // 根据条件获取 candy 详情
     getCandyDetail: (id) => {
       return axios.get(`/api/candy/${id}`)
+    },
+    getCandyPrice: () => {
+      return axios.get('/api/candy/price')
     }
   }
 }

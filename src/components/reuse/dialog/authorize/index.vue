@@ -57,13 +57,13 @@ import Sign from './sign'
 
 import { addClass, removeClass } from 'utils/tool'
 
-import { contractMixins } from '@/mixins'
+import { contractMixins, publicMixins } from '@/mixins'
 
 import { actionTypes } from '@/store/types'
 import { mapState, mapActions } from 'vuex'
 export default {
   name: 'authorize-dialog',
-  mixins: [contractMixins],
+  mixins: [contractMixins, publicMixins],
   props: {
     avatar: {
       type: Object,
@@ -111,9 +111,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('web3', [
-      'web3Opt'
-    ]),
     ...mapState('user', [
       'userInfo'
     ]),
@@ -126,11 +123,6 @@ export default {
     ...mapState('contract', [
       'isCrowdsaleApproved'
     ]),
-
-    // 是否是移动端
-    isMobile () {
-      return this.$root.$children[0].isMobile
-    },
 
     // 登陆之后的用户地址
     address () {
@@ -205,10 +197,6 @@ export default {
       console.log('browserInit', browserInit, loading, unlockedWeb3)
 
       return unlockedWeb3 || (browserInit && !loading)
-    },
-
-    account () {
-      return this.$root.$children[0].web3Opt.address || window.localStorage.getItem('currentAddress')
     }
 
     // metaOpen () {

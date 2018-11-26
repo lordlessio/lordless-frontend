@@ -115,6 +115,15 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
   box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.25);
 }
 
+.el-tabs {
+  &.mobile-quests-tabs {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}
+
 // el-notification
 @media screen and (max-width: 768px) {
   .el-notification {

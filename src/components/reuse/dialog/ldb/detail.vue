@@ -13,7 +13,6 @@
           :mobile="isMobile"
           :loginText="isMobile ? 'Started' : 'Get Started'"
           @click="$emit('tipClick')"/>
-
       </div>
       <ldb-detail
         v-if="!loading"
@@ -21,7 +20,8 @@
         ref="ldbDetail"
         dialog
         :detailInfo.sync="detailInfo"
-        @initInfo="initDetailInfo">
+        @initInfo="initDetailInfo"
+        @touchmove.prevent>
       </ldb-detail>
     </slide-dialog>
   </div>

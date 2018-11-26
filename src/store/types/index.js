@@ -11,6 +11,7 @@ const ldb = require('./ldb')
 const contract = require('./contract')
 const status = require('./status')
 const region = require('./region')
+const candy = require('./candy')
 
 // 将所有类型的 types 合并返回
-module.exports = merge(userTypes, layoutTypes, web3, ldb, contract, status, region)
+module.exports = merge(userTypes, layoutTypes, web3, ldb, contract, status, region, candy)

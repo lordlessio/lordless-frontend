@@ -16,17 +16,12 @@
 </template>
 
 <script>
+import { publicMixins } from '@/mixins'
 export default {
   name: 'mobile-connect',
+  mixins: [publicMixins],
   data: () => {
-    return {
-      loading: true
-    }
-  },
-  computed: {
-    account () {
-      return this.$root.$children[0].web3Opt.address || window.localStorage.getItem('currentAddress')
-    }
+    return {}
   }
 }
 </script>

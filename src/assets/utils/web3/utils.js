@@ -17,7 +17,14 @@ export const initStorageUser = (account) => {
 export const getNetwork = (web3js) => {
   return new Promise((resolve, reject) => {
     try {
+      // 设置 timeout
+      const timer = setTimeout(() => {
+        clearTimeout(timer)
+        resolve({ coinbase: '' })
+      }, 3000)
+
       web3js.version.getNetwork((error, networkId) => {
+        clearTimeout(timer)
         if (error) return resolve({ error: error.message || 'Network error', networkId: 0 })
         resolve({ networkId: parseInt(networkId) })
       })
@@ -31,7 +38,15 @@ export const getNetwork = (web3js) => {
 export const getCoinbase = (web3js) => {
   return new Promise((resolve, reject) => {
     try {
+      // 设置 timeout
+      const timer = setTimeout(() => {
+        clearTimeout(timer)
+        resolve({ coinbase: '' })
+      }, 3000)
+
       web3js.eth.getCoinbase((error, coinbase) => {
+        clearTimeout(timer)
+
         if (error) return resolve({ error: error.message || 'Coinbase error', coinbase: '' })
         resolve({ coinbase: (coinbase || '').toString() })
       })
@@ -45,7 +60,15 @@ export const getCoinbase = (web3js) => {
 export const getAccount = (web3js) => {
   return new Promise((resolve, reject) => {
     try {
+      // 设置 timeout
+      const timer = setTimeout(() => {
+        clearTimeout(timer)
+        resolve({ account: '' })
+      }, 3000)
+
       web3js.eth.getAccounts((error, accounts) => {
+        clearTimeout(timer)
+
         if (error) return resolve({ error: error.message || 'Account error', account: '' })
         resolve({ account: (accounts[0] || '').toString() })
       })
@@ -59,7 +82,15 @@ export const getAccount = (web3js) => {
 export const getGasPrice = (web3js) => {
   return new Promise((resolve, reject) => {
     try {
+      // 设置 timeout,有些账号获取 gasPrice 会一直不返回，所以需要设置 timeout
+      const timer = setTimeout(() => {
+        clearTimeout(timer)
+        resolve({ account: '' })
+      }, 3000)
+
       web3js.eth.getGasPrice((error, gasPrice) => {
+        clearTimeout(timer)
+
         if (error) return resolve({ error: error.message || 'gasPrice error', gasPrice: 0 })
         resolve({ gasPrice: gasPrice ? gasPrice.toNumber() : 0 })
       })
@@ -74,7 +105,16 @@ export const getBalance = (web3js, address) => {
   return new Promise((resolve, reject) => {
     try {
       if (!address) return resolve({ balance: 0 })
+
+      // 设置 timeout 有些账号获取 getBalance 会一直不返回，所以需要设置 timeout
+      const timer = setTimeout(() => {
+        clearTimeout(timer)
+        resolve({ account: '' })
+      }, 3000)
+
       web3js.eth.getBalance(address, (error, balance) => {
+        clearTimeout(timer)
+
         if (error) return resolve({ error: error.message || 'balance error', balance: 0 })
         resolve({ balance: balance ? balance.toNumber() : 0 })
       })

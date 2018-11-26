@@ -48,7 +48,7 @@
                 </div>
               </div>
               <div
-                v-else-if="!userAssets.length && !candyLoading"
+                v-else-if="!userAssets.total && !candyLoading"
                 class="d-flex v-flex col-flex f-auto-center text-center no-asset-box absolute">
                 <svg>
                   <use xlink:href="#icon-no-candy"/>
@@ -75,7 +75,7 @@
                 </div>
                 <div
                   class="d-flex f-align-center text-center candy-balance-item candy-list-item"
-                  v-for="(asset, index) of userAssets"
+                  v-for="(asset, index) of userAssets.list"
                   :key="index">
                   <el-col :span="5" :xs="8" class="d-flex f-auto-center candy-symbol">
                     <p class="d-flex f-align-end">
@@ -109,8 +109,8 @@
           </el-tab-pane>
           <el-tab-pane
             class="d-flex candy-tab-box"
-            :class="{ 'cursor-no-drop': !userAssets.length }"
-            :disabled="!userAssets.length"
+            :class="{ 'cursor-no-drop': !userAssets.total }"
+            :disabled="!userAssets.total"
             label="History"
             name="history">
             <!-- <div v-if="candyLoading" class="user-candy-skeletion">
@@ -333,8 +333,13 @@ export default {
 
       candyLoading: true,
 
-      // 用户账户
-      userAssets: [],
+      // 用户账户信息
+      userAssets: {
+        list: [],
+        pn: 1,
+        ps: 10,
+        total: 0
+      },
 
       // 用户交易记录信息
       userRecords: {
@@ -421,7 +426,7 @@ export default {
       if (this.candyTab !== 'balance') return
       this.candyLoading = true
       const res = await getUserAssets()
-      if (res.code === 1000) {
+      if (res.code === 1000 && res.data) {
         this.userAssets = res.data
       }
       this.candyLoading = false

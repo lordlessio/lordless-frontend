@@ -8,6 +8,7 @@ import ldb from './ldb'
 import contract from './contract'
 import status from './status'
 import region from './region'
+import candy from './candy'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -20,7 +21,8 @@ const store = new Vuex.Store({
     ldb,
     contract,
     status,
-    region
+    region,
+    candy
   }
 })
 

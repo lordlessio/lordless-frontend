@@ -101,6 +101,9 @@ export default {
     // ...mapActions('region', [
     //   actionTypes.REGION_SET_REGIONS
     // ]),
+    ...mapActions('candy', [
+      actionTypes.CANDY_SET_CANDY_PRICE
+    ]),
     ...mapActions('status', [
       actionTypes.STATUS_INIT_BROSWER
     ]),
@@ -150,6 +153,7 @@ export default {
     // document.getElementById('outside-loading').style = 'display: none'
     this.$nextTick(() => {
       // this[actionTypes.REGION_SET_REGIONS]()
+      this[actionTypes.CANDY_SET_CANDY_PRICE]()
       this[actionTypes.STATUS_INIT_BROSWER]()
       this[actionTypes.USER_SET_USER_BY_TOKEN]()
       this[actionTypes.USER_SET_USER_HOME]()
