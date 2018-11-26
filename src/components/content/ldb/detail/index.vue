@@ -754,7 +754,8 @@ export default {
       if (res.code === 1000) {
         cbData.data = res.data
 
-        this.$notify({
+        // 非移动端使用 notify 的形式做提示
+        !this.isMobile && this.$notify({
           type: 'success',
           title: 'Cheers!',
           message: `+ ${res.data.executor.reward.count.toFixed(4)} ${ldbTaskType.candyType.symbol.toUpperCase()}`,
@@ -785,7 +786,7 @@ export default {
           this.$set(this.ldbInfo, 'apLeft', 0)
         }
       }
-      return cb(cbData)
+      return cb && cb(cbData)
     },
 
     /**

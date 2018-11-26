@@ -21,13 +21,14 @@
                   class="inline-block mobile-circle-candy"
                   :style="`animation-delay: ${index * .35}s;`"
                   :data-num="`≈ ${(candy.ldbTaskType.priceInUSD * candy.ldbTaskType.candyType.USD2TokenCount).toFixed(4)}`"
+                  :data-tip="`+ ${(candy.ldbTaskType.priceInUSD * candy.ldbTaskType.candyType.USD2TokenCount).toFixed(4)} ${candy.ldbTaskType.candyType.symbol.toLocaleUpperCase()}`"
                   @click="receiveCandy(candy)">
                   <svg>
                     <use xlink:href="#ldb-candy-circle"/>
                   </svg>
                   <span class="inline-block mobile-candies-coin">
                     <svg>
-                      <use :xlink:href="`#coin-${candy.ldbTaskType.candyType.symbol.toLowerCase()}`"/>
+                      <use :xlink:href="`#coin-${candy.ldbTaskType.candyType.symbol.toLocaleLowerCase()}`"/>
                     </svg>
                   </span>
                 </span>
@@ -782,23 +783,23 @@ export default {
     }
   }
 
-  // @keyframes candyAfterAnimate {
-  //   0% {
-  //     transform: translate(-40%, 5px) translateZ(0);
-  //     animation-timing-function: ease-in;
-  //   }
-  //   20% {
-  //     transform: translate(-40%, 0px) translateZ(0);
-  //     opacity: 1;
-  //   }
-  //   50% {
-  //     animation-timing-function: ease-out;
-  //   }
-  //   100% {
-  //     transform: translate(-40%, -5px) translateZ(0);
-  //     opacity: 0;
-  //   }
-  // }
+  @keyframes candyAfterAnimate {
+    0% {
+      transform: translate(-40%, 5px) translateZ(0);
+      animation-timing-function: ease-in;
+    }
+    20% {
+      transform: translate(-40%, 0px) translateZ(0);
+      opacity: 1;
+    }
+    50% {
+      animation-timing-function: ease-out;
+    }
+    100% {
+      transform: translate(-40%, -5px) translateZ(0);
+      opacity: 0;
+    }
+  }
   @keyframes candiesShow {
     0% {
       opacity: 0;
@@ -818,22 +819,22 @@ export default {
           opacity: 0;
           transition: opacity .5s ease-out;
         }
-        // &::before {
-        //   opacity: 0;
-        //   transition-duration: 0s;
-        // }
-        // &::after {
-        //   animation: candyAfterAnimate 1s 1;
-        // }
+        &::before {
+          opacity: 0;
+          transition-duration: 0s;
+        }
+        &::after {
+          animation: candyAfterAnimate 1s 1;
+        }
       }
     }
-    // &.afterAnimate {
-    //   .mobile-circle-candy {
-    //     &::after {
-    //       animation: candyAfterAnimate 1s 1;
-    //     }
-    //   }
-    // }
+    &.afterAnimate {
+      .mobile-circle-candy {
+        &::after {
+          animation: candyAfterAnimate 1s 1;
+        }
+      }
+    }
   }
   .mobile-circle-candy {
     position: relative;
@@ -865,7 +866,7 @@ export default {
       color: #EA3C53;
     }
     &::after {
-      content: attr(data-msg);
+      content: attr(data-tip);
       position: absolute;
       top: -25px;
       left: 50%;
