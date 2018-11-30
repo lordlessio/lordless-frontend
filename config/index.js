@@ -78,7 +78,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsDllDirectory: 'static/dll',
     ossPublicPath,
-    assetsPublicPath: `${env.LDBICON_ORIGIN}/${ossPublicPath}`,
+    assetsPublicPath: `//lordless-sh.oss-cn-shanghai.aliyuncs.com/${ossPublicPath}`,
 
     /**
      * Source Maps
