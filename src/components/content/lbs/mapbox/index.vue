@@ -146,7 +146,7 @@ export default {
 
         // 创建 Image markers
         const imgSrc = `${process.env.LDBICON_ORIGIN}${ldbIcon.source.map}`
-        // const imgSrc = 'http://lordless.oss-cn-hongkong.aliyuncs.com/console/ldbIcon/2018-08-04/1533395070990.png'
+        // const imgSrc = 'http://lordless-sh.oss-cn-shanghai.aliyuncs.com/console/ldbIcon/2018-08-04/1533395070990.png'
         const markerDom = this.createImageMarker({ name, imgSrc, level: chain.level, ap, apLeft })
         // const { id, fields } = item
         // const _id = id
@@ -301,7 +301,7 @@ export default {
 
         // 创建 markers
         const poster = `${process.env.LDBICON_ORIGIN}${ldbIcon.source.map}`
-        // const poster = 'http://lordless.oss-cn-hongkong.aliyuncs.com/console/ldbIcon/2018-08-04/1533395070990.png'
+        // const poster = 'http://lordless-sh.oss-cn-shanghai.aliyuncs.com/console/ldbIcon/2018-08-04/1533395070990.png'
         const pointDom = this.createPointMarker({ _id, name, poster, level: chain.level })
         pointDom.addEventListener('click', () => {
           this.flyToCoords({ center: coords, pitch: this.mPitch, zoom: this.scrollZooms[this.scrollZooms.length - 1] })

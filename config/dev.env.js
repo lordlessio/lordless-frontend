@@ -8,7 +8,6 @@ const port = argv.port || 8080
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   port,
-  LDBICON_ORIGIN: '"//lordless.oss-cn-hongkong.aliyuncs.com"',
   BACKEND_SERVER: '"//10.229.6.223:8080/lordless"',
   // BACKEND_SERVER: `"//ropsten.lordless.games"`,
   ETHERSCANURL: '"https://ropsten.etherscan.io/"',

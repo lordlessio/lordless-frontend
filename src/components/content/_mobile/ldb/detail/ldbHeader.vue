@@ -36,7 +36,7 @@
             </div>
           </div>
           <div class="detail-mobile-poster">
-            <!-- <img src="http://lordless.oss-cn-hongkong.aliyuncs.com//lordlesstest/ldbicon/!-4-detail.jpg?x-oss-process=image/resize,w_1600"/> -->
+            <!-- <img src="http://lordless-sh.oss-cn-shanghai.aliyuncs.com//lordlesstest/ldbicon/!-4-detail.jpg?x-oss-process=image/resize,w_1600"/> -->
             <lordless-img absolute type="span" :src="info.ldbIcon.source.detail | reldbIcon('detail')"></lordless-img>
           </div>
           <!-- <div class="alone-layer detail-mobile-level">
