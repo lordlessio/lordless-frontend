@@ -55,8 +55,8 @@ export default {
 
   .ld-switch-input {
     padding: 0 10px 0 20px;
-    height: 34px;
-    line-height: 34px;
+    height: 24px;
+    line-height: 24px;
     color: #fff;
     background-color: $--text-blue-color;
     border-radius: 20px;
@@ -64,6 +64,8 @@ export default {
   }
   .ld-switch-icon {
     margin-left: 5px;
+    font-size: 18px;
+    color: #0079FF;
     transform: rotateZ(180deg);
     transition: transform .3s;
     &.change {

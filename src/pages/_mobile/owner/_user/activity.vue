@@ -12,7 +12,7 @@
         <div class="d-flex f-auto-center TTFontBolder">
           <span>Try to purchase or sell a Tavern in</span>
           <span class="inline-block">
-            <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/market')">Marketplace</lordless-btn>
+            <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/taverns')">Taverns</lordless-btn>
           </span>
         </div>
       </div>
@@ -76,8 +76,11 @@ import ActivityCard from '@/components/reuse/card/activity'
 
 import { getActivitysByUser } from 'api'
 import { mapState } from 'vuex'
+
+import { activatedMixins } from '@/mixins'
 export default {
   name: 'mobile-owner-activity',
+  mixins: [activatedMixins],
   data: () => {
     return {
 

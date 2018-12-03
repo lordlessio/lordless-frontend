@@ -1,6 +1,6 @@
 <template>
   <section id="mobile-sort-bar" class="relative mobile-sort-bar" :class="{ 'inherit-height': inheritHeight }">
-    <div id="sort-bar-box" class="alone-layer lg-d-flex f-align-center relative sort-bar-box">
+    <div ref="sort-bar-box" id="sort-bar-box" class="alone-layer lg-d-flex f-align-center relative sort-bar-box">
       <div class="relative sort-bar-container" :class="{ 'sort': openModel }">
         <div class="d-flex f-align-center sort-bar-cnt">
           <slot></slot>
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { addClass, removeClass, hasClass } from 'utils/tool'
+import { addClass, removeClass, hasClass, scrollTo } from 'utils/tool'
 import { layoutMixins } from '@/mixins'
 import SwitchInput from '@/components/stories/switchInput'
 export default {
@@ -98,6 +98,8 @@ export default {
   data: (vm) => {
     console.log('------ sort bar', vm.sortItems)
     return {
+      parentNode: null,
+      scrollHandle: null,
       openModel: false,
 
       // order options
@@ -133,6 +135,12 @@ export default {
       this.openModel = !this.openModel
     },
 
+    initSortBar () {
+      this.$nextTick(() => {
+        if (!this.static && this.showSort) this.sortBarScroll()
+      })
+    },
+
     /**
      * order 改变触发事件
      */
@@ -140,7 +148,7 @@ export default {
       if (this.openModel) {
         this.toggleBar()
       }
-      document.documentElement.scrollTop = 100
+      scrollTo(0)
       this.$emit('order', order)
     },
 
@@ -150,7 +158,7 @@ export default {
     chooseSort (sort) {
       if (this.sortModel === sort) return
 
-      document.documentElement.scrollTop = 100
+      scrollTo(0)
 
       this.sortModel = sort
       this.toggleBar()
@@ -161,13 +169,15 @@ export default {
      * sortBar 滚动监听
      */
     sortBarScroll () {
+      this.scrollHandle && this.destroySortBar()
       console.log('sortBarScroll')
       let navHeight = 0
       let _navHeight = 0
 
       const h = this.scrollHeight
       const pdom = document.getElementById('mobile-sort-bar')
-      const sdom = document.getElementById('sort-bar-box')
+      const sdom = this.$refs['sort-bar-box']
+
       const isMobile = this.isMobile
       const func = () => {
         // 因为 mobile navbar 高度固定，所以第一次取到之后就可以保存到变量
@@ -194,20 +204,36 @@ export default {
           sdom.style.top = navHeight + 'px'
         }
       }
-      document.addEventListener('scroll', func)
-      this.$once('hook:beforeDestroy', () => {
-        this.openModel = false
-        if (!pdom.firstChild) {
-          pdom.appendChild(sdom)
-        }
-        document.removeEventListener('scroll', func)
-      })
+
+      func()
+
+      this.parentNode = pdom
+      this.scrollHandle = func
+
+      this.$nextTick(() => document.addEventListener('scroll', this.scrollHandle))
+    },
+    destroySortBar (pdom = this.parentNode) {
+      this.openModel = false
+
+      // const pdom = document.getElementById('mobile-sort-bar')
+      const sdom = this.$refs['sort-bar-box']
+      if (pdom && !pdom.firstChild) {
+        pdom.appendChild(sdom)
+      }
+      document.removeEventListener('scroll', this.scrollHandle)
     }
   },
+  deactivated () {
+    this.destroySortBar()
+  },
+  beforeDestroy () {
+    this.destroySortBar()
+  },
+  activated () {
+    this.initSortBar()
+  },
   mounted () {
-    this.$nextTick(() => {
-      if (!this.static && this.showSort) this.sortBarScroll()
-    })
+    this.initSortBar()
   }
 }
 </script>
@@ -217,7 +243,7 @@ export default {
    *  mobile-sort-bar --- begin
    */
   .mobile-sort-bar {
-    height: 60px;
+    height: 50px;
     z-index: 9;
     &.inherit-height {
       height: inherit;
@@ -287,6 +313,8 @@ export default {
     }
   }
   .sort-bar-icon {
+    font-size: 18px;
+    color: #0079FF;
     transition: transform .15s;
   }
 

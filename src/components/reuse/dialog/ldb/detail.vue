@@ -1,11 +1,13 @@
 <template>
   <div>
     <slide-dialog
+      ref="tavernSlideDialog"
       :visible.sync="detailModel"
+      :showClose="false"
       @opened="dialogOpen"
       @close="dialogClose">
       <!-- <ldb-detail-skeletion :visible="loading" dialog></ldb-detail-skeletion> -->
-      <div class="text-nowrap ldb-detail-dialog-tip">
+      <!-- <div class="text-nowrap ldb-detail-dialog-tip">
         <header-tip
           :market="false"
           :leftInfo="!isMobile"
@@ -13,13 +15,14 @@
           :mobile="isMobile"
           :loginText="isMobile ? 'Started' : 'Get Started'"
           @click="$emit('tipClick')"/>
-      </div>
+      </div> -->
       <ldb-detail
         v-if="!loading"
         :class="{ 'blur': blurs[1] }"
         ref="ldbDetail"
         dialog
         :detailInfo.sync="detailInfo"
+        @tClose="tCloseHandle"
         @initInfo="initDetailInfo"
         @touchmove.prevent>
       </ldb-detail>
@@ -84,6 +87,10 @@ export default {
     ...mapMutations('layout', [
       mutationTypes.LAYOUT_SET_BLURS
     ]),
+
+    tCloseHandle () {
+      this.$refs.tavernSlideDialog && this.$refs.tavernSlideDialog.closeModel()
+    },
 
     /**
      * 对话框打开事件

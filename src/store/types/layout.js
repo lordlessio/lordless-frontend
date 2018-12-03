@@ -9,12 +9,16 @@ const mutationTypes = {
   LAYOUT_SET_APP_OPTIONS: 'layoutSetAppOpts',
   LAYOUT_SET_BLURS: 'layoutSetBlurs',
   LAYOUT_SET_MESSAGE_TIP: 'layoutSetMsgTip',
-  LAYOUT_SET_META_OPEN: 'layoutSetMetaOpen'
+  LAYOUT_SET_META_OPEN: 'layoutSetMetaOpen',
+  LAYOUT_SET_ACTIVATED_OPTIONS: 'layoutSetActivated',
+  LAYOUT_SET_PHISTORY: 'layoutSetPHistory',
+  LAYOUT_SET_POP_DIRECTION: 'layoutSetPopDirection',
+  LAYOUT_SET_POP_TRANSITION: 'layoutSetPopTransition'
 }
 const actionTypes = {
-  LAYOUT_SET_APP_OPTIONS: 'layoutSetAppOpts',
-  LAYOUT_SET_BLURS: 'layoutSetBlurs',
-  LAYOUT_SET_META_OPEN: 'layoutSetMetaOpen'
+  LAYOUT_SET_APP_OPTIONS: 'layoutSetAppOpts_action',
+  LAYOUT_SET_BLURS: 'layoutSetBlurs_action',
+  LAYOUT_SET_META_OPEN: 'layoutSetMetaOpen_action'
 }
 
 module.exports = {

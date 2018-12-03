@@ -92,8 +92,8 @@ export default {
       width: 100%;
     }
     &.is-mobile {
-      top: -10px;
-      right: -10px;
+      top: 0;
+      right: 0;
       width: 40px;
       height: 40px;
     }

@@ -21,6 +21,18 @@ export default {
     // blur 状态集合，多级状态使用追加形式
     blurs: [],
 
+    // keep alive activated option
+    activated: {},
+
+    // lordless page history,页面载入队列记录
+    pHistory: {},
+
+    // lordless pop 滚动方向
+    popDirection: 'forward',
+
+    // lordless pop 滚动 transition name
+    popTransition: '',
+
     // app 状态集合
     app: {},
     header: {
@@ -83,6 +95,36 @@ export default {
     }
   },
   mutations: {
+
+    /**
+     * 存储 lordless page History
+     */
+    [mutationTypes.LAYOUT_SET_PHISTORY] (state, path = '') {
+      const _pHistory = state.pHistory
+      if (_pHistory[path]) delete _pHistory[path]
+      _pHistory[path] = Object.keys(_pHistory).length + 1
+    },
+
+    /**
+     * 存储 lordless pop 滚动方向
+     */
+    [mutationTypes.LAYOUT_SET_POP_DIRECTION] (state, direction = '') {
+      state.popDirection = direction
+    },
+
+    /**
+     * 存储 lordless pop 滚动 transition name
+     */
+    [mutationTypes.LAYOUT_SET_POP_TRANSITION] (state, transition = '') {
+      state.popTransition = transition
+    },
+
+    /**
+     * 修改 activated 配置
+     */
+    [mutationTypes.LAYOUT_SET_ACTIVATED_OPTIONS] (state, payload = {}) {
+      state.activated = Object.assign({}, state.activated, payload)
+    },
 
     /**
      * 修改 metaOpen 配置参数

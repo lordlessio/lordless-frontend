@@ -15,13 +15,13 @@
 <script>
 import MobileOwnerInfo from '@/components/content/_mobile/info'
 import TavernDialog from '@/components/reuse/dialog/ldb/detail'
-import { userMixins } from '@/mixins'
+import { userMixins, activatedMixins } from '@/mixins'
 
 import { historyState } from 'utils/tool'
 import { mapState } from 'vuex'
 export default {
   name: 'mobile-me-info',
-  mixins: [userMixins],
+  mixins: [userMixins, activatedMixins],
   data: () => {
     return {
       detailModel: false,

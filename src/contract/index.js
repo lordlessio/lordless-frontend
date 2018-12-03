@@ -1,7 +1,7 @@
 
 // 公用 contract 函数
-const initContract = (json, web3js) => {
-  if (!web3js || !web3js.eth) return
+export const initContract = (json, web3js) => {
+  if (!web3js || !web3js.eth) return null
   // const _contract = contract(json)
   // _contract.defaults({
   //   from: account
@@ -22,7 +22,7 @@ const initContract = (json, web3js) => {
     }
   })
   Object.defineProperty(contract, 'methods', {
-    value: (name, values) => {
+    value: (name, values = []) => {
       return new Promise((resolve, reject) => {
         contract[name](...values, (err, res) => {
           if (err) return reject(err)
@@ -36,5 +36,6 @@ const initContract = (json, web3js) => {
 
 export const TavernNFTs = (web3js) => initContract(process.env.contract.TavernNFTs, web3js)
 export const NFTsCrowdsale = (web3js) => initContract(process.env.contract.NFTsCrowdsale, web3js)
+export const Airdrop = (web3js) => initContract(process.env.contract.Airdrop, web3js)
 // export const Power = (web3js) => initContract(process.env.contract.Power, web3js)
 // export const Building = (web3js) => initContract(process.env.contract.Building, web3js)

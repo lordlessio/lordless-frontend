@@ -13,7 +13,7 @@
           <div class="d-flex f-auto-center TTFontBolder">
             <span>Try to buy a Tavern in</span>
             <span class="inline-block">
-              <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/market')">Marketplace</lordless-btn>
+              <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/taverns')">Taverns</lordless-btn>
             </span>
           </div>
         </div>
@@ -134,8 +134,11 @@ import { historyState } from 'utils/tool'
 
 import { getChainLdbs } from 'api'
 import { mapState } from 'vuex'
+
+import { activatedMixins } from '@/mixins'
 export default {
   name: 'mobile-owner-taverns',
+  mixins: [activatedMixins],
   data: () => {
     return {
 

@@ -1,10 +1,17 @@
 <template>
   <div class="mobile-main-page">
     <mobile-nav-bar
+      ref="mobile-nav-bar"
       v-show="(scrollOpt.show && (!connectModel || !web3Model)) || connectModel || web3Model"
       v-bind="scrollOpt"
       @history="$router.push('/owner/info')"/>
-    <router-view v-show="pageShow" class="mobile-children-page"/>
+
+    <transition :name="popTransition">
+      <keep-alive :max="20">
+        <router-view v-if="$route.meta.keepAlive && pageShow" class="lordless-pop-page"/>
+      </keep-alive>
+    </transition>
+    <router-view v-if="!$route.meta.keepAlive && pageShow"/>
     <div
       v-if="web3Model || connectModel || web3Loading"
       class="d-flex mobile-plugins-box">
@@ -89,6 +96,9 @@ export default {
     ...mapState('user', [
       'userInfo'
     ]),
+    ...mapState('layout', [
+      'popTransition'
+    ]),
     web3Loading () {
       return this.web3Opt.loading
     },
@@ -130,9 +140,9 @@ export default {
       for (const item of navbarTexts) {
         if (route.path.match(item.match)) {
           this.$set(this, 'scrollOpt', Object.assign({}, opt, item))
-          this.$nextTick(() => {
-            console.log('check route', item, (this.scrollOpt.show && (!this.connectModel || !this.web3Model)) || this.connectModel || this.web3Model)
-          })
+          // this.$nextTick(() => {
+          //   console.log('check route', item, (this.scrollOpt.show && (!this.connectModel || !this.web3Model)) || this.connectModel || this.web3Model)
+          // })
           break
         }
       }
@@ -141,6 +151,11 @@ export default {
     async checkUser () {
       this.$refs.mobileOwnerAuthorize.checkoutAuthorize()
     }
+  },
+  activated () {
+    console.log(' mobile owner activated ')
+    this.checkRoute()
+    this.$nextTick(() => this.$refs['mobile-nav-bar'].init())
   },
   mounted () {
     this.$nextTick(() => this.checkRoute())

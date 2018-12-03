@@ -25,8 +25,7 @@
           :radius="radius"
           :seed="userInfo.address"
           :scale="scale"
-          :theme="theme">
-        </lordless-blockies>
+          :theme="theme"/>
       </div>
       <!-- <p class="lg-hidden user-avatar-logout" @click.stop="logout">Logout</p> -->
     </div>

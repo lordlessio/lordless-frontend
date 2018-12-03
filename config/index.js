@@ -61,7 +61,7 @@ module.exports = {
     cssSourceMap: true,
     proxyTable: {
       '/lordless': {
-        target: 'http://10.229.6.223:7001',
+        target: 'http://10.229.4.70:7001',
         changeOrigin: true,
         pathRewrite: {'^/lordless': ''}
       },

@@ -15,6 +15,7 @@ const userRecord = require('./userRecord')
 const activity = require('./activity')
 const home = require('./home')
 const region = require('./region')
+const airdrop = require('./airdrop')
 
 module.exports = merge(
   aMap(axios),
@@ -31,5 +32,6 @@ module.exports = merge(
   userRecord(axios),
   activity(axios),
   home(axios),
-  region(axios)
+  region(axios),
+  airdrop(axios)
 )

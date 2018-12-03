@@ -62,7 +62,7 @@ import { contractMixins, publicMixins } from '@/mixins'
 import { actionTypes } from '@/store/types'
 import { mapState, mapActions } from 'vuex'
 export default {
-  name: 'authorize-dialog',
+  name: 'lordless-authorize',
   mixins: [contractMixins, publicMixins],
   props: {
     avatar: {

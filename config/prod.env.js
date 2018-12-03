@@ -1,5 +1,6 @@
 'use strict'
-const contract = JSON.stringify(require('../.contract/mainnet.json'))
+const merge = require('webpack-merge')
+const contract = JSON.stringify(merge(require('../.contract/mainnet.json'), require('../.contract/airdrop/mainnet.json')))
 
 module.exports = {
   NODE_ENV: '"production"',

@@ -3,6 +3,7 @@ const files = [
   '/reuse/_mobile/navbar',
 
   '/reuse/tavernPoster',
+  '/reuse/dialog/authorize',
 
   '/stories/blockies',
   '/stories/button',

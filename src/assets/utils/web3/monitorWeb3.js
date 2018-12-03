@@ -136,17 +136,20 @@ export const monitorWeb3 = (web3Opt) => {
     }
   }
 
-  let nowt
-  const loopStep = async (timestamp) => {
-    if (!nowt) nowt = timestamp
-    if (timestamp - nowt > 1000) {
+  const loopTCO = () => {
+    let nowt
+    const loopStep = async (timestamp) => {
+      if (!nowt) nowt = timestamp
+      if (timestamp - nowt > 1000) {
       // console.time('loopStep')
-      await checkWeb3()
-      // console.timeEnd('loopStep')
-      nowt = timestamp
+        await checkWeb3()
+        // console.timeEnd('loopStep')
+        nowt = timestamp
+        return window.requestAnimationFrame(loopStep)
+      }
       return window.requestAnimationFrame(loopStep)
     }
     return window.requestAnimationFrame(loopStep)
   }
-  return window.requestAnimationFrame(loopStep)
+  return loopTCO()
 }

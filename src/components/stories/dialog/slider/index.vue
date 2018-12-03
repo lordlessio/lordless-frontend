@@ -3,6 +3,7 @@
     <dialog-slide
       :visible.sync="dialogModel"
       :popstateModel="popstateModel"
+      :showClose="showClose"
       @opened="$emit('opened')"
       @open="openModel"
       @close="closeModel"
@@ -31,6 +32,10 @@ export default {
     visible: {
       type: Boolean,
       default: false
+    },
+    showClose: {
+      type: Boolean,
+      default: true
     }
   },
   data: (vm) => {
@@ -97,6 +102,7 @@ export default {
       this.prohibitScroll()
     },
     closeModel () {
+      this.dialogModel = false
       this.$emit('close')
       this[actionTypes.LAYOUT_SET_APP_OPTIONS]({ transform: false })
       this.freeScroll()

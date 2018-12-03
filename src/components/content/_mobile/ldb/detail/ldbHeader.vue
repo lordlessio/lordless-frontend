@@ -9,6 +9,18 @@
     <transition name="ld-hide-fade" @after-enter="afterEnter">
       <section v-if="!loading && info" id="mobile-detail-header" class="mobile-detail-header">
         <!-- <div class="alone-layer absolute-full detail-header-mask"></div> -->
+        <!-- <span @click.stop="$emit('tClose')" class="inline-block tavern-header-return">
+          <i class="el-icon-close"></i>
+        </span>
+        <div class="text-nowrap tavern-header-tip">
+          <header-tip
+            :market="false"
+            :leftInfo="false"
+            :scale="6"
+            :mobile="true"
+            loginText="Started"
+            @click="$emit('tipClick')"/>
+        </div> -->
         <div class="detail-header-top">
           <div v-if="!owner" class="detail-mobile-candies">
             <div id="mobile-candies-box" class="alone-layer mobile-candies-container" :class="{ 'show': rendered }">
@@ -109,16 +121,16 @@
                   </p>
                 </div>
                 <figcaption class="d-flex f-align-center">
-                  <div class="v-flex d-flex f-align-center detail-lord-box">
+                  <div v-if="info.lord" class="v-flex d-flex f-align-center detail-lord-box">
                     <lordless-blockies
                       theme="dark"
                       :scale="7"
                       jump
-                      :seed="info.lord.address">
+                      :seed="info.lord._id">
                     </lordless-blockies>
                     <div class="v-flex d-flex col-flex f-justify-around detail-lord-info">
                       <p>{{ info.lord.nickName || 'LORDLESS' }}</p>
-                      <p><link-symbol underline :to="info.lord.address">{{ info.lord.address | splitAddress({ before: 6, end: 4, symbol: '***' }) }}</link-symbol></p>
+                      <p><link-symbol underline :to="info.lord._id">{{ info.lord._id | splitAddress({ before: 6, end: 4, symbol: '***' }) }}</link-symbol></p>
                     </div>
                   </div>
                   <lordless-btn
@@ -140,6 +152,7 @@
 
 <script>
 import HeaderSkeletion from '@/components/skeletion/_mobile/ldb/detail/header'
+import HeaderTip from '@/components/reuse/headerTip'
 
 import { addClass, removeClass, transitionEvent, _setTimeout } from 'utils/tool'
 export default {
@@ -268,7 +281,8 @@ export default {
     // }
   },
   components: {
-    HeaderSkeletion
+    HeaderSkeletion,
+    HeaderTip
   },
   methods: {
 
@@ -520,6 +534,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .tavern-header-return {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    font-size: 24px;
+    color: #555;
+    // width: 20px;
+    // height: 20px;
+    // fill: #999;
+    z-index: 5;
+    cursor: pointer;
+  }
+  .tavern-header-tip {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    z-index: 9;
+  }
   .mobile-header-box {
     &.dialog {
       // .header-bottom-figure {
@@ -606,7 +638,7 @@ export default {
 
   .header-container {
     position: relative;
-    padding: 0 10px;
+    padding: 0 18px;
     // min-width: 1000px;
     // max-width: 1280px;
     z-index: 2;
@@ -813,7 +845,7 @@ export default {
     left: 0;
     top: 0;
     &.animate {
-      z-index: -1;
+      z-index: 9;
       .mobile-circle-candy {
         >svg, >span, &::before {
           opacity: 0;

@@ -153,6 +153,11 @@
         fill: #fff;
       }
     }
+    &.promotion {
+      font-family: inherit;
+      color: #fff;
+      background-image: linear-gradient(-45deg, #F5515F 0%, #9F041B 100%);
+    }
     // &.pink {
     //   color: #fff;
     //   border: none;

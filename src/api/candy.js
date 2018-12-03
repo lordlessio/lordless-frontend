@@ -8,8 +8,13 @@ module.exports = axios => {
     getCandyDetail: (id) => {
       return axios.get(`/api/candy/${id}`)
     },
+    // 获取糖果价格
     getCandyPrice: () => {
       return axios.get('/api/candy/price')
+    },
+    // 获取糖果 claimed
+    getCandyClaimed: () => {
+      return axios.get('/api/candy/claimed')
     }
   }
 }

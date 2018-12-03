@@ -5,11 +5,6 @@
       v-if="!isMobile"
       @path="pathChange"
       @openDetail="openDetail"/>
-    <mobile-market-page
-      ref="market"
-      v-if="isMobile"
-      @path="pathChange"
-      @openDetail="openDetail"/>
     <detail-dialog
       v-model="detailModel"
       :ldbId="detailInfo._id"
@@ -20,7 +15,6 @@
 
 <script>
 import MarketPage from '@/components/content/market'
-import MobileMarketPage from '@/components/content/_mobile/market'
 
 import DetailDialog from '@/components/reuse/dialog/ldb/detail'
 
@@ -42,7 +36,6 @@ export default {
   },
   components: {
     MarketPage,
-    MobileMarketPage,
 
     DetailDialog
   },

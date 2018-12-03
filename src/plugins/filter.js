@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import {
   formatDue,
+  formatNumber,
   formatDecimal,
   sliceStr,
   splitAddress,
@@ -22,6 +23,8 @@ Vue.filter('splitAddress', splitAddress)
 Vue.filter('dateFormat', dateFormat)
 
 Vue.filter('timeFormat', timeFormat)
+
+Vue.filter('formatNumber', formatNumber)
 
 Vue.filter('formatDecimal', formatDecimal)
 

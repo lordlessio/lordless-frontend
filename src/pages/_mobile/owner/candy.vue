@@ -6,8 +6,10 @@
 
 <script>
 import MobileCandy from '@/components/content/_mobile/candy'
+import { activatedMixins } from '@/mixins'
 export default {
   name: 'mobile-candy-page',
+  mixins: [activatedMixins],
   components: {
     MobileCandy
   }

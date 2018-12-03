@@ -15,8 +15,8 @@
         name="bounty">
       </el-tab-pane>
       <el-tab-pane
-        label="Reward"
-        name="reward">
+        label="Promotion"
+        name="promotion">
       </el-tab-pane>
     </el-tabs>
     <div id="mobile-quests-content-box" class="mobile-quests-content-box">
@@ -35,7 +35,7 @@
                 </p>
                 <p class="quests-empty-desc">You have not claimed any candy.</p>
                 <div class="quests-empty-btns">
-                  <lordless-btn class="quests-empty-btn" theme="blue" inverse shadow @click="$router.push('/market')">Bottoms up</lordless-btn>
+                  <lordless-btn class="quests-empty-btn" theme="blue" inverse shadow @click="$router.push('/taverns')">Bottoms up</lordless-btn>
                 </div>
               </div>
             </div>
@@ -53,7 +53,7 @@
                 <p v-if="loading && !infos.bottoms.noMore">
                   <i class="el-icon-loading"></i>
                 </p>
-                <p v-else-if="infos.bottoms.noMore">noMore datas</p>
+                <p v-else-if="infos.bottoms.noMore">AH! no more Bottoms up~</p>
               </div>
               <!-- <div class="quest-pagination-box">
                 <lordless-pagination
@@ -96,7 +96,7 @@
                 </p>
                 <p class="quests-empty-desc">You have not apply any quests now.</p>
                 <div class="quests-empty-btns">
-                  <lordless-btn class="quests-empty-btn" theme="blue" inverse shadow @click="$router.push('/market')">Apply a quest</lordless-btn>
+                  <lordless-btn class="quests-empty-btn" theme="blue" inverse shadow @click="$router.push('/taverns')">Apply a quest</lordless-btn>
                 </div>
               </div>
             </div>
@@ -113,7 +113,7 @@
                 <p v-if="loading && !infos.bounty.noMore">
                   <i class="el-icon-loading"></i>
                 </p>
-                <p v-else-if="infos.bounty.noMore">noMore datas</p>
+                <p v-else-if="infos.bounty.noMore">AH! no more Bounty~</p>
               </div>
               <!-- <div class="quest-pagination-box">
                 <lordless-pagination
@@ -130,11 +130,11 @@
             </div>
           </transition>
         </div>
-        <div v-else-if="currentTab === 'reward'" class="mobile-quests-reward">
+        <div v-else-if="currentTab === 'promotion'" class="mobile-quests-promotion">
           <transition name="ld-hide-fade" mode="out-in" @after-enter="afterEnter">
-            <mobile-reward-skeletion class="quest-cnt-box" v-if="loading && !infos.reward.total"/>
+            <mobile-promotion-skeletion class="quest-cnt-box" v-if="loading && !infos.promotion.total"/>
             <div
-              v-else-if="!loading && !infos.reward.total"
+              v-else-if="!loading && !infos.promotion.total"
               class="d-flex f-auto-center mobile-quests-empty mobile-bounty-empty">
               <div class="quests-empty-container">
                 <p class="quests-empty-icon">
@@ -144,37 +144,25 @@
                 </p>
                 <p class="quests-empty-desc">You have no taverns now.</p>
                 <div class="quests-empty-btns">
-                  <lordless-btn class="quests-empty-btn" theme="blue" inverse shadow @click="$router.push('/market')">Buy a tavern</lordless-btn>
+                  <lordless-btn class="quests-empty-btn" theme="blue" inverse shadow @click="$router.push('/taverns')">Buy a tavern</lordless-btn>
                 </div>
               </div>
             </div>
-            <div v-else ref="rewardQuestCnt" class="quest-cnt-box quest-item-content">
+            <div v-else ref="promotionQuestCnt" class="quest-cnt-box quest-item-content">
               <ul>
                 <li
                   class="quest-item"
-                  v-for="(reward, index) of infos.reward.list" :key="index">
-                  <mobile-quest-reward
-                    :info="reward"/>
+                  v-for="(promotion, index) of infos.promotion.list" :key="index">
+                  <mobile-quest-promotion
+                    :info="promotion"/>
                 </li>
               </ul>
               <div class="text-center quest-item-loadmore">
-                <p v-if="loading && !infos.reward.noMore">
+                <p v-if="loading && !infos.promotion.noMore">
                   <i class="el-icon-loading"></i>
                 </p>
-                <p v-else-if="infos.reward.noMore">noMore datas</p>
+                <p v-else-if="infos.promotion.noMore">AH! no more Promotion~</p>
               </div>
-              <!-- <div class="quest-pagination-box">
-                <lordless-pagination
-                  :scrollE="rewardPageScrollE"
-                  :scrollOffset="150"
-                  class="quest-pagination-pages"
-                  :total="infos.reward.total"
-                  :currentPage="infos.reward.pn"
-                  :size="infos.reward.ps"
-                  theme="blue"
-                  background
-                  @currentChange="changePage($event, 'reward')"/>
-              </div> -->
             </div>
           </transition>
         </div>
@@ -185,21 +173,22 @@
 
 <script>
 import MobileQuestBounty from '@/components/reuse/_mobile/card/quests/bounty'
-import MobileQuestReward from '@/components/reuse/_mobile/card/quests/reward'
+import MobileQuestPromotion from '@/components/reuse/_mobile/card/quests/promotion'
 
 import MobileSortBar from '@/components/reuse/_mobile/sortBar'
 
 import MobileBottomsUpSkeletion from '@/components/skeletion/_mobile/quests/bottomsUp'
 import MobileBountySkeletion from '@/components/skeletion/_mobile/quests/bounty'
-import MobileRewardSkeletion from '@/components/skeletion/_mobile/quests/reward'
+import MobilePromotionSkeletion from '@/components/skeletion/_mobile/quests/promotion'
 
 import { getUserTasks } from 'api'
-import { historyState } from 'utils/tool'
+import { historyState, scrollTo } from 'utils/tool'
 
-import { publicMixins } from '@/mixins'
+import { publicMixins, activatedMixins } from '@/mixins'
+
 export default {
   name: 'mobile-quest-content',
-  mixins: [publicMixins],
+  mixins: [publicMixins, activatedMixins],
   props: {
     type: {
       type: String,
@@ -212,7 +201,7 @@ export default {
       tabFilters: {
         bottoms: 'candy',
         bounty: 'tasks',
-        reward: 'lord'
+        promotion: 'promotion'
       },
 
       // 当前 tab 区域,默认为地址栏参数
@@ -238,7 +227,7 @@ export default {
           total: 0,
           more: true
         },
-        reward: {
+        promotion: {
           pn: 1,
           ps: 10,
           list: [],
@@ -272,9 +261,6 @@ export default {
     },
     bountyPageScrollE () {
       return this.$refs.bountyQuestCnt
-    },
-    rewardPageScrollE () {
-      return this.$refs.rewardQuestCnt
     }
   },
   watch: {
@@ -289,17 +275,16 @@ export default {
     }
   },
   components: {
-    MobileQuestReward,
+    MobileQuestPromotion,
     MobileQuestBounty,
     MobileSortBar,
 
     MobileBottomsUpSkeletion,
     MobileBountySkeletion,
-    MobileRewardSkeletion
+    MobilePromotionSkeletion
   },
   methods: {
     afterEnter () {
-      console.log('afterEnter', this.currentTab)
       this.scrollListenerFunc()
     },
 
@@ -346,7 +331,7 @@ export default {
       this.$set(this.infos[_prevTab], 'scrollTop', _scrollTop)
 
       // 将 scrollTop 复位 为0
-      document.documentElement.scrollTop = 0
+      // scrollTo(0)
 
       historyState(`/owner/quest?type=${_currentTab}`)
       this.prevTab = _currentTab
@@ -361,7 +346,7 @@ export default {
       // 如果切换 tab 之前，待切换 tab 数据已存在，重新绑定 scroll 事件
       this.$nextTick(async () => {
         if (this.infos[_currentTab].total) {
-          this.scrollListenerFunc()
+          this.scrollListenerFunc({ chooseTab: true })
         }
       })
     },
@@ -419,22 +404,25 @@ export default {
     /**
      * scroll 监听事件
      */
-    scrollListenerFunc ({ bool = false, bottom = 80, pHeight = document.body.offsetHeight } = {}) {
+    scrollListenerFunc ({ bool = false, bottom = 80, pHeight = document.body.offsetHeight, chooseTab = false } = {}) {
       this.scrollHandle && document.removeEventListener('scroll', this.scrollHandle)
       this.scrollHandle = null
 
       console.log(' --- scroll')
       const box = document.getElementById('mobile-quests-content-box')
-      let bHeight = box.offsetHeight
+      let bHeight = box ? box.offsetHeight : 0
       // 如果 bHeight 不存在或者 bHeight - bottom 小于 pHeight, return
       if (!bHeight || bHeight - bottom < pHeight) return
 
       const _currentTab = this.currentTab
 
-      // 将 scrollTop 修改为当前 tab 的scrollTop值
-      const _cScrollTop = this.infos[_currentTab].scrollTop || 0
-      console.log('_cScrollTop', _cScrollTop)
-      document.documentElement.scrollTop = _cScrollTop
+      // chooseTab 根据已有 scrollTop 值做变化
+      if (chooseTab) {
+        // 将 scrollTop 修改为当前 tab 的scrollTop值
+        const _cScrollTop = this.infos[_currentTab].scrollTop || 0
+        console.log('_cScrollTop', _cScrollTop)
+        scrollTo(_cScrollTop)
+      }
 
       const handleFunc = () => {
         if (bool || this.infos[_currentTab].noMore) return
@@ -465,9 +453,22 @@ export default {
     questsTabFunc () {
       const questTabs = document.querySelector('.mobile-quests-tabs')
       document.body.appendChild(questTabs)
-      this.$once('hook:beforeDestroy', () => {
-        document.body.removeChild(questTabs)
-      })
+    },
+
+    /**
+     * quests destory 事件
+     */
+    questsDestory () {
+      // window.removeEventListener('popstate', this.popstateListener)
+
+      const tabs = document.querySelector('.mobile-quests-tabs')
+      tabs && tabs.parentNode.nodeName === 'BODY' && this.$el.appendChild(document.querySelector('.mobile-quests-tabs'))
+
+      // remove scroll listener
+      this.scrollHandle && document.removeEventListener('scroll', this.scrollHandle)
+      this.scrollHandle = null
+
+      window.removeEventListener('popstate', this.popstateListener)
     },
 
     /**
@@ -478,15 +479,21 @@ export default {
       this.popstateModel = true
     }
   },
+  activated () {
+    console.log('quests component activated')
+    this.scrollListenerFunc()
+    this.questsTabFunc()
+    window.addEventListener('popstate', this.popstateListener)
+  },
+  deactivated () {
+    this.questsDestory()
+  },
   beforeDestroy () {
-    window.removeEventListener('popstate', this.popstateListener)
-
-    // remove scroll listener
-    this.scrollHandle && document.removeEventListener('scroll', this.scrollHandle)
-    this.scrollHandle = null
+    this.questsDestory()
   },
   mounted () {
     this.questsTabFunc()
+
     // 监听 popstate 事件，主要用于 pushState 监听
     window.addEventListener('popstate', this.popstateListener)
     this.$nextTick(() => {

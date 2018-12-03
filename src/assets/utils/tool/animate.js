@@ -1,3 +1,4 @@
+import { scrollTo as _scrollTo } from './index'
 /*
  * Tween.js
  * t: current time（当前时间）；
@@ -189,12 +190,18 @@ export const scrollToTop = ({ target = null, before = document.documentElement.s
   const step = (timestamp) => {
     if (!st) st = timestamp
     const t = timestamp - st
+
+    // const s = Tween[lname][ltype](t, 0, before - end, duration)
+    // let top = before > end ? before - s + end : before - s
+
     let top = before - Tween[lname][ltype](t, 0, before - end, duration) + end
+
+    // console.log('top', before, Tween[lname][ltype](t, 0, before - end, duration), end, top)
 
     if (top <= end) top = end
 
     if (target) target.scrollTop = top
-    else document.documentElement.scrollTop = top
+    else _scrollTo(top)
     if (t >= duration) {
       if (cb) return cb()
       return true

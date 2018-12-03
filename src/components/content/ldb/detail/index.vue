@@ -22,6 +22,7 @@
       :loading="infoLoading"
       :owner="owner"
       :userInfo="userInfo"
+      @tClose="$emit('tClose')"
       @enter="contentShow = true"
       @setHome="setHome"
       @receive="receiveCandy"
@@ -250,7 +251,7 @@ export default {
     },
 
     owner () {
-      return this.ldbInfo.lord._id === this.userInfo._id
+      return this.ldbInfo.lord && (this.ldbInfo.lord._id === this.userInfo._id)
     }
   },
   watch: {
@@ -351,10 +352,12 @@ export default {
 
     async checkHome ({ ldbId = this.ldbInfo._id, userId = this.userInfo.address } = {}) {
       const res = await getHome()
+
+      let isHome = false
       if (res.code === 1000 && res.data) {
-        if (res.data._id === ldbId) this.isHome = true
-        else this.isHome = false
-      } else this.isHome = false
+        if (res.data._id === ldbId) isHome = true
+      }
+      this.isHome = isHome
     },
     /**
      * 获取 ldb 建筑详情
@@ -363,12 +366,13 @@ export default {
     async getLdbInfo (id) {
       this.infoLoading = true
       const res = await getLdbById({ id })
-      if (res.code === 1000) {
-        this.checkHome({ ldbId: res.data._id })
-        this.getLdbTasks({ ldbId: res.data._id })
-        this.getLdbRecords({ ldbInfo: res.data })
-        this.getUserPendings({ ldbInfo: res.data })
-        this.ldbInfo = Object.assign({}, this.ldbInfo, res.data)
+      if (res.code === 1000 && res.data) {
+        const { data } = res
+        this.checkHome({ ldbId: data._id })
+        this.getLdbTasks({ ldbId: data._id })
+        this.getLdbRecords({ ldbInfo: data })
+        this.getUserPendings({ ldbInfo: data })
+        this.ldbInfo = Object.assign({}, this.ldbInfo, data)
       } else {
         this.$notify.error({
           title: 'Network Error!',
@@ -868,7 +872,7 @@ export default {
       margin-top: 30px;
     }
     &.mobile {
-      margin: 0 auto 80px;
+      margin: 0 auto 30px;
       max-width: 768px;
     }
   }

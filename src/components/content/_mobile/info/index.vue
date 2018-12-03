@@ -60,7 +60,7 @@
             :gradient="apProgress.gradient"/>
         </div>
         <p class="d-flex user-progress-desc recover-at" v-if="new Date(overviews.recoverAt) - new Date() + 5000 > 0">
-          <countdown class="task-status-time" @countdownend="initInfo" :time="new Date(overviews.recoverAt) - new Date() + 5000" :interval="1000" tag="p">
+          <countdown class="task-status-time" @countdownend="countDownHandle" :time="new Date(overviews.recoverAt) - new Date() + 5000" :interval="1000" tag="p">
             <!-- <template slot-scope="props">{{ parseInt(props.days) || props.hours || props.minutes || props.seconds }}{{ parseInt(props.days) ? 'd' : (props.hours ? 'h' : (props.minutes ? 'm' : props.seconds ? 's' : '')) }}</template> -->
             <template slot-scope="props">{{ props | formatDue(3) }}</template>
           </countdown>
@@ -108,14 +108,14 @@
                 theme="blue"
                 inverse
                 shadow
-                @click="$router.push('/market')">
-                View Market now
+                @click="$router.push('/taverns')">
+                View Taverns now
               </lordless-btn>
             </div>
           </div>
         </div>
       </div>
-      <div v-if="false" class="mobile-user-card user-childrens-box">
+      <!-- <div class="mobile-user-card user-childrens-box">
         <div class="user-childrens-container">
           <ul>
             <li
@@ -138,7 +138,7 @@
             </li>
           </ul>
         </div>
-      </div>
+      </div> -->
       <div class="d-flex f-align-center mobile-user-card user-logout-box" @click.stop="$emit('logout')">
         <div class="v-flex d-flex f-align-center user-children-cnt">
           <span class="inline-block user-children-icon logout">
@@ -234,8 +234,14 @@ export default {
   },
   methods: {
     ...mapActions('user', [
-      actionTypes.USER_SET_USER_HOME
+      actionTypes.USER_SET_USER_HOME,
+      actionTypes.USER_SET_USER_BY_TOKEN
     ]),
+
+    countDownHandle () {
+      this.initInfo()
+      this[actionTypes.USER_SET_USER_BY_TOKEN]()
+    },
 
     initInfo () {
       this.getUserMessage()
@@ -455,17 +461,17 @@ export default {
   /**
    *  user-childrens-box  -- begin
    */
-  .user-childrens-box {
+  // .user-childrens-box {
 
-  }
-  .user-children-item {
-    &:not(:first-of-type) {
-      margin-top: 28px;
-    }
-  }
-  .user-children-cnt {
-    color: #777;
-  }
+  // }
+  // .user-children-item {
+  //   &:not(:first-of-type) {
+  //     margin-top: 28px;
+  //   }
+  // }
+  // .user-children-cnt {
+  //   color: #777;
+  // }
   .user-children-icon {
     margin-right: 12px;
     width: 22px;
@@ -479,7 +485,6 @@ export default {
     width: 14px;
     height: 14px;
     fill: #bbb;
-    // transform: rotate(90deg);
   }
   /**
    *  user-childrens-box  -- end

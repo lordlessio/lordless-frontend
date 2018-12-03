@@ -18,7 +18,7 @@
           </p>
           <p class="children-none-data-desc">You have no candy now.<br/>You can apply a quest to earn bounty or buy a tavern to get reward.</p>
           <div>
-            <lordless-btn class="TTFontBolder children-none-data-btn" theme="blue" inverse shadow @click="$router.push('/market')">Buy a tavern</lordless-btn>
+            <lordless-btn class="TTFontBolder children-none-data-btn" theme="blue" inverse shadow @click="$router.push('/taverns')">Buy a tavern</lordless-btn>
           </div>
         </div>
       </div>
@@ -124,11 +124,13 @@ export default {
 
 <style lang="scss" scoped>
   .mobile-candies-box {
+    // padding-bottom: 35px;
+    // box-sizing: border-box;
     @include viewport-unit(min-height, 100vh, 112px);
   }
   .candies-main-cnt {
     margin-top: 10px;
-    padding: 0 20px;
+    padding: 0 20px 35px;
     @include overflow();
   }
   .candies-item {

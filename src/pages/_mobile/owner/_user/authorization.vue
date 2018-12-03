@@ -34,12 +34,12 @@ import Authorize from '@/components/reuse/dialog/authorize'
 
 // import { putUserTgAuth } from 'api'
 
-import { contractMixins, dialogMixins } from '@/mixins'
+import { contractMixins, dialogMixins, activatedMixins } from '@/mixins'
 import { actionTypes } from '@/store/types'
 import { mapState, mapActions } from 'vuex'
 export default {
   name: 'mobile-owner-authorization',
-  mixins: [contractMixins, dialogMixins],
+  mixins: [contractMixins, dialogMixins, activatedMixins],
   data: (vm) => {
     return {
       authorizations: [

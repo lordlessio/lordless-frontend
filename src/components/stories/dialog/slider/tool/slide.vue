@@ -8,7 +8,7 @@
       class="alone-layer ld-dialog-slide"
       @click.stop>
       <div v-if="rendered" class="ld-slide-container">
-        <span @click.stop="$emit('update:visible', false)" class="lg-hidden inline-block dialog-ldb-close">
+        <span v-if="showClose" @click.stop="$emit('update:visible', false)" class="lg-hidden inline-block dialog-ldb-close">
           <i class="el-icon-close"></i>
         </span>
         <slot></slot>
@@ -25,6 +25,10 @@ export default {
       default: false
     },
     appendToBody: {
+      type: Boolean,
+      default: true
+    },
+    showClose: {
       type: Boolean,
       default: true
     },

@@ -3,15 +3,15 @@
     <!-- <mobile-nav-bar :text="navigations[activeIndex].navbarText" :scroll="navigations[activeIndex].scroll"/> -->
     <ul class="d-flex tab-bar-ul" @click.stop="chooseBar">
       <li v-for="(item, index) of navigations" :key="index"
-        class="v-flex text-center tab-bar-item" :class="{ 'is-active': item.active }">
+        class="v-flex text-center tab-bar-item" :class="{ 'is-active': item.active, 'is-home': item.name === 'Home' }">
         <p class="d-inline-flex col-flex f-auto-center"
           :data-active="item.active.toString()" :data-index="index">
-          <span class="inline-block">
+          <span class="inline-block line-height-0 tab-bar-icon">
             <svg>
               <use :xlink:href="`${item.active ? item.activeIcon : item.icon}`"/>
             </svg>
           </span>
-          <span class="inline-block text-cap">{{ item.name }}</span>
+          <span class="inline-block text-cap tab-bar-name">{{ item.name }}</span>
         </p>
       </li>
     </ul>
@@ -20,7 +20,9 @@
 
 <script>
 // import MobileNavBar from '@/components/reuse/_mobile/navbar'
-import { scrollToTop } from 'utils/tool/animate'
+// import { scrollToTop } from 'utils/tool/animate'
+import { mutationTypes } from '@/store/types'
+import { mapMutations } from 'vuex'
 export default {
   name: 'mobile-tab-bar',
   data: () => {
@@ -29,11 +31,19 @@ export default {
       activeIndex: 0,
       navigations: [
         {
-          icon: '#icon-tab-marketplace',
-          activeIcon: '#icon-tab-marketplace',
-          name: 'Market',
-          route: '/market',
-          match: /\/market/,
+          icon: '#icon-logo-image',
+          activeIcon: '#icon-logo-image',
+          name: 'Home',
+          route: '/home',
+          match: /\/(home|project)/,
+          active: true
+        },
+        {
+          icon: '#icon-beer',
+          activeIcon: '#icon-beer',
+          name: 'Taverns',
+          route: '/taverns',
+          match: /\/taverns/,
           active: true
         },
         {
@@ -69,6 +79,10 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('layout', [
+      mutationTypes.LAYOUT_SET_POP_DIRECTION
+    ]),
+
     getAttr (node) {
       if (!node || node.nodeName === 'BODY') return {}
 
@@ -79,32 +93,53 @@ export default {
       } else return this.getAttr(node.parentNode)
     },
 
+    /**
+     * choose bar 事件
+     */
     chooseBar (e) {
       const { active, index } = this.getAttr(e.target)
-      if (!active) return
+
+      let fromIndex = 0
+      let toIndex = index
+
+      let routePath = ''
+
+      if (!active) return false
       else if (active === 'true') {
         for (let i = 0; i < this.navigations.length; i++) {
           if (parseInt(index) === i && this.$route.path !== this.navigations[i].route) {
-            this.$router.push(this.navigations[i].route)
+            // this.$router.push(this.navigations[i].route)
+            routePath = this.navigations[i].route
             break
           }
         }
       } else {
         this.navigations = this.navigations.map((item, i) => {
           const obj = {}
-          if (item.active) obj.active = false
+          if (item.active) {
+            obj.active = false
+            fromIndex = i
+          }
           if (parseInt(index) === i) {
+            toIndex = i
             this.activeIndex = index
             obj.active = true
-            this.$router.push(item.route)
+            routePath = item.route
+            // this.$router.push(item.route)
           }
           return Object.assign({}, item, obj)
         })
       }
-      scrollToTop()
+
+      let direction = '_forward'
+      if (toIndex < fromIndex) direction = '_reverse'
+      this[mutationTypes.LAYOUT_SET_POP_DIRECTION](direction)
+
+      this.$router.push(routePath)
+      // scrollToTop()
     },
 
-    rewriteNavigation (route = '/market', navigations = this.navigations) {
+    rewriteNavigation (route = '/home', navigations = this.navigations) {
       this.navigations = navigations.map(item => {
         item.active = false
         if (route.match(item.match)) {
@@ -137,21 +172,40 @@ export default {
   z-index: 100;
 }
 .tab-bar-ul {
-  margin-top: 5px;
+  margin-top: 8px;
   // height: 50px;
 }
 .tab-bar-item {
   height: initial;
-  font-size: 10px;
+  font-size: 12px;
   color: #999;
   fill: #999;
-  svg {
-    width: 22px;
-    height: 22px;
-  }
   &.is-active {
     color: #4586fc;
     fill: #4586fc;
   }
+  &.is-home {
+    .tab-bar-icon {
+      padding: 4px;
+      border-radius: 100%;
+      background-color: #999;
+      fill: #fff;
+      box-sizing: border-box;
+    }
+    &.is-active {
+      .tab-bar-icon {
+        background-color: #4586fc;
+      }
+    }
+  }
+}
+.tab-bar-name {
+  // line-height: 12px;
+  transform: scale(.84);
+}
+.tab-bar-icon {
+  margin-bottom: 1px;
+  width: 22px;
+  height: 22px;
 }
 </style>

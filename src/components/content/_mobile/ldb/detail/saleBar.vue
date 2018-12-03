@@ -122,7 +122,7 @@ export default {
       // contract mixin 合约检查状态
       // const { init, ldbNFTOwner, crowdsaleOwner } = this.contractStatus
       const info = this.info
-      return !this.showSign && info.lord.address === this.user.address
+      return !this.showSign && info.lord && info.lord.address === this.user.address
       // return (!this.showSign && info.lord.address === this.userInfo.address) && (ldbNFTOwner || crowdsaleOwner) && init
     }
   },
@@ -137,15 +137,17 @@ export default {
       document.body.appendChild(this.$el)
     }
   },
+  activated () {
+    this.init()
+  },
+  deactivated () {
+    this.$el && this.$el.parentNode && this.$el.parentNode.removeChild(this.$el)
+  },
   beforeDestroy () {
-    if (this.$el && this.$el.parentNode) {
-      this.$el.parentNode.removeChild(this.$el)
-    }
+    this.$el && this.$el.parentNode && this.$el.parentNode.removeChild(this.$el)
   },
   mounted () {
-    this.$nextTick(() => {
-      this.init()
-    })
+    this.init()
   }
 }
 </script>

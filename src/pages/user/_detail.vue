@@ -187,6 +187,7 @@
 
 <script>
 import { getUserByAddress, getUserOverview, getUserHome } from 'api'
+import { scrollTo } from 'utils/tool'
 
 // import { historyState } from 'utils/tool'
 
@@ -396,7 +397,7 @@ export default {
     // }
   },
   mounted () {
-    document.documentElement.scrollTop = 0
+    scrollTo(0)
     const { address } = this.$route.params
     this.$nextTick(() => {
       this.init({ address: address.toLowerCase() })

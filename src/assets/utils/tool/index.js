@@ -227,6 +227,11 @@ export const offsetParent = (current, parent, type) => {
   }
   return dom
 }
+export const scrollTo = (num = 0) => {
+  document.documentElement.scrollTop = num
+  window.pageYOffset = num
+  document.body.scrollTop = num
+}
 export const transitionEvent = () => {
   const el = document.createElement('surface')
   const transitions = {
@@ -342,9 +347,10 @@ export const transferCoords = (value) => {
  */
 export const weiToEth = (value) => {
   if (!value) return value
-
   const web3js = store.state.web3.web3Opt.web3js
-  value = parseInt(value)
+
+  // 防止 1e+20 之类的数字转化失败，这里需要判断一下
+  if (typeof value !== 'number') value = parseInt(value)
 
   if (!web3js.fromWei) {
     value = value / 1e18
@@ -357,6 +363,28 @@ export const weiToEth = (value) => {
 export const sliceStr = (str, { start = 0, end = 10 } = {}) => {
   if (!str) return str
   return str.toString().slice(start, end)
+}
+
+export const formatNumber = (number) => {
+  if (!number) return 0
+
+  number = parseFloat(number)
+
+  if (number / 1000000000 > 1000000000) return ' Infinity'
+
+  const symbols = [
+    { symbol: 'b', num: 1000000000 },
+    { symbol: 'm', num: 1000000 },
+    { symbol: 'k', num: 1000 }
+  ]
+  let str
+  for (const s of symbols) {
+    if (number / s.num >= 1) {
+      str = `${parseFloat(number / s.num).toFixed(1)} ${s.symbol}`
+      break
+    }
+  }
+  return str || number
 }
 
 export const formatDecimal = (str, { len = 4, percentage = false } = {}) => {

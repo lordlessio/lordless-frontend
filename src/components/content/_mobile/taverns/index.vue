@@ -1,19 +1,15 @@
 <template>
   <div class="mobile-market">
     <div id="mobile-market-container" class="d-flex col-flex relative mobile-market-container">
-      <section id="mobile-market-header" class="text-center relative mobile-market-header">
+      <!-- <section id="mobile-market-header" class="text-center relative mobile-market-header">
         <h2>Marketplace</h2>
         <p class="TTFontBolder">Marketplace is an easy, convenient way to buy and sell your Tavern.</p>
-        <!-- <span v-if="isHistory" class="inline-block market-back-svg" @click="history.go(-1)">
-          <svg>
-            <use xlink:href="#icon-back"/>
-          </svg>
-        </span> -->
-      </section>
+      </section> -->
+      <h2 class="mobile-taverns-title">Taverns</h2>
       <mobile-sort-bar
         :sortItems="sortItems"
         :total="ldbs.total"
-        :scrollHeight="scrollHeight"
+        :scrollHeight="100"
         @sort="sortHandle"
         @order="orderHandle"/>
       <!-- <section id="market-sort-section" class="relative market-sort-section">
@@ -51,16 +47,16 @@
         </div>
       </section> -->
       <section class="d-flex col-flex v-flex mobile-market-ldbs">
-        <el-row :gutter="40" v-if="ldbsLoading">
-          <el-col
-            v-for="item of [1,2, 3]" :key="item"
-            :xs="24" :sm="12">
-            <mobile-skeletion-building class="skeletion-building-item"/>
-          </el-col>
-        </el-row>
-        <transition name="ld-hide-in-fade">
+        <transition name="ld-hide-in-fade" mode="out-in">
+          <ul v-if="ldbsLoading" class="v-flex d-flex f-wrap f-justify-between">
+            <li
+              class="v-flex skeletion-building-item"
+              v-for="item of [1,2]" :key="item">
+              <mobile-skeletion-building/>
+            </li>
+          </ul>
           <div
-            v-if="!ldbs.total && !ldbsLoading"
+            v-else-if="!ldbs.total && !ldbsLoading"
             class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
             <svg>
               <use xlink:href="#icon-no-selling-ldb"/>
@@ -77,23 +73,20 @@
               </span>
             </div>
           </div>
-        </transition>
-        <transition name="ld-hide-in-fade">
-          <el-row v-show="ldbs.total && !ldbsLoading" :gutter="40" class="v-flex market-cnt-box">
-            <el-col
-              class="mobile-market-item"
-              v-for="ldb of ldbs.list" :key="ldb._id"
-              :xs="24" :sm="12">
+          <ul v-else class="v-flex d-flex f-wrap f-justify-between market-cnt-box">
+            <li
+              class="v-flex mobile-market-item"
+              v-for="ldb of ldbs.list" :key="ldb._id">
               <mobile-building-card
                 :sale="ldb.chain.auction.isOnAuction"
                 :presale="ldb.chain.auction.isOnPreAuction"
                 :info="ldb"
-                @choose="openDetail">
-              </mobile-building-card>
-            </el-col>
-          </el-row>
+                @choose="openDetail"/>
+            </li>
+            <li v-if="ldbs.total <= ldbs.pn * ldbs.ps" class="text-center mobile-nomore-taverns">AH! no more Taverns~</li>
+          </ul>
         </transition>
-        <div class="market-pagination-box">
+        <!-- <div class="market-pagination-box">
           <skeletion-pager v-if="ldbsLoading && !ldbs.total"/>
           <lordless-pagination
             v-if="ldbs.total"
@@ -105,7 +98,7 @@
             :size="ldbs.ps"
             background
             @currentChange="pageChange"/>
-        </div>
+        </div> -->
       </section>
     </div>
   </div>
@@ -113,7 +106,7 @@
 
 <script>
 import { getChainLdbs } from 'api'
-import { hasClass, removeClass, addClass } from 'utils/tool'
+// import { hasClass, removeClass, addClass } from 'utils/tool'
 
 import MobileSortBar from '@/components/reuse/_mobile/sortBar'
 // import SwitchInput from '@/components/stories/switchInput'
@@ -122,19 +115,22 @@ import MobileBuildingCard from '@/components/reuse/_mobile/card/building'
 import MobileSkeletionBuilding from '@/components/skeletion/_mobile/building'
 import SkeletionPager from '@/components/skeletion/pagination'
 
+// import { scrollTo } from 'utils/tool'
+
 import { layoutMixins } from '@/mixins'
 
 // import throttle from 'lodash/throttle'
 
 export default {
-  name: 'lordless-market',
+  name: 'lordless-taverns',
   mixins: [layoutMixins],
   data: () => {
     return {
+      marketScrollHandle: null,
       // ldb 建筑列表
       ldbs: {
         pn: 1,
-        ps: 9,
+        ps: 20,
         list: [],
         total: 0
       },
@@ -173,11 +169,11 @@ export default {
     // isHistory () {
     //   return window.history.length > 1
     // },
-    scrollHeight () {
-      const dom = document.getElementById('mobile-market-header')
-      console.log('scrollHeight', dom)
-      return dom ? dom.offsetHeight : 200
-    },
+    // scrollHeight () {
+    //   const dom = document.getElementById('mobile-market-header')
+    //   console.log('scrollHeight', dom)
+    //   return dom ? dom.offsetHeight : 0
+    // },
     isMobile () {
       return this.$root.$children[0].isMobile
     },
@@ -258,7 +254,7 @@ export default {
     // chooseSort (value) {
     //   if (this.ldbSort === value) return
 
-    //   document.documentElement.scrollTop = 100
+    //   scrollTo(100)
 
     //   this.ldbSort = value
     //   this.toggleSort()
@@ -272,7 +268,7 @@ export default {
     //   if (this.sortOpen) {
     //     this.toggleSort()
     //   }
-    //   document.documentElement.scrollTop = 100
+    //   scrollTo(100)
     //   this.getLdbs({ order })
     // },
 
@@ -284,60 +280,65 @@ export default {
 
       const path = `${this.$route.path}?page=${page}`
       this.$emit('path', path)
-    },
+    }
 
     /**
      * market 滚动监听
      */
-    marketScroll () {
-      let navHeight = 0
-      let _navHeight = 0
+    // marketScrollListener () {
+    //   let navHeight = 0
+    //   let _navHeight = 0
 
-      const h = document.getElementsByClassName('mobile-market-header')[0].offsetHeight
-      const pdom = document.getElementById('market-sort-section')
-      const sdom = document.getElementById('mobile-market-sort')
-      const isMobile = this.isMobile
-      const func = () => {
-        // 因为 mobile navbar 高度固定，所以第一次取到之后就可以保存到变量
-        if (isMobile && !navHeight) {
-          if (_navHeight) navHeight = _navHeight
-          else {
-            const mobileNavbar = document.getElementById('mobile-nav-bar')
-            if (mobileNavbar) navHeight = mobileNavbar.offsetHeight
-          }
-          _navHeight = navHeight
-        }
-        const y = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
-        const bool = hasClass('fixed', sdom)
-        if (y <= h && bool) {
-          navHeight = 0
-          sdom.style.top = '0px'
+    //   const h = document.getElementsByClassName('mobile-market-header')[0].offsetHeight
+    //   const pdom = document.getElementById('market-sort-section')
+    //   const sdom = document.getElementById('mobile-market-sort')
+    //   const isMobile = this.isMobile
+    //   const func = () => {
+    //     // 因为 mobile navbar 高度固定，所以第一次取到之后就可以保存到变量
+    //     if (isMobile && !navHeight) {
+    //       if (_navHeight) navHeight = _navHeight
+    //       else {
+    //         const mobileNavbar = document.getElementById('mobile-nav-bar')
+    //         if (mobileNavbar) navHeight = mobileNavbar.offsetHeight
+    //       }
+    //       _navHeight = navHeight
+    //     }
+    //     const y = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
+    //     const bool = hasClass('fixed', sdom)
+    //     if (y <= h && bool) {
+    //       navHeight = 0
+    //       sdom.style.top = '0px'
 
-          removeClass('fixed', sdom)
-          pdom.appendChild(sdom)
-        } else if (y > h && !bool) {
-          addClass('fixed', sdom)
-          document.body.appendChild(sdom)
+    //       removeClass('fixed', sdom)
+    //       pdom.appendChild(sdom)
+    //     } else if (y > h && !bool) {
+    //       addClass('fixed', sdom)
+    //       document.body.appendChild(sdom)
 
-          sdom.style.top = navHeight + 'px'
-        }
-      }
-      document.addEventListener('scroll', func)
-      this.$once('hook:beforeDestroy', () => {
-        this.sortOpen = false
-        if (!pdom.firstChild) {
-          pdom.appendChild(sdom)
-        }
-        document.removeEventListener('scroll', func)
-      })
-    }
+    //       sdom.style.top = navHeight + 'px'
+    //     }
+    //   }
+
+    //   func()
+
+    //   this.marketScrollHandle = func
+    //   this.$nextTick(() => document.addEventListener('scroll', this.marketScrollHandle))
+    // },
+    // destroyMarket () {
+    //   const pdom = document.getElementById('market-sort-section')
+    //   const sdom = document.getElementById('mobile-market-sort')
+    //   this.sortOpen = false
+    //   if (pdom && !pdom.firstChild) {
+    //     pdom.appendChild(sdom)
+    //   }
+    //   document.removeEventListener('scroll', this.marketScrollHandle)
+    // }
   },
   mounted () {
-    document.documentElement.scrollTop = 0
+    // scrollTo(0)
     this.$nextTick(() => {
       const pn = parseInt(this.$route.query.page || 1)
       this.getLdbs({ pn })
-      // this.marketScroll()
     })
   }
 }
@@ -345,40 +346,46 @@ export default {
 
 <style lang="scss" scoped>
 
-  // .mobile-market {
-  //   background-color: #f8f8f8;
-  // }
+  .mobile-market {
+    padding-bottom: 35px;
+    // background-color: #f8f8f8;
+  }
   .mobile-market-container {
     // margin: 0 -20px;
     // padding: 0;
     // max-width: 768px;
     // @include viewport-unit(min-height, 100vh, 80px);
   }
+  .mobile-taverns-title {
+    padding: 20px 20px 0;
+    font-size: 24px;
+    line-height: 1;
+  }
 
   /**
    *  mobile-market-header --- begin
    */
-  .mobile-market-header {
-    padding: 55px 0;
-    background-image: linear-gradient(to right, #1613B0, #7D72F0);
-    color: #fff;
-    >h2 {
-      font-size: 36px;
-    }
-    >p {
-      margin: 25px auto 0;
-      max-width: 310px;
-      font-size: 16px;
-    }
-  }
-  .market-back-svg {
-    position: absolute;
-    left: 15px;
-    top: 15px;
-    width: 15px;
-    height: 15px;
-    fill: #fff;
-  }
+  // .mobile-market-header {
+  //   padding: 55px 0;
+  //   background-image: linear-gradient(to right, #1613B0, #7D72F0);
+  //   color: #fff;
+  //   >h2 {
+  //     font-size: 36px;
+  //   }
+  //   >p {
+  //     margin: 25px auto 0;
+  //     max-width: 310px;
+  //     font-size: 16px;
+  //   }
+  // }
+  // .market-back-svg {
+  //   position: absolute;
+  //   left: 15px;
+  //   top: 15px;
+  //   width: 15px;
+  //   height: 15px;
+  //   fill: #fff;
+  // }
 
   /**
    *  mobile-market-header --- end
@@ -513,6 +520,7 @@ export default {
    * skeletion style -- begin
    */
   .skeletion-building-item {
+    max-width: 160px;
     margin-bottom: 30px;
   }
   /*
@@ -523,15 +531,29 @@ export default {
    *  mobile-market-ldbs --- begin
    */
   .mobile-market-ldbs {
-    padding: 0 20px;
-    margin-top: 5px;
+    position: relative;
+    padding: 24px 20px 0;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 1px;
+      left: 20px;
+      width: calc(100% - 40px);
+      height: 1px;
+      background-color: #ddd;
+    }
   }
   .mobile-market-item {
-    margin-bottom: 30px;
-    padding-left: 10px;
-    padding-right: 10px;
+    max-width: 160px;
+    margin-bottom: 18px;
+    // padding-left: 10px;
+    // padding-right: 10px;
     color: #fff;
     cursor: pointer;
+  }
+  .mobile-nomore-taverns {
+    width: 100%;
+    color: #999;
   }
   /**
    *  mobile-market-ldbs --- end
@@ -540,18 +562,18 @@ export default {
   /*
    * market-pagination-box     --begin
    */
-  .market-pagination-box {
-    margin-top: 25px;
-    margin-bottom: 35px;
-  }
-  .market-pagination-switch {
-    font-size: 18px;
-    >span {
-      margin-left: 30px;
-      display: inline-block;
-      cursor: pointer;
-    }
-  }
+  // .market-pagination-box {
+  //   margin-top: 25px;
+  //   margin-bottom: 35px;
+  // }
+  // .market-pagination-switch {
+  //   font-size: 18px;
+  //   >span {
+  //     margin-left: 30px;
+  //     display: inline-block;
+  //     cursor: pointer;
+  //   }
+  // }
   /*
    * market-pagination-box     --end
    */

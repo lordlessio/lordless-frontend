@@ -99,6 +99,7 @@
 
 <script>
 import { getChainLdbs } from 'api'
+import { scrollTo } from 'utils/tool'
 
 import LdSelect from '@/components/stories/select'
 import SwitchInput from '@/components/stories/switchInput'
@@ -238,7 +239,7 @@ export default {
     }
   },
   mounted () {
-    document.documentElement.scrollTop = 0
+    scrollTo(0)
     this.$nextTick(() => {
       const pn = parseInt(this.$route.query.page || 1)
       this.getLdbs({ pn })

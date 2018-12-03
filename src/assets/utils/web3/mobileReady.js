@@ -23,7 +23,7 @@ const checkForWeb3 = () => {
       }
       return window.requestAnimationFrame(step)
     }
-    loopFunc()
+    return loopFunc()
   })
 }
 
@@ -31,17 +31,17 @@ export const mobileReady = async () => {
   return new Promise(async resolve => {
     if (window.imToken || window.coco || typeof web3 !== 'undefined') {
       // alert('  init ---- 1')
-      resolve()
+      return resolve()
     } else {
       // alert('  init ---- 4')
       if (!mobileBool()) return resolve()
       if (await checkForWeb3()) {
-        resolve()
+        return resolve()
       }
       // document.addEventListener('load', checkForWeb3, false)
 
       window.addEventListener('sdkReady', function () {
-        resolve()
+        return resolve()
       })
     }
   })

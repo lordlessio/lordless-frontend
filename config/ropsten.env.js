@@ -2,7 +2,7 @@
 const merge = require('webpack-merge')
 // const devEnv = require('./dev.env')
 const prodEnv = require('./prod.env')
-const contract = JSON.stringify(require('../.contract/ropsten.json'))
+const contract = JSON.stringify(merge(require('../.contract/ropsten.json'), require('../.contract/airdrop/ropsten.json')))
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"ropsten"',

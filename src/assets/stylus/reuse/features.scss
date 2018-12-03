@@ -326,9 +326,44 @@
   width: 100%;
 }
 
+// lordless pop transition style
+.lordless-pop-out-enter-active,
+.lordless-pop-out-leave-active,
+.lordless-pop-in-enter-active,
+.lordless-pop-in-leave-active {
+  will-change: transform;
+  transition: all 400ms;
+  height: 100%;
+  // top: 46px;
+  position: absolute;
+  backface-visibility: hidden;
+  perspective: 1000;
+}
+.lordless-pop-out-enter {
+  opacity: 0;
+  transform: translate3d(-100%, 0, 0);
+}
+.lordless-pop-out-leave-active {
+  opacity: 0;
+  transform: translate3d(100%, 0, 0);
+}
+.lordless-pop-in-enter {
+  opacity: 0;
+  transform: translate3d(100%, 0, 0);
+}
+.lordless-pop-in-leave-active {
+  opacity: 0;
+  transform: translate3d(-100%, 0, 0);
+}
+
 /**
  *  vue transtion style -- end
  */
+
+.lordless-pop-page {
+  box-sizing: border-box;
+  @include viewport-unit(width, 100vw);
+}
 
 
 /* skeletion -- begin */
