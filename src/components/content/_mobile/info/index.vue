@@ -12,7 +12,7 @@
             <p class="text-break user-info-address">{{ userInfo.address }}</p>
           </div>
           <div class="mobile-user-holdings">
-            <h2>Estimated holdings value</h2>
+            <h2>Total Earnings from LORDLESS</h2>
             <div class="d-flex f-align-center user-holdings-cnt">
               <div class="v-flex user-holdings-item">
                 <p>In ETH</p>
@@ -257,6 +257,9 @@ export default {
       }
       this.loading = false
     }
+  },
+  activated () {
+    this[actionTypes.USER_SET_USER_HOME]()
   },
   async mounted () {
     this.$nextTick(() => {

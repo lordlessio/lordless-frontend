@@ -125,7 +125,6 @@
                     <lordless-blockies
                       theme="dark"
                       :scale="7"
-                      jump
                       :seed="info.lord._id">
                     </lordless-blockies>
                     <div class="v-flex d-flex col-flex f-justify-around detail-lord-info">

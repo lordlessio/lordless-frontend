@@ -21,7 +21,7 @@ export const getNetwork = (web3js) => {
       const timer = setTimeout(() => {
         clearTimeout(timer)
         resolve({ coinbase: '' })
-      }, 3000)
+      }, 5000)
 
       web3js.version.getNetwork((error, networkId) => {
         clearTimeout(timer)
@@ -42,7 +42,7 @@ export const getCoinbase = (web3js) => {
       const timer = setTimeout(() => {
         clearTimeout(timer)
         resolve({ coinbase: '' })
-      }, 3000)
+      }, 5000)
 
       web3js.eth.getCoinbase((error, coinbase) => {
         clearTimeout(timer)
@@ -64,13 +64,16 @@ export const getAccount = (web3js) => {
       const timer = setTimeout(() => {
         clearTimeout(timer)
         resolve({ account: '' })
-      }, 3000)
+      }, 5000)
 
       web3js.eth.getAccounts((error, accounts) => {
         clearTimeout(timer)
 
+        let account = accounts[0]
+        if (!account) account = web3js.eth.defaultAccount || ''
+
         if (error) return resolve({ error: error.message || 'Account error', account: '' })
-        resolve({ account: (accounts[0] || '').toString() })
+        resolve({ account })
       })
     } catch (err) {
       resolve({ error: err.message || 'Coinbase error', account: '' })
@@ -86,7 +89,7 @@ export const getGasPrice = (web3js) => {
       const timer = setTimeout(() => {
         clearTimeout(timer)
         resolve({ account: '' })
-      }, 3000)
+      }, 5000)
 
       web3js.eth.getGasPrice((error, gasPrice) => {
         clearTimeout(timer)
@@ -110,7 +113,7 @@ export const getBalance = (web3js, address) => {
       const timer = setTimeout(() => {
         clearTimeout(timer)
         resolve({ account: '' })
-      }, 3000)
+      }, 5000)
 
       web3js.eth.getBalance(address, (error, balance) => {
         clearTimeout(timer)

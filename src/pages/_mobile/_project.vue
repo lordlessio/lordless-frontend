@@ -67,7 +67,7 @@
                 </span>
                 <p class="v-flex d-flex f-justify-between market-item-right">
                   <span>Market cap</span>
-                  <span>$ {{ projectInfo.market.marketCap | formatNumber }}</span>
+                  <span>$ {{ projectInfo.market.marketCap || projectInfo.market.price * projectInfo.market.circulatingSupply | formatNumber }}</span>
                 </p>
               </li>
               <li class="d-flex f-align-center intro-market-item">

@@ -221,7 +221,7 @@ export default {
         //   })
 
         // 使用自有封装对象
-        window.lordlessMethods.buy(params).then(tx => {
+        window.lordlessMethods.buy(params).then(async tx => {
           console.log('----- claimHandle tx', tx)
           // this.buyPending = true
           this.metamaskChoose = false
@@ -230,7 +230,8 @@ export default {
           this.$set(this.progressNums, 'left', this.progressNums.left - 100)
           this.$set(this.progressNums, 'dropping', this.progressNums.dropping + 100)
 
-          saveAirdropUser({ tx, airdropId: info._id })
+          await saveAirdropUser({ tx, airdropId: info._id })
+          this.$router.push('/owner/quest?type=promotion')
         })
           .catch((err) => {
             console.log('err', err.message)

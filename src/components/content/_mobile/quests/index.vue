@@ -10,13 +10,13 @@
         name="bottoms">
       </el-tab-pane>
       <el-tab-pane
-        class="relative"
-        label="Bounty"
-        name="bounty">
-      </el-tab-pane>
-      <el-tab-pane
         label="Promotion"
         name="promotion">
+      </el-tab-pane>
+      <el-tab-pane
+        class="relative"
+        label="Reward"
+        name="reward">
       </el-tab-pane>
     </el-tabs>
     <div id="mobile-quests-content-box" class="mobile-quests-content-box">
@@ -70,8 +70,8 @@
             </div>
           </transition>
         </div>
-        <div v-else-if="currentTab === 'bounty'" class="mobile-quests-bounty">
-          <div class="d-flex tasks-sort-box">
+        <div v-else-if="currentTab === 'reward'" class="mobile-quests-bounty">
+          <!-- <div class="d-flex tasks-sort-box">
             <mobile-sort-bar
               class="v-flex tasks-sort-bar"
               :sortItems="bountySortItems"
@@ -82,11 +82,11 @@
               @sort="bountySortChange">
               <span class="tasks-sort-title">Filter by</span>
             </mobile-sort-bar>
-          </div>
+          </div> -->
           <transition name="ld-hide-fade" mode="out-in" @after-enter="afterEnter">
-            <mobile-bounty-skeletion class="quest-cnt-box" v-if="loading && !infos.bounty.total"/>
+            <mobile-reward-skeletion class="quest-cnt-box" v-if="loading && !infos.reward.total"/>
             <div
-              v-else-if="!loading && !infos.bounty.total"
+              v-else-if="!loading && !infos.reward.total"
               class="d-flex f-auto-center mobile-quests-empty mobile-bounty-empty">
               <div class="quests-empty-container">
                 <p class="quests-empty-icon">
@@ -100,20 +100,20 @@
                 </div>
               </div>
             </div>
-            <div v-else ref="bountyQuestCnt" class="quest-cnt-box quest-item-content quest-tasks-content">
+            <div v-else ref="rewardQuestCnt" class="quest-cnt-box quest-item-content quest-tasks-content">
               <ul>
                 <li
                   class="quest-item"
-                  v-for="(bounty, index) of infos.bounty.list" :key="index">
-                  <mobile-quest-bounty
-                    :info="bounty"/>
+                  v-for="(reward, index) of infos.reward.list" :key="index">
+                  <mobile-quest-reward
+                    :info="reward"/>
                 </li>
               </ul>
               <div class="text-center quest-item-loadmore">
-                <p v-if="loading && !infos.bounty.noMore">
+                <p v-if="loading && !infos.reward.noMore">
                   <i class="el-icon-loading"></i>
                 </p>
-                <p v-else-if="infos.bounty.noMore">AH! no more Bounty~</p>
+                <p v-else-if="infos.reward.noMore">AH! no more Rewards~</p>
               </div>
               <!-- <div class="quest-pagination-box">
                 <lordless-pagination
@@ -173,12 +173,14 @@
 
 <script>
 import MobileQuestBounty from '@/components/reuse/_mobile/card/quests/bounty'
+import MobileQuestReward from '@/components/reuse/_mobile/card/quests/reward'
 import MobileQuestPromotion from '@/components/reuse/_mobile/card/quests/promotion'
 
 import MobileSortBar from '@/components/reuse/_mobile/sortBar'
 
 import MobileBottomsUpSkeletion from '@/components/skeletion/_mobile/quests/bottomsUp'
-import MobileBountySkeletion from '@/components/skeletion/_mobile/quests/bounty'
+// import MobileBountySkeletion from '@/components/skeletion/_mobile/quests/bounty'
+import MobileRewardSkeletion from '@/components/skeletion/_mobile/quests/reward'
 import MobilePromotionSkeletion from '@/components/skeletion/_mobile/quests/promotion'
 
 import { getUserTasks, getAirdropUsers } from 'api'
@@ -200,7 +202,7 @@ export default {
       popstateModel: false,
       tabFilters: {
         bottoms: 'candy',
-        bounty: 'tasks',
+        reward: 'lord',
         promotion: 'promotion'
       },
 
@@ -220,7 +222,14 @@ export default {
           total: 0,
           more: true
         },
-        bounty: {
+        // bounty: {
+        //   pn: 1,
+        //   ps: 10,
+        //   list: [],
+        //   total: 0,
+        //   more: true
+        // },
+        reward: {
           pn: 1,
           ps: 10,
           list: [],
@@ -237,19 +246,19 @@ export default {
       },
 
       // sortBar options
-      bountyStatus: -2,
-      bountyStatusFilters: {
-        'all': -2,
-        'under': 0,
-        'approved': 1,
-        'rejected': -1
-      },
-      bountySortItems: {
-        'all': 'All',
-        'under': 'Under way',
-        'approved': 'Approved',
-        'rejected': 'Rejected'
-      },
+      // bountyStatus: -2,
+      // bountyStatusFilters: {
+      //   'all': -2,
+      //   'under': 0,
+      //   'approved': 1,
+      //   'rejected': -1
+      // },
+      // bountySortItems: {
+      //   'all': 'All',
+      //   'under': 'Under way',
+      //   'approved': 'Approved',
+      //   'rejected': 'Rejected'
+      // },
 
       // scroll options
       scrollHandle: null
@@ -258,10 +267,10 @@ export default {
   computed: {
     bottomsPageScrollE () {
       return this.$refs.bottomsQuestCnt
-    },
-    bountyPageScrollE () {
-      return this.$refs.bountyQuestCnt
     }
+    // bountyPageScrollE () {
+    //   return this.$refs.bountyQuestCnt
+    // }
   },
   watch: {
     popstateModel (val) {
@@ -276,11 +285,14 @@ export default {
   },
   components: {
     MobileQuestPromotion,
+    MobileQuestReward,
     MobileQuestBounty,
+
     MobileSortBar,
 
     MobileBottomsUpSkeletion,
-    MobileBountySkeletion,
+    MobileRewardSkeletion,
+    // MobileBountySkeletion,
     MobilePromotionSkeletion
   },
   methods: {
@@ -303,11 +315,11 @@ export default {
     /**
      * bounty sort 事件
      */
-    async bountySortChange (status) {
-      this.bountyStatus = status
-      const data = await this.getTasks({ status })
-      data && this.$set(this.infos, this.currentTab, data)
-    },
+    // async bountySortChange (status) {
+    //   this.bountyStatus = status
+    //   const data = await this.getTasks({ status })
+    //   data && this.$set(this.infos, this.currentTab, data)
+    // },
 
     /**
      * 根据 type 初始化 quest
@@ -335,7 +347,7 @@ export default {
 
       historyState(`/owner/quest?type=${_currentTab}`)
       this.prevTab = _currentTab
-      this.bountyStatus = -2
+      // this.bountyStatus = -2
 
       // 切换tab之前，判断当前tab是否含有历史数据，如果有，就不请求
       if (!this.infos[_currentTab].total) {
@@ -357,13 +369,14 @@ export default {
     async getTasks ({ pn = this.infos[this.currentTab].pn, ps = this.infos[this.currentTab].ps, status = this.bountyStatus, type = this.currentTab } = {}) {
       // 根据选择器的key，过滤后端对应sort字符
       const _type = this.tabFilters[type]
-      const _status = this.bountyStatusFilters[status]
+      // const _status = this.bountyStatusFilters[status]
 
       this.currentTab = type
 
       this.loading = true
 
-      const params = { pn, ps, type: _type, status: _status }
+      // const params = { pn, ps, type: _type, status: _status }
+      const params = { pn, ps, type: _type }
 
       let data = null
       try {
