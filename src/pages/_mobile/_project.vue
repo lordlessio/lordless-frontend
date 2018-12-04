@@ -168,8 +168,7 @@
       </section>
       <section class="ld-project-section project-seciton-terms">
         <p class="project-terms-title">Disclaimer</p>
-        <p class="TTFontNormal">This content is being provided to you for informational purposes only. The content has been prepared by third parties not affiliated with Coinbase Inc or any of its affiliates and Coinbase is not responsible for its content. This content and any information contained therein, does not constitute a recommendation by Coinbase to buy, sell or hold any
-  security, financial product or instrument referenced in the content.</p>
+        <p class="TTFontNormal">This content is being provided to you for informational purposes only. The content has been prepared by third parties not affiliated with LORDLESS or any of its affiliates and LORDLESS is not responsible for its content. This content and any information contained therein, does not constitute a recommendation for trading or trading-related actions, financial product or instrument referenced in the content. Be sure to let us know if you have questions.</p>
       </section>
     </div>
   </transition>

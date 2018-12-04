@@ -4,7 +4,7 @@
       <p class="d-flex f-align-center f-justify-between">
         <span>
           <span v-if="!progressNums.completed" class="inline-block">...</span>
-          <count-up v-else class="inline-block" :startVal="0" :endVal="progressNums.dropping" :duration="1000" :isReady="progressNums.completed"></count-up>&nbsp;dropping
+          <count-up v-else class="inline-block" :startVal="0" :endVal="progressNums.total" :duration="1000" :isReady="progressNums.completed"></count-up>&nbsp;total
         </span>
         <span class="promotion-left-num">
           <span v-if="!progressNums.completed" class="inline-block">...</span>

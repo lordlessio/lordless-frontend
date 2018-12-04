@@ -161,7 +161,7 @@
                 <p v-if="loading && !infos.promotion.noMore">
                   <i class="el-icon-loading"></i>
                 </p>
-                <p v-else-if="infos.promotion.noMore">AH! no more Promotion~</p>
+                <p v-else-if="infos.promotion.noMore">AH! no more Promotions~</p>
               </div>
             </div>
           </transition>

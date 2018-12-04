@@ -1,5 +1,5 @@
 <template>
-  <section id="mobile-sort-bar" class="relative mobile-sort-bar" :class="{ 'inherit-height': inheritHeight }">
+  <section ref="mobile-sort-bar" class="relative mobile-sort-bar" :class="{ 'inherit-height': inheritHeight }">
     <div ref="sort-bar-box" id="sort-bar-box" class="alone-layer lg-d-flex f-align-center relative sort-bar-box">
       <div class="relative sort-bar-container" :class="{ 'sort': openModel }">
         <div class="d-flex f-align-center sort-bar-cnt">
@@ -93,7 +93,8 @@ export default {
     scrollHeight: {
       type: Number,
       default: 0
-    }
+    },
+    parentDom: Object
   },
   data: (vm) => {
     console.log('------ sort bar', vm.sortItems)
@@ -175,7 +176,7 @@ export default {
       let _navHeight = 0
 
       const h = this.scrollHeight
-      const pdom = document.getElementById('mobile-sort-bar')
+      const pdom = this.$refs['mobile-sort-bar']
       const sdom = this.$refs['sort-bar-box']
 
       const isMobile = this.isMobile
@@ -212,7 +213,7 @@ export default {
 
       this.$nextTick(() => document.addEventListener('scroll', this.scrollHandle))
     },
-    destroySortBar (pdom = this.parentNode) {
+    destroySortBar (pdom = this.parentDom || this.parentNode) {
       this.openModel = false
 
       // const pdom = document.getElementById('mobile-sort-bar')

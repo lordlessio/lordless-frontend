@@ -58,7 +58,7 @@ export default {
         {
           text: 'Candies',
           match: /\/owner\/candy/,
-          show: true,
+          show: false,
           withdraw: true
         },
         {

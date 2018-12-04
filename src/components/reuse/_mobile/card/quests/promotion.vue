@@ -16,7 +16,7 @@
           </svg>
         </span>
       </div>
-      <div class="d-flex promotion-card-bottom">
+      <a class="d-flex promotion-card-bottom" :href="`${ETHERSCANURL}/tx/${info.tx}`" target="_blank">
         <span class="inline-block promotion-symbol-icon">
           <svg>
             <use :xlink:href="`#coin-${info.airdrop.project.symbol.toLocaleLowerCase()}`"/>
@@ -32,7 +32,7 @@
             <span class="inline-block">≈ {{ info.airdrop.countPerUser / 1e18 / info.airdrop.project.USD2TokenCount | formatDecimal }}</span>
           </p>
         </div>
-      </div>
+      </a>
     </div>
   </div>
 </template>
@@ -44,6 +44,11 @@ export default {
     info: {
       type: Object,
       default: () => {}
+    }
+  },
+  computed: {
+    ETHERSCANURL () {
+      return process.env.ETHERSCANURL
     }
   }
 }

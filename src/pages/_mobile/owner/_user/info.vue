@@ -3,47 +3,24 @@
     <mobile-owner-info
       @logout="logout"
       @home="openHome"/>
-
-    <tavern-dialog
-      v-model="detailModel"
-      :ldbId="tavernId"
-      @close="dialogClose"
-      @tipClick="detailModel = false"/>
   </div>
 </template>
 
 <script>
 import MobileOwnerInfo from '@/components/content/_mobile/info'
-import TavernDialog from '@/components/reuse/dialog/ldb/detail'
 import { userMixins, activatedMixins } from '@/mixins'
 
 import { historyState } from 'utils/tool'
-import { mapState } from 'vuex'
 export default {
   name: 'mobile-me-info',
   mixins: [userMixins, activatedMixins],
   data: () => {
     return {
-      detailModel: false,
-      tavernId: null
-    }
-  },
-  computed: {
-    ...mapState('status', {
-      popstateModel: 'popstate'
-    })
-  },
-  watch: {
-    popstateModel (val) {
-      console.log('popstate', val, location.pathname)
-      if (val && location.pathname.includes('/owner/info')) {
-        this.detailModel = false
-      }
+      detailModel: false
     }
   },
   components: {
-    MobileOwnerInfo,
-    TavernDialog
+    MobileOwnerInfo
   },
   methods: {
 
@@ -51,9 +28,7 @@ export default {
      * 打开 home
      */
     openHome (tavern) {
-      this.detailModel = true
-      this.tavernId = tavern.id
-      historyState(`/tavern/${tavern.id}`)
+      this.$router.push(`/tavern/${tavern.id}`)
     },
 
     /**

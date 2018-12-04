@@ -5,7 +5,7 @@ import { actionTypes } from '@/store/types'
  * loop candy clamied
  */
 
-export const loopCandyClamied = (duration = 15000) => {
+export const loopCandyClamied = (duration = 30000) => {
   let nowt = 0
   const loopStep = async (timestamp) => {
     if (!nowt || timestamp - nowt > duration) {

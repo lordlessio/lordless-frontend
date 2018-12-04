@@ -1,5 +1,5 @@
 <template>
-  <div class="mobile-sale-bar">
+  <div v-if="showBar" class="mobile-sale-bar">
     <div class="d-flex f-align-center sale-bar-container">
       <span class="v-flex text-upper sale-bar-price">{{ info.chain.auction.price | weiToEth }} ETH</span>
       <div class="text-nowrap sale-bar-time">
@@ -124,6 +124,10 @@ export default {
       const info = this.info
       return !this.showSign && info.lord && info.lord.address === this.user.address
       // return (!this.showSign && info.lord.address === this.userInfo.address) && (ldbNFTOwner || crowdsaleOwner) && init
+    },
+    showBar () {
+      const info = this.info
+      return this.isOwner || info.chain.auction.isOnAuction
     }
   },
   methods: {

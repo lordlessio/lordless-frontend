@@ -1,5 +1,21 @@
 <template>
   <div class="d-flex col-flex mobile-candies-box">
+    <div class="relative candies-holding-box">
+      <div class="d-flex col-flex f-auto-center candies-holding-container">
+        <p class="candies-holding-title">Total holding</p>
+        <p class="TTFontBolder">
+          <span class="inline-block candies-holding-symbol">$</span>
+          <count-up class="inline-block candies-holding-value" :startVal="0" :decimals="4" :endVal="holdingValue" :duration="1000" :isReady="holdingValue !== null"></count-up>
+        </p>
+        <el-tooltip effect="dark" content="Coming soon" placement="left" :hide-after="2000">
+          <span class="inline-block line-height-0 nav-withdraw-icon">
+            <svg>
+              <use xlink:href="#icon-withdraw"/>
+            </svg>
+          </span>
+        </el-tooltip>
+      </div>
+    </div>
     <asset-sort-bar
       v-if="loading || assets.total"
       :sortItems="sortItems"
@@ -51,6 +67,7 @@ export default {
   data: () => {
     return {
       loading: true,
+      holdingValue: null,
       assets: [],
 
       assetOrder: -1,
@@ -109,29 +126,74 @@ export default {
       const res = await getUserAssets()
       if (res.code === 1000 && res.data) {
         this.reSortAssets({}, res.data)
+        this.holdingValue = res.data.totalValue
+        console.log('------ ', res.data.totalValue)
       }
       this.loading = false
     }
   },
+  activated () {
+    this.getAssets()
+  },
   mounted () {
-    this.$nextTick(() => {
-      console.log('userInfo', this.userInfo)
-      this.getAssets()
-    })
+    this.getAssets()
   }
 }
 </script>
 
 <style lang="scss" scoped>
   .mobile-candies-box {
+    margin-top: -52px;
     // padding-bottom: 35px;
     // box-sizing: border-box;
-    @include viewport-unit(min-height, 100vh, 112px);
+    @include viewport-unit(min-height, 100vh, 60px);
   }
+  .candies-holding-box {
+    height: 140px;
+    color: #fff;
+    background-image: linear-gradient(-225deg, #124BDC 0%, #0079FF 100%);
+  }
+  .candies-holding-container {
+    padding-top: 10px;
+    height: 100%;
+  }
+  .candies-holding-title {
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  .candies-holding-symbol {
+    font-size: 20px;
+    transform: translateY(-15px);
+  }
+  .candies-holding-value {
+    font-size: 36px;
+  }
+  .nav-withdraw-icon {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    width: 22px;
+    height: 22px;
+    fill: #fff;
+  }
+
   .candies-main-cnt {
-    margin-top: 10px;
+    // margin-top: 10px;
     padding: 0 20px 35px;
     @include overflow();
+  }
+  .candies-list {
+    position: relative;
+    padding-top: 20px;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 1px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: #ddd;
+    }
   }
   .candies-item {
     &:not(:first-of-type) {
