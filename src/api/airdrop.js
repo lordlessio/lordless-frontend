@@ -4,6 +4,9 @@ module.exports = axios => {
     getAirdrops: (params) => {
       return axios.get('/api/airdrops', { params })
     },
+    getAirdropUsers: (params) => {
+      return axios.get('/api/airdropUsers', { params })
+    },
     // 根据 id 或者 airdropId 获取 airdrop 详情
     getAirdropDetail: (params) => {
       return axios.get('/api/airdrop/detail', { params })

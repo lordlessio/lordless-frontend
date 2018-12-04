@@ -327,6 +327,20 @@
 }
 
 // lordless pop transition style
+.lordless-pop-none-enter-active, .lordless-pop-none-leave-active {
+  // will-change: transform;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+  // perspective: 1000;
+}
+.lordless-pop-none-enter {
+  opacity: 0;
+}
+.lordless-pop-none-leave-active {
+  opacity: 0;
+}
+
 .lordless-pop-out-enter-active,
 .lordless-pop-out-leave-active,
 .lordless-pop-in-enter-active,

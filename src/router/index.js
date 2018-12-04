@@ -455,7 +455,6 @@ const router = new Router({
       const path = to.path
 
       // 因为在 非通过 popstate 导航时，同步的 scrollBehavior 不会起作用
-      // 而且在 duration 少于 350 的时候，组件内部生命周期没有完成，也不会起作用
       setTimeout(() => {
         const { y = 0 } = activated[path] || {}
         resolve({ x: 0, y })
@@ -503,7 +502,7 @@ router.beforeEach((to, from, next) => {
     const toIndex = _pHistory[to.path]
     const fromIndex = _pHistory[from.path]
 
-    console.log('endTime', endTime, Date.now(), Date.now() - endTime, toIndex, fromIndex)
+    // console.log('endTime', endTime, Date.now(), Date.now() - endTime, toIndex, fromIndex)
     if (isCheckDirection) {
       if (toIndex) {
         // 判断是否是ios左滑返回
@@ -513,14 +512,6 @@ router.beforeEach((to, from, next) => {
           _popDirection = 'forward'
         } else {
           _popDirection = 'reverse'
-          // 判断是否是ios左滑返回
-          // if (!isPush && (Date.now() - endTime) < 377) {
-          //   _popDirection = ''
-          //   // store.commit(`layout/${mutationTypes.LAYOUT_SET_POP_DIRECTION}`, '')
-          // } else {
-          //   _popDirection = 'reverse'
-          //   // store.commit(`layout/${mutationTypes.LAYOUT_SET_POP_DIRECTION}`, 'reverse')
-          // }
         }
       } else {
         /* 储存 page pop history */
@@ -534,7 +525,7 @@ router.beforeEach((to, from, next) => {
     /** set store pop direction */
     let popTransitionName = ''
     switch (_popDirection) {
-      case '': popTransitionName = ''
+      case '': popTransitionName = 'lordless-pop-none'
         break
       case 'forward': popTransitionName = 'lordless-pop-in'
         break
@@ -568,7 +559,12 @@ router.beforeEach((to, from, next) => {
   if (title) {
     document.title = title
   }
-  next()
+  window.requestAnimationFrame(next)
+})
+
+router.afterEach(() => {
+  isPush = false
+  store.commit(`layout/${mutationTypes.LAYOUT_SET_POP_DIRECTION}`, 'forward')
 })
 
 router.afterEach(() => {

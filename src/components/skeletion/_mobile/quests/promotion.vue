@@ -26,7 +26,7 @@ export default {
 
   }
   .promotion-skeletion-container {
-    border-radius: 100%;
+    border-radius: 5px;
     overflow: hidden;
     background-color: $--skeletion-light;
     p {

@@ -1,13 +1,15 @@
 <template>
   <div class="mobile-promotion-card">
     <div class="promotion-card-container">
-      <div class="d-flex f-align-center promotion-card-top">
+      <div class="d-flex f-align-center promotion-card-top" @click.stop="$router.push(`/project/${info.airdrop.project._id}`)">
         <span class="inline-block line-height-0 card-top-icon">
           <svg>
-            <use xlink:href="#coin-less"/>
+            <use :xlink:href="`#coin-${info.airdrop.project.symbol.toLocaleLowerCase()}`"/>
           </svg>
         </span>
-        <span class="inline-block card-top-symbol">{{ 'LESS' }} Airdrop</span>
+        <span class="inline-block card-top-symbol">
+          <span class="text-upper">{{ info.airdrop.project.symbol }}</span>
+         Airdrop</span>
         <span class="inline-block line-height-0 card-top-icon arrow">
           <svg>
             <use xlink:href="#icon-arrow-line-right"/>
@@ -17,17 +19,17 @@
       <div class="d-flex promotion-card-bottom">
         <span class="inline-block promotion-symbol-icon">
           <svg>
-            <use xlink:href="#coin-less"/>
+            <use :xlink:href="`#coin-${info.airdrop.project.symbol.toLocaleLowerCase()}`"/>
           </svg>
         </span>
         <div class="v-flex promotion-info-box">
           <p class="d-flex f-align-center">
-            <span class="v-flex inline-block text-upper">LESS</span>
-            <span class="inline-block TTFontBolder">+200</span>
+            <span class="v-flex inline-block text-upper">{{ info.airdrop.project.symbol }}</span>
+            <span class="inline-block TTFontBolder">+ {{ info.airdrop.countPerUser | weiToEth }}</span>
           </p>
           <p class="d-flex f-align-center">
-            <span class="v-flex inline-block">{{ new Date() | dateFormat('MMM. DD YYYY') }}</span>
-            <span class="inline-block">≈ $1.1</span>
+            <span class="v-flex inline-block">{{ info.update_at | dateFormat('MMM. DD YYYY') }}</span>
+            <span class="inline-block">≈ {{ info.airdrop.countPerUser / 1e18 / info.airdrop.project.USD2TokenCount | formatDecimal }}</span>
           </p>
         </div>
       </div>

@@ -53,7 +53,7 @@
         </p>
       </div>
     </div>
-    <div v-else class="authorize-sign-container">
+    <!-- <div v-else class="authorize-sign-container">
       <h1 class="TTFontBolder">Create Account</h1>
       <div class="text-left authorize-sign-cnt">
         <p>We use your email to send you notifications around collectible activity such as ones you buy and sell. We'll never share your email with anyone else.</p>
@@ -105,20 +105,20 @@
         shadow
         :disabled="!signRequired"
         @click="signUp">Sign Up</lordless-btn>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
-import LdInput from '@/components/stories/input'
-import CheckBox from '@/components/stories/checkbox'
+// import LdInput from '@/components/stories/input'
+// import CheckBox from '@/components/stories/checkbox'
 import TermsDialog from '@/components/reuse/dialog/sign/terms.vue'
 import PrivacyDialog from '@/components/reuse/dialog/sign/privacy.vue'
 
 import Privacy from '@/components/content/sign/privacy.vue'
 import Terms from '@/components/content/sign/terms.vue'
 
-import { getUserByAddress } from 'api'
+// import { getUserByAddress } from 'api'
 
 import { metamaskMixins } from '@/mixins'
 
@@ -166,50 +166,50 @@ export default {
         terms: false,
         privacy: false,
         notice: false
-      },
+      }
 
       // 注册 inputs
-      signInputs: {
-        nickName: {
-          model: '',
-          placeholder: 'Nickname',
-          maxlength: 30,
-          required: false
-        },
-        email: {
-          model: '',
-          theme: null,
-          placeholder: 'Email Address',
-          regex: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-          required: false
-        }
-      }
+      // signInputs: {
+      //   nickName: {
+      //     model: '',
+      //     placeholder: 'Nickname',
+      //     maxlength: 30,
+      //     required: false
+      //   },
+      //   email: {
+      //     model: '',
+      //     theme: null,
+      //     placeholder: 'Email Address',
+      //     regex: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      //     required: false
+      //   }
+      // }
     }
   },
   computed: {
 
     // 判断注册信息格式是否有效
-    signRequired () {
-      const { nickName, email } = this.signInputs
-      const { terms, privacy } = this.termModels
-      return terms && privacy && nickName.required && email.required
-    }
+    // signRequired () {
+    //   const { nickName, email } = this.signInputs
+    //   const { terms, privacy } = this.termModels
+    //   return terms && privacy && nickName.required && email.required
+    // }
   },
   watch: {
-    value (val) {
-      if (val) this.checkRegister()
-    },
+    // value (val) {
+    //   if (val) this.checkRegister()
+    // },
 
-    // 监听 account改变并且 sign dialog 在打开情况下，重新 check register
-    account (val) {
-      if (val && this.value) {
-        this.checkRegister()
-      }
-    }
+    // // 监听 account改变并且 sign dialog 在打开情况下，重新 check register
+    // account (val) {
+    //   if (val && this.value) {
+    //     this.checkRegister()
+    //   }
+    // }
   },
   components: {
-    LdInput,
-    CheckBox,
+    // LdInput,
+    // CheckBox,
 
     TermsDialog,
     PrivacyDialog,
@@ -239,56 +239,56 @@ export default {
     },
 
     // 检查用户是否已经注册过
-    async checkRegister (address = this.account) {
-      console.log('check user sign')
-      this.userChecking = true
-      const res = await getUserByAddress(address)
-      if (res.code === 1000 && !res.data) this.isRegister = true
-      else if (res.code !== 1000) {
-        this.$notify.error({
-          title: 'error!',
-          message: res.errorMsg || 'unknown',
-          position: 'bottom-right',
-          duration: 2500
-        })
-      } else this.isRegister = false
-      this.userChecking = false
-    },
+    // async checkRegister (address = this.account) {
+    //   console.log('check user sign')
+    //   this.userChecking = true
+    //   const res = await getUserByAddress(address)
+    //   if (res.code === 1000 && !res.data) this.isRegister = true
+    //   else if (res.code !== 1000) {
+    //     this.$notify.error({
+    //       title: 'error!',
+    //       message: res.errorMsg || 'unknown',
+    //       position: 'bottom-right',
+    //       duration: 2500
+    //     })
+    //   } else this.isRegister = false
+    //   this.userChecking = false
+    // },
 
-    // 注册账户
-    signUp () {
-      if (!this.signRequired) return
-      const { email, nickName } = this.signInputs
+    // // 注册账户
+    // signUp () {
+    //   if (!this.signRequired) return
+    //   const { email, nickName } = this.signInputs
 
-      // metamask 控制开关
-      this.metamaskChoose = true
-      this[actionTypes.USER_META_LOGIN]({
-        nickName: nickName.model,
-        email: email.model,
-        cb: () => {
-          this.metamaskChoose = false
+    //   // metamask 控制开关
+    //   this.metamaskChoose = true
+    //   this[actionTypes.USER_META_LOGIN]({
+    //     nickName: nickName.model,
+    //     email: email.model,
+    //     cb: () => {
+    //       this.metamaskChoose = false
 
-          this.reset()
+    //       this.reset()
 
-          this.$emit('success')
-        }})
-    },
+    //       this.$emit('success')
+    //     }})
+    // },
 
-    emailChange ({ required }) {
-      this.$set(this.signInputs.email, 'required', required)
-    },
+    // emailChange ({ required }) {
+    //   this.$set(this.signInputs.email, 'required', required)
+    // },
 
-    emailBlur ({ required, model }) {
-      this.$set(this.signInputs.email, 'required', required)
-    },
+    // emailBlur ({ required, model }) {
+    //   this.$set(this.signInputs.email, 'required', required)
+    // },
 
-    nicknameChange ({ model }) {
-      this.$set(this.signInputs.nickName, 'required', !!model)
-    },
+    // nicknameChange ({ model }) {
+    //   this.$set(this.signInputs.nickName, 'required', !!model)
+    // },
 
-    nickNameBlur ({ model }) {
-      this.$set(this.signInputs.nickName, 'required', !!model)
-    },
+    // nickNameBlur ({ model }) {
+    //   this.$set(this.signInputs.nickName, 'required', !!model)
+    // },
 
     termAgree (type) {
       this[`${type}DialogModel`] = false
@@ -296,8 +296,8 @@ export default {
     },
 
     reset () {
-      this.$set(this.signInputs.nickName, 'model', '')
-      this.$set(this.signInputs.email, 'model', '')
+      // this.$set(this.signInputs.nickName, 'model', '')
+      // this.$set(this.signInputs.email, 'model', '')
       this.$set(this, 'termModels', {
         terms: false,
         privacy: false,
@@ -309,7 +309,7 @@ export default {
     }
   },
   mounted () {
-    this.checkRegister()
+    // this.checkRegister()
   }
 }
 </script>

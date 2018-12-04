@@ -181,7 +181,7 @@ import MobileBottomsUpSkeletion from '@/components/skeletion/_mobile/quests/bott
 import MobileBountySkeletion from '@/components/skeletion/_mobile/quests/bounty'
 import MobilePromotionSkeletion from '@/components/skeletion/_mobile/quests/promotion'
 
-import { getUserTasks } from 'api'
+import { getUserTasks, getAirdropUsers } from 'api'
 import { historyState, scrollTo } from 'utils/tool'
 
 import { publicMixins, activatedMixins } from '@/mixins'
@@ -367,7 +367,12 @@ export default {
 
       let data = null
       try {
-        const res = await getUserTasks(params)
+        let res
+        if (_type === 'promotion') {
+          res = await getAirdropUsers(params)
+        } else {
+          res = await getUserTasks(params)
+        }
         if (res.code === 1000 && res.data) {
           data = res.data
         }

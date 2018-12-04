@@ -140,7 +140,7 @@ export default {
         let isConnected = false
         isConnected = await Airdrop.methods('isCollected', [ account, airdropId ])
         if (!isConnected) {
-          isConnected = !!(await getAirdropUserInfo({ airdropId: this.info._id }))
+          isConnected = !!(await getAirdropUserInfo({ airdropId: this.info._id }).data)
         }
         this.isClaimed = isConnected
       } catch (err) {
