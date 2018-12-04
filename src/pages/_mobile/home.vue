@@ -1,51 +1,61 @@
 <template>
   <section class="mobile-home-box">
-    <div class="mobile-home-promotions">
-      <h2 class="mobile-home-title">Promotions</h2>
-      <ul class="mobile-home-ul home-promotions-ul">
-        <li
-          v-for="(item, index) of airdrops"
-          :key="index"
-          class="home-info-item home-promotions-item"
-          @click.stop="$router.push(`/project/${item.project._id}`)">
-          <figure>
-            <figcaption></figcaption>
-            <promotion-claim
-              class="promotion-item-info"
-              :info="item"/>
-          </figure>
-        </li>
-      </ul>
-    </div>
-    <div class="mobile-home-candies">
-      <h2 class="mobile-home-title">Candies</h2>
-      <ul class="mobile-home-ul home-candies-ul">
-        <li
-          v-for="(candy, index) of Object.values(candyClaimed)" :key="index"
-          class="home-info-item home-candies-item"
-          @click.stop="$router.push(`/project/${candy._id}`)">
-          <div class="d-flex f-align-center candies-symbol-box">
-            <p class="line-height-0 home-candy-icon candies-symbol-coin">
-              <svg>
-                <use :xlink:href="`#coin-${candy.symbol.toLocaleLowerCase()}`"/>
-              </svg>
-            </p>
-            <p class="v-flex">{{ candy.coinmarketcap.name || candy.symbol }}<span class="text-upper">&nbsp;({{ candy.symbol }})</span></p>
-          </div>
-          <div class="d-flex f-align-center candies-claimed-box">
-            <span class="TTFontBolder candies-claimed-num">{{ candy.count | formatDecimal }}<span>(&nbsp;$ {{ candy.count / candy.USD2TokenCount | formatDecimal }})</span>&nbsp;&nbsp;</span>
-            has been claimed
-          </div>
-        </li>
-      </ul>
-    </div>
+    <transition name="ld-hide-fade" mode="out-in">
+      <home-skeletion v-if="loading"/>
+
+      <div v-else>
+        <div class="mobile-home-promotions">
+          <h2 class="mobile-home-title">Promotions</h2>
+          <ul class="mobile-home-ul home-promotions-ul">
+            <li
+              v-for="(item, index) of airdrops"
+              :key="index"
+              class="home-info-item home-promotions-item"
+              @click.stop="$router.push(`/project/${item.project._id}`)">
+              <figure>
+                <figcaption :style="`background-image: url(${ossOrigin + item.banners[0]})`"></figcaption>
+                <promotion-claim
+                  class="promotion-item-info"
+                  :info="item"/>
+              </figure>
+            </li>
+          </ul>
+        </div>
+        <div class="mobile-home-candies">
+          <h2 class="mobile-home-title">Candies</h2>
+          <ul class="mobile-home-ul home-candies-ul">
+            <li
+              v-for="(candy, index) of Object.values(candyClaimed)" :key="index"
+              class="home-info-item home-candies-item"
+              @click.stop="$router.push(`/project/${candy._id}`)">
+              <div class="d-flex f-align-center candies-symbol-box">
+                <p class="line-height-0 home-candy-icon candies-symbol-coin">
+                  <svg>
+                    <use :xlink:href="`#coin-${candy.symbol.toLocaleLowerCase()}`"/>
+                  </svg>
+                </p>
+                <p class="v-flex">{{ candy.coinmarketcap.name || candy.symbol }}<span class="text-upper">&nbsp;({{ candy.symbol }})</span></p>
+              </div>
+              <div class="d-flex f-align-center candies-claimed-box">
+                <span class="TTFontBolder candies-claimed-num">{{ candy.count | formatDecimal }}<span>(&nbsp;$ {{ candy.count / candy.USD2TokenCount | formatDecimal }})</span>&nbsp;&nbsp;</span>
+                has been claimed
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </transition>
   </section>
 </template>
 
 <script>
 import PromotionClaim from '@/components/reuse/_mobile/card/promotion/claim'
 
+import HomeSkeletion from '@/components/skeletion/_mobile/home'
+
 import { getAirdrops } from 'api'
+
+import { loopCandyClamied } from 'utils/loop'
 
 import { mapState } from 'vuex'
 export default {
@@ -60,10 +70,14 @@ export default {
   computed: {
     ...mapState('candy', [
       'candyClaimed'
-    ])
+    ]),
+    ossOrigin () {
+      return process.env.LDBICON_ORIGIN
+    }
   },
   components: {
-    PromotionClaim
+    PromotionClaim,
+    HomeSkeletion
   },
   methods: {
     async getAirdrops () {
@@ -81,6 +95,7 @@ export default {
   },
   mounted () {
     this.getAirdrops()
+    loopCandyClamied()
   }
 }
 </script>
@@ -122,7 +137,7 @@ export default {
     figcaption {
       width: 100%;
       height: 340px;
-      background-color: #EB8785;
+      @include bg-size();
     }
   }
 

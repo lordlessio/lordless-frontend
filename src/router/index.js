@@ -52,7 +52,8 @@ const mobileRoutes = [
     component: MobileHome,
     meta: {
       title: 'Home - LORDLESS',
-      keepAlive: true
+      keepAlive: true,
+      transition: false
       // header: {
       //   show: false
       // },
@@ -67,7 +68,8 @@ const mobileRoutes = [
     component: MobileTaverns,
     meta: {
       title: 'Taverns - LORDLESS',
-      keepAlive: true
+      keepAlive: true,
+      transition: false
       // header: {
       //   show: false
       // },
@@ -82,7 +84,8 @@ const mobileRoutes = [
     component: MobileTavernDetail,
     meta: {
       title: 'Tavern Detail - LORDLESS',
-      keepAlive: true
+      keepAlive: true,
+      transition: true
       // header: {
       //   show: false
       // },
@@ -97,7 +100,8 @@ const mobileRoutes = [
     component: MobileProject,
     meta: {
       title: 'Project Detail - LORDLESS',
-      keepAlive: true
+      keepAlive: true,
+      transition: false
     }
   },
   {
@@ -111,7 +115,8 @@ const mobileRoutes = [
         component: MobileOwnerCandy,
         meta: {
           title: 'Candy - LORDLESS',
-          keepAlive: true
+          keepAlive: true,
+          transition: false
 
           // header: {
           //   show: false
@@ -127,7 +132,8 @@ const mobileRoutes = [
         component: MobileOwnerQuest,
         meta: {
           title: 'Quest - LORDLESS',
-          keepAlive: true
+          keepAlive: true,
+          transition: false
           // header: {
           //   show: false
           // },
@@ -142,7 +148,8 @@ const mobileRoutes = [
         component: MobileMeInfo,
         meta: {
           title: 'OwnerInfo - LORDLESS',
-          keepAlive: true
+          keepAlive: true,
+          transition: false
           // header: {
           //   show: false
           // },
@@ -158,7 +165,8 @@ const mobileRoutes = [
         meta: {
           title: 'Owner Activities - LORDLESS',
           navText: 'Activities',
-          keepAlive: true
+          keepAlive: true,
+          transition: false
           // header: {
           //   show: false
           // },
@@ -174,7 +182,8 @@ const mobileRoutes = [
         meta: {
           title: 'Owner Authorization - LORDLESS',
           navText: 'Authorization',
-          keepAlive: true
+          keepAlive: true,
+          transition: false
           // header: {
           //   show: false
           // },
@@ -190,7 +199,8 @@ const mobileRoutes = [
         meta: {
           title: 'Owner Taverns - LORDLESS',
           navText: 'Taverns',
-          keepAlive: true
+          keepAlive: true,
+          transition: false
           // header: {
           //   show: false
           // },
@@ -537,6 +547,8 @@ router.beforeEach((to, from, next) => {
         break
       default: break
     }
+    const { transition } = to.meta
+    if (!transition) popTransitionName = 'lordless-pop-none'
 
     store.commit(`layout/${mutationTypes.LAYOUT_SET_POP_TRANSITION}`, popTransitionName)
 

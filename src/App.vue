@@ -39,7 +39,7 @@ import MobileAlert from '@/components/reuse/dialog/mobileAlert'
 import { mobileBool } from 'utils/tool'
 
 import { initWeb3 } from '@/assets/utils/web3/initWeb3'
-import { loopCandyClamied } from '@/assets/utils/loop'
+// import { loopCandyClamied } from '@/assets/utils/loop'
 
 import { actionTypes } from '@/store/types'
 import { mapState, mapActions } from 'vuex'
@@ -161,7 +161,7 @@ export default {
     this[actionTypes.STATUS_INIT_BROSWER]()
     this[actionTypes.USER_SET_USER_BY_TOKEN]()
     this[actionTypes.USER_SET_USER_HOME]()
-    loopCandyClamied()
+    // loopCandyClamied()
     // document.getElementById('outside-loading').style = 'display: none'
     // this.$nextTick(() => {
     //   // this[actionTypes.REGION_SET_REGIONS]()

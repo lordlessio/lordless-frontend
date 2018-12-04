@@ -373,9 +373,9 @@ export const formatNumber = (number) => {
   if (number / 1000000000 > 1000000000) return ' Infinity'
 
   const symbols = [
-    { symbol: 'b', num: 1000000000 },
-    { symbol: 'm', num: 1000000 },
-    { symbol: 'k', num: 1000 }
+    { symbol: 'B', num: 1000000000 },
+    { symbol: 'M', num: 1000000 },
+    { symbol: 'K', num: 1000 }
   ]
   let str
   for (const s of symbols) {
@@ -387,17 +387,17 @@ export const formatNumber = (number) => {
   return str || number
 }
 
-export const formatDecimal = (str, { len = 4, percentage = false } = {}) => {
-  if (!str) return str
-  if (len === 0) return Math.round(str)
+export const formatDecimal = (value, { len = 4, percentage = false } = {}) => {
+  if (!value || typeof value !== 'number') return value
+  if (len === 0) return Math.round(value)
   if (percentage) {
-    str = parseFloat(str) * 100
+    value = parseFloat(value) * 100
   }
-  str = str.toString()
-  if (str.split('.')[1]) {
-    str = str.split('.')[0] + '.' + str.split('.')[1].slice(0, len)
+  value = value.toString()
+  if (value.split('.')[1]) {
+    value = value.split('.')[0] + '.' + value.split('.')[1].slice(0, len)
   }
-  return parseFloat(str)
+  return parseFloat(value)
 }
 
 /**

@@ -4,7 +4,7 @@
       <div class="d-flex f-align-center promotion-card-top" @click.stop="$router.push(`/project/${info.airdrop.project._id}`)">
         <span class="inline-block line-height-0 card-top-icon">
           <svg>
-            <use :xlink:href="`#coin-${info.airdrop.project.symbol.toLocaleLowerCase()}`"/>
+            <use xlink:href="#icon-horn"/>
           </svg>
         </span>
         <span class="inline-block card-top-symbol">

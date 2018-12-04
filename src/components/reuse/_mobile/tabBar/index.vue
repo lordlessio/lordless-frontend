@@ -168,7 +168,7 @@ export default {
   width: 100%;
   height: 50px;
   background-color: #fff;
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.36);
+  box-shadow: 0 0 10px 0px #dedede;
   z-index: 100;
 }
 .tab-bar-ul {
