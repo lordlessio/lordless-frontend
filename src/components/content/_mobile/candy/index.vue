@@ -1,20 +1,11 @@
 <template>
   <div class="d-flex col-flex relative mobile-candies-box">
-    <div v-if="loading || assets.total">
-      <mobile-candy-holding-nav :holdingValue="holdingValue"/>
-      <asset-sort-bar
-        :sortItems="sortItems"
-        :total="assets.total"
-        :scrollHeight="100"
-        :topHeight="44"
-        @sort="sortChange"
-        @order="orderChange"/>
-    </div>
     <mobile-nav-bar
-      v-else
+      v-if="!loading && !assets.total"
       ref="mobile-nav-bar"
       text="Candies"
-      :scroll="false"/>
+      :scroll="false"
+      fixed/>
     <transition name="ld-hide-fade" mode="out-in">
       <mobile-asset-skeletion v-if="loading"/>
       <div v-else-if="!loading && !assets.total" class="v-flex d-flex f-auto-center children-none-data-box none-candies-box">
@@ -31,6 +22,14 @@
         </div>
       </div>
       <div v-else-if="!loading && assets.total" class="v-flex d-flex col-flex mobile-candies-container">
+        <mobile-candy-holding-nav :holdingValue="holdingValue"/>
+        <asset-sort-bar
+          :sortItems="sortItems"
+          :total="assets.total"
+          :scrollHeight="100"
+          :topHeight="44"
+          @sort="sortChange"
+          @order="orderChange"/>
         <div class="v-flex candies-main-cnt">
           <ul class="candies-list">
             <li
@@ -143,7 +142,6 @@ export default {
 
 <style lang="scss" scoped>
   .mobile-candies-box {
-    padding-top: 140px;
     margin-top: -52px;
     // padding-bottom: 35px;
     // box-sizing: border-box;
@@ -154,6 +152,9 @@ export default {
     // margin-top: 10px;
     padding: 0 20px 35px;
     @include overflow();
+  }
+  .mobile-candies-container {
+    padding-top: 140px;
   }
   .candies-list {
     position: relative;

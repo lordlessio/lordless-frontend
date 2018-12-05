@@ -1,6 +1,22 @@
 <template>
   <div v-if="visible" class="text-center authorize-sign-box">
-    <div v-if="web3Loading || !isRegister || userChecking" class="authorize-login-container">
+    <div v-if="web3Loading || !isRegister || userChecking" class="mobile-authorize-login">
+      <h2>Sign up</h2>
+      <p class="mobile-login-desc">You are signing up for the wallet address below.</p>
+      <div class="mobile-login-account">
+        <p class="text-break">{{ account }}</p>
+      </div>
+      <div class="mobile-login-btn">
+        <lordless-btn
+          class="TTFontBolder lordless-message-btn login-btn"
+          theme="blue"
+          shadow
+          :loading="web3Loading || userChecking"
+          :disabled="web3Loading || userChecking"
+          @click="relogin">YES</lordless-btn>
+      </div>
+    </div>
+    <!-- <div v-if="web3Loading || !isRegister || userChecking" class="authorize-login-container">
       <div class="inline-block lordless-shadow" :style="`border-radius: ${avatar.radius};`">
         <lordless-blockies
           :scale="avatar.scale"
@@ -24,7 +40,7 @@
             @click="relogin">Login</lordless-btn>
         </div>
       </div>
-    </div>
+    </div> -->
     <div v-else-if="termsDialogModel">
       <div class="authorize-sign-terms authorize-sign-term">
         <h1 class="TTFontBolder">Term of use</h1>
@@ -452,6 +468,35 @@ export default {
   .term-btn {
     padding: 12px 15px;
   }
+
+  /**
+   *  mobile-authorize-login --begin
+   */
+  .mobile-authorize-login {
+    padding: 15px 10px;
+    color: #fff;
+    font-size: 16px;
+    >h2 {
+      font-size: 24px;
+    }
+  }
+  .mobile-login-desc {
+    margin-top: 10px;
+    // font-size: 16px;
+  }
+  .mobile-login-account {
+    padding: 5px;
+    margin-top: 20px;
+    // font-size: 16px;
+    border: 2px dashed #fff;
+    border-radius: 5px;
+  }
+  .mobile-login-btn {
+    margin-top: 35px;
+  }
+  /**
+   *  mobile-authorize-login --end
+   */
 
   @media screen and (max-width: 768px) {
     .authorize-sign-input {

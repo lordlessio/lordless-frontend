@@ -9,7 +9,7 @@
       <p class="text-cap mobile-navbar-text">
         <span class="text-ellipsis inline-block">{{ text }}</span>
       </p>
-      <div v-if="userAvatar" class="TTFontBold d-flex f-align-center nav-right-box navbar-header-tip">
+      <div v-if="userAvatar && userInfo._id" class="TTFontBold d-flex f-align-center nav-right-box navbar-header-tip">
         <span class="inline-block line-height-0 navbar-tip-icon">
           <svg>
             <use xlink:href="#icon-color-star"/>

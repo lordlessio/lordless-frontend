@@ -3,6 +3,7 @@
 
 // lordless-logout-confirm
 .lordless-logout-confirm {
+  padding-bottom: 35px;
   margin-top: 50%;
   margin-left: 50%;
   max-width: 90%;
@@ -13,28 +14,46 @@
   box-sizing: border-box;
   border: none;
   transform: translateX(-50%);
+  @include TTFontBold();
+  .el-message-box__header {
+    padding-top: 45px;
+    padding-bottom: 5px;
+  }
   .el-message-box__title {
+    font-size: 24px;
+    color: #fff;
+    @include TTFontBolder();
+  }
+  .el-message-box__close {
+    font-weight: bold;
+    font-size: 24px;
     color: #fff;
   }
   // .el-message-box__title {
   //   font-size: 20px;
   // }
   .logout-tip-text {
-    margin-bottom: 10px;
+    // margin-bottom: 10px;
     font-size: 16px;
     color: #fff;
+  }
+  .el-message-box__btns {
+    padding-top: 20px;
   }
 }
 .logout-confirm-btn, .logout-cancel-btn {
   font-size: 16px;
   border: none;
-  @include TTFontBold();
-  &:focus {
-    background-color: $--color-btn-red;
-  }
+  @include TTFontBolder();
 }
 .logout-confirm-btn {
-  background-color: $--color-btn-red;
+  padding: 12px 20px;
+  background-color: #fff;
+  color: $--color-btn-blue;
+  &:focus {
+    background-color: #fff;
+    color: $--color-btn-blue;
+  }
 }
 .logout-cancel-btn {
 

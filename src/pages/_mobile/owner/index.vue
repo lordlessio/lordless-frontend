@@ -19,10 +19,10 @@
         <i class="el-icon-loading"></i>
       </div>
       <mobile-wallets
-        class="v-flex"
+        class="v-flex mobile-owner-plugin"
         v-else-if="web3Model"/>
       <mobile-connect
-        class="v-flex"
+        class="v-flex mobile-owner-plugin"
         v-else
         @connect="checkUser"/>
     </div>
@@ -209,5 +209,8 @@ export default {
     &:not(:first-of-type) {
       margin-top: 12px;
     }
+  }
+  .mobile-owner-plugin {
+    padding-top: 44px;
   }
 </style>

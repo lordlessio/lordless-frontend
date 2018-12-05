@@ -5,7 +5,7 @@
       <p class="mobile-wallets-desc">We can’t connect the external wallet.<br>Please copy the website below and download the wallet to paste the address in the wallet.</p>
       <p
         id="copy-link"
-        class="inline-block line-height-1 wallets-copy-link"
+        class="TTFontBolder inline-block line-height-1 wallets-copy-link"
         :data-clipboard-text="copyLink"
         @mouseleave="clipBool = false">
         {{ copyLink }}
@@ -46,8 +46,14 @@ export default {
   data: () => {
     return {
       clipBool: false,
-      copyLink: 'http://lordless.games',
+      copyLink: 'https://game.lordless.io',
       wallets: [
+        {
+          type: 'is-blue',
+          icon: '#icon-coinbase-wallet',
+          theme: 'light',
+          path: 'https://wallet.coinbase.com/'
+        },
         {
           type: 'is-yellow',
           icon: '#icon-trustwallet',
@@ -55,7 +61,7 @@ export default {
           path: 'https://trustwallet.com/'
         },
         {
-          type: 'is-blue',
+          type: 'is-popular',
           theme: 'light',
           icon: '#icon-alphawallet',
           path: 'https://alphawallet.com/'
@@ -122,7 +128,7 @@ export default {
     }
     &::after {
       content: 'Copy to clipboard';
-      position: absolute;
+      position: fixed;
       bottom: 15%;
       left: 50%;
       padding: 10px 14px;
@@ -150,6 +156,10 @@ export default {
       &::before {
         display: none;
       }
+      .mobile-wallets-container {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
       .mobile-wallets-title, .mobile-wallets-desc {
         color: #fff;
       }
@@ -164,6 +174,8 @@ export default {
     }
   }
   .mobile-wallets-container {
+    padding-top: 35px;
+    padding-bottom: 35px;
     margin: 0 auto;
     max-width: 300px;
   }
@@ -178,12 +190,12 @@ export default {
   }
   .wallets-copy-link {
     margin-top: 12px;
-    padding: 16px;
+    padding: 10px 12px;
     line-height: 1;
     font-size: 16px;
     border: 2px dashed;
-    color: #777;
-    border-color: #999;
+    color: #0079FF;
+    border-color: #0079FF;
     border-radius: 5px;
     outline: none;
   }
@@ -191,7 +203,7 @@ export default {
     margin-top: 45px;
   }
   .mobile-wallet-btn {
-    padding: 10px 0;
+    height: 50px;
     background-color: transparent !important;
     border: none;
     &.light {
@@ -215,6 +227,18 @@ export default {
       width: 25px;
       height: 25px;
     }
+    &.is-blue {
+      .wallet-icon {
+        svg {
+          width: 110px;
+        }
+      }
+      background-image: linear-gradient(to right, #124BDC, #0079FF);
+      &.inverse {
+        fill: #0079FF !important;
+        background-image: linear-gradient(#fff, #fff);
+      }
+    }
     &.is-yellow {
       .wallet-icon {
         svg {
@@ -229,7 +253,7 @@ export default {
         background-image: linear-gradient(#fff, #fff);
       }
     }
-    &.is-blue {
+    &.is-popular {
       .wallet-icon {
         svg {
           width: 110px;

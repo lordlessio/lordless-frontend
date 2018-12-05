@@ -31,22 +31,25 @@ export default {
     // height: 100%;
   }
   .mobile-connect-container {
+    padding: 35px 0;
     margin: 0 auto;
     max-width: 300px;
     font-size: 16px;
   }
   .mobile-connect-icon {
     margin: 0 auto;
-    width: 120px;
-    height: 120px;
+    width: 96px;
+    height: 96px;
     line-height: 0;
-    fill: #999;
+    fill: #bbb;
   }
   .mobile-connect-address {
     margin-top: 36px;
     padding: 10px 12px;
     border: 2px dashed #4586FC;
+    font-size: 16px;
     color: #4586FC;
+    border-radius: 5px;
   }
   .mobile-connect-desc {
     margin-top: 12px;

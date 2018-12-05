@@ -26,16 +26,13 @@ export default {
       this[actionTypes.USER_META_LOGIN]()
     },
     async logout () {
-      this.$confirm('<p class="logout-tip-text">Should you logout this account.</p>', 'Logout?', {
-        confirmButtonText: 'logout',
-        cancelButtonText: 'cancel',
+      this.$confirm('<p class="logout-tip-text">Are you sure to logout?</p>', 'Logout', {
+        confirmButtonText: 'YES',
         dangerouslyUseHTMLString: true,
-        showClose: false,
-        type: 'warning',
+        showCancelButton: false,
         center: true,
         customClass: 'lordless-logout-confirm',
-        confirmButtonClass: 'logout-confirm-btn',
-        cancelButtonClass: 'logout-cancel-btn'
+        confirmButtonClass: 'logout-confirm-btn'
       }).then(() => {
         this[actionTypes.USER_LOGOUT]({ reset: true })
       })

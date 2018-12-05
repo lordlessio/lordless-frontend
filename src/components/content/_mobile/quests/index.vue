@@ -144,7 +144,7 @@
                 </p>
                 <p class="quests-empty-desc">You have no taverns now.</p>
                 <div class="quests-empty-btns">
-                  <lordless-btn class="quests-empty-btn" theme="blue" inverse shadow @click="$router.push('/taverns')">Buy a tavern</lordless-btn>
+                  <lordless-btn class="quests-empty-btn" theme="blue" inverse shadow @click="$router.push('/taverns')">Apply a quest</lordless-btn>
                 </div>
               </div>
             </div>

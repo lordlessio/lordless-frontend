@@ -13,12 +13,18 @@
       class="inline-block lordless-carousel-btn prev"
       :disabled="disabledPrev"
       @click="carouselChoose('prev', disabledPrev)">
+      <span>
+        <i class="el-icon el-icon-caret-left"></i>
+      </span>
     </lordless-btn>
     <lordless-btn
       theme="inherit"
       class="inline-block lordless-carousel-btn next"
       :disabled="disabledNext"
       @click="carouselChoose('next', disabledNext)">
+      <span>
+        <i class="el-icon el-icon-caret-right"></i>
+      </span>
     </lordless-btn>
     <slot></slot>
   </el-carousel>
@@ -131,6 +137,7 @@ export default {
     top: 50%;
     width: 50px;
     height: 50px;
+    font-size: 30px;
     color: #fff;
     border-radius: 100%;
     background-color: $--text-blue-color;
@@ -138,29 +145,29 @@ export default {
     z-index: 5;
     border: none;
     // cursor: pointer;
-    &::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-top: 10px solid transparent;
-      border-bottom: 10px solid transparent;
-      border-right: 12px solid #fff;
-      border-radius: 2px;
-    }
+    // &::before {
+    //   content: '';
+    //   position: absolute;
+    //   top: 50%;
+    //   left: 50%;
+    //   width: 0;
+    //   height: 0;
+    //   border-top: 10px solid transparent;
+    //   border-bottom: 10px solid transparent;
+    //   border-right: 12px solid #fff;
+    //   border-radius: 2px;
+    // }
     &.prev {
       left: 12.5%;
-      &::before {
-        transform: translate(-60%, -50%);
-      }
+      // &::before {
+      //   transform: translate(-60%, -50%);
+      // }
     }
     &.next {
       right: 12.5%;
-      &::before {
-        transform: translate(-40%, -50%) rotate(180deg);
-      }
+      // &::before {
+      //   transform: translate(-40%, -50%) rotate(180deg);
+      // }
     }
   }
 </style>
