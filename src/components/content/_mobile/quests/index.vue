@@ -142,9 +142,9 @@
                     <use xlink:href="#icon-no-candy"/>
                   </svg>
                 </p>
-                <p class="quests-empty-desc">You have no taverns now.</p>
+                <p class="quests-empty-desc">You have no promotions now.</p>
                 <div class="quests-empty-btns">
-                  <lordless-btn class="quests-empty-btn" theme="blue" inverse shadow @click="$router.push('/taverns')">Apply a quest</lordless-btn>
+                  <lordless-btn class="quests-empty-btn" theme="blue" inverse shadow @click="$router.push('/home')">Apply a Promotion</lordless-btn>
                 </div>
               </div>
             </div>
