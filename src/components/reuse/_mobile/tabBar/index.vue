@@ -3,9 +3,9 @@
     <!-- <mobile-nav-bar :text="navigations[activeIndex].navbarText" :scroll="navigations[activeIndex].scroll"/> -->
     <ul class="d-flex tab-bar-ul" @click.stop="chooseBar">
       <li v-for="(item, index) of navigations" :key="index"
-        class="v-flex text-center tab-bar-item" :class="{ 'is-active': item.active, 'is-home': item.name === 'Home' }">
-        <p class="d-inline-flex col-flex f-auto-center"
-          :data-active="item.active.toString()" :data-index="index">
+        class="v-flex text-center tab-bar-item" :class="{ 'is-active': item.active, 'is-home': item.name === 'Home' }"
+        :data-active="item.active.toString()" :data-index="index">
+        <p class="d-inline-flex col-flex f-auto-center">
           <span class="inline-block line-height-0 tab-bar-icon">
             <svg>
               <use :xlink:href="`${item.active ? item.activeIcon : item.icon}`"/>
