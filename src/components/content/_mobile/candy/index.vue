@@ -35,7 +35,7 @@
           <ul class="candies-list">
             <li
               class="candies-item"
-              v-for="(asset, index) of [].concat(assets.list, assets.list)" :key="index">
+              v-for="(asset, index) of assets.list" :key="index">
               <mobile-asset-card :info="asset" :totalValue="assets.totalValue"/>
             </li>
           </ul>
