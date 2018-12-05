@@ -36,12 +36,13 @@
         class="TTFontBold promotion-claim-btn"
         theme="promotion"
         inverse
-        :disabled="loading || isClaimed"
+        :disabled="isClaimed || loading"
         :loading="loading"
         @click="claimPromotion">{{ isClaimed ? 'Claimed' : 'Claim now' }}</lordless-btn>
     </div>
     <lordless-authorize
       ref="authorize"
+      @sign="signSuccess"
       @blurs="dialogSetBlurs($event, metamaskChoose ? 1 : 0)"/>
   </div>
 </template>
@@ -164,6 +165,10 @@ export default {
       const dropping = parseFloat(weiToEth(_dropping.toNumber()))
       const total = parseFloat(left + dropping)
       this.progressNums = { total, left, dropping, completed: true }
+    },
+
+    signSuccess () {
+      this.$nextTick(() => this.claimPromotion())
     },
 
     async claimPromotion (info = this.info, Airdrop = this.Airdrop, web3Opt = this.web3Opt) {

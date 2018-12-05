@@ -3,7 +3,8 @@ import {
   Container, Header, Main, Aside,
   Col, Row,
   Tooltip, Progress, Select, Option, Carousel, CarouselItem,
-  Tabs, TabPane, Dialog, Autocomplete, Pagination, Notification,
+  Tabs, TabPane, Dialog, Autocomplete, Pagination,
+  Notification, MessageBox,
   Collapse, CollapseItem
 } from 'element-ui'
 
@@ -37,3 +38,8 @@ Vue.use(CollapseItem)
 Vue.prototype.$ELEMENT = { size: 'large', zIndex: 3000 }
 
 Vue.prototype.$notify = Notification
+
+Vue.prototype.$msgbox = MessageBox
+Vue.prototype.$alert = MessageBox.alert
+Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$prompt = MessageBox.prompt

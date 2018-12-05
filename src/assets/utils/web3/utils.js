@@ -21,7 +21,7 @@ export const getNetwork = (web3js) => {
       const timer = setTimeout(() => {
         clearTimeout(timer)
         resolve({ coinbase: '' })
-      }, 5000)
+      }, 30000)
 
       web3js.version.getNetwork((error, networkId) => {
         clearTimeout(timer)

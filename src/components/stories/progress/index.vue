@@ -1,5 +1,5 @@
 <template>
-  <div class="alone-layer ld-progress-box">
+  <div class="alone-layer ld-progress-box" :style="`border-radius: ${radius}px;`">
     <div v-if="!circle" class="ld-progress-line" :class="{ 'shadow': shadow }" :style="`background-color: ${underColor};`">
       <div
         class="ld-progress-bar"
@@ -74,6 +74,10 @@ export default {
     width: {
       type: Number,
       default: 126
+    },
+    radius: {
+      type: Number,
+      default: 5
     }
   }
 }

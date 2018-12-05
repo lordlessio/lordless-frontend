@@ -1,11 +1,11 @@
 import store from '@/store'
-import { initStorageUser, getNetwork, getAccount, getBalance, getGasPrice } from './utils'
+import { initStorageUser, getAccount, getBalance, getGasPrice } from './utils'
 import { actionTypes } from '@/store/types'
 
 export const monitorWeb3 = (web3Opt) => {
   // const APPROVED_NETWORKID = '5777'
   // const { web3Opt } = store.state.web3
-  let { balance, address, networkId, web3js, error } = web3Opt
+  let { balance, address, web3js, error } = web3Opt
 
   // gasprice 全局只请求一次
   getGasPrice(web3js)
@@ -34,22 +34,22 @@ export const monitorWeb3 = (web3Opt) => {
     /**
      * check network
      */
-    const nRes = await getNetwork(web3js)
+    // const nRes = await getNetwork(web3js)
 
-    if (nRes.error) {
-      error = nRes.error
-      store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { error: nRes.error })
-      return
-    }
+    // if (nRes.error) {
+    //   error = nRes.error
+    //   store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { error: nRes.error })
+    //   return
+    // }
 
-    const newNetworkId = nRes.networkId
+    // const newNetworkId = nRes.networkId
 
-    // 如果切换了网络, 修改 web3Opt
-    if ((newNetworkId && newNetworkId !== networkId) || (!newNetworkId && networkId)) {
-      networkId = newNetworkId
-      store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { networkId })
-      return
-    }
+    // // 如果切换了网络, 修改 web3Opt
+    // if ((newNetworkId && newNetworkId !== networkId) || (!newNetworkId && networkId)) {
+    //   networkId = newNetworkId
+    //   store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { networkId })
+    //   return
+    // }
 
     /**
      * check coinbase
@@ -97,7 +97,7 @@ export const monitorWeb3 = (web3Opt) => {
 
     if (aRes.error) {
       error = aRes.error
-      store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { error: nRes.error })
+      store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { error: aRes.error })
       return
     }
 

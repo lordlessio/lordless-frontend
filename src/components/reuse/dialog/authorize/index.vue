@@ -44,7 +44,7 @@
         :visible="showSign"
         :account="account"
         :web3Loading="web3Opt.loading"
-        @success="authorizeDialog = false"/>
+        @success="signSuccess"/>
     </div>
   </el-dialog>
 </template>
@@ -262,6 +262,11 @@ export default {
     ...mapActions('contract', [
       actionTypes.CONTRACT_CHECK_CROWDSALE
     ]),
+
+    signSuccess () {
+      this.$emit('sign')
+      this.authorizeDialog = false
+    },
 
     authorizeClosed () {
       // console.log('this.signAuthorize', this.$refs.signAuthorize)

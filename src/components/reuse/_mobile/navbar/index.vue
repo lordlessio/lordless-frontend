@@ -6,7 +6,9 @@
           <use xlink:href="#icon-back"/>
         </svg>
       </p>
-      <p class="text-cap mobile-navbar-text">{{ text }}</p>
+      <p class="text-cap mobile-navbar-text">
+        <span class="text-ellipsis inline-block">{{ text }}</span>
+      </p>
       <div v-if="userAvatar" class="TTFontBold d-flex f-align-center nav-right-box navbar-header-tip">
         <span class="inline-block line-height-0 navbar-tip-icon">
           <svg>
@@ -201,7 +203,11 @@ export default {
   }
   .mobile-navbar-text {
     font-weight: bold;
+    height: 44px;
     // font-size: 16px;
+    >span {
+      max-width: 128px;
+    }
   }
   .nav-right-box {
     position: absolute;

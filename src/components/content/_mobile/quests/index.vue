@@ -539,6 +539,7 @@ export default {
   @include viewport-unit(min-height, 100vh, 112px);
 }
 .quest-item {
+  border-radius: 5px;
   box-shadow: 0 0 10px 3px rgba(200, 200, 200, .35);
   &:not(:first-of-type) {
     margin-top: 18px;
