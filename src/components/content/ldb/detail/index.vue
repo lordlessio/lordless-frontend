@@ -266,7 +266,7 @@ export default {
     //   }
     // },
     ldbInfo (val, oval) {
-      if (val && oval && this.dialog) this.$emit('update:detailInfo', val)
+      if (val && oval) this.$emit('update:detailInfo', val)
     },
     account (val, oval) {
       if (!oval) return

@@ -94,6 +94,10 @@ export default {
       type: Number,
       default: 0
     },
+    topHeight: {
+      type: Number,
+      default: 0
+    },
     parentDom: Object
   },
   data: (vm) => {
@@ -172,28 +176,29 @@ export default {
     sortBarScroll () {
       this.scrollHandle && this.destroySortBar()
       console.log('sortBarScroll')
-      let navHeight = 0
-      let _navHeight = 0
+      const topHeight = this.topHeight
+      let navHeight = topHeight
+      // let _navHeight = 0
 
       const h = this.scrollHeight
       const pdom = this.$refs['mobile-sort-bar']
       const sdom = this.$refs['sort-bar-box']
 
-      const isMobile = this.isMobile
+      // const isMobile = this.isMobile
       const func = () => {
         // 因为 mobile navbar 高度固定，所以第一次取到之后就可以保存到变量
-        if (isMobile && !navHeight) {
-          if (_navHeight) navHeight = _navHeight
-          else {
-            const mobileNavbar = document.getElementById('mobile-nav-bar')
-            if (mobileNavbar) navHeight = mobileNavbar.offsetHeight
-          }
-          _navHeight = navHeight
-        }
+        // if (isMobile && !navHeight) {
+        //   if (_navHeight) navHeight = _navHeight
+        //   else {
+        //     const mobileNavbar = document.getElementById('mobile-nav-bar')
+        //     if (mobileNavbar) navHeight = mobileNavbar.offsetHeight
+        //   }
+        //   _navHeight = navHeight
+        // }
         const y = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
         const bool = hasClass('fixed', sdom)
         if (y <= h && bool) {
-          navHeight = 0
+          navHeight = topHeight
           sdom.style.top = '0px'
 
           removeClass('fixed', sdom)

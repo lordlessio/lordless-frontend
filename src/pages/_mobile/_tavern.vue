@@ -3,8 +3,13 @@
     <mobile-nav-bar
       ref="mobile-nav-bar"
       v-bind="scrollOpt"
+      :text="navbarText"
       @history="tCloseHandle"/>
-    <ldb-detail ref="ldbDetail" theme="light" @tClose="tCloseHandle"/>
+    <ldb-detail
+      ref="ldbDetail"
+      theme="light"
+      :detailInfo.sync="tavernInfo"
+      @tClose="tCloseHandle"/>
   </div>
 </template>
 
@@ -16,15 +21,22 @@ import { mapMutations } from 'vuex'
 export default {
   data: () => {
     return {
+      tavernInfo: null,
       scrollOpt: {
         show: true,
         history: true,
-        text: 'Tavern',
         scroll: true,
         userAvatar: true,
         transparent: true,
         scrollMark: 100
       }
+    }
+  },
+  computed: {
+    navbarText () {
+      const tavernInfo = this.tavernInfo
+      if (!tavernInfo) return 'Tavern'
+      return tavernInfo.name.zh
     }
   },
   components: {

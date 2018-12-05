@@ -6,14 +6,14 @@
           <use xlink:href="#icon-back"/>
         </svg>
       </p>
-      <p class="text-cap">{{ text }}</p>
-      <div v-if="userAvatar" class="nav-right-box navbar-header-tip">
-        <lordless-blockies
-          class="user-avatar-poster"
-          radius="5px"
-          seed="userInfo.address"
-          :scale="5"
-          theme="dark"/>
+      <p class="text-cap mobile-navbar-text">{{ text }}</p>
+      <div v-if="userAvatar" class="TTFontBold d-flex f-align-center nav-right-box navbar-header-tip">
+        <span class="inline-block line-height-0 navbar-tip-icon">
+          <svg>
+            <use xlink:href="#icon-color-star"/>
+          </svg>
+        </span>
+        <span class="inline-block">AP&nbsp;&nbsp;{{ userInfo.ap }}</span>
       </div>
       <p class="line-height-0 nav-right-box nav-withdraw" v-if="withdraw" @click.stop="withdrawTip = true">
         <el-tooltip v-model="withdrawTip" effect="dark" content="Coming soon" placement="left" :hide-after="3000">
@@ -30,8 +30,10 @@
 
 <script>
 import { addClass, removeClass } from 'utils/tool'
+import { userMixins } from '@/mixins'
 export default {
   name: 'mobile-nav-bar',
+  mixins: [userMixins],
   props: {
     container: {
       type: String,
@@ -148,8 +150,8 @@ export default {
     width: 100%;
     height: 44px;
     line-height: 44px;
-    background-color: #4586fc;
-    font-size: 20px;
+    background-color: #0079FF;
+    font-size: 16px;
     color: #fff;
     &.scroll-hidden {
       opacity: 0;
@@ -166,9 +168,12 @@ export default {
       opacity: 1;
       z-index: 99;
       color: #fff;
-      background-color: #4586fc;
+      background-color: #0079FF;
       .nav-history-icon {
         fill: #fff;
+      }
+      .navbar-header-tip {
+        background-image: none;
       }
     }
     &.is-active {
@@ -194,6 +199,10 @@ export default {
     fill: #fff;
     transform: translateY(-50%);
   }
+  .mobile-navbar-text {
+    font-weight: bold;
+    // font-size: 16px;
+  }
   .nav-right-box {
     position: absolute;
     right: 20px;
@@ -206,6 +215,17 @@ export default {
     fill: #fff;
   }
   .navbar-header-tip {
-    height: 44px;
+    right: 10px;
+    padding: 0 10px;
+    height: 35px;
+    line-height: 35px;
+    color: #fff;
+    background: linear-gradient(-225deg, #124BDC 0%, #0079FF 100%);
+    border-radius: 5px;
+  }
+  .navbar-tip-icon {
+    margin-right: 5px;
+    width: 16px;
+    height: 16px;
   }
 </style>

@@ -132,7 +132,7 @@
             <ul class="d-flex flex-wrap project-intro-exchanges">
               <li v-for="(item, index) in  projectInfo.exchanges" :key="index"
                 class="text-center project-exchange-item">
-                <a class="inline-block" :href="item.website" target="_blank">
+                <a class="inline-block" :href="exchangesLink(item)" target="_blank">
                   <p class="project-exchange-img" :style="`background-image: url(${ossOrigin + item.icon})`"></p>
                   <p>{{ item.name }}</p>
                 </a>
@@ -210,6 +210,10 @@ export default {
     ProjectSkeletion
   },
   methods: {
+    exchangesLink ({ name, website }) {
+      if (name === 'DDEX' && this.projectInfo.symbol === 'LESS') return 'https://ddex.io/trade/LESS-WETH'
+      return website
+    },
     initPage () {
       const { projectId } = this.$route.params
       projectId && this.initProject(projectId)

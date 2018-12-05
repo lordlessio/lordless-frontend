@@ -10,6 +10,7 @@
         :sortItems="sortItems"
         :total="ldbs.total"
         :scrollHeight="100"
+        :topHeight="44"
         @sort="sortHandle"
         @order="orderHandle"/>
       <!-- <section id="market-sort-section" class="relative market-sort-section">
