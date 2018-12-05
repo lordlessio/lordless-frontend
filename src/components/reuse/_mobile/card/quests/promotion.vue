@@ -29,7 +29,7 @@
           </p>
           <p class="d-flex f-align-center">
             <span class="v-flex inline-block">{{ info.update_at | dateFormat('MMM. DD YYYY') }}</span>
-            <span class="inline-block">≈ {{ info.airdrop.countPerUser / 1e18 / info.airdrop.project.USD2TokenCount | formatDecimal }}</span>
+            <span class="inline-block">≈ $ {{ info.airdrop.countPerUser / 1e18 / info.airdrop.project.USD2TokenCount | formatDecimal }}</span>
           </p>
         </div>
       </a>

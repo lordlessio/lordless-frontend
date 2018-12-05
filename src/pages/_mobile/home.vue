@@ -37,7 +37,7 @@
                 <p class="v-flex">{{ candy.coinmarketcap.name || candy.symbol }}<span class="text-upper">&nbsp;({{ candy.symbol }})</span></p>
               </div>
               <div class="d-flex f-align-center candies-claimed-box">
-                <span class="TTFontBolder candies-claimed-num">{{ candy.count | formatDecimal }}<span>(&nbsp;$ {{ candy.count / candy.USD2TokenCount | formatDecimal }})</span>&nbsp;&nbsp;</span>
+                <span class="TTFontBolder candies-claimed-num">{{ candy.count | formatNumber | formatDecimal({ len: 2 }) }}<span>&nbsp;($ {{ candy.count / candy.USD2TokenCount | formatNumber | formatDecimal({ len: 2 }) }})</span>&nbsp;&nbsp;</span>
                 has been claimed
               </div>
             </li>
@@ -172,8 +172,7 @@ export default {
     font-size: 20px;
     color: #0079FF;
     >span {
-      font-size: 12px;
-      color: #999;
+      font-size: 16px;
     }
   }
   .promotion-item-info {
