@@ -250,6 +250,7 @@ export default {
           .catch((err) => {
             console.log('err', err.message)
             this.metamaskChoose = false
+            this.loading = false
             // this.$notify.error({
             //   title: 'Error!',
             //   message: err.message || 'unknow error',
