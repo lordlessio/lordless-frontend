@@ -199,7 +199,8 @@ export default {
   },
   data: (vm) => {
     return {
-      popstateModel: false,
+      rendered: false,
+      // popstateModel: false,
       tabFilters: {
         bottoms: 'candy',
         reward: 'lord',
@@ -273,12 +274,12 @@ export default {
     // }
   },
   watch: {
-    popstateModel (val) {
-      if (val) {
-        this.currentTab = this.$route.query.type || 'bottoms'
-        this.popstateModel = false
-      }
-    },
+    // popstateModel (val) {
+    //   if (val) {
+    //     this.currentTab = this.$route.query.type || 'bottoms'
+    //     this.popstateModel = false
+    //   }
+    // },
     account () {
       this.initQuest()
     }
@@ -325,8 +326,10 @@ export default {
      * 根据 type 初始化 quest
      */
     async initQuest (type = this.currentTab) {
+      if (!this.rendered) this.rendered = true
       const data = await this.getTasks(Object.assign({}, this.infos[type], { type }))
       data && this.$set(this.infos, type, data)
+      this.currentTab = type
     },
 
     /**
@@ -480,28 +483,22 @@ export default {
       // window.removeEventListener('popstate', this.popstateListener)
 
       const tabs = document.querySelector('.mobile-quests-tabs')
-      tabs && tabs.parentNode.nodeName === 'BODY' && this.$el.appendChild(document.querySelector('.mobile-quests-tabs'))
+      tabs && tabs.parentNode.nodeName === 'BODY' && this.$el.appendChild(tabs)
 
       // remove scroll listener
       this.scrollHandle && document.removeEventListener('scroll', this.scrollHandle)
       this.scrollHandle = null
 
-      window.removeEventListener('popstate', this.popstateListener)
-    },
+      // window.removeEventListener('popstate', this.popstateListener)
+    }
 
     /**
      * window popstate 监听事件
      */
-    popstateListener () {
-      if (this.popstateModel) return
-      this.popstateModel = true
-    }
-  },
-  activated () {
-    console.log('quests component activated')
-    this.scrollListenerFunc()
-    this.questsTabFunc()
-    window.addEventListener('popstate', this.popstateListener)
+    // popstateListener () {
+    //   if (this.popstateModel) return
+    //   this.popstateModel = true
+    // }
   },
   deactivated () {
     this.questsDestory()
@@ -509,11 +506,23 @@ export default {
   beforeDestroy () {
     this.questsDestory()
   },
+  activated () {
+    if (!this.rendered) return
+    console.log('quests component activated')
+    this.scrollListenerFunc()
+    this.questsTabFunc()
+
+    this.$nextTick(() => {
+      const { refresh, type } = this.$route.query
+      refresh && this.initQuest(type)
+    })
+    // window.addEventListener('popstate', this.popstateListener)
+  },
   mounted () {
     this.questsTabFunc()
 
     // 监听 popstate 事件，主要用于 pushState 监听
-    window.addEventListener('popstate', this.popstateListener)
+    // window.addEventListener('popstate', this.popstateListener)
     this.$nextTick(() => {
       const type = this.$route.query.type
       this.initQuest(type)

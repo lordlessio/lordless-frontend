@@ -72,6 +72,7 @@ export default {
   },
   data: () => {
     return {
+      rendered: false,
       loading: true,
       isClaimed: false,
       progressNums: {
@@ -110,7 +111,7 @@ export default {
       if (val) this.initTokenContract()
     },
     account (val) {
-      if (val && this.web3Init) this.initTokenContract()
+      if (val && this.claimInit) this.initTokenContract()
     },
     claimedNum (val) {
       this.$emit('update:claimed', val)
@@ -126,6 +127,7 @@ export default {
       const address = typeof project === 'object' ? project.address : project
       this[actionTypes.CONTRACT_SET_AIRDROP_TOKENS](address)
       this.$nextTick(() => {
+        if (!this.rendered) this.rendered = true
         this.initProgressNumber(address)
         this.checkClaimStatus()
       })
@@ -140,8 +142,10 @@ export default {
       try {
         let isConnected = false
         isConnected = await Airdrop.methods('isCollected', [ account, airdropId ])
+        console.log('isConnected ---- before', isConnected)
         if (!isConnected) {
-          isConnected = !!(await getAirdropUserInfo({ airdropId: this.info._id }).data)
+          isConnected = !!((await getAirdropUserInfo({ airdropId: this.info._id })).data)
+          console.log('isConnected ---- after', isConnected)
         }
         this.isClaimed = isConnected
       } catch (err) {
@@ -168,7 +172,9 @@ export default {
     },
 
     signSuccess () {
-      this.$nextTick(() => this.claimPromotion())
+      this.$nextTick(() => {
+        this.claimPromotion()
+      })
     },
 
     async claimPromotion (info = this.info, Airdrop = this.Airdrop, web3Opt = this.web3Opt) {
@@ -185,6 +191,7 @@ export default {
         // if (!pId) return
 
         this.metamaskChoose = true
+        this.loading = true
 
         const { gasPrice, address } = web3Opt
 
@@ -229,18 +236,26 @@ export default {
         window.lordlessMethods.buy(params).then(async tx => {
           console.log('----- claimHandle tx', tx)
           // this.buyPending = true
-          this.metamaskChoose = false
+          this.loading = false
           this.isClaimed = true
 
           this.$set(this.progressNums, 'left', this.progressNums.left - 100)
           this.$set(this.progressNums, 'dropping', this.progressNums.dropping + 100)
 
           await saveAirdropUser({ tx, airdropId: info._id })
-          this.$router.push('/owner/quest?type=promotion')
+          this.metamaskChoose = false
+
+          this.$nextTick(() => this.$router.push('/owner/quest?type=promotion&refresh=true'))
         })
           .catch((err) => {
             console.log('err', err.message)
             this.metamaskChoose = false
+            this.$notify.error({
+              title: 'Error!',
+              message: err.message || 'unknow error',
+              position: 'bottom-right',
+              duration: 3500
+            })
           })
       } catch (err) {
         this.$notify.error({
@@ -253,6 +268,7 @@ export default {
     }
   },
   activated () {
+    if (!this.rendered) return
     this.initTokenContract()
   },
   mounted () {

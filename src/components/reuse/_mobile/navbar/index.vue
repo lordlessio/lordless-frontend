@@ -82,6 +82,7 @@ export default {
   },
   data: () => {
     return {
+      rendered: false,
       navbarScrollFunc: null,
       withdrawTip: false
     }
@@ -112,6 +113,8 @@ export default {
     init () {
       console.log(' ---- navbar init', this.scroll, this.fixed)
       this.$nextTick(() => {
+        if (!this.rendered) this.rendered = true
+
         if (this.scroll || this.fixed) {
           document.body.appendChild(this.$el)
           this.scroll && this.scrollListener()
@@ -132,6 +135,7 @@ export default {
     this.destroy()
   },
   activated () {
+    if (!this.rendered) return
     this.init()
   },
   beforeDestroy () {

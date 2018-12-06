@@ -1,10 +1,11 @@
 <template>
   <section class="lordless-tab-bar">
     <!-- <mobile-nav-bar :text="navigations[activeIndex].navbarText" :scroll="navigations[activeIndex].scroll"/> -->
-    <ul class="d-flex tab-bar-ul" @click.stop="chooseBar">
+    <ul class="d-flex tab-bar-ul">
       <li v-for="(item, index) of navigations" :key="index"
         class="v-flex text-center tab-bar-item" :class="{ 'is-active': item.active, 'is-home': item.name === 'Home' }"
-        :data-active="item.active.toString()" :data-index="index">
+        :data-active="item.active.toString()" :data-index="index"
+        @click.stop="$router.push(item.route)">
         <p class="d-inline-flex col-flex f-auto-center">
           <span class="inline-block line-height-0 tab-bar-icon">
             <svg>
@@ -94,50 +95,50 @@ export default {
     },
 
     /**
-     * choose bar 事件
+     * choose bar 委托事件
      */
-    chooseBar (e) {
-      const { active, index } = this.getAttr(e.target)
+    // chooseBar (e) {
+    //   const { active, index } = this.getAttr(e.target)
 
-      let fromIndex = 0
-      let toIndex = index
+    //   let fromIndex = 0
+    //   let toIndex = index
 
-      let routePath = ''
+    //   let routePath = ''
 
-      if (!active) return false
-      else if (active === 'true') {
-        for (let i = 0; i < this.navigations.length; i++) {
-          if (parseInt(index) === i && this.$route.path !== this.navigations[i].route) {
-            // this.$router.push(this.navigations[i].route)
-            routePath = this.navigations[i].route
-            break
-          }
-        }
-      } else {
-        this.navigations = this.navigations.map((item, i) => {
-          const obj = {}
-          if (item.active) {
-            obj.active = false
-            fromIndex = i
-          }
-          if (parseInt(index) === i) {
-            toIndex = i
-            this.activeIndex = index
-            obj.active = true
-            routePath = item.route
-            // this.$router.push(item.route)
-          }
-          return Object.assign({}, item, obj)
-        })
-      }
+    //   if (!active) return false
+    //   else if (active === 'true') {
+    //     for (let i = 0; i < this.navigations.length; i++) {
+    //       if (parseInt(index) === i && this.$route.path !== this.navigations[i].route) {
+    //         // this.$router.push(this.navigations[i].route)
+    //         routePath = this.navigations[i].route
+    //         break
+    //       }
+    //     }
+    //   } else {
+    //     this.navigations = this.navigations.map((item, i) => {
+    //       const obj = {}
+    //       if (item.active) {
+    //         obj.active = false
+    //         fromIndex = i
+    //       }
+    //       if (parseInt(index) === i) {
+    //         toIndex = i
+    //         this.activeIndex = index
+    //         obj.active = true
+    //         routePath = item.route
+    //         // this.$router.push(item.route)
+    //       }
+    //       return Object.assign({}, item, obj)
+    //     })
+    //   }
 
-      let direction = '_forward'
-      if (toIndex < fromIndex) direction = '_reverse'
-      this[mutationTypes.LAYOUT_SET_POP_DIRECTION](direction)
+    //   let direction = '_forward'
+    //   if (toIndex < fromIndex) direction = '_reverse'
+    //   this[mutationTypes.LAYOUT_SET_POP_DIRECTION](direction)
 
-      this.$router.push(routePath)
-      // scrollToTop()
-    },
+    //   this.$router.push(routePath)
+    //   // scrollToTop()
+    // },
 
     rewriteNavigation (route = '/home', navigations = this.navigations) {
       this.navigations = navigations.map(item => {

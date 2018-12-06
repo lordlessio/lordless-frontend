@@ -185,6 +185,7 @@ export default {
   name: 'lordless-project-detail',
   data: () => {
     return {
+      rendered: false,
       loading: true,
       claimed: 0,
       projectInfo: {
@@ -217,6 +218,7 @@ export default {
     initPage () {
       const { projectId } = this.$route.params
       projectId && this.initProject(projectId)
+      if (!this.rendered) this.rendered = true
     },
     async initProject (projectId) {
       this.loading = true
@@ -232,6 +234,7 @@ export default {
     }
   },
   activated () {
+    if (!this.rendered) return
     this.initPage()
   },
   mounted () {

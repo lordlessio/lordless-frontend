@@ -98,12 +98,17 @@ export default {
       type: Number,
       default: 0
     },
-    parentDom: Object
+    parentDom: {
+      type: Object,
+      default: null
+    }
   },
   data: (vm) => {
     console.log('------ sort bar', vm.sortItems)
     return {
+      rendered: false,
       parentNode: null,
+      scrollNode: null,
       scrollHandle: null,
       openModel: false,
 
@@ -142,6 +147,7 @@ export default {
 
     initSortBar () {
       this.$nextTick(() => {
+        if (!this.rendered) this.rendered = true
         if (!this.static && this.showSort) this.sortBarScroll()
       })
     },
@@ -173,9 +179,9 @@ export default {
     /**
      * sortBar 滚动监听
      */
-    sortBarScroll () {
-      this.scrollHandle && this.destroySortBar()
-      console.log('sortBarScroll')
+    async sortBarScroll () {
+      console.log('this.scrollHandle', this.scrollHandle)
+      this.scrollHandle && await this.destroySortBar()
       const topHeight = this.topHeight
       let navHeight = topHeight
       // let _navHeight = 0
@@ -214,28 +220,35 @@ export default {
       func()
 
       this.parentNode = pdom
+      this.scrollNode = sdom
       this.scrollHandle = func
 
       this.$nextTick(() => document.addEventListener('scroll', this.scrollHandle))
     },
-    destroySortBar (pdom = this.parentDom || this.parentNode) {
-      this.openModel = false
+    destroySortBar () {
+      return new Promise(resolve => {
+        this.openModel = false
 
-      // const pdom = document.getElementById('mobile-sort-bar')
-      const sdom = this.$refs['sort-bar-box']
-      if (pdom && !pdom.firstChild) {
-        pdom.appendChild(sdom)
-      }
-      document.removeEventListener('scroll', this.scrollHandle)
+        const pdom = this.parentNode || this.$refs['mobile-sort-bar']
+        const sdom = this.scrollNode || this.$refs['sort-bar-box']
+        if (pdom && !pdom.firstChild) {
+          pdom.appendChild(sdom)
+        }
+        document.removeEventListener('scroll', this.scrollHandle)
+        this.scrollHandle = null
+
+        return resolve()
+      })
     }
   },
-  deactivated () {
-    this.destroySortBar()
+  async deactivated () {
+    await this.destroySortBar()
   },
-  beforeDestroy () {
-    this.destroySortBar()
+  async beforeDestroy () {
+    await this.destroySortBar()
   },
   activated () {
+    if (!this.rendered) return
     this.initSortBar()
   },
   mounted () {

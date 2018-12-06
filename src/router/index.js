@@ -53,7 +53,7 @@ const mobileRoutes = [
     meta: {
       title: 'Home - LORDLESS',
       keepAlive: true,
-      transition: false
+      transition: true
       // header: {
       //   show: false
       // },
@@ -69,7 +69,7 @@ const mobileRoutes = [
     meta: {
       title: 'Taverns - LORDLESS',
       keepAlive: true,
-      transition: false
+      transition: true
       // header: {
       //   show: false
       // },
@@ -116,7 +116,7 @@ const mobileRoutes = [
         meta: {
           title: 'Candy - LORDLESS',
           keepAlive: true,
-          transition: false
+          transition: true
 
           // header: {
           //   show: false
@@ -133,7 +133,7 @@ const mobileRoutes = [
         meta: {
           title: 'Quest - LORDLESS',
           keepAlive: true,
-          transition: false
+          transition: true
           // header: {
           //   show: false
           // },
@@ -149,7 +149,7 @@ const mobileRoutes = [
         meta: {
           title: 'OwnerInfo - LORDLESS',
           keepAlive: true,
-          transition: false
+          transition: true
           // header: {
           //   show: false
           // },

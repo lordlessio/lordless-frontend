@@ -197,6 +197,10 @@
     &:disabled {
       position: relative;
       cursor: no-drop;
+      &.shadow {
+        box-shadow: none;
+        // box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
+      }
       &::before {
         content: '';
         position: absolute;
@@ -206,6 +210,7 @@
         height: 100%;
         background-color: rgba(255, 255, 255, .7);
         cursor: no-drop;
+        border-radius: inherit;
       }
     }
   }

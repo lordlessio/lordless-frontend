@@ -60,6 +60,7 @@ export default {
   name: 'mobile-candies-content',
   data: () => {
     return {
+      rendered: false,
       loading: true,
       holdingValue: null,
       assets: [],
@@ -118,6 +119,7 @@ export default {
 
     // 获取用户 assets
     async getAssets () {
+      if (this.rendered) return
       this.loading = true
       const res = await getUserAssets()
       if (res.code === 1000 && res.data) {
@@ -129,6 +131,7 @@ export default {
     },
     init () {
       this.getAssets()
+      this.rendered = false
     }
   },
   activated () {
@@ -136,6 +139,7 @@ export default {
   },
   mounted () {
     this.init()
+    this.rendered = true
   }
 }
 </script>
