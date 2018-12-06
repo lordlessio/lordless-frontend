@@ -250,12 +250,12 @@ export default {
           .catch((err) => {
             console.log('err', err.message)
             this.metamaskChoose = false
-            this.$notify.error({
-              title: 'Error!',
-              message: err.message || 'unknow error',
-              position: 'bottom-right',
-              duration: 3500
-            })
+            // this.$notify.error({
+            //   title: 'Error!',
+            //   message: err.message || 'unknow error',
+            //   position: 'bottom-right',
+            //   duration: 3500
+            // })
           })
       } catch (err) {
         this.$notify.error({
