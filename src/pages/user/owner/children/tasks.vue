@@ -67,6 +67,20 @@
             name="promotion">
             <transition name="ld-hide-fade" mode="out-in">
               <promotion-skeletion v-if="loading"/>
+              <div
+                v-else-if="!taskInfos.promotion.total && !loading"
+                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box absolute user-no-sale-tasks">
+                <svg>
+                  <use xlink:href="#icon-no-candy"/>
+                </svg>
+                <p>You have nothing on Promotion now.</p>
+                <div class="d-flex f-auto-center TTFontBolder">
+                  <span>Try to Receive a promotion in</span>
+                  <span class="inline-block">
+                    <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/project/promotions')">Promotions</lordless-btn>
+                  </span>
+                </div>
+              </div>
               <el-row v-else :gutter="20" class="relative user-tasks-cnt">
                 <el-col
                   :xs="24"
