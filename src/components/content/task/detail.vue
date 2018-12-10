@@ -49,7 +49,7 @@
                 </svg>
               </div>
               <div class="v-flex inline-block header-coin-desc">
-                <p>{{ taskInfo.reward.candy.desc }}</p>
+                <p class="task-candy-desc">{{ taskInfo.reward.candy.desc }}</p>
                 <a class="coin-href hover-underline" :href="taskInfo.reward.candy.website" target="_blank">{{ taskInfo.reward.candy.website }}</a>
               </div>
             </div>
@@ -446,6 +446,10 @@ export default {
       display: inline-block;
       color: #fff;
     }
+  }
+  .task-candy-desc {
+    // max-height: 80px;
+    // overflow: hidden;
   }
   .coin-href {
     margin-top: 10px;

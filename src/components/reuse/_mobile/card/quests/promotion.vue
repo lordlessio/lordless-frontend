@@ -1,5 +1,5 @@
 <template>
-  <div class="mobile-promotion-card">
+  <div class="mobile-promotion-card" :class="{ 'is-lg': lg, 'is-shadow': shadow }">
     <div class="promotion-card-container">
       <div class="d-flex f-align-center promotion-card-top" @click.stop="$router.push(`/project/${info.airdrop.project._id}`)">
         <span class="inline-block line-height-0 card-top-icon">
@@ -44,6 +44,14 @@ export default {
     info: {
       type: Object,
       default: () => {}
+    },
+    lg: {
+      type: Boolean,
+      default: false
+    },
+    shadow: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -59,6 +67,50 @@ export default {
     background-color: #fff;
     border-radius: 5px;
     overflow: hidden;
+    &.is-shadow {
+      box-shadow: 0 0 10px 3px rgba(221, 221, 221, 1);
+    }
+    &.is-lg {
+      .promotion-card-top {
+        padding: 0 40px;
+        height: 50px;
+        line-height: 50px;
+        font-size: 16px;
+      }
+      .card-top-symbol {
+        margin-left: 12px;
+        margin-right: 6px;
+      }
+      .card-top-icon {
+        width: 24px;
+        height: 24px;
+        fill: #bbb;
+        &.arrow {
+          width: 12px;
+          height: 12px;
+        }
+      }
+      .promotion-card-bottom {
+        padding: 18px 40px;
+      }
+      .promotion-symbol-icon {
+        padding: 14px;
+        width: 56px;
+        height: 56px;
+      }
+      .promotion-info-box {
+        margin-left: 18px;
+        >p {
+          &:nth-of-type(1) {
+            font-size: 20px;
+            @include TTFontBolder();
+          }
+          &:nth-of-type(2) {
+            font-size: 16px;
+          }
+        }
+      }
+    }
   }
   .promotion-card-container {
 

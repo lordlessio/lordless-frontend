@@ -6,6 +6,7 @@
       position="fixed"
       :index="99">
     </Loading> -->
+    <!-- <aside class="d-flex lg-col-flex sm-row-flex ld-user-navgation" :style="`background-image: url(${ossOrigin}/frontend/static/svg/city.svg)`"> -->
     <aside class="d-flex lg-col-flex sm-row-flex ld-user-navgation">
       <div class="d-flex f-auto-center user-navgation-logo sm-hidden">
         <header-logo theme="deep-blue"/>
@@ -86,13 +87,13 @@ export default {
           path: '/owner/candy'
         },
         {
-          name: 'tasks',
-          icon: 'task',
-          path: '/owner/tasks'
+          name: 'quests',
+          icon: 'quests',
+          path: '/owner/quests'
         },
         {
           name: 'taverns',
-          icon: 'building',
+          icon: 'taverns',
           path: '/owner/taverns'
         },
         {
@@ -120,6 +121,11 @@ export default {
         zIndex: 99
       },
       loading: true
+    }
+  },
+  computed: {
+    ossOrigin () {
+      return process.env.LDBICON_ORIGIN
     }
   },
   components: {
@@ -179,6 +185,10 @@ export default {
     width: 250px;
     z-index: 1;
     box-shadow: 1px 3px 5px 0 rgba(0, 0, 0, .1);
+    // background-size: 100% auto;
+    // background-position-y: 100%;
+    // background-repeat: no-repeat;
+    // @include viewport-unit(min-height, 90px);
   }
 
   .user-navgation-logo {

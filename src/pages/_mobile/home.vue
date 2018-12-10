@@ -13,7 +13,7 @@
               class="home-info-item home-promotions-item"
               @click.stop="$router.push(`/project/${item.project._id}`)">
               <figure>
-                <figcaption :style="`background-image: url(${ossOrigin + item.banners[0]})`"></figcaption>
+                <figcaption :style="`background-image: url(${ossOrigin + item.poster || item.banners[0]})`"></figcaption>
                 <promotion-claim
                   class="promotion-item-info"
                   :info="item"/>

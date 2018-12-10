@@ -5,7 +5,7 @@
         <p class="candies-holding-title">Total holding</p>
         <p class="TTFontBolder candies-holding-value-box">
           <span class="inline-block candies-holding-symbol">$</span>
-          <count-up class="inline-block candies-holding-value" :startVal="0" :decimals="4" :endVal="holdingValue" :duration="1000" :isReady="holdingValue !== null"></count-up>
+          <span class="inline-block candies-holding-value">{{ holdingValue | formatDecimal({ len: 4 }) }}</span>
         </p>
         <el-tooltip effect="dark" content="Coming soon" placement="left" :hide-after="2000">
           <span class="inline-block line-height-0 nav-withdraw-icon">
@@ -35,45 +35,71 @@ export default {
   },
   data: () => {
     return {
+      rendered: false,
+      parentNode: null,
+      scrollNode: null,
       scrollFunc: null
     }
   },
   methods: {
-    scrollListener () {
+    async scrollListener () {
+      this.scrollFunc && await this.destory()
       let navbarInverse = false
-      const dom = this.$refs['candies-holding-box']
+      const pdom = this.$refs['candies-holding-parent']
+      const sdom = this.$refs['candies-holding-box']
       const scrollMark = this.scrollMark
       const func = () => {
         const scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
         if (!navbarInverse && scrollTop >= scrollMark) {
-          addClass('is-fixed', dom)
+          addClass('is-fixed', sdom)
           navbarInverse = true
+
+          // 在判断阶段 append 至已有 dom 变量中，可以解决组件穿透页面情况
+          pdom && sdom && document.body.appendChild(sdom)
         } else if (navbarInverse && scrollTop < scrollMark) {
-          removeClass('is-fixed', dom)
+          removeClass('is-fixed', sdom)
           navbarInverse = false
+
+          // 在判断阶段 append 至已有 dom 变量中，可以解决组件穿透页面情况
+          pdom && sdom && pdom.appendChild(sdom)
         }
       }
+
       this.scrollFunc = func
+      this.parentNode = pdom
+      this.scrollNode = sdom
+
       this.$nextTick(() => document.addEventListener('scroll', this.scrollFunc))
     },
     init () {
-      document.body.appendChild(this.$refs['candies-holding-box'])
-      this.scrollListener()
+      this.$nextTick(() => {
+        if (!this.rendered) this.rendered = true
+        this.scrollListener()
+      })
     },
     destory () {
-      this.scrollFunc && document.removeEventListener('scroll', this.scrollFunc)
+      return new Promise(resolve => {
+        const pdom = this.parentNode || this.$refs['candies-holding-parent']
+        const sdom = this.scrollNode || this.$refs['candies-holding-box']
+        if (pdom && !pdom.firstChild) {
+          pdom.appendChild(sdom)
+        }
 
-      const parent = this.$refs['candies-holding-parent']
-      parent && parent.appendChild(this.$refs['candies-holding-box'])
+        this.scrollFunc && document.removeEventListener('scroll', this.scrollFunc)
+        this.scrollFunc = null
+
+        return resolve()
+      })
     }
   },
-  beforeDestroy () {
-    this.destory()
+  async beforeDestroy () {
+    await this.destory()
   },
-  deactivated () {
-    this.destory()
+  async deactivated () {
+    await this.destory()
   },
   activated () {
+    if (!this.rendered) return
     this.init()
   },
   mounted () {

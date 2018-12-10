@@ -28,7 +28,7 @@ import Owner from '@/pages/user/owner'
 import OwnerInfo from '@/pages/user/owner/children/info'
 import OwnerCandy from '@/pages/user/owner/children/candy'
 import OwnerTaverns from '@/pages/user/owner/children/taverns'
-import OwnerTasks from '@/pages/user/owner/children/tasks'
+import OwnerQuests from '@/pages/user/owner/children/tasks'
 import OwnerAuthorization from '@/pages/user/owner/children/authorization'
 import OwnerActivity from '@/pages/user/owner/children/activity'
 
@@ -131,11 +131,11 @@ const mobileRoutes = [
         }
       },
       {
-        path: 'quest',
-        name: 'mobile-user-quest',
+        path: 'quests',
+        name: 'mobile-user-quests',
         component: MobileOwnerQuest,
         meta: {
-          title: 'Quest - LORDLESS',
+          title: 'Quests - LORDLESS',
           keepAlive: true,
           transition: true
           // header: {
@@ -430,12 +430,12 @@ const routes = [
         }
       },
       {
-        path: 'tasks',
-        name: 'Owner-tasks',
-        component: OwnerTasks,
+        path: 'quests',
+        name: 'Owner-quests',
+        component: OwnerQuests,
         meta: {
           title: 'My Quests - LORDLESS',
-          navgation: 'tasks',
+          navgation: 'quests',
           header: {
             show: false
           },
@@ -476,14 +476,14 @@ const routes = [
       },
       {
         path: '*',
-        redirect: '/map'
+        redirect: '/owner/info'
       }
     ]
   },
   {
     path: '*',
     name: 'other',
-    redirect: '/map'
+    redirect: '/project/promotions'
   }
 ]
 

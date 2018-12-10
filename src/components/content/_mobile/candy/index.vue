@@ -22,7 +22,7 @@
         </div>
       </div>
       <div v-else-if="!loading && assets.total" class="v-flex d-flex col-flex mobile-candies-container">
-        <mobile-candy-holding-nav :holdingValue="holdingValue"/>
+        <mobile-candy-holding-nav ref="mobile-candy-holding" :holdingValue="holdingValue"/>
         <asset-sort-bar
           :sortItems="sortItems"
           :total="assets.total"

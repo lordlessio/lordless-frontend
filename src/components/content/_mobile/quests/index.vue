@@ -265,14 +265,14 @@ export default {
       scrollHandle: null
     }
   },
-  computed: {
-    bottomsPageScrollE () {
-      return this.$refs.bottomsQuestCnt
-    }
-    // bountyPageScrollE () {
-    //   return this.$refs.bountyQuestCnt
-    // }
-  },
+  // computed: {
+  // bottomsPageScrollE () {
+  //   return this.$refs.bottomsQuestCnt
+  // }
+  // bountyPageScrollE () {
+  //   return this.$refs.bountyQuestCnt
+  // }
+  // },
   watch: {
     // popstateModel (val) {
     //   if (val) {
@@ -348,7 +348,7 @@ export default {
       // 将 scrollTop 复位 为0
       // scrollTo(0)
 
-      historyState(`/owner/quest?type=${_currentTab}`)
+      historyState(`/owner/quests?type=${_currentTab}`)
       this.prevTab = _currentTab
       // this.bountyStatus = -2
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex f-align-center ld-switch-input" @click="toggleSwitch">
+  <div class="d-flex f-align-center ld-switch-input" :class="{ 'is-mobile': mobile }" @click="toggleSwitch">
     <span>{{ items[active] ? items[active].label : '' }}</span>
     <span class="ld-switch-icon" :class="{ 'change': active === items.length - 1 }">
       <i class="el-icon el-icon-caret-top"></i>
@@ -19,6 +19,10 @@ export default {
       default: () => {
         return []
       }
+    },
+    mobile: {
+      type: Boolean,
+      default: false
     }
   },
   data: (vm) => {
@@ -55,17 +59,24 @@ export default {
 
   .ld-switch-input {
     padding: 0 10px 0 20px;
-    height: 24px;
-    line-height: 24px;
+    height: 34px;
+    line-height: 34px;
     color: #fff;
     background-color: $--text-blue-color;
     border-radius: 20px;
     cursor: pointer;
+    &.is-mobile {
+      height: 24px;
+      line-height: 24px;
+      .ld-switch-icon {
+        color: #0079FF;
+      }
+    }
   }
   .ld-switch-icon {
     margin-left: 5px;
     font-size: 18px;
-    color: #0079FF;
+    color: #fff;
     transform: rotateZ(180deg);
     transition: transform .3s;
     &.change {

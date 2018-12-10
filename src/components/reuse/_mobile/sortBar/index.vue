@@ -16,6 +16,7 @@
           <switch-input
             v-if="showOrder"
             class="mobile-switch-input"
+            mobile
             v-model="orderModel"
             :items="orderItems"
             @change="orderChange"/>

@@ -59,8 +59,8 @@ export default {
           icon: '#icon-tab-quest',
           activeIcon: '#icon-tab-quest',
           name: 'Quests',
-          route: '/owner/quest',
-          match: /\/owner\/quest/,
+          route: '/owner/quests',
+          match: /\/owner\/quests/,
           active: false
         },
         {

@@ -4,7 +4,7 @@
     <div v-else class="project-promotions-box">
       <section class="promotions-section">
         <h2>Promotions</h2>
-        <ul class="d-flex f-justify-between promotions-list">
+        <ul class="d-flex f-align-center promotions-list">
           <li class="v-flex promotions-item"
             v-for="(item, index) of promotions" :key="index">
             <figure>
@@ -89,7 +89,7 @@ export default {
     overflow: hidden;
     transition: all .35s;
     &:not(:first-of-type) {
-      margin-top: 24px;
+      margin-left: 24px;
     }
     &:hover {
       cursor: pointer;

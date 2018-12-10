@@ -5,11 +5,82 @@
       <div
         class="v-flex relative onwer-children-cnt">
         <el-tabs
-          v-model="taskTab"
+          v-model="currentTab"
           @tab-click="chooseTab">
           <el-tab-pane
-            label="Tasks"
-            name="tasks">
+            label="Bottoms up"
+            name="bottoms">
+            <!-- <div class="tasks-sort">
+              <span>Filter by</span>
+              <ld-select
+                class="tasks-sort-select"
+                v-model="tasksSort"
+                :items="sortItems"
+                @change="filterTasks">
+              </ld-select>
+            </div> -->
+            <transition name="ld-hide-fade" mode="out-in">
+              <div v-if="loading" class="user-tasks-skeletion">
+                <div class="d-flex skeletion-breath">
+                  <div class="v-flex tasks-skeletion-left">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                  </div>
+                  <div class="d-flex col-flex tasks-skeletion-right">
+                    <p></p>
+                    <p></p>
+                  </div>
+                </div>
+              </div>
+              <div
+                v-else-if="!taskInfos.bottoms.total && !loading"
+                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box absolute user-no-sale-tasks">
+                <svg>
+                  <use xlink:href="#icon-no-candy"/>
+                </svg>
+                <p>You have no Bootoms up now.</p>
+                <div class="d-flex f-auto-center TTFontBolder">
+                  <span>recive candy in Tavern</span>
+                  <span class="inline-block">
+                    <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/map')">Map</lordless-btn>
+                  </span>
+                </div>
+              </div>
+              <el-row v-else :gutter="20" class="relative user-tasks-cnt">
+                <el-col
+                  :xs="24"
+                  class="tasks-item"
+                  v-for="(task, index) of taskInfos.bottoms.list"
+                  :key="index">
+                  <task-card
+                    :info="task"
+                    @play="playTask"
+                    @choose="chooseTask">
+                  </task-card>
+                </el-col>
+              </el-row>
+            </transition>
+          </el-tab-pane>
+          <el-tab-pane
+            label="Promotion"
+            name="promotion">
+            <transition name="ld-hide-fade" mode="out-in">
+              <promotion-skeletion v-if="loading"/>
+              <el-row v-else :gutter="20" class="relative user-tasks-cnt">
+                <el-col
+                  :xs="24"
+                  class="tasks-item"
+                  v-for="(promotion, index) of taskInfos.promotion.list"
+                  :key="index">
+                  <promotion-card :info="promotion" lg shadow/>
+                </el-col>
+              </el-row>
+            </transition>
+          </el-tab-pane>
+          <el-tab-pane
+            label="Bounty"
+            name="bounty">
             <div class="tasks-sort">
               <span>Filter by</span>
               <ld-select
@@ -19,27 +90,27 @@
                 @change="filterTasks">
               </ld-select>
             </div>
-            <div v-if="loading" class="user-tasks-skeletion has-filter">
-              <div class="d-flex skeletion-breath">
-                <div class="v-flex tasks-skeletion-left">
-                  <p></p>
-                  <p></p>
-                  <p></p>
-                </div>
-                <div class="d-flex col-flex tasks-skeletion-right">
-                  <p></p>
-                  <p></p>
+            <transition name="ld-hide-fade" mode="out-in">
+              <div v-if="loading" class="user-tasks-skeletion has-filter">
+                <div class="d-flex skeletion-breath">
+                  <div class="v-flex tasks-skeletion-left">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                  </div>
+                  <div class="d-flex col-flex tasks-skeletion-right">
+                    <p></p>
+                    <p></p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <transition name="ld-hide-in-fade">
               <div
-                v-if="!taskInfos.total && !loading"
+                v-else-if="!taskInfos.bounty.total && !loading"
                 class="d-flex v-flex col-flex f-auto-center text-center no-asset-box absolute user-no-sale-tasks">
                 <svg>
                   <use xlink:href="#icon-no-candy"/>
                 </svg>
-                <p>You have nothing tasks now.</p>
+                <p>You have nothing Bounty now.</p>
                 <!-- <div class="d-flex f-auto-center TTFontBolder">
                   <span>Make the first selling transaction for your</span>
                 </div> -->
@@ -50,13 +121,11 @@
                   </span>
                 </div>
               </div>
-            </transition>
-            <transition name="ld-hide-in-fade">
-              <el-row v-if="taskInfos.total && !loading" :gutter="20" class="relative user-tasks-cnt">
+              <el-row v-else :gutter="20" class="relative user-tasks-cnt">
                 <el-col
                   :xs="24"
                   class="tasks-item"
-                  v-for="(task, index) of taskInfos.list"
+                  v-for="(task, index) of taskInfos.bounty.list"
                   :key="index">
                   <task-card
                     :info="task"
@@ -68,8 +137,8 @@
             </transition>
           </el-tab-pane>
           <el-tab-pane
-            label="Candy"
-            name="candy">
+            label="Reward"
+            name="reward">
             <!-- <div class="tasks-sort">
               <span>Filter by</span>
               <ld-select
@@ -79,79 +148,22 @@
                 @change="filterTasks">
               </ld-select>
             </div> -->
-            <div v-if="loading" class="user-tasks-skeletion">
-              <div class="d-flex skeletion-breath">
-                <div class="v-flex tasks-skeletion-left">
-                  <p></p>
-                  <p></p>
-                  <p></p>
-                </div>
-                <div class="d-flex col-flex tasks-skeletion-right">
-                  <p></p>
-                  <p></p>
+            <transition name="ld-hide-fade" mode="out-in">
+              <div v-if="loading" class="user-tasks-skeletion">
+                <div class="d-flex skeletion-breath">
+                  <div class="v-flex tasks-skeletion-left">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                  </div>
+                  <div class="d-flex col-flex tasks-skeletion-right">
+                    <p></p>
+                    <p></p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <transition name="ld-hide-in-fade">
               <div
-                v-if="!taskInfos.total && !loading"
-                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box absolute user-no-sale-tasks">
-                <svg>
-                  <use xlink:href="#icon-no-candy"/>
-                </svg>
-                <p>You have no Candy Tasks now.</p>
-                <div class="d-flex f-auto-center TTFontBolder">
-                  <span>recive candy in Tavern</span>
-                  <span class="inline-block">
-                    <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/map')">Map</lordless-btn>
-                  </span>
-                </div>
-              </div>
-            </transition>
-            <transition name="ld-hide-in-fade">
-              <el-row v-if="taskInfos.total && !loading" :gutter="20" class="relative user-tasks-cnt">
-                <el-col
-                  :xs="24"
-                  class="tasks-item"
-                  v-for="(task, index) of taskInfos.list"
-                  :key="index">
-                  <task-card
-                    :info="task"
-                    @play="playTask"
-                    @choose="chooseTask">
-                  </task-card>
-                </el-col>
-              </el-row>
-            </transition>
-          </el-tab-pane>
-          <el-tab-pane
-            label="LORD rewards"
-            name="lord">
-            <!-- <div class="tasks-sort">
-              <span>Filter by</span>
-              <ld-select
-                class="tasks-sort-select"
-                v-model="tasksSort"
-                :items="sortItems"
-                @change="filterTasks">
-              </ld-select>
-            </div> -->
-            <div v-if="loading" class="user-tasks-skeletion">
-              <div class="d-flex skeletion-breath">
-                <div class="v-flex tasks-skeletion-left">
-                  <p></p>
-                  <p></p>
-                  <p></p>
-                </div>
-                <div class="d-flex col-flex tasks-skeletion-right">
-                  <p></p>
-                  <p></p>
-                </div>
-              </div>
-            </div>
-            <transition name="ld-hide-in-fade">
-              <div
-                v-if="!taskInfos.total && !loading"
+                v-else-if="!taskInfos.reward.total && !loading"
                 class="d-flex v-flex col-flex f-auto-center text-center no-asset-box absolute user-no-sale-tasks">
                 <svg>
                   <use xlink:href="#icon-no-candy"/>
@@ -164,13 +176,11 @@
                   </span>
                 </div>
               </div>
-            </transition>
-            <transition name="ld-hide-in-fade">
-              <el-row v-if="taskInfos.total && !loading" :gutter="20" class="relative user-tasks-cnt">
+              <el-row v-else :gutter="20" class="relative user-tasks-cnt">
                 <el-col
                   :xs="24"
                   class="tasks-item"
-                  v-for="(task, index) of taskInfos.list"
+                  v-for="(task, index) of taskInfos.reward.list"
                   :key="index">
                   <task-card
                     :info="task"
@@ -186,6 +196,7 @@
           v-if="showPagination"
           class="ld-tasks-pagination"
           :scrollE="$el"
+          :currentPage="currentPage"
           :scrollPE="pageScrollPE"
           :total="pageTotal"
           background
@@ -205,21 +216,33 @@ import TaskDialog from '@/components/reuse/dialog/task/detail'
 import TaskCard from '@/components/reuse/card/task'
 import LdSelect from '@/components/stories/select'
 
+import PromotionCard from '@/components/reuse/_mobile/card/quests/promotion'
+import PromotionSkeletion from '@/components/skeletion/_mobile/quests/promotion'
+
 import { historyState } from 'utils/tool'
 
-import { getUserTasks } from 'api'
+import { getUserTasks, getAirdropUsers } from 'api'
+import { publicMixins } from '@/mixins'
 import { mapState } from 'vuex'
 export default {
-  data: () => {
+  mixins: [publicMixins],
+  data: (vm) => {
     return {
 
       loading: false,
 
-      // 当前 tab 区域
-      taskTab: 'tasks',
+      tabFilters: {
+        bottoms: 'candy',
+        reward: 'lord',
+        promotion: 'promotion',
+        bounty: 'tasks'
+      },
 
-      // 改变之前的 tab 区域
-      currentTab: 'tasks',
+      // 当前 tab 区域,默认为地址栏参数
+      currentTab: vm.$route.query.type || 'bottoms',
+
+      // 上一个历史的 tab 区域
+      prevTab: vm.$route.query.type || 'bottoms',
 
       // task detail 弹窗
       detailModel: false,
@@ -228,10 +251,34 @@ export default {
       taskInfo: {},
 
       taskInfos: {
-        pn: 1,
-        ps: 10,
-        list: [],
-        total: 0
+        bounty: {
+          pn: 1,
+          ps: 10,
+          list: [],
+          total: 0,
+          more: true
+        },
+        bottoms: {
+          pn: 1,
+          ps: 10,
+          list: [],
+          total: 0,
+          more: true
+        },
+        reward: {
+          pn: 1,
+          ps: 10,
+          list: [],
+          total: 0,
+          more: true
+        },
+        promotion: {
+          pn: 1,
+          ps: 10,
+          list: [],
+          total: 0,
+          more: true
+        }
       },
       /**
        * all tasks options
@@ -265,7 +312,10 @@ export default {
       // 任务奖励列表
       taskRewards: [],
       // sale 建筑总数
-      tRTotal: 0
+      tRTotal: 0,
+
+      // scroll options
+      scrollHandle: null
     }
   },
   computed: {
@@ -278,70 +328,223 @@ export default {
     pageScrollPE () {
       return document.getElementById('user-main-content')
     },
+    currentPage () {
+      return this.taskInfos[this.currentTab].pn
+    },
     pageTotal () {
-      if (this.taskTab === 'tasks') {
-        return this.tTotal
-      }
-      return this.tRTotal
+      // if (this.currentTab === 'tasks') {
+      //   return this.tTotal
+      // }
+      return this.taskInfos[this.currentTab].total
     },
     showPagination () {
-      if (this.taskTab === 'tasks') {
-        return this.tasks.length
-      }
-      return this.taskRewards.lnegth
+      const { total, pn, ps } = this.taskInfos[this.currentTab]
+      return total > pn * ps
+    //   if (this.currentTab === 'tasks') {
+    //     return this.tasks.length
+    //   }
+    //   return this.taskRewards.lnegth
     }
   },
   watch: {
-    userInfo (val, oval) {
-      this.getTasks()
-    },
+    // userInfo (val, oval) {
+    //   this.getTasks()
+    // },
     popstateModel (val) {
       console.log('popstate', val, location.pathname)
       if (val && location.pathname.includes('/owner/tasks')) {
         this.detailModel = false
       }
+    },
+    account () {
+      this.initQuest()
     }
   },
   components: {
     TaskDialog,
     TaskCard,
-    LdSelect
+    LdSelect,
+
+    PromotionCard,
+    PromotionSkeletion
   },
   methods: {
-    chooseTab () {
-      if (this.currentTab === this.taskTab) return
-      this.currentTab = this.taskTab
-      this.tasksSort = -2
-      this.$set(this.taskInfos, 'pn', 1)
-      this.$set(this.taskInfos, 'ps', 10)
+    // afterEnter () {
+    //   this.scrollListenerFunc()
+    // },
 
-      this.getTasks()
-      // if (this.taskTab === 'tasks') this.getTasks()
-      // else this.getTaskRewards()
+    /**
+     * 根据 type 初始化 quest
+     */
+    async initQuest (type = this.currentTab) {
+      if (!this.rendered) this.rendered = true
+      const data = await this.getTasks(Object.assign({}, this.taskInfos[type], { type }))
+      data && this.$set(this.taskInfos, type, data)
+      this.currentTab = type
+    },
+
+    /**
+     * choose tab
+     */
+    async chooseTab () {
+      // const _currentTab = this.currentTab
+      // if (this.prevTab === this.currentTab) return
+      // this.prevTab = this.currentTab
+      // this.tasksSort = -2
+      // this.$set(this.taskInfos[this.currentTab], 'pn', 1)
+      // this.$set(this.taskInfos[this.currentTab], 'ps', 10)
+
+      // this.getTasks()
+
+      // historyState(`/owner/quests?type=${_currentTab}`)
+
+      const _currentTab = this.currentTab
+      if (this.prevTab === _currentTab) return
+
+      // 切换 tab 之后，在数据还未修改之前，将之前tab的 scrollTop 进行存储
+      const _prevTab = this.prevTab
+      const _scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
+      console.log('chooseTab _scrollTop', _scrollTop)
+      this.$set(this.taskInfos[_prevTab], 'scrollTop', _scrollTop)
+
+      // 将 scrollTop 复位 为0
+      // scrollTo(0)
+
+      historyState(`/owner/quests?type=${_currentTab}`)
+      this.prevTab = _currentTab
+      // this.bountyStatus = -2
+
+      // 切换tab之前，判断当前tab是否含有历史数据，如果有，就不请求
+      if (!this.taskInfos[_currentTab].total) {
+        const data = await this.getTasks(this.taskInfos[_currentTab])
+        data && this.$set(this.taskInfos, _currentTab, data)
+      }
     },
 
     filterTasks (e) {
       this.getTasks({ status: e })
     },
 
-    async getTasks ({ pn = this.taskInfos.pn, ps = this.taskInfos.ps, status = this.tasksSort, type = this.taskTab } = {}) {
-      if (!this.userInfo.address) return
+    /**
+     * 获取 task 基础事件
+     */
+    async getTasks ({ pn = this.taskInfos[this.currentTab].pn, ps = this.taskInfos[this.currentTab].ps, status = this.tasksSort, type = this.currentTab } = {}) {
+      // if (!this.userInfo.address) return
+
+      // 根据选择器的key，过滤后端对应sort字符
+      const _type = this.tabFilters[type]
+      // const _status = this.bountyStatusFilters[status]
+
+      this.currentTab = type
+
       this.loading = true
-      const params = {
+
+      // const params = { pn, ps, type: _type, status: _status }
+      const params = { pn, ps, type: _type, status }
+
+      let data = null
+      try {
+        let res
+        if (_type === 'promotion') {
+          res = await getAirdropUsers(params)
+        } else {
+          res = await getUserTasks(params)
+        }
+        if (res.code === 1000 && res.data) {
+          data = res.data
+        }
+        this.loading = false
+      } catch (err) {
+        this.loading = false
+      }
+
+      return data
+    },
+
+    // 获取更多 tasks
+    async loadMoreTasks (cb) {
+      const currentTab = this.currentTab
+      const info = this.taskInfos[currentTab]
+      const pn = info.pn + 1
+      const { list, ps, total } = await this.getTasks({ pn })
+
+      this.$set(this.taskInfos, currentTab, Object.assign({}, info, {
+        list: info.list.concat(list),
         pn,
         ps,
-        type,
-        status
-      }
-      const res = await getUserTasks(params)
-      if (res.code === 1000 && res.data) {
-        // const { list, total } = res.data
-        // this.tasks = list
-        // this.tTotal = total
-        this.$set(this, 'taskInfos', res.data)
-      }
-      this.loading = false
+        total
+      }))
+
+      return cb && cb()
     },
+
+    /**
+     * scroll 监听事件
+     */
+    // scrollListenerFunc ({ bool = false, bottom = 80, pHeight = document.body.offsetHeight, chooseTab = false } = {}) {
+    //   this.scrollHandle && document.removeEventListener('scroll', this.scrollHandle)
+    //   this.scrollHandle = null
+
+    //   console.log(' --- scroll')
+    //   const box = document.getElementById('mobile-quests-content-box')
+    //   let bHeight = box ? box.offsetHeight : 0
+    //   // 如果 bHeight 不存在或者 bHeight - bottom 小于 pHeight, return
+    //   if (!bHeight || bHeight - bottom < pHeight) return
+
+    //   const _currentTab = this.currentTab
+
+    //   // chooseTab 根据已有 scrollTop 值做变化
+    //   if (chooseTab) {
+    //     // 将 scrollTop 修改为当前 tab 的scrollTop值
+    //     const _cScrollTop = this.taskInfos[_currentTab].scrollTop || 0
+    //     console.log('_cScrollTop', _cScrollTop)
+    //     scrollTo(_cScrollTop)
+    //   }
+
+    //   const handleFunc = () => {
+    //     if (bool || this.taskInfos[_currentTab].noMore) return
+    //     if (!bHeight) bHeight = box.offsetHeight
+    //     const scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
+
+    //     // 如果页面上滑到达指定条件位置
+    //     // 读取更多数据
+    //     if (scrollTop + pHeight + bottom > bHeight) {
+    //       bool = true
+    //       this.loadMoreTasks(() => {
+    //         this.$nextTick(() => {
+    //           bool = false
+    //           bHeight = box.offsetHeight
+    //         })
+    //       })
+    //     }
+    //   }
+    //   handleFunc()
+
+    //   this.scrollHandle = handleFunc
+
+    //   this.$nextTick(() => {
+    //     document.addEventListener('scroll', this.scrollHandle)
+    //   })
+    // },
+
+    // async getTasks ({ pn = this.taskInfos.pn, ps = this.taskInfos.ps, status = this.tasksSort, type = this.currentTab } = {}) {
+    //   if (!this.userInfo.address) return
+    //   this.loading = true
+    //   const params = {
+    //     pn,
+    //     ps,
+    //     type,
+    //     status
+    //   }
+    //   const res = await getUserTasks(params)
+    //   if (res.code === 1000 && res.data) {
+    //     // const { list, total } = res.data
+    //     // this.tasks = list
+    //     // this.tTotal = total
+    //     this.$set(this, 'taskInfos', res.data)
+    //   }
+    //   this.loading = false
+    // },
 
     // async getTaskRewards ({ pn = 1, ps = 10 } = {}) {
     //   this.loading = true
@@ -359,8 +562,17 @@ export default {
     //   this.loading = false
     // },
 
-    pageChange (pn) {
-      this.getTasks({ pn })
+    async pageChange (pn) {
+      const currentTab = this.currentTab
+      const info = this.taskInfos[currentTab]
+      const { list, ps, total } = await this.getTasks({ pn })
+      this.$set(this.taskInfos, currentTab, Object.assign({}, info, {
+        list: info.list.concat(list),
+        pn,
+        ps,
+        total
+      }))
+      // this.getTasks({ pn })
     },
 
     chooseTask (item) {
@@ -382,10 +594,20 @@ export default {
     dialogClose () {
       if (!this.popstateModel) historyState(this.$route.path)
     }
+
+    // destoryTasks () {
+    //   this.scrollHandle && document.removeEventListener('scroll', this.scrollHandle)
+    //   this.scrollHandle = null
+    // }
   },
+  // beforeDestroy () {
+  //   this.destoryTasks()
+  // },
   mounted () {
     this.$nextTick(() => {
-      this.getTasks()
+      const type = this.$route.query.type
+      this.initQuest(type)
+      // this.getTasks()
     })
   }
 }
@@ -394,8 +616,9 @@ export default {
 <style lang="scss" scoped>
 
   .user-tasks-box {
+    padding: 30px 30px 100px;
     font-size: 16px;
-    @include padding(-1, 30px, 1);
+    // @include padding(-1, 30px, 1);
     /deep/ .el-tabs__header {
       margin: 0;
     }

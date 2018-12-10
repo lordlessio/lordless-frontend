@@ -160,6 +160,8 @@ export default {
         this.progressNums = { total: 0, left: 0, dropping: 0 }
         return
       }
+      // const _count = await Airdrop.methods('getAirdrop', [ this.info.airdropId ])
+      // console.log('_count', _count[1].toNumber())
       const _left = await TokenContract.methods('balanceOf', [ Airdrop.address ])
       console.log('_left', _left.toNumber())
       const _dropping = await Airdrop.methods('tokenTotalClaim', [ tokenAddress ])
@@ -245,7 +247,7 @@ export default {
           await saveAirdropUser({ tx, airdropId: info._id })
           this.metamaskChoose = false
 
-          this.$nextTick(() => this.$router.push('/owner/quest?type=promotion&refresh=true'))
+          this.$nextTick(() => this.$router.push('/owner/quests?type=promotion&refresh=true'))
         })
           .catch((err) => {
             console.log('err', err.message)
