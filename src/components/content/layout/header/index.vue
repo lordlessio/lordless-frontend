@@ -22,14 +22,19 @@
             </svg>
           </router-link>
         </span>
-        <span v-if="!isMobile" class="inline-block header-right-item" data-type="link">
-          <router-link to="/map">
-            Map
+        <span class="inline-block header-right-item" data-type="link">
+          <router-link to="/project/promotions">
+            Promotions
           </router-link>
         </span>
         <span class="inline-block header-right-item" data-type="link">
           <router-link to="/market">
             Marketplace
+          </router-link>
+        </span>
+        <span v-if="!isMobile" class="inline-block header-right-item" data-type="link">
+          <router-link to="/map">
+            Map
           </router-link>
         </span>
         <span class="inline-block header-right-item" data-type="link">

@@ -18,6 +18,10 @@ import Privacy from '@/pages/help/privacy'
 
 import TaskDetail from '@/pages/task/_detail.vue'
 
+import LordlessProject from '@/pages/project/index.vue'
+import LordlessPromotions from '@/pages/project/promotions.vue'
+import ProjectDetail from '@/pages/project/_project.vue'
+
 import UserDetail from '@/pages/user/_detail'
 
 import Owner from '@/pages/user/owner'
@@ -335,6 +339,45 @@ const routes = [
     meta: {
       title: 'USER - LORDLESS'
     }
+  },
+  {
+    path: '/project/',
+    name: 'project',
+    component: LordlessProject,
+    children: [
+      {
+        path: 'promotions',
+        name: 'Promotions Page',
+        component: LordlessPromotions,
+        meta: {
+          title: 'Promotions - LORDLESS',
+          header: {
+            show: true
+          },
+          footer: {
+            show: true
+          }
+        }
+      },
+      {
+        path: ':projectId',
+        name: 'ProjectInfo',
+        component: ProjectDetail,
+        meta: {
+          title: 'Project - LORDLESS',
+          header: {
+            show: true
+          },
+          footer: {
+            show: true
+          }
+        }
+      },
+      {
+        path: '*',
+        redirect: 'promotions'
+      }
+    ]
   },
   {
     path: '/owner',

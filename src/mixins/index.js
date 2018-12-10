@@ -8,6 +8,8 @@ const layoutMixins = require('./layout')
 const publicMixins = require('./public')
 const activatedMixins = require('./activated')
 
+const promotionsMixins = require('./utils/promotions')
+
 // console.log('contractMixins', contractMixins)
 // // export const loginMixins = login
 module.exports = {
@@ -18,5 +20,6 @@ module.exports = {
   userMixins: userMixins.default,
   layoutMixins: layoutMixins.default,
   publicMixins: publicMixins.default,
-  activatedMixins: activatedMixins.default
+  activatedMixins: activatedMixins.default,
+  promotionsMixins: promotionsMixins.default
 }

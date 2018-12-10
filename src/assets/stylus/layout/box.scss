@@ -1,6 +1,7 @@
 
 // 一级 DOM 布局样式
 #lordless {
+  background-color: #f8f8f8;
   &.mobile-dialog-open {
     height: 100%;
     overflow: hidden;
@@ -62,6 +63,11 @@
   //   width: 100%;
   // }
 }
+@media (max-width: 992px) {
+  .container, .page-container {
+    padding: 0 20px;
+  }
+}
 
 @media (max-width: 768px) {
   // .ld-main {
@@ -74,11 +80,11 @@
     padding-bottom: calc(env(safe-area-inset-bottom) + 50px); /* 在 iphone x + 中本句才会生效 */
     padding-left: env(safe-area-inset-left);
     box-sizing: border-box;
-    background-color: #f8f8f8;
+    // background-color: #f8f8f8;
   }
-  body {
-    background-color: #f8f8f8;
-  }
+  // body {
+  //   background-color: #f8f8f8;
+  // }
   .container {
     padding: 0 20px;
   }
