@@ -25,7 +25,10 @@
     }
   }
   @media screen and (min-width: 769px) {
-    @if ($lg != -1) {
+    @if ($value == 100vw) {
+      #{$property}: calc(100% - #{$minus});
+    }
+    @else if ($lg != -1) {
       @include viewport-unit-tool($property, $value, $minus);
     }
   }
@@ -53,8 +56,13 @@
 
       $percent: $value / ($value * 0 + 1); // see https://github.com/sass/sass/issues/533
 
-      $percent-width: $device-width * $percent / 100 - $minus;
-      $percent-height: $device-height * $percent / 100 - $minus;
+      $percent-width: $device-width * $percent / 100;
+      $percent-height: $device-height * $percent / 100;
+
+      @if ($minus != 0px) {
+        $percent-width: $device-width * $percent / 100 - $minus;
+        $percent-height: $device-height * $percent / 100 - $minus;
+      }
 
       @if ($unit == vmin or $unit == vmax) {
         @media #{$device-query} {

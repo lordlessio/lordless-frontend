@@ -28,7 +28,7 @@ export default {
      * 打开 home
      */
     openHome (tavern) {
-      this.$router.push(`/tavern/${tavern.id}`)
+      this.$router.push(`/tavern/${tavern.id}?refer=${encodeURIComponent(this.$route.path)}`)
     },
 
     /**

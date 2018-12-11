@@ -48,7 +48,9 @@ export default {
     ]),
     tCloseHandle () {
       this[mutationTypes.LAYOUT_SET_POP_DIRECTION]('_reverse')
-      this.$nextTick(() => this.$router.push('/taverns'))
+
+      const refer = this.$route.query.refer || '/taverns'
+      this.$nextTick(() => this.$router.push(`${decodeURIComponent(refer)}`))
       // if (history.length) {
       //   history.go(-1)
       // } else {
