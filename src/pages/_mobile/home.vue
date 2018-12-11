@@ -8,7 +8,7 @@
           <h2 class="mobile-home-title">Promotions</h2>
           <ul class="mobile-home-ul home-promotions-ul">
             <li
-              v-for="(item, index) of airdrops"
+              v-for="(item, index) of promotions"
               :key="index"
               class="home-info-item home-promotions-item"
               @click.stop="$router.push(`/project/${item.project._id}`)">
@@ -63,7 +63,6 @@ export default {
   data: () => {
     return {
       loading: true,
-      airdrops: [],
       promotions: []
     }
   },
@@ -80,21 +79,23 @@ export default {
     HomeSkeletion
   },
   methods: {
-    async getAirdrops () {
+    async getAirdropsHandle () {
       this.loading = true
+      console.log('---- come in airdrop')
       try {
         const res = await getAirdrops()
         if (res.code === 1000 && res.data) {
-          this.airdrops = res.data
+          this.promotions = res.data
         }
+        console.log('---- come in airdrop 2')
+        this.loading = false
       } catch (err) {
         this.loading = false
       }
-      this.loading = false
     }
   },
   mounted () {
-    this.getAirdrops()
+    this.getAirdropsHandle()
     loopCandyClamied()
   }
 }

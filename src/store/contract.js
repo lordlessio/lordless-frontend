@@ -58,16 +58,16 @@ export default {
     /**
      * init contrcat instance
      */
-    [actionTypes.CONTRACT_INIT_INSTANCE]: ({ state, commit, dispatch }, { monitor = false } = {}) => {
+    [actionTypes.CONTRACT_INIT_INSTANCE]: async ({ state, commit, dispatch }, { monitor = false } = {}) => {
       console.log('init contract')
       const { web3js, address } = web3Store.state.web3Opt
 
       // 如果是 monitor 的状态，不重置合约文件
       if (!monitor) {
-        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'NFTsCrowdsale', value: NFTsCrowdsale(web3js) })
-        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Airdrop', value: Airdrop(web3js) })
+        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'NFTsCrowdsale', value: await NFTsCrowdsale(web3js) })
+        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Airdrop', value: await Airdrop(web3js) })
         // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Building', value: Building(web3js) })
-        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'TavernNFTs', value: TavernNFTs(web3js) })
+        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'TavernNFTs', value: await TavernNFTs(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'contractReady', value: true })
       }
 
@@ -92,7 +92,7 @@ export default {
     /**
      * set airdrop tokens contract
      */
-    [actionTypes.CONTRACT_SET_AIRDROP_TOKENS]: ({ state, commit }, address) => {
+    [actionTypes.CONTRACT_SET_AIRDROP_TOKENS]: async ({ state, commit }, address) => {
       if (state.airdropTokens[address]) return
 
       const { web3js } = web3Store.state.web3Opt
@@ -115,7 +115,7 @@ export default {
         }]
       }
 
-      const contract = initContract(contractJson, web3js)
+      const contract = await initContract(contractJson, web3js)
       contract && commit(mutationTypes.CONTRACT_SET_AIRDROP_TOKENS, { address, contract })
     }
   }

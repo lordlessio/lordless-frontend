@@ -5,11 +5,14 @@
       <p class="d-flex f-align-center f-justify-between promotion-claim-nums">
         <span>
           <span v-if="!progressNums.completed" class="inline-block">...</span>
-          <count-up v-else class="inline-block" :startVal="0" :endVal="progressNums.total" :duration="1000" :isReady="progressNums.completed"></count-up>&nbsp;total
+          <span v-else>
+            Total&nbsp;
+            <count-up class="inline-block" :startVal="0" :endVal="progressNums.total" :duration="1" :isReady="progressNums.completed"></count-up>
+          </span>
         </span>
         <span class="promotion-left-num">
           <span v-if="!progressNums.completed" class="inline-block">...</span>
-          <count-up v-else class="inline-block" :startVal="0" :endVal="progressNums.left" :duration="1000" :isReady="progressNums.completed"></count-up>&nbsp;&nbsp;left
+          <count-up v-else class="inline-block" :startVal="0" :endVal="progressNums.left" :duration="1" :isReady="progressNums.completed"></count-up>&nbsp;&nbsp;left
         </span>
       </p>
       <div class="promotion-progress-bar">
@@ -107,6 +110,10 @@ export default {
     claimedNum () {
       return this.progressNums.dropping
     },
+    tokenAddress () {
+      const { project } = this.info
+      return typeof project === 'object' ? project.address : project
+    },
     isEnd () {
       const { open, countPerUser } = this.info
       return !open || (!this.failed && this.progressNums.left < parseFloat(weiToEth(countPerUser)))
@@ -121,6 +128,9 @@ export default {
     },
     claimedNum (val) {
       this.$emit('update:claimed', val)
+    },
+    airdropTokens (val) {
+      console.log('----- watch airdropTokens')
     }
   },
   methods: {
@@ -153,7 +163,7 @@ export default {
     /**
      * 初始化 token
      */
-    initTokenContract ({ project } = this.info, { isConnected, networkId } = this.web3Opt) {
+    async initTokenContract ({ project } = this.info, { isConnected, networkId } = this.web3Opt) {
       // 如果 web3 没有就绪 或者 网络不匹配，进入 failed 模式
       if (!isConnected || (process.env.NODE_ENV !== 'development' && parseInt(networkId) !== process.env.APPROVED_NETWORK_ID)) {
         this.initFailedClaim()
@@ -165,11 +175,13 @@ export default {
       this.initStatus()
 
       const address = typeof project === 'object' ? project.address : project
-      this[actionTypes.CONTRACT_SET_AIRDROP_TOKENS](address)
+      await this[actionTypes.CONTRACT_SET_AIRDROP_TOKENS](address)
       this.$nextTick(() => {
         if (!this.rendered) this.rendered = true
-        this.initProgressNumber(address)
         this.checkClaimStatus()
+        setTimeout(() => {
+          this.initProgressNumber(address)
+        }, 0)
       })
     },
 
@@ -195,9 +207,11 @@ export default {
       this.loading = false
     },
 
-    async initProgressNumber (tokenAddress, TokenContract = this.airdropTokens[tokenAddress], Airdrop = this.Airdrop) {
+    async initProgressNumber (tokenAddress = this.tokenAddress, Airdrop = this.Airdrop) {
+      const TokenContract = this.airdropTokens[tokenAddress]
+      console.log('airdropTokens', this.airdropTokens)
       if (!TokenContract) {
-        this.progressNums = { total: 0, left: 0, dropping: 0 }
+        this.progressNums = { total: 0, left: 0, dropping: 0, completed: true }
         return
       }
       // const _count = await Airdrop.methods('getAirdrop', [ this.info.airdropId ])

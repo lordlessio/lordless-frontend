@@ -54,8 +54,7 @@
             class="user-avatar"
             :scale="isMobile ? 7 : 8"
             :theme="isMobile ? 'light' : theme === 'dark' ? 'light' : 'dark'"
-            :showText="false"
-            leftInfo/>
+            :showText="false"/>
         </div>
         <p class="d-flex row-flex align-baseline lg-hidden header-right-item header-logout" data-type="link" @click.stop="logout">
           <span class="line-height-0 inline-block header-logout-icon">

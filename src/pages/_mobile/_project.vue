@@ -17,8 +17,9 @@
           </p>
           <div v-if="airdropInfo">
             <p class="TTFontBolder candy-claimed-info">
-              {{ claimed === -1 ? '???' : (claimed / projectInfo.USD2TokenCount | formatNumber | formatDecimal({ len: 2 })) }} US dollars
-              <span class="TTFontBold">has been claimed.</span>
+              <span v-if="claimed === -1">???</span>
+              <span v-else>{{ claimed / projectInfo.USD2TokenCount | formatNumber | formatDecimal({ len: 2 }) }}</span> US dollars
+              <span class="TTFontBold candy-claimed-been">has been claimed.</span>
             </p>
             <div class="project-candy-carousel">
               <el-carousel trigger="click" height="128px" :interval="5000" arrow="never" :indicator-position="projectInfo.airdrop.banners.length <= 1 ? 'none' : ''" :loop="projectInfo.airdrop.banners.length > 1">
@@ -190,7 +191,8 @@ export default {
       claimed: 0,
       projectInfo: {
         coinmarketcap: {},
-        market: {}
+        market: {},
+        exchanges: []
       }
     }
   },
@@ -226,6 +228,8 @@ export default {
         const res = await getCandyDetail(projectId)
         if (res.code === 1000 && res.data) {
           this.projectInfo = res.data
+        } else {
+          this.$router.push('/')
         }
       } catch (err) {
         this.loading = false
@@ -284,7 +288,7 @@ export default {
     margin-top: 10px;
     font-size: 24px;
     color: #0B2A48;
-    >span {
+    .candy-claimed-been {
       font-size: 18px;
     }
   }
