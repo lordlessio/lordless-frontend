@@ -1,11 +1,11 @@
 <template>
   <div class="authorize-status-box" @touchmove.stop>
     <div class="authorize-status-container text-center">
-      <h1 class="TTFontBolder">{{ infos[type].title }}</h1>
-      <p>{{ infos[type].content }}</p>
+      <h1 class="TTFontBolder">{{ statusInfos[type].title }}</h1>
+      <p>{{ statusInfos[type].content }}</p>
       <p>New here?Read our guide on getting started.</p>
       <lordless-btn theme="deep-blue" class="TTFontBolder lordless-message-btn" @click="$router.push('/guide')">Read guide</lordless-btn>
-      <lordless-img class="authorize-status-img" :alt="infos[type].title" :sType="infos[type].sType" :center="false" :src="infos[type].imgUrl | originSource"/>
+      <lordless-img class="authorize-status-img" :alt="statusInfos[type].title" :sType="statusInfos[type].sType" :center="false" :src="statusInfos[type].imgUrl | originSource"/>
     </div>
   </div>
 </template>
@@ -21,31 +21,68 @@ export default {
   data: () => {
     return {
       infos: {
-        missing: {
-          title: 'MetaMask is Missing',
-          content: 'Install MetaMask in your browser extension market.',
-          imgUrl: '/img/guide/status-metamask-addon.png',
-          sType: 'width'
+        mobile: {
+          missing: {
+            title: 'Web3 is Missing',
+            content: 'Install MetaMask in your browser extension market.',
+            imgUrl: '/img/guide/status-metamask-addon.png',
+            sType: 'width'
+          },
+          locked: {
+            title: 'Your Web3 is locked',
+            content: 'Open MetaMask and follow the instructions to unlock it.',
+            imgUrl: '/img/guide/status-metamask-addon.png',
+            sType: 'width'
+          },
+          network: {
+            title: 'Ethereum network is unallow',
+            content: 'Please Choose a right network.',
+            imgUrl: '/img/guide/status-main-network.png',
+            sType: 'auto'
+          },
+          browser: {
+            title: 'Your browser is unsupported',
+            content: 'You need to use Chrome or Firefox which allows you to use MetaMask.',
+            imgUrl: '/img/guide/status-borwser.png',
+            sType: 'width'
+          }
         },
-        locked: {
-          title: 'Your MetaMask is locked',
-          content: 'Open MetaMask and follow the instructions to unlock it.',
-          imgUrl: '/img/guide/status-metamask-addon.png',
-          sType: 'width'
-        },
-        network: {
-          title: 'MetaMask network is unallow',
-          content: 'Open MetaMask and Choose right network.',
-          imgUrl: '/img/guide/status-main-network.png',
-          sType: 'auto'
-        },
-        browser: {
-          title: 'Your browser is unsupported',
-          content: 'You need to use Chrome or Firefox which allows you to use MetaMask.',
-          imgUrl: '/img/guide/status-borwser.png',
-          sType: 'width'
+        pc: {
+          missing: {
+            title: 'MetaMask is Missing',
+            content: 'Install MetaMask in your browser extension market.',
+            imgUrl: '/img/guide/status-metamask-addon.png',
+            sType: 'width'
+          },
+          locked: {
+            title: 'Your MetaMask is locked',
+            content: 'Open MetaMask and follow the instructions to unlock it.',
+            imgUrl: '/img/guide/status-metamask-addon.png',
+            sType: 'width'
+          },
+          network: {
+            title: 'MetaMask network is unallow',
+            content: 'Open MetaMask and Choose right network.',
+            imgUrl: '/img/guide/status-main-network.png',
+            sType: 'auto'
+          },
+          browser: {
+            title: 'Your browser is unsupported',
+            content: 'You need to use Chrome or Firefox which allows you to use MetaMask.',
+            imgUrl: '/img/guide/status-borwser.png',
+            sType: 'width'
+          }
         }
       }
+    }
+  },
+  computed: {
+    isMobile () {
+      return this.$root.$children[0].isMobile
+    },
+    statusInfos () {
+      const type = this.isMobile ? 'mobile' : 'pc'
+      return this.infos[type]
     }
   }
 }

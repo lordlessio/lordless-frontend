@@ -91,7 +91,7 @@
               <li
                 v-if="overviews.completeTasks.total >= overviews.ps && owner"
                 class="info-more">
-                <router-link class="d-flex f-align-baseline" to="/owner/tasks">
+                <router-link class="d-flex f-align-baseline" to="/owner/quests">
                   <span>More </span>
                   <span data-type="icon">
                     <i class="el-icon-d-arrow-right"></i>

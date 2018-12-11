@@ -26,7 +26,7 @@
               theme="blue"
               inverse
               shadow
-              @click="$router.push('/lbs')">
+              @click="$router.push('/map')">
               View map now
             </lordless-btn>
           </div>

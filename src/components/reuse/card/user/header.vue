@@ -76,7 +76,7 @@
           </div>
           <div v-if="owner" class="lg-text-right header-cnt-balance sm-hidden">
             <p>ETH Balance in wallet</p>
-            <p class="eth-balance">{{ balance | weiToEth }} ETH</p>
+            <p class="eth-balance">{{ ethBalance | weiToEth }} ETH</p>
           </div>
         </div>
       </div>
@@ -93,9 +93,9 @@
 <script>
 import Clipboard from 'clipboard'
 import Authorize from '@/components/reuse/dialog/authorize'
-import { contractMixins, dialogMixins } from '@/mixins'
+import { contractMixins, dialogMixins, publicMixins } from '@/mixins'
 export default {
-  mixins: [ contractMixins, dialogMixins ],
+  mixins: [ contractMixins, dialogMixins, publicMixins ],
   props: {
     loading: {
       type: Boolean,
@@ -122,8 +122,8 @@ export default {
     }
   },
   computed: {
-    balance () {
-      return this.$root.$children[0].web3Opt.balance
+    ethBalance () {
+      return this.web3Opt.balance
     },
 
     isCrowdsaleApproved () {

@@ -70,9 +70,9 @@ import LdHeader from '@/components/content/layout/header'
 import Authorize from '@/components/reuse/dialog/authorize'
 // import Loading from '@/components/stories/loading'
 
-import { dialogMixins, userMixins } from '@/mixins'
+import { dialogMixins, userMixins, publicMixins } from '@/mixins'
 export default {
-  mixins: [ dialogMixins, userMixins ],
+  mixins: [ dialogMixins, userMixins, publicMixins ],
   data: () => {
     return {
       navgations: [
@@ -147,8 +147,8 @@ export default {
     }
   },
   watch: {
-    userInfo (val, oVal) {
-      console.log('---- val', val, oVal)
+    account (val, oVal) {
+      console.log('---- owner info account watch', val, oVal)
       this.$nextTick(() => this.checkUser())
     }
   },

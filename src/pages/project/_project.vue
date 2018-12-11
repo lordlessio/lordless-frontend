@@ -16,7 +16,7 @@
               <span class="project-symbol-text">({{ projectInfo.symbol }})</span>
             </p>
           </div>
-          <p v-if="ownerAirdrops" class="TTFontBolder project-claimed-text">{{ claimed / projectInfo.USD2TokenCount | formatNumber | formatDecimal({ len: 2 }) }} US dollars has been claimed.</p>
+          <p v-if="ownerAirdrops" class="TTFontBolder project-claimed-text">{{ claimed === -1 ? '???' : (claimed / projectInfo.USD2TokenCount | formatNumber | formatDecimal({ len: 2 })) }} US dollars has been claimed.</p>
           <div class="project-intro-box">
             <div class="project-intro-item">
               <p class="intro-item-title">Slogan</p>

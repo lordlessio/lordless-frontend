@@ -17,7 +17,7 @@
           </p>
           <div v-if="airdropInfo">
             <p class="TTFontBolder candy-claimed-info">
-              {{ claimed / projectInfo.USD2TokenCount | formatNumber | formatDecimal({ len: 2 }) }} US dollars
+              {{ claimed === -1 ? '???' : (claimed / projectInfo.USD2TokenCount | formatNumber | formatDecimal({ len: 2 })) }} US dollars
               <span class="TTFontBold">has been claimed.</span>
             </p>
             <div class="project-candy-carousel">

@@ -35,6 +35,7 @@ export default {
         confirmButtonClass: 'logout-confirm-btn'
       }).then(() => {
         this[actionTypes.USER_LOGOUT]({ reset: true })
+        this.$router.push('/')
       })
     }
   }

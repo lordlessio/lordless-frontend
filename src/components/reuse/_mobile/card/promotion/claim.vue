@@ -1,7 +1,8 @@
 <template>
-  <div v-if="info._id" class="promotion-claim-box">
+  <div v-if="info._id" class="promotion-claim-box" :class="{ 'is-failed': failed }">
     <div class="promotion-claim-left">
-      <p class="d-flex f-align-center f-justify-between">
+      <p class="promotion-claim-failed">9,999 total</p>
+      <p class="d-flex f-align-center f-justify-between promotion-claim-nums">
         <span>
           <span v-if="!progressNums.completed" class="inline-block">...</span>
           <count-up v-else class="inline-block" :startVal="0" :endVal="progressNums.total" :duration="1000" :isReady="progressNums.completed"></count-up>&nbsp;total
@@ -36,9 +37,9 @@
         class="TTFontBold promotion-claim-btn"
         theme="promotion"
         inverse
-        :disabled="isClaimed || loading"
+        :disabled="isClaimed || loading || isEnd"
         :loading="loading"
-        @click="claimPromotion">{{ isClaimed ? 'Claimed' : 'Claim now' }}</lordless-btn>
+        @click="claimPromotion">{{ isEnd ? 'End' : isClaimed ? 'Claimed' : 'Claim now' }}</lordless-btn>
     </div>
     <lordless-authorize
       ref="authorize"
@@ -72,13 +73,14 @@ export default {
   },
   data: () => {
     return {
+      failed: false,
       rendered: false,
       loading: true,
       isClaimed: false,
       progressNums: {
         completed: false,
-        total: 0,
-        left: 0,
+        total: 1,
+        left: 1,
         dropping: 0
       },
       progress: {
@@ -104,6 +106,10 @@ export default {
     },
     claimedNum () {
       return this.progressNums.dropping
+    },
+    isEnd () {
+      const { open, countPerUser } = this.info
+      return !open || (!this.failed && this.progressNums.left < parseFloat(weiToEth(countPerUser)))
     }
   },
   watch: {
@@ -122,8 +128,42 @@ export default {
       actionTypes.CONTRACT_SET_AIRDROP_TOKENS
     ]),
 
-    initTokenContract ({ project } = this.info) {
+    /**
+     * 初始化状态
+     */
+    initStatus () {
+      this.failed = false
+      this.isClaimed = true
+      this.$set(this.progressNums, 'dropping', 0)
+    },
+
+    /**
+     * 初始化 failed 模式
+     */
+    initFailedClaim () {
+      this.failed = true
+      this.$nextTick(() => {
+        this.isClaimed = false
+        this.loading = false
+
+        this.$set(this.progressNums, 'dropping', -1)
+      })
+    },
+
+    /**
+     * 初始化 token
+     */
+    initTokenContract ({ project } = this.info, { isConnected, networkId } = this.web3Opt) {
+      // 如果 web3 没有就绪 或者 网络不匹配，进入 failed 模式
+      if (!isConnected || (process.env.NODE_ENV !== 'development' && parseInt(networkId) !== process.env.APPROVED_NETWORK_ID)) {
+        this.initFailedClaim()
+        return
+      }
       if (!project) return
+
+      // 初始化状态
+      this.initStatus()
+
       const address = typeof project === 'object' ? project.address : project
       this[actionTypes.CONTRACT_SET_AIRDROP_TOKENS](address)
       this.$nextTick(() => {
@@ -163,9 +203,9 @@ export default {
       // const _count = await Airdrop.methods('getAirdrop', [ this.info.airdropId ])
       // console.log('_count', _count[1].toNumber())
       const _left = await TokenContract.methods('balanceOf', [ Airdrop.address ])
-      console.log('_left', _left.toNumber())
+      console.log('_left', _left, _left.toNumber())
       const _dropping = await Airdrop.methods('tokenTotalClaim', [ tokenAddress ])
-      console.log('_dropping', _dropping.toNumber())
+      console.log('_dropping', _dropping, _dropping.toNumber())
 
       const left = parseFloat(weiToEth(_left.toNumber()))
       const dropping = parseFloat(weiToEth(_dropping.toNumber()))
@@ -186,7 +226,7 @@ export default {
         // 检查市场权限
         const authorize = this.$refs.authorize.checkoutAuthorize({ guide: true })
 
-        if (!authorize) return
+        if (!authorize || this.failed) return
 
         // pId = (await Airdrop.methods('getAirdropIds') || [])[0]
 
@@ -281,6 +321,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .promotion-claim-box {
+    &.is-failed {
+      .promotion-claim-num {
+        visibility: hidden;
+      }
+      .promotion-claim-failed {
+        display: block;
+      }
+      .promotion-claim-nums {
+        display: none;
+      }
+    }
+  }
+  .promotion-claim-failed {
+    display: none;
+  }
   .promotion-claim-left {
     font-size: 16px;
     color: #777;

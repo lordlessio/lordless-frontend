@@ -357,7 +357,7 @@ export const weiToEth = (value) => {
   } else {
     value = web3js.fromWei(value)
   }
-  return parseFloat(parseInt(value).toFixed(4))
+  return parseFloat(parseFloat(value).toFixed(4))
 }
 
 export const sliceStr = (str, { start = 0, end = 10 } = {}) => {
