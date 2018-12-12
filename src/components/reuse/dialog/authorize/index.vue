@@ -94,6 +94,8 @@ export default {
   },
   data: () => {
     return {
+      // 在 authorizeInit 就绪之前，如果手动触发了 check，则标记 initBeforeCheck 为 true
+      initBeforeCheck: false,
 
       // 在 authorizeInit 就绪之前，如果手动触发了 check，则标记 rendered 为 true
       rendered: false,
@@ -212,6 +214,8 @@ export default {
     showStatus (val) {
       if (val && this.authorizeInit) {
         this.initModels()
+      } else if (this.rendered) {
+        this.checkoutAuthorize()
       }
     },
 
@@ -230,9 +234,10 @@ export default {
       this.$emit('blurs', val)
     },
 
-    // 如果切换了账号，关闭对话框
+    // 如果切换了账号，recheck authorize
     account (val, oVal) {
-      if (!this.autoClose) return
+      console.log('------- account watch', oVal, 'rendered', this.rendered)
+      if (!this.autoClose || !this.rendered) return
       console.log('------------ account', val, oVal)
       this.checkoutAuthorize()
       // this.authorizeDialog = false
@@ -247,9 +252,8 @@ export default {
           this.authorizeDialog = false
 
           this.$nextTick(() => {
-            if (this.rendered) {
+            if (this.initBeforeCheck) {
               this.$root.$children[0].mobileWalletModel = true
-              this.rendered = false
             }
           })
         }
@@ -305,8 +309,10 @@ export default {
     },
 
     checkoutAuthorize ({ guide = false, crowdsale = false, telegram = false } = {}) {
-      // authorizeInit 就绪之前，触发 checkout， 改变 rendered 状态为 true
-      if (!this.authorizeInit) this.rendered = true
+      // 记录是否已经手动check过了， rendered
+      if (!this.rendered) this.rendered = true
+      // authorizeInit 就绪之前，触发 checkout， 改变 initBeforeCheck 状态为 true
+      if (!this.authorizeInit) this.initBeforeCheck = true
       if (!this.isMobileRead()) return false
 
       // 如果是移动端，直接弹出
