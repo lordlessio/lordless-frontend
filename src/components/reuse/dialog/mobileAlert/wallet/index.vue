@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import MobileWallets from '@/components/reuse/_mobile/wallets'
+import MobileWallets from '@/components/reuse/_mobile/wallets/trust'
 import { layoutMixins } from '@/mixins'
 import { addClass, removeClass } from 'utils/tool'
 export default {

@@ -242,7 +242,7 @@ export default {
         if (this.isMobile && !loading && !isConnected) {
           this.authorizeDialog = false
           // this.$nextTick(() => {
-          //   this.$root.$children[0].mobileAlertModel = true
+          //   this.$root.$children[0].mobileWalletModel = true
           // })
         }
       }
@@ -287,7 +287,7 @@ export default {
         // case this.isMobile:
           this.authorizeDialog = false
           this.$nextTick(() => {
-            this.$root.$children[0].mobileAlertModel = true
+            this.$root.$children[0].mobileWalletModel = true
           })
           return false
 
@@ -301,7 +301,7 @@ export default {
 
       // 如果是移动端，直接弹出
       // if (this.isMobile) {
-      //   this.$root.$children[0].mobileAlertModel = true
+      //   this.$root.$children[0].mobileWalletModel = true
       //   return
       // }
 

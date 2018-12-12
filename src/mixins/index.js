@@ -7,6 +7,7 @@ const userMixins = require('./user')
 const layoutMixins = require('./layout')
 const publicMixins = require('./public')
 const activatedMixins = require('./activated')
+const clipboardMixins = require('./clipboard')
 
 const promotionsMixins = require('./utils/promotions')
 
@@ -21,5 +22,6 @@ module.exports = {
   layoutMixins: layoutMixins.default,
   publicMixins: publicMixins.default,
   activatedMixins: activatedMixins.default,
-  promotionsMixins: promotionsMixins.default
+  promotionsMixins: promotionsMixins.default,
+  clipboardMixins: clipboardMixins.default
 }

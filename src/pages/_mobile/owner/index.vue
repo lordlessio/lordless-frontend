@@ -36,7 +36,7 @@
 
 <script>
 import MobileConnect from '@/components/reuse/_mobile/connect'
-import MobileWallets from '@/components/reuse/_mobile/wallets'
+import MobileWallets from '@/components/reuse/_mobile/wallets/trust'
 import Authorize from '@/components/reuse/dialog/authorize'
 
 import { dialogMixins, publicMixins } from '@/mixins'
@@ -105,9 +105,11 @@ export default {
     web3Model () {
       const { loading, isConnected } = this.web3Opt
       return this.isMobile && !loading && !isConnected
+      // return true
     },
     connectModel () {
       return !this.userInfo.default && !this.userInfo._id
+      // return true
     },
     pageShow () {
       return !this.connectModel && !this.web3Model && !this.web3Loading

@@ -23,7 +23,8 @@
       @close="closeTip">
     </msg-tip> -->
     <meta-tip v-model="metaOpen"/>
-    <mobile-alert v-model="mobileAlertModel"/>
+    <mobile-wallet-alert v-model="mobileWalletModel"/>
+    <mobile-wechat-block v-model="wechatBlockModel"/>
   </div>
 </template>
 
@@ -35,7 +36,8 @@ import Header from '@/components/content/layout/header'
 import Footer from '@/components/content/layout/footer'
 // import MsgTip from '@/components/stories/message'
 import MetaTip from '@/components/reuse/dialog/metaTip'
-import MobileAlert from '@/components/reuse/dialog/mobileAlert'
+import MobileWalletAlert from '@/components/reuse/dialog/mobileAlert/wallet'
+import MobileWechatBlock from '@/components/reuse/dialog/mobileAlert/wechatBlock'
 import { mobileBool } from 'utils/tool'
 
 import { initWeb3 } from '@/assets/utils/web3/initWeb3'
@@ -67,7 +69,9 @@ export default {
   },
   data: () => {
     return {
-      mobileAlertModel: false,
+      wechatBlockModel: false,
+      mobileWalletModel: false,
+
       isMobile: false,
       reloginDialog: false
     }
@@ -101,7 +105,8 @@ export default {
 
     // MsgTip,
     MetaTip,
-    MobileAlert,
+    MobileWalletAlert,
+    MobileWechatBlock,
     LordlessSvg
   },
   methods: {

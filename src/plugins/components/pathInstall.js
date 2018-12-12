@@ -5,6 +5,8 @@ const files = [
   '/reuse/tavernPoster',
   '/reuse/dialog/authorize',
 
+  '/content/layout/header/logo',
+
   '/stories/blockies',
   '/stories/button',
   '/stories/image',

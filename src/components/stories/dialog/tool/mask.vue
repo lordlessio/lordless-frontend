@@ -38,7 +38,6 @@ export default {
   },
   methods: {
     afterLeave () {
-      console.log(' -- mask after leave popstate', this.popstateModel)
       this.$emit('closed')
     },
     destroy () {
@@ -46,6 +45,9 @@ export default {
         this.$el.parentNode.removeChild(this.$el)
       }
     }
+  },
+  deactivated () {
+    this.destroy()
   },
   destroyed () {
     this.destroy()

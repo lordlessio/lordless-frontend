@@ -15,7 +15,10 @@
               class="sm-mar-t5 text-center approved-tasks-item alone-layer"
               :span="24">
               <div class="relative" style="z-index: 2;">
-                <p class="approved-card-tip" v-if="approvedTask && approvedTask.executor.info.nickName">{{ approvedTask.executor.info.nickName }} just completed a new task</p>
+                <p class="approved-card-tip" v-if="approvedTask && approvedTask.executor.info.nickName">
+                  <link-symbol :to="approvedTask.executor.info._id">{{ approvedTask.executor.info.nickName || (approvedTask.executor.info._id | splitAddress({ before: 4, end: 2 })) }}</link-symbol>
+                  <span>just completed a new task</span>
+                </p>
                 <p class="approved-card-tip" v-else-if="approvedTask && !approvedTask.executor.info.nickName">{{ approvedTask.executor.info._id | splitAddress({ before: 4, end: 2 }) }} just completed a new task</p>
                 <figure id="approved-item-container" class="approved-item-container">
                   <div class="d-flex f-auto-center approved-task-header">
@@ -179,6 +182,7 @@ export default {
     text-align: center;
     font-size: 16px;
     color: #fff;
+    z-index: 2;
   }
   .approved-item-container {
     min-height: 300px;

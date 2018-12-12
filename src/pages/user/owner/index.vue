@@ -6,12 +6,12 @@
       position="fixed"
       :index="99">
     </Loading> -->
-    <!-- <aside class="d-flex lg-col-flex sm-row-flex ld-user-navgation" :style="`background-image: url(${ossOrigin}/frontend/static/svg/city.svg)`"> -->
-    <aside class="d-flex lg-col-flex sm-row-flex ld-user-navgation">
+    <aside class="d-flex lg-col-flex sm-row-flex ld-user-navgation" :style="`background-image: url(${ossOrigin}/frontend/static/svg/city.svg)`">
+    <!-- <aside class="d-flex lg-col-flex sm-row-flex ld-user-navgation"> -->
       <div class="d-flex f-auto-center user-navgation-logo sm-hidden">
-        <header-logo theme="deep-blue"/>
+        <lordless-header-logo theme="light" shadow reverse/>
       </div>
-      <div class="d-flex col-flex v-flex">
+      <div class="relative d-flex col-flex v-flex">
         <ul class="d-flex v-flex sm-row-flex lg-col-flex user-navgation-list">
           <li
             class="user-navgation-item"
@@ -65,7 +65,6 @@
 </template>
 
 <script>
-import HeaderLogo from '@/components/content/layout/header/logo'
 import LdHeader from '@/components/content/layout/header'
 import Authorize from '@/components/reuse/dialog/authorize'
 // import Loading from '@/components/stories/loading'
@@ -131,7 +130,6 @@ export default {
   components: {
     // Loading,
 
-    HeaderLogo,
     LdHeader,
     Authorize
   },
@@ -183,17 +181,19 @@ export default {
   // ld-user-navgation
   .ld-user-navgation {
     width: 250px;
+    min-height: 670px;
     z-index: 1;
     box-shadow: 1px 3px 5px 0 rgba(0, 0, 0, .1);
-    // background-size: 100% auto;
-    // background-position-y: 100%;
-    // background-repeat: no-repeat;
-    // @include viewport-unit(min-height, 90px);
+    background-size: 100% auto;
+    background-position-y: 100%;
+    background-repeat: no-repeat;
+    background-color: #fff;
+    // @include viewport-unit(min-height, 100vh, 90px);
   }
 
   .user-navgation-logo {
     height: 90px;
-    border-bottom: 1px solid rgba(77, 70, 210, 0.05);
+    // border-bottom: 1px solid rgba(77, 70, 210, 0.05);
     fill: $--text-deep-blue-color;
     cursor: pointer;
     svg {
@@ -212,9 +212,9 @@ export default {
       cursor: pointer;
     }
     &.active {
-      color: $--text-deep-blue-color;
-      fill: $--text-deep-blue-color;
-      background-color: rgba(77, 70, 210, 0.05);
+      color: $--text-blue-color;
+      fill: $--text-blue-color;
+      background-color: #f8f8f8;
       .navgation-item-cnt {
         &::before {
           visibility: visible;
@@ -239,9 +239,15 @@ export default {
     @include margin('right', 15px, -2);
   }
   .user-logout {
+    position: absolute;
+    left: 0;
+    bottom: 15%;
+    width: 100%;
     height: 100px;
-    color: $--text-red-color;
-    fill: $--text-red-color;
+    // color: $--text-red-color;
+    // fill: $--text-red-color;
+    color: #F5515F;
+    fill: #F5515F;
   }
 
   .ld-user-container {
@@ -312,7 +318,7 @@ export default {
         top: 0;
         width: 5px;
         height: 100%;
-        background-color: $--text-deep-blue-color;
+        background-color: $--text-blue-color;
         visibility: hidden;
       }
     }

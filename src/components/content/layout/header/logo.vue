@@ -1,5 +1,5 @@
 <template>
-  <router-link to="/" class="inline-block header-logo" :class="theme">
+  <router-link to="/" class="inline-block header-logo" :class="[theme, { 'shadow': shadow, 'reverse': reverse }]">
     <svg class="inline-block">
       <use xlink:href="#icon-logo-image"/>
     </svg>
@@ -8,10 +8,19 @@
 
 <script>
 export default {
+  name: 'lordless-header-logo',
   props: {
     theme: {
       type: String,
       default: 'dark'
+    },
+    shadow: {
+      type: Boolean,
+      default: false
+    },
+    reverse: {
+      type: Boolean,
+      default: false
     }
   }
 }
@@ -50,20 +59,38 @@ export default {
       width: 100%;
       height: 100%;
     }
-    &.deep-blue {
-      background-color: $--text-deep-blue-color;
-      fill: #fff;
-      color: $--text-deep-blue-color;
-    }
+    // &.deep-blue {
+    //   background-color: $--text-deep-blue-color;
+    //   fill: #fff;
+    //   color: $--text-deep-blue-color;
+    //   &.reverse {
+    //     background-color: #fff;
+    //     fill: $--text-deep-blue-color;
+    //     color: $--text-deep-blue-color;
+    //   }
+    // }
     &.dark {
       background-color: #fff;
       fill: $--text-deep-blue-color;
       color: $--text-deep-blue-color;
+      &.reverse {
+        background-color: #fff;
+        fill: $--text-deep-blue-color;
+        color: $--text-deep-blue-color;
+      }
     }
     &.light {
       background-color: $--text-blue-color;
       fill: #fff;
       color: $--text-blue-color;
+      &.reverse {
+        background-color: #fff;
+        fill: $--text-blue-color;
+        color: $--text-blue-color;
+      }
+    }
+    &.shadow {
+      box-shadow: 0 0 10px 3px rgba(0, 0, 0, .25);
     }
   }
 </style>

@@ -55,7 +55,8 @@
     white-space: nowrap;
     outline: none;
     border-radius: 5px;
-    border-width: 1px;
+    // border-width: 1px;
+    border: none;
     cursor: pointer;
     svg {
       fill: inherit;
@@ -157,6 +158,16 @@
       font-family: inherit;
       color: #fff;
       background-image: linear-gradient(-45deg, #F5515F 0%, #9F041B 100%);
+    }
+    &.blue-linear {
+      color: #fff;
+      fill: #fff;
+      background-image: linear-gradient(-225deg, #124BDC 0%, #0079FF 100%);
+      &.inverse {
+        color: #0079FF;
+        background-color: #fff;
+        background-image: none;
+      }
     }
     // &.pink {
     //   color: #fff;

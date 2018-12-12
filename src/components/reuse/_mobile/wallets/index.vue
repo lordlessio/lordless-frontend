@@ -1,5 +1,5 @@
 <template>
-  <section class="d-flex f-auto-center text-center mobile-wallets-box" :class="{ 'dialog': dialog, 'clipboard': clipBool }">
+  <section class="d-flex f-auto-center text-center mobile-clipboard-box mobile-wallets-box" :class="{ 'dialog': dialog, 'clipboard': clipBool }">
     <div class="v-flex mobile-wallets-container">
       <h2 class="mobile-wallets-title">No wallet available</h2>
       <p class="mobile-wallets-desc">We can’t connect the external wallet.<br>Please copy the website below and download the wallet to paste the address in the wallet.</p>
@@ -34,9 +34,10 @@
 </template>
 
 <script>
-import Clipboard from 'clipboard'
+import { clipboardMixins } from '@/mixins'
 export default {
   name: 'mobile-wallets',
+  mixins: [clipboardMixins],
   props: {
     dialog: {
       type: Boolean,
@@ -45,7 +46,6 @@ export default {
   },
   data: () => {
     return {
-      clipBool: false,
       copyLink: 'https://game.lordless.io',
       wallets: [
         {
@@ -80,28 +80,6 @@ export default {
         }
       ]
     }
-  },
-  watch: {
-    clipBool (val) {
-      if (val) {
-        setTimeout(() => {
-          this.clipBool = false
-        }, 1500)
-      }
-    }
-  },
-  methods: {
-    // 初始化 黏贴板
-    initClipboard () {
-      const clip = new Clipboard('#copy-link')
-      clip.on('success', (e) => {
-        this.clipBool = true
-        e.clearSelection()
-      })
-    }
-  },
-  mounted () {
-    this.initClipboard()
   }
 }
 </script>
@@ -125,28 +103,6 @@ export default {
       background-position: 0 0;
       z-index: -1;
       transform: rotate(180deg);
-    }
-    &::after {
-      content: 'Copy to clipboard';
-      position: fixed;
-      bottom: 15%;
-      left: 50%;
-      padding: 10px 14px;
-      background-color: rgba(0, 0, 0, .75);
-      font-size: 14px;
-      color: #fff;
-      border-radius: 5px;
-      white-space: nowrap;
-      transform: translateX(-50%);
-      opacity: 0;
-      visibility: hidden;
-      transition: all .4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    &.clipboard {
-      &::after {
-        opacity: 1;
-        visibility: visible;
-      }
     }
     &.dialog {
       padding-top: 0;

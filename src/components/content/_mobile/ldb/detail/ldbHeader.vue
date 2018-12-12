@@ -331,7 +331,7 @@ export default {
      * 领取糖果
      */
     async receiveCandy (task) {
-      // this.$root.$children[0].mobileAlertModel = true
+      // this.$root.$children[0].mobileWalletModel = true
 
       // 移动端，暂时阻断
       // if (task) return

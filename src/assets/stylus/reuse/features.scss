@@ -299,6 +299,32 @@
  *  no-asset-box  --- end
  */
 
+.mobile-clipboard-box {
+  position: relative;
+  &::after {
+    content: 'Copy to clipboard';
+    position: fixed;
+    bottom: 15%;
+    left: 50%;
+    padding: 10px 14px;
+    background-color: rgba(0, 0, 0, .75);
+    font-size: 14px;
+    color: #fff;
+    border-radius: 5px;
+    white-space: nowrap;
+    transform: translateX(-50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all .4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  &.clipboard {
+    &::after {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
 .contract-pending-tip {
   position: relative;
   height: 0;

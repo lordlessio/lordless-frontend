@@ -10,7 +10,7 @@
             :presale="presale"
             :salePrice="info.chain.auction.price"
             showPopularity
-            showSale/>
+            :showSale="info.chain.auction.isOnAuction || info.chain.auction.isOnPreAuction"/>
         </div>
         <div class="building-main-cnt">
           <h2 class="building-name">{{ info.name.zh }}</h2>

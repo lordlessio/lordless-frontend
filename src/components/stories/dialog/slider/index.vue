@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import DialogSlide from './tool/slide'
-import DialogMask from './tool/mask'
+import DialogSlide from './slide'
+import DialogMask from '../tool/mask'
 
 import { mutationTypes, actionTypes } from '@/store/types'
 import { mapState, mapMutations, mapActions } from 'vuex'
