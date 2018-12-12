@@ -10,7 +10,7 @@
         <div class="wechat-block-container">
           <h2>Your operation is blocked</h2>
           <p class="wechat-block-desc">LORDLESS can not connect the ETH Wallet in Wechat.</p>
-          <p class="wechat-block-learn-text">Click the <span class="wechat-block-symbol">&nbsp;...&nbsp;</span> on the upper-right corner and select <span>Open in Safari.</span></p>
+          <p class="wechat-block-learn-text">Click the <span class="wechat-block-symbol">&nbsp;...&nbsp;</span> on the upper-right corner and select <span>Open in Browser.</span></p>
         </div>
         <div class="webchat-block-img line-height-0">
           <img class="full-width" src="/static/img/utils/wechat-sharing.png"/>

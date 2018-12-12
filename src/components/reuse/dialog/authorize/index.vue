@@ -241,9 +241,9 @@ export default {
 
         if (this.isMobile && !loading && !isConnected) {
           this.authorizeDialog = false
-          // this.$nextTick(() => {
-          //   this.$root.$children[0].mobileWalletModel = true
-          // })
+          this.$nextTick(() => {
+            this.$root.$children[0].mobileWalletModel = true
+          })
         }
       }
     }
