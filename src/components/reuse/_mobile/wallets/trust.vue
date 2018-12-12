@@ -46,7 +46,7 @@ export default {
       if (isWechat) {
         this.$root.$children[0].wechatBlockModel = true
       } else {
-        window.location.href = `https://links.trustwalletapp.com/a/key_live_lfvIpVeI9TFWxPCqwU8rZnogFqhnzs4D?&event=openURL&url=${window.location.href}`
+        window.location.href = `https://links.trustwalletapp.com/a/key_live_lfvIpVeI9TFWxPCqwU8rZnogFqhnzs4D?&event=openURL&url=${this.copyLink}`
       }
     }
   }
@@ -115,7 +115,7 @@ export default {
     }
   }
   .trust-copy-link {
-    max-width: 270px;
+    max-width: 250px;
     margin-top: 12px;
     padding: 8px 12px;
     font-size: 16px;

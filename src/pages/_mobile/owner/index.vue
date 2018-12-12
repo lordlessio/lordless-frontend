@@ -173,9 +173,15 @@ export default {
     // @include viewport-unit(min-height, 100vh, 112px);
   }
   .mobile-plugins-box {
+    // padding-top: 44px;
+    // padding-bottom: 50px;
     // margin-top: 40px;
     // padding-bottom: 40px;
     @include viewport-unit(min-height, 100vh, 50px);
+  }
+  .mobile-owner-plugin {
+    padding-top: 44px;
+    box-sizing: border-box;
   }
   .mobile-plugins-loading {
     font-size: 30px;
@@ -211,8 +217,5 @@ export default {
     &:not(:first-of-type) {
       margin-top: 12px;
     }
-  }
-  .mobile-owner-plugin {
-    padding-top: 44px;
   }
 </style>
