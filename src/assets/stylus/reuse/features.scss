@@ -140,7 +140,7 @@
   // font-size: 34px;
   cursor: pointer;
   z-index: 9;
-  @include fontSize(34px, 1.4);
+  @include fontSize(34px, 1.1);
   [class^="el-icon-"] {
     font-weight: bold;
   }
@@ -302,7 +302,7 @@
 .mobile-clipboard-box {
   position: relative;
   &::after {
-    content: 'Copy to clipboard';
+    content: 'Copied!';
     position: fixed;
     bottom: 15%;
     left: 50%;

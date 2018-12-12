@@ -32,7 +32,12 @@ export default {
   },
   data: () => {
     return {
-      copyLink: 'https://game.lordless.io'
+      copyLink: window.location.href || 'https://game.lordless.io'
+    }
+  },
+  watch: {
+    '$route' () {
+      this.copyLink = window.location.href
     }
   },
   methods: {
@@ -41,7 +46,7 @@ export default {
       if (isWechat) {
         this.$root.$children[0].wechatBlockModel = true
       } else {
-        window.location.href = 'https://links.trustwalletapp.com/a/key_live_lfvIpVeI9TFWxPCqwU8rZnogFqhnzs4D?&event=openURL&url=https://game.lordless.io'
+        window.location.href = `https://links.trustwalletapp.com/a/key_live_lfvIpVeI9TFWxPCqwU8rZnogFqhnzs4D?&event=openURL&url=${window.location.href}`
       }
     }
   }
@@ -110,6 +115,7 @@ export default {
     }
   }
   .trust-copy-link {
+    max-width: 270px;
     margin-top: 12px;
     padding: 8px 12px;
     font-size: 16px;
@@ -117,6 +123,7 @@ export default {
     border: 2px dashed #777;
     border-radius: 5px;
     background-color: #fff;
+    @include overflow();
   }
   .trust-wallet-btns {
     margin-top: 36px;

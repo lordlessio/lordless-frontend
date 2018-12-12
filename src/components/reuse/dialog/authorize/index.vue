@@ -94,6 +94,10 @@ export default {
   },
   data: () => {
     return {
+
+      // 在 authorizeInit 就绪之前，如果手动触发了 check，则标记 rendered 为 true
+      rendered: false,
+
       authorizeDialog: false,
 
       // isInit: false,
@@ -228,7 +232,7 @@ export default {
 
     // 如果切换了账号，关闭对话框
     account (val, oVal) {
-      if (!this.autoClose || !this.oVal) return
+      if (!this.autoClose) return
       console.log('------------ account', val, oVal)
       this.checkoutAuthorize()
       // this.authorizeDialog = false
@@ -241,8 +245,12 @@ export default {
 
         if (this.isMobile && !loading && !isConnected) {
           this.authorizeDialog = false
+
           this.$nextTick(() => {
-            this.$root.$children[0].mobileWalletModel = true
+            if (this.rendered) {
+              this.$root.$children[0].mobileWalletModel = true
+              this.rendered = false
+            }
           })
         }
       }
@@ -297,6 +305,8 @@ export default {
     },
 
     checkoutAuthorize ({ guide = false, crowdsale = false, telegram = false } = {}) {
+      // authorizeInit 就绪之前，触发 checkout， 改变 rendered 状态为 true
+      if (!this.authorizeInit) this.rendered = true
       if (!this.isMobileRead()) return false
 
       // 如果是移动端，直接弹出
