@@ -31,7 +31,7 @@ export default {
           locked: {
             title: 'Your Web3 is locked',
             content: 'Open MetaMask and follow the instructions to unlock it.',
-            imgUrl: '/img/guide/status-metamask-addon.png',
+            imgUrl: '/img/guide/status-locked-metamask.png',
             sType: 'width'
           },
           network: {
@@ -57,7 +57,7 @@ export default {
           locked: {
             title: 'Your MetaMask is locked',
             content: 'Open MetaMask and follow the instructions to unlock it.',
-            imgUrl: '/img/guide/status-metamask-addon.png',
+            imgUrl: '/img/guide/status-locked-metamask.png',
             sType: 'width'
           },
           network: {
