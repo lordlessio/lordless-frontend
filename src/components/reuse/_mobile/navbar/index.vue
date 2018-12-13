@@ -17,8 +17,8 @@
         </span>
         <span class="inline-block">AP&nbsp;&nbsp;{{ userInfo.ap }}</span>
       </div>
-      <p class="relative line-height-0 nav-right-box nav-withdraw-box" :class="{ 'show-tip': withdrawTip }" v-if="withdraw" @click.stop="withdrawTip = true">
-        <span class="inline-block line-height-0 nav-withdraw-icon">
+      <p class="relative line-height-0 nav-right-box nav-withdraw-box" :class="{ 'show-tip': withdrawTip }" v-if="withdraw">
+        <span class="inline-block line-height-0 nav-withdraw-icon" @click.stop="withdrawTip = true">
           <svg>
             <use xlink:href="#icon-withdraw"/>
           </svg>
