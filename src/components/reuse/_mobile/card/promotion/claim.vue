@@ -5,18 +5,18 @@
       <p class="d-flex f-align-center f-justify-between promotion-claim-nums">
         <span class="promotion-left-num">
           <span v-if="!progressNums.completed" class="inline-block">...</span>
-          <span v-else>
-            Left&nbsp;
-            <count-up class="inline-block" :startVal="0" :endVal="progressNums.left" :duration="1" :isReady="progressNums.completed"></count-up>
-          </span>
+          <!-- <span v-else>
+            Left&nbsp; -->
+          <count-up v-else class="inline-block" :startVal="0" :endVal="progressNums.left" :duration="1" :isReady="progressNums.completed"></count-up>&nbsp;&nbsp;left
+          <!-- </span> -->
         </span>
         <span>
           <span v-if="!progressNums.completed" class="inline-block">...</span>
-          <!-- <span v-else>
+          <span v-else>
             Total&nbsp;
             <count-up class="inline-block" :startVal="0" :endVal="progressNums.total" :duration="1" :isReady="progressNums.completed"></count-up>
-          </span> -->
-          <count-up v-else class="inline-block" :startVal="0" :endVal="progressNums.total" :duration="1" :isReady="progressNums.completed"></count-up>&nbsp;&nbsp;total
+          </span>
+          <!-- <count-up v-else class="inline-block" :startVal="0" :endVal="progressNums.total" :duration="1" :isReady="progressNums.completed"></count-up>&nbsp;&nbsp;total -->
         </span>
       </p>
       <div class="promotion-progress-bar">

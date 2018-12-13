@@ -36,7 +36,7 @@ export default {
           },
           network: {
             title: 'Ethereum network is unallow',
-            content: 'Please Choose a right network.',
+            content: 'Please choose a right network.',
             imgUrl: '/img/guide/status-main-network.png',
             sType: 'auto'
           },
@@ -62,7 +62,7 @@ export default {
           },
           network: {
             title: 'MetaMask network is unallow',
-            content: 'Open MetaMask and Choose right network.',
+            content: 'Open MetaMask and choose right network.',
             imgUrl: '/img/guide/status-main-network.png',
             sType: 'auto'
           },
