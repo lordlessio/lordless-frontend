@@ -1,6 +1,6 @@
 <template>
   <section :ref="container" id="mobile-nav-bar" class="TTFontBolder text-center mobile-nav-bar" :class="[scrollDefaultTheme, { 'is-static': !fixed, 'is-active': fixed && !scroll, 'transparent': transparent }]">
-    <div class="relative">
+    <div class="relative" @click.stop="withdrawTip = false">
       <p class="TTFontBolder nav-history-icon line-height-0" v-if="history" @click.stop="$emit('history')">
         <svg>
           <use xlink:href="#icon-back"/>
@@ -17,14 +17,12 @@
         </span>
         <span class="inline-block">AP&nbsp;&nbsp;{{ userInfo.ap }}</span>
       </div>
-      <p class="line-height-0 nav-right-box nav-withdraw" v-if="withdraw" @click.stop="withdrawTip = true">
-        <el-tooltip v-model="withdrawTip" effect="dark" content="Coming soon" placement="left" :hide-after="3000">
-          <span class="inline-block line-height-0 nav-withdraw-icon">
-            <svg>
-              <use xlink:href="#icon-withdraw"/>
-            </svg>
-          </span>
-        </el-tooltip>
+      <p class="relative line-height-0 nav-right-box nav-withdraw-box" :class="{ 'show-tip': withdrawTip }" v-if="withdraw" @click.stop="withdrawTip = true">
+        <span class="inline-block line-height-0 nav-withdraw-icon">
+          <svg>
+            <use xlink:href="#icon-withdraw"/>
+          </svg>
+        </span>
       </p>
     </div>
   </section>
@@ -85,6 +83,15 @@ export default {
       rendered: false,
       navbarScrollFunc: null,
       withdrawTip: false
+    }
+  },
+  watch: {
+    withdrawTip (val) {
+      if (val) {
+        setTimeout(() => {
+          this.withdrawTip = false
+        }, 1500)
+      }
     }
   },
   methods: {
@@ -218,6 +225,44 @@ export default {
     right: 20px;
     top: 55%;
     transform: translateY(-50%);
+  }
+  .nav-withdraw-box {
+    @include TTFontBold();
+    &::before {
+      content: 'Coming soon';
+      position: absolute;
+      left: -10px;
+      top: -3px;
+      padding: 0 5px;
+      width: 80px;
+      height: 25px;
+      line-height: 25px;
+      font-size: 12px;
+      background-color: #303133;
+      transform: translateX(-100%);
+      border-radius: 5px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all .15s;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: -10px;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 5px solid #303133;
+      opacity: 0;
+      visibility: hidden;
+      transition: all .15s;
+    }
+    &.show-tip {
+      &::before, &::after {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
   }
   .nav-withdraw-icon {
     width: 22px;

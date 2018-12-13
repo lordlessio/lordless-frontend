@@ -194,6 +194,7 @@ export default {
     }
   }
   .tavern-deal-btn {
+    margin: 0;
     &:disabled {
       background-color: #aaa !important;
     }

@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { isWechat } from 'utils/tool'
 import { clipboardMixins } from '@/mixins'
 export default {
   name: 'mobile-wallet-trust',
@@ -42,8 +43,7 @@ export default {
   },
   methods: {
     jumpTrust () {
-      const isWechat = typeof WeixinJSBridge !== 'undefined' && (navigator.userAgent.toLowerCase().indexOf('micromessenger') > -1 || typeof window.navgator.wxuserAgent !== 'undefined')
-      if (isWechat) {
+      if (isWechat()) {
         this.$root.$children[0].wechatBlockModel = true
       } else {
         window.location.href = `https://links.trustwalletapp.com/a/key_live_lfvIpVeI9TFWxPCqwU8rZnogFqhnzs4D?&event=openURL&url=${this.copyLink}`

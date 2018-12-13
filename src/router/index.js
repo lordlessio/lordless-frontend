@@ -4,7 +4,7 @@ import { sync } from 'vuex-router-sync'
 import store from '../store'
 
 import { mutationTypes } from '@/store/types'
-import { mobileBool } from 'utils/tool'
+import { mobileBool, isWechat } from 'utils/tool'
 
 import Sign from '@/pages/user/sign.vue'
 import Market from '@/pages/market'
@@ -541,6 +541,9 @@ if (isMobile) {
  * router loading status
  */
 router.beforeEach((to, from, next) => {
+  if (isWechat()) {
+    location.href = location.origin + to.fullPath
+  }
   // 只有在移动端的时候会使用 keep-alive 和 scrollBehavior，所以该操作在 pc 端没必要浪费内存
   if (isMobile) {
     let _popDirection = store.state.layout.popDirection || 'forward'
@@ -571,7 +574,7 @@ router.beforeEach((to, from, next) => {
         store.commit(`layout/${mutationTypes.LAYOUT_SET_PHISTORY}`, to.path)
 
         /** update pop direction */
-        _popDirection = 'forward'
+        _popDirection = ''
       }
     }
 
@@ -615,11 +618,6 @@ router.beforeEach((to, from, next) => {
     document.title = title
   }
   window.requestAnimationFrame(next)
-})
-
-router.afterEach(() => {
-  isPush = false
-  store.commit(`layout/${mutationTypes.LAYOUT_SET_POP_DIRECTION}`, 'forward')
 })
 
 router.afterEach(() => {

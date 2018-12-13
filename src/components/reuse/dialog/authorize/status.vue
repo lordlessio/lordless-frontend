@@ -90,18 +90,19 @@ export default {
 
 <style lang="scss" scoped>
 
-  // .authorize-status-box {
+  .authorize-status-box {
+    padding-top: 15px;
   //   max-width: 600px;
   //   color: #fff;
   //   background-image: linear-gradient(135deg, #5961F9, #EE9AE5);
   //   border-radius: 5px;
   //   box-sizing: border-box;
   //   @include padding-around(70px, 50px, 30px, 50px, 1);
-  // }
+  }
   .authorize-status-container {
     >h1 {
       @include margin('bottom', 10px, 1);
-      @include fontSize(36px, 1.2);
+      @include fontSize(36px, 1.4);
     }
     >p {
       @include fontSize(18px, 1.2);

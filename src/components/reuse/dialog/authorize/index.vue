@@ -19,43 +19,52 @@
         :class="closeTheme">
         <i class="el-icon-close"></i>
       </span>
-      <Crowdsale
-        ref="crowdsale"
-        v-model="showCrowsale"
-        :avatar="avatar"
-        :address="address"
-        @pending="crowdsalePending"/>
 
-      <Telegram
-        ref="telegram"
-        :visible.sync="showTelegram"
-        :avatar="avatar"
-        :address="address"
-        @close="authorizeDialog = false"
-        @telegram="$emit('telegram', $event)"/>
+      <Loading v-if="!authorizeInit"/>
+
+      <mobile-wallets v-else-if="mobileWalletModel" dialog/>
 
       <Status
-        v-if="showStatus && !hideStatus"
+        v-else-if="showStatus && !hideStatus"
         :type="statusType"/>
 
-      <Sign
-        ref="signAuthorize"
-        v-model="authorizeDialog"
-        :visible="showSign"
-        :account="account"
-        :web3Loading="web3Opt.loading"
-        @success="signSuccess"/>
+      <div v-else>
+        <Sign
+          ref="signAuthorize"
+          v-model="authorizeDialog"
+          :visible="showSign"
+          :account="account"
+          :web3Loading="web3Opt.loading"
+          @success="signSuccess"/>
+        <Crowdsale
+          ref="crowdsale"
+          v-model="showCrowsale"
+          :avatar="avatar"
+          :address="address"
+          @pending="crowdsalePending"/>
+
+        <Telegram
+          ref="telegram"
+          :visible.sync="showTelegram"
+          :avatar="avatar"
+          :address="address"
+          @close="authorizeDialog = false"
+          @telegram="$emit('telegram', $event)"/>
+      </div>
     </div>
   </el-dialog>
 </template>
 
 <script>
+import Loading from './loading'
+import Status from './status'
+import MobileWallets from '@/components/reuse/_mobile/wallets/trust'
+
 import Telegram from './telegram'
 import Crowdsale from './crowdsale'
-import Status from './status'
 import Sign from './sign'
 
-import { addClass, removeClass } from 'utils/tool'
+import { addClass, removeClass, isWechat } from 'utils/tool'
 
 import { contractMixins, publicMixins } from '@/mixins'
 
@@ -94,6 +103,8 @@ export default {
   },
   data: () => {
     return {
+      mobileWalletModel: false,
+
       // 在 authorizeInit 就绪之前，如果手动触发了 check，则标记 initBeforeCheck 为 true
       initBeforeCheck: false,
 
@@ -129,6 +140,9 @@ export default {
     ...mapState('contract', [
       'isCrowdsaleApproved'
     ]),
+    isWechatBool () {
+      return isWechat()
+    },
 
     // 登陆之后的用户地址
     address () {
@@ -249,11 +263,18 @@ export default {
         this.$emit('init')
 
         if (this.isMobile && !loading && !isConnected) {
-          this.authorizeDialog = false
+          // this.authorizeDialog = false
 
           this.$nextTick(() => {
             if (this.initBeforeCheck) {
-              this.$root.$children[0].mobileWalletModel = true
+              this.mobileWalletModel = true
+              // if (this.isWechatBool) {
+              //   this.authorizeDialog = false
+              //   this.$root.$children[0].wechatBlockModel = true
+              // } else {
+              //   this.authorizeDialog = true
+              //   this.mobileWalletModel = true
+              // }
             }
           })
         }
@@ -265,9 +286,12 @@ export default {
     // }
   },
   components: {
+    Loading,
+    Status,
+    MobileWallets,
+
     Telegram,
     Crowdsale,
-    Status,
     Sign
   },
   methods: {
@@ -295,12 +319,15 @@ export default {
 
       switch (true) {
         // 如果是移动端，并且 !locked 返回 false
+        case this.isWechatBool:
+          this.authorizeDialog = false
+          this.$root.$children[0].wechatBlockModel = true
+          return false
+
         case this.isMobile && !loading && !isConnected:
         // case this.isMobile:
-          this.authorizeDialog = false
-          this.$nextTick(() => {
-            this.$root.$children[0].mobileWalletModel = true
-          })
+          this.authorizeDialog = true
+          this.mobileWalletModel = true
           return false
 
         // 如果不是移动端，或者移动端含有 web3，返回 true
@@ -317,7 +344,7 @@ export default {
 
       // 如果是移动端，直接弹出
       // if (this.isMobile) {
-      //   this.$root.$children[0].mobileWalletModel = true
+      //   this.mobileWalletModel = true
       //   return
       // }
 
