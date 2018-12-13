@@ -17,13 +17,13 @@
         </span>
         <span class="inline-block">AP&nbsp;&nbsp;{{ userInfo.ap }}</span>
       </div>
-      <p class="relative line-height-0 nav-right-box nav-withdraw-box" :class="{ 'show-tip': withdrawTip }" v-if="withdraw">
-        <span class="inline-block line-height-0 nav-withdraw-icon" @click.stop="withdrawTip = true">
+      <!-- <p class="relative line-height-0 nav-right-box nav-withdraw-box" v-if="withdraw">
+        <span class="inline-block line-height-0 nav-withdraw-icon">
           <svg>
             <use xlink:href="#icon-withdraw"/>
           </svg>
         </span>
-      </p>
+      </p> -->
     </div>
   </section>
 </template>
@@ -81,19 +81,19 @@ export default {
   data: () => {
     return {
       rendered: false,
-      navbarScrollFunc: null,
-      withdrawTip: false
+      navbarScrollFunc: null
+      // withdrawTip: false
     }
   },
-  watch: {
-    withdrawTip (val) {
-      if (val) {
-        setTimeout(() => {
-          this.withdrawTip = false
-        }, 1500)
-      }
-    }
-  },
+  // watch: {
+  //   withdrawTip (val) {
+  //     if (val) {
+  //       setTimeout(() => {
+  //         this.withdrawTip = false
+  //       }, 1500)
+  //     }
+  //   }
+  // },
   methods: {
     scrollListener () {
       if (this.navbarScrollFunc) this.destroyScroll()
@@ -226,44 +226,45 @@ export default {
     top: 55%;
     transform: translateY(-50%);
   }
-  .nav-withdraw-box {
-    @include TTFontBold();
-    &::before {
-      content: 'Coming soon';
-      position: absolute;
-      left: -10px;
-      top: -3px;
-      padding: 0 5px;
-      width: 80px;
-      height: 25px;
-      line-height: 25px;
-      font-size: 12px;
-      background-color: #303133;
-      transform: translateX(-100%);
-      border-radius: 5px;
-      opacity: 0;
-      visibility: hidden;
-      transition: all .15s;
-    }
-    &::after {
-      content: '';
-      position: absolute;
-      top: 3px;
-      left: -10px;
-      border-top: 5px solid transparent;
-      border-bottom: 5px solid transparent;
-      border-left: 5px solid #303133;
-      opacity: 0;
-      visibility: hidden;
-      transition: all .15s;
-    }
-    &.show-tip {
-      &::before, &::after {
-        opacity: 1;
-        visibility: visible;
-      }
-    }
-  }
+  // .nav-withdraw-box {
+  //   @include TTFontBold();
+  //   &::before {
+  //     content: 'Coming soon';
+  //     position: absolute;
+  //     left: -10px;
+  //     top: -3px;
+  //     padding: 3px 8px;
+  //     min-width: 80px;
+  //     text-align: center;
+  //     height: 25px;
+  //     line-height: 25px;
+  //     font-size: 12px;
+  //     background-color: #303133;
+  //     transform: translateX(-100%);
+  //     border-radius: 5px;
+  //     opacity: 0;
+  //     visibility: hidden;
+  //     transition: all .15s;
+  //   }
+  //   &::after {
+  //     content: '';
+  //     position: absolute;
+  //     top: 8px;
+  //     left: -10px;
+  //     border-top: 5px solid transparent;
+  //     border-bottom: 5px solid transparent;
+  //     border-left: 5px solid #303133;
+  //     opacity: 0;
+  //     visibility: hidden;
+  //     transition: all .15s;
+  //   }
+  //   &.show-tip {
+  //     &::before, &::after {
+  //       opacity: 1;
+  //       visibility: visible;
+  //     }
+  //   }
+  // }
   .nav-withdraw-icon {
     width: 22px;
     height: 22px;

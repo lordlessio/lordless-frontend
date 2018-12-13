@@ -7,13 +7,11 @@
           <span class="inline-block candies-holding-symbol">$</span>
           <span class="inline-block candies-holding-value">{{ holdingValue | formatDecimal({ len: 4 }) }}</span>
         </p>
-        <el-tooltip effect="dark" content="Coming soon" placement="left" :hide-after="2000">
-          <span class="inline-block line-height-0 nav-withdraw-icon">
-            <svg>
-              <use xlink:href="#icon-withdraw"/>
-            </svg>
-          </span>
-        </el-tooltip>
+        <span class="relative inline-block line-height-0 nav-withdraw-icon" :class="{ 'show-tip': withdrawTip }" @click.stop="withdrawTip = true">
+          <svg>
+            <use xlink:href="#icon-withdraw"/>
+          </svg>
+        </span>
       </div>
     </div>
   </div>
@@ -38,7 +36,17 @@ export default {
       rendered: false,
       parentNode: null,
       scrollNode: null,
-      scrollFunc: null
+      scrollFunc: null,
+      withdrawTip: false
+    }
+  },
+  watch: {
+    withdrawTip (val) {
+      if (val) {
+        setTimeout(() => {
+          this.withdrawTip = false
+        }, 1500)
+      }
     }
   },
   methods: {
@@ -167,5 +175,41 @@ export default {
     width: 20px;
     height: 20px;
     fill: #fff;
+    &::before {
+      content: 'Coming soon';
+      position: absolute;
+      left: -10px;
+      top: -3px;
+      padding: 3px 8px;
+      min-width: 80px;
+      height: 25px;
+      line-height: 25px;
+      text-align: center;
+      font-size: 12px;
+      background-color: #303133;
+      transform: translateX(-100%);
+      border-radius: 5px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all .15s;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: -10px;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 5px solid #303133;
+      opacity: 0;
+      visibility: hidden;
+      transition: all .15s;
+    }
+    &.show-tip {
+      &::before, &::after {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
   }
 </style>
