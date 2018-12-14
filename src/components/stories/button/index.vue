@@ -61,6 +61,9 @@
     svg {
       fill: inherit;
     }
+    a {
+      color: inherit;
+    }
     &.inherit {
       &.shadow {
         box-shadow: 2.5px 5px 10px 0 rgba(0, 0, 0, .25);
@@ -167,6 +170,20 @@
         color: #0079FF;
         background-color: #fff;
         background-image: none;
+      }
+    }
+    &.red-linear {
+      color: #fff;
+      background-image: linear-gradient(45deg, #D1001F 0%, #F5515F 100%);
+      fill: #fff;
+      &.shadow {
+        box-shadow: 2.5px 5px 10px 0 rgba(0, 0, 0, .25);
+        // box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
+      }
+      &.inverse {
+        color: #F5515F;
+        background-color: #fff;
+        fill: #F5515F;
       }
     }
     // &.pink {

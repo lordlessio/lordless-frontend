@@ -4,6 +4,20 @@
     <div v-else class="project-promotions-box">
       <section class="promotions-section">
         <h2>Promotions</h2>
+        <div class="home-promotions-tips">
+          <p class="d-flex f-align-center">
+            <span>Follow</span>
+            <a class="d-inline-flex f-align-center home-promotions-twitter-link" target="_blank" href="https://twitter.com/LordLessIo">
+              <span class="inline-block line-height-0 promotions-twitter-icon">
+                <svg>
+                  <use xlink:href="#icon-twitter"/>
+                </svg>
+              </span>
+              <span>@LordLessIo</span>
+            </a>
+            <span>to make you never miss any promotions in LORDLESS.</span>
+          </p>
+        </div>
         <ul class="d-flex f-align-center promotions-list">
           <li class="v-flex promotions-item"
             v-for="(item, index) of promotions" :key="index">
@@ -81,6 +95,25 @@ export default {
       font-size: 24px;
       color: #777;
     }
+  }
+  .home-promotions-tips {
+    margin-top: 10px;
+    padding-bottom: 24px;
+    font-size: 16px;
+    color: #777;
+    border-bottom: 1px solid #ddd;
+    box-sizing: border-box;
+  }
+  .home-promotions-twitter-link {
+    margin: 0 6px;
+    color: #0079FF;
+    text-decoration: underline;
+    fill: #0079FF;
+  }
+  .promotions-twitter-icon {
+    margin-right: 2px;
+    width: 18px;
+    height: 18px;
   }
   .promotions-item {
     max-width: 348px;

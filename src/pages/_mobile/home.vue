@@ -6,6 +6,19 @@
       <div v-else>
         <div class="mobile-home-promotions">
           <h2 class="mobile-home-title">Promotions</h2>
+          <div class="home-promotions-tips">
+            <p>Follow our Twitter to make you never miss any promotions in LORDLESS.</p>
+            <lordless-btn class="promotions-twitter-btn" theme="red-linear" shadow>
+              <a class="d-flex f-align-center" target="_blank" href="https://twitter.com/LordLessIo">
+                <span class="inline-block line-height-0 promotions-twitter-icon">
+                  <svg>
+                    <use xlink:href="#icon-twitter"/>
+                  </svg>
+                </span>
+                <span>Follow right now</span>
+              </a>
+            </lordless-btn>
+          </div>
           <ul class="mobile-home-ul home-promotions-ul">
             <li
               v-for="(item, index) of promotions"
@@ -109,8 +122,27 @@ export default {
     font-size: 24px;
     color: #555;
   }
-  .mobile-home-ul {
+  .home-promotions-tips {
     margin-top: 10px;
+    padding-bottom: 24px;
+    font-size: 16px;
+    color: #777;
+    border-bottom: 1px solid #ddd;
+    box-sizing: border-box;
+  }
+  .promotions-twitter-btn {
+    margin-top: 10px;
+    padding: 0 20px;
+    height: 46px;
+    line-height: 46px;
+  }
+  .promotions-twitter-icon {
+    margin-right: 6px;
+    width: 22px;
+    height: 22px;
+  }
+  .mobile-home-ul {
+    margin-top: 24px;
   }
   .home-info-item {
     box-shadow: 0 0 10px 3px rgba(222, 222, 222, 1);
