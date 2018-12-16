@@ -18,8 +18,8 @@
             <span>to make you never miss any promotions in LORDLESS.</span>
           </p>
         </div>
-        <ul class="d-flex f-align-center promotions-list">
-          <li class="v-flex promotions-item"
+        <ul class="d-flex f-wrap f-align-center f-justify-between promotions-list">
+          <li class="promotions-item"
             v-for="(item, index) of promotions" :key="index">
             <figure>
               <figcaption
@@ -101,7 +101,7 @@ export default {
     padding-bottom: 24px;
     font-size: 16px;
     color: #777;
-    border-bottom: 1px solid #ddd;
+    // border-bottom: 1px solid #ddd;
     box-sizing: border-box;
   }
   .home-promotions-twitter-link {
@@ -115,15 +115,19 @@ export default {
     width: 18px;
     height: 18px;
   }
+  .promotions-list {
+    margin: -30px -12px 0;
+  }
   .promotions-item {
-    max-width: 348px;
+    margin: 30px 12px 0;
+    width: 348px;
     box-shadow: 0 0 10px 3px rgba(222, 222, 222, 1);
     border-radius: 5px;
     overflow: hidden;
     transition: all .35s;
-    &:not(:first-of-type) {
-      margin-left: 24px;
-    }
+    // &:not(:first-of-type) {
+    //   margin-left: 24px;
+    // }
     &:hover {
       cursor: pointer;
       box-shadow: 0 0 10px 6px rgba(222, 222, 222, 1);
