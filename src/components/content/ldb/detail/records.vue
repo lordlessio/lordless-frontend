@@ -25,7 +25,7 @@
           <li class="lordless-table-item records-table-item"
             v-for="(record, index) of list"
             :key="index">
-            <a class="d-flex f-align-center" :href="`${ETHERSCANURL}/tx/${record.tx.transactionHash}`" target="_blank">
+            <a class="d-flex f-align-center" :href="`${ETHERSCANURL}tx/${record.tx.transactionHash}`" target="_blank">
               <p class="v-flex d-flex f-align-center line-height-0 quests-item-name">
                 <span class="inline-block records-eth-icon">
                   <svg>

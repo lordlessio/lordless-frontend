@@ -2,9 +2,9 @@
   <div class="relative alone-layer tavern-keeps-box">
 
     <!-- ldb detail datas skeletion -->
-    <transition name="ld-suspension-hide-fade">
+    <!-- <transition name="ld-suspension-hide-fade">
       <tavernkeeps-skeletion v-if="loading || keepsLoading"/>
-    </transition>
+    </transition> -->
 
     <transition name="ld-hide-fade" mode="out-in" @after-enter="datasEnter">
       <section v-if="!loading && !keepsLoading && keeps.length" class="d-flex col-flex f-align-ceter sm-col-flex detail-tavern-keeps">

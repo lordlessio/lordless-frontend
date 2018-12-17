@@ -3,7 +3,7 @@
     <div class="d-flex f-align-center ad-space-container">
       <span>Ad space for rent. </span>
       <span>
-        <a href="mailto:bd@lordless.io" target="_blank">Book your slot here!</a>
+        <a href="https://t.me/netpi" target="_blank">Book your slot here!</a>
       </span>
       <span class="inline-block line-height-0 ad-space-finger">
         <svg>

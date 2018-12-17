@@ -4,13 +4,15 @@
     <transition name="ld-hide-fade">
       <div v-if="!loading && total">
         <h2 class="detail-mobile-title">Transaction histroy</h2>
-        <div v-for="record of list" :key="record._id" class="d-flex col-flex mobile-records-item">
-          <span class="d-flex f-align-center">Price<span class="v-flex text-right text-color-third">{{ record.created_at | timeFormat }}</span></span>
-          <p class="price text-upper">{{ record.market[0].price | weiToEth }} ETH</p>
-          <span>From</span>
-          <p>{{ record.market[0].buyer | splitAddress({ before: 16, end: 8 }) }}</p>
-          <span>To</span>
-          <p>{{ record.market[0].seller | splitAddress({ before: 16, end: 8 }) }}</p>
+        <div v-for="record of list" :key="record._id">
+          <a class="d-flex col-flex mobile-records-item" :href="`${ETHERSCANURL}tx/${record.tx.transactionHash}`" target="_blank">
+            <span class="d-flex f-align-center">Price<span class="v-flex text-right text-color-third">{{ record.created_at | timeFormat }}</span></span>
+            <p class="price text-upper">{{ record.market[0].price | weiToEth }} ETH</p>
+            <span>From</span>
+            <p>{{ record.market[0].buyer | splitAddress({ before: 16, end: 8 }) }}</p>
+            <span>To</span>
+            <p>{{ record.market[0].seller | splitAddress({ before: 16, end: 8 }) }}</p>
+          </a>
         </div>
       </div>
     </transition>
@@ -36,6 +38,11 @@ export default {
   },
   components: {
     RecordsSkeletion
+  },
+  computed: {
+    ETHERSCANURL () {
+      return process.env.ETHERSCANURL
+    }
   }
 }
 </script>
