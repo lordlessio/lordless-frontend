@@ -201,12 +201,12 @@ export default {
   }
   .deal-sale-svg {
     >svg {
-      width: 43px;
+      width: 58px;
       height: 16px;
       fill: #EB8785;
     }
     &.presale {
-      width: 72px;
+      width: 103px;
       height: 16px;
     }
   }

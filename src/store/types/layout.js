@@ -12,8 +12,9 @@ const mutationTypes = {
   LAYOUT_SET_META_OPEN: 'layoutSetMetaOpen',
   LAYOUT_SET_ACTIVATED_OPTIONS: 'layoutSetActivated',
   LAYOUT_SET_PHISTORY: 'layoutSetPHistory',
-  LAYOUT_SET_POP_DIRECTION: 'layoutSetPopDirection',
-  LAYOUT_SET_POP_TRANSITION: 'layoutSetPopTransition'
+  // LAYOUT_SET_POP_DIRECTION: 'layoutSetPopDirection',
+  LAYOUT_SET_POP_TRANSITION: 'layoutSetPopTransition',
+  LAYOUT_SET_TABBAR_OPTIONS: 'layoutSetTabbarOptions'
 }
 const actionTypes = {
   LAYOUT_SET_APP_OPTIONS: 'layoutSetAppOpts_action',

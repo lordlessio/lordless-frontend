@@ -105,7 +105,7 @@ const mobileRoutes = [
     meta: {
       title: 'Project Detail - LORDLESS',
       keepAlive: true,
-      transition: false
+      transition: true
     }
   },
   {
@@ -546,7 +546,9 @@ router.beforeEach((to, from, next) => {
   }
   // 只有在移动端的时候会使用 keep-alive 和 scrollBehavior，所以该操作在 pc 端没必要浪费内存
   if (isMobile) {
-    let _popDirection = store.state.layout.popDirection || 'forward'
+    // 之前是将 popDirection 存储进 vuex 中，但实际存储在 sessionStorage 中即可，读写方便
+    // let _popDirection = store.state.layout.popDirection || 'forward'
+    let _popDirection = sessionStorage.getItem('lordless_direction') || 'forward'
 
     /**
      * 如果 popDirection 中含有 '_' 字符，代表已经被其他规则规则好方向，这里就不需要修改 popDirection 了
@@ -622,7 +624,8 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach(() => {
   isPush = false
-  store.commit(`layout/${mutationTypes.LAYOUT_SET_POP_DIRECTION}`, 'forward')
+  sessionStorage.setItem('lordless_direction', 'forward')
+  // store.commit(`layout/${mutationTypes.LAYOUT_SET_POP_DIRECTION}`, 'forward')
 })
 
 store.router = router

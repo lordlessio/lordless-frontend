@@ -1,6 +1,7 @@
 const Vue = require('vue').default
 const files = [
   '/reuse/_mobile/navbar',
+  '/reuse/_mobile/adSpace',
 
   '/reuse/tavernPoster',
   '/reuse/dialog/authorize',

@@ -66,8 +66,8 @@
 <script>
 import { originSource } from 'utils/tool'
 
-import { mutationTypes } from '@/store/types'
-import { mapMutations } from 'vuex'
+// import { mutationTypes } from '@/store/types'
+// import { mapMutations } from 'vuex'
 export default {
   props: {
     info: {
@@ -106,15 +106,16 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('layout', [
-      mutationTypes.LAYOUT_SET_POP_DIRECTION
-    ]),
+    // ...mapMutations('layout', [
+    //   mutationTypes.LAYOUT_SET_POP_DIRECTION
+    // ]),
     chooseTavern (e, info = this.info) {
       if (!this.jump) {
         this.$emit('choose', info)
         return
       }
-      this[mutationTypes.LAYOUT_SET_POP_DIRECTION]('_forward')
+      // this[mutationTypes.LAYOUT_SET_POP_DIRECTION]('_forward')
+      sessionStorage.setItem('lordless_direction', '_forward')
       this.$router.push(`/tavern/${info.id}`)
     },
     originSource () {

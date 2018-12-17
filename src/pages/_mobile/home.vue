@@ -4,6 +4,7 @@
       <home-skeletion v-if="loading"/>
 
       <div v-else>
+        <mobile-ad-space class="home-ad-space"/>
         <div class="mobile-home-promotions">
           <h2 class="mobile-home-title">Promotions</h2>
           <div class="home-promotions-tips">
@@ -115,6 +116,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .home-ad-space {
+    margin: -20px -20px 0;
+  }
+
   .mobile-home-box {
     padding: 20px 20px 50px;
   }
@@ -163,6 +168,9 @@ export default {
   /**
    *  mobile-home-promotions  -- begin
    */
+  .mobile-home-promotions {
+    padding-top: 16px;
+  }
   .home-promotions-item {
     &:not(:first-of-type) {
       margin-top: 24px;

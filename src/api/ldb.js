@@ -19,6 +19,11 @@ module.exports = axios => {
     // 根据 id 修改建筑信息
     updateLdb: params => {
       return axios.put('/api/ldb/update', params)
+    },
+
+    // 根据tokenId获取以往领主总收益
+    getTavernkeeps: (tokenId) => {
+      return axios.get(`/api/tavern/keeps/${tokenId}`)
     }
   }
 }

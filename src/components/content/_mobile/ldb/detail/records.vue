@@ -8,9 +8,9 @@
           <span class="d-flex f-align-center">Price<span class="v-flex text-right text-color-third">{{ record.created_at | timeFormat }}</span></span>
           <p class="price text-upper">{{ record.market[0].price | weiToEth }} ETH</p>
           <span>From</span>
-          <p>{{ record.market[0].buyer | splitAddress({ before: 17, end: 12 }) }}</p>
+          <p>{{ record.market[0].buyer | splitAddress({ before: 16, end: 8 }) }}</p>
           <span>To</span>
-          <p>{{ record.market[0].seller | splitAddress({ before: 17, end: 12 }) }}</p>
+          <p>{{ record.market[0].seller | splitAddress({ before: 16, end: 8 }) }}</p>
         </div>
       </div>
     </transition>
@@ -42,7 +42,7 @@ export default {
 
 <style lang="scss" scoped>
   .detail-mobile-title {
-    margin-top: 20px;
+    margin-top: 30px;
     margin-bottom: 10px;
     font-size: 20px;
     color: $--text-third-color;
@@ -52,6 +52,7 @@ export default {
     padding: 20px 20px 30px;
     font-size: 16px;
     border-radius: 5px;
+    background-color: #fff;
     box-shadow: 0 2px 5px 0px rgba(0, 0, 0, .25);
     >p {
       // font-size: 16px;

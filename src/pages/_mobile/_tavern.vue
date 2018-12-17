@@ -16,8 +16,8 @@
 <script>
 import LdbDetail from '@/components/content/ldb/detail'
 
-import { mutationTypes } from '@/store/types'
-import { mapMutations } from 'vuex'
+// import { mutationTypes } from '@/store/types'
+// import { mapMutations } from 'vuex'
 export default {
   data: () => {
     return {
@@ -43,11 +43,12 @@ export default {
     LdbDetail
   },
   methods: {
-    ...mapMutations('layout', [
-      mutationTypes.LAYOUT_SET_POP_DIRECTION
-    ]),
+    // ...mapMutations('layout', [
+    //   mutationTypes.LAYOUT_SET_POP_DIRECTION
+    // ]),
     tCloseHandle () {
-      this[mutationTypes.LAYOUT_SET_POP_DIRECTION]('_reverse')
+      // this[mutationTypes.LAYOUT_SET_POP_DIRECTION]('_reverse')
+      sessionStorage.setItem('lordless_direction', '_reverse')
 
       const refer = this.$route.query.refer || '/taverns'
       this.$nextTick(() => this.$router.push(`${decodeURIComponent(refer)}`))

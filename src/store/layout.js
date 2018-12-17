@@ -9,6 +9,10 @@ export default {
   namespaced: true,
   state: {
 
+    tabBar: {
+      show: true
+    },
+
     messageTip: {
       show: false,
       theme: 'default',
@@ -28,7 +32,7 @@ export default {
     pHistory: {},
 
     // lordless pop 滚动方向
-    popDirection: 'forward',
+    // popDirection: 'forward',
 
     // lordless pop 滚动 transition name
     popTransition: '',
@@ -95,6 +99,12 @@ export default {
     }
   },
   mutations: {
+    /**
+     * 修改 tabbar 状态
+     */
+    [mutationTypes.LAYOUT_SET_TABBAR_OPTIONS] (state, payload = {}) {
+      state.tabBar = Object.assign({}, state.tabBar, payload)
+    },
 
     /**
      * 存储 lordless page History
@@ -108,9 +118,9 @@ export default {
     /**
      * 存储 lordless pop 滚动方向
      */
-    [mutationTypes.LAYOUT_SET_POP_DIRECTION] (state, direction = '') {
-      state.popDirection = direction
-    },
+    // [mutationTypes.LAYOUT_SET_POP_DIRECTION] (state, direction = '') {
+    //   state.popDirection = direction
+    // },
 
     /**
      * 存储 lordless pop 滚动 transition name

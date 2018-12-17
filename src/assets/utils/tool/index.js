@@ -360,8 +360,11 @@ export const weiToEth = (value) => {
   return parseFloat(parseFloat(value).toFixed(4))
 }
 
-export const sliceStr = (str, { start = 0, end = 10 } = {}) => {
+export const sliceStr = (str, { start = 0, end = 10, symbol = false } = {}) => {
   if (!str) return str
+  if (symbol && str.length > end) {
+    return `${str.toString().slice(start, end)}...`
+  }
   return str.toString().slice(start, end)
 }
 

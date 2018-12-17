@@ -27,17 +27,31 @@
       @setHome="setHome"
       @receive="receiveCandy"
       @refresh="init(ldbInfo._id)"/>
-    <section id="ldb-detail-content" class="ldb-detail-content" :class="{ 'show': contentShow }">
+    <section id="ldb-detail-content" class="ldb-detail-content" :class="{ 'show': contentShow, 'is-mobile': isMobile }">
       <div class="container detail-container md d-flex sm-col-flex">
         <div class="detail-cnt-left v-flex">
-          <ldb-datas-tool
+          <tavern-keeps
             v-if="!isMobile"
             ref="ldbDatas"
             :info.sync="ldbInfo"
             :loading="infoLoading"
             @enter="contentShow = true"/>
 
-          <tasks-now-tool
+          <mobile-tavern-keeps
+            v-if="isMobile"
+            ref="ldbDatas"
+            :info.sync="ldbInfo"
+            :loading="infoLoading"/>
+
+          <quests-tool
+            v-if="!isMobile"
+            class="sm-hidden"
+            :quests="ldbTasks | ldbGroupTasks"
+            :ldbId="ldbInfo._id"
+            :owner="owner"
+            :loading="ldbTaskLoading"
+            @receive="receiveTask"/>
+          <!-- <tasks-now-tool
             v-if="!isMobile"
             class="sm-hidden"
             :candies="ldbTasks | ldbGroupCandies"
@@ -45,7 +59,7 @@
             :ldbId="ldbInfo._id"
             :owner="owner"
             :loading="ldbTaskLoading"
-            @receive="receiveTask"/>
+            @receive="receiveTask"/> -->
 
           <!-- <mobile-quests-tool
             v-if="isMobile"
@@ -65,6 +79,7 @@
           <mobile-records-tool
             v-if="isMobile"
             :list="ldbRecords.list"
+            :total="ldbRecords.total"
             :loading="recordsLoading"/>
 
           <!-- <approved-tasks-tool
@@ -75,13 +90,8 @@
         </div>
         <div v-if="!isMobile" class="detail-cnt-right">
 
-          <approved-tasks-tool
-            ref="approvedTask"
-            class="detail-approved-tasks"
-            :ldbId="ldbInfo._id"
-            :loading="ldbTaskLoading"/>
-
           <ldb-sale-tool
+            class="detail-sale-card"
             :info.sync="ldbInfo"
             :pendings="ldbPendings"
             :user="userInfo"
@@ -89,6 +99,12 @@
             @buy="buyHandle"
             @sale="saleHandle"
             @cancel="cancelSaleHandle"/>
+
+          <approved-tasks-tool
+            ref="approvedTask"
+            class="detail-approved-tasks"
+            :ldbId="ldbInfo._id"
+            :loading="ldbTaskLoading"/>
           <!-- <ldb-candy-tool :list="candyLimits" :loading="ldbTaskLoading"></ldb-candy-tool> -->
 
         </div>
@@ -133,9 +149,11 @@
 import LdbHeaderTool from './ldbHeader'
 import MobileHeaderTool from '@/components/content/_mobile/ldb/detail/ldbHeader'
 
-import LdbDatasTool from './ldbDatas'
+import TavernKeeps from './tavernkeeps'
+import MobileTavernKeeps from '@/components/content/_mobile/ldb/detail/tavernkeeps'
 
-import TasksNowTool from './tasksNow'
+// import TasksNowTool from './tasksNow'
+import QuestsTool from './questsTool'
 // import MobileQuestsTool from '@/components/content/_mobile/ldb/detail/quests'
 
 import RecordsTool from './records'
@@ -283,9 +301,11 @@ export default {
     LdbHeaderTool,
     MobileHeaderTool,
 
-    LdbDatasTool,
+    TavernKeeps,
+    MobileTavernKeeps,
 
-    TasksNowTool,
+    // TasksNowTool,
+    QuestsTool,
     // MobileQuestsTool,
 
     RecordsTool,
@@ -860,8 +880,10 @@ export default {
     /deep/ .ldb-left-section {
     margin-top: 50px;
     >h3 {
-      font-family: $--font-TTNormsMedium;
-      font-weight: normal;
+      margin-bottom: 18px;
+      // font-family: $--font-TTNormsMedium;
+      // font-weight: normal;
+      color: #777;
       >span {
         color: #999;
         font-size: 18px;
@@ -900,10 +922,15 @@ export default {
     z-index: 2;
     transition: opacity .15s ease-in-out, transform .45s ease-in-out;
     @include margin('bottom', 35px, 1, -2);
+    &.is-mobile {
+      // margin-top: 15px;
+      padding: 0 18px;
+      opacity: 1;
+    }
     &.show {
       // animation: showContent .45s ease-in-out 1;
       opacity: 1;
-      @include grid('transform', translateY(-80px))
+      @include grid('transform', translateY(-64px))
     }
   }
   .detail-container {
@@ -918,7 +945,7 @@ export default {
     width: 100%;
     // max-width: 300px;
   }
-  .detail-approved-tasks {
-    margin-bottom: 60px;
+  .detail-sale-card {
+    margin-bottom: 36px;
   }
 </style>

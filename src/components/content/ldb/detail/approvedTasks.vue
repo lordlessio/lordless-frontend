@@ -244,18 +244,18 @@ export default {
     >span {
       position: relative;
       left: 0;
-      padding: 20px;
+      padding: 24px;
       width: 96px;
       height: 96px;
       fill: $--text-blue-color;
       border-radius: 100%;
       background-color: #fff;
       box-sizing: border-box;
-      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .25);
+      box-shadow: 0 0px 10px 2px rgba(0, 0, 0, .25);
       transition: left .4s cubic-bezier(0.4, 0, 0.2, 1);
       &:not(:first-of-type) {
         margin-left: -15px;
-        z-index: -1;
+        // z-index: 1;
       }
     }
   }

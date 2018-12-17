@@ -1,178 +1,187 @@
 <template>
-  <transition name="ld-hide-fade" mode="out-in">
-    <project-skeletion v-if="loading"/>
-    <div v-else class="lordless-project-box">
-      <section class="ld-project-section project-section-candy">
-        <div class="project-candy-info">
-          <p class="d-flex f-align-center candy-info-symbol">
-            <span class="inline-block line-height-0 candy-symbol-icon">
-              <svg v-if="projectInfo.symbol">
-                <use :xlink:href="`#coin-${projectInfo.symbol.toLocaleLowerCase()}`"/>
-              </svg>
-            </span>
-            <span class="TTFontBolder inline-block text-upper">
-              <span class="inline-block">{{ projectInfo.name }}</span>
-              <span class="inline-block">({{ projectInfo.symbol }})</span>
-            </span>
-          </p>
-          <div v-if="airdropInfo">
-            <p class="TTFontBolder candy-claimed-info">
-              <span v-if="claimed === -1">???</span>
-              <span v-else>{{ claimed / projectInfo.USD2TokenCount | formatNumber | formatDecimal({ len: 2 }) }}</span> US dollars
-              <span class="TTFontBold candy-claimed-been">has been claimed.</span>
+  <div class="lordless-project-box">
+    <transition name="ld-hide-fade" mode="out-in">
+      <project-skeletion v-if="loading"/>
+      <div v-else>
+        <mobile-ad-space class="home-ad-space"/>
+
+        <mobile-nav-bar
+          ref="mobile-nav-bar"
+          v-bind="scrollOpt"
+          :text="navbarText"
+          @history="tCloseHandle"/>
+        <section class="ld-project-section project-section-candy">
+          <div class="project-candy-info">
+            <p class="d-flex f-align-center candy-info-symbol">
+              <span class="inline-block line-height-0 candy-symbol-icon">
+                <svg v-if="projectInfo.symbol">
+                  <use :xlink:href="`#coin-${projectInfo.symbol.toLocaleLowerCase()}`"/>
+                </svg>
+              </span>
+              <span class="TTFontBolder inline-block text-upper">
+                <span class="inline-block">{{ projectInfo.name }}</span>
+                <span class="inline-block">({{ projectInfo.symbol }})</span>
+              </span>
             </p>
-            <div class="project-candy-carousel">
-              <el-carousel trigger="click" height="128px" :interval="5000" arrow="never" :indicator-position="projectInfo.airdrop.banners.length <= 1 ? 'none' : ''" :loop="projectInfo.airdrop.banners.length > 1">
-                <el-carousel-item v-for="(banner, index) of projectInfo.airdrop.banners" :key="index">
-                  <div class="project-airdrop-banner" :style="`background-image: url(${ossOrigin + banner})`"></div>
-                </el-carousel-item>
-              </el-carousel>
+            <div v-if="airdropInfo">
+              <p class="TTFontBolder candy-claimed-info">
+                <span v-if="claimed === -1">???</span>
+                <span v-else>{{ claimed / projectInfo.USD2TokenCount | formatNumber | formatDecimal({ len: 2 }) }}</span> US dollars
+                <span class="TTFontBold candy-claimed-been">has been claimed.</span>
+              </p>
+              <div class="project-candy-carousel">
+                <el-carousel trigger="click" height="128px" :interval="5000" arrow="never" :indicator-position="projectInfo.airdrop.banners.length <= 1 ? 'none' : ''" :loop="projectInfo.airdrop.banners.length > 1">
+                  <el-carousel-item v-for="(banner, index) of projectInfo.airdrop.banners" :key="index">
+                    <div class="project-airdrop-banner" :style="`background-image: url(${ossOrigin + banner})`"></div>
+                  </el-carousel-item>
+                </el-carousel>
+              </div>
+              <promotion-claim
+                class="project-promotion-info"
+                :info="airdropInfo"
+                :claimed.sync="claimed"/>
             </div>
-            <promotion-claim
-              class="project-promotion-info"
-              :info="airdropInfo"
-              :claimed.sync="claimed"/>
           </div>
-        </div>
-      </section>
-      <section class="ld-project-section project-section-intro">
-        <h3>Intro</h3>
-        <div class="project-intro-cnt">
-          <div class="project-intro-item">
-            <p class="intro-item-title">Slogan</p>
-            <p class="TTFontNormal intro-item-desc">{{ projectInfo.slogan }}</p>
+        </section>
+        <section class="ld-project-section project-section-intro">
+          <h3>Intro</h3>
+          <div class="project-intro-cnt">
+            <div class="project-intro-item">
+              <p class="intro-item-title">Slogan</p>
+              <p class="TTFontNormal intro-item-desc">{{ projectInfo.slogan }}</p>
+            </div>
+            <div class="project-intro-item">
+              <p class="intro-item-title">About {{ projectInfo.name }}</p>
+              <p class="TTFontNormal intro-item-desc">{{ projectInfo.desc }}</p>
+            </div>
+            <div class="project-intro-item">
+              <p class="intro-item-title">Market</p>
+              <ul class="intro-market-ul">
+                <li class="d-flex f-align-center intro-market-item">
+                  <span class="inlin-block market-item-icon">
+                    <svg>
+                      <use xlink:href="#icon-market-price"/>
+                    </svg>
+                  </span>
+                  <p class="v-flex d-flex f-justify-between market-item-right">
+                    <span>Price</span>
+                    <span>$ {{ projectInfo.market.price | formatDecimal }}</span>
+                  </p>
+                </li>
+                <li class="d-flex f-align-center intro-market-item">
+                  <span class="inlin-block market-item-icon">
+                    <svg>
+                      <use xlink:href="#icon-analysis"/>
+                    </svg>
+                  </span>
+                  <p class="v-flex d-flex f-justify-between market-item-right">
+                    <span>Market cap</span>
+                    <span>$ {{ projectInfo.market.marketCap || projectInfo.market.price * projectInfo.market.circulatingSupply | formatNumber }}</span>
+                  </p>
+                </li>
+                <li class="d-flex f-align-center intro-market-item">
+                  <span class="inlin-block market-item-icon">
+                    <svg>
+                      <use xlink:href="#icon-volume"/>
+                    </svg>
+                  </span>
+                  <p class="v-flex d-flex f-justify-between market-item-right">
+                    <span>Volume (24h)</span>
+                    <span>$ {{ projectInfo.market.volume | formatDecimal | formatNumber }}</span>
+                  </p>
+                </li>
+                <li class="d-flex f-align-center intro-market-item">
+                  <span class="inlin-block market-item-icon">
+                    <svg>
+                      <use xlink:href="#icon-date"/>
+                    </svg>
+                  </span>
+                  <p class="v-flex d-flex f-justify-between market-item-right">
+                    <span>Issue date</span>
+                    <span>{{ projectInfo.market.issueDate | dateFormat('MMM. DD YYYY') }}</span>
+                  </p>
+                </li>
+                <li class="d-flex f-align-center intro-market-item">
+                  <span class="inlin-block market-item-icon">
+                    <svg>
+                      <use xlink:href="#icon-issue-price"/>
+                    </svg>
+                  </span>
+                  <p class="v-flex d-flex f-justify-between market-item-right">
+                    <span>Issue price</span>
+                    <span>$ {{ projectInfo.market.issuePrice | formatDecimal }}</span>
+                  </p>
+                </li>
+                <li class="d-flex f-align-center intro-market-item">
+                  <span class="inlin-block market-item-icon">
+                    <svg>
+                      <use xlink:href="#icon-total-supply"/>
+                    </svg>
+                  </span>
+                  <p class="v-flex d-flex f-justify-between market-item-right">
+                    <span>Total supply</span>
+                    <span>{{ projectInfo.market.totalSupply | formatNumber }}</span>
+                  </p>
+                </li>
+                <li class="d-flex f-align-center intro-market-item">
+                  <span class="inlin-block market-item-icon">
+                    <svg>
+                      <use xlink:href="#icon-circulating-supply"/>
+                    </svg>
+                  </span>
+                  <p class="v-flex d-flex f-justify-between market-item-right">
+                    <span>Circulating supply</span>
+                    <span>{{ projectInfo.market.circulatingSupply | formatNumber }}</span>
+                  </p>
+                </li>
+              </ul>
+            </div>
+            <div class="project-intro-item" v-if="projectInfo.exchanges.length">
+              <p class="intro-item-title">Exchanges</p>
+              <ul class="d-flex flex-wrap project-intro-exchanges">
+                <li v-for="(item, index) in  projectInfo.exchanges" :key="index"
+                  class="text-center project-exchange-item">
+                  <a class="inline-block" :href="exchangesLink(item)" target="_blank">
+                    <p class="project-exchange-img" :style="`background-image: url(${ossOrigin + item.icon})`"></p>
+                    <p>{{ item.name }}</p>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
-          <div class="project-intro-item">
-            <p class="intro-item-title">About {{ projectInfo.name }}</p>
-            <p class="TTFontNormal intro-item-desc">{{ projectInfo.desc }}</p>
-          </div>
-          <div class="project-intro-item">
-            <p class="intro-item-title">Market</p>
-            <ul class="intro-market-ul">
-              <li class="d-flex f-align-center intro-market-item">
-                <span class="inlin-block market-item-icon">
+        </section>
+        <section v-if="projectInfo.socialeLinks && projectInfo.socialeLinks.length" class="ld-project-section project-section-resource">
+          <h3>Resource</h3>
+          <div class="project-resource-cnt">
+            <ul class="resource-cnt-ul">
+              <li
+                v-for="sociale of projectInfo.socialeLinks"
+                :key="sociale._id"
+                class="d-flex f-align-center resource-cnt-item">
+                <span class="inline-block line-height-0 resource-item-icon">
                   <svg>
-                    <use xlink:href="#icon-market-price"/>
+                    <use :xlink:href="`#icon-${sociale.name.toLocaleLowerCase()}`"/>
                   </svg>
                 </span>
-                <p class="v-flex d-flex f-justify-between market-item-right">
-                  <span>Price</span>
-                  <span>$ {{ projectInfo.market.price | formatDecimal }}</span>
-                </p>
-              </li>
-              <li class="d-flex f-align-center intro-market-item">
-                <span class="inlin-block market-item-icon">
-                  <svg>
-                    <use xlink:href="#icon-analysis"/>
-                  </svg>
-                </span>
-                <p class="v-flex d-flex f-justify-between market-item-right">
-                  <span>Market cap</span>
-                  <span>$ {{ projectInfo.market.marketCap || projectInfo.market.price * projectInfo.market.circulatingSupply | formatNumber }}</span>
-                </p>
-              </li>
-              <li class="d-flex f-align-center intro-market-item">
-                <span class="inlin-block market-item-icon">
-                  <svg>
-                    <use xlink:href="#icon-volume"/>
-                  </svg>
-                </span>
-                <p class="v-flex d-flex f-justify-between market-item-right">
-                  <span>Volume (24h)</span>
-                  <span>$ {{ projectInfo.market.volume | formatDecimal | formatNumber }}</span>
-                </p>
-              </li>
-              <li class="d-flex f-align-center intro-market-item">
-                <span class="inlin-block market-item-icon">
-                  <svg>
-                    <use xlink:href="#icon-date"/>
-                  </svg>
-                </span>
-                <p class="v-flex d-flex f-justify-between market-item-right">
-                  <span>Issue date</span>
-                  <span>{{ projectInfo.market.issueDate | dateFormat('MMM. DD YYYY') }}</span>
-                </p>
-              </li>
-              <li class="d-flex f-align-center intro-market-item">
-                <span class="inlin-block market-item-icon">
-                  <svg>
-                    <use xlink:href="#icon-issue-price"/>
-                  </svg>
-                </span>
-                <p class="v-flex d-flex f-justify-between market-item-right">
-                  <span>Issue price</span>
-                  <span>$ {{ projectInfo.market.issuePrice | formatDecimal }}</span>
-                </p>
-              </li>
-              <li class="d-flex f-align-center intro-market-item">
-                <span class="inlin-block market-item-icon">
-                  <svg>
-                    <use xlink:href="#icon-total-supply"/>
-                  </svg>
-                </span>
-                <p class="v-flex d-flex f-justify-between market-item-right">
-                  <span>Total supply</span>
-                  <span>{{ projectInfo.market.totalSupply | formatNumber }}</span>
-                </p>
-              </li>
-              <li class="d-flex f-align-center intro-market-item">
-                <span class="inlin-block market-item-icon">
-                  <svg>
-                    <use xlink:href="#icon-circulating-supply"/>
-                  </svg>
-                </span>
-                <p class="v-flex d-flex f-justify-between market-item-right">
-                  <span>Circulating supply</span>
-                  <span>{{ projectInfo.market.circulatingSupply | formatNumber }}</span>
-                </p>
-              </li>
-            </ul>
-          </div>
-          <div class="project-intro-item" v-if="projectInfo.exchanges.length">
-            <p class="intro-item-title">Exchanges</p>
-            <ul class="d-flex flex-wrap project-intro-exchanges">
-              <li v-for="(item, index) in  projectInfo.exchanges" :key="index"
-                class="text-center project-exchange-item">
-                <a class="inline-block" :href="exchangesLink(item)" target="_blank">
-                  <p class="project-exchange-img" :style="`background-image: url(${ossOrigin + item.icon})`"></p>
-                  <p>{{ item.name }}</p>
+                <a :href="sociale.link" target="_blank" class="v-flex d-flex f-justify-between resource-item-right">
+                  <span class="text-cap">{{ sociale.name }}</span>
+                  <span class="inline-block inline-height-0 resource-item-arrow">
+                    <svg>
+                      <use xlink:href="#icon-arrow-line-right"/>
+                    </svg>
+                  </span>
                 </a>
               </li>
             </ul>
           </div>
-        </div>
-      </section>
-      <section v-if="projectInfo.socialeLinks && projectInfo.socialeLinks.length" class="ld-project-section project-section-resource">
-        <h3>Resource</h3>
-        <div class="project-resource-cnt">
-          <ul class="resource-cnt-ul">
-            <li
-              v-for="sociale of projectInfo.socialeLinks"
-              :key="sociale._id"
-              class="d-flex f-align-center resource-cnt-item">
-              <span class="inline-block line-height-0 resource-item-icon">
-                <svg>
-                  <use :xlink:href="`#icon-${sociale.name.toLocaleLowerCase()}`"/>
-                </svg>
-              </span>
-              <a :href="sociale.link" target="_blank" class="v-flex d-flex f-justify-between resource-item-right">
-                <span class="text-cap">{{ sociale.name }}</span>
-                <span class="inline-block inline-height-0 resource-item-arrow">
-                  <svg>
-                    <use xlink:href="#icon-arrow-line-right"/>
-                  </svg>
-                </span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-      <section class="ld-project-section project-seciton-terms">
-        <p class="project-terms-title">Disclaimer</p>
-        <p class="TTFontNormal">This content is being provided to you for informational purposes only. The content has been prepared by third parties not affiliated with LORDLESS or any of its affiliates and LORDLESS is not responsible for its content. This content and any information contained therein, does not constitute a recommendation for trading or trading-related actions, financial product or instrument referenced in the content. Be sure to let us know if you have questions.</p>
-      </section>
-    </div>
-  </transition>
+        </section>
+        <section class="ld-project-section project-seciton-terms">
+          <p class="project-terms-title">Disclaimer</p>
+          <p class="TTFontNormal">This content is being provided to you for informational purposes only. The content has been prepared by third parties not affiliated with LORDLESS or any of its affiliates and LORDLESS is not responsible for its content. This content and any information contained therein, does not constitute a recommendation for trading or trading-related actions, financial product or instrument referenced in the content. Be sure to let us know if you have questions.</p>
+        </section>
+      </div>
+    </transition>
+  </div>
 </template>
 
 <script>
@@ -182,6 +191,8 @@ import ProjectSkeletion from '@/components/skeletion/_mobile/project/detail'
 import { getCandyDetail } from 'api'
 
 // import { mapState } from 'vuex'
+// import { mutationTypes } from '@/store/types'
+// import { mapMutations } from 'vuex'
 export default {
   name: 'lordless-project-detail',
   data: () => {
@@ -189,14 +200,25 @@ export default {
       rendered: false,
       loading: true,
       claimed: 0,
+      prevPath: null,
       projectInfo: {
         coinmarketcap: {},
         market: {},
         exchanges: []
+      },
+      scrollOpt: {
+        show: true,
+        history: true,
+        scroll: false
       }
     }
   },
   computed: {
+    navbarText () {
+      const projectInfo = this.projectInfo
+      if (!projectInfo) return 'Project'
+      return `${projectInfo.symbol}(project)`
+    },
     airdropInfo () {
       const { airdrop } = this.projectInfo
       if (!airdrop) return null
@@ -213,11 +235,28 @@ export default {
     ProjectSkeletion
   },
   methods: {
+    // ...mapMutations('layout', [
+    //   mutationTypes.LAYOUT_SET_POP_DIRECTION
+    // ]),
+    tCloseHandle () {
+      // this[mutationTypes.LAYOUT_SET_POP_DIRECTION]('_reverse')
+      sessionStorage.setItem('lordless_direction', '_reverse')
+
+      const refer = this.$route.query.refer || '/home'
+      this.$nextTick(() => this.$router.push(`${decodeURIComponent(refer)}`))
+      // if (history.length) {
+      //   history.go(-1)
+      // } else {
+      //   this.$router.push('/market')
+      // }
+    },
     exchangesLink ({ name, website }) {
       if (name === 'DDEX' && this.projectInfo.symbol === 'LESS') return 'https://ddex.io/trade/LESS-WETH'
       return website
     },
     initPage () {
+      this.prevPath = this.$route.path
+
       const { projectId } = this.$route.params
       projectId && this.initProject(projectId)
       if (!this.rendered) this.rendered = true
@@ -237,8 +276,14 @@ export default {
       this.loading = false
     }
   },
+  deactivated () {
+    this.loading = true
+  },
   activated () {
-    if (!this.rendered) return
+    if (!this.rendered || this.$route.path === this.prevPath) {
+      this.loading = false
+      return
+    }
     this.initPage()
   },
   mounted () {
@@ -248,6 +293,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .lordless-project-box {
+    padding-top: 44px;
+    @include viewport-unit(width, 100vw);
+    @include viewport-unit(min-height, 100vh);
+  }
   .ld-project-section {
     // padding: 20px;
     padding: 0 20px;

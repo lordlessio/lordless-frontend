@@ -15,38 +15,47 @@
           class="text-center ldb-no-txs">
           <p>暂无交易哦</p>
         </el-row> -->
-        <ul class="TTFontBolder d-flex col-flex lordless-table-list shadow quests-list">
-          <li class="d-flex lordless-table-item lordless-table-thead">
-            <p class="v-flex quests-item-name">PRICE</p>
-            <p class="v-flex quests-item-cost">WHEN</p>
-            <p class="v-flex quests-item-reward">FROM</p>
-            <p class="v-flex quests-item-reward">TO</p>
-          </li>
-          <li class="lordless-table-item records-table-item"
-            v-for="(record, index) of list"
-            :key="index">
-            <a class="d-flex f-align-center" :href="`${ETHERSCANURL}/tx/${record.tx.transactionHash}`" target="_blank">
-              <p class="v-flex d-flex f-align-center line-height-0 quests-item-name">
-                <span class="inline-block records-eth-icon">
-                  <svg>
-                    <use xlink:href="#icon-eth-price"/>
-                  </svg>
-                </span>
-                <span class="inline-block">{{ record.market[0].price | weiToEth }}</span>
-              </p>
-              <p class="v-flex quests-item-cost">{{ record.created_at | timeFormat }}</p>
-              <p class="v-flex text-upper quests-item-reward">
+        <div class="alone-layer left-section-cnt ldb-tx-cnt">
+          <el-row class="ldb-tx-header">
+            <el-col :span="5">
+              Price
+            </el-col>
+            <el-col :span="7">
+              When
+            </el-col>
+            <el-col :span="6">
+              From
+            </el-col>
+            <el-col :span="6">
+              To
+            </el-col>
+          </el-row>
+          <el-row class="ldb-tx-list">
+            <el-row
+                v-if="total"
+                v-for="(record, index) of list"
+                :key="index"
+                class="ldb-tx-item">
+              <el-col :span="5" class="color-blue">
+                <span>{{ record.market[0].price | weiToEth }}</span>
+                <span class="text-upper">ETH</span>
+              </el-col>
+              <el-col :span="7">
+                {{ record.created_at | timeFormat }}
+              </el-col>
+              <el-col :span="6" class="sm-text-ellipsis">
                 <link-symbol underline :to="record.market[0].buyer">
                   {{ record.market[0].buyer | splitAddress({ before: 6, end: 4 }) }}
                 </link-symbol>
-              </p>
-              <p class="v-flex text-upper quests-item-reward">
+              </el-col>
+              <el-col :span="6" class="sm-text-ellipsis">
                 <link-symbol underline :to="record.market[0].seller">
                   {{ record.market[0].seller | splitAddress({ before: 6, end: 4 }) }}
                 </link-symbol>
-              </p></a>
-          </li>
-        </ul>
+              </el-col>
+            </el-row>
+          </el-row>
+        </div>
       </section>
     </transition>
   </div>
@@ -74,11 +83,6 @@ export default {
   },
   components: {
     RecordsSkeletion
-  },
-  computed: {
-    ETHERSCANURL () {
-      return process.env.ETHERSCANURL
-    }
   }
 }
 </script>
@@ -103,11 +107,6 @@ export default {
   .ldb-tx-list {
 
   }
-  .records-table-item {
-    >a {
-      color: inherit;
-    }
-  }
   .ldb-no-txs {
     padding: 50px 0;
   }
@@ -120,14 +119,5 @@ export default {
     &:not(:first-of-type) {
       margin-top: 25px;
     }
-  }
-
-  .records-eth-icon {
-    margin-right: 4px;
-    width: 10px;
-    height: 12px;
-    fill: #555;
-    stroke: #555;
-    stroke-width: 1;
   }
 </style>

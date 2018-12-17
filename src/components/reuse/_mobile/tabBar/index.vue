@@ -1,5 +1,5 @@
 <template>
-  <section class="lordless-tab-bar">
+  <section class="lordless-tab-bar" :class="{ 'is-hide': tabBarHide }">
     <!-- <mobile-nav-bar :text="navigations[activeIndex].navbarText" :scroll="navigations[activeIndex].scroll"/> -->
     <ul class="d-flex tab-bar-ul">
       <li v-for="(item, index) of navigations" :key="index"
@@ -22,12 +22,13 @@
 <script>
 // import MobileNavBar from '@/components/reuse/_mobile/navbar'
 // import { scrollToTop } from 'utils/tool/animate'
-import { mutationTypes } from '@/store/types'
-import { mapMutations } from 'vuex'
+// import { mutationTypes } from '@/store/types'
+// import { mapMutations } from 'vuex'
 export default {
   name: 'mobile-tab-bar',
   data: () => {
     return {
+      tabBarHide: false,
       // activeText: 'Marketplace',
       activeIndex: 0,
       navigations: [
@@ -36,7 +37,8 @@ export default {
           activeIcon: '#icon-logo-image',
           name: 'Home',
           route: '/home',
-          match: /\/(home|project)/,
+          // match: /\/(home|project)/,
+          match: /\/home/,
           active: true
         },
         {
@@ -68,7 +70,8 @@ export default {
           activeIcon: '#icon-tab-user_selected',
           name: 'Me',
           route: '/owner/info',
-          match: /\/owner\/(info|activities|taverns|authorization|general)/,
+          // match: /\/owner\/(info|activities|taverns|authorization|general)/,
+          match: /\/owner\/info/,
           active: false
         }
       ]
@@ -80,9 +83,9 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('layout', [
-      mutationTypes.LAYOUT_SET_POP_DIRECTION
-    ]),
+    // ...mapMutations('layout', [
+    //   mutationTypes.LAYOUT_SET_POP_DIRECTION
+    // ]),
 
     getAttr (node) {
       if (!node || node.nodeName === 'BODY') return {}
@@ -134,20 +137,24 @@ export default {
 
       let direction = '_forward'
       if (toIndex < fromIndex) direction = '_reverse'
-      this[mutationTypes.LAYOUT_SET_POP_DIRECTION](direction)
+      // this[mutationTypes.LAYOUT_SET_POP_DIRECTION](direction)
+      sessionStorage.setItem('lordless_direction', direction)
 
       this.$nextTick(() => this.$router.push(routePath))
       // scrollToTop()
     },
 
     rewriteNavigation (route = '/home', navigations = this.navigations) {
+      let isHide = true
       this.navigations = navigations.map(item => {
         item.active = false
         if (route.match(item.match)) {
           item.active = true
+          isHide = false
         }
         return item
       })
+      this.tabBarHide = isHide
     }
   },
   mounted () {
@@ -171,6 +178,12 @@ export default {
   background-color: #fff;
   box-shadow: 0 0 10px 0px #dedede;
   z-index: 100;
+  transition: all .3s;
+  &.is-hide {
+    transform: translateY(100%);
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 .tab-bar-ul {
   margin-top: 8px;

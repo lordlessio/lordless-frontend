@@ -1,85 +1,80 @@
 <template>
-  <div class="relative alone-layer ldb-deal-status">
+  <div class="relative alone-layer tavern-deal-status">
 
-    <!-- ldb detail sale skeletion -->
+    <!-- tavern detail sale skeletion -->
     <!-- <transition name="ld-suspension-hide-fade"> -->
-      <sale-skeletion v-if="loading"/>
     <!-- </transition> -->
 
     <transition name="ld-hide-fade">
-      <section v-if="!loading && (info.chain.auction.isOnAuction || info.chain.auction.isOnPreAuction || isOwner)" class="ldb-deal-cnt">
-        <figure>
-          <h2 class="TTFontBold deal-ldb-tokenId">#{{ info.chain.tokenId }}</h2>
-          <p class="deal-ldb-name">{{ info.name.zh }}</p>
-          <span v-if="info.chain.auction.isOnPreAuction" class="deal-presale-svg">
-            <svg>
-              <use xlink:href="#icon-presale"/>
-            </svg>
-          </span>
-          <div v-if="info.chain.auction.isOnAuction" class="deal-ldb-auction">
-            <countdown v-if="new Date(info.chain.auction.endAt) - new Date() >= 0" class="deal-ldb-endtime" :time="new Date(info.chain.auction.endAt) - new Date()" :interval="3000" tag="p">
-            <!-- <template slot-scope="props">{{ parseInt(props.days) || props.hours || props.minutes || props.seconds }}{{ parseInt(props.days) ? 'd' : (props.hours ? 'h' : (props.minutes ? 'm' : props.seconds ? 's' : '')) }}</template> -->
-              <template slot-scope="props">Expire in {{ props | formatDue(1, 'plural') }}</template>
-            </countdown>
-            <p v-else class="deal-ldb-endtime color-red">Over Due</p>
+      <sale-skeletion v-if="loading"/>
+      <section v-else-if="!loading && (info.chain.auction.isOnAuction || info.chain.auction.isOnPreAuction || isOwner)" class="TTFontBolder tavern-deal-cnt">
+        <div class="tavern-deal-container">
+          <div class="d-flex tavern-deal-info">
+            <p class="text-nowrap d-flex f-align-center deal-price-box">
+              <span class="inline-block line-height-0 deal-eth-icon">
+                <svg>
+                  <use xlink:href="#icon-eth-price"/>
+                </svg>
+              </span>
+              <span>{{ (info.chain.auction.price / 1e18).toLocaleString() }}</span>
+            </p>
+            <div class="TTFontBold v-flex text-right text-nowrap">
+              <p class="deal-tavern-sale-top line-height-1">
+                <span class="inline-block tavern-sale-icon" :class="{ 'is-sale': info.chain.auction.isOnAuction, 'is-auction': showSale }">
+                  <svg>
+                    <use :xlink:href="`#icon-${showSale ? 'auction' : info.chain.auction.isOnAuction ? 'sale' : 'presale'}`"/>
+                  </svg>
+                </span>
+              </p>
+              <div v-if="showSale" class="deal-tavern-auction">Last buying price</div>
+              <div v-else-if="info.chain.auction.isOnAuction" class="deal-tavern-auction">
+                <countdown v-if="new Date(info.chain.auction.endAt) - new Date() >= 0" class="deal-tavern-endtime" :time="new Date(info.chain.auction.endAt) - new Date()" :interval="3000" tag="p">
+                <!-- <template slot-scope="props">{{ parseInt(props.days) || props.hours || props.minutes || props.seconds }}{{ parseInt(props.days) ? 'd' : (props.hours ? 'h' : (props.minutes ? 'm' : props.seconds ? 's' : '')) }}</template> -->
+                  <template slot-scope="props">Expire in {{ props | formatDue(1, 'plural') }}</template>
+                </countdown>
+                <p v-else class="deal-tavern-endtime color-red">Over Due</p>
+              </div>
+              <div v-else-if="info.chain.auction.isOnPreAuction" class="deal-tavern-auction">
+                <!-- <p class="deal-tavern-endtime">The auction starts in</p> -->
+                <countdown @countdownprogress="countdownprogress" class="deal-tavern-endtime" :time="new Date(info.chain.auction.startAt) - new Date()" :interval="1000" tag="div">
+                <!-- <template slot-scope="props">{{ parseInt(props.days) || props.hours || props.minutes || props.seconds }}{{ parseInt(props.days) ? 'd' : (props.hours ? 'h' : (props.minutes ? 'm' : props.seconds ? 's' : '')) }}</template> -->
+                  <template slot-scope="props">
+                    <div class="deal-tavern-presale">
+                      {{ props.totalHours }} h : {{ props.minutes }} m : {{ props.seconds }} s
+                    </div>
+                  </template>
+                </countdown>
+              </div>
+            </div>
           </div>
-          <div v-if="info.chain.auction.isOnPreAuction" class="deal-ldb-auction">
-            <p class="deal-ldb-endtime">The auction starts in</p>
-            <countdown @countdownprogress="countdownprogress" class="deal-ldb-endtime" :time="new Date(info.chain.auction.startAt) - new Date()" :interval="1000" tag="div">
-            <!-- <template slot-scope="props">{{ parseInt(props.days) || props.hours || props.minutes || props.seconds }}{{ parseInt(props.days) ? 'd' : (props.hours ? 'h' : (props.minutes ? 'm' : props.seconds ? 's' : '')) }}</template> -->
-              <template slot-scope="props">
-                <div class="d-flex f-align-center deal-ldb-presale">
-                  <div>
-                    <p class="presale-time-num">{{ props.totalHours }}</p>
-                    <p>hours</p>
-                  </div>
-                  <div>
-                    <p class="presale-time-num">{{ props.minutes }}</p>
-                    <p>minitues</p>
-                  </div>
-                  <div>
-                    <p class="presale-time-num">{{ props.seconds }}</p>
-                    <p>seconds</p>
-                  </div>
-                </div>
-              </template>
-            </countdown>
+          <div class="tavern-deal-btns">
+
+            <lordless-btn
+              v-if="showSale"
+              class="ldb-deal-btn"
+              theme="red-linear"
+              shadow
+              :disabled="pendings.isSelling"
+              @click="$emit('sale')">{{ pendings.isSelling ? 'Saling' : 'Sale' }}</lordless-btn>
+
+            <lordless-btn
+              v-else-if="showBuy"
+              class="ldb-deal-btn"
+              theme="red-linear"
+              shadow
+              :disabled="pendings.isBuying || info.chain.auction.isOnPreAuction"
+              @click="$emit('buy')">
+              <span>{{ info.chain.auction.isOnPreAuction ? 'Stay tuned' : pendings.isBuying ? 'Buying' : 'Be the tavernkeep now!' }}</span>
+            </lordless-btn>
+
+            <lordless-btn
+              v-if="showCancelSale"
+              class="ldb-deal-btn"
+              theme="red-linear"
+              shadow
+              :disabled="pendings.isCanceling"
+              @click="$emit('cancel')">{{ pendings.isCanceling ? 'Cancel Saling' : 'Cancel Sale'}}</lordless-btn>
           </div>
-          <figcaption>
-            <h2>{{ info.chain.auction.price | weiToEth }} ETH</h2>
-          </figcaption>
-        </figure>
-        <div class="text-center ldb-deal-btns">
-          <lordless-btn
-            v-if="showSale"
-            class="ldb-deal-btn"
-            theme="blue"
-            shadow
-            inverse
-            :disabled="pendings.isSelling"
-            @click="$emit('sale')">{{ pendings.isSelling ? 'Saling' : 'Sale' }}</lordless-btn>
-
-          <lordless-btn
-            v-if="showCancelSale"
-            class="ldb-deal-btn"
-            theme="blue"
-            shadow
-            inverse
-            :disabled="pendings.isCanceling"
-            @click="$emit('cancel')">{{ pendings.isCanceling ? 'Cancel Saling' : 'Cancel Sale'}}</lordless-btn>
-
-          <lordless-btn
-            v-if="showBuy"
-            class="ldb-deal-btn"
-            theme="blue"
-            shadow
-            inverse
-            :disabled="pendings.isBuying || info.chain.auction.isOnPreAuction"
-            @click="$emit('buy')">
-            <span v-if="info.chain.auction.isOnPreAuction">Buy</span>
-            <span v-else-if="showSign">Sign to Buy</span>
-            <span v-else>{{ pendings.isBuying ? 'Buying' : 'Buy now' }}</span>
-          </lordless-btn>
         </div>
       </section>
     </transition>
@@ -129,6 +124,7 @@ export default {
       // const { init, isSell } = this.contractStatus
       const info = this.info
       return !this.showSign && this.isOwner && !info.chain.auction.isOnAuction && !info.chain.auction.isOnPreAuction
+      // return true
     },
 
     showCancelSale () {
@@ -170,90 +166,60 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  // ldb-deal-status
-  .ldb-deal-status {
-    // padding-bottom: 65px;
-    color: #999;
+  .tavern-deal-status {
+    border-radius: 5px;
+    box-shadow: 0 3px 10px 2px rgba(0, 0, 0, .15);
   }
-  .ldb-deal-cnt {
-    h2 {
-      color: #555;
-    }
-    .deal-ldb-tokenId {
-      color: #777;
-      font-weight: normal;
-    }
-    >figure {
-      position: relative;
-      padding: 20px 25px;
-      // background-image: linear-gradient(45deg, #16222A, #3A6073);
-      background-color: #fff;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px 0px rgba(0, 0, 0, .25);
-    }
-    figcaption {
-      margin-top: 20px;
-      padding-top: 15px;
-      border-top: 2px solid #bbb;
-    }
+  .tavern-deal-cnt {
+    border-radius: 5px;
+    overflow: hidden;
   }
-  .deal-presale-svg {
-    display: inline-block;
-    position: absolute;
-    right: 25px;
-    top: 25px;
-    width: 100px;
-    height: 15px;
+  .tavern-deal-container {
+
+  }
+  .tavern-deal-info {
+    padding: 8px 24px;
+    background-color: #fff;
+  }
+  .deal-price-box {
+    font-size: 24px;
+    color: $--text-blue-color;
+  }
+  .deal-eth-icon {
+    margin-right: 4px;
+    width: 14px;
+    height: 18px;
     fill: $--text-blue-color;
+    stroke-width: 2px;
+    stroke: $--text-blue-color;
   }
-  .deal-ldb-name {
-    font-size: 20px;
+  .deal-tavern-sale-top {
+
   }
-  .deal-ldb-auction {
-    margin-top: 10px;
-  }
-  .deal-ldb-presale {
-    margin-top: 15px;
-    >div {
-      text-align: center;
-      width: 80px;
-      margin-right: 30px;
-      &:not(:last-of-type) {
-        position: relative;
-        &:after {
-          content: ':';
-          position: absolute;
-          right: -15px;
-          top: 0;
-          font-size: 20px;
-          font-family: $--font-TTNormsBold;
-          color: #555;
-        }
-      }
-       >p {
-        font-size: 16px;
-        color: #bbb;
-      }
+  .tavern-sale-icon {
+    margin: 2px 0;
+    width: 124px;
+    height: 20px;
+    fill: $--text-blue-color;
+    &.is-sale {
+      width: 73px;
     }
-    .presale-time-num {
-      font-family: $--font-TTNormsBold;
-      font-size: 22px;
-      color: #555;
+    &.is-auction {
+      width: 124px;
     }
   }
-  .deal-ldb-endtime {
-    font-size: 18px;
+
+  .deal-tavern-auction {
+    // margin-top: 10px;
+    font-size: 16px;
+    color: #777;
   }
-  .ldb-deal-btns {
-    margin-top: 35px;
-    padding: 0 25px;
-  }
+
   .ldb-deal-btn {
     width: 100%;
-    padding: 13px 0;
-    font-size: 20px;
-    &:not(:first-of-type) {
-      margin-top: 20px;
-    }
+    height: 60px;
+    line-height: 60px;
+    border-radius: 0;
+    font-size: 18px;
   }
 </style>
