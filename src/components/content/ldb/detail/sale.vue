@@ -1,5 +1,5 @@
 <template>
-  <div class="relative alone-layer tavern-deal-status">
+  <div v-if="loading || showContent" class="relative alone-layer tavern-deal-status">
 
     <!-- tavern detail sale skeletion -->
     <!-- <transition name="ld-suspension-hide-fade"> -->
@@ -7,7 +7,7 @@
 
     <transition name="ld-hide-fade">
       <sale-skeletion v-if="loading"/>
-      <section v-else-if="!loading && (info.chain.auction.isOnAuction || info.chain.auction.isOnPreAuction || isOwner)" class="TTFontBolder tavern-deal-cnt">
+      <section v-else-if="showContent" class="TTFontBolder tavern-deal-cnt">
         <div class="tavern-deal-container">
           <div class="d-flex tavern-deal-info">
             <p class="text-nowrap d-flex f-align-center deal-price-box">
@@ -119,6 +119,11 @@ export default {
     }
   },
   computed: {
+
+    showContent () {
+      const { info, loading, isOwner } = this
+      return !loading && (info.chain.auction.isOnAuction || info.chain.auction.isOnPreAuction || isOwner)
+    },
 
     showSale () {
       // const { init, isSell } = this.contractStatus

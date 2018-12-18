@@ -617,7 +617,10 @@ export default {
       // }, this.countUp.level.duration)
     },
 
-    initCurrentACCU ({ start = this.countUp.cAC.start, end = this.countUp.cAC.end || this.info.activeness } = {}) {
+    initCurrentACCU ({ start = this.countUp.cAC.start, end = this.info.activeness - nextAC(this.info.chain.level - 1) } = {}) {
+      // const activeness = this.info.activeness
+      const _end = nextAC(this.info.chain.level - 1)
+      console.log('----- _end', _end, nextAC(0), nextAC(-1))
       if (!this.countUp.cAC.isReady) {
         this.$set(this.countUp, 'cAC', {
           start: end,
@@ -638,7 +641,7 @@ export default {
       // }, this.countUp.cAC.duration)
     },
 
-    initNextACCU ({ start = this.countUp.nAC.start, end = this.countUp.nAC.end || nextAC(this.info.chain.level) } = {}) {
+    initNextACCU ({ start = this.countUp.nAC.start, end = nextAC(this.info.chain.level) - nextAC(this.info.chain.level - 1) } = {}) {
       if (!this.countUp.nAC.isReady) {
         this.$set(this.countUp, 'nAC', {
           start: end,

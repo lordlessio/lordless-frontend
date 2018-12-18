@@ -74,9 +74,9 @@
                 <div class="d-flex f-align-end relative">
                   <div class="v-flex">
                     <p class="text-nowrap detail-mobile-tag">
-                      <span class="inline-block level">LVL 11</span>
+                      <!-- <span class="inline-block level">LVL {{ countUp.level.end }}</span> -->
                       <span class="inline-block" v-for="type of info.ldbType" :key="type">{{ type | formatLdbType }}</span>
-                      <span class="inline-block region">Shanghai</span>
+                      <!-- <span class="inline-block region">Shanghai</span> -->
                     </p>
                     <div class="d-flex row-flex f-align-center detail-mobile-location">
                       <p>
@@ -94,12 +94,33 @@
                     <img :alt="`tavern popularity ${info.chain.popularity}`" :src="`/img/tavern/ldb-level-${info.chain.popularity}.png` | originSource({ size: 450 })"/>
                   </div>
                 </div>
-                <p class="detail-mobile-desc">{{ info.desc.zh | sliceStr({ end: 78 }) }}...</p>
+                <!-- <p class="detail-mobile-desc">{{ info.desc.zh | sliceStr({ end: 78 }) }}...</p> -->
                 <div class="detail-progress-box">
                   <p class="d-flex detail-progress-tip">
-                    <span class="v-flex">Action Point</span>
+                    <span class="v-flex">LEVEL {{ countUp.level.end }}</span>
                     <span>
-                      <count-up class="inline-block" :startVal="countUp.cAP.start" :endVal="countUp.cAP.end" :duration="countUp.cAP.duration" :isReady="countUp.cAP.isReady"></count-up>
+                      <count-up class="inline-block count-now-num" :startVal="countUp.cAC.start" :endVal="countUp.cAC.end" :duration="countUp.cAC.duration" :isReady="countUp.cAC.isReady"></count-up>
+                      <span class="text-color-third">/
+                        <count-up class="inline-block" :startVal="countUp.nAC.start" :endVal="countUp.nAC.end" :duration="countUp.nAC.duration" :isReady="countUp.nAC.isReady"></count-up>
+                      </span>
+                    </span>
+                  </p>
+                  <div class="detail-progress-bar">
+                    <lordless-progress
+                      shadow
+                      :current="countUp.cAC.end"
+                      :max="countUp.nAC.end"
+                      :gradient="progress.ac.gradient"/>
+                  </div>
+                  <p class="d-flex user-progress-desc recover-at">
+                    The tavern still need to earn {{ countUp.nAC.end - countUp.cAC.end }} to level up.
+                  </p>
+                </div>
+                <div class="detail-progress-box">
+                  <p class="d-flex detail-progress-tip">
+                    <span class="v-flex">ACTION POINT</span>
+                    <span>
+                      <count-up class="inline-block count-now-num" :startVal="countUp.cAP.start" :endVal="countUp.cAP.end" :duration="countUp.cAP.duration" :isReady="countUp.cAP.isReady"></count-up>
                       <span class="text-color-third">/
                         <count-up class="inline-block" :startVal="countUp.nAP.start" :endVal="countUp.nAP.end" :duration="countUp.nAP.duration" :isReady="countUp.nAP.isReady"></count-up>
                       </span>
@@ -110,7 +131,7 @@
                       shadow
                       :current="countUp.cAP.end"
                       :max="countUp.nAP.end"
-                      :gradient="progress.gradient"/>
+                      :gradient="progress.ap.gradient"/>
                   </div>
                   <p class="d-flex user-progress-desc recover-at" v-if="new Date(info.recoverAt) - new Date() + 5000 > 0">
                     <countdown class="task-status-time" @countdownend="$emit('refresh')" :time="new Date(info.recoverAt) - new Date() + 5000" :interval="1000" tag="p">
@@ -133,7 +154,7 @@
                     </div>
                   </div>
                   <lordless-btn
-                    class="mobile-home-btn"
+                    class="TTFontBolder mobile-home-btn"
                     theme="blue"
                     shadow
                     inverse
@@ -153,7 +174,7 @@
 import HeaderSkeletion from '@/components/skeletion/_mobile/ldb/detail/header'
 import HeaderTip from '@/components/reuse/headerTip'
 
-import { addClass, removeClass, transitionEvent, _setTimeout } from 'utils/tool'
+import { addClass, removeClass, transitionEvent, _setTimeout, nextAC } from 'utils/tool'
 export default {
   props: {
     info: {
@@ -201,13 +222,40 @@ export default {
       // receiveBoxShow: false,
       // receiveEndCandy: null,
       progress: {
-        gradient: {
-          direction: 'to right',
-          start: '#1613B0',
-          end: '#7D72F0'
+        ac: {
+          gradient: {
+            direction: 'to right',
+            start: '#FFAA00',
+            end: '#FFE000'
+          }
+        },
+        ap: {
+          gradient: {
+            direction: 'to right',
+            start: '#00D5B8',
+            end: '#00FF99'
+          }
         }
       },
       countUp: {
+        level: {
+          isReady: false,
+          duration: 1500,
+          start: 0,
+          end: 0
+        },
+        cAC: {
+          isReady: false,
+          duration: 1500,
+          start: 0,
+          end: 0
+        },
+        nAC: {
+          isReady: false,
+          duration: 1500,
+          start: 0,
+          end: 0
+        },
         cAP: {
           isReady: false,
           duration: 1500,
@@ -258,26 +306,38 @@ export default {
     candyTasks (val) {
       console.log('----- candyTasks', val, this.allTasks, this.rendered)
       if (this.userInfo.ap !== 0 && this.info.apLeft !== 0 && !val.length && this.allTasks.length && this.rendered) this.getCandyTasks()
-    }
+    },
 
-    // receiveBoxShow (val) {
-    //   const receiveLayer = document.getElementById('header-candy-layer')
-    //   if (val) {
-    //     addClass('show', receiveLayer)
-    //   } else {
-    //     addClass('hide', receiveLayer)
-    //     const func = () => {
-    //       receiveLayer.removeEventListener(animationEndEvent(), func)
-    //       if (this.receiveBoxShow) {
-    //         removeClass('hide', receiveLayer)
-    //         return
-    //       }
-    //       removeClass('hide', receiveLayer)
-    //       removeClass('show', receiveLayer)
-    //     }
-    //     receiveLayer.addEventListener(animationEndEvent(), func)
-    //   }
-    // }
+    /**
+     * 监听建筑当前经验
+     * 根据当前建筑等级，计算升级所需经验
+     * 达到升级条件，改变建筑等级
+     */
+    'info.activeness' (val) {
+      const func = () => {
+        return () => {
+          let _this = this
+          clearTimeout(_this.acTimer)
+          _this.acTimer = null
+          _this.acTimer = setTimeout(() => {
+            const nextAc = nextAC(_this.info.chain.level)
+            if (val >= nextAc) {
+              const info = _this.info
+              info.chain.level += 1
+              _this.$emit('update:info', info)
+              _this.initLevelCU({ end: info.chain.level })
+
+              const nAcEnd = nextAC(info.chain.level) - nextAC(info.chain.level - 1)
+              _this.initNextACCU({ end: nAcEnd })
+            }
+
+            const cAcEnd = this.info.activeness - nextAC(this.info.chain.level - 1)
+            _this.initCurrentACCU({ end: cAcEnd })
+          }, 600)
+        }
+      }
+      func()()
+    }
   },
   components: {
     HeaderSkeletion,
@@ -285,34 +345,11 @@ export default {
   },
   methods: {
 
-    // hideReceiveLayer () {
-    //   const receiveLayer = document.getElementById('header-candy-layer')
-    //   const func = () => {
-    //     receiveLayer.removeEventListener(animationEndEvent(), func)
-    //     if (this.receiveBoxShow) {
-    //       removeClass('hide', receiveLayer)
-    //       return
-    //     }
-    //     removeClass('hide', receiveLayer)
-    //     removeClass('show', receiveLayer)
-    //   }
-    //   receiveLayer.addEventListener(animationEndEvent(), func)
-    // },
-
     afterEnter () {
       this.initCountUp()
 
       const header = document.getElementById('mobile-detail-header')
       if (!header) return
-      // const animateFunc = () => {
-      //   header.removeEventListener(transitionEvent(), animateFunc)
-      //   this.$nextTick(() => {
-      //     this.rendered = true
-      //     this.getCandyTasks()
-      //   })
-      // }
-      // header.addEventListener(transitionEvent(), animateFunc)
-      // this.animate = true
       this.rendered = true
       this.getCandyTasks()
 
@@ -491,8 +528,70 @@ export default {
     },
 
     initCountUp () {
+      this.initLevelCU()
+      this.initCurrentACCU()
+      this.initNextACCU()
       this.initCurrentAPCU()
       this.initNextAPCU()
+    },
+
+    initLevelCU ({ start = this.countUp.level.start, end = this.countUp.level.end || this.info.chain.level } = {}) {
+      if (!this.countUp.level.isReady) {
+        this.$set(this.countUp, 'level', {
+          start: end,
+          end,
+          isReady: true,
+          duration: 1500
+        })
+        return
+      }
+      this.$set(this.countUp.level, 'end', end)
+
+      _setTimeout({ duration: this.countUp.level.duration }, () => {
+        this.$set(this.countUp.level, 'start', end)
+      })
+    },
+
+    initCurrentACCU ({ start = this.countUp.cAC.start, end = this.info.activeness - nextAC(this.info.chain.level - 1) } = {}) {
+      if (!this.countUp.cAC.isReady) {
+        this.$set(this.countUp, 'cAC', {
+          start: end,
+          end,
+          isReady: true,
+          duration: 1500
+        })
+        return
+      }
+      this.$set(this.countUp.cAC, 'end', end)
+
+      _setTimeout({ duration: this.countUp.cAC.duration }, () => {
+        this.$set(this.countUp.cAC, 'start', end)
+      })
+      // const timeOut = setTimeout(() => {
+      //   this.$set(this.countUp.cAC, 'start', end)
+      //   clearTimeout(timeOut)
+      // }, this.countUp.cAC.duration)
+    },
+
+    initNextACCU ({ start = this.countUp.nAC.start, end = nextAC(this.info.chain.level) - nextAC(this.info.chain.level - 1) } = {}) {
+      if (!this.countUp.nAC.isReady) {
+        this.$set(this.countUp, 'nAC', {
+          start: end,
+          end,
+          isReady: true,
+          duration: 1500
+        })
+        return
+      }
+      this.$set(this.countUp.nAC, 'end', end)
+
+      _setTimeout({ duration: this.countUp.nAC.duration }, () => {
+        this.$set(this.countUp.nAC, 'start', end)
+      })
+      // const timeOut = setTimeout(() => {
+      //   this.$set(this.countUp.nAC, 'start', end)
+      //   clearTimeout(timeOut)
+      // }, this.countUp.nAC.duration)
     },
 
     initCurrentAPCU ({ start = this.countUp.cAP.start, end = this.countUp.cAP.end || this.info.apLeft } = {}) {
@@ -644,34 +743,42 @@ export default {
   }
 
   .detail-progress-box {
-    margin-top: 15px;
+    margin-top: 24px;
+    &:first-of-type {
+      margin-top: 18px;
+    }
   }
   .detail-progress-tip {
-    >span {
-      &:first-of-type {
-        font-size: 16px;
-      }
-      &:last-of-type {
-        font-size: 14px;
-      }
-    }
+    font-size: 14px;
+    color: #777;
+    // >span {
+    //   &:first-of-type {
+    //     font-size: 16px;
+    //   }
+    //   &:last-of-type {
+    //     font-size: 14px;
+    //   }
+    // }
+  }
+  .count-now-num {
+    color: #0B2A48;
   }
   .detail-progress-bar {
     margin-top: 10px;
-    height: 27px;
+    height: 22px;
     border-radius: 5px;
     overflow: hidden;
   }
   .user-progress-desc {
     margin-top: 3px;
     font-size: 14px;
-    color: #bbb;
+    color: #999;
     &.recover-at {
       margin-top: 8px;
     }
   }
   .task-status-time {
-    width: 110px;
+    min-width: 105px;
   }
 
   // header-candy-layer
@@ -1077,15 +1184,15 @@ export default {
     margin-top: 10px;
     font-size: 20px;
   }
-  .detail-mobile-desc {
-    margin-top: 20px;
-    max-width: 300px;
-    font-size: 14px;
-  }
+  // .detail-mobile-desc {
+  //   margin-top: 20px;
+  //   max-width: 300px;
+  //   font-size: 14px;
+  // }
   .mobile-home-btn {
-    padding: 10px 15px;
+    padding: 12px 15px;
     // font-size: 18px;
-    font-family: $--font-TTNormsMedium;
+    // font-family: $--font-TTNormsMedium;
   }
   .detail-lord-info {
     margin-left: 10px;

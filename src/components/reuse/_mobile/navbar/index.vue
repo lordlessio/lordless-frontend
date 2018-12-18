@@ -115,11 +115,14 @@ export default {
 
       this.navbarScrollFunc = func
 
+      console.log('navbar ------ scroll')
+
       this.$nextTick(() => document.addEventListener('scroll', this.navbarScrollFunc))
     },
     init () {
       console.log(' ---- navbar init', this.scroll, this.fixed)
       this.$nextTick(() => {
+        console.log('navbar ------ init')
         if (!this.rendered) this.rendered = true
 
         if (this.scroll || this.fixed) {

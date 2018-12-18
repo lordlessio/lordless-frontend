@@ -6,11 +6,11 @@
         <h2 class="detail-mobile-title">Transaction histroy</h2>
         <div v-for="record of list" :key="record._id">
           <a class="d-flex col-flex mobile-records-item" :href="`${ETHERSCANURL}tx/${record.tx.transactionHash}`" target="_blank">
-            <span class="d-flex f-align-center">Price<span class="v-flex text-right text-color-third">{{ record.created_at | timeFormat }}</span></span>
-            <p class="price text-upper">{{ record.market[0].price | weiToEth }} ETH</p>
-            <span>From</span>
+            <span class="d-flex f-align-center">PRICE<span class="v-flex text-right text-color-third">{{ record.created_at | timeFormat }}</span></span>
+            <p class="TTFontBolder price text-upper">{{ record.market[0].price | weiToEth }} ETH</p>
+            <span>FROM</span>
             <p>{{ record.market[0].buyer | splitAddress({ before: 16, end: 8 }) }}</p>
-            <span>To</span>
+            <span>TO</span>
             <p>{{ record.market[0].seller | splitAddress({ before: 16, end: 8 }) }}</p>
           </a>
         </div>
@@ -49,10 +49,10 @@ export default {
 
 <style lang="scss" scoped>
   .detail-mobile-title {
-    margin-top: 30px;
+    margin-top: 28px;
     margin-bottom: 10px;
-    font-size: 20px;
-    color: $--text-third-color;
+    font-size: 24px;
+    color: #0B2A48;
   }
 
   .mobile-records-item {

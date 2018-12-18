@@ -934,8 +934,8 @@ export default {
     }
   }
   .detail-container {
-    @include padding('left', 10px, 1, -2);
-    @include padding('right', 10px, 1, -2);
+    @include padding('left', 0px, 1, -2);
+    @include padding('right', 0px, 1, -2);
   }
 
   /* detail-cnt-right */

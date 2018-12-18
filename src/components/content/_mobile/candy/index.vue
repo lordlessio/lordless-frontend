@@ -118,14 +118,13 @@ export default {
     },
 
     // 获取用户 assets
-    async getAssets () {
+    async getAssets (activated) {
       if (this.rendered) return
       this.loading = true
       const res = await getUserAssets()
       if (res.code === 1000 && res.data) {
         this.reSortAssets({}, res.data)
         this.holdingValue = res.data.totalValue
-        console.log('------ ', res.data.totalValue)
       }
       this.loading = false
     },
@@ -134,8 +133,14 @@ export default {
       this.rendered = false
     }
   },
-  activated () {
-    this.init()
+  async activated () {
+    // this.init()
+    if (this.rendered) return
+    const res = await getUserAssets()
+    if (res.code === 1000 && res.data) {
+      this.reSortAssets({}, res.data)
+      this.holdingValue = res.data.totalValue
+    }
   },
   mounted () {
     this.init()

@@ -46,7 +46,7 @@
         inverse
         :disabled="isClaimed || loading || isEnd"
         :loading="loading"
-        @click="claimPromotion">{{ isEnd ? 'End' : isClaimed ? 'Claimed' : 'Claim now' }}</lordless-btn>
+        @click="claimPromotion">{{ isEnd ? 'Ended' : isClaimed ? 'Claimed' : 'Claim now' }}</lordless-btn>
     </div>
     <lordless-authorize
       ref="authorize"
@@ -132,10 +132,10 @@ export default {
     },
     claimedNum (val) {
       this.$emit('update:claimed', val)
-    },
-    airdropTokens (val) {
-      console.log('----- watch airdropTokens')
     }
+    // airdropTokens (val) {
+    //   console.log('----- watch airdropTokens')
+    // }
   },
   methods: {
     ...mapActions('contract', [
@@ -198,10 +198,10 @@ export default {
       try {
         let isConnected = false
         isConnected = await Airdrop.methods('isCollected', [ account, airdropId ])
-        console.log('isConnected ---- before', isConnected)
+        // console.log('isConnected ---- before', isConnected)
         if (!isConnected) {
           isConnected = !!((await getAirdropUserInfo({ airdropId: this.info._id })).data)
-          console.log('isConnected ---- after', isConnected)
+          // console.log('isConnected ---- after', isConnected)
         }
         this.isClaimed = isConnected
       } catch (err) {
@@ -213,7 +213,7 @@ export default {
 
     async initProgressNumber (tokenAddress = this.tokenAddress, Airdrop = this.Airdrop) {
       const TokenContract = this.airdropTokens[tokenAddress]
-      console.log('airdropTokens', this.airdropTokens)
+      // console.log('airdropTokens', this.airdropTokens)
       if (!TokenContract) {
         this.progressNums = { total: 0, left: 0, dropping: 0, completed: true }
         return
@@ -221,9 +221,9 @@ export default {
       // const _count = await Airdrop.methods('getAirdrop', [ this.info.airdropId ])
       // console.log('_count', _count[1].toNumber())
       const _left = await TokenContract.methods('balanceOf', [ Airdrop.address ])
-      console.log('_left', _left, _left.toNumber())
+      // console.log('_left', _left, _left.toNumber())
       const _dropping = await Airdrop.methods('tokenTotalClaim', [ tokenAddress ])
-      console.log('_dropping', _dropping, _dropping.toNumber())
+      // console.log('_dropping', _dropping, _dropping.toNumber())
 
       const left = parseFloat(weiToEth(_left.toNumber()))
       const dropping = parseFloat(weiToEth(_dropping.toNumber()))
@@ -265,7 +265,7 @@ export default {
         // const gas = await NFTsCrowdsale.payByEth.estimateGas(tokenId)
         const gas = (await Airdrop.estimateGas(claimParams.name, claimParams.values)) || 100000
 
-        console.log('--- gas', gas, gasPrice)
+        // console.log('--- gas', gas, gasPrice)
         // 根据链上信息 claim 糖果
         const params = {
           gas,
@@ -294,7 +294,7 @@ export default {
 
         // 使用自有封装对象
         window.lordlessMethods.buy(params).then(async tx => {
-          console.log('----- claimHandle tx', tx)
+          // console.log('----- claimHandle tx', tx)
           // this.buyPending = true
           this.loading = false
           this.isClaimed = true

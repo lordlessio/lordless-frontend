@@ -31,41 +31,41 @@
               </div>
             </div>
           </div>
+          <div class="user-progress-box user-level-box">
+            <p class="d-flex user-progress-title">
+              <span class="user-progress-name">Level {{ userInfo.level }}</span>
+              <span class="v-flex text-right">{{ userInfo.activeness }}<span class="user-progress-next">/{{ nextActiveness }}</span></span>
+            </p>
+            <div class="user-progress-bar user-level-progress">
+              <lordless-progress
+                shadow
+                :current="userInfo.activeness"
+                :max="nextActiveness"
+                :gradient="levelProgress.gradient"/>
+            </div>
+            <p class="text-left user-progress-desc">You still need to earn {{ nextActiveness - userInfo.activeness }} to level up.</p>
+          </div>
+          <div class="user-progress-box user-ap-box">
+            <p class="d-flex user-progress-title">
+              <span class="user-progress-name">Action point</span>
+              <span class="v-flex text-right">{{ userInfo.ap }}<span class="user-progress-next">/{{ userInfo.maxAp }}</span></span>
+            </p>
+            <div class="user-progress-bar user-ap-progress">
+              <lordless-progress
+                shadow
+                :current="userInfo.ap"
+                :max="userInfo.maxAp"
+                :gradient="apProgress.gradient"/>
+            </div>
+            <p class="d-flex user-progress-desc recover-at" v-if="new Date(overviews.recoverAt) - new Date() + 5000 > 0">
+              <countdown class="task-status-time" @countdownend="countDownHandle" :time="new Date(overviews.recoverAt) - new Date() + 5000" :interval="1000" tag="p">
+                <!-- <template slot-scope="props">{{ parseInt(props.days) || props.hours || props.minutes || props.seconds }}{{ parseInt(props.days) ? 'd' : (props.hours ? 'h' : (props.minutes ? 'm' : props.seconds ? 's' : '')) }}</template> -->
+                <template slot-scope="props">{{ props | formatDue(3) }}</template>
+              </countdown>
+              to refill.
+            </p>
+          </div>
         </div>
-      </div>
-      <div class="mobile-user-card user-progress-box user-level-box">
-        <p class="d-flex user-progress-title">
-          <span class="user-progress-name">Level {{ userInfo.level }}</span>
-          <span class="v-flex text-right">{{ userInfo.activeness }}<span class="user-progress-next">/{{ nextActiveness }}</span></span>
-        </p>
-        <div class="user-progress-bar user-level-progress">
-          <lordless-progress
-            shadow
-            :current="userInfo.activeness"
-            :max="nextActiveness"
-            :gradient="levelProgress.gradient"/>
-        </div>
-        <p class="user-progress-desc">You still need to earn {{ nextActiveness - userInfo.activeness }} to level up.</p>
-      </div>
-      <div class="mobile-user-card user-progress-box user-ap-box">
-        <p class="d-flex user-progress-title">
-          <span class="user-progress-name">Action point</span>
-          <span class="v-flex text-right">{{ userInfo.ap }}<span class="user-progress-next">/{{ userInfo.maxAp }}</span></span>
-        </p>
-        <div class="user-progress-bar user-ap-progress">
-          <lordless-progress
-            shadow
-            :current="userInfo.ap"
-            :max="userInfo.maxAp"
-            :gradient="apProgress.gradient"/>
-        </div>
-        <p class="d-flex user-progress-desc recover-at" v-if="new Date(overviews.recoverAt) - new Date() + 5000 > 0">
-          <countdown class="task-status-time" @countdownend="countDownHandle" :time="new Date(overviews.recoverAt) - new Date() + 5000" :interval="1000" tag="p">
-            <!-- <template slot-scope="props">{{ parseInt(props.days) || props.hours || props.minutes || props.seconds }}{{ parseInt(props.days) ? 'd' : (props.hours ? 'h' : (props.minutes ? 'm' : props.seconds ? 's' : '')) }}</template> -->
-            <template slot-scope="props">{{ props | formatDue(3) }}</template>
-          </countdown>
-          to refill.
-        </p>
       </div>
       <div class="mobile-user-card user-home-box">
         <div class="d-flex f-align-center user-home-container">
@@ -195,15 +195,15 @@ export default {
       levelProgress: {
         gradient: {
           direction: 'to right',
-          start: '#1613B0',
-          end: '#7D72F0'
+          start: '#FFAA00',
+          end: '#FFE000'
         }
       },
       apProgress: {
         gradient: {
           direction: 'to right',
-          start: '#9F041B',
-          end: '#F5515F'
+          start: '#00D5B8',
+          end: '#00FF99'
         }
       }
     }
@@ -305,6 +305,7 @@ export default {
 
   .mobile-user-header {
     padding-top: 0;
+    padding-bottom: 0;
   }
   .mobile-user-content {
     transform: translateY(-36px);
@@ -363,7 +364,7 @@ export default {
    *  user-progress-box -- begion
    */
   .user-progress-box {
-
+    margin-top: 24px;
   }
   .user-progress-title {
     font-size: 14px;
@@ -378,7 +379,7 @@ export default {
   }
   .user-progress-bar {
     margin-top: 8px;
-    height: 30px;
+    height: 22px;
     border-radius: 5px;
     overflow: hidden;
   }

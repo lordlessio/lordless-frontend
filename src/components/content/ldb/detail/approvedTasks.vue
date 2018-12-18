@@ -37,12 +37,12 @@
                   <figcaption v-if="approvedTask"><link-symbol :link="`/task/${approvedTask._id}`">{{ approvedTask.ldbTaskType.name }}</link-symbol></figcaption>
                   <div class="d-flex f-align-center approved-task-rewards" v-if="approvedTask">
                     <div class="v-flex">
-                      <p>LORD</p>
+                      <p>Tavernkeep</p>
                       <h3>+{{ approvedTask.lord.reward.count | formatDecimal }} <span class="text-upper">{{ approvedTask.reward.candy.symbol }}</span></h3>
                       <p>≈$ {{ approvedTask.lord.reward.count / approvedTask.reward.candy.USD2TokenCount | formatDecimal }}</p>
                     </div>
                     <div class="v-flex">
-                      <p>Swordsman</p>
+                      <p>Bounty hunter</p>
                       <h3>+{{ approvedTask.executor.reward.count | formatDecimal }} <span class="text-upper">{{ approvedTask.reward.candy.symbol }}</span></h3>
                       <p>≈$ {{ approvedTask.executor.reward.count / approvedTask.reward.candy.USD2TokenCount | formatDecimal }}</p>
                     </div>
@@ -177,7 +177,7 @@ export default {
   .approved-card-tip {
     position: absolute;
     left: 0;
-    top: 25px;
+    top: 16px;
     width: 100%;
     text-align: center;
     font-size: 16px;
@@ -185,13 +185,13 @@ export default {
     z-index: 2;
   }
   .approved-item-container {
-    min-height: 300px;
+    // min-height: 300px;
     opacity: 1;
     transition: opacity .4s cubic-bezier(0.4, 0, 0.2, 1);
     &.animate {
       opacity: 0;
       &::before {
-        transform: skewY(15deg) translateY(-50%);
+        transform: skewY(14deg) translateY(-50%);
       }
       >figcaption {
         transform: translateY(-200%);
@@ -217,7 +217,7 @@ export default {
   }
   .approved-item-container {
     position: relative;
-    padding: 60px 15px 40px;
+    padding: 63px 15px 48px;
     >figcaption {
       margin-top: 25px;
       margin-bottom: 25px;
@@ -230,12 +230,12 @@ export default {
       content: '';
       position: absolute;
       left: 0;
-      top: -20%;
+      top: -16%;
       width: 100%;
       height: 50%;
       // background-image: linear-gradient(45deg, #16222A, #3A6073);
       background-color: $--text-blue-color;
-      transform: skewY(15deg) translateY(0);
+      transform: skewY(14deg) translateY(0);
       transition: transform .4s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: -1;
     }
@@ -244,9 +244,9 @@ export default {
     >span {
       position: relative;
       left: 0;
-      padding: 24px;
-      width: 96px;
-      height: 96px;
+      padding: 22px;
+      width: 88px;
+      height: 88px;
       fill: $--text-blue-color;
       border-radius: 100%;
       background-color: #fff;
@@ -262,14 +262,16 @@ export default {
   .approved-task-rewards {
     transform: translateY(0);
     transition: .4s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #0B2A48;
     >div {
       >h3 {
-        margin-top: 10px;
-        color: #777;
+        margin-top: 6px;
+        margin-bottom: 6px;
+        font-size: 20px;
       }
       >p {
         &:nth-of-type(1) {
-          font-size: 18px;
+          font-size: 16px;
           color: #999;
         }
       }

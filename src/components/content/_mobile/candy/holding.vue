@@ -1,6 +1,6 @@
 <template>
   <div class="candies-holding-parent" ref="candies-holding-parent">
-    <div ref="candies-holding-box" class="relative candies-holding-box">
+    <div ref="candies-holding-box" id="candies-holding-box" class="relative candies-holding-box">
       <div class="d-flex col-flex f-auto-center candies-holding-container">
         <p class="candies-holding-title">Total holding</p>
         <p class="TTFontBolder candies-holding-value-box">
@@ -34,9 +34,9 @@ export default {
   data: () => {
     return {
       rendered: false,
+      scrollFunc: null,
       parentNode: null,
       scrollNode: null,
-      scrollFunc: null,
       withdrawTip: false
     }
   },
@@ -50,8 +50,8 @@ export default {
     }
   },
   methods: {
-    async scrollListener () {
-      this.scrollFunc && await this.destory()
+    scrollListener () {
+      this.scrollFunc && this.destroyScroll()
       let navbarInverse = false
       const pdom = this.$refs['candies-holding-parent']
       const sdom = this.$refs['candies-holding-box']
@@ -73,6 +73,8 @@ export default {
         }
       }
 
+      func()
+
       this.scrollFunc = func
       this.parentNode = pdom
       this.scrollNode = sdom
@@ -80,31 +82,29 @@ export default {
       this.$nextTick(() => document.addEventListener('scroll', this.scrollFunc))
     },
     init () {
-      this.$nextTick(() => {
-        if (!this.rendered) this.rendered = true
-        this.scrollListener()
-      })
+      if (!this.rendered) this.rendered = true
+      this.scrollListener()
+    },
+    destroyScroll () {
+      removeClass('is-fixed', this.$refs['candies-holding-box'])
+      document.removeEventListener('scroll', this.scrollFunc)
+      this.scrollFunc = null
     },
     destory () {
-      return new Promise(resolve => {
-        const pdom = this.parentNode || this.$refs['candies-holding-parent']
-        const sdom = this.scrollNode || this.$refs['candies-holding-box']
-        if (pdom && !pdom.firstChild) {
-          pdom.appendChild(sdom)
-        }
-
-        this.scrollFunc && document.removeEventListener('scroll', this.scrollFunc)
-        this.scrollFunc = null
-
-        return resolve()
-      })
+      this.destroyScroll()
+      // this.$el && this.$el.parentNode && this.$el.parentNode.removeChild(this.$el)
+      const pdom = this.parentNode || this.$refs['candies-holding-parent']
+      const sdom = this.scrollNode || this.$refs['candies-holding-box']
+      if (pdom && !pdom.firstChild) {
+        pdom.appendChild(sdom)
+      }
     }
   },
-  async beforeDestroy () {
-    await this.destory()
+  beforeDestroy () {
+    this.$nextTick(() => this.destory())
   },
-  async deactivated () {
-    await this.destory()
+  deactivated () {
+    this.$nextTick(() => this.destory())
   },
   activated () {
     if (!this.rendered) return

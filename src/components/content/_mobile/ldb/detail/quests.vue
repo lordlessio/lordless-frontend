@@ -94,10 +94,10 @@ export default {
 
 <style lang="scss" scoped>
   .detail-mobile-title {
-    margin-top: 20px;
+    margin-top: 28px;
     margin-bottom: 10px;
-    font-size: 20px;
-    color: $--text-third-color;
+    font-size: 24px;
+    color: #0B2A48;
   }
   .quests-now-item {
     position: relative;

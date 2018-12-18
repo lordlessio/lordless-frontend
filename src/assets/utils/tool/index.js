@@ -466,9 +466,15 @@ export const formatDue = (obj, len = 2, type = 'single') => {
 /**
  * ldb and user Ac
  */
-export const nextAC = level => Math.ceil(Math.pow(level * 108, 2) / Math.pow(108, 2) * 10)
+export const nextAC = level => {
+  level = level > 0 ? level : 0
+  return Math.ceil(Math.pow(level * 108, 2) / Math.pow(108, 2) * 10)
+}
 
-export const remainingAC = (level, ac) => Math.ceil(Math.pow(level * 108, 2) / Math.pow(108, 2) * 10) - ac
+export const remainingAC = (level, ac) => {
+  level = level > 0 ? level : 0
+  return Math.ceil(Math.pow(level * 108, 2) / Math.pow(108, 2) * 10) - ac
+}
 
 export const formatLdbType = (type) => {
   const types = [

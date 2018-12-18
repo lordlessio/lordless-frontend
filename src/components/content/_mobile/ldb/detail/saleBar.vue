@@ -1,9 +1,9 @@
 <template>
   <div v-if="showBar" class="mobile-sale-bar">
     <div class="d-flex f-align-center sale-bar-container">
-      <span class="v-flex text-upper sale-bar-price">{{ info.chain.auction.price | weiToEth }} ETH</span>
-      <div class="text-nowrap sale-bar-time">
-        <div v-if="info.chain.auction.isOnPreAuction">
+      <!-- <span class="v-flex text-upper sale-bar-price">{{ info.chain.auction.price | weiToEth }} ETH</span> -->
+      <!-- <div class="d-flex text-nowrap sale-bar-time"> -->
+        <!-- <div v-if="info.chain.auction.isOnPreAuction">
           <p class="text-right line-height-1 deal-sale-svg presale">
             <svg>
               <use xlink:href="#icon-presale"/>
@@ -27,47 +27,83 @@
               </div>
             </template>
           </countdown>
-        </div>
-        <div v-if="info.chain.auction.isOnAuction">
+        </div> -->
+        <!-- <div class="v-flex d-flex col-flex mobile-sale-left" v-if="info.chain.auction.isOnAuction">
           <p class="text-right line-height-1 deal-sale-svg">
             <svg>
               <use xlink:href="#icon-sale"/>
             </svg>
           </p>
+          <p class="TTFontBolder tavern-sale-price">{{ info.chain.auction.price | weiToEth }} ETH</p>
           <countdown v-if="new Date(info.chain.auction.endAt) - new Date() >= 0" class="deal-ldb-endtime" :time="new Date(info.chain.auction.endAt) - new Date()" :interval="3000" tag="p">
             <template slot-scope="props">Expire in {{ props | formatDue(1, 'plural') }}</template>
           </countdown>
           <p v-else class="deal-ldb-endtime color-red">Over Due</p>
-        </div>
+        </div> -->
+      <!-- </div> -->
+      <div class="v-flex d-flex col-flex mobile-sale-left" v-if="info.chain.auction.isOnAuction">
+        <p class="TTFontBolder tavern-sale-price">{{ info.chain.auction.price | weiToEth }} ETH</p>
+        <countdown v-if="new Date(info.chain.auction.endAt) - new Date() >= 0" class="deal-ldb-endtime" :time="new Date(info.chain.auction.endAt) - new Date()" :interval="3000" tag="p">
+          <template slot-scope="props">Expire in {{ props | formatDue(1, 'plural') }}</template>
+        </countdown>
+        <p v-else class="deal-ldb-endtime color-red">Over Due</p>
+      </div>
+      <div class="v-flex d-flex col-flex mobile-sale-left" v-else-if="info.chain.auction.isOnPreAuction">
+        <p class="TTFontBolder tavern-sale-price">{{ info.chain.auction.price | weiToEth }} ETH</p>
+        <countdown @countdownprogress="countdownprogress" class="deal-ldb-endtime" :time="new Date(info.chain.auction.startAt) - new Date()" :interval="1000" tag="p">
+          <template slot-scope="props">{{ props.totalHours }} h : {{ props.minutes }} m : {{ props.seconds }} s</template>
+        </countdown>
       </div>
       <div class="text-center tavern-deal-btns">
-        <lordless-btn
+        <!-- <lordless-btn
           v-if="showSale"
           class="tavern-deal-btn"
-          theme="blue"
-          inverse
+          theme="blue-linear"
           :disabled="pendings.isSelling"
           @click="$emit('sale')">{{ pendings.isSelling ? 'Saling' : 'Sale' }}</lordless-btn>
 
         <lordless-btn
           v-if="showCancelSale"
           class="tavern-deal-btn"
-          theme="blue"
-          inverse
+          theme="blue-linear"
           :disabled="pendings.isCanceling"
           @click="$emit('cancel')">{{ pendings.isCanceling ? 'Cancel Saling' : 'Cancel Sale'}}</lordless-btn>
 
         <lordless-btn
           v-if="showBuy"
           class="tavern-deal-btn"
-          theme="blue"
-          inverse
+          theme="blue-linear"
           :disabled="pendings.isBuying || info.chain.auction.isOnPreAuction"
           @click="$emit('buy')">
           <span v-if="info.chain.auction.isOnPreAuction">Buy</span>
           <span v-else-if="showSign">Sign to Buy</span>
           <span v-else>{{ pendings.isBuying ? 'Buying' : 'Buy now' }}</span>
+        </lordless-btn> -->
+        <lordless-btn
+          v-if="showSale"
+          class="tavern-deal-btn"
+          theme="blue-linear"
+          shadow
+          :disabled="pendings.isSelling"
+          @click="$emit('sale')">{{ pendings.isSelling ? 'Saling' : 'Sale' }}</lordless-btn>
+
+        <lordless-btn
+          v-else-if="showBuy"
+          class="tavern-deal-btn"
+          theme="blue-linear"
+          shadow
+          :disabled="pendings.isBuying || info.chain.auction.isOnPreAuction"
+          @click="$emit('buy')">
+          <span>{{ info.chain.auction.isOnPreAuction ? 'Stay tuned' : pendings.isBuying ? 'Buying' : 'Be a tavernkeep' }}</span>
         </lordless-btn>
+
+        <lordless-btn
+          v-if="showCancelSale"
+          class="tavern-deal-btn"
+          theme="blue-linear"
+          shadow
+          :disabled="pendings.isCanceling"
+          @click="$emit('cancel')">{{ pendings.isCanceling ? 'Cancel Saling' : 'Cancel Sale'}}</lordless-btn>
       </div>
     </div>
   </div>
@@ -158,6 +194,7 @@ export default {
 
 <style lang="scss" scoped>
   .mobile-sale-bar {
+    // padding: 0 18px;
     position: fixed;
     // position: absolute;
     bottom: 0;
@@ -168,10 +205,17 @@ export default {
     overflow: hidden;
     z-index: 2199;
   }
-  .sale-bar-price {
+  // .sale-bar-price {
     // padding: 0 20px;
-    padding-left: 20px;
-    font-family: $--font-TTNormsBold;
+    // padding-left: 20px;
+    // font-family: $--font-TTNormsBold;
+    // font-size: 20px;
+    // color: $--text-blue-color;
+  // }
+  .mobile-sale-left {
+    padding-left: 18px;
+  }
+  .tavern-sale-price {
     font-size: 20px;
     color: $--text-blue-color;
   }
@@ -180,15 +224,18 @@ export default {
   // }
   .deal-ldb-endtime {
     font-size: 14px;
-    color: $--text-third-color;
+    color: #777;
+    // color: $--text-third-color;
     &.presale {
       color: $--text-main-color;
     }
   }
   .tavern-deal-btns {
+    width: 168px;
     margin-left: 15px;
     >button {
       padding: 15px 18px;
+      width: 100%;
       height: 100%;
       border-radius: 0;
     }
