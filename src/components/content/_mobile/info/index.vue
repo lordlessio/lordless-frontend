@@ -34,16 +34,16 @@
           <div class="user-progress-box user-level-box">
             <p class="d-flex user-progress-title">
               <span class="user-progress-name">Level {{ userInfo.level }}</span>
-              <span class="v-flex text-right">{{ userInfo.activeness }}<span class="user-progress-next">/{{ nextActiveness }}</span></span>
+              <span class="v-flex text-right">{{ currentActiveness }}<span class="user-progress-next">/{{ nextActiveness }}</span></span>
             </p>
             <div class="user-progress-bar user-level-progress">
               <lordless-progress
                 shadow
-                :current="userInfo.activeness"
+                :current="currentActiveness"
                 :max="nextActiveness"
                 :gradient="levelProgress.gradient"/>
             </div>
-            <p class="text-left user-progress-desc">You still need to earn {{ nextActiveness - userInfo.activeness }} to level up.</p>
+            <p class="text-left user-progress-desc">You still need to earn {{ nextActiveness - currentActiveness }} to level up.</p>
           </div>
           <div class="user-progress-box user-ap-box">
             <p class="d-flex user-progress-title">
@@ -217,9 +217,13 @@ export default {
       'candyPrice'
     ]),
 
+    currentActiveness () {
+      return this.userInfo.activeness - nextAC(this.userInfo.level - 1)
+    },
+
     // 升至下个等级所需经验
     nextActiveness () {
-      return nextAC(this.userInfo.level)
+      return nextAC(this.userInfo.level) - nextAC(this.userInfo.level - 1)
     },
 
     ethBalance () {

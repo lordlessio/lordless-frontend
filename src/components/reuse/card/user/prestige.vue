@@ -18,7 +18,7 @@
           <div class="d-flex f-align-end exp-progress-top">
             <span class="v-flex text-left">LEVEL {{ user.level }}</span>
             <span class="exp-text-progress">
-              <span class="exp-current">{{ user.activeness }}</span>
+              <span class="exp-current">{{ currentActiveness }}</span>
               <span>&nbsp;/&nbsp;</span>
               <span>{{ nextActiveness }}</span>
             </span>
@@ -26,12 +26,12 @@
           <div class="exp-progress">
             <lordless-progress
               shadow
-              :current="user.activeness"
+              :current="currentActiveness"
               :max="nextActiveness"
               :gradient="progress.gradient">
             </lordless-progress>
           </div>
-          <p class="exp-tip-text">You still need to earn {{ nextActiveness - user.activeness }} to level up.</p>
+          <p class="exp-tip-text">You still need to earn {{ nextActiveness - currentActiveness }} to level up.</p>
         </div>
         <div class="exp-recived-box sm-hidden">
           <span
@@ -81,8 +81,11 @@ export default {
     }
   },
   computed: {
+    currentActiveness () {
+      return this.user.activeness - nextAC(this.user.level - 1)
+    },
     nextActiveness () {
-      return nextAC(this.user.level)
+      return nextAC(this.user.level) - nextAC(this.user.level - 1)
     }
   }
 }
