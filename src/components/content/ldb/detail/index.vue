@@ -634,7 +634,7 @@ export default {
         console.log('sell --- authorize', authorize)
 
         const tokenId = ldbInfo.chain.tokenId
-        if (!authorize || !tokenId) return
+        if (!authorize || (!tokenId && tokenId !== 0)) return
 
         this.sellModel = true
       } catch (err) {
@@ -649,7 +649,7 @@ export default {
       try {
         const authorize = await this.$refs.authorize.checkoutAuthorize({ guide: true, crowdsale: true })
         const tokenId = ldbInfo.chain.tokenId
-        if (!authorize || !tokenId) return
+        if (!authorize || (!tokenId && tokenId !== 0)) return
 
         this.metamaskChoose = true
 
