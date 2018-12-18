@@ -312,9 +312,13 @@ export default {
               info.chain.level += 1
               _this.$emit('update:info', info)
               _this.initLevelCU({ end: info.chain.level })
-              _this.initNextACCU({ end: nextAC(info.chain.level) })
+
+              const nAcEnd = nextAC(info.chain.level) - nextAC(info.chain.level - 1)
+              _this.initNextACCU({ end: nAcEnd })
             }
-            _this.initCurrentACCU({ end: val })
+
+            const cAcEnd = this.info.activeness - nextAC(this.info.chain.level - 1)
+            _this.initCurrentACCU({ end: cAcEnd })
           }, 600)
         }
       }
@@ -595,7 +599,7 @@ export default {
       this.initCurrentAPCU()
       this.initNextAPCU()
     },
-    initLevelCU ({ start = this.countUp.level.start, end = this.countUp.level.end || this.info.chain.level } = {}) {
+    initLevelCU ({ start = this.countUp.level.start, end = this.info.chain.level } = {}) {
       if (!this.countUp.level.isReady) {
         this.$set(this.countUp, 'level', {
           start: end,
@@ -618,9 +622,6 @@ export default {
     },
 
     initCurrentACCU ({ start = this.countUp.cAC.start, end = this.info.activeness - nextAC(this.info.chain.level - 1) } = {}) {
-      // const activeness = this.info.activeness
-      const _end = nextAC(this.info.chain.level - 1)
-      console.log('----- _end', _end, nextAC(0), nextAC(-1))
       if (!this.countUp.cAC.isReady) {
         this.$set(this.countUp, 'cAC', {
           start: end,

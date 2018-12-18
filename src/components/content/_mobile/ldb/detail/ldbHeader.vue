@@ -535,7 +535,7 @@ export default {
       this.initNextAPCU()
     },
 
-    initLevelCU ({ start = this.countUp.level.start, end = this.countUp.level.end || this.info.chain.level } = {}) {
+    initLevelCU ({ start = this.countUp.level.start, end = this.info.chain.level } = {}) {
       if (!this.countUp.level.isReady) {
         this.$set(this.countUp, 'level', {
           start: end,
