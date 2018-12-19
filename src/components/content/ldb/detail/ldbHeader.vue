@@ -149,6 +149,7 @@ import {
   animationIterationEvent, _setTimeout, nextAC } from 'utils/tool'
 import { receiveAnimate } from 'utils/tool/animate'
 export default {
+  name: 'tavern-detail-header',
   props: {
     info: {
       type: Object,

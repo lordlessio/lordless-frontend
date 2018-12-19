@@ -81,6 +81,7 @@ import TaskNowSkeletion from '@/components/skeletion/ldb/detail/taskNow'
 import LdCarousel from '@/components/stories/carousel'
 import LdSliderBar from '@/components/stories/sliderBar'
 export default {
+  name: 'tavern-detail-tasks-now',
   props: {
     candies: {
       type: Array,

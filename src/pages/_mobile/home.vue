@@ -27,7 +27,9 @@
               class="home-info-item home-promotions-item"
               @click.stop="$router.push(`/project/${item.project._id}`)">
               <figure>
-                <figcaption :style="`background-image: url(${ossOrigin + item.poster || item.banners[0]})`"></figcaption>
+                <figcaption>
+                  <img :alt="`promotions_${item.project.symbol}`" class="full-width" :src="ossOrigin + item.banners[0]"/>
+                </figcaption>
                 <promotion-claim
                   class="promotion-item-info"
                   :info="item"/>
@@ -35,7 +37,7 @@
             </li>
           </ul>
         </div>
-        <div class="mobile-home-candies">
+        <!-- <div class="mobile-home-candies">
           <h2 class="mobile-home-title">Candies</h2>
           <ul class="mobile-home-ul home-candies-ul">
             <li
@@ -51,12 +53,12 @@
                 <p class="v-flex">{{ candy.coinmarketcap.name || candy.symbol }}<span class="text-upper">&nbsp;({{ candy.symbol }})</span></p>
               </div>
               <div class="d-flex f-align-center candies-claimed-box">
-                <span class="TTFontBolder candies-claimed-num">{{ candy.count | formatNumber | formatDecimal({ len: 2 }) }}<span>&nbsp;($ {{ candy.count / candy.USD2TokenCount | formatNumber | formatDecimal({ len: 2 }) }})</span>&nbsp;&nbsp;</span>
+                <span class="TTFontBolder candies-claimed-num">{{ (candy.count + (promotionClaimeds[candy.symbol.toLocaleLowerCase()] || 0)) | formatNumber | formatDecimal({ len: 2 }) }}<span>&nbsp;($ {{ (candy.count + (promotionClaimeds[candy.symbol.toLocaleLowerCase()] || 0)) / candy.USD2TokenCount | formatNumber | formatDecimal({ len: 2 }) }})</span>&nbsp;&nbsp;</span>
                 has been claimed
               </div>
             </li>
           </ul>
-        </div>
+        </div> -->
       </div>
     </transition>
   </section>
@@ -69,21 +71,22 @@ import HomeSkeletion from '@/components/skeletion/_mobile/home'
 
 import { getAirdrops } from 'api'
 
-import { loopCandyClamied } from 'utils/loop'
+// import { loopCandyClamied } from 'utils/loop'
 
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 export default {
   name: 'mobile-home-page',
   data: () => {
     return {
       loading: true,
       promotions: []
+      // promotionClaimeds: {}
     }
   },
   computed: {
-    ...mapState('candy', [
-      'candyClaimed'
-    ]),
+    // ...mapState('candy', [
+    //   'candyClaimed'
+    // ]),
     ossOrigin () {
       return process.env.LDBICON_ORIGIN
     }
@@ -110,7 +113,7 @@ export default {
   },
   mounted () {
     this.getAirdropsHandle()
-    loopCandyClamied()
+    // loopCandyClamied()
   }
 }
 </script>
@@ -177,8 +180,8 @@ export default {
     }
     figcaption {
       width: 100%;
-      height: 340px;
-      @include bg-size();
+      // height: 128px;
+      // @include bg-size();
     }
   }
 

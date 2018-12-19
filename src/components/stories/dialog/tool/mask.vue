@@ -4,7 +4,8 @@
     @after-leave="afterLeave">
     <div
       v-if="visible"
-      class="alone-layer ld-ldb-dialog"
+      class="alone-layer ld-dialog-mask"
+      :class="{ 'is-fade': isFade }"
       @click="$emit('update:visible', false)"
       @touchmove.prevent>
     </div>
@@ -21,6 +22,10 @@ export default {
     appendToBody: {
       type: Boolean,
       default: true
+    },
+    isFade: {
+      type: Boolean,
+      default: false
     },
 
     // popstate 改变状态
@@ -56,7 +61,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .ld-ldb-dialog {
+  .ld-dialog-mask {
     position: fixed;
     // position: absolute;
     top: 0;
@@ -65,5 +70,9 @@ export default {
     height: 100%;
     background-color: rgba(0, 0, 0, .5);
     z-index: 2000;
+    &.is-fade {
+      background-color: rgba(255, 255, 255, 0.5);
+      z-index: 3000;
+    }
   }
 </style>

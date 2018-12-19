@@ -67,8 +67,9 @@
           </div>
         </div>
       </div>
-      <div class="mobile-user-card user-home-box">
-        <div class="d-flex f-align-center user-home-container">
+      <div class="card-margin user-home-box">
+        <h3 class="card-title">Home</h3>
+        <div class="d-flex f-align-center mobile-user-card user-home-container">
           <div
             v-if="userHome && userHome._id"
             class="d-flex full-width user-has-home"
@@ -77,7 +78,9 @@
               <lordless-tavern-poster
                 :src="userHome.ldb.ldbIcon.source.preview"
                 :popularity="userHome.ldb.chain.popularity"
-                shadow/>
+                shadow
+                showPopularity
+                isSmall/>
             </div>
             <div class="v-flex d-flex col-flex f-justify-between user-home-info">
               <p class="d-flex f-align-center user-home-title">
@@ -115,6 +118,37 @@
           </div>
         </div>
       </div>
+      <div v-if="ownerTaverns.total" class="card-margin user-taverns-box">
+        <h3 class="card-title">My taverns</h3>
+        <ul class="d-flex col-flex">
+          <li v-for="tavern of ownerTaverns.list" :key="tavern.id"
+            class="d-flex full-width mobile-user-card owner-taverns-item"
+            @click.stop="$emit('home', tavern)">
+            <div class="user-home-poster">
+              <lordless-tavern-poster
+                :src="tavern.ldbIcon.source.preview"
+                :popularity="tavern.chain.popularity"
+                shadow
+                showPopularity
+                isSmall/>
+            </div>
+            <div class="v-flex d-flex col-flex f-justify-between user-home-info">
+              <p class="d-flex f-align-center user-home-title">
+                <span class="text-nowrap user-home-name">{{ tavern.name.zh }}</span>
+              </p>
+              <div>
+                <p class="user-home-level">Level {{ tavern.chain.level }}</p>
+                <p class="user-home-leftap">{{ tavern.apLeft }} AP remaining</p>
+              </div>
+            </div>
+            <div class="d-flex f-auto-center user-home-jump">
+              <svg>
+                <use xlink:href="#icon-arrow-circle"/>
+              </svg>
+            </div>
+          </li>
+        </ul>
+      </div>
       <!-- <div class="mobile-user-card user-childrens-box">
         <div class="user-childrens-container">
           <ul>
@@ -139,7 +173,7 @@
           </ul>
         </div>
       </div> -->
-      <div class="d-flex f-align-center mobile-user-card user-logout-box" @click.stop="$emit('logout')">
+      <div class="d-flex f-align-center card-margin mobile-user-card user-logout-box" @click.stop="$emit('logout')">
         <div class="v-flex d-flex f-align-center user-children-cnt">
           <span class="inline-block user-children-icon logout">
             <svg>
@@ -159,13 +193,15 @@
 </template>
 
 <script>
-import { getUserOverview } from 'api'
+import { getUserOverview, getChainLdbs } from 'api'
 import { nextAC } from 'utils/tool'
 
 import { actionTypes } from '@/store/types'
 import { mapState, mapActions } from 'vuex'
+import { publicMixins } from '@/mixins'
 export default {
   name: 'mobile-user-content',
+  mixins: [publicMixins],
   data: () => {
     return {
       pathChildrens: [
@@ -190,8 +226,14 @@ export default {
         //   icon: '#icon-authorization_selected'
         // }
       ],
+
       loading: true,
       overviews: {},
+
+      tavernsLoading: true,
+      ownerTaverns: {
+        list: []
+      },
       levelProgress: {
         gradient: {
           direction: 'to right',
@@ -249,17 +291,36 @@ export default {
 
     initInfo () {
       this.getUserMessage()
+      this.getUserTaverns()
       this[actionTypes.USER_SET_USER_HOME]()
     },
 
     // 获取用户 overview 信息
     async getUserMessage () {
       this.loading = true
-      const res = await getUserOverview({ single: true })
-      if (res.code === 1000) {
-        this.overviews = Object.assign({}, this.overviews, res.data)
+      try {
+        const res = await getUserOverview({ single: true })
+        if (res.code === 1000) {
+          this.overviews = Object.assign({}, this.overviews, res.data)
+        }
+      } catch (err) {
+        this.loading = false
       }
       this.loading = false
+    },
+
+    // 获取用户自己的 tavern
+    async getUserTaverns ({ pn = 1, ps = 20, lord = this.account } = {}) {
+      this.tavernsLoading = true
+      try {
+        const res = await getChainLdbs({ lord })
+        if (res.code === 1000) {
+          this.ownerTaverns = Object.assign({}, this.ownerTaverns, res.data)
+        }
+      } catch (err) {
+        this.tavernsLoading = false
+      }
+      this.tavernsLoading = false
     }
   },
   activated () {
@@ -298,9 +359,15 @@ export default {
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 0 10px 3px rgba(200, 200, 200, .5);
-    &:not(:first-of-type) {
-      margin-top: 16px;
-    }
+    box-sizing: border-box;
+  }
+  .card-margin {
+    margin-top: 16px;
+  }
+  .card-title {
+    margin-bottom: 6px;
+    font-size: 18px;
+    color: #0B2A48;
   }
 
   /**
@@ -464,6 +531,21 @@ export default {
 
   /**
    *  user-home-box  -- end
+   */
+
+  /**
+   *  user-taverns-box  -- end
+   */
+  .user-taverns-box {
+
+  }
+  .owner-taverns-item {
+    &:not(:first-of-type) {
+      margin-top: 10px;
+    }
+  }
+  /**
+   *  user-taverns-box  -- end
    */
 
   /**

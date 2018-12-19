@@ -9,9 +9,9 @@ const port = argv.port || 8080
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   port,
-  // BACKEND_SERVER: '"//localhost:8080/lordless"',
-  BACKEND_SERVER: `"//ropsten.lordless.games"`,
-  // BACKEND_SERVER: `"//game.lordless.io"`,
+  // BACKEND_SERVER: '"//10.229.3.92:8080/lordless"',
+  // BACKEND_SERVER: `"//ropsten.lordless.games"`,
+  BACKEND_SERVER: `"//game.lordless.io"`,
   ETHERSCANURL: '"https://ropsten.etherscan.io/"',
   APPROVED_NETWORK_ID: 5777,
   contract,

@@ -1,5 +1,5 @@
 <template>
-  <section :ref="container" id="mobile-nav-bar" class="TTFontBolder text-center mobile-nav-bar" :class="[scrollDefaultTheme, { 'is-static': !fixed, 'is-active': fixed && !scroll, 'transparent': transparent }]">
+  <section :ref="container" id="mobile-nav-bar" class="TTFontBolder text-center mobile-nav-bar" :class="[scrollDefaultTheme, { 'is-static': !fixed, 'is-active': fixed && !scroll, 'transparent': transparent, 'blur': blurs[0] }]">
     <div class="relative" @click.stop="withdrawTip = false">
       <p class="TTFontBolder nav-history-icon line-height-0" v-if="history" @click.stop="$emit('history')">
         <svg>
@@ -31,6 +31,8 @@
 <script>
 import { addClass, removeClass } from 'utils/tool'
 import { userMixins } from '@/mixins'
+
+import { mapState } from 'vuex'
 export default {
   name: 'mobile-nav-bar',
   mixins: [userMixins],
@@ -84,6 +86,11 @@ export default {
       navbarScrollFunc: null
       // withdrawTip: false
     }
+  },
+  computed: {
+    ...mapState('layout', [
+      'blurs'
+    ])
   },
   // watch: {
   //   withdrawTip (val) {

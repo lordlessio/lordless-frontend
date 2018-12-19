@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex user-tasks-box">
     <div class="d-flex v-flex col-flex user-candy-container">
-      <h1 class="text-cap owner-children-title">Tasks</h1>
+      <h1 class="text-cap owner-children-title">Quests</h1>
       <div
         class="v-flex relative onwer-children-cnt">
         <el-tabs

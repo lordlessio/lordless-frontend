@@ -64,7 +64,7 @@ import Telegram from './telegram'
 import Crowdsale from './crowdsale'
 import Sign from './sign'
 
-import { addClass, removeClass, isWechat } from 'utils/tool'
+import { isWechat } from 'utils/tool'
 
 import { contractMixins, publicMixins } from '@/mixins'
 
@@ -239,12 +239,12 @@ export default {
       if (!this.crowdsale && val) this.authorizeDialog = false
     },
     authorizeDialog (val) {
-      const lordless = document.getElementById('lordless')
-      if (val) {
-        this.$nextTick(() => addClass('mobile-dialog-open', lordless))
-      } else {
-        removeClass('mobile-dialog-open', lordless)
-      }
+      // const lordless = document.getElementById('lordless')
+      // if (val) {
+      //   this.$nextTick(() => addClass('mobile-dialog-open', lordless))
+      // } else {
+      //   removeClass('mobile-dialog-open', lordless)
+      // }
       this.$emit('blurs', val)
     },
 

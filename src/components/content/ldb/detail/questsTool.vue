@@ -14,16 +14,31 @@
             <p class="quests-item-name">QUEST</p>
             <p class="v-flex quests-item-cost">COST</p>
             <p class="v-flex quests-item-reward">REWARD</p>
+            <p class="v-flex"></p>
           </li>
-          <li class="lordless-table-item quests-table-item"
+          <li class="lordless-table-item quests-table-item is-unhover"
             :class="{ 'is-disable': quest.userStatus !== undefined }"
             v-for="(quest, index) of quests"
-            :key="index"
-            @click.stop="receive(quest)">
+            :key="index">
             <div class="relative d-flex f-align-center quests-item-container">
               <p class="quests-item-name">{{ quest.ldbTaskType.name }}</p>
               <p class="v-flex quests-item-cost">{{ quest.ldbTaskType.apCost }}AP</p>
-              <p class="v-flex text-upper quests-item-reward">{{ quest.ldbTaskType.priceInUSD * quest.ldbTaskType.candyType.USD2TokenCount | formatDecimal({ len: 2 }) }} {{ quest.ldbTaskType.candyType.symbol }} / {{ quest.ac }}AC</p>
+              <p class="v-flex text-upper quests-item-reward">+ {{ quest.ldbTaskType.priceInUSD * quest.ldbTaskType.candyType.USD2TokenCount | formatDecimal({ len: 2 }) }} {{ quest.ldbTaskType.candyType.symbol }}<br>+ {{ quest.ac }}AC</p>
+              <p class="v-flex text-center quests-item-apply">
+                <span class="quests-status applied" v-if="quest.userStatus === 0">Approved</span>
+                <span class="quests-status completed" v-else-if="quest.userStatus === 1">Completed</span>
+                <span class="quests-status failed" v-else-if="quest.userStatus === -1">Failed</span>
+                <span v-else>
+                  <lordless-btn
+                    class="quests-apply-btn"
+                    theme="blue"
+                    shadow
+                    inverse
+                    :disabled="receiveLoading || !quest.countLeft || owner"
+                    :loading="receiveLoading"
+                    @click="receive(quest)">Apply</lordless-btn>
+                </span>
+              </p>
             </div>
           </li>
         </ul>
@@ -35,6 +50,7 @@
 <script>
 import TaskNowSkeletion from '@/components/skeletion/ldb/detail/taskNow'
 export default {
+  name: 'tavern-quests-tool',
   props: {
     quests: {
       type: Array,
@@ -83,7 +99,25 @@ export default {
   }
 
   .quests-item-name {
-    flex: 2;
+    width: 230px;
+  }
+  .quests-apply-btn {
+    padding: 0 20px;
+    height: 36px;
+    line-height: 36px;
+    font-size: 14px;
+  }
+  .quests-status {
+    font-size: 16px;
+    &.failed {
+      color: #F5515F;
+    }
+    &.completed {
+      color: #69D1C3;
+    }
+    &.applied {
+      color: #0079FF;
+    }
   }
   // .quests-table-item {
   //   padding: 0 20px;

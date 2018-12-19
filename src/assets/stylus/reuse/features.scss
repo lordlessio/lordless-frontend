@@ -366,7 +366,7 @@ $--dialog-background-linear-end: #EE9AE5;
       transition: all .35s;
     }
   }
-  &:not(:first-of-type):not(.is-disable) {
+  &:not(:first-of-type):not(.is-disable):not(.is-unhover) {
     transition: all .35s;
     &:hover {
       padding: 24px 10px;

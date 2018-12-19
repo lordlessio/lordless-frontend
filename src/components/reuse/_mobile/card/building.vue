@@ -5,7 +5,7 @@
         <lordless-tavern-poster
           :src="info.ldbIcon.source.preview"
           :popularity="info.chain.popularity"
-          isMobile
+          isMedium
           showPopularity/>
       </div>
       <div class="v-flex d-flex col-flex m-building-info">

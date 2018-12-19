@@ -22,7 +22,7 @@
               <p class="deal-tavern-sale-top line-height-1">
                 <span class="inline-block tavern-sale-icon" :class="{ 'is-sale': info.chain.auction.isOnAuction, 'is-auction': showSale }">
                   <svg>
-                    <use :xlink:href="`#icon-${showSale ? 'auction' : info.chain.auction.isOnAuction ? 'sale' : 'presale'}`"/>
+                    <use :xlink:href="`#icon-${showSale ? 'sale-auction' : info.chain.auction.isOnAuction ? 'sale' : 'presale'}`"/>
                   </svg>
                 </span>
               </p>
@@ -84,6 +84,7 @@
 <script>
 import SaleSkeletion from '@/components/skeletion/ldb/detail/sale'
 export default {
+  name: 'tavern-detail-sale',
   props: {
     info: {
       type: Object,

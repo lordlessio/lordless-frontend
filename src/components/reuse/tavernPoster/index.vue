@@ -1,6 +1,6 @@
 <template>
   <div class="tavern-poster" :class="[`building-popularity-${popularity}`, { 'shadow': shadow }]">
-    <div v-if="showPopularity" class="tavern-popularity-poster" :class="{ 'is-mobile': isMobile }">
+    <div v-if="showPopularity" class="tavern-popularity-poster" :class="{ 'is-mobile': isMedium, 'is-small': isSmall }">
       <img alt="tavern popularity image" :src="originSource(`/img/tavern/ldb-level-${popularity}.png`, { size: 120 })"/>
     </div>
     <img alt="tavern curve" class="tavern-curve" :src="originSource('/svg/curve.svg', { size: -1 })">
@@ -42,7 +42,12 @@ export default {
       default: false
     },
 
-    isMobile: {
+    isMedium: {
+      type: Boolean,
+      default: false
+    },
+
+    isSmall: {
       type: Boolean,
       default: false
     },
@@ -96,6 +101,12 @@ export default {
       right: 0;
       width: 40px;
       height: 40px;
+    }
+    &.is-small {
+      top: 2px;
+      right: 2px;
+      width: 18px;
+      height: 18px;
     }
   }
   .tavern-sale-bg {

@@ -48,6 +48,7 @@ import TavernkeepsSkeletion from '@/components/skeletion/ldb/detail/tavernkeeps'
 
 import { getTavernkeeps } from 'api'
 export default {
+  name: 'tavern-detail-tavernkeeps',
   props: {
     info: {
       type: Object,

@@ -13,7 +13,8 @@ const files = [
   '/stories/image',
   '/stories/linkSymbol',
   '/stories/pagination',
-  '/stories/progress'
+  '/stories/progress',
+  '/stories/dialog/fade'
 ]
 
 for (const file of files) {

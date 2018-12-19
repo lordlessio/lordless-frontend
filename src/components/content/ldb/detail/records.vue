@@ -56,6 +56,7 @@
 import RecordsSkeletion from '@/components/skeletion/ldb/detail/records'
 
 export default {
+  name: 'tavern-detail-records',
   props: {
     list: {
       type: Array,

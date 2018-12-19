@@ -25,7 +25,7 @@
                 <span class="TTFontBolder line-height-1 keeps-user-name">{{ keep.lord.nickName | sliceStr({ end: 6, symbol: true }) }}</span>
                 <span class="keeps-user-address">{{ keep.lord._id | splitAddress({ before: 6, end: 4 }) }}</span>
               </p>
-              <p v-else class="TTFontBolder keeps-user-name">{{ keep.lord._id | splitAddress({ before: 10, end: 8 }) }}</p>
+              <p v-else class="TTFontBolder keeps-user-name">{{ keep.lord._id | splitAddress({ before: 6, end: 4, symbol: '******' }) }}</p>
             </div>
             <p class="TTFontBolder mobile-keeps-index"># {{ keeps.length - index }}</p>
           </div>

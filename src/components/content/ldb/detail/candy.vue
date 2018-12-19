@@ -44,6 +44,7 @@
 
 <script>
 export default {
+  name: 'tavern-detail-candy',
   props: {
     list: {
       type: Array,

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog
+  <!-- <el-dialog
     :visible.sync="sellModel"
     :custom-class="`inline-block lordless-dialog message-dialog center no-header transparent ${metaOpen ? 'blur' : ''}`"
     width="100%"
@@ -8,61 +8,65 @@
     top="0"
     :show-close="false"
     @open="$emit('open')"
-    @close="$emit('close')">
-    <div class="lordless-message-box">
-      <span
-        @click.stop="$emit('input', false)"
-        class="inline-block line-height-1 lordless-message-close light">
-        <i class="el-icon-close"></i>
-      </span>
-      <div class="text-center dialog-sell-cnt">
-        <h1>Sell Tavern</h1>
-        <p class="text-left"><span>#{{ ldbInfo.chain.tokenId }}</span> will be placed for auction. When time expires, you need to cancel the auction, and then <span>#{{ ldbInfo.chain.tokenId }}</span> will be set free for sale.</p>
-        <div class="dialog-sell-middle">
-          <ld-input
-            v-model="sellInputs.price.model"
-            type="text"
-            number
-            required
-            :placeholder="sellInputs.price.placeholder"
-            :symbol="sellInputs.price.symbol"
-            :regex="sellInputs.price.regex"
-            :regexError="sellInputs.price.regexError"
-            @change="priceHandle"
-            @blur="priceHandle">
-          </ld-input>
-          <ld-input
-            v-model="sellInputs.duration.model"
-            type="text"
-            number
-            required
-            :placeholder="sellInputs.duration.placeholder"
-            :symbol="sellInputs.duration.symbol"
-            :regex="sellInputs.duration.regex"
-            :regexError="sellInputs.duration.regexError"
-            @change="durationHandle"
-            @blur="durationHandle">
-          </ld-input>
-        </div>
-        <div class="TTFontBolder ldb-sell-bottom">
-          <div class="ldb-sell-btn">
-            <lordless-btn
-              class="TTFontBolder lordless-message-btn"
-              theme="deep-blue"
-              shadow
-              :loading="sellPending"
-              :disabled="metamaskChoose || sellPending"
-              @click="submitSell">
-              <span class="sell-confirm" v-if="!sellPending">Sell</span>
-            </lordless-btn>
+    @close="$emit('close')"> -->
+    <lordless-fade-dialog
+      :visible.sync="sellModel"
+      :class="`${metaOpen ? 'blur' : ''}`">
+      <div class="lordless-message-box">
+        <span
+          @click.stop="$emit('input', false)"
+          class="inline-block line-height-1 lordless-message-close light">
+          <i class="el-icon-close"></i>
+        </span>
+        <div class="text-center dialog-sell-cnt">
+          <h1>Sell Tavern</h1>
+          <p class="text-left"><span>#{{ ldbInfo.chain.tokenId }}</span> will be placed for auction. When time expires, you need to cancel the auction, and then <span>#{{ ldbInfo.chain.tokenId }}</span> will be set free for sale.</p>
+          <div class="dialog-sell-middle">
+            <ld-input
+              v-model="sellInputs.price.model"
+              type="text"
+              number
+              required
+              :placeholder="sellInputs.price.placeholder"
+              :symbol="sellInputs.price.symbol"
+              :regex="sellInputs.price.regex"
+              :regexError="sellInputs.price.regexError"
+              @change="priceHandle"
+              @blur="priceHandle">
+            </ld-input>
+            <ld-input
+              v-model="sellInputs.duration.model"
+              type="text"
+              number
+              required
+              :placeholder="sellInputs.duration.placeholder"
+              :symbol="sellInputs.duration.symbol"
+              :regex="sellInputs.duration.regex"
+              :regexError="sellInputs.duration.regexError"
+              @change="durationHandle"
+              @blur="durationHandle">
+            </ld-input>
           </div>
-          <div class="contract-pending-tip" v-show="sellPending">
-            <p>contract is pending, waiting for few minutes</p>
+          <div class="TTFontBolder ldb-sell-bottom">
+            <div class="ldb-sell-btn">
+              <lordless-btn
+                class="TTFontBolder lordless-message-btn"
+                theme="blue"
+                shadow
+                :loading="sellPending"
+                :disabled="metamaskChoose || sellPending"
+                @click="submitSell">
+                <span class="sell-confirm" v-if="!sellPending">Confirm</span>
+              </lordless-btn>
+            </div>
+            <div class="contract-pending-tip" v-show="sellPending">
+              <p>contract is pending, waiting for few minutes</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </el-dialog>
+    </lordless-fade-dialog>
+  <!-- </el-dialog> -->
 </template>
 
 <script>
@@ -238,11 +242,13 @@ export default {
     // transform: translateY(-150px);
     // margin-top: -150px;
     >h1 {
-      font-size: 36px;
+      // font-size: 36px;
+      @include fontSize(36px, 1.5);
     }
     >p {
       font-size: 16px;
-      @include margin('top', 40px, 1);
+      @include margin('top', 40px, -2, 1);
+      @include margin('top', 10px, 1, -2);
       >span {
         font-size: 18px;
         font-family: $--font-TTNormsMedium;
@@ -256,6 +262,7 @@ export default {
     line-height: 30px;
     font-size: 18px;
     overflow: hidden;
+    @include margin('top', 12px, 1, -2);
     >div {
       &:not(:first-of-type) {
         margin-top: 40px;
@@ -264,7 +271,8 @@ export default {
   }
 
   .ldb-sell-bottom {
-    margin-top: 60px;
+    @include margin('top', 60px, 2);
+    @include margin('bottom', 30px, 1, -2);
   }
 
   .ldb-sell-bottom {

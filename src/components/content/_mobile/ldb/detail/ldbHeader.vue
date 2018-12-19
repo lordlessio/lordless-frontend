@@ -150,7 +150,7 @@
                     </lordless-blockies>
                     <div class="v-flex d-flex col-flex f-justify-around detail-lord-info">
                       <p>{{ info.lord.nickName || 'LORDLESS' }}</p>
-                      <p><link-symbol underline :to="info.lord._id">{{ info.lord._id | splitAddress({ before: 6, end: 4, symbol: '***' }) }}</link-symbol></p>
+                      <p><link-symbol underline :to="info.lord._id">{{ info.lord._id | splitAddress({ before: 5, end: 2, symbol: '***' }) }}</link-symbol></p>
                     </div>
                   </div>
                   <lordless-btn

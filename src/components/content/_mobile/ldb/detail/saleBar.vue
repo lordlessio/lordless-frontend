@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showBar" class="mobile-sale-bar">
+  <div v-if="showBar" class="mobile-sale-bar" :class="{ 'blur': blurs[0] }">
     <div class="d-flex f-align-center sale-bar-container">
       <!-- <span class="v-flex text-upper sale-bar-price">{{ info.chain.auction.price | weiToEth }} ETH</span> -->
       <!-- <div class="d-flex text-nowrap sale-bar-time"> -->
@@ -54,7 +54,7 @@
           <template slot-scope="props">{{ props.totalHours }} h : {{ props.minutes }} m : {{ props.seconds }} s</template>
         </countdown>
       </div>
-      <div class="text-center tavern-deal-btns">
+      <div class="text-center tavern-deal-btns" :class="{ 'is-unauction': showSale }">
         <!-- <lordless-btn
           v-if="showSale"
           class="tavern-deal-btn"
@@ -110,6 +110,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   props: {
     info: {
@@ -131,11 +132,15 @@ export default {
     }
   },
   computed: {
+    ...mapState('layout', [
+      'blurs'
+    ]),
 
     showSale () {
       // const { init, isSell } = this.contractStatus
       const info = this.info
       return !this.showSign && this.isOwner && !info.chain.auction.isOnAuction && !info.chain.auction.isOnPreAuction
+      // return true
     },
 
     showCancelSale () {
@@ -163,7 +168,8 @@ export default {
     },
     showBar () {
       const info = this.info
-      return this.isOwner || info.chain.auction.isOnAuction
+      return this.isOwner || info.chain.auction.isOnAuction || info.chain.auction.isOnPreAuction
+      // return true
     }
   },
   methods: {
@@ -238,6 +244,10 @@ export default {
       width: 100%;
       height: 100%;
       border-radius: 0;
+    }
+    &.is-unauction {
+      width: 100%;
+      margin-left: 0px;
     }
   }
   .tavern-deal-btn {
