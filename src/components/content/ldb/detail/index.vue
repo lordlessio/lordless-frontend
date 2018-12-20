@@ -330,6 +330,15 @@ export default {
       actionTypes.USER_SET_USER_HOME
     ]),
 
+    tavernContractError (err) {
+      this.$notify.error({
+        title: 'Error!',
+        message: err.message || 'unknow error!',
+        position: 'bottom-right',
+        duration: 2500
+      })
+    },
+
     // showContent () {
     //   this.contentShow = true
     //   this.$nextTick(() => {
@@ -596,6 +605,7 @@ export default {
         })
           .catch((err) => {
             console.log('err', err)
+            this.tavernContractError(err)
             this.metamaskChoose = false
           })
         // NFTsCrowdsale.methods(payByEth.name, payByEth.values.concat([{ gas, gasPrice, value: ldb[2] }]))
@@ -615,12 +625,7 @@ export default {
 
         // this.buyModel = true
       } catch (err) {
-        this.$notify.error({
-          title: 'Error!',
-          message: err.message || 'unknow error',
-          position: 'bottom-right',
-          duration: 3500
-        })
+        this.tavernContractError(err)
       }
     },
 
@@ -661,13 +666,13 @@ export default {
         }
 
         // 估算 gas，不准
-        // const gas = (await NFTsCrowdsale.estimateGas(cancelAuction.name, cancelAuction.values)) || 599999
-        const gas = 599999
+        const gas = (await NFTsCrowdsale.estimateGas(cancelAuction.name, cancelAuction.values)) || 599999
+        // const gas = 599999
 
         const { gasPrice } = web3Opt
 
         // 执行合约
-        NFTsCrowdsale.methods(cancelAuction.name, cancelAuction.values.concat([{ gas, gasPrice }]))
+        NFTsCrowdsale.methods(cancelAuction.name, cancelAuction.values.concat([{ gas, gasPrice, from: this.account }]))
           .then(tx => {
             this.metamaskChoose = false
             console.log('unsell tx', tx)
@@ -691,6 +696,7 @@ export default {
           })
           .catch((err) => {
             console.log('err', err)
+            this.tavernContractError(err)
             this.metamaskChoose = false
             this.$set(this.ldbPendings, 'isCanceling', false)
           })

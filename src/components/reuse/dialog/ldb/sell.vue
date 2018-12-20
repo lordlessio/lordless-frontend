@@ -10,9 +10,8 @@
     @open="$emit('open')"
     @close="$emit('close')"> -->
     <lordless-fade-dialog
-      :visible.sync="sellModel"
-      :class="`${metaOpen ? 'blur' : ''}`">
-      <div class="lordless-message-box">
+      :visible.sync="sellModel">
+      <div class="lordless-message-box" :class="`${metamaskChoose ? 'blur' : ''}`">
         <span
           @click.stop="$emit('input', false)"
           class="inline-block line-height-1 lordless-message-close light">
@@ -72,10 +71,12 @@
 <script>
 import LdInput from '@/components/stories/input'
 
-import { metamaskMixins, contractMixins } from '@/mixins'
+import { weiToEth } from 'utils/tool'
+
+import { metamaskMixins, contractMixins, publicMixins } from '@/mixins'
 
 export default {
-  mixins: [metamaskMixins, contractMixins],
+  mixins: [metamaskMixins, contractMixins, publicMixins],
   props: {
     value: {
       type: Boolean,
@@ -126,14 +127,6 @@ export default {
       return price.required && duration.required
     },
 
-    account () {
-      return this.$root.$children[0].web3Opt.address
-    },
-
-    metaOpen () {
-      return this.$root.$children[0].metaOpen
-    },
-
     web3Opt () {
       return this.$root.$children[0].web3Opt
     }
@@ -162,7 +155,7 @@ export default {
      */
     async submitSell ({ ldbInfo = this.ldbInfo, sellInputs = this.sellInputs, web3Opt = this.web3Opt, NFTsCrowdsale = this.NFTsCrowdsale } = {}) {
       const tokenId = ldbInfo.chain.tokenId
-      if (!tokenId || !this.sellRequired) return
+      if ((!tokenId && tokenId !== 0) || !this.sellRequired) return
 
       const { web3js, gasPrice } = web3Opt
 
@@ -172,22 +165,22 @@ export default {
 
       const startTime = Math.floor(new Date().getTime() / 1000)
       const endTime = Math.floor(new Date().getTime() / 1000) + duration * 3600 * 24
-      console.log('--- sale price', web3js.toWei(price), tokenId, startTime, endTime)
+      console.log('--- sale price', weiToEth(price), tokenId, startTime, endTime)
 
       this.metamaskChoose = true
 
       // 传输的合约参数
       const newAuction = {
         name: 'newAuction',
-        values: [ web3js.toWei(price), tokenId, startTime, endTime ]
+        values: [ weiToEth(price), tokenId, startTime, endTime ]
       }
 
       // 估算 gas，不准
-      // const gas = (await NFTsCrowdsale.estimateGas(newAuction.name, newAuction.values)) || 400000
-      const gas = 400000
+      const gas = (await NFTsCrowdsale.estimateGas(newAuction.name, newAuction.values)) || 400000
+      // const gas = 400000
 
       // 执行合约操作
-      NFTsCrowdsale.methods(newAuction.name, newAuction.values.concat([{ gas, gasPrice }]))
+      NFTsCrowdsale.methods(newAuction.name, newAuction.values.concat([{ gas, gasPrice, from: this.account }]))
         .then(tx => {
           this.sellPending = true
           this.metamaskChoose = false
@@ -213,6 +206,12 @@ export default {
         })
         .catch((err) => {
           console.log('err', err)
+          this.$notify.error({
+            title: 'Error!',
+            message: err.message || 'unknow error!',
+            position: 'bottom-right',
+            duration: 2500
+          })
           this.metamaskChoose = false
         })
     }

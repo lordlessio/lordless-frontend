@@ -66,6 +66,13 @@ export const getAccount = (web3js) => {
         resolve({ account: '' })
       }, 5000)
 
+      if (window.ethereum) {
+        window.ethereum.enable().then(accounts => {
+          resolve({ account: accounts[0] })
+        })
+        return
+      }
+
       web3js.eth.getAccounts((error, accounts) => {
         clearTimeout(timer)
 

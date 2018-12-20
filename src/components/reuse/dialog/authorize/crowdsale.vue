@@ -142,11 +142,12 @@ export default {
       }
 
       // 估算 gas,不准
-      // const gas = (await TavernNFTs.estimateGas(setApprovalForAll.name, setApprovalForAll.values)) || 300000
-      const gas = 300000
+      const gas = (await TavernNFTs.estimateGas(setApprovalForAll.name, setApprovalForAll.values)) || 300000
+      // console.log('---- gas', gas)
+      // const gas = 300000
 
       // 执行合约
-      TavernNFTs.methods(setApprovalForAll.name, setApprovalForAll.values.concat([{ gas, gasPrice }]))
+      TavernNFTs.methods(setApprovalForAll.name, setApprovalForAll.values.concat([{ from: this.address, gas, gasPrice }]))
         .then(tx => {
           this.metamaskChoose = false
           this.$emit('pending', { tx })

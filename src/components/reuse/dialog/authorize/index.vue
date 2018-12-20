@@ -41,7 +41,8 @@
           v-model="showCrowsale"
           :avatar="avatar"
           :address="address"
-          @pending="crowdsalePending"/>
+          @pending="crowdsalePending"
+          @error="authorizeError"/>
 
         <Telegram
           ref="telegram"
@@ -304,6 +305,15 @@ export default {
       this.authorizeDialog = false
     },
 
+    authorizeError (err) {
+      this.$notify.error({
+        title: 'Error!',
+        message: err.message || 'unknow error!',
+        position: 'bottom-right',
+        duration: 3500
+      })
+    },
+
     authorizeClosed () {
       // console.log('this.signAuthorize', this.$refs.signAuthorize)
       this.$refs.signAuthorize && this.$refs.signAuthorize.reset()
@@ -399,7 +409,7 @@ export default {
           title: 'Error!',
           message: 'please check your metamask!',
           position: 'bottom-right',
-          duration: 3500
+          duration: 2500
         })
         return false
       }

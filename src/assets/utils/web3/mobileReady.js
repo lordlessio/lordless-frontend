@@ -1,4 +1,20 @@
 import { mobileBool } from 'utils/tool'
+
+function initCdnWeb3 () {
+  return new Promise((resolve, reject) => {
+    if (window.web3) return resolve()
+    const el = document.createElement('script')
+    el.src = 'https://lordless-sh.oss-cn-shanghai.aliyuncs.com/static/js/web3.min.js'
+    el.type = 'text/javascript'
+    el.async = true
+    document.head.appendChild(el)
+    el.onload = () => {
+      resolve()
+    }
+    el.onerror = (e) => reject(new Error(e))
+  })
+}
+
 const checkForWeb3 = () => {
   // alert('checkForWeb3')
   return new Promise(resolve => {
@@ -29,7 +45,11 @@ const checkForWeb3 = () => {
 
 export const mobileReady = async () => {
   return new Promise(async resolve => {
-    if (window.imToken || window.coco || typeof web3 !== 'undefined') {
+    if (window.imToken) {
+      initCdnWeb3().then(d => {
+        return resolve()
+      })
+    } else if (window.coco || typeof web3 !== 'undefined') {
       // alert('  init ---- 1')
       return resolve()
     } else {
