@@ -13,7 +13,10 @@
         <section class="ld-project-section project-section-candy">
           <div class="project-candy-info">
             <p class="d-flex f-align-center candy-info-symbol">
-              <span class="inline-block line-height-0 candy-symbol-icon">
+              <span v-if="projectInfo.iconUrl" class="inline-block line-height-0 project-symbol-img">
+                <img class="full-width" :alt="`${projectInfo.symbol} icon`" :src="ossOrigin + projectInfo.iconUrl"/>
+              </span>
+              <span v-else class="inline-block line-height-0 candy-symbol-icon">
                 <svg v-if="projectInfo.symbol">
                   <use :xlink:href="`#coin-${projectInfo.symbol.toLocaleLowerCase()}`"/>
                 </svg>
@@ -26,6 +29,7 @@
             <div v-if="airdropInfo">
               <p class="TTFontBolder candy-claimed-info">
                 <span v-if="claimed === -1">???</span>
+                <span v-else-if="!projectInfo.USD2TokenCount"> {{ claimed }} token</span>
                 <span v-else>{{ claimed / projectInfo.USD2TokenCount | formatNumber | formatDecimal({ len: 2 }) }}</span> US dollars
                 <span class="TTFontBold candy-claimed-been">has been claimed.</span>
               </p>
@@ -57,7 +61,7 @@
             <div class="project-intro-item">
               <p class="intro-item-title">Market</p>
               <ul class="intro-market-ul">
-                <li class="d-flex f-align-center intro-market-item">
+                <li v-if="projectInfo.market.price" class="d-flex f-align-center intro-market-item">
                   <span class="inlin-block market-item-icon">
                     <svg>
                       <use xlink:href="#icon-market-price"/>
@@ -68,7 +72,7 @@
                     <span>$ {{ projectInfo.market.price | formatDecimal }}</span>
                   </p>
                 </li>
-                <li class="d-flex f-align-center intro-market-item">
+                <li v-if="projectInfo.market.marketCap" class="d-flex f-align-center intro-market-item">
                   <span class="inlin-block market-item-icon">
                     <svg>
                       <use xlink:href="#icon-analysis"/>
@@ -79,7 +83,7 @@
                     <span>$ {{ projectInfo.market.marketCap || projectInfo.market.price * projectInfo.market.circulatingSupply | formatNumber }}</span>
                   </p>
                 </li>
-                <li class="d-flex f-align-center intro-market-item">
+                <li v-if="projectInfo.market.volume" class="d-flex f-align-center intro-market-item">
                   <span class="inlin-block market-item-icon">
                     <svg>
                       <use xlink:href="#icon-volume"/>
@@ -90,7 +94,7 @@
                     <span>$ {{ projectInfo.market.volume | formatDecimal | formatNumber }}</span>
                   </p>
                 </li>
-                <li class="d-flex f-align-center intro-market-item">
+                <li v-if="projectInfo.market.issueDate" class="d-flex f-align-center intro-market-item">
                   <span class="inlin-block market-item-icon">
                     <svg>
                       <use xlink:href="#icon-date"/>
@@ -101,7 +105,7 @@
                     <span>{{ projectInfo.market.issueDate | dateFormat('MMM. DD YYYY') }}</span>
                   </p>
                 </li>
-                <li class="d-flex f-align-center intro-market-item">
+                <li v-if="projectInfo.market.issuePrice" class="d-flex f-align-center intro-market-item">
                   <span class="inlin-block market-item-icon">
                     <svg>
                       <use xlink:href="#icon-issue-price"/>
@@ -112,7 +116,7 @@
                     <span>$ {{ projectInfo.market.issuePrice | formatDecimal }}</span>
                   </p>
                 </li>
-                <li class="d-flex f-align-center intro-market-item">
+                <li v-if="projectInfo.market.totalSupply" class="d-flex f-align-center intro-market-item">
                   <span class="inlin-block market-item-icon">
                     <svg>
                       <use xlink:href="#icon-total-supply"/>
@@ -123,7 +127,7 @@
                     <span>{{ projectInfo.market.totalSupply | formatNumber }}</span>
                   </p>
                 </li>
-                <li class="d-flex f-align-center intro-market-item">
+                <li v-if="projectInfo.market.circulatingSupply" class="d-flex f-align-center intro-market-item">
                   <span class="inlin-block market-item-icon">
                     <svg>
                       <use xlink:href="#icon-circulating-supply"/>
@@ -323,6 +327,10 @@ export default {
   .candy-info-symbol {
     font-size: 18px;
     color: #777;
+  }
+  .project-symbol-img {
+    margin-right: 10px;
+    width: 28px;
   }
   .candy-symbol-icon {
     margin-right: 6px;

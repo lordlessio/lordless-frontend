@@ -227,13 +227,16 @@ export default {
       }
       // const _count = await Airdrop.methods('getAirdrop', [ this.info.airdropId ])
       // console.log('_count', _count[1].toNumber())
+      let decimals = await TokenContract.methods('decimals')
+      decimals = decimals.toNumber()
+
       const _left = await TokenContract.methods('balanceOf', [ Airdrop.address ])
-      // console.log('_left', _left, _left.toNumber())
+      // console.log('_left', _left, _left.toNumber() / Math.pow(10, decimals))
       const _dropping = await Airdrop.methods('tokenTotalClaim', [ tokenAddress ])
       // console.log('_dropping', _dropping, _dropping.toNumber())
 
-      const left = parseFloat(weiToEth(_left.toNumber()))
-      const dropping = parseFloat(weiToEth(_dropping.toNumber()))
+      const left = parseFloat(_left.toNumber() / Math.pow(10, decimals))
+      const dropping = parseFloat(_dropping.toNumber() / Math.pow(10, decimals))
       const total = parseFloat(left + dropping)
       this.progressNums = { total, left, dropping, completed: true }
     },

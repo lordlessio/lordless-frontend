@@ -18,7 +18,7 @@
             <span>to make you never miss any promotions in LORDLESS.</span>
           </p>
         </div>
-        <ul class="d-flex f-wrap f-align-center f-justify-between promotions-list">
+        <ul class="d-flex f-wrap f-align-center promotions-list">
           <li class="promotions-item"
             v-for="(item, index) of promotions" :key="index">
             <figure>

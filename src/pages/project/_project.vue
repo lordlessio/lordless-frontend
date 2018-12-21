@@ -6,7 +6,10 @@
       <div class="d-flex md-col-flex">
         <div class="md-order-1 v-flex project-main-info">
           <div class="TTFontBolder d-flex f-align-center project-symbol-title">
-            <span class="inline-block project-symbol-icon">
+            <span v-if="projectInfo.iconUrl" class="inline-block line-height-0 project-symbol-img">
+              <img class="full-width" :alt="`${projectInfo.symbol} icon`" :src="ossOrigin + projectInfo.iconUrl"/>
+            </span>
+            <span v-else class="inline-block project-symbol-icon">
               <svg>
                 <use :xlink:href="`#coin-${projectInfo.symbol.toLocaleLowerCase()}`"/>
               </svg>
@@ -18,8 +21,9 @@
           </div>
           <p v-if="ownerAirdrops" class="TTFontBolder project-claimed-text">
             <span v-if="claimed === -1">???</span>
-            <span v-else>{{ claimed / projectInfo.USD2TokenCount | formatNumber | formatDecimal({ len: 2 }) }}</span>
-            US dollars has been claimed.
+            <span v-else-if="!projectInfo.USD2TokenCount"> {{ claimed }} token</span>
+            <span v-else>{{ claimed / projectInfo.USD2TokenCount | formatNumber | formatDecimal({ len: 2 }) }} US dollars </span>
+            has been claimed.
           </p>
           <div class="project-intro-box">
             <div class="project-intro-item">
@@ -33,7 +37,7 @@
             <div class="project-intro-item">
               <p class="intro-item-title">Market</p>
               <ul class="d-flex f-wrap project-intro-markets">
-                <li class="text-center text-nowrap project-market-item">
+                <li v-if="projectInfo.market.price" class="text-center text-nowrap project-market-item">
                   <p class="TTFontBolder project-market-top">$ {{ projectInfo.market.price | formatDecimal }}</p>
                   <p class="d-flex f-auto-center project-market-bottom">
                     <span class="inline-block line-height-0 market-bottom-icon">
@@ -44,7 +48,7 @@
                     <span>Price</span>
                   </p>
                 </li>
-                <li class="text-center text-nowrap project-market-item">
+                <li v-if="projectInfo.market.marketCap" class="text-center text-nowrap project-market-item">
                   <p class="TTFontBolder project-market-top">$ {{ projectInfo.market.marketCap || projectInfo.market.price * projectInfo.market.circulatingSupply | formatNumber }}</p>
                   <p class="d-flex f-auto-center project-market-bottom">
                     <span class="inline-block line-height-0 market-bottom-icon">
@@ -55,7 +59,7 @@
                     <span>Market cap</span>
                   </p>
                 </li>
-                <li class="text-center text-nowrap project-market-item">
+                <li v-if="projectInfo.market.volume" class="text-center text-nowrap project-market-item">
                   <p class="TTFontBolder project-market-top">$ {{ projectInfo.market.volume | formatDecimal | formatNumber }}</p>
                   <p class="d-flex f-auto-center project-market-bottom">
                     <span class="inline-block line-height-0 market-bottom-icon">
@@ -66,7 +70,7 @@
                     <span>Volume (24h)</span>
                   </p>
                 </li>
-                <li class="text-center text-nowrap project-market-item">
+                <li v-if="projectInfo.market.issueDate" class="text-center text-nowrap project-market-item">
                   <p class="TTFontBolder project-market-top">{{ projectInfo.market.issueDate | dateFormat('MMM. DD YYYY') }}</p>
                   <p class="d-flex f-auto-center project-market-bottom">
                     <span class="inline-block line-height-0 market-bottom-icon">
@@ -77,7 +81,7 @@
                     <span>Issue date</span>
                   </p>
                 </li>
-                <li class="text-center text-nowrap project-market-item">
+                <li v-if="projectInfo.market.issuePrice" class="text-center text-nowrap project-market-item">
                   <p class="TTFontBolder project-market-top">$ {{ projectInfo.market.issuePrice | formatDecimal }}</p>
                   <p class="d-flex f-auto-center project-market-bottom">
                     <span class="inline-block line-height-0 market-bottom-icon">
@@ -88,7 +92,7 @@
                     <span>Issue price</span>
                   </p>
                 </li>
-                <li class="text-center text-nowrap project-market-item">
+                <li v-if="projectInfo.market.totalSupply" class="text-center text-nowrap project-market-item">
                   <p class="TTFontBolder project-market-top">{{ projectInfo.market.totalSupply | formatNumber }}</p>
                   <p class="d-flex f-auto-center project-market-bottom">
                     <span class="inline-block line-height-0 market-bottom-icon">
@@ -99,7 +103,7 @@
                     <span>Total supply</span>
                   </p>
                 </li>
-                <li class="text-center text-nowrap project-market-item">
+                <li v-if="projectInfo.market.circulatingSupply" class="text-center text-nowrap project-market-item">
                   <p class="TTFontBolder project-market-top">{{ projectInfo.market.circulatingSupply | formatNumber }}</p>
                   <p class="d-flex f-auto-center project-market-bottom">
                     <span class="inline-block line-height-0 market-bottom-icon">
@@ -282,6 +286,9 @@ export default {
   }
   .project-symbol-title {
     margin-bottom: 20px;
+  }
+  .project-symbol-img {
+    width: 36px;
   }
   .project-symbol-icon {
     padding: 8px;
