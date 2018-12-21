@@ -88,10 +88,10 @@ export default {
   }
   .tavern-popularity-poster {
     position: absolute;
-    top: -15px;
-    right: -15px;
-    width: 80px;
-    height: 80px;
+    top: 0;
+    right: 0;
+    width: 62px;
+    height: 62px;
     z-index: 3;
     >img {
       width: 100%;

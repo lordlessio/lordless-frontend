@@ -37,10 +37,10 @@
         </div>
       </section>
       <section class="d-flex col-flex v-flex market-ldbs-box">
-        <el-row :gutter="40" v-if="ldbsLoading">
+        <el-row :gutter="20" v-if="ldbsLoading">
           <el-col
-            v-for="item of [1,2, 3]" :key="item"
-            :xs="24" :sm="8">
+            v-for="item in 4" :key="item"
+            :xs="12" :sm="6">
             <skeletion-building class="skeletion-building-item"/>
           </el-col>
         </el-row>
@@ -65,11 +65,11 @@
           </div>
         </transition>
         <transition name="ld-hide-in-fade">
-          <el-row v-show="ldbs.total && !ldbsLoading" :gutter="40" class="v-flex market-cnt-box">
+          <el-row v-show="ldbs.total && !ldbsLoading" :gutter="20" class="v-flex market-cnt-box">
             <el-col
               class="market-cnt-item"
               v-for="ldb of ldbs.list" :key="ldb._id"
-              :xs="24" :sm="8">
+              :xs="12" :sm="6">
               <building-card
                 :sale="ldb.chain.auction.isOnAuction"
                 :presale="ldb.chain.auction.isOnPreAuction"
@@ -86,6 +86,7 @@
             :scrollE="pageScrollE"
             :scrollOffset="150"
             class="market-pagination-pages"
+            theme="blue"
             :total="ldbs.total"
             :currentPage="ldbs.pn"
             :size="ldbs.ps"
@@ -114,7 +115,7 @@ export default {
       // ldb 建筑列表
       ldbs: {
         pn: 1,
-        ps: 9,
+        ps: 12,
         list: [],
         total: 0
       },

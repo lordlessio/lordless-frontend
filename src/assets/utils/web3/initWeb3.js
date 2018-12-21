@@ -49,7 +49,8 @@ const checkWeb3 = async () => {
   // check web3 instance
   if (typeof ethereum !== 'undefined' || typeof web3 !== 'undefined') {
     // Use Mist/MetaMask's provider
-    const web3js = new Web3(window.ethereum || web3.currentProvider)
+    const provider = typeof web3 !== 'undefined' ? web3.currentProvider : window.ethereum
+    const web3js = new Web3(provider)
 
     res.web3js = web3js
     res.isConnected = web3js.isConnected()

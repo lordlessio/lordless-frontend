@@ -1,14 +1,22 @@
 <template>
   <div v-if="info._id" class="promotion-claim-box" :class="{ 'is-failed': failed }">
     <div class="promotion-claim-left">
-      <p class="promotion-claim-failed">??? total</p>
+      <!-- <p class="promotion-claim-failed">??? total</p> -->
       <p class="d-flex f-align-center f-justify-between promotion-claim-nums">
-        <span class="promotion-left-num">
+        <span class="TTFontBolder promotion-claim-symbol">{{ info.project.symbol }}</span>
+        <span>
+          <span>
+            <span v-if="!progressNums.completed || failed">-,---</span>
+            <count-up v-else class="inline-block" :startVal="0" :endVal="progressNums.left" :duration="1" :isReady="progressNums.completed"></count-up> /
+          </span>
+          <span>
+            <span v-if="!progressNums.completed || failed">-,---</span>
+            <count-up v-else class="inline-block" :startVal="0" :endVal="progressNums.total" :duration="1" :isReady="progressNums.completed"></count-up>
+          </span>
+        </span>
+        <!-- <span class="promotion-left-num">
           <span v-if="!progressNums.completed" class="inline-block">...</span>
-          <!-- <span v-else>
-            Left&nbsp; -->
           <count-up v-else class="inline-block" :startVal="0" :endVal="progressNums.left" :duration="1" :isReady="progressNums.completed"></count-up>&nbsp;&nbsp;left
-          <!-- </span> -->
         </span>
         <span>
           <span v-if="!progressNums.completed" class="inline-block">...</span>
@@ -16,8 +24,7 @@
             Total&nbsp;
             <count-up class="inline-block" :startVal="0" :endVal="progressNums.total" :duration="1" :isReady="progressNums.completed"></count-up>
           </span>
-          <!-- <count-up v-else class="inline-block" :startVal="0" :endVal="progressNums.total" :duration="1" :isReady="progressNums.completed"></count-up>&nbsp;&nbsp;total -->
-        </span>
+        </span> -->
       </p>
       <div class="promotion-progress-bar">
         <lordless-progress
@@ -38,7 +45,7 @@
       </p> -->
       <p class="TTFontBolder v-flex d-flex f-justify-start promotion-claim-num">
         <span class="inline-block">+ {{ info.countPerUser | weiToEth }}</span>
-        <span class="inline-block text-upper promotion-claim-symbol">{{ info.project.symbol }}</span>
+        <!-- <span class="inline-block text-upper promotion-claim-symbol">{{ info.project.symbol }}</span> -->
       </p>
       <lordless-btn
         class="TTFontBold promotion-claim-btn"
@@ -305,7 +312,9 @@ export default {
           await saveAirdropUser({ tx, airdropId: info._id })
           this.metamaskChoose = false
 
-          this.$nextTick(() => this.$router.push('/owner/quests?type=promotion&refresh=true'))
+          this.$nextTick(() => {
+            this.$router.push('/owner/quests?type=promotion&refresh=true')
+          })
         })
           .catch((err) => {
             console.log('err', err.message)
@@ -344,17 +353,17 @@ export default {
       .promotion-claim-num {
         visibility: hidden;
       }
-      .promotion-claim-failed {
-        display: block;
-      }
-      .promotion-claim-nums {
-        display: none;
-      }
+      // .promotion-claim-failed {
+      //   display: block;
+      // }
+      // .promotion-claim-nums {
+      //   display: none;
+      // }
     }
   }
-  .promotion-claim-failed {
-    display: none;
-  }
+  // .promotion-claim-failed {
+  //   display: none;
+  // }
   .promotion-claim-left {
     font-size: 16px;
     color: #777;
@@ -378,8 +387,9 @@ export default {
     color: #F5515F;
   }
   .promotion-claim-symbol {
-    margin-left: 5px;
-    font-size: 16px;
+    // margin-left: 5px;
+    // font-size: 16px;
+    color: #F5515F;
   }
   // .promotion-candy-coin {
   //   margin-right: 6px;

@@ -8,9 +8,24 @@
             :src="info.ldbIcon.source.preview"
             :popularity="info.chain.popularity"
             :presale="presale"
-            :salePrice="info.chain.auction.price"
-            showPopularity
-            :showSale="info.chain.auction.isOnAuction || info.chain.auction.isOnPreAuction"/>
+            showPopularity/>
+        </div>
+        <div class="TTFontBolder building-sale-tag">
+          <div class="d-inline-flex f-align-center sale-tag-container">
+            <span class="inline-block line-height-0 building-price-tag">
+              <svg>
+                <use xlink:href="#icon-price-tag"></use>
+              </svg>
+            </span>
+            <span class="inline-block line-height-0 building-eth-price">
+              <svg>
+                <use xlink:href="#icon-eth-price"></use>
+              </svg>
+            </span>
+            <span class="inline-block">
+              {{ info.chain.auction.price | weiToEth }}
+            </span>
+          </div>
         </div>
         <div class="building-main-cnt">
           <h2 class="building-name">{{ info.name.zh }}</h2>
@@ -24,24 +39,36 @@
             </span>
             <span>&nbsp;{{ info.chain.lng | transferCoords | sliceStr }}, {{ info.chain.lat | transferCoords | sliceStr }}</span>
           </p>
-          <ul class="d-flex f-align-center building-data">
-            <li class="v-flex building-data-item">
-              <p>{{ info.chain.level || 0 }}</p>
-              <p>Level</p>
-            </li>
-            <!-- <li class="v-flex building-data-item">
-              <p>{{ info.chain.popularity || 0 }}</p>
-              <p>Popularity</p>
-            </li> -->
-            <li class="v-flex building-data-item">
-              <p>{{ info.members }}</p>
-              <p>Hunters</p>
-            </li>
-          </ul>
         </div>
       </div>
-      <figcaption class="building-card-bottom">
-        <ul class="text-left">
+      <figcaption class="relative building-card-bottom">
+        <div class="building-bottom-progress">
+          <lordless-progress
+            class="building-bottom-progress"
+            :current="info.apLeft"
+            :max="info.ap"
+            :gradient="progressOpts.capacity.gradient"/>
+        </div>
+
+        <ul class="d-flex f-align-center building-data">
+          <li class="v-flex building-data-item">
+            <p>{{ (info.ap || 0).toLocaleString() }}</p>
+            <p>Max AP</p>
+          </li>
+          <li class="v-flex building-data-item">
+            <p>{{ info.chain.level || 0 }}</p>
+            <p>Level</p>
+          </li>
+          <!-- <li class="v-flex building-data-item">
+            <p>{{ info.chain.popularity || 0 }}</p>
+            <p>Popularity</p>
+          </li> -->
+          <li class="v-flex building-data-item">
+            <p>{{ info.members }}</p>
+            <p>Hunters</p>
+          </li>
+        </ul>
+        <!-- <ul class="text-left">
           <li class="d-flex col-flex">
             <p class="d-flex f-align-center">
               <span class="v-flex">AP</span>
@@ -55,20 +82,7 @@
               </lordless-progress>
             </p>
           </li>
-          <!-- <li class="d-flex col-flex">
-            <p class="d-flex f-align-center">
-              <span class="v-flex">Activeness</span>
-              <span>{{ info.chain.activeness }}</span>
-            </p>
-            <p class="building-progress">
-              <lordless-progress
-                :current="info.chain.activeness"
-                :max="1267"
-                :gradient="progressOpts.activeness.gradient">
-              </lordless-progress>
-            </p>
-          </li> -->
-        </ul>
+        </ul> -->
       </figcaption>
     </figure>
   </div>
@@ -122,15 +136,16 @@ export default {
     background-color: #fff;
     border-radius: 5px;
     transition: all .15s ease;
-    &.sale {
-      .building-sale-tag {
-        visibility: visible;
-      }
-    }
+    // &.sale {
+    //   .building-sale-tag {
+    //     visibility: visible;
+    //   }
+    // }
     &.shadow {
-      .building-card-bottom {
-        box-shadow: 0px 20px 25px -15px rgba(0, 0, 0, 0.25);
-      }
+      // .building-card-bottom {
+      //   box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.25);
+      // }
+      box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.15)
     }
   }
 
@@ -138,25 +153,54 @@ export default {
    *  building-header  --- begin
    */
   .building-header {
-    height: 300px;
+    height: 260px;
   }
 
   /**
    *  building-header  --- end
    */
+  .building-sale-tag {
+    position: relative;
+    z-index: 9;
+  }
+  .sale-tag-container {
+    padding: 0 18px;
+    background-image: linear-gradient(-45deg, #796FEE 0%, #534BD6 100%);
+    border-radius: 18px;
+    height: 36px;
+    line-height: 36px;
+    font-size: 20px;
+    color: #fff;
+    fill: #fff;
+  }
+  .building-price-tag {
+    width: 16px;
+    height: 16px;
+  }
+  .building-eth-price {
+    margin-left: 8px;
+    margin-right: 6px;
+    width: 10px;
+    height: 14px;
+    stroke-width: 2;
+    stroke: #fff;
+  }
 
   /**
    *  building-main-cnt --- begin
    */
   .building-main-cnt {
+    margin-top: 25px;
     padding: 0 20px 30px;
     >p {
       margin-top: 5px;
     }
   }
   .building-name {
+    height: 48px;
     font-size: 18px;
     color: #555;
+    overflow: hidden;
   }
   .building-tokenId {
     font-size: 14px;
@@ -174,7 +218,7 @@ export default {
 
   .building-data {
     position: relative;
-    margin: 25px auto 0;
+    // margin: 25px auto 0;
     max-width: 230px;
   }
   .building-data-item {
@@ -211,7 +255,7 @@ export default {
    *  building-card-bottom  --- begin
    */
   .building-card-bottom {
-    padding: 35px 30px;
+    padding: 24px 22px;
     font-size: 14px;
     color: #999;
     background-color: #fff;
@@ -219,22 +263,30 @@ export default {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     transition: all .15s ease;
+    overflow: hidden;
     li {
-      &:not(:first-of-type) {
-        margin-top: 10px;
-      }
+      // &:not(:first-of-type) {
+      //   margin-top: 10px;
+      // }
       >p {
         &:first-of-type {
-          margin-bottom: 5px;
+          margin-bottom: 4px;
         }
       }
     }
   }
-  .building-progress {
+  // .building-progress {
+  //   width: 100%;
+  //   height: 5px;
+  //   border-radius: 5px;
+  //   overflow: hidden;
+  // }
+  .building-bottom-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
     width: 100%;
-    height: 5px;
-    border-radius: 5px;
-    overflow: hidden;
+    height: 3px;
   }
   /**
    *  building-card-bottom  --- end
@@ -243,8 +295,9 @@ export default {
    @media screen and (min-width: 768px) {
     .ld-building-card {
       &:hover {
-        transform: translateY(-4px);
-        box-shadow: 0px 10px 25px 0 rgba(0, 0, 0, 0.25);
+        transform: translateY(-2px);
+        // box-shadow: 0px 10px 25px 0 rgba(0, 0, 0, 0.25);
+        box-shadow: 0px 2px 20px 3px rgba(0, 0, 0, 0.15);
         .building-card-bottom {
           box-shadow: none;
         }

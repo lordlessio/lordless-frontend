@@ -1,11 +1,11 @@
 import store from '@/store'
-import { initStorageUser, getAccount, getBalance, getGasPrice } from './utils'
+import { initStorageUser, getAccount, getGasPrice } from './utils'
 import { actionTypes } from '@/store/types'
 
 export const monitorWeb3 = (web3Opt) => {
   // const APPROVED_NETWORKID = '5777'
   // const { web3Opt } = store.state.web3
-  let { balance, address, web3js, error } = web3Opt
+  let { address, web3js, error } = web3Opt
 
   // gasprice 全局只请求一次
   getGasPrice(web3js)
@@ -19,11 +19,12 @@ export const monitorWeb3 = (web3Opt) => {
     /**
      * check balance
      */
-    const balanceRes = (await getBalance(web3js, address)) || {}
-    if (balanceRes.balance !== balance) {
-      balance = balanceRes.balance
-      store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { balance: balanceRes.balance || 0 })
-    }
+    // balance 循环请求，会造成 metamask 循环 tx 提示闪烁
+    // const balanceRes = (await getBalance(web3js, address)) || {}
+    // if (balanceRes.balance !== balance) {
+    //   balance = balanceRes.balance
+    //   store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { balance: balanceRes.balance || 0 })
+    // }
 
     // const gasPriceRes = (await getGasPrice(web3js)) || {}
     // if (gasPriceRes.gasPrice !== gasPrice) {

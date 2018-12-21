@@ -179,6 +179,8 @@ export default {
   }
   .m-building-name {
     font-weight: 500;
+    height: 32px;
+    overflow: hidden;
   }
   .building-price-icon {
     margin-right: 2px;
