@@ -100,9 +100,9 @@ export default {
       progress: {
         underColor: '#ddd',
         gradient: {
-          direction: '-45deg',
-          start: '#F5515F',
-          end: '#9F041B'
+          direction: '45deg',
+          start: '#D0374E',
+          end: '#F5515F'
         }
       }
     }
@@ -373,7 +373,7 @@ export default {
   }
   .promotion-progress-bar {
     margin-top: 6px;
-    height: 28px;
+    height: 22px;
     border-radius: 5px;
     overflow: hidden;
   }

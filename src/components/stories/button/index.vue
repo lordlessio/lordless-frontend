@@ -160,7 +160,7 @@
     &.promotion {
       font-family: inherit;
       color: #fff;
-      background-image: linear-gradient(-45deg, #F5515F 0%, #9F041B 100%);
+      background-image: linear-gradient(-45deg, #F5515F 0%, #D1001F 100%);
     }
     &.blue-linear {
       color: #fff;
