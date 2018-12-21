@@ -6,7 +6,7 @@
       <div class="d-flex md-col-flex">
         <div class="md-order-1 v-flex project-main-info">
           <div class="TTFontBolder d-flex f-align-center project-symbol-title">
-            <span v-if="projectInfo.iconUrl" class="inline-block line-height-0 project-symbol-img">
+            <span v-if="projectInfo.iconUrl && projectInfo.symbol === 'BITE'" class="inline-block line-height-0 project-symbol-img">
               <img class="full-width" :alt="`${projectInfo.symbol} icon`" :src="ossOrigin + projectInfo.iconUrl"/>
             </span>
             <span v-else class="inline-block project-symbol-icon">

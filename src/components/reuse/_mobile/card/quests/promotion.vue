@@ -17,7 +17,10 @@
         </span>
       </div>
       <a class="d-flex promotion-card-bottom" :href="`${ETHERSCANURL}/tx/${info.tx}`" target="_blank">
-        <span class="inline-block promotion-symbol-icon">
+        <span v-if="info.airdrop.project.iconUrl && info.airdrop.project.symbol === 'BITE'" class="inline-block line-height-0 project-symbol-img">
+          <img class="full-width" :alt="`${info.airdrop.project.symbol} icon`" :src="ossOrigin + info.airdrop.project.iconUrl"/>
+        </span>
+        <span v-else class="inline-block promotion-symbol-icon">
           <svg>
             <use :xlink:href="`#coin-${info.airdrop.project.symbol.toLocaleLowerCase()}`"/>
           </svg>
@@ -29,7 +32,7 @@
           </p>
           <p class="d-flex f-align-center">
             <span class="v-flex inline-block">{{ info.update_at | dateFormat('MMM. DD YYYY') }}</span>
-            <span class="inline-block">≈ $ {{ info.airdrop.countPerUser / 1e18 / info.airdrop.project.USD2TokenCount | formatDecimal }}</span>
+            <span v-if="info.airdrop.project.USD2TokenCount" class="inline-block">≈ $ {{ info.airdrop.countPerUser / 1e18 / info.airdrop.project.USD2TokenCount | formatDecimal }}</span>
           </p>
         </div>
       </a>
@@ -57,6 +60,9 @@ export default {
   computed: {
     ETHERSCANURL () {
       return process.env.ETHERSCANURL
+    },
+    ossOrigin () {
+      return process.env.LDBICON_ORIGIN
     }
   }
 }
@@ -125,6 +131,10 @@ export default {
   }
   .card-top-symbol {
     margin: 0 5px;
+  }
+  .project-symbol-img {
+    width: 48px;
+    height: 48px;
   }
   .card-top-icon {
     width: 18px;

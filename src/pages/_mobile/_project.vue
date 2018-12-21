@@ -13,7 +13,7 @@
         <section class="ld-project-section project-section-candy">
           <div class="project-candy-info">
             <p class="d-flex f-align-center candy-info-symbol">
-              <span v-if="projectInfo.iconUrl" class="inline-block line-height-0 project-symbol-img">
+              <span v-if="projectInfo.iconUrl && projectInfo.symbol === 'BITE'" class="inline-block line-height-0 project-symbol-img">
                 <img class="full-width" :alt="`${projectInfo.symbol} icon`" :src="ossOrigin + projectInfo.iconUrl"/>
               </span>
               <span v-else class="inline-block line-height-0 candy-symbol-icon">

@@ -273,7 +273,7 @@ export default {
 
         // 估算 gas
         // const gas = await NFTsCrowdsale.payByEth.estimateGas(tokenId)
-        const gas = (await Airdrop.estimateGas(claimParams.name, claimParams.values)) || 100000
+        const gas = (await Airdrop.estimateGas(claimParams.name, claimParams.values)) || 120000
 
         // console.log('--- gas', gas, gasPrice)
         // 根据链上信息 claim 糖果
