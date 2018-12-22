@@ -4,7 +4,7 @@
     <transition name="ld-hide-fade">
       <div v-if="!loading && total">
         <h2 class="detail-mobile-title">Transaction histroy</h2>
-        <div v-for="record of list" :key="record._id">
+        <div v-if="!record.isPending" v-for="record of list" :key="record._id" class="mobile-record-item-box">
           <a class="d-flex col-flex mobile-records-item" :href="`${ETHERSCANURL}tx/${record.tx.transactionHash}`" target="_blank">
             <span class="d-flex f-align-center">PRICE<span class="v-flex text-right text-color-third">{{ record.created_at | timeFormat }}</span></span>
             <p class="TTFontBolder price text-upper">{{ record.market[0].price | weiToEth }} ETH</p>
@@ -55,6 +55,11 @@ export default {
     color: #0B2A48;
   }
 
+  .mobile-record-item-box {
+    &:not(:first-of-type) {
+      margin-top: 20px;
+    }
+  }
   .mobile-records-item {
     padding: 20px 20px 30px;
     font-size: 16px;
@@ -74,9 +79,6 @@ export default {
       &:not(:first-of-type) {
         margin-top: 10px;
       }
-    }
-    &:not(:first-of-type) {
-      margin-top: 20px;
     }
   }
 </style>

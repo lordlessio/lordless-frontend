@@ -23,6 +23,7 @@
             <p class="v-flex quests-item-reward">TO</p>
           </li>
           <li class="lordless-table-item records-table-item"
+            v-if="!record.isPending"
             v-for="(record, index) of list"
             :key="index">
             <a class="d-flex f-align-center" :href="`${ETHERSCANURL}tx/${record.tx.transactionHash}`" target="_blank">
