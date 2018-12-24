@@ -61,7 +61,7 @@
             <div class="project-intro-item">
               <p class="intro-item-title">Market</p>
               <ul class="intro-market-ul">
-                <li v-if="projectInfo.market.price" class="d-flex f-align-center intro-market-item">
+                <li v-if="projectInfo.market.price && projectInfo.symbol.toLocaleLowerCase() !== 'less'" class="d-flex f-align-center intro-market-item">
                   <span class="inlin-block market-item-icon">
                     <svg>
                       <use xlink:href="#icon-market-price"/>

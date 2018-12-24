@@ -37,7 +37,7 @@
             <div class="project-intro-item">
               <p class="intro-item-title">Market</p>
               <ul class="d-flex f-wrap project-intro-markets">
-                <li v-if="projectInfo.market.price" class="text-center text-nowrap project-market-item">
+                <li v-if="projectInfo.market.price && projectInfo.symbol.toLocaleLowerCase() !== 'less'" class="text-center text-nowrap project-market-item">
                   <p class="TTFontBolder project-market-top">$ {{ projectInfo.market.price | formatDecimal }}</p>
                   <p class="d-flex f-auto-center project-market-bottom">
                     <span class="inline-block line-height-0 market-bottom-icon">
