@@ -41,7 +41,7 @@
             </a>
           </div>
           <div class="sm-v-flex footer-icons-item">
-            <a class="inline-block" target="_blank" href="https://t.me/lordlessio">
+            <a class="inline-block" target="_blank" href="https://t.me/lordless_global">
               <svg v-if="theme !== 'default'">
                 <use xlink:href="#icon-telegram"/>
               </svg>

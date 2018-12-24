@@ -112,7 +112,7 @@
             <span class="TTFontBolder inline-block">Subscribe</span>
           </a>
           <div class="footer-link-icons">
-            <a class="inline-block" href="https://t.me/lordlessio" target="_blank">
+            <a class="inline-block" href="https://t.me/lordless_global" target="_blank">
               <svg>
                 <use xlink:href="#icon-telegram"/>
               </svg>

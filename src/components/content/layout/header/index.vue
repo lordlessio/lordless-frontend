@@ -43,7 +43,7 @@
           </a>
         </span>
         <span class="inline-block header-right-item line-height-0" data-type="link">
-          <a href="https://t.me/lordlessio" target="_blank">
+          <a href="https://t.me/lordless_global" target="_blank">
             <svg>
               <use xlink:href="#icon-telegram"/>
             </svg>

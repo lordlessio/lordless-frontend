@@ -98,7 +98,7 @@
                         <p class="header-info-title">
                           Tavernkeep
                         </p>
-                        <div class="d-flex f-align-center header-info-cnt detail-lord-box">
+                        <div v-if="info.lord" class="d-flex f-align-center header-info-cnt detail-lord-box">
                           <lordless-blockies
                             theme="light"
                             :scale="7"
@@ -1121,7 +1121,7 @@ export default {
     height: 54px;
     cursor: pointer;
     transform: translateY(-10px);
-    animation: candyAnimate 5s linear infinite;
+    // animation: candyAnimate 5s linear infinite;
     // -moz-animation-duration: 2.4s;
     will-change: transform;
     &.move {

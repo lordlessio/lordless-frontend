@@ -71,8 +71,6 @@
 <script>
 import LdInput from '@/components/stories/input'
 
-import { weiToEth } from 'utils/tool'
-
 import { metamaskMixins, contractMixins, publicMixins } from '@/mixins'
 
 export default {
@@ -157,22 +155,24 @@ export default {
       const tokenId = ldbInfo.chain.tokenId
       if ((!tokenId && tokenId !== 0) || !this.sellRequired) return
 
+      const _sellInputs = JSON.parse(JSON.stringify(sellInputs))
+
       const { web3js, gasPrice } = web3Opt
 
       // 获取表单信息
-      const price = parseFloat(sellInputs.price.model)
-      const duration = parseFloat(sellInputs.duration.model)
+      const price = web3js.toWei(parseFloat(_sellInputs.price.model))
+      const duration = parseFloat(_sellInputs.duration.model)
 
       const startTime = Math.floor(new Date().getTime() / 1000)
       const endTime = Math.floor(new Date().getTime() / 1000) + duration * 3600 * 24
-      console.log('--- sale price', weiToEth(price), tokenId, startTime, endTime)
+      console.log('--- sale price', price, tokenId, startTime, endTime)
 
       this.metamaskChoose = true
 
       // 传输的合约参数
       const newAuction = {
         name: 'newAuction',
-        values: [ weiToEth(price), tokenId, startTime, endTime ]
+        values: [ price, tokenId, startTime, endTime ]
       }
 
       // 估算 gas，不准
@@ -188,7 +188,7 @@ export default {
           this.$emit('input', false)
 
           this.$nextTick(() => {
-            this.$emit('pending', { tx, tokenId, price: web3js.toWei(price), action: newAuction.name, pending: true })
+            this.$emit('pending', { tx, tokenId, price, action: newAuction.name, pending: true })
           })
           // 执行内部pending
           if (this.pending) {
@@ -198,7 +198,7 @@ export default {
                 if (err) return
                 if (data.isPending) return loop()
 
-                this.$emit('pending', { tx, tokenId, price: web3js.toWei(price), action: newAuction.name }, data)
+                this.$emit('pending', { tx, tokenId, price, action: newAuction.name }, data)
               })
             }
             loop()

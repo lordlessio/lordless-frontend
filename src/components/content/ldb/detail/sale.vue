@@ -153,7 +153,7 @@ export default {
       // contract mixin 合约检查状态
       // const { init, ldbNFTOwner, crowdsaleOwner } = this.contractStatus
       const info = this.info
-      return !this.showSign && info.lord.address === this.user.address
+      return !this.showSign && info.lord && info.lord.address === this.user.address
       // return (!this.showSign && info.lord.address === this.userInfo.address) && (ldbNFTOwner || crowdsaleOwner) && init
     }
   },
