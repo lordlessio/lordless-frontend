@@ -343,6 +343,17 @@ export const transferCoords = (value) => {
 }
 
 /**
+ * translate to wei by decimals
+ */
+export const weiByDecimals = (value, decimals = 18) => {
+  if (!value) return value
+
+  // 防止 1e+20 之类的数字转化失败，这里需要判断一下
+  if (typeof value !== 'number') value = parseInt(value)
+
+  return parseFloat(parseFloat(value / Math.pow(10, decimals)).toFixed(4))
+}
+/**
  * wei to eth
  */
 export const weiToEth = (value) => {

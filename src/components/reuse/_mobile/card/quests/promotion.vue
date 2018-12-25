@@ -33,7 +33,7 @@
         <div class="v-flex promotion-info-box">
           <p class="d-flex f-align-center">
             <span class="v-flex inline-block text-upper">{{ info.airdrop.project.symbol }}</span>
-            <span class="inline-block TTFontBolder">+ {{ info.airdrop.countPerUser | weiToEth }}</span>
+            <span class="inline-block TTFontBolder">+ {{ info.airdrop.countPerUser | weiByDecimals(info.airdrop.decimals) }}</span>
           </p>
           <p class="d-flex f-align-center">
             <span class="v-flex inline-block">{{ info.update_at | dateFormat('MMM. DD YYYY') }}</span>

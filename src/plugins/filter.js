@@ -8,6 +8,7 @@ import {
   reldbIcon,
   transferCoords,
   weiToEth,
+  weiByDecimals,
   dateFormat,
   timeFormat,
   formatLdbType,
@@ -31,6 +32,8 @@ Vue.filter('formatDecimal', formatDecimal)
 Vue.filter('sliceStr', sliceStr)
 
 Vue.filter('weiToEth', weiToEth)
+
+Vue.filter('weiByDecimals', weiByDecimals)
 
 Vue.filter('transferCoords', transferCoords)
 

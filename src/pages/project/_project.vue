@@ -27,7 +27,7 @@
           </div>
           <p v-if="ownerAirdrops" class="TTFontBolder project-claimed-text">
             <span v-if="claimed === -1">???</span>
-            <span v-else-if="!projectInfo.USD2TokenCount"> {{ claimed }} tokens</span>
+            <span v-else-if="!projectInfo.USD2TokenCount"> {{ claimed | formatNumber }} tokens</span>
             <span v-else>{{ claimed / projectInfo.USD2TokenCount | formatNumber | formatDecimal({ len: 2 }) }} US dollars</span>
             has been claimed.
           </p>

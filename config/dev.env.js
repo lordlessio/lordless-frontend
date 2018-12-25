@@ -11,7 +11,7 @@ module.exports = merge(prodEnv, {
   port,
   // BACKEND_SERVER: '"//10.229.2.203:8080/lordless"',
   // BACKEND_SERVER: `"//ropsten.lordless.games"`,
-  BACKEND_SERVER: `"//game.lordless.io"`,
+  // BACKEND_SERVER: `"//game.lordless.io"`,
   ETHERSCANURL: '"https://ropsten.etherscan.io/"',
   APPROVED_NETWORK_ID: 5777,
   contract,

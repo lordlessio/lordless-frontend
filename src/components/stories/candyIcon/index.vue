@@ -32,7 +32,7 @@ export default {
   },
   data: () => {
     return {
-      filterSvgSymbols: ['BITE']
+      filterSvgSymbols: ['BITE', 'LNM']
     }
   },
   computed: {
@@ -54,9 +54,11 @@ export default {
     }
   }
   .candy-symbol-img {
+    padding: 8%;
     width: 100%;
     border-radius: 100%;
     overflow: hidden;
+    box-sizing: border-box;
   }
   .candy-svg-box {
     width: 100%;

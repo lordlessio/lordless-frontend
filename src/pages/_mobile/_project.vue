@@ -35,7 +35,7 @@
             <div v-if="airdropInfo">
               <p class="TTFontBolder candy-claimed-info">
                 <span v-if="claimed === -1">???</span>
-                <span v-else-if="!projectInfo.USD2TokenCount"> {{ claimed }} tokens</span>
+                <span v-else-if="!projectInfo.USD2TokenCount"> {{ claimed | formatNumber }} tokens</span>
                 <span v-else>{{ claimed / projectInfo.USD2TokenCount | formatNumber | formatDecimal({ len: 2 }) }} US dollars</span>
                 <span class="TTFontBold candy-claimed-been">has been claimed.</span>
               </p>

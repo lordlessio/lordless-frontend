@@ -8,6 +8,7 @@
     <wallets-svg/>
     <mobile-svg/>
     <market-svg/>
+    <coin-svg/>
   </div>
 </template>
 
@@ -20,6 +21,7 @@ import TaskSvg from './task'
 import WalletsSvg from './wallets'
 import MobileSvg from './mobile'
 import MarketSvg from './market'
+import CoinSvg from './coin'
 export default {
   components: {
     GradientSvg,
@@ -29,7 +31,8 @@ export default {
     TaskSvg,
     WalletsSvg,
     MobileSvg,
-    MarketSvg
+    MarketSvg,
+    CoinSvg
   },
   mounted () {
     document.body.appendChild(this.$el)

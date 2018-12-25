@@ -44,7 +44,7 @@
         <span class="inline-block">LESS</span>
       </p> -->
       <p class="TTFontBolder v-flex d-flex f-justify-start promotion-claim-num">
-        <span class="inline-block">+ {{ info.countPerUser | weiToEth }}</span>
+        <span class="inline-block">+ {{ info.countPerUser | weiByDecimals(info.decimals) }}</span>
         <!-- <span class="inline-block text-upper promotion-claim-symbol">{{ info.project.symbol }}</span> -->
       </p>
       <lordless-btn
@@ -65,7 +65,7 @@
 <script>
 import { saveAirdropUser, getAirdropUserInfo } from 'api'
 
-import { weiToEth } from 'utils/tool'
+import { weiByDecimals } from 'utils/tool'
 import { metamaskMixins, dialogMixins, publicMixins } from '@/mixins'
 
 import { actionTypes } from '@/store/types'
@@ -126,8 +126,8 @@ export default {
       return typeof project === 'object' ? project.address : project
     },
     isEnd () {
-      const { open, countPerUser } = this.info
-      return !open || (!this.failed && this.progressNums.left < parseFloat(weiToEth(countPerUser)))
+      const { open, countPerUser, decimals } = this.info
+      return !open || (!this.failed && this.progressNums.left < parseFloat(weiByDecimals(countPerUser, decimals)))
     }
   },
   watch: {
@@ -227,7 +227,7 @@ export default {
       }
       // const _count = await Airdrop.methods('getAirdrop', [ this.info.airdropId ])
       // console.log('_count', _count[1].toNumber())
-      let decimals = this.info.decimals || (await TokenContract.methods('decimals')).toNumber() || 16
+      let decimals = this.info.decimals || (await TokenContract.methods('decimals')).toNumber() || 18
 
       const _left = await TokenContract.methods('balanceOf', [ Airdrop.address ])
       // console.log('_left', _left, _left.toNumber() / Math.pow(10, decimals))
