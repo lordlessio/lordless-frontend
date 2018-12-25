@@ -5,7 +5,7 @@
       <p>Authorize the Marketplace contract to operate tarven</p>
       <lordless-btn
         class="TTFontBolder lordless-message-btn crowdsale-btn"
-        theme="blue"
+        theme="dialog"
         shadow
         :loading="crowdsalePending"
         :disabled="crowdsalePending"
@@ -32,7 +32,7 @@
         <div>
           <lordless-btn
             class="TTFontBolder lordless-message-btn crowdsale-btn"
-            theme="deep-blue"
+            theme="dialog"
             shadow
             :loading="crowdsalePending"
             :disabled="crowdsalePending"

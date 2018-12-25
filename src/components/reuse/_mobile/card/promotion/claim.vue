@@ -227,8 +227,7 @@ export default {
       }
       // const _count = await Airdrop.methods('getAirdrop', [ this.info.airdropId ])
       // console.log('_count', _count[1].toNumber())
-      let decimals = await TokenContract.methods('decimals')
-      decimals = decimals.toNumber()
+      let decimals = this.info.decimals || (await TokenContract.methods('decimals')).toNumber() || 16
 
       const _left = await TokenContract.methods('balanceOf', [ Airdrop.address ])
       // console.log('_left', _left, _left.toNumber() / Math.pow(10, decimals))
@@ -405,8 +404,11 @@ export default {
   //   fill: #fff;
   // }
   .promotion-claim-btn {
-    padding: 8px 14px;
+    padding: 0 16px;
+    height: 32px;
+    line-height: 32px;
     font-size: 14px;
     border: none;
+    @include TTFontBold();
   }
 </style>

@@ -20,22 +20,50 @@
               </a>
             </lordless-btn>
           </div>
-          <ul class="mobile-home-ul home-promotions-ul">
-            <li
-              v-for="(item, index) of promotions"
-              :key="index"
-              class="home-info-item home-promotions-item"
-              @click.stop="$router.push(`/project/${item.project._id}`)">
-              <figure>
-                <figcaption>
-                  <img :alt="`promotions_${item.project.symbol}`" class="full-width" :src="ossOrigin + item.banners[0]"/>
-                </figcaption>
-                <promotion-claim
-                  class="promotion-item-info"
-                  :info="item"/>
-              </figure>
-            </li>
-          </ul>
+          <!-- <div class="home-promotions-item home-promotions-lucky">
+            <div class="home-promotions-title">
+              <p class="TTFontBolder">Lucky Blocks</p>
+              <p>Try your LUCK today on blockchain.</p>
+            </div>
+            <ul class="promotions-lucky-ul">
+              <li
+                v-for="(item, index) of promotions"
+                :key="index"
+                class="home-info-item promotions-public-item promotions-lucky-item"
+                @click.stop="$router.push(`/project/${item.project._id}`)">
+                <figure>
+                  <figcaption>
+                    <img :alt="`promotions_${item.project.symbol}`" class="full-width" :src="ossOrigin + item.banners[0]"/>
+                  </figcaption>
+                  <promotion-lucky
+                    class="promotion-item-info"
+                    :info="item"/>
+                </figure>
+              </li>
+            </ul>
+          </div> -->
+          <div class="home-promotions-item home-promotions-windfall">
+            <!-- <div class="home-promotions-title">
+              <p class="TTFontBolder">Favorite Windfall</p>
+              <p>Claim your FREE token right now.</p>
+            </div> -->
+            <ul class="promotions-windfall-ul">
+              <li
+                v-for="(item, index) of promotions"
+                :key="index"
+                class="home-info-item promotions-public-item promotions-windfall-item"
+                @click.stop="$router.push(`/project/${item.project._id}`)">
+                <figure>
+                  <figcaption>
+                    <img :alt="`promotions_${item.project.symbol}`" class="full-width" :src="ossOrigin + item.banners[0]"/>
+                  </figcaption>
+                  <promotion-claim
+                    class="promotion-item-info"
+                    :info="item"/>
+                </figure>
+              </li>
+            </ul>
+          </div>
         </div>
         <!-- <div class="mobile-home-candies">
           <h2 class="mobile-home-title">Candies</h2>
@@ -66,6 +94,7 @@
 
 <script>
 import PromotionClaim from '@/components/reuse/_mobile/card/promotion/claim'
+// import PromotionLucky from '@/components/reuse/_mobile/card/promotion/lucky'
 
 import HomeSkeletion from '@/components/skeletion/_mobile/home'
 
@@ -93,6 +122,8 @@ export default {
   },
   components: {
     PromotionClaim,
+    // PromotionLucky,
+
     HomeSkeletion
   },
   methods: {
@@ -149,8 +180,20 @@ export default {
     width: 22px;
     height: 22px;
   }
-  .mobile-home-ul {
-    margin-top: 24px;
+  .home-promotions-item {
+    margin-top: 36px;
+  }
+  .home-promotions-title {
+    margin-bottom: 6px;
+    font-size: 16px;
+    color: #777;
+    >p {
+      &:first-of-type {
+        margin-bottom: 4px;
+        font-size: 18px;
+        color: #0B2A48;
+      }
+    }
   }
   .home-info-item {
     box-shadow: 0 0 10px 3px rgba(222, 222, 222, 1);
@@ -174,7 +217,12 @@ export default {
   .mobile-home-promotions {
     padding-top: 16px;
   }
-  .home-promotions-item {
+
+  .promotions-lucky-item {
+
+  }
+
+  .promotions-public-item {
     &:not(:first-of-type) {
       margin-top: 24px;
     }

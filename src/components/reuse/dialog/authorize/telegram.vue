@@ -21,7 +21,7 @@
         <lordless-btn
           v-if="isOk"
           class="TTFontBolder ld-authorize-btn"
-          theme="blue"
+          theme="dialog"
           shadow
           :disabled="true">
           <span class="inline-block authorize-check-box">

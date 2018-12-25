@@ -126,6 +126,12 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 // el-notification
 @media screen and (max-width: 768px) {
+  .v-modal {
+    opacity: 0.48;
+    background-color: rgba(0, 0, 0, 1);
+    pointer-events: none;
+  }
+
   .el-notification {
     width: 230px;
     padding: 8px 12px;

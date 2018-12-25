@@ -6,14 +6,20 @@
       <div class="d-flex md-col-flex">
         <div class="md-order-1 v-flex project-main-info">
           <div class="TTFontBolder d-flex f-align-center project-symbol-title">
-            <span v-if="projectInfo.iconUrl && projectInfo.symbol === 'BITE'" class="inline-block line-height-0 project-symbol-img">
+            <span class="project-symbol-img">
+              <lordless-candy-icon
+                linear
+                :url="projectInfo.iconUrl"
+                :symbol="projectInfo.symbol"/>
+            </span>
+            <!-- <span v-if="projectInfo.iconUrl && projectInfo.symbol === 'BITE'" class="inline-block line-height-0 project-symbol-img">
               <img class="full-width" :alt="`${projectInfo.symbol} icon`" :src="ossOrigin + projectInfo.iconUrl"/>
             </span>
             <span v-else class="inline-block project-symbol-icon">
               <svg>
                 <use :xlink:href="`#coin-${projectInfo.symbol.toLocaleLowerCase()}`"/>
               </svg>
-            </span>
+            </span> -->
             <p class="project-symbol-name">
               <span>{{ projectInfo.name }}</span>
               <span class="project-symbol-text">({{ projectInfo.symbol }})</span>
@@ -289,18 +295,19 @@ export default {
   }
   .project-symbol-img {
     width: 36px;
-  }
-  .project-symbol-icon {
-    padding: 8px;
-    width: 36px;
     height: 36px;
-    line-height: 0;
-    background-color: #0079FF;
-    fill: #fff;
-    box-sizing: border-box;
-    border-radius: 100%;
-    overflow: hidden;
   }
+  // .project-symbol-icon {
+  //   padding: 8px;
+  //   width: 36px;
+  //   height: 36px;
+  //   line-height: 0;
+  //   background-color: #0079FF;
+  //   fill: #fff;
+  //   box-sizing: border-box;
+  //   border-radius: 100%;
+  //   overflow: hidden;
+  // }
   .project-symbol-name {
     margin-left: 14px;
     font-size: 24px;

@@ -9,7 +9,7 @@
       <div class="mobile-login-btn">
         <lordless-btn
           class="TTFontBolder lordless-message-btn login-btn"
-          theme="blue"
+          theme="dialog"
           shadow
           :loading="web3Loading || userChecking"
           :disabled="web3Loading || userChecking"
@@ -50,7 +50,7 @@
         <p class="term-btn-box">
           <lordless-btn
             class="d-inline-flex f-align-center term-btn"
-            theme="blue"
+            theme="dialog"
             @click="termAgree('terms')">Done</lordless-btn>
         </p>
       </div>
@@ -64,7 +64,7 @@
         <p class="term-btn-box">
           <lordless-btn
             class="d-inline-flex f-align-center term-btn"
-            theme="blue"
+            theme="dialog"
             @click="termAgree('privacy')">Done</lordless-btn>
         </p>
       </div>

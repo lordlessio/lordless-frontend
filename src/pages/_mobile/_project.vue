@@ -13,14 +13,20 @@
         <section class="ld-project-section project-section-candy">
           <div class="project-candy-info">
             <p class="d-flex f-align-center candy-info-symbol">
-              <span v-if="projectInfo.iconUrl && projectInfo.symbol === 'BITE'" class="inline-block line-height-0 project-symbol-img">
+              <span class="inline-block line-height-0 project-symbol-img">
+                <lordless-candy-icon
+                  linear
+                  :url="projectInfo.iconUrl"
+                  :symbol="projectInfo.symbol"/>
+              </span>
+              <!-- <span v-if="projectInfo.iconUrl && projectInfo.symbol === 'BITE'" class="inline-block line-height-0 project-symbol-img">
                 <img class="full-width" :alt="`${projectInfo.symbol} icon`" :src="ossOrigin + projectInfo.iconUrl"/>
               </span>
               <span v-else class="inline-block line-height-0 candy-symbol-icon">
                 <svg v-if="projectInfo.symbol">
                   <use :xlink:href="`#coin-${projectInfo.symbol.toLocaleLowerCase()}`"/>
                 </svg>
-              </span>
+              </span> -->
               <span class="TTFontBolder inline-block text-upper">
                 <span class="inline-block">{{ projectInfo.name }}</span>
                 <span class="inline-block">({{ projectInfo.symbol }})</span>
@@ -331,17 +337,18 @@ export default {
   .project-symbol-img {
     margin-right: 10px;
     width: 28px;
-  }
-  .candy-symbol-icon {
-    margin-right: 6px;
-    padding: 6px;
-    width: 28px;
     height: 28px;
-    border-radius: 100%;
-    background-image: linear-gradient(-45deg, #00C0EB 0%, #0079FF 100%);
-    fill: #fff;
-    box-sizing: border-box;
   }
+  // .candy-symbol-icon {
+  //   margin-right: 6px;
+  //   padding: 6px;
+  //   width: 28px;
+  //   height: 28px;
+  //   border-radius: 100%;
+  //   background-image: linear-gradient(-45deg, #00C0EB 0%, #0079FF 100%);
+  //   fill: #fff;
+  //   box-sizing: border-box;
+  // }
   .candy-claimed-info {
     margin-top: 10px;
     font-size: 24px;

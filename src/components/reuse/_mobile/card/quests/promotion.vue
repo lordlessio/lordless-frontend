@@ -17,14 +17,19 @@
         </span>
       </div>
       <a class="d-flex promotion-card-bottom" :href="`${ETHERSCANURL}/tx/${info.tx}`" target="_blank">
-        <span v-if="info.airdrop.project.iconUrl && info.airdrop.project.symbol === 'BITE'" class="inline-block line-height-0 project-symbol-img">
+        <span class="inline-block line-height-0 project-symbol-img">
+          <lordless-candy-icon
+            :url="info.airdrop.project.iconUrl"
+            :symbol="info.airdrop.project.symbol"/>
+        </span>
+        <!-- <span v-if="info.airdrop.project.iconUrl && info.airdrop.project.symbol === 'BITE'" class="inline-block line-height-0 project-symbol-img">
           <img class="full-width" :alt="`${info.airdrop.project.symbol} icon`" :src="ossOrigin + info.airdrop.project.iconUrl"/>
         </span>
         <span v-else class="inline-block promotion-symbol-icon">
           <svg>
             <use :xlink:href="`#coin-${info.airdrop.project.symbol.toLocaleLowerCase()}`"/>
           </svg>
-        </span>
+        </span> -->
         <div class="v-flex promotion-info-box">
           <p class="d-flex f-align-center">
             <span class="v-flex inline-block text-upper">{{ info.airdrop.project.symbol }}</span>
@@ -149,16 +154,16 @@ export default {
   .promotion-card-bottom {
     padding: 16px 20px;
   }
-  .promotion-symbol-icon {
-    padding: 8px;
-    box-sizing: border-box;
-    width: 36px;
-    height: 36px;
-    background-color: #0079FF;
-    fill: #fff;
-    border-radius: 100%;
-    overflow: hidden;
-  }
+  // .promotion-symbol-icon {
+  //   padding: 8px;
+  //   box-sizing: border-box;
+  //   width: 36px;
+  //   height: 36px;
+  //   background-color: #0079FF;
+  //   fill: #fff;
+  //   border-radius: 100%;
+  //   overflow: hidden;
+  // }
   .promotion-info-box {
     margin-left: 8px;
     >p {

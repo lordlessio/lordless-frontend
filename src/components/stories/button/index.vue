@@ -186,6 +186,20 @@
         fill: #F5515F;
       }
     }
+    &.dialog {
+      color: $--dialog-btn-color;
+      background-color: #fff;
+      fill: $--dialog-btn-color;
+      &.shadow {
+        box-shadow: 2.5px 5px 10px 0 rgba(0, 0, 0, .25);
+        // box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
+      }
+      &.inverse {
+        color: #fff;
+        background-color: $--dialog-btn-color;
+        fill: #fff;
+      }
+    }
     // &.pink {
     //   color: #fff;
     //   border: none;

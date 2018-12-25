@@ -4,7 +4,7 @@
       <h1 class="TTFontBolder">{{ statusInfos[type].title }}</h1>
       <p>{{ statusInfos[type].content }}</p>
       <p>New here?Read our guide on getting started.</p>
-      <lordless-btn theme="deep-blue" class="TTFontBolder lordless-message-btn" @click="$router.push('/guide')">Read guide</lordless-btn>
+      <lordless-btn theme="dialog" class="TTFontBolder lordless-message-btn" @click="$router.push('/guide')">Read guide</lordless-btn>
       <lordless-img class="authorize-status-img" :alt="statusInfos[type].title" :sType="statusInfos[type].sType" :center="false" :src="statusInfos[type].imgUrl | originSource"/>
     </div>
   </div>

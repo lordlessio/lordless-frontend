@@ -5,6 +5,7 @@ const files = [
 
   '/reuse/tavernPoster',
   '/reuse/dialog/authorize',
+  '/reuse/dialog/luckyRules',
 
   '/content/layout/header/logo',
 
@@ -14,7 +15,8 @@ const files = [
   '/stories/linkSymbol',
   '/stories/pagination',
   '/stories/progress',
-  '/stories/dialog/fade'
+  '/stories/dialog/fade',
+  '/stories/candyIcon'
 ]
 
 for (const file of files) {

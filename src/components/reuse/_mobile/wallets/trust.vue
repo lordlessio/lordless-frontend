@@ -11,7 +11,7 @@
       <p class="trust-wallet-desc">Use <span>Trust Wallet Browser</span> to visit:<br>(Click to copy URL)</p>
       <p id="copy-link" class="inline-block trust-copy-link" :data-clipboard-text="copyLink">{{ copyLink }}</p>
       <div class="trust-wallet-btns">
-        <lordless-btn theme="blue-linear" class="full-width trust-open-btn" @click="jumpTrust">
+        <lordless-btn :theme="dialog ? 'dialog': 'blue-linear'" class="full-width trust-open-btn" @click="jumpTrust">
           Open with Trust
         </lordless-btn>
       </div>

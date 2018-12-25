@@ -18,19 +18,44 @@
             <span>to make you never miss any promotions in LORDLESS.</span>
           </p>
         </div>
-        <ul class="d-flex f-wrap f-align-center promotions-list">
-          <li class="promotions-item"
-            v-for="(item, index) of promotions" :key="index">
-            <figure>
-              <figcaption
-                :style="`background-image: url(${ossOrigin + item.banners[0]})`"
-                @click.stop="$router.push(`/project/${item.project._id}`)"/>
-              <promotion-claim
-                class="promotion-item-info"
-                :info="item"/>
-            </figure>
-          </li>
-        </ul>
+
+        <!-- <div class="home-promotions-item home-promotions-windfall">
+          <div class="home-promotions-title">
+            <p class="TTFontBolder">Windfall</p>
+          </div>
+          <ul class="d-flex f-wrap f-align-center promotions-list">
+            <li class="promotions-item"
+              v-for="(item, index) of promotions" :key="index">
+              <figure>
+                <figcaption
+                  :style="`background-image: url(${ossOrigin + item.banners[0]})`"
+                  @click.stop="$router.push(`/project/${item.project._id}`)"/>
+                <promotion-lucky
+                  class="promotion-item-info"
+                  :info="item"/>
+              </figure>
+            </li>
+          </ul>
+        </div> -->
+
+        <div class="home-promotions-item home-promotions-windfall">
+          <!-- <div class="home-promotions-title">
+            <p class="TTFontBolder">Lucky Blocks</p>
+          </div> -->
+          <ul class="d-flex f-wrap f-align-center promotions-list">
+            <li class="promotions-item"
+              v-for="(item, index) of promotions" :key="index">
+              <figure>
+                <figcaption
+                  :style="`background-image: url(${ossOrigin + item.banners[0]})`"
+                  @click.stop="$router.push(`/project/${item.project._id}`)"/>
+                <promotion-claim
+                  class="promotion-item-info"
+                  :info="item"/>
+              </figure>
+            </li>
+          </ul>
+        </div>
       </section>
       <section class="promotions-section candies-section">
         <h2>Candies</h2>
@@ -70,6 +95,7 @@
 import { promotionsMixins } from '@/mixins'
 import PromotionsBreadcrumb from '@/components/reuse/promotions/breadcrumb'
 import PromotionClaim from '@/components/reuse/_mobile/card/promotion/claim'
+// import PromotionLucky from '@/components/reuse/_mobile/card/promotion/lucky'
 
 import PromotionsSkeletion from '@/components/skeletion/project/promotions'
 export default {
@@ -78,6 +104,7 @@ export default {
   components: {
     PromotionsBreadcrumb,
     PromotionClaim,
+    // PromotionLucky,
 
     PromotionsSkeletion
   }
@@ -101,7 +128,6 @@ export default {
     padding-bottom: 24px;
     font-size: 16px;
     color: #777;
-    // border-bottom: 1px solid #ddd;
     box-sizing: border-box;
   }
   .home-promotions-twitter-link {
@@ -115,6 +141,18 @@ export default {
     width: 18px;
     height: 18px;
   }
+
+  .home-promotions-item {
+    &:not(:last-of-type) {
+      margin-bottom: 36px;
+    }
+  }
+  .home-promotions-title {
+    margin-bottom: 12px;
+    font-size: 18px;
+    color: #0B2A48;
+  }
+
   .promotions-list {
     margin: -30px -12px 0;
   }
