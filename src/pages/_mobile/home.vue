@@ -20,20 +20,19 @@
               </a>
             </lordless-btn>
           </div>
-          <!-- <div class="home-promotions-item home-promotions-lucky">
+          <div class="home-promotions-item home-promotions-lucky">
             <div class="home-promotions-title">
               <p class="TTFontBolder">Lucky Blocks</p>
               <p>Try your LUCK today on blockchain.</p>
             </div>
             <ul class="promotions-lucky-ul">
               <li
-                v-for="(item, index) of promotions"
+                v-for="(item, index) of luckydrops"
                 :key="index"
-                class="home-info-item promotions-public-item promotions-lucky-item"
-                @click.stop="$router.push(`/project/${item.project._id}`)">
+                class="home-info-item promotions-public-item promotions-lucky-item">
                 <figure>
                   <figcaption>
-                    <img :alt="`promotions_${item.project.symbol}`" class="full-width" :src="ossOrigin + item.banners[0]"/>
+                    <img class="full-width" :src="ossOrigin + item.banners[0]"/>
                   </figcaption>
                   <promotion-lucky
                     class="promotion-item-info"
@@ -41,12 +40,12 @@
                 </figure>
               </li>
             </ul>
-          </div> -->
+          </div>
           <div class="home-promotions-item home-promotions-windfall">
-            <!-- <div class="home-promotions-title">
+            <div class="home-promotions-title">
               <p class="TTFontBolder">Favorite Windfall</p>
               <p>Claim your FREE token right now.</p>
-            </div> -->
+            </div>
             <ul class="promotions-windfall-ul">
               <li
                 v-for="(item, index) of promotions"
@@ -94,11 +93,11 @@
 
 <script>
 import PromotionClaim from '@/components/reuse/_mobile/card/promotion/claim'
-// import PromotionLucky from '@/components/reuse/_mobile/card/promotion/lucky'
+import PromotionLucky from '@/components/reuse/_mobile/card/promotion/lucky'
 
 import HomeSkeletion from '@/components/skeletion/_mobile/home'
 
-import { getAirdrops } from 'api'
+import { getAirdrops, getLuckydrops } from 'api'
 
 // import { loopCandyClamied } from 'utils/loop'
 
@@ -108,7 +107,8 @@ export default {
   data: () => {
     return {
       loading: true,
-      promotions: []
+      promotions: [],
+      luckydrops: []
       // promotionClaimeds: {}
     }
   },
@@ -122,7 +122,7 @@ export default {
   },
   components: {
     PromotionClaim,
-    // PromotionLucky,
+    PromotionLucky,
 
     HomeSkeletion
   },
@@ -131,9 +131,13 @@ export default {
       this.loading = true
       console.log('---- come in airdrop')
       try {
-        const res = await getAirdrops()
-        if (res.code === 1000 && res.data) {
-          this.promotions = res.data
+        const airdropRes = await getAirdrops()
+        if (airdropRes.code === 1000 && airdropRes.data) {
+          this.promotions = airdropRes.data
+        }
+        const luckydropRes = await getLuckydrops()
+        if (luckydropRes.code === 1000 && luckydropRes.data) {
+          this.luckydrops = luckydropRes.data
         }
         console.log('---- come in airdrop 2')
         this.loading = false

@@ -19,6 +19,9 @@ export const initWeb3 = async () => {
   // 注册 web3 状态
   await store.dispatch(`web3/${actionTypes.WEB3_SET_WEB3_INFO}`, res)
 
+  // 获取并存储所有的 candies
+  await store.dispatch(`candy/${actionTypes.CANDY_SET_CANDY_SYMBOLS}`)
+
   // 注册合约
   store.dispatch(`contract/${actionTypes.CONTRACT_INIT_INSTANCE}`)
 

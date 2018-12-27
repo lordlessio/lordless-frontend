@@ -19,7 +19,7 @@
           </p>
         </div>
 
-        <!-- <div class="home-promotions-item home-promotions-windfall">
+        <div class="home-promotions-item home-promotions-windfall">
           <div class="home-promotions-title">
             <p class="TTFontBolder">Windfall</p>
           </div>
@@ -36,12 +36,12 @@
               </figure>
             </li>
           </ul>
-        </div> -->
+        </div>
 
         <div class="home-promotions-item home-promotions-windfall">
-          <!-- <div class="home-promotions-title">
+          <div class="home-promotions-title">
             <p class="TTFontBolder">Lucky Blocks</p>
-          </div> -->
+          </div>
           <ul class="d-flex f-wrap f-align-center promotions-list">
             <li class="promotions-item"
               v-for="(item, index) of promotions" :key="index">
@@ -95,7 +95,7 @@
 import { promotionsMixins } from '@/mixins'
 import PromotionsBreadcrumb from '@/components/reuse/promotions/breadcrumb'
 import PromotionClaim from '@/components/reuse/_mobile/card/promotion/claim'
-// import PromotionLucky from '@/components/reuse/_mobile/card/promotion/lucky'
+import PromotionLucky from '@/components/reuse/_mobile/card/promotion/lucky'
 
 import PromotionsSkeletion from '@/components/skeletion/project/promotions'
 export default {
@@ -104,7 +104,7 @@ export default {
   components: {
     PromotionsBreadcrumb,
     PromotionClaim,
-    // PromotionLucky,
+    PromotionLucky,
 
     PromotionsSkeletion
   }

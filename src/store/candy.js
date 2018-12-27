@@ -2,13 +2,14 @@
 /**
  * candy store options
  */
-import { getCandyPrice, getCandyClaimed } from '../api'
+import { getCandies, getCandyPrice, getCandyClaimed } from '../api'
 import { actionTypes, mutationTypes } from './types'
 export default {
   namespaced: true,
   state: {
     candyPrice: {},
-    candyClaimed: {}
+    candyClaimed: {},
+    candySymbols: {}
   },
   mutations: {
 
@@ -24,6 +25,13 @@ export default {
      */
     [mutationTypes.CANDY_SET_CANDY_CLAIMED]: (state, payload = {}) => {
       state.candyClaimed = Object.assign({}, state.candyClaimed, payload)
+    },
+
+    /**
+     * 存储 candy symbols
+     */
+    [mutationTypes.CANDY_SET_CANDY_SYMBOLS]: (state, payload = {}) => {
+      state.candySymbols = Object.assign({}, state.candySymbols, payload)
     }
   },
   actions: {
@@ -41,7 +49,15 @@ export default {
      */
     [actionTypes.CANDY_SET_CANDY_CLAIMED]: async ({ commit }) => {
       const res = await getCandyClaimed()
-      if (res.code === 1000 && res) commit(mutationTypes.CANDY_SET_CANDY_CLAIMED, res.data)
+      if (res.code === 1000 && res.data) commit(mutationTypes.CANDY_SET_CANDY_CLAIMED, res.data)
+    },
+
+    /**
+     * 获取 candy symbols
+     */
+    [actionTypes.CANDY_SET_CANDY_SYMBOLS]: async ({ commit }) => {
+      const res = await getCandies({ type: 'symbol' })
+      if (res.code === 1000 && res.data) commit(mutationTypes.CANDY_SET_CANDY_SYMBOLS, res.data)
     }
   }
 }

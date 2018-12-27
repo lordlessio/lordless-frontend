@@ -18,18 +18,17 @@
         </el-row>
       </div>
     </div>
-    <Authorize
+    <lordless-authorize
       ref="authorize"
+      blurs
       @telegram="telegramFunc"
-      @pending="authorizePending"
-      @blurs="dialogSetBlurs($event, 0)">
-    </Authorize>
+      @pending="authorizePending"/>
   </div>
 </template>
 
 <script>
 import AuthorizationCard from '@/components/reuse/card/authorization'
-import Authorize from '@/components/reuse/dialog/authorize'
+// import Authorize from '@/components/reuse/dialog/authorize'
 
 // import { putUserTgAuth } from 'api'
 
@@ -82,8 +81,8 @@ export default {
     }
   },
   components: {
-    AuthorizationCard,
-    Authorize
+    AuthorizationCard
+    // Authorize
   },
   methods: {
     ...mapActions('user', [

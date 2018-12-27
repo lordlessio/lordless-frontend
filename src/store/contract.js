@@ -2,9 +2,10 @@
 /**
  * contract store options
  */
-import { initContract, NFTsCrowdsale, TavernNFTs, Airdrop } from '@/contract'
+import { initContract, NFTsCrowdsale, TavernNFTs, Airdrop, Luckydrop } from '@/contract'
 import { mutationTypes, actionTypes } from './types'
 import web3Store from './web3'
+import candyStore from './candy'
 export default {
   namespaced: true,
 
@@ -19,9 +20,11 @@ export default {
     TavernNFTs: null,
     NFTsCrowdsale: null,
     Airdrop: null,
+    Luckydrop: null,
 
     // airdrop 中包含的 token 所需合约
-    airdropTokens: {}
+    airdropTokens: {},
+    tokenAllowances: {}
   },
 
   mutations: {
@@ -34,11 +37,22 @@ export default {
     /**
      * set airdrop tokens contract
      */
-    [mutationTypes.CONTRACT_SET_AIRDROP_TOKENS]: (state, { address, contract }) => {
+    [mutationTypes.CONTRACT_SET_AIRDROP_TOKENS]: (state, { candy, contract }) => {
       const _airdropTokens = state.airdropTokens
-      _airdropTokens[address] = contract
+      _airdropTokens[candy] = contract
       state.airdropTokens = _airdropTokens
-      // window.airdropTokens = _airdropTokens
+      window.airdropTokens = _airdropTokens
+    },
+
+    /**
+     * set token allowance
+     */
+    [mutationTypes.CONTRACT_SET_TOKEN_ALLOWANCE]: (state, { candy = '', address, luckyAddress, tokenContract = state.airdropTokens[candy] }) => {
+      // 向 tokenContract 查询 address 给 luckyAddress 授权操作多少个 token
+      tokenContract.methods('allowance', [ address, luckyAddress ]).then(allowance => {
+        state.tokenAllowances[candy.toLocaleLowerCase()] = allowance ? allowance.toNumber() : 0
+        window.tokenAllowances = state.tokenAllowances
+      })
     }
   },
 
@@ -67,6 +81,7 @@ export default {
       if (!monitor) {
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'NFTsCrowdsale', value: await NFTsCrowdsale(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Airdrop', value: await Airdrop(web3js) })
+        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Luckydrop', value: await Luckydrop(web3js) })
         // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Building', value: Building(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'TavernNFTs', value: await TavernNFTs(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'contractReady', value: true })
@@ -74,8 +89,15 @@ export default {
 
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'address', value: address })
 
-      // 初始化合约完成之后，检查当前用户市场权限
+      // 初始化合约完成之后，检查当前用户市场权限以及用户tokenAllwance
       dispatch(actionTypes.CONTRACT_CHECK_CROWDSALE, address)
+
+      // 根据所有的 candy，批量初始化合约
+      const { candySymbols } = candyStore.state
+      const _symbols = candySymbols.list
+      for (const item of _symbols) {
+        dispatch(actionTypes.CONTRACT_SET_AIRDROP_TOKENS, { candy: item.address, luckyAddress: state.Luckydrop.address })
+      }
     },
 
     /**
@@ -93,45 +115,28 @@ export default {
     /**
      * set airdrop tokens contract
      */
-    [actionTypes.CONTRACT_SET_AIRDROP_TOKENS]: async ({ state, commit }, address) => {
-      if (state.airdropTokens[address]) return
+    [actionTypes.CONTRACT_SET_AIRDROP_TOKENS]: async ({ state, commit }, { candy, luckyAddress = state.Luckydrop.address } = {}) => {
+      if (state.airdropTokens[candy]) return
 
-      const { web3js } = web3Store.state.web3Opt
+      let { web3js, address } = web3Store.state.web3Opt
+
+      // 如果没有从 web3 中获取到 address, 使用 localStorage 中的地址
+      address = address || window.localStorage.getItem('currentAddress')
+
       const contractJson = {
-        address,
-        abi: [{
-          'constant': true,
-          'inputs': [{
-            'name': 'tokenOwner',
-            'type': 'address'
-          }],
-          'name': 'balanceOf',
-          'outputs': [{
-            'name': 'balance',
-            'type': 'uint256'
-          }],
-          'payable': false,
-          'stateMutability': 'view',
-          'type': 'function'
-        },
-        {
-          'constant': true,
-          'inputs': [],
-          'name': 'decimals',
-          'outputs': [
-            {
-              'name': '',
-              'type': 'uint8'
-            }
-          ],
-          'payable': false,
-          'stateMutability': 'view',
-          'type': 'function'
-        }]
+        address: candy,
+        abi: process.env.erc20ABI
       }
 
       const contract = await initContract(contractJson, web3js)
-      contract && commit(mutationTypes.CONTRACT_SET_AIRDROP_TOKENS, { address, contract })
+      if (contract) {
+        console.log('candy, luckyAddress', candy, luckyAddress, address)
+        // 存储 token contract
+        commit(mutationTypes.CONTRACT_SET_AIRDROP_TOKENS, { candy, contract })
+
+        // 存储用户授权到 token allowance
+        commit(mutationTypes.CONTRACT_SET_TOKEN_ALLOWANCE, { luckyAddress, candy, address, contract })
+      }
     }
   }
 }

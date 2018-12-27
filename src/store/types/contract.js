@@ -4,13 +4,14 @@
  */
 
 const mutationTypes = {
-  CONTRACT_SET_INSTANCE: 'setContractIntance',
-  CONTRACT_SET_AIRDROP_TOKENS: 'setContractAirdropTokens'
+  CONTRACT_SET_INSTANCE: 'setContractIntance_mutation',
+  CONTRACT_SET_AIRDROP_TOKENS: 'setContractAirdropTokens_mutation',
+  CONTRACT_SET_TOKEN_ALLOWANCE: 'setTokenAllowance_mutation'
 }
 const actionTypes = {
-  CONTRACT_SET_INSTANCE: 'setContractIntance',
-  CONTRACT_INIT_INSTANCE: 'initContract',
-  CONTRACT_CHECK_CROWDSALE: 'checkCrowdsale',
+  CONTRACT_SET_INSTANCE: 'setContractIntance_action',
+  CONTRACT_INIT_INSTANCE: 'initContract_action',
+  CONTRACT_CHECK_CROWDSALE: 'checkCrowdsale_action',
   CONTRACT_SET_AIRDROP_TOKENS: 'setContractAirdropTokens_action'
 }
 

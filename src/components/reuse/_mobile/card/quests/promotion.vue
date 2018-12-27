@@ -9,7 +9,7 @@
         </span>
         <span class="inline-block card-top-symbol">
           <span class="text-upper">{{ info.airdrop.project.symbol }}</span>
-         Airdrop</span>
+         Windfall</span>
         <span class="inline-block line-height-0 card-top-icon arrow">
           <svg>
             <use xlink:href="#icon-arrow-line-right"/>

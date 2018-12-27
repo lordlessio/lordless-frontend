@@ -154,6 +154,11 @@
                   class="quest-item"
                   v-for="(promotion, index) of infos.promotion.list" :key="index">
                   <mobile-quest-promotion
+                    v-if="promotion.airdrop"
+                    :info="promotion"/>
+
+                  <mobile-quest-lucky
+                    v-else-if="promotion.luckydrop"
                     :info="promotion"/>
                 </li>
               </ul>
@@ -175,6 +180,7 @@
 import MobileQuestBounty from '@/components/reuse/_mobile/card/quests/bounty'
 import MobileQuestReward from '@/components/reuse/_mobile/card/quests/reward'
 import MobileQuestPromotion from '@/components/reuse/_mobile/card/quests/promotion'
+import MobileQuestLucky from '@/components/reuse/_mobile/card/quests/lucky'
 
 import MobileSortBar from '@/components/reuse/_mobile/sortBar'
 
@@ -286,6 +292,7 @@ export default {
   },
   components: {
     MobileQuestPromotion,
+    MobileQuestLucky,
     MobileQuestReward,
     MobileQuestBounty,
 

@@ -45,5 +45,9 @@ export const NFTsCrowdsale = (web3js) => {
 export const Airdrop = (web3js) => {
   return initContract(process.env.contract.Airdrop, web3js)
 }
+
+export const Luckydrop = (web3js) => {
+  return initContract(process.env.contract.Luckydrop, web3js)
+}
 // export const Power = (web3js) => initContract(process.env.contract.Power, web3js)
 // export const Building = (web3js) => initContract(process.env.contract.Building, web3js)

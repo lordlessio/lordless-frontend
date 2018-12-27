@@ -53,25 +53,24 @@
         </div>
       </el-main>
     </el-container>
-    <Authorize
+    <lordless-authorize
       ref="ownerAuthorize"
       :modelClose="false"
       :autoClose="false"
+      blurs
       @init="checkUser"
-      @blurs="dialogSetBlurs"
-      @fClose="fCloseAuthorize">
-    </Authorize>
+      @fClose="fCloseAuthorize"/>
   </el-container>
 </template>
 
 <script>
 import LdHeader from '@/components/content/layout/header'
-import Authorize from '@/components/reuse/dialog/authorize'
+// import Authorize from '@/components/reuse/dialog/authorize'
 // import Loading from '@/components/stories/loading'
 
-import { dialogMixins, userMixins, publicMixins } from '@/mixins'
+import { userMixins, publicMixins } from '@/mixins'
 export default {
-  mixins: [ dialogMixins, userMixins, publicMixins ],
+  mixins: [ userMixins, publicMixins ],
   data: () => {
     return {
       navgations: [
@@ -130,8 +129,8 @@ export default {
   components: {
     // Loading,
 
-    LdHeader,
-    Authorize
+    LdHeader
+    // Authorize
   },
   methods: {
 
@@ -140,7 +139,7 @@ export default {
     },
 
     async checkUser () {
-      const authorize = this.$refs.ownerAuthorize.checkoutAuthorize()
+      const authorize = await this.$refs.ownerAuthorize.checkoutAuthorize()
       this.loading = !this.userInfo.address && !authorize
     }
   },

@@ -110,7 +110,7 @@
         </div>
       </div>
     </section>
-    <Authorize
+    <lordless-authorize
       ref="authorize"
       @blurs="dialogSetBlurs($event, dialog ? 1 : 0)"/>
 
@@ -168,7 +168,7 @@ import LdbCandyTool from './candy'
 
 // import SketchFab from '@/components/sketchfab'
 
-import Authorize from '@/components/reuse/dialog/authorize'
+// import Authorize from '@/components/reuse/dialog/authorize'
 // import OrderDialog from '@/components/reuse/dialog/ldb/order'
 // import LdbBuy from '@/components/reuse/dialog/ldb/buy'
 import LdbSell from '@/components/reuse/dialog/ldb/sell'
@@ -318,7 +318,7 @@ export default {
 
     LdbCandyTool,
 
-    Authorize,
+    // Authorize,
     // OrderDialog,
     // LdbBuy,
     LdbSell
@@ -557,7 +557,7 @@ export default {
     async buyHandle ({ ldbInfo = this.ldbInfo, web3Opt = this.web3Opt, NFTsCrowdsale = this.NFTsCrowdsale } = {}) {
       try {
         // 检查市场权限
-        const authorize = this.$refs.authorize.checkoutAuthorize({ guide: true })
+        const authorize = await this.$refs.authorize.checkoutAuthorize({ guide: true })
 
         const tokenId = ldbInfo.chain.tokenId
         if (!authorize || (!tokenId && tokenId !== 0)) return

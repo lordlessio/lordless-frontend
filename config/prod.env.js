@@ -1,6 +1,7 @@
 'use strict'
 const merge = require('webpack-merge')
 const contract = JSON.stringify(merge(require('../.contract/mainnet.json'), require('../.contract/airdrop/mainnet.json')))
+const erc20ABI = JSON.stringify(require('../.abis/erc20.json'))
 
 module.exports = {
   NODE_ENV: '"production"',
@@ -10,5 +11,6 @@ module.exports = {
   ETHERSCANURL: '"https://etherscan.io/"',
   APPROVED_NETWORK_ID: 1,
   contract,
+  erc20ABI,
   tgBot: '"LORDLESS_bot"'
 }

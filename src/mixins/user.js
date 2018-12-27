@@ -19,7 +19,7 @@ export default {
     async sign () {
       if (!this.$refs.authorize) return
 
-      const authorize = this.$refs.authorize.checkoutAuthorize()
+      const authorize = await this.$refs.authorize.checkoutAuthorize()
       if (!authorize) return
 
       // 检测 user 是否注册过

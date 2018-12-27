@@ -44,14 +44,14 @@
         <span class="inline-block">LESS</span>
       </p> -->
       <p class="TTFontBolder v-flex d-flex f-justify-start promotion-claim-num">
-        <span class="inline-block">+ {{ info.countPerUser | weiByDecimals(info.decimals) }}</span>
+        <span class="inline-block">+ {{ (weiByDecimals(info.countPerUser, info.decimals)).toLocaleString() }}</span>
         <!-- <span class="inline-block text-upper promotion-claim-symbol">{{ info.project.symbol }}</span> -->
       </p>
       <lordless-btn
         class="TTFontBold promotion-claim-btn"
         theme="promotion"
         inverse
-        :disabled="isClaimed || loading || isEnd"
+        :disabled="isClaimed || loading || isEnd || info.status !== -1"
         :loading="loading"
         @click="claimPromotion">{{ isEnd ? 'Ended' : isClaimed ? 'Claimed' : 'Claim now' }}</lordless-btn>
     </div>
@@ -68,8 +68,7 @@ import { saveAirdropUser, getAirdropUserInfo } from 'api'
 import { weiByDecimals } from 'utils/tool'
 import { metamaskMixins, dialogMixins, publicMixins } from '@/mixins'
 
-import { actionTypes } from '@/store/types'
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   name: 'promotion-claim-card',
   mixins: [metamaskMixins, dialogMixins, publicMixins],
@@ -116,7 +115,7 @@ export default {
       'web3Opt'
     ]),
     claimInit () {
-      return !this.web3Opt.loading && this.web3Opt.isConnected && !!this.Airdrop && !!this.info._id
+      return !this.web3Opt.loading && this.web3Opt.isConnected && !!this.Airdrop && !!this.info._id && !this.airdropTokens[this.info.project.address]
     },
     claimedNum () {
       return this.progressNums.dropping
@@ -145,9 +144,9 @@ export default {
     // }
   },
   methods: {
-    ...mapActions('contract', [
-      actionTypes.CONTRACT_SET_AIRDROP_TOKENS
-    ]),
+    weiByDecimals () {
+      return weiByDecimals(...arguments)
+    },
 
     /**
      * 初始化状态
@@ -186,7 +185,6 @@ export default {
       this.initStatus()
 
       const address = typeof project === 'object' ? project.address : project
-      await this[actionTypes.CONTRACT_SET_AIRDROP_TOKENS](address)
       this.$nextTick(() => {
         if (!this.rendered) this.rendered = true
         this.checkClaimStatus()
@@ -251,7 +249,7 @@ export default {
       if (!airdropId) return
       try {
         // 检查市场权限
-        const authorize = this.$refs.authorize.checkoutAuthorize({ guide: true })
+        const authorize = await this.$refs.authorize.checkoutAuthorize({ guide: true })
 
         if (!authorize || this.failed) return
 

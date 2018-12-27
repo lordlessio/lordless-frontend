@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="authorizeDialog"
-    :custom-class="`inline-block lordless-dialog message-dialog no-header transparent center ${metaOpen ? 'blur' : ''}`"
+    :custom-class="`inline-block lordless-dialog message-dialog no-header transparent center ${metaOpen ? 'lg-blur' : ''}`"
     width="100%"
     append-to-body
     center
@@ -36,12 +36,21 @@
           :account="account"
           :web3Loading="web3Opt.loading"
           @success="signSuccess"/>
+
         <Crowdsale
           ref="crowdsale"
           v-model="showCrowsale"
           :avatar="avatar"
           :address="address"
           @pending="crowdsalePending"
+          @error="authorizeError"/>
+
+        <token-allowance
+          ref="crowdsale"
+          v-model="showTokenAllowance"
+          :address="address"
+          :tokenBets="tokenBets"
+          @success="tokenAllowanceSuccess"
           @error="authorizeError"/>
 
         <Telegram
@@ -64,16 +73,17 @@ import MobileWallets from '@/components/reuse/_mobile/wallets/trust'
 import Telegram from './telegram'
 import Crowdsale from './crowdsale'
 import Sign from './sign'
+import TokenAllowance from './tokenAllowance'
 
 import { isWechat } from 'utils/tool'
 
-import { contractMixins, publicMixins } from '@/mixins'
+import { contractMixins, publicMixins, dialogMixins } from '@/mixins'
 
 import { actionTypes } from '@/store/types'
 import { mapState, mapActions } from 'vuex'
 export default {
   name: 'lordless-authorize',
-  mixins: [contractMixins, publicMixins],
+  mixins: [contractMixins, publicMixins, dialogMixins],
   props: {
     avatar: {
       type: Object,
@@ -100,7 +110,22 @@ export default {
     pending: {
       type: Boolean,
       default: true
-    }
+    },
+
+    // 是否内部执行 blurs
+    blurs: {
+      type: Boolean,
+      default: false
+    },
+    defaultBlursNum: {
+      type: Number,
+      default: 0
+    },
+
+    // tokenAllowance 参数
+    tokenAddress: String,
+    usedToken: Number,
+    tokenBets: Array
   },
   data: () => {
     return {
@@ -120,7 +145,16 @@ export default {
 
       showCrowsale: false,
 
-      showTelegram: false
+      showTelegram: false,
+
+      showTokenAllowance: false,
+
+      checkModels: {
+        sign: false,
+        crowsale: false,
+        telegram: false,
+        tokenAllowance: false
+      }
 
       // crowdsale options
       // crowdsaleModel: false,
@@ -139,7 +173,8 @@ export default {
       'metaOpen'
     ]),
     ...mapState('contract', [
-      'isCrowdsaleApproved'
+      'isCrowdsaleApproved',
+      'tokenAllowances'
     ]),
     isWechatBool () {
       return isWechat()
@@ -246,7 +281,9 @@ export default {
       // } else {
       //   removeClass('mobile-dialog-open', lordless)
       // }
-      this.$emit('blurs', val)
+      if (this.blurs) {
+        this.dialogSetBlurs(val, this.defaultBlursNum)
+      } else this.$emit('blurs', val)
     },
 
     // 如果切换了账号，recheck authorize
@@ -293,7 +330,8 @@ export default {
 
     Telegram,
     Crowdsale,
-    Sign
+    Sign,
+    TokenAllowance
   },
   methods: {
     ...mapActions('contract', [
@@ -302,7 +340,8 @@ export default {
 
     signSuccess () {
       this.$emit('sign')
-      this.authorizeDialog = false
+
+      this.rewriteCheckModels()
     },
 
     authorizeError (err) {
@@ -345,7 +384,19 @@ export default {
       }
     },
 
-    checkoutAuthorize ({ guide = false, crowdsale = false, telegram = false } = {}) {
+    initModels () {
+      this.showTelegram = false
+      this.showCrowsale = false
+      this.showTokenAllowance = false
+      this.showSign = false
+    },
+
+    checkoutAuthorize ({ guide = false, crowdsale = false, telegram = false, tokenAllowance = false, isIModels = true } = this.checkModels) {
+      this.checkModels = { guide, crowdsale, telegram, tokenAllowance, model: guide || crowdsale || telegram || tokenAllowance }
+
+      // 检测之前初始化状态
+      isIModels && this.initModels()
+
       // 记录是否已经手动check过了， rendered
       if (!this.rendered) this.rendered = true
       // authorizeInit 就绪之前，触发 checkout， 改变 initBeforeCheck 状态为 true
@@ -366,7 +417,7 @@ export default {
       }
 
       // 检测之前初始化状态
-      this.initModels()
+      // isIModels && this.initModels()
 
       // 如果验证 telegram 并且用户没有授权 telegram,则执行并下行阻断
       if (telegram && (!this.userInfo.telegram || !this.userInfo.telegram.id)) {
@@ -388,7 +439,7 @@ export default {
         return false
       }
 
-      if (!crowdsale) return true
+      if (!crowdsale && !tokenAllowance) return true
 
       console.log('---- this.statusType', this.statusType)
 
@@ -425,6 +476,22 @@ export default {
         return false
       }
 
+      if (tokenAllowance) {
+        console.log('--- come in tokenAllowance')
+
+        // 进入 tokenAllowance 之后，首先检查 tokenBets 中的 token
+        const tokenBets = this.tokenBets
+        const showTokenAllowance = !!(tokenBets.filter(bet => {
+          const candy = bet.candy.address.toLocaleLowerCase()
+          return !this.tokenAllowances[candy] || this.tokenAllowances[candy] < bet.count
+        })).length
+
+        this.authorizeDialog = showTokenAllowance
+        this.showTokenAllowance = showTokenAllowance
+
+        return !showTokenAllowance
+      }
+
       if (crowdsale) {
         this.showCrowsale = true
         console.log('---- authorize crowdsale', this.$refs.crowdsale)
@@ -439,10 +506,33 @@ export default {
       return true
     },
 
-    initModels () {
-      this.showTelegram = false
-      this.showCrowsale = false
-      this.showSign = false
+    /**
+     * rewrite checkModels
+     */
+    rewriteCheckModels (type = null, checkModels = this.checkModels) {
+      type && this.$set(this.checkModels, type, false)
+
+      const _model = !!(Object.keys(checkModels).filter(key => checkModels[key] && key !== type && key !== 'model')).length
+
+      console.log('_model', type, _model, checkModels)
+      this.$set(this.checkModels, 'model', _model)
+
+      // 如果 _model 为true，代表还有未完成操作。
+      if (_model) {
+        // 继续执行 checkoutAuthorize
+        this.$nextTick(() => this.checkoutAuthorize())
+      }
+      this.authorizeDialog = _model
+
+      return _model
+    },
+
+    /**
+     * token allowance 成功触发函数
+     */
+    tokenAllowanceSuccess () {
+      this.$emit('allowanceSuccess')
+      this.rewriteCheckModels('tokenAllowance')
     },
 
     // 市场授权 pending 状态处理

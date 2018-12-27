@@ -19,27 +19,26 @@
         </el-row>
       </div>
     </div>
-    <Authorize
+    <lordless-authorize
       ref="authorize"
+      blurs
       @telegram="telegramFunc"
-      @pending="authorizePending"
-      @blurs="dialogSetBlurs($event, 0)">
-    </Authorize>
+      @pending="authorizePending"/>
   </div>
 </template>
 
 <script>
 import AuthorizationCard from '@/components/reuse/card/authorization'
-import Authorize from '@/components/reuse/dialog/authorize'
+// import Authorize from '@/components/reuse/dialog/authorize'
 
 // import { putUserTgAuth } from 'api'
 
-import { contractMixins, dialogMixins, activatedMixins } from '@/mixins'
+import { contractMixins, publicMixins, activatedMixins } from '@/mixins'
 import { actionTypes } from '@/store/types'
 import { mapState, mapActions } from 'vuex'
 export default {
   name: 'mobile-owner-authorization',
-  mixins: [contractMixins, dialogMixins, activatedMixins],
+  mixins: [contractMixins, publicMixins, activatedMixins],
   data: (vm) => {
     return {
       authorizations: [
@@ -68,9 +67,9 @@ export default {
     ...mapState('user', [
       'userInfo'
     ]),
-    isMobile () {
-      return this.$root.$children[0].isMobile
-    },
+    // isMobile () {
+    //   return this.$root.$children[0].isMobile
+    // },
     marketModel () {
       return this.$root.$children[0].isCrowdsaleApproved
     }
@@ -87,8 +86,8 @@ export default {
     }
   },
   components: {
-    AuthorizationCard,
-    Authorize
+    AuthorizationCard
+    // Authorize
   },
   methods: {
     ...mapActions('user', [

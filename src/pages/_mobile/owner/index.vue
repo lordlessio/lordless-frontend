@@ -26,24 +26,24 @@
         v-else
         @connect="checkUser"/>
     </div>
-    <Authorize
+    <lordless-authorize
       ref="mobileOwnerAuthorize"
+      blurs
       :modelClose="false"
-      :autoClose="false"
-      @blurs="dialogSetBlurs"/>
+      :autoClose="false"/>
   </div>
 </template>
 
 <script>
 import MobileConnect from '@/components/reuse/_mobile/connect'
 import MobileWallets from '@/components/reuse/_mobile/wallets/trust'
-import Authorize from '@/components/reuse/dialog/authorize'
+// import Authorize from '@/components/reuse/dialog/authorize'
 
-import { dialogMixins, publicMixins } from '@/mixins'
+import { publicMixins } from '@/mixins'
 import { mapState } from 'vuex'
 export default {
   name: 'mobile-owner-index',
-  mixins: [dialogMixins, publicMixins],
+  mixins: [publicMixins],
   data: () => {
     return {
       scrollOpt: {
@@ -124,7 +124,7 @@ export default {
     }
   },
   components: {
-    Authorize,
+    // Authorize,
     MobileConnect,
     MobileWallets
   },

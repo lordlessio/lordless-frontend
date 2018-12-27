@@ -251,31 +251,27 @@
         </div>
       </div>
     </transition>
-    <Authorize
+    <lordless-authorize
       ref="authorize"
       @pending="authorizePending"
-      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)">
-    </Authorize>
+      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)"/>
 
     <order-dialog
       v-model="orderModel"
       :ldbInfo="ldbInfo"
-      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)">
-    </order-dialog>
+      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)"/>
 
     <ldb-buy
       v-model="buyModel"
       :ldbInfo="ldbInfo"
       @pending="ldbBuyPending"
-      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)">
-    </ldb-buy>
+      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)"/>
 
     <ldb-sell
       v-model="sellModel"
       :ldbInfo="ldbInfo"
       @pending="ldbSellPending"
-      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)">
-    </ldb-sell>
+      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)"/>
   </div>
 </template>
 
@@ -291,7 +287,7 @@ import Blockies from '@/components/stories/blockies'
 
 import SketchFab from '@/components/reuse/sketchfab'
 
-import Authorize from '@/components/reuse/dialog/authorize'
+// import Authorize from '@/components/reuse/dialog/authorize'
 import OrderDialog from '@/components/reuse/dialog/ldb/order'
 import LdbBuy from '@/components/reuse/dialog/ldb/buy'
 import LdbSell from '@/components/reuse/dialog/ldb/sell'
@@ -423,7 +419,7 @@ export default {
     Blockies,
 
     UserAvatar,
-    Authorize,
+    // Authorize,
     OrderDialog,
 
     LdbBuy,

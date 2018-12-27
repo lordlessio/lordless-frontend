@@ -112,6 +112,7 @@ export const getGasPrice = (web3js) => {
 
 // get eth balance
 export const getBalance = (web3js, address) => {
+  if (!address) address = web3js.eth.defaultAccount
   return new Promise((resolve, reject) => {
     try {
       if (!address) return resolve({ balance: 0 })

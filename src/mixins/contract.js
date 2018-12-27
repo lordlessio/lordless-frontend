@@ -24,6 +24,10 @@ export default {
       contractInterval: [],
 
       intervals: []
+
+      // tokenAllowance 参数
+      // allowanceModels: {},
+      // allowancePendings: {}
     }
   },
   computed: {
@@ -125,6 +129,32 @@ export default {
     //     })
     // },
 
+    /**
+     * 检查 token 合约是否授权成功
+     */
+    // async checkAllowance ({ address = this.account, airdropTokens = this.airdropTokens, candy, count } = {}) {
+    //   this.$set(this.allowancePendings, candy, true)
+
+    //   try {
+    //     // 获取用户授权操作 erc20 数量
+    //     const allowance = await airdropTokens[candy].methods('allowance', [ address, candy ])
+
+    //     // 如果授权的 erc20 操作数量大于或等于消耗数量，标示为 true
+    //     if (allowance >= count) {
+    //       this.$set(this.allowanceModels, candy, true)
+    //       return true
+    //     } else {
+    //       this.$set(this.allowancePendings, candy, false)
+    //       return false
+    //     }
+    //   } catch (err) {
+    //     this.$emit('error', err)
+    //   }
+    // },
+
+    /**
+     * 轮询市场合约是否成功
+     */
     async checkCrowdsaleEvent ({ address, TavernNFTs = this.TavernNFTs, NFTsCrowdsale = this.NFTsCrowdsale } = {}, cb) {
       if (!address) return
 
@@ -145,6 +175,9 @@ export default {
         }, 5000)
       }
       this.$once('hook:beforeDestroy', () => {
+        timeout && clearTimeout(timeout)
+      })
+      this.$once('hook:deactivated', () => {
         timeout && clearTimeout(timeout)
       })
       return loopFunc()
@@ -185,6 +218,9 @@ export default {
         }, 5000)
       }
       this.$once('hook:beforeDestroy', () => {
+        timeout && clearTimeout(timeout)
+      })
+      this.$once('hook:deactivated', () => {
         timeout && clearTimeout(timeout)
       })
       return loopFunc()

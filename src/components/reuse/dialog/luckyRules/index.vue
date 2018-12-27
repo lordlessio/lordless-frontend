@@ -31,7 +31,7 @@
       </div>
       <p class="lucky-rules-icon">GOOD LUCK!</p>
       <p class="lucky-rules-btns">
-        <lordless-btn class="lucky-rules-btn" theme="dialog">Got it</lordless-btn>
+        <lordless-btn class="lucky-rules-btn" theme="dialog" @click="$emit('input', false)">Got it</lordless-btn>
       </p>
     </div>
   </el-dialog>

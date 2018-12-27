@@ -1,5 +1,5 @@
 <template>
-  <div id="lordless" :class="{ 'blur': blurs[0], 'transform': appOpt.transform, 'no-transform': !appOpt.transform }">
+  <div id="lordless" :class="{ 'lg-blur': blurs[0], 'transform': appOpt.transform, 'no-transform': !appOpt.transform }">
     <lordless-svg/>
 
     <mobile-tab-bar v-if="isMobile"/>

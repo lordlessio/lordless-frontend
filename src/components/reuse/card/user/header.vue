@@ -81,21 +81,20 @@
         </div>
       </div>
     </transition>
-    <Authorize
+    <lordless-authorize
       v-if="owner && user"
       ref="authorize"
       :address="user.address"
-      @blurs="dialogSetBlurs">
-    </Authorize>
+      blurs/>
   </div>
 </template>
 
 <script>
 import Clipboard from 'clipboard'
-import Authorize from '@/components/reuse/dialog/authorize'
-import { contractMixins, dialogMixins, publicMixins } from '@/mixins'
+// import Authorize from '@/components/reuse/dialog/authorize'
+import { contractMixins, publicMixins } from '@/mixins'
 export default {
-  mixins: [ contractMixins, dialogMixins, publicMixins ],
+  mixins: [ contractMixins, publicMixins ],
   props: {
     loading: {
       type: Boolean,
@@ -130,9 +129,9 @@ export default {
       return this.$root.$children[0].isCrowdsaleApproved
     }
   },
-  components: {
-    Authorize
-  },
+  // components: {
+  //   Authorize
+  // },
   methods: {
     // 初始化 黏贴板
     initClipboard () {

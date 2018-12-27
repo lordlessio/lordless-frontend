@@ -149,7 +149,7 @@
                       :seed="info.lord._id">
                     </lordless-blockies>
                     <div class="v-flex d-flex col-flex f-justify-around detail-lord-info">
-                      <p>{{ info.lord.nickName || 'LORDLESS' }}</p>
+                      <p v-if="info.lord.nickName">{{ info.lord.nickName }}</p>
                       <p><link-symbol underline :to="info.lord._id">{{ info.lord._id | splitAddress({ before: 5, end: 2, symbol: '***' }) }}</link-symbol></p>
                     </div>
                   </div>
@@ -286,6 +286,7 @@ export default {
         this.apTimer = null
         this.apTimer = setTimeout(() => {
           this.initCurrentAPCU({ end: val })
+          this.initNextAPCU()
           clearTimeout(this.apTimer)
           this.apTimer = null
         }, 600)
@@ -594,7 +595,7 @@ export default {
       // }, this.countUp.nAC.duration)
     },
 
-    initCurrentAPCU ({ start = this.countUp.cAP.start, end = this.countUp.cAP.end || this.info.apLeft } = {}) {
+    initCurrentAPCU ({ start = this.countUp.cAP.start, end = this.info.apLeft } = {}) {
       if (!this.countUp.cAP.isReady) {
         this.$set(this.countUp, 'cAP', {
           start: end,
@@ -611,7 +612,7 @@ export default {
       })
     },
 
-    initNextAPCU ({ start = this.countUp.nAP.start, end = this.countUp.nAP.end || this.info.ap } = {}) {
+    initNextAPCU ({ start = this.countUp.nAP.start, end = this.info.ap } = {}) {
       if (!this.countUp.nAP.isReady) {
         this.$set(this.countUp, 'nAP', {
           start: end,

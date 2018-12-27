@@ -107,7 +107,7 @@
                             :seed="info.lord.address">
                           </lordless-blockies>
                           <div class="v-flex d-flex col-flex f-justify-around detail-lord-info">
-                            <p>{{ info.lord.nickName || 'LORDLESS' }}</p>
+                            <p v-if="info.lord.nickName">{{ info.lord.nickName }}</p>
                             <p><link-symbol underline :to="info.lord.address">{{ info.lord.address | splitAddress({ symbol: '***' }) }}</link-symbol></p>
                           </div>
                         </div>
@@ -1121,7 +1121,7 @@ export default {
     height: 54px;
     cursor: pointer;
     transform: translateY(-10px);
-    // animation: candyAnimate 5s linear infinite;
+    animation: candyAnimate 5s linear infinite;
     // -moz-animation-duration: 2.4s;
     will-change: transform;
     &.move {
