@@ -40,11 +40,11 @@
             </p>
             <div class="d-flex f-align-start lucky-section-content">
               <div class="v-flex lucky-left-content winnings">
-                <div class="d-flex f-align-center lucky-winnings-info" :class="{ 'miss': info.luckyRandom < (100 - info.luckydrop.dropInfos.ethWinning.percent) }" v-if="info.luckydrop.dropInfos.ethWinning">
+                <div class="d-flex f-align-center lucky-winnings-info" :class="{ 'miss': info.luckyRandom + info.luckydrop.dropInfos.ethWinning.percent < 100 }" v-if="info.luckydrop.dropInfos.ethWinning">
                   <p class="v-flex">
                     <span class="inline-block line-height-0 lucky-winnings-icon">
                       <svg>
-                        <use :xlink:href="`#icon-${info.luckyRandom < (100 - info.luckydrop.dropInfos.ethWinning.percent) ? 'close' : 'ok'}`"/>
+                        <use :xlink:href="`#icon-${info.luckyRandom + info.luckydrop.dropInfos.ethWinning.percent >= 100 ? 'ok' : 'close'}`"/>
                       </svg>
                     </span>
                     <span>+ {{ info.luckydrop.dropInfos.ethWinning.count | weiByDecimals(info.luckydrop.dropInfos.ethWinning.decimals) }} ETH</span>
@@ -54,11 +54,11 @@
                 <div
                   v-for="(item, index) of info.luckydrop.dropInfos.tokenWinnings" :key="index"
                   class="d-flex f-align-center lucky-winnings-info"
-                  :class="{ 'miss': info.luckyRandom < (100 - item.percent) }">
+                  :class="{ 'miss': info.luckyRandom + item.percent < 100 }">
                   <p class="v-flex">
                     <span class="inline-block line-height-0 lucky-winnings-icon">
                       <svg>
-                        <use :xlink:href="`#icon-${info.luckyRandom < (100 - item.percent) ? 'close' : 'ok'}`"/>
+                        <use :xlink:href="`#icon-${info.luckyRandom + item.percent >= 100 ? 'ok' : 'close'}`"/>
                       </svg>
                     </span>
                     <span>+ {{ item.count | weiByDecimals(item.decimals) }} {{ item.candy.symbol }}</span>
@@ -134,10 +134,10 @@ export default {
       const { luckyRandom, luckydrop } = this.info
       const { dropInfos } = luckydrop || {}
       const { ethWinning, tokenWinnings } = dropInfos || {}
-      randoms.push(100 - ethWinning.percent)
+      randoms.push(ethWinning.percent)
 
       for (const tokenW of tokenWinnings) {
-        randoms.push(100 - tokenW.percent)
+        randoms.push(tokenW.percent)
       }
 
       randoms = randoms.sort((a, b) => b - 1)
@@ -145,21 +145,21 @@ export default {
       return {
         random: luckyRandom,
         randoms,
-        maxRandom: randoms[0],
-        minRandom: randoms[randoms.length - 1]
+        maxRandom: randoms[randoms.length - 1],
+        minRandom: randoms[0]
       }
     },
     // 是否赢得了全奖
     isFullWinning () {
-      const { random, maxRandom } = this.allWinningRandoms
+      const { random, minRandom } = this.allWinningRandoms
 
-      return random >= maxRandom
+      return random + minRandom >= 100
     },
     // 是否没有得奖
     isUnWinning () {
-      const { random, minRandom } = this.allWinningRandoms
+      const { random, maxRandom } = this.allWinningRandoms
 
-      return random < minRandom
+      return random + maxRandom < 100
     }
   }
 }
@@ -258,6 +258,10 @@ export default {
     &.failed {
       &::after {
         content: 'FAILED';
+      }
+      .bets {
+        color: #555;
+        text-decoration: line-through;
       }
     }
   }

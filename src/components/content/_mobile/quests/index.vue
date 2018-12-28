@@ -334,7 +334,7 @@ export default {
      */
     async initQuest (type = this.currentTab) {
       if (!this.rendered) this.rendered = true
-      const data = await this.getTasks(Object.assign({}, this.infos[type], { type }))
+      const data = await this.getTasks(Object.assign({}, this.infos[type], { type, pn: 1 }))
       data && this.$set(this.infos, type, data)
       this.currentTab = type
     },
@@ -387,6 +387,8 @@ export default {
 
       // const params = { pn, ps, type: _type, status: _status }
       const params = { pn, ps, type: _type }
+
+      this.$set(this.infos, this.currentTab, Object.assign({}, this.infos[this.currentTab], { pn, ps }))
 
       let data = null
       try {
@@ -495,17 +497,7 @@ export default {
       // remove scroll listener
       this.scrollHandle && document.removeEventListener('scroll', this.scrollHandle)
       this.scrollHandle = null
-
-      // window.removeEventListener('popstate', this.popstateListener)
     }
-
-    /**
-     * window popstate 监听事件
-     */
-    // popstateListener () {
-    //   if (this.popstateModel) return
-    //   this.popstateModel = true
-    // }
   },
   deactivated () {
     this.questsDestory()
@@ -516,20 +508,19 @@ export default {
   activated () {
     if (!this.rendered) return
     console.log('quests component activated')
-    this.scrollListenerFunc()
+
     this.questsTabFunc()
 
-    this.$nextTick(() => {
+    this.$nextTick(async () => {
       const { refresh, type } = this.$route.query
-      refresh && this.initQuest(type)
+      refresh && await this.initQuest(type)
+
+      this.scrollListenerFunc()
     })
-    // window.addEventListener('popstate', this.popstateListener)
   },
   mounted () {
     this.questsTabFunc()
 
-    // 监听 popstate 事件，主要用于 pushState 监听
-    // window.addEventListener('popstate', this.popstateListener)
     this.$nextTick(() => {
       const type = this.$route.query.type
       this.initQuest(type)

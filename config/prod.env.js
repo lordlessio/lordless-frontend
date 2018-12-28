@@ -1,6 +1,6 @@
 'use strict'
 const merge = require('webpack-merge')
-const contract = JSON.stringify(merge(require('../.contract/mainnet.json'), require('../.contract/airdrop/mainnet.json')))
+const contract = JSON.stringify(merge(require('../.contract/mainnet.json'), require('../.contract/airdrop/mainnet.json'), require('../.contract/luckydrop/mainnet.json')))
 const erc20ABI = JSON.stringify(require('../.abis/erc20.json'))
 
 module.exports = {
