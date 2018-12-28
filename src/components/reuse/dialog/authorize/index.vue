@@ -481,13 +481,21 @@ export default {
 
         // 进入 tokenAllowance 之后，首先检查 tokenBets 中的 token
         const tokenBets = this.tokenBets
+        console.log('tokenBets', tokenBets)
         const showTokenAllowance = !!(tokenBets.filter(bet => {
           const candy = bet.candy.address.toLocaleLowerCase()
           return !this.tokenAllowances[candy] || this.tokenAllowances[candy] < bet.count
         })).length
 
+        console.log('showTokenAllowance', showTokenAllowance)
+
+        // this.showTokenAllowance = showTokenAllowance
+
         this.authorizeDialog = showTokenAllowance
-        this.showTokenAllowance = showTokenAllowance
+
+        this.$nextTick(() => {
+          this.showTokenAllowance = showTokenAllowance
+        })
 
         return !showTokenAllowance
       }

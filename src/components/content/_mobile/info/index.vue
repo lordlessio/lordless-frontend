@@ -118,7 +118,8 @@
           </div>
         </div>
       </div>
-      <div v-if="ownerTaverns.total" class="card-margin user-taverns-box">
+      <!-- 暂时先不显示 -->
+      <div v-if="ownerTaverns.total && false" class="card-margin user-taverns-box">
         <h3 class="card-title">My taverns</h3>
         <ul class="d-flex col-flex">
           <li v-for="tavern of ownerTaverns.list" :key="tavern.id"

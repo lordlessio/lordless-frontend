@@ -2,7 +2,7 @@
 /**
  * contract store options
  */
-import { initContract, NFTsCrowdsale, TavernNFTs, Airdrop, Luckydrop } from '@/contract'
+import { initContract, NFTsCrowdsale, TavernNFTs, Airdrop, Luckyblock } from '@/contract'
 import { mutationTypes, actionTypes } from './types'
 import web3Store from './web3'
 import candyStore from './candy'
@@ -20,7 +20,7 @@ export default {
     TavernNFTs: null,
     NFTsCrowdsale: null,
     Airdrop: null,
-    Luckydrop: null,
+    Luckyblock: null,
 
     // airdrop 中包含的 token 所需合约
     airdropTokens: {},
@@ -31,7 +31,7 @@ export default {
     [mutationTypes.CONTRACT_SET_INSTANCE]: (state, { key, value }) => {
       if (!key) return false
       state[key] = value
-      // window[key] = value
+      window[key] = value
     },
 
     /**
@@ -81,7 +81,7 @@ export default {
       if (!monitor) {
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'NFTsCrowdsale', value: await NFTsCrowdsale(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Airdrop', value: await Airdrop(web3js) })
-        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Luckydrop', value: await Luckydrop(web3js) })
+        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Luckyblock', value: await Luckyblock(web3js) })
         // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Building', value: Building(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'TavernNFTs', value: await TavernNFTs(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'contractReady', value: true })
@@ -96,27 +96,28 @@ export default {
       const { candySymbols } = candyStore.state
       const _symbols = candySymbols.list
       for (const item of _symbols) {
-        dispatch(actionTypes.CONTRACT_SET_AIRDROP_TOKENS, { candy: item.address, luckyAddress: state.Luckydrop.address })
+        dispatch(actionTypes.CONTRACT_SET_AIRDROP_TOKENS, { candy: item.address, luckyAddress: state.Luckyblock.address })
       }
     },
 
     /**
      * reset contrcat instance
      */
-    [actionTypes.CONTRACT_RESET_INSTANCE]: ({ commit }) => {
+    [actionTypes.CONTRACT_RESET_INSTANCE]: async ({ commit }) => {
       console.log('reset contract')
+      commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'NFTsCrowdsale', value: await NFTsCrowdsale(web3js) })
+      commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Airdrop', value: await Airdrop(web3js) })
+      commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Luckyblock', value: await Luckyblock(web3js) })
+      // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Building', value: Building(web3js) })
+      commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'TavernNFTs', value: await TavernNFTs(web3js) })
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'address', value: null })
-      // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'NFTsCrowdsale', value: null })
-      // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'buildingContract', value: null })
-      // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'TavernNFTs', value: null })
-      commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'isCrowdsaleApproved', value: false })
     },
 
     /**
      * set airdrop tokens contract
      */
-    [actionTypes.CONTRACT_SET_AIRDROP_TOKENS]: async ({ state, commit }, { candy, luckyAddress = state.Luckydrop.address } = {}) => {
-      if (state.airdropTokens[candy]) return
+    [actionTypes.CONTRACT_SET_AIRDROP_TOKENS]: async ({ state, commit }, { candy, luckyAddress = state.Luckyblock.address } = {}) => {
+      // if (state.airdropTokens[candy]) return
 
       let { web3js, address } = web3Store.state.web3Opt
 

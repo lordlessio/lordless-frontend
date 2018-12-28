@@ -1,5 +1,5 @@
 <template>
-  <section :ref="container" id="mobile-nav-bar" class="TTFontBolder text-center mobile-nav-bar" :class="[scrollDefaultTheme, { 'is-static': !fixed, 'is-active': fixed && !scroll, 'transparent': transparent, 'blur': blurs[0] }]">
+  <section :ref="container" id="mobile-nav-bar" class="TTFontBolder text-center mobile-nav-bar" :class="[scrollDefaultTheme, { 'is-history': history, 'is-static': !fixed, 'is-active': fixed && !scroll, 'transparent': transparent, 'blur': blurs[0] }]">
     <div class="relative" @click.stop="withdrawTip = false">
       <p class="TTFontBolder nav-history-icon line-height-0" v-if="history" @click.stop="$emit('history')">
         <svg>
@@ -180,11 +180,18 @@ export default {
       opacity: 0;
       z-index: -99;
     }
+    &.is-history {
+      padding-top: 12px;
+      transition: padding-top .3s;
+      &.is-active, .is-static {
+        padding-top: 0px;
+      }
+    }
     &.transparent {
       color: transparent;
       background-color: transparent;
       .nav-history-icon {
-        fill: #999;
+        fill: #fff;
       }
     }
     &.is-active, .is-static {
@@ -194,6 +201,7 @@ export default {
       background-color: #0079FF;
       .nav-history-icon {
         fill: #fff;
+        background-color: transparent;
       }
       .navbar-header-tip {
         background-image: none;
@@ -214,13 +222,17 @@ export default {
     }
   }
   .nav-history-icon {
+    padding: 8px;
     position: absolute;
     left: 20px;
     top: 50%;
-    width: 18px;
-    height: 18px;
+    width: 36px;
+    height: 36px;
     fill: #fff;
+    background-color: #777;
     transform: translateY(-50%);
+    box-sizing: border-box;
+    border-radius: 100%;
   }
   .mobile-navbar-text {
     font-weight: bold;

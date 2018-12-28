@@ -17,10 +17,19 @@
           </p> -->
           <p class="m-building-name">{{ info.name.zh }}</p>
           <div class="m-building-sale-box">
-            <div v-if="!info.chain.auction.isOnAuction && !info.chain.auction.isOnPreAuction"
+            <div v-if="info.lord"
                 class="d-flex f-auto-center building-owner-info">
               <lordless-blockies
-                theme="light"
+                theme="dark"
+                :scale="3"
+                :size="5"
+                :seed="info.lord._id || info.lord "/>
+              <span class="building-owner-address">{{ info.lord._id || info.lord | splitAddress({ before: 3, end: 4 }) }}</span>
+            </div>
+            <!-- <div v-if="!info.chain.auction.isOnAuction && !info.chain.auction.isOnPreAuction"
+                class="d-flex f-auto-center building-owner-info">
+              <lordless-blockies
+                theme="dark"
                 :scale="3"
                 :seed="info.lord._id || info.lord "/>
               <span class="building-owner-address">{{ info.lord._id || info.lord | splitAddress({ before: 3, end: 4 }) }}</span>
@@ -32,18 +41,34 @@
                 </svg>
               </span>
               {{ info.chain.auction.price | weiToEth }}
-            </p>
+            </p> -->
           </div>
-
         </figcaption>
 
-        <div class="building-info-bottom">
+        <div class="relative building-info-bottom">
           <p class="building-info-markline"></p>
           <!-- <div class="d-flex">
             <p class="v-flex">Level <span>{{ info.chain.level || 0 }}</span></p>
             <p class="v-flex">Hunters <span>{{ info.members || 0 }}</span></p>
           </div> -->
-          <div class="building-apleft-bar">
+          <ul class="relative d-flex f-align-center text-center mobile-building-data">
+            <li class="v-flex building-data-item">
+              <p>{{ (info.ap || 0).toLocaleString() }}</p>
+              <p>Max AP</p>
+            </li>
+            <li class="v-flex building-data-item">
+              <p>{{ info.chain.level || 0 }}</p>
+              <p>Level</p>
+            </li>
+          </ul>
+          <div class="apleft-progress-bar">
+            <lordless-progress
+              :current="info.apLeft"
+              :max="info.ap"
+              :underColor="apProgress.underColor"
+              :gradient="apProgress.gradient"/>
+          </div>
+          <!-- <div class="building-apleft-bar">
             <p class="d-flex f-justify-between">
               <span>AP</span>
               <span>{{ info.apLeft }}</span>
@@ -55,7 +80,7 @@
                 :underColor="apProgress.underColor"
                 :gradient="apProgress.gradient"/>
             </div>
-          </div>
+          </div> -->
           <!-- <h3 class="text-upper">{{ info.chain.auction.price | weiToEth }} ETH</h3> -->
         </div>
       </div>
@@ -189,8 +214,11 @@ export default {
     fill: #0079FF;
   }
   .building-info-bottom {
-    margin-top: 12px;
+    margin-top: 10px;
     padding: 0 20px 20px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    overflow: hidden;
     // p {
     //   color: #999;
     // }
@@ -207,15 +235,35 @@ export default {
     height: 0;
     border-top: 1px solid #ddd;
   }
-  .building-apleft-bar {
+  .mobile-building-data {
     margin-top: 10px;
-    font-size: 14px;
-    span {
+    // position: relative;
+  }
+  .building-data-item {
+    position: relative;
+    >p {
+      font-size: 12px;
       color: #999;
+      &:first-of-type {
+        // margin-bottom: 2px;
+        font-size: 14px;
+        color: #0B2A48;
+      }
     }
   }
+  // .building-apleft-bar {
+  //   margin-top: 10px;
+  //   font-size: 14px;
+  //   span {
+  //     color: #999;
+  //   }
+  // }
   .apleft-progress-bar {
-    height: 6px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
     border-radius: 5px;
     overflow: hidden;
   }

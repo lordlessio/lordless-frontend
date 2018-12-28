@@ -5,7 +5,7 @@
       <div v-if="!loading && total">
         <h2 class="detail-mobile-title">Transaction histroy</h2>
         <div v-if="!record.isPending" v-for="record of list" :key="record._id" class="mobile-record-item-box">
-          <a class="d-flex col-flex mobile-records-item" :href="`${ETHERSCANURL}tx/${record.tx.transactionHash}`" target="_blank">
+          <a class="d-flex col-flex mobile-records-item" :href="`${ETHERSCANURL}/tx/${record.tx.transactionHash}`" target="_blank">
             <span class="d-flex f-align-center">PRICE<span class="v-flex text-right text-color-third">{{ record.created_at | timeFormat }}</span></span>
             <p class="TTFontBolder price text-upper">{{ record.market[0].price | weiToEth }} ETH</p>
             <span>FROM</span>

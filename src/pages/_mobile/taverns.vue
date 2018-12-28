@@ -1,6 +1,6 @@
 <template>
   <div class="mobile-taverns-page">
-    <mobile-nav-bar text="Taverns" fixed scroll scrollDefaultTheme="scroll-hidden" :scrollMark="100"/>
+    <mobile-nav-bar text="Taverns" fixed scroll scrollDefaultTheme="scroll-hidden" :scrollMark="220"/>
     <mobile-taverns-page
       ref="market"
       @path="pathChange"

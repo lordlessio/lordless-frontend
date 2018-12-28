@@ -58,20 +58,24 @@ export const getCoinbase = (web3js) => {
 
 // generator getAccount func
 export const getAccount = (web3js) => {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
+      if (web3js.eth.defaultAccount || web3js.eth.accounts.length) {
+        resolve({ account: web3js.eth.defaultAccount || web3js.eth.accounts[0] })
+        return
+      }
+
+      if (window.ethereum) {
+        const accounts = await window.ethereum.enable()
+        resolve({ account: accounts[0] })
+        return
+      }
+
       // 设置 timeout
       const timer = setTimeout(() => {
         clearTimeout(timer)
         resolve({ account: '' })
       }, 5000)
-
-      if (window.ethereum) {
-        window.ethereum.enable().then(accounts => {
-          resolve({ account: accounts[0] })
-        })
-        return
-      }
 
       web3js.eth.getAccounts((error, accounts) => {
         clearTimeout(timer)

@@ -27,7 +27,7 @@
             </div>
             <ul class="promotions-lucky-ul">
               <li
-                v-for="(item, index) of luckydrops"
+                v-for="(item, index) of luckyblocks"
                 :key="index"
                 class="home-info-item promotions-public-item promotions-lucky-item">
                 <figure>
@@ -92,63 +92,20 @@
 </template>
 
 <script>
-import PromotionClaim from '@/components/reuse/_mobile/card/promotion/claim'
-import PromotionLucky from '@/components/reuse/_mobile/card/promotion/lucky'
+import PromotionClaim from '@/components/reuse/card/promotion/claim'
+import PromotionLucky from '@/components/reuse/card/promotion/lucky'
 
 import HomeSkeletion from '@/components/skeletion/_mobile/home'
 
-import { getAirdrops, getLuckydrops } from 'api'
-
-// import { loopCandyClamied } from 'utils/loop'
-
-// import { mapState } from 'vuex'
+import { promotionsMixins } from '@/mixins'
 export default {
   name: 'mobile-home-page',
-  data: () => {
-    return {
-      loading: true,
-      promotions: [],
-      luckydrops: []
-      // promotionClaimeds: {}
-    }
-  },
-  computed: {
-    // ...mapState('candy', [
-    //   'candyClaimed'
-    // ]),
-    ossOrigin () {
-      return process.env.LDBICON_ORIGIN
-    }
-  },
+  mixins: [ promotionsMixins ],
   components: {
     PromotionClaim,
     PromotionLucky,
 
     HomeSkeletion
-  },
-  methods: {
-    async getAirdropsHandle () {
-      this.loading = true
-      console.log('---- come in airdrop')
-      try {
-        const airdropRes = await getAirdrops()
-        if (airdropRes.code === 1000 && airdropRes.data) {
-          this.promotions = airdropRes.data
-        }
-        const luckydropRes = await getLuckydrops()
-        if (luckydropRes.code === 1000 && luckydropRes.data) {
-          this.luckydrops = luckydropRes.data
-        }
-        console.log('---- come in airdrop 2')
-        this.loading = false
-      } catch (err) {
-        this.loading = false
-      }
-    }
-  },
-  mounted () {
-    this.getAirdropsHandle()
-    // loopCandyClamied()
   }
 }
 </script>

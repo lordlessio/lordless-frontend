@@ -30,15 +30,27 @@
             <use :xlink:href="`#coin-${info.airdrop.project.symbol.toLocaleLowerCase()}`"/>
           </svg>
         </span> -->
-        <div class="v-flex promotion-info-box">
-          <p class="d-flex f-align-center">
+        <div class="v-flex d-flex f-align-center promotion-info-box">
+          <div class="v-flex">
+            <p class="TTFontBolder">{{ info.airdrop.project.symbol }}</p>
+            <p class="promotion-info-date">{{ info.update_at | dateFormat('MMM. DD YYYY') }}</p>
+          </div>
+          <div v-if="info.status === 2 || info.status === -1" class="TTFontBolder promotion-failed-info">
+            {{ info.status === -1 ? 'Failed' : 'Token Empty!' }}
+          </div>
+          <div v-else class="promotion-receive-info" :class="{ 'is-pending': info.status === 0 }">
+            <p class="TTFontBolder">+ {{ info.airdrop.countPerUser | weiByDecimals(info.airdrop.decimals) }}</p>
+            <p class="text-right promotion-info-pending">Pending...</p>
+            <p v-if="info.airdrop.project.USD2TokenCount" class="promotion-receive-value">≈ $ {{ info.airdrop.countPerUser / 1e18 / info.airdrop.project.USD2TokenCount | formatDecimal }}</p>
+          </div>
+          <!-- <p class="d-flex f-align-center">
             <span class="v-flex inline-block text-upper">{{ info.airdrop.project.symbol }}</span>
             <span class="inline-block TTFontBolder">+ {{ info.airdrop.countPerUser | weiByDecimals(info.airdrop.decimals) }}</span>
           </p>
           <p class="d-flex f-align-center">
             <span class="v-flex inline-block">{{ info.update_at | dateFormat('MMM. DD YYYY') }}</span>
             <span v-if="info.airdrop.project.USD2TokenCount" class="inline-block">≈ $ {{ info.airdrop.countPerUser / 1e18 / info.airdrop.project.USD2TokenCount | formatDecimal }}</span>
-          </p>
+          </p> -->
         </div>
       </a>
     </div>
@@ -166,25 +178,54 @@ export default {
   // }
   .promotion-info-box {
     margin-left: 8px;
-    >p {
-      &:nth-of-type(1) {
-        font-size: 16px;
-        >span {
-          color: #0079FF;
-          &:nth-of-type(1) {
-            color: #555;
-          }
-        }
+    font-size: 20px;
+    color: #555;
+    // >p {
+    //   &:nth-of-type(1) {
+    //     font-size: 16px;
+    //     >span {
+    //       color: #0079FF;
+    //       &:nth-of-type(1) {
+    //         color: #555;
+    //       }
+    //     }
+    //   }
+    //   &:nth-of-type(2) {
+    //     font-size: 14px;
+    //     color: #0079FF;
+    //       >span {
+    //         &:nth-of-type(1) {
+    //           color: #bbb;
+    //         }
+    //       }
+    //   }
+    // }
+  }
+  .promotion-receive-info {
+    color: #0079FF;
+    &.is-pending {
+      color: #bbb;
+      .promotion-info-pending {
+        display: block;
       }
-      &:nth-of-type(2) {
-        font-size: 14px;
-        color: #0079FF;
-          >span {
-            &:nth-of-type(1) {
-              color: #bbb;
-            }
-          }
+      .promotion-receive-value {
+        display: none;
       }
     }
+  }
+  .promotion-info-pending {
+    display: none;
+    font-size: 16px;
+    color: #bbb;
+  }
+  .promotion-info-date, .promotion-receive-value {
+    font-size: 14px;
+  }
+  .promotion-info-date {
+    color: #bbb;
+  }
+  .promotion-failed-info {
+    font-size: 16px;
+    color: #F5515F;
   }
 </style>

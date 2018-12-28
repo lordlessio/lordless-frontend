@@ -1,12 +1,12 @@
 <template>
   <div v-if="value" class="crowdsale-box">
-    <div v-if="isMobile" class="text-center mobile-crowdsale-container">
+    <div class="text-center mobile-crowdsale-container">
       <h2>Token Approve</h2>
-      <p>Authorize the Token contract to luckydrop contract</p>
+      <p>Authorize the Token contract to luckyBlock contract</p>
       <div
         class="d-flex f-align-center token-crowdsale-item"
         v-for="(bet, index) of tokenBets" :key="index">
-        <p class="v-flex text-left">{{ bet.candy.symbol }}</p>
+        <p class="TTFontBolder v-flex text-left">Authorize {{ bet.candy.symbol }}</p>
         <lordless-btn
           class="TTFontBolder crowdsale-btn"
           theme="dialog"
@@ -45,21 +45,17 @@ export default {
   },
   computed: {
     ...mapState('contract', [
-      'Luckydrop',
+      'Luckyblock',
       'airdropTokens',
       'tokenAllowances'
     ]),
 
     luckyAddress () {
-      return this.Luckydrop.address
+      return this.Luckyblock.address
     },
 
     web3Opt () {
       return this.$root.$children[0].web3Opt
-    },
-
-    ETHERSCANURL () {
-      return process.env.ETHERSCANURL
     },
 
     isMobile () {
@@ -69,26 +65,40 @@ export default {
   watch: {
     value (val) {
       val && this.initTokenAllowance()
-    },
-    tokenAllowances (obj) {
-      for (const bet of this.tokenBets) {
-        const { candy } = bet
-        this.$set(this.allowancePendings, candy.address, obj[candy.address] === undefined)
-      }
-    },
-    allowanceModels (obj) {
-      const keys = Object.keys(obj)
-      const bool = !!keys.filter(key => !!obj[key]).length
-      if (keys.length === this.tokenBets.length && bool) {
-        console.log('--- allowance success')
-        this.$emit('success')
-      }
     }
+    // tokenAllowances (obj) {
+    //   console.log('----- watch tokenAllowances', obj)
+    //   for (const bet of this.tokenBets) {
+    //     const { candy } = bet
+    //     this.$set(this.allowancePendings, candy.address, obj[candy.address] === undefined)
+    //   }
+    // },
+    // allowanceModels (obj) {
+    //   const keys = Object.keys(obj)
+    //   const bool = !!keys.filter(key => !!obj[key]).length
+    //   if (keys.length === this.tokenBets.length && bool) {
+    //     console.log('--- allowance success')
+    //     this.$emit('success')
+    //   }
+    // }
   },
   methods: {
     ...mapMutations('contract', [
       mutationTypes.CONTRACT_SET_TOKEN_ALLOWANCE
     ]),
+
+    checkAllowance (tokenAllowances = this.tokenAllowances, allowanceModels = this.allowanceModels) {
+      for (const bet of this.tokenBets) {
+        const { candy } = bet
+        this.$set(this.allowancePendings, candy.address, tokenAllowances[candy.address] === undefined)
+      }
+
+      const keys = Object.keys(allowanceModels)
+      const bool = !!keys.filter(key => !!allowanceModels[key]).length
+      if (keys.length === this.tokenBets.length && bool) {
+        this.$emit('success')
+      }
+    },
 
     /**
      * 初始化 tokenAllowance
@@ -105,6 +115,8 @@ export default {
         // 记录该 token 是否授权状态, 这里的数量都是 wei 单位
         this.$set(this.allowanceModels, candy, tokenAllowances[candy] !== undefined && tokenAllowances[candy] >= bet.count)
       }
+
+      this.$nextTick(() => this.checkAllowance())
     },
 
     /**
@@ -135,6 +147,8 @@ export default {
           this.metamaskChoose = false
           this.loopCheckTokenAllowance({ luckyAddress, candy, count }, () => {
             this.$set(this.allowanceModels, candy, true)
+            this.$set(this.allowancePendings, candy, false)
+            this.$nextTick(() => this.checkAllowance())
           })
         })
         .catch(err => {
@@ -242,6 +256,9 @@ export default {
   }
   .token-crowdsale-item {
     margin-top: 40px;
+    &:not(:first-of-type) {
+      margin-top: 25px;
+    }
   }
   .crowdsale-btn {
     padding-left: 12px;

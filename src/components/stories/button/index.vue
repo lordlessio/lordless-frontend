@@ -166,6 +166,10 @@
       color: #fff;
       fill: #fff;
       background-image: linear-gradient(-225deg, #124BDC 0%, #0079FF 100%);
+      &.shadow {
+        box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, .15);
+        // box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
+      }
       &.inverse {
         color: #0079FF;
         background-color: #fff;

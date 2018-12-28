@@ -113,7 +113,7 @@
                       :gradient="progress.ac.gradient"/>
                   </div>
                   <p class="d-flex user-progress-desc recover-at">
-                    The tavern still need to earn {{ countUp.nAC.end - countUp.cAC.end }} to level up.
+                    {{ countUp.nAC.end - countUp.cAC.end }} activeness to level up.
                   </p>
                 </div>
                 <div class="detail-progress-box">

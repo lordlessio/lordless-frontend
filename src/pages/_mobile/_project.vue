@@ -195,7 +195,7 @@
 </template>
 
 <script>
-import PromotionClaim from '@/components/reuse/_mobile/card/promotion/claim'
+import PromotionClaim from '@/components/reuse/card/promotion/claim'
 import ProjectSkeletion from '@/components/skeletion/_mobile/project/detail'
 
 import { getCandyDetail } from 'api'

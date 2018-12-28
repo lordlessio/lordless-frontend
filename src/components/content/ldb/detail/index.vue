@@ -82,11 +82,6 @@
             :total="ldbRecords.total"
             :loading="recordsLoading"/>
 
-          <!-- <approved-tasks-tool
-            :list="[1,2]"
-            :loading="ldbTaskLoading">
-          </approved-tasks-tool> -->
-
         </div>
         <div v-if="!isMobile" class="detail-cnt-right">
 
@@ -105,8 +100,6 @@
             class="detail-approved-tasks"
             :ldbId="ldbInfo._id"
             :loading="ldbTaskLoading"/>
-          <!-- <ldb-candy-tool :list="candyLimits" :loading="ldbTaskLoading"></ldb-candy-tool> -->
-
         </div>
       </div>
     </section>
@@ -114,26 +107,18 @@
       ref="authorize"
       @blurs="dialogSetBlurs($event, dialog ? 1 : 0)"/>
 
-    <!-- <order-dialog
-      v-model="orderModel"
-      :ldbInfo="ldbInfo"
-      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)">
-    </order-dialog> -->
-
-    <!-- <ldb-buy
-      v-model="buyModel"
-      :ldbInfo="ldbInfo"
-      @pending="ldbBuyPending"
-      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)">
-    </ldb-buy> -->
-
     <ldb-sell
       v-model="sellModel"
       :ldbInfo="ldbInfo"
       @pending="ldbSellPending"
       @blurs="dialogSetBlurs($event, dialog ? 1 : 0)"/>
 
-    <mobile-sale-bar-tool
+    <mobile-taver-further
+      v-if="isMobile"
+      :info.sync="ldbInfo"
+      :user="userInfo"
+      :loading="infoLoading"/>
+    <!-- <mobile-sale-bar-tool
       v-if="isMobile"
       :info.sync="ldbInfo"
       :pendings="ldbPendings"
@@ -141,7 +126,7 @@
       :loading="infoLoading"
       @buy="buyHandle"
       @sale="saleHandle"
-      @cancel="cancelSaleHandle"/>
+      @cancel="cancelSaleHandle"/> -->
   </div>
 </template>
 
@@ -162,7 +147,9 @@ import MobileRecordsTool from '@/components/content/_mobile/ldb/detail/records'
 import ApprovedTasksTool from './approvedTasks'
 
 import LdbSaleTool from './sale'
-import MobileSaleBarTool from '@/components/content/_mobile/ldb/detail/saleBar'
+// import MobileSaleBarTool from '@/components/content/_mobile/ldb/detail/saleBar'
+
+import MobileTaverFurther from '@/components/content/_mobile/ldb/detail/further'
 
 import LdbCandyTool from './candy'
 
@@ -314,7 +301,8 @@ export default {
     ApprovedTasksTool,
 
     LdbSaleTool,
-    MobileSaleBarTool,
+    // MobileSaleBarTool,
+    MobileTaverFurther,
 
     LdbCandyTool,
 

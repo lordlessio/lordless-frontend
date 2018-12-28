@@ -5,10 +5,10 @@
         <span>Bets</span>
       </p>
       <div class="lucky-section-content bets">
-        <div class="d-flex f-align-center" v-if="info.dropInfos.ethBet">
-          <p class="v-flex">- {{ info.dropInfos.ethBet.count | weiByDecimals(info.dropInfos.ethBet.decimals) }} ETH</p>
+        <div class="d-flex f-align-center" v-if="info.blockInfos.ethBets">
+          <p class="v-flex">- {{ info.blockInfos.ethBets.count | weiByDecimals(info.blockInfos.ethBets.decimals) }} ETH</p>
         </div>
-        <div class="d-flex f-align-center" v-for="(item, index) of info.dropInfos.tokenBets" :key="index">
+        <div class="d-flex f-align-center" v-for="(item, index) of info.blockInfos.tokenBets" :key="index">
           <p class="v-flex">- {{ item.count | weiByDecimals(item.decimals) }} {{ item.candy.symbol }}</p>
         </div>
       </div>
@@ -19,11 +19,11 @@
         <span class="v-flex text-right">Probability</span>
       </p>
       <div class="d-flex col-flex lucky-section-content winnings">
-        <div class="d-flex f-align-center" v-if="info.dropInfos.ethWinning">
-          <p class="v-flex">+ {{ info.dropInfos.ethWinning.count | weiByDecimals(info.dropInfos.ethWinning.decimals) }} ETH</p>
-          <p class="lucky-right-content">{{ info.dropInfos.ethWinning.percent }}%</p>
+        <div class="d-flex f-align-center" v-if="info.blockInfos.ethWinnings">
+          <p class="v-flex">+ {{ info.blockInfos.ethWinnings.count | weiByDecimals(info.blockInfos.ethWinnings.decimals) }} ETH</p>
+          <p class="lucky-right-content">{{ info.blockInfos.ethWinnings.percent }}%</p>
         </div>
-        <div class="d-flex f-align-center" v-for="(item, index) of info.dropInfos.tokenWinnings" :key="index">
+        <div class="d-flex f-align-center" v-for="(item, index) of info.blockInfos.tokenWinnings" :key="index">
           <p class="v-flex">+ {{ item.count | weiByDecimals(item.decimals) }} {{ item.candy.symbol }}</p>
           <p class="lucky-right-content">{{ item.percent }}%</p>
         </div>
@@ -39,17 +39,18 @@
         <span>Rules & Detail</span>
       </p>
       <lordless-btn
-        class="lucky-claim-btn"
+        class="lucky-play-btn"
         theme="red-linear"
-        :loading="btnLoading"
-        :disabled="btnLoading"
-        @click="playLuckyDrop">Play now</lordless-btn>
+        :loading="!web3Error && (btnLoading || isChecking)"
+        :disabled="!web3Error && (btnLoading || isChecking || isEnded)"
+        @click="playLuckblock">{{ isEnded ? 'Ended' : 'Play now'}}</lordless-btn>
     </div>
     <lordless-lucky-rules v-model="rulesModel"/>
     <lordless-authorize
       ref="authorize"
       blurs
       :tokenBets="tokenBets"
+      @fClose="btnLoading = false"
       @allowanceSuccess="allowanceSuccess"/>
   </div>
 </template>
@@ -74,6 +75,8 @@ export default {
   },
   data: () => {
     return {
+      isEnded: false,
+      isChecking: true,
       rulesModel: false,
       btnLoading: false,
       InsufficientEth: false
@@ -84,12 +87,30 @@ export default {
       'web3Opt'
     ]),
     ...mapState('contract', [
-      'Luckydrop',
+      'Luckyblock',
       'airdropTokens'
     ]),
 
+    playInit () {
+      const { loading, isConnected } = this.web3Opt
+      return !loading && isConnected && !!this.info._id && !!this.Luckyblock
+    },
+
+    web3Error () {
+      const { loading, isConnected } = this.web3Opt
+      return !loading && !isConnected
+    },
+
     tokenBets () {
-      return this.info.dropInfos.tokenBets
+      return this.info.blockInfos.tokenBets
+    }
+  },
+  watch: {
+    playInit (val) {
+      if (val) this.initLuckyblockStatus()
+    },
+    account (val) {
+      if (val && this.playInit) this.initLuckyblockStatus()
     }
   },
   methods: {
@@ -97,17 +118,51 @@ export default {
       this.rulesModel = true
     },
     allowanceSuccess () {
-      this.doLuckyDrop()
+      this.doLuckyblock()
     },
 
-    // play LuckyDrop 事件
-    async playLuckyDrop () {
+    async initLuckyblockStatus ({ luckyblockId, blockInfos } = this.info, Luckyblock = this.Luckyblock, { web3js } = this.web3Opt) {
+      // 如果 web3 没有就绪 或者 网络不匹配，进入 failed 模式
+      // if (!isConnected || (process.env.NODE_ENV !== 'development' && parseInt(networkId) !== process.env.APPROVED_NETWORK_ID)) {
+      //   this.initFailedplay()
+      //   return
+      // }
+      if (!blockInfos || !Luckyblock) return
+
+      this.isChecking = true
+
+      const { ethWinnings } = blockInfos
+      const winningNum = ethWinnings.count
+
+      console.log('luckyblockBase before', luckyblockId)
+
+      // 获取活动的开启状态，如果 luckyblockBase 为true，代表活动关闭
+      const luckyblockBase = await Luckyblock.methods('getLuckyblockBase', [ luckyblockId ])
+      console.log('luckyblockBase', luckyblockBase)
+
+      // 获取合约的 eth Balance，如果eth不足，则关闭活动
+      const { balance } = await getBalance(web3js, Luckyblock.address)
+
+      if (balance < winningNum || luckyblockBase) {
+        this.isEnded = true
+      }
+
+      this.isChecking = false
+      console.log('---- winningNum', winningNum, balance, luckyblockBase)
+      // this.$nextTick(() => {
+      //   if (!this.rendered) this.rendered = true
+      //   this.checkplayStatus()
+      // })
+    },
+
+    // play Luckyblock 事件
+    async playLuckblock () {
       this.btnLoading = true
       try {
         const authorize = await this.$refs.authorize.checkoutAuthorize({ tokenAllowance: true })
         if (!authorize) return
 
-        this.doLuckyDrop()
+        this.doLuckyblock()
       } catch (err) {
         this.btnLoading = false
         this.$notify.error({
@@ -120,9 +175,9 @@ export default {
     },
 
     /**
-     * 执行 luckyDrop 合约
+     * 执行 luckyblock 合约
      */
-    async doLuckyDrop (address = this.account, info = this.info, Luckydrop = this.Luckydrop, web3Opt = this.web3Opt) {
+    async doLuckyblock (address = this.account, info = this.info, Luckyblock = this.Luckyblock, web3Opt = this.web3Opt) {
       this.btnLoading = true
 
       const web3js = web3Opt.web3js
@@ -131,10 +186,10 @@ export default {
 
       console.log('balance', balance)
       // 判断 eth 是否足够
-      if (balance < info.dropInfos.ethBet.count) {
+      if (balance < info.blockInfos.ethBets.count) {
         this.$notify.warning({
           title: 'Warning!',
-          message: 'ETH is Insufficient',
+          message: 'Insufficient ETH!',
           position: 'bottom-right',
           duration: 2500
         })
@@ -142,7 +197,7 @@ export default {
         return
       }
 
-      const tokenBets = info.dropInfos.tokenBets
+      const tokenBets = info.blockInfos.tokenBets
       let tokenEnough = true
       await (Promise.all(tokenBets.map(async tokenBet => {
         const candy = tokenBet.candy.address
@@ -153,7 +208,7 @@ export default {
         if (balance.toNumber() < tokenBet.count) {
           this.$notify.warning({
             title: 'Warning!',
-            message: `${tokenBet.candy.symbol.toLocaleUpperCase()} is Insufficient!`,
+            message: `Insufficient ${tokenBet.candy.symbol.toLocaleUpperCase()}!`,
             position: 'bottom-right',
             duration: 2500
           })
@@ -169,21 +224,21 @@ export default {
 
       this.metamaskChoose = true
       try {
-        const luckydropParam = {
-          name: 'claim',
-          values: [ info.dropId ]
+        const luckyblockParam = {
+          name: 'play',
+          values: [ info.luckyblockId ]
         }
         const { gasPrice } = web3Opt
-        const gas = (await Luckydrop.estimateGas(luckydropParam.name, luckydropParam.values)) || 300000
+        const gas = (await Luckyblock.estimateGas(luckyblockParam.name, luckyblockParam.values)) || 300000
 
         const params = {
           gas,
           gasPrice,
-          data: Luckydrop.claim.getData(info.dropId),
+          data: Luckyblock[luckyblockParam.name].getData(info.luckyblockId),
           // memo: 'buy a tavern by lordless',
           // feeCustomizable: true,
-          value: info.dropInfos.ethBet.count,
-          to: Luckydrop.address,
+          value: info.blockInfos.ethBets.count,
+          to: Luckyblock.address,
           from: address
         }
 
@@ -192,7 +247,7 @@ export default {
           this.btnLoading = false
           console.log('tx', tx)
 
-          await saveAirdropUser({ tx, luckydropId: info._id })
+          await saveAirdropUser({ tx, luckyblockId: info._id })
           this.metamaskChoose = false
 
           this.$nextTick(() => {
@@ -213,6 +268,13 @@ export default {
         })
       }
     }
+  },
+  activated () {
+    if (!this.rendered) return
+    this.initLuckyblockStatus()
+  },
+  mounted () {
+    this.initLuckyblockStatus()
   }
 }
 </script>
@@ -260,7 +322,7 @@ export default {
     height: 15px;
     fill: #777;
   }
-  .lucky-claim-btn {
+  .lucky-play-btn {
     padding: 0 16px;
     height: 32px;
     line-height: 32px;

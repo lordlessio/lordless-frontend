@@ -6,10 +6,26 @@
         <p class="TTFontBolder">Marketplace is an easy, convenient way to buy and sell your Tavern.</p>
       </section> -->
       <h2 class="mobile-taverns-title">Taverns</h2>
+      <div class="taverns-trading-opensea">
+        <p>LORDLESS use OpenSea for further trading. Visit our marketplace on OpenSea right now.</p>
+        <lordless-btn
+          class="trading-opensea-btn"
+          theme="blue-linear"
+          shadow>
+          <a class="d-inline-flex f-align-center" href="https://opensea.io/assets/lordless" target="_blank">
+            <span class="inline-block line-height-0 trading-opensea-icon">
+              <svg>
+                <use xlink:href="#icon-open-sea"/>
+              </svg>
+            </span>
+            <span>Trading on OpenSea</span>
+          </a>
+        </lordless-btn>
+      </div>
       <mobile-sort-bar
         :sortItems="sortItems"
         :total="ldbs.total"
-        :scrollHeight="100"
+        :scrollHeight="220"
         :topHeight="44"
         @sort="sortHandle"
         @order="orderHandle"/>
@@ -361,6 +377,31 @@ export default {
     padding: 20px 20px 0;
     font-size: 24px;
     line-height: 1;
+  }
+
+  .taverns-trading-opensea {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    padding: 0 20px;
+    font-size: 16px;
+    color: #777;
+  }
+  .trading-opensea-btn {
+    margin-top: 10px;
+    height: 46px;
+    line-height: 46px;
+    >a {
+      padding: 0 20px;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+    }
+  }
+  .trading-opensea-icon {
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    fill: #fff;
   }
 
   /**

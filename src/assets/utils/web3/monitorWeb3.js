@@ -1,11 +1,11 @@
 import store from '@/store'
-import { initStorageUser, getAccount, getGasPrice } from './utils'
+import { initStorageUser, getAccount, getGasPrice, getBalance } from './utils'
 import { actionTypes } from '@/store/types'
 
 export const monitorWeb3 = (web3Opt) => {
   // const APPROVED_NETWORKID = '5777'
   // const { web3Opt } = store.state.web3
-  let { address, web3js, error } = web3Opt
+  let { address, balance, web3js, error } = web3Opt
 
   // gasprice 全局只请求一次
   getGasPrice(web3js)
@@ -20,11 +20,11 @@ export const monitorWeb3 = (web3Opt) => {
      * check balance
      */
     // balance 循环请求，会造成 metamask 循环 tx 提示闪烁
-    // const balanceRes = (await getBalance(web3js, address)) || {}
-    // if (balanceRes.balance !== balance) {
-    //   balance = balanceRes.balance
-    //   store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { balance: balanceRes.balance || 0 })
-    // }
+    const balanceRes = (await getBalance(web3js, address)) || {}
+    if (balanceRes.balance !== balance) {
+      balance = balanceRes.balance
+      store.dispatch(`web3/${actionTypes.WEB3_RESET_OR_UPDATE_WEB3}`, { balance: balanceRes.balance || 0 })
+    }
 
     // const gasPriceRes = (await getGasPrice(web3js)) || {}
     // if (gasPriceRes.gasPrice !== gasPrice) {
@@ -129,7 +129,6 @@ export const monitorWeb3 = (web3Opt) => {
         store.dispatch(`contract/${actionTypes.CONTRACT_RESET_INSTANCE}`)
       }
     }
-
     // 如果流程完成，但是 error 还存在，清除 error
     if (error) {
       error = null
@@ -137,20 +136,25 @@ export const monitorWeb3 = (web3Opt) => {
     }
   }
 
-  const loopTCO = () => {
-    let nowt
-    const loopStep = async (timestamp) => {
-      if (!nowt) nowt = timestamp
-      if (timestamp - nowt > 1000) {
-      // console.time('loopStep')
-        await checkWeb3()
-        // console.timeEnd('loopStep')
-        nowt = timestamp
-        return window.requestAnimationFrame(loopStep)
-      }
-      return window.requestAnimationFrame(loopStep)
-    }
-    return window.requestAnimationFrame(loopStep)
+  const loopTCO = async () => {
+    checkWeb3()
+    return setTimeout(() => {
+      loopTCO()
+    }, 1000)
+    // let nowt
+    // const loopStep = async (timestamp) => {
+    //   if (!nowt) nowt = timestamp
+    //   if (timestamp - nowt > 1000) {
+    //   // console.time('loopStep')
+    //     await checkWeb3()
+    //     // console.timeEnd('loopStep')
+    //     nowt = timestamp
+    //     return window.requestAnimationFrame(loopStep)
+    //   }
+    //   return window.requestAnimationFrame(loopStep)
+    // }
+    // return window.requestAnimationFrame(loopStep)
   }
-  return loopTCO()
+  loopTCO()
+  return null
 }

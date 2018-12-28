@@ -158,7 +158,7 @@
                     :info="promotion"/>
 
                   <mobile-quest-lucky
-                    v-else-if="promotion.luckydrop"
+                    v-else-if="promotion.luckyblock"
                     :info="promotion"/>
                 </li>
               </ul>

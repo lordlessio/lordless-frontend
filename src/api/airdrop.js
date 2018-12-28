@@ -11,14 +11,14 @@ module.exports = axios => {
       return axios.get('/api/airdrop/detail', { params })
     },
 
-    // 根据条件获取 luckydrops 列表
-    getLuckydrops: (params) => {
-      return axios.get('/api/luckydrops', { params })
+    // 根据条件获取 Luckyblock 列表
+    getLuckyblocks: (params) => {
+      return axios.get('/api/luckyblocks', { params })
     },
 
-    // 根据 id 或者 dropId 获取 luckydrop 详情
-    getLuckydropDetail: (params) => {
-      return axios.get('/api/luckydrop/detail', { params })
+    // 根据 id 或者 luckyblockId 获取 luckyblock 详情
+    getLuckyblockDetail: (params) => {
+      return axios.get('/api/luckyblock/detail', { params })
     },
 
     // 根据用户获取参与的airdrop活动

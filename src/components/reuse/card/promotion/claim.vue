@@ -51,7 +51,7 @@
         class="TTFontBold promotion-claim-btn"
         theme="promotion"
         inverse
-        :disabled="isClaimed || loading || isEnd || info.status !== -1"
+        :disabled="!web3Error && (isClaimed || loading || isEnd || info.status !== -1)"
         :loading="loading"
         @click="claimPromotion">{{ isEnd ? 'Ended' : isClaimed ? 'Claimed' : 'Claim now' }}</lordless-btn>
     </div>
@@ -117,6 +117,10 @@ export default {
     claimInit () {
       return !this.web3Opt.loading && this.web3Opt.isConnected && !!this.Airdrop && !!this.info._id && !this.airdropTokens[this.info.project.address]
     },
+    web3Error () {
+      const { loading, isConnected } = this.web3Opt
+      return !loading && !isConnected
+    },
     claimedNum () {
       return this.progressNums.dropping
     },
@@ -131,13 +135,16 @@ export default {
   },
   watch: {
     claimInit (val) {
-      if (val) this.initTokenContract()
+      if (val) this.initAirdropStatus()
     },
     account (val) {
-      if (val && this.claimInit) this.initTokenContract()
+      if (val && this.claimInit) this.initAirdropStatus()
     },
     claimedNum (val) {
       this.$emit('update:claimed', val)
+    },
+    web3Error (val) {
+      this.initFailedClaim()
     }
     // airdropTokens (val) {
     //   console.log('----- watch airdropTokens')
@@ -171,14 +178,14 @@ export default {
     },
 
     /**
-     * 初始化 token
+     * 初始化 airdrop 状态
      */
-    async initTokenContract ({ project } = this.info, { isConnected, networkId } = this.web3Opt) {
+    async initAirdropStatus ({ project } = this.info, { isConnected, networkId } = this.web3Opt) {
       // 如果 web3 没有就绪 或者 网络不匹配，进入 failed 模式
-      if (!isConnected || (process.env.NODE_ENV !== 'development' && parseInt(networkId) !== process.env.APPROVED_NETWORK_ID)) {
-        this.initFailedClaim()
-        return
-      }
+      // if (!isConnected || (process.env.NODE_ENV !== 'development' && parseInt(networkId) !== process.env.APPROVED_NETWORK_ID)) {
+      //   this.initFailedClaim()
+      //   return
+      // }
       if (!project) return
 
       // 初始化状态
@@ -269,7 +276,6 @@ export default {
         }
 
         // 估算 gas
-        // const gas = await NFTsCrowdsale.payByEth.estimateGas(tokenId)
         const gas = (await Airdrop.estimateGas(claimParams.name, claimParams.values)) || 120000
 
         // console.log('--- gas', gas, gasPrice)
@@ -284,25 +290,8 @@ export default {
           from: address
         }
 
-        // Airdrop.methods(claimParams.name, claimParams.values.concat([{ gas, gasPrice }]))
-        //   .then(tx => {
-        //     console.log('----- buyHandle tx', tx)
-        //     // this.buyPending = true
-        //     this.metamaskChoose = false
-
-        //     this.checkTxEvent({ tx, action: claimParams.name, pId }, () => {
-        //       this.$router.push('/owner/activity')
-        //     })
-        //   })
-        //   .catch((err) => {
-        //     console.log('err', err)
-        //     this.metamaskChoose = false
-        //   })
-
         // 使用自有封装对象
         window.lordlessMethods.buy(params).then(async tx => {
-          // console.log('----- claimHandle tx', tx)
-          // this.buyPending = true
           this.loading = false
           this.isClaimed = true
 
@@ -320,12 +309,6 @@ export default {
             console.log('err', err.message)
             this.metamaskChoose = false
             this.loading = false
-            // this.$notify.error({
-            //   title: 'Error!',
-            //   message: err.message || 'unknow error',
-            //   position: 'bottom-right',
-            //   duration: 3500
-            // })
           })
       } catch (err) {
         this.$notify.error({
@@ -339,10 +322,10 @@ export default {
   },
   activated () {
     if (!this.rendered) return
-    this.initTokenContract()
+    this.initAirdropStatus()
   },
   mounted () {
-    this.initTokenContract()
+    this.initAirdropStatus()
   }
 }
 </script>

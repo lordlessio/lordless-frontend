@@ -19,13 +19,13 @@
           </p>
         </div>
 
-        <div class="home-promotions-item home-promotions-windfall">
+        <div class="home-promotions-item home-promotions-lucky">
           <div class="home-promotions-title">
-            <p class="TTFontBolder">Windfall</p>
+            <p class="TTFontBolder">Lucky Blocks</p>
           </div>
           <ul class="d-flex f-wrap f-align-center promotions-list">
             <li class="promotions-item"
-              v-for="(item, index) of promotions" :key="index">
+              v-for="(item, index) of luckyblocks" :key="index">
               <figure>
                 <figcaption
                   :style="`background-image: url(${ossOrigin + item.banners[0]})`"
@@ -40,7 +40,7 @@
 
         <div class="home-promotions-item home-promotions-windfall">
           <div class="home-promotions-title">
-            <p class="TTFontBolder">Lucky Blocks</p>
+            <p class="TTFontBolder">Windfall</p>
           </div>
           <ul class="d-flex f-wrap f-align-center promotions-list">
             <li class="promotions-item"
@@ -94,8 +94,8 @@
 <script>
 import { promotionsMixins } from '@/mixins'
 import PromotionsBreadcrumb from '@/components/reuse/promotions/breadcrumb'
-import PromotionClaim from '@/components/reuse/_mobile/card/promotion/claim'
-import PromotionLucky from '@/components/reuse/_mobile/card/promotion/lucky'
+import PromotionClaim from '@/components/reuse/card/promotion/claim'
+import PromotionLucky from '@/components/reuse/card/promotion/lucky'
 
 import PromotionsSkeletion from '@/components/skeletion/project/promotions'
 export default {

@@ -187,7 +187,7 @@
 
 <script>
 import PromotionsBreadcrumb from '@/components/reuse/promotions/breadcrumb'
-import PromotionClaim from '@/components/reuse/_mobile/card/promotion/claim'
+import PromotionClaim from '@/components/reuse/card/promotion/claim'
 
 import ProjectInfoSkeletion from '@/components/skeletion/project'
 

@@ -87,7 +87,8 @@
                   class="tasks-item"
                   v-for="(promotion, index) of taskInfos.promotion.list"
                   :key="index">
-                  <promotion-card :info="promotion" lg shadow/>
+                  <promotion-airdrop v-if="promotion.airdrop" :info="promotion" lg shadow/>
+                  <promotion-lucky v-else :info="promotion" lg shadow/>
                 </el-col>
               </el-row>
             </transition>
@@ -230,7 +231,8 @@ import TaskDialog from '@/components/reuse/dialog/task/detail'
 import TaskCard from '@/components/reuse/card/task'
 import LdSelect from '@/components/stories/select'
 
-import PromotionCard from '@/components/reuse/_mobile/card/quests/promotion'
+import PromotionAirdrop from '@/components/reuse/_mobile/card/quests/promotion'
+import PromotionLucky from '@/components/reuse/_mobile/card/quests/lucky'
 import PromotionSkeletion from '@/components/skeletion/_mobile/quests/promotion'
 
 import { historyState } from 'utils/tool'
@@ -379,7 +381,8 @@ export default {
     TaskCard,
     LdSelect,
 
-    PromotionCard,
+    PromotionAirdrop,
+    PromotionLucky,
     PromotionSkeletion
   },
   methods: {
