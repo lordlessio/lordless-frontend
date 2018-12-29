@@ -281,6 +281,7 @@ export default {
       // } else {
       //   removeClass('mobile-dialog-open', lordless)
       // }
+      if (!val) this.$emit('dialogClose')
       if (this.blurs) {
         this.dialogSetBlurs(val, this.defaultBlursNum)
       } else this.$emit('blurs', val)

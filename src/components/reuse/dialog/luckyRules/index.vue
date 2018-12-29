@@ -26,7 +26,7 @@
       <div class="lucky-rules-contract">
         <p>The probability is onchain.</p>
         <h3>
-          <a href="#" target="_blank">READ SMART CONTRACT</a>
+          <a :href="contractLink" target="_blank">READ SMART CONTRACT</a>
         </h3>
       </div>
       <p class="lucky-rules-icon">GOOD LUCK!</p>
@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'lordless-lucky-rules',
   props: {
@@ -49,6 +50,15 @@ export default {
   data: () => {
     return {
       dialogModel: false
+    }
+  },
+  computed: {
+    ...mapState('contract', [
+      'Luckyblock'
+    ]),
+
+    contractLink () {
+      return `${process.env.ETHERSCANURL}/address/${this.Luckyblock ? this.Luckyblock.address : ''}#code`
     }
   },
   watch: {

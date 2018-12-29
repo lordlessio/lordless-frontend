@@ -50,8 +50,7 @@
       ref="authorize"
       blurs
       :tokenBets="tokenBets"
-      @fClose="btnLoading = false"
-      @allowanceSuccess="allowanceSuccess"/>
+      @dialogClose="btnLoading = false"/>
   </div>
 </template>
 
@@ -123,9 +122,9 @@ export default {
     showTip () {
       this.rulesModel = true
     },
-    allowanceSuccess () {
-      this.doLuckyblock()
-    },
+    // allowanceSuccess () {
+    //   this.doLuckyblock()
+    // },
 
     async initLuckyblockStatus ({ luckyblockId, blockInfos } = this.info, Luckyblock = this.Luckyblock, { web3js } = this.web3Opt) {
       // 如果 web3 没有就绪 或者 网络不匹配，进入 failed 模式

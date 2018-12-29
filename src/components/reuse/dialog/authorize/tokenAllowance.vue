@@ -87,10 +87,14 @@ export default {
       actionTypes.CONTRACT_SET_TOKEN_ALLOWANCE
     ]),
 
-    checkAllowance (tokenAllowances = this.tokenAllowances, allowanceModels = this.allowanceModels) {
+    checkAllowance (address = this.account, tokenAllowances = this.tokenAllowances, allowanceModels = this.allowanceModels) {
       for (const bet of this.tokenBets) {
         const { candy } = bet
-        this.$set(this.allowancePendings, candy.address, tokenAllowances[candy.address] === undefined)
+        const tokenApproveKey = `lordless_token_approve_${address}_${candy.address}`
+        const isPending = sessionStorage.getItem(tokenApproveKey)
+        isPending && this.loopCheckTokenAllowance({ candy: candy.address, count: bet.count })
+
+        this.$set(this.allowancePendings, candy.address, isPending || tokenAllowances[candy.address] === undefined)
       }
 
       const keys = Object.keys(allowanceModels)
@@ -126,9 +130,6 @@ export default {
       candy = typeof candy === 'object' ? candy.address : candy
       this.$set(this.allowancePendings, candy, true)
 
-      // metamask 是否被打开
-      this.metamaskChoose = true
-
       const { gasPrice } = web3Opt
 
       // 传输的合约参数
@@ -141,15 +142,14 @@ export default {
       const gas = (await airdropTokens[candy].estimateGas(setApprove.name, setApprove.values)) || 300000
       console.log('gas', gas, luckyAddress, candy, address)
 
+      // metamask 是否被打开
+      this.metamaskChoose = true
+
       // 授权给合约 erc20 可操作数量为 1e30
       airdropTokens[candy].methods(setApprove.name, setApprove.values.concat([{ from: this.address, gas, gasPrice }]))
         .then(tx => {
           this.metamaskChoose = false
-          this.loopCheckTokenAllowance({ luckyAddress, candy, count }, () => {
-            this.$set(this.allowanceModels, candy, true)
-            this.$set(this.allowancePendings, candy, false)
-            this.$nextTick(() => this.checkAllowance())
-          })
+          this.loopCheckTokenAllowance({ luckyAddress, candy, count })
         })
         .catch(err => {
           console.log('err', err)
@@ -162,13 +162,18 @@ export default {
     /**
      * loop 监听 tokenAllowance 事件
      */
-    async loopCheckTokenAllowance ({ address = this.account, luckyAddress = this.luckyAddress, airdropTokens = this.airdropTokens, candy = '', count = 0 } = {}, cb) {
+    async loopCheckTokenAllowance ({ address = this.account, luckyAddress = this.luckyAddress, airdropTokens = this.airdropTokens, candy = '', count = 0 } = {}) {
       if (!address) return
 
       candy = candy.toLocaleLowerCase()
 
+      console.log(' ====== come in loopCheckTokenAllowance')
+
       let timeout = null
       const loopFunc = () => {
+        const tokenApproveKey = `lordless_token_approve_${address}_${candy}`
+        sessionStorage.setItem(tokenApproveKey, true)
+
         // 创建新定时器实例
         timeout = setTimeout(async () => {
           const allowance = await this[actionTypes.CONTRACT_SET_TOKEN_ALLOWANCE]({ address, candy, luckyAddress, contract: airdropTokens[candy] })
@@ -181,7 +186,17 @@ export default {
           }
           console.log('----- loopCheckTokenAllowance', luckyAddress, candy, count, this.tokenAllowances[candy])
           if (allowance >= count) {
-            return cb && cb()
+            sessionStorage.getItem(tokenApproveKey) && this.$notify.success({
+              title: 'Success!',
+              message: 'Betting with LESS Success!',
+              position: 'bottom-right',
+              duration: 2500
+            })
+
+            sessionStorage.removeItem(tokenApproveKey)
+            this.$set(this.allowanceModels, candy, true)
+            this.$set(this.allowancePendings, candy, false)
+            this.$nextTick(() => this.checkAllowance())
           } else {
             return loopFunc()
           }
