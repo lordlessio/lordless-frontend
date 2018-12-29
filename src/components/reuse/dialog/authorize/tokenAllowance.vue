@@ -139,7 +139,7 @@ export default {
       }
 
       // 估算 gas
-      const gas = (await airdropTokens[candy].estimateGas(setApprove.name, setApprove.values)) || 300000
+      const gas = (await airdropTokens[candy].estimateGas(setApprove.name, setApprove.values)) || 120000
       console.log('gas', gas, luckyAddress, candy, address)
 
       // metamask 是否被打开

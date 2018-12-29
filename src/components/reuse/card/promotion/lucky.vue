@@ -234,7 +234,8 @@ export default {
           values: [ info.luckyblockId ]
         }
         const { gasPrice } = web3Opt
-        const gas = (await Luckyblock.estimateGas(luckyblockParam.name, luckyblockParam.values)) || 150000
+        // const gas = (await Luckyblock.estimateGas(luckyblockParam.name, luckyblockParam.values)) || 139999
+        const gas = 139999
 
         const params = {
           gas,
