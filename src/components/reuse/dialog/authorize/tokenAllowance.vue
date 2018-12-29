@@ -100,19 +100,6 @@ export default {
       }
     },
 
-    checkAllowance (tokenAllowances = this.tokenAllowances, allowanceModels = this.allowanceModels) {
-      for (const bet of this.tokenBets) {
-        const { candy } = bet
-        this.$set(this.allowancePendings, candy.address, tokenAllowances[candy.address] === undefined)
-      }
-
-      const keys = Object.keys(allowanceModels)
-      const bool = !!keys.filter(key => !!allowanceModels[key]).length
-      if (keys.length === this.tokenBets.length && bool) {
-        this.$emit('success')
-      }
-    },
-
     /**
      * 初始化 tokenAllowance
      */
