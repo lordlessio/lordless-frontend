@@ -41,18 +41,20 @@ export default {
       const _airdropTokens = state.airdropTokens
       _airdropTokens[candy] = contract
       state.airdropTokens = _airdropTokens
-      window.airdropTokens = _airdropTokens
+      // window.airdropTokens = _airdropTokens
     },
 
     /**
      * set token allowance
      */
-    [mutationTypes.CONTRACT_SET_TOKEN_ALLOWANCE]: (state, { candy = '', address, luckyAddress, tokenContract = state.airdropTokens[candy] }) => {
+    [mutationTypes.CONTRACT_SET_TOKEN_ALLOWANCE]: (state, { candy = '', allowance }) => {
       // 向 tokenContract 查询 address 给 luckyAddress 授权操作多少个 token
-      tokenContract.methods('allowance', [ address, luckyAddress ]).then(allowance => {
-        state.tokenAllowances[candy.toLocaleLowerCase()] = allowance ? allowance.toNumber() : 0
-        window.tokenAllowances = state.tokenAllowances
-      })
+      // tokenContract.methods('allowance', [ address, luckyAddress ]).then(allowance => {
+      //   state.tokenAllowances[candy.toLocaleLowerCase()] = allowance ? allowance.toNumber() : 0
+      //   window.tokenAllowances = state.tokenAllowances
+      // })
+      state.tokenAllowances[candy.toLocaleLowerCase()] = allowance ? allowance.toNumber() : 0
+      // window.tokenAllowances = state.tokenAllowances
     }
   },
 
@@ -116,7 +118,7 @@ export default {
     /**
      * set airdrop tokens contract
      */
-    [actionTypes.CONTRACT_SET_AIRDROP_TOKENS]: async ({ state, commit }, { candy, luckyAddress = state.Luckyblock.address } = {}) => {
+    [actionTypes.CONTRACT_SET_AIRDROP_TOKENS]: async ({ state, commit, dispatch }, { candy, luckyAddress = state.Luckyblock.address } = {}) => {
       // if (state.airdropTokens[candy]) return
 
       let { web3js, address } = web3Store.state.web3Opt
@@ -136,8 +138,17 @@ export default {
         commit(mutationTypes.CONTRACT_SET_AIRDROP_TOKENS, { candy, contract })
 
         // 存储用户授权到 token allowance
-        commit(mutationTypes.CONTRACT_SET_TOKEN_ALLOWANCE, { luckyAddress, candy, address, contract })
+        dispatch(actionTypes.CONTRACT_SET_TOKEN_ALLOWANCE, { candy, address, contract, luckyAddress })
       }
+    },
+    /**
+     * set tokenAllowance
+     */
+    [actionTypes.CONTRACT_SET_TOKEN_ALLOWANCE]: async ({ state, commit }, { candy, address, contract = state.airdropTokens[candy], luckyAddress = state.Luckyblock.address } = {}) => {
+      // 向 tokenContract 查询 address 给 luckyAddress 授权操作多少个 token
+      const allowance = await contract.methods('allowance', [ address, luckyAddress ])
+      commit(mutationTypes.CONTRACT_SET_TOKEN_ALLOWANCE, { candy, allowance })
+      return allowance
     }
   }
 }

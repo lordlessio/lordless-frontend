@@ -1,12 +1,12 @@
 <template>
   <div v-if="value" class="crowdsale-box">
     <div class="text-center mobile-crowdsale-container">
-      <h2>Token Approve</h2>
-      <p>Authorize the Token contract to luckyBlock contract</p>
+      <h2>Token Authorize</h2>
+      <p>Authorize the Luckyblock contract to operate your Token on your behalf.</p>
       <div
         class="d-flex f-align-center token-crowdsale-item"
         v-for="(bet, index) of tokenBets" :key="index">
-        <p class="TTFontBolder v-flex text-left">Authorize {{ bet.candy.symbol }}</p>
+        <p class="TTFontBolder v-flex text-left">Betting with {{ bet.candy.symbol }}</p>
         <lordless-btn
           class="TTFontBolder crowdsale-btn"
           theme="dialog"
@@ -22,8 +22,8 @@
 <script>
 import { metamaskMixins, publicMixins } from '@/mixins'
 
-import { mutationTypes } from '@/store/types'
-import { mapState, mapMutations } from 'vuex'
+import { actionTypes } from '@/store/types'
+import { mapState, mapActions } from 'vuex'
 export default {
   mixins: [metamaskMixins, publicMixins],
   props: {
@@ -83,9 +83,22 @@ export default {
     // }
   },
   methods: {
-    ...mapMutations('contract', [
-      mutationTypes.CONTRACT_SET_TOKEN_ALLOWANCE
+    ...mapActions('contract', [
+      actionTypes.CONTRACT_SET_TOKEN_ALLOWANCE
     ]),
+
+    checkAllowance (tokenAllowances = this.tokenAllowances, allowanceModels = this.allowanceModels) {
+      for (const bet of this.tokenBets) {
+        const { candy } = bet
+        this.$set(this.allowancePendings, candy.address, tokenAllowances[candy.address] === undefined)
+      }
+
+      const keys = Object.keys(allowanceModels)
+      const bool = !!keys.filter(key => !!allowanceModels[key]).length
+      if (keys.length === this.tokenBets.length && bool) {
+        this.$emit('success')
+      }
+    },
 
     checkAllowance (tokenAllowances = this.tokenAllowances, allowanceModels = this.allowanceModels) {
       for (const bet of this.tokenBets) {
@@ -171,8 +184,8 @@ export default {
       const loopFunc = () => {
         // 创建新定时器实例
         timeout = setTimeout(async () => {
-          // const allowance = await airdropTokens[candy].methods('allowance', [ address, candy ])
-          this[mutationTypes.CONTRACT_SET_TOKEN_ALLOWANCE]({ address, candy, luckyAddress, tokenContract: airdropTokens[candy] })
+          const allowance = await this[actionTypes.CONTRACT_SET_TOKEN_ALLOWANCE]({ address, candy, luckyAddress, contract: airdropTokens[candy] })
+
           clearTimeout(timeout)
           timeout = null
 
@@ -180,7 +193,7 @@ export default {
             return
           }
           console.log('----- loopCheckTokenAllowance', luckyAddress, candy, count, this.tokenAllowances[candy])
-          if (this.tokenAllowances[candy] >= count) {
+          if (allowance >= count) {
             return cb && cb()
           } else {
             return loopFunc()

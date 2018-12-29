@@ -7,7 +7,7 @@ import { mutationTypes } from '@/store/types'
 import { mobileBool, isWechat } from 'utils/tool'
 
 import Sign from '@/pages/user/sign.vue'
-import Market from '@/pages/market'
+import Taverns from '@/pages/taverns'
 import Lbs from '@/pages/lbs'
 
 import TavernDetail from '@/pages/ldb/_detail.vue'
@@ -229,11 +229,11 @@ const mobileRoutes = [
 // pc端 routes
 const routes = [
   {
-    path: '/market',
-    name: 'Market',
-    component: Market,
+    path: '/taverns',
+    name: 'taverns',
+    component: Taverns,
     meta: {
-      title: 'Marketplace - LORDLESS',
+      title: 'Taverns - LORDLESS',
       header: {
         show: true
       }

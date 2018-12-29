@@ -167,11 +167,11 @@ export default {
         case this.failed:
           return '#icon-annoyed'
         case this.pending:
-          return '#icon-cool'
+          return '#icon-smile'
         case this.isFullWinning:
           return '#icon-kiss'
         default:
-          return '#icon-smile'
+          return '#icon-cool'
       }
     }
   }

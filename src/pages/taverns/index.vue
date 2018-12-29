@@ -1,7 +1,7 @@
 <template>
   <div>
-    <market-page
-      ref="market"
+    <taverns-page
+      ref="taverns"
       v-if="!isMobile"
       @path="pathChange"
       @openDetail="openDetail"/>
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import MarketPage from '@/components/content/market'
+import TavernsPage from '@/components/content/taverns'
 
 import DetailDialog from '@/components/reuse/dialog/ldb/detail'
 
@@ -25,7 +25,7 @@ import { mapState } from 'vuex'
 export default {
   data: () => {
     return {
-      marketPath: null,
+      tavernsPath: null,
 
       // ldb dialog 显示控制
       detailModel: false,
@@ -35,7 +35,7 @@ export default {
     }
   },
   components: {
-    MarketPage,
+    TavernsPage,
 
     DetailDialog
   },
@@ -50,7 +50,7 @@ export default {
   watch: {
     popstateModel (val) {
       console.log('popstate', val, location.pathname)
-      if (val && location.pathname.includes('/market')) {
+      if (val && location.pathname.includes('/taverns')) {
         this.detailModel = false
       }
     }
@@ -72,14 +72,14 @@ export default {
      */
     dialogClose (info) {
       // 如果对话框关闭，改变浏览器地址为详情页面地址
-      if (!this.popstateModel) historyState(this.marketPath || this.$route.path)
+      if (!this.popstateModel) historyState(this.tavernsPath || this.$route.path)
       // else this.$root.$children[0].popstate = false
       console.log('dialogClose')
-      this.$refs.market.changeLdbs(info)
+      this.$refs.taverns.changeLdbs(info)
     },
 
     pathChange (path) {
-      this.marketPath = path
+      this.tavernsPath = path
       historyState(path)
     }
   },

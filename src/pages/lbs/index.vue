@@ -292,7 +292,7 @@ export default {
     }
   },
   beforeMount () {
-    if (this.$root.$children[0].isMobile) this.$router.push('/market')
+    if (this.$root.$children[0].isMobile) this.$router.push('/taverns')
   },
   mounted () {
     this.$nextTick(() => {

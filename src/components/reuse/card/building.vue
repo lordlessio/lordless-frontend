@@ -10,7 +10,7 @@
             :presale="presale"
             showPopularity/>
         </div>
-        <div class="TTFontBolder building-sale-tag">
+        <!-- <div class="TTFontBolder building-sale-tag">
           <div class="d-inline-flex f-align-center sale-tag-container">
             <span class="inline-block line-height-0 building-price-tag">
               <svg>
@@ -26,12 +26,12 @@
               {{ info.chain.auction.price | weiToEth }}
             </span>
           </div>
-        </div>
+        </div> -->
         <div class="building-main-cnt">
-          <h2 class="building-name">{{ info.name.zh }}</h2>
           <p class="building-tokenId">#{{ info.chain.tokenId }}</p>
+          <h2 class="building-name">{{ info.name.zh }}</h2>
           <p class="d-flex f-auto-center building-coords">
-            <span class="inline-block building-coords-icon">
+            <span class="inline-block line-height-0 building-coords-icon">
               <svg>
                 <use xlink:href="#icon-location"/>
               </svg>
@@ -39,6 +39,17 @@
             </span>
             <span>&nbsp;{{ info.chain.lng | transferCoords | sliceStr }}, {{ info.chain.lat | transferCoords | sliceStr }}</span>
           </p>
+          <div class="building-lord-box">
+            <div v-if="info.lord"
+              class="d-flex f-auto-center building-lord-info">
+              <lordless-blockies
+                theme="dark"
+                :scale="4"
+                :size="6"
+                :seed="info.lord._id || info.lord "/>
+              <span class="building-lord-address">{{ info.lord._id || info.lord | splitAddress({ before: 6, end: 2, symbol: '**' }) }}</span>
+            </div>
+          </div>
         </div>
       </div>
       <figcaption class="relative building-card-bottom">
@@ -116,8 +127,9 @@ export default {
       progressOpts: {
         capacity: {
           gradient: {
-            start: '#4586FC',
-            end: '#4586FC'
+            direction: '45deg',
+            start: '#124BDC',
+            end: '#0079FF'
           }
         }
       }
@@ -159,61 +171,83 @@ export default {
   /**
    *  building-header  --- end
    */
-  .building-sale-tag {
-    position: relative;
-    z-index: 9;
+
+  /**
+   *  building-lord-box  --- begin
+   */
+  .building-lord-box {
+    margin-top: 8px;
+    height: 24px;
+    line-height: 24px;
   }
-  .sale-tag-container {
-    padding: 0 18px;
-    background-image: linear-gradient(-45deg, #796FEE 0%, #534BD6 100%);
-    border-radius: 18px;
-    height: 36px;
-    line-height: 36px;
-    font-size: 20px;
-    color: #fff;
-    fill: #fff;
+  .building-lord-info {
+
   }
-  .building-price-tag {
-    width: 16px;
-    height: 16px;
+  .building-lord-address {
+    margin-left: 6px;
+    font-size: 16px;
+    color: #555;
   }
-  .building-eth-price {
-    margin-left: 8px;
-    margin-right: 6px;
-    width: 10px;
-    height: 14px;
-    stroke-width: 2;
-    stroke: #fff;
-  }
+  /**
+   *  building-lord-box  --- end
+   */
+
+  // .building-sale-tag {
+  //   position: relative;
+  //   z-index: 9;
+  // }
+  // .sale-tag-container {
+  //   padding: 0 18px;
+  //   background-image: linear-gradient(-45deg, #796FEE 0%, #534BD6 100%);
+  //   border-radius: 18px;
+  //   height: 36px;
+  //   line-height: 36px;
+  //   font-size: 20px;
+  //   color: #fff;
+  //   fill: #fff;
+  // }
+  // .building-price-tag {
+  //   width: 16px;
+  //   height: 16px;
+  // }
+  // .building-eth-price {
+  //   margin-left: 8px;
+  //   margin-right: 6px;
+  //   width: 10px;
+  //   height: 14px;
+  //   stroke-width: 2;
+  //   stroke: #fff;
+  // }
 
   /**
    *  building-main-cnt --- begin
    */
   .building-main-cnt {
-    margin-top: 25px;
+    // margin-top: 25px;
     padding: 0 20px 30px;
     >p {
       margin-top: 5px;
     }
   }
   .building-name {
-    height: 48px;
+    height: 46px;
     font-size: 18px;
-    color: #555;
+    color: #0B2A48;
     overflow: hidden;
   }
   .building-tokenId {
-    font-size: 14px;
+    margin-top: 0px;
+    font-size: 18px;
     color: #999;
   }
   .building-coords {
     font-size: 16px;
-    color: #bbb;
+    color: #999;
   }
   .building-coords-icon {
-    fill: #bbb;
-    width: 16px;
-    height: 16px;
+    fill: #999;
+    width: 12px;
+    height: 12px;
   }
 
   .building-data {
@@ -224,11 +258,11 @@ export default {
   .building-data-item {
     position: relative;
     >p {
-      font-size: 14px;
+      font-size: 12px;
       color: #999;
       &:first-of-type {
-        margin-bottom: 5px;
-        font-size: 18px;
+        margin-bottom: 4px;
+        font-size: 16px;
         color: #373737;
       }
     }
@@ -255,7 +289,7 @@ export default {
    *  building-card-bottom  --- begin
    */
   .building-card-bottom {
-    padding: 24px 22px;
+    padding: 24px 22px 30px;
     font-size: 14px;
     color: #999;
     background-color: #fff;
@@ -286,7 +320,7 @@ export default {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 3px;
+    height: 6px;
   }
   /**
    *  building-card-bottom  --- end

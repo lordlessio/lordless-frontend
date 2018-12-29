@@ -71,12 +71,12 @@ export default {
     // }
     &.dark {
       background-color: #fff;
-      fill: $--text-deep-blue-color;
-      color: $--text-deep-blue-color;
+      fill: #0024FF;
+      color: #0024FF;
       &.reverse {
         background-color: #fff;
-        fill: $--text-deep-blue-color;
-        color: $--text-deep-blue-color;
+        fill: #0024FF;
+        color: #0024FF;
       }
     }
     &.light {

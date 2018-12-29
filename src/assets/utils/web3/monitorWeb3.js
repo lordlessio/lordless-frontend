@@ -137,23 +137,23 @@ export const monitorWeb3 = (web3Opt) => {
   }
 
   const loopTCO = async () => {
-    checkWeb3()
-    return setTimeout(() => {
-      loopTCO()
-    }, 1000)
-    // let nowt
-    // const loopStep = async (timestamp) => {
-    //   if (!nowt) nowt = timestamp
-    //   if (timestamp - nowt > 1000) {
-    //   // console.time('loopStep')
-    //     await checkWeb3()
-    //     // console.timeEnd('loopStep')
-    //     nowt = timestamp
-    //     return window.requestAnimationFrame(loopStep)
-    //   }
-    //   return window.requestAnimationFrame(loopStep)
-    // }
-    // return window.requestAnimationFrame(loopStep)
+    // checkWeb3()
+    // return setTimeout(() => {
+    //   loopTCO()
+    // }, 1000)
+    let nowt
+    const loopStep = async (timestamp) => {
+      if (!nowt) nowt = timestamp
+      if (timestamp - nowt > 1000) {
+      // console.time('loopStep')
+        await checkWeb3()
+        // console.timeEnd('loopStep')
+        nowt = timestamp
+        return window.requestAnimationFrame(loopStep)
+      }
+      return window.requestAnimationFrame(loopStep)
+    }
+    return window.requestAnimationFrame(loopStep)
   }
   loopTCO()
   return null

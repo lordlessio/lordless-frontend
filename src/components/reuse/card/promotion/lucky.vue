@@ -4,7 +4,7 @@
       <p class="lucky-section-title">
         <span>Bets</span>
       </p>
-      <div class="lucky-section-content bets">
+      <div class="lucky-section-content f-justify-center bets">
         <div class="d-flex f-align-center" v-if="info.blockInfos.ethBets">
           <p class="v-flex">- {{ info.blockInfos.ethBets.count | weiByDecimals(info.blockInfos.ethBets.decimals) }} ETH</p>
         </div>
@@ -18,7 +18,7 @@
         <span>Winnings</span>
         <span class="v-flex text-right">Probability</span>
       </p>
-      <div class="d-flex col-flex lucky-section-content winnings">
+      <div class="d-flex col-flex lucky-section-content f-justify-center winnings">
         <div class="d-flex f-align-center" v-if="info.blockInfos.ethWinnings">
           <p class="v-flex">+ {{ info.blockInfos.ethWinnings.count | weiByDecimals(info.blockInfos.ethWinnings.decimals) }} ETH</p>
           <p class="lucky-right-content">{{ info.blockInfos.ethWinnings.percent }}%</p>
@@ -61,6 +61,8 @@ import { saveAirdropUser } from 'api'
 import { getBalance } from 'utils/web3/utils'
 
 import { metamaskMixins, publicMixins } from '@/mixins'
+
+// import { actionTypes } from '@/store/types'
 import { mapState } from 'vuex'
 export default {
   name: 'promotion-lucky-card',
@@ -114,6 +116,10 @@ export default {
     }
   },
   methods: {
+    // ...mapActions('contract', [
+    //   actionTypes.CONTRACT_SET_TOKEN_ALLOWANCE
+    // ]),
+
     showTip () {
       this.rulesModel = true
     },
@@ -229,7 +235,7 @@ export default {
           values: [ info.luckyblockId ]
         }
         const { gasPrice } = web3Opt
-        const gas = (await Luckyblock.estimateGas(luckyblockParam.name, luckyblockParam.values)) || 300000
+        const gas = (await Luckyblock.estimateGas(luckyblockParam.name, luckyblockParam.values)) || 150000
 
         const params = {
           gas,
@@ -303,8 +309,14 @@ export default {
     &.bets {
       color: #F5515F;
     }
+    // &.winnings {
+    //   min-height: 64px;
+    // }
     p {
       margin-top: 8px;
+    }
+    @media screen and (min-width: 768px) {
+      min-height: 64px;
     }
   }
 

@@ -28,9 +28,14 @@
           </router-link>
         </span>
         <span class="inline-block header-right-item" data-type="link">
-          <router-link to="/market">
-            Marketplace
+          <router-link to="/taverns">
+            Taverns
           </router-link>
+        </span>
+        <span class="inline-block header-right-item" data-type="link">
+          <a href="https://opensea.io/assets/lordless" target="_blank">
+            Marketplace
+          </a>
         </span>
         <span v-if="!isMobile" class="inline-block header-right-item" data-type="link">
           <router-link to="/map">

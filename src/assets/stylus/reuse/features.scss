@@ -103,6 +103,15 @@ $--dialog-background-linear-end: #C86DD7;
     // @include grid('top', 50%, 1);
     // @include grid('transform', translate(-50%, -50%), 1);
   }
+  &.full-style {
+    @media screen and (max-width: 768px) {
+      margin: 0;
+      padding: 0;
+      top: 0;
+      transform: translate(0, 0);
+      overflow: hidden;
+    }
+  }
   // &.mobile-center {
   //   @include grid('top', 50%, -1);
   //   @include grid('transform', translate(0, -50%), -1);
@@ -137,6 +146,17 @@ $--dialog-background-linear-end: #C86DD7;
   transform: translateX(-50%);
   @include grid('padding', 35px 20px 20px 20px, -1);
   @include viewport-unit('width', 100vw, 40px);
+  transition: all .3s;
+  &.full-style {
+    @media screen and (max-width: 768px) {
+      max-width: 768px;
+      @include viewport-unit('width', 100vw);
+      @include viewport-unit('height', 100vh);
+    }
+    // @media screen and (min-width: 768px) {
+    //   height:
+    // }
+  }
 }
 .lordless-message-close {
   position: absolute;

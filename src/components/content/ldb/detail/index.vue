@@ -69,7 +69,8 @@
             :loading="ldbTaskLoading"
             @receive="receiveTask"/> -->
 
-          <records-tool
+          <!-- 交易记录暂时先去掉 -->
+          <!-- <records-tool
             v-if="!isMobile"
             :list="ldbRecords.list"
             :total="ldbRecords.total"
@@ -80,12 +81,12 @@
             v-if="isMobile"
             :list="ldbRecords.list"
             :total="ldbRecords.total"
-            :loading="recordsLoading"/>
+            :loading="recordsLoading"/> -->
 
         </div>
         <div v-if="!isMobile" class="detail-cnt-right">
 
-          <ldb-sale-tool
+          <!-- <ldb-sale-tool
             class="detail-sale-card"
             :info.sync="ldbInfo"
             :pendings="ldbPendings"
@@ -93,7 +94,12 @@
             :loading="infoLoading"
             @buy="buyHandle"
             @sale="saleHandle"
-            @cancel="cancelSaleHandle"/>
+            @cancel="cancelSaleHandle"/> -->
+
+          <ldb-further-tool
+            class="detail-further-card"
+            :info.sync="ldbInfo"
+            :loading="infoLoading"/>
 
           <approved-tasks-tool
             ref="approvedTask"
@@ -107,11 +113,11 @@
       ref="authorize"
       @blurs="dialogSetBlurs($event, dialog ? 1 : 0)"/>
 
-    <ldb-sell
+    <!-- <ldb-sell
       v-model="sellModel"
       :ldbInfo="ldbInfo"
       @pending="ldbSellPending"
-      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)"/>
+      @blurs="dialogSetBlurs($event, dialog ? 1 : 0)"/> -->
 
     <mobile-taver-further
       v-if="isMobile"
@@ -141,29 +147,30 @@ import MobileTavernKeeps from '@/components/content/_mobile/ldb/detail/tavernkee
 import QuestsTool from './questsTool'
 // import MobileQuestsTool from '@/components/content/_mobile/ldb/detail/quests'
 
-import RecordsTool from './records'
-import MobileRecordsTool from '@/components/content/_mobile/ldb/detail/records'
+// import RecordsTool from './records'
+// import MobileRecordsTool from '@/components/content/_mobile/ldb/detail/records'
 
 import ApprovedTasksTool from './approvedTasks'
 
-import LdbSaleTool from './sale'
+// import LdbSaleTool from './sale'
+import LdbFurtherTool from './further'
 // import MobileSaleBarTool from '@/components/content/_mobile/ldb/detail/saleBar'
 
 import MobileTaverFurther from '@/components/content/_mobile/ldb/detail/further'
 
-import LdbCandyTool from './candy'
+// import LdbCandyTool from './candy'
 
 // import SketchFab from '@/components/sketchfab'
 
 // import Authorize from '@/components/reuse/dialog/authorize'
 // import OrderDialog from '@/components/reuse/dialog/ldb/order'
 // import LdbBuy from '@/components/reuse/dialog/ldb/buy'
-import LdbSell from '@/components/reuse/dialog/ldb/sell'
+// import LdbSell from '@/components/reuse/dialog/ldb/sell'
 
 import range from 'lodash/range'
 import { getMessageByCode } from 'utils/tool'
 import { contractMixins, dialogMixins, metamaskMixins } from '@/mixins'
-import { setHome, getHome, receiveTask, getLdbById, getActivitysByTokenId, getUserPendingsByTokenId, getLdb2Round } from 'api'
+import { setHome, getHome, receiveTask, getLdbById, getUserPendingsByTokenId, getLdb2Round } from 'api'
 
 import { actionTypes } from '@/store/types'
 import { mapActions } from 'vuex'
@@ -206,14 +213,14 @@ export default {
       },
 
       // 当前建筑交易记录
-      ldbRecords: {
-        pn: 1,
-        ps: 10,
-        list: [],
-        total: 0
-      },
+      // ldbRecords: {
+      //   pn: 1,
+      //   ps: 10,
+      //   list: [],
+      //   total: 0
+      // },
 
-      recordsLoading: true,
+      // recordsLoading: true,
 
       ldbTasks: [],
 
@@ -234,7 +241,7 @@ export default {
       // orderModel: false,
 
       // 挂单弹窗状态
-      sellModel: false,
+      // sellModel: false,
 
       // 当前用户在该建筑中的 pending 状态
       ldbPendings: {
@@ -295,21 +302,22 @@ export default {
     QuestsTool,
     // MobileQuestsTool,
 
-    RecordsTool,
-    MobileRecordsTool,
+    // RecordsTool,
+    // MobileRecordsTool,
 
     ApprovedTasksTool,
 
-    LdbSaleTool,
+    // LdbSaleTool,
+    LdbFurtherTool,
     // MobileSaleBarTool,
-    MobileTaverFurther,
+    MobileTaverFurther
 
-    LdbCandyTool,
+    // LdbCandyTool
 
     // Authorize,
     // OrderDialog,
     // LdbBuy,
-    LdbSell
+    // LdbSell
   },
   methods: {
     ...mapActions('user', [
@@ -387,7 +395,7 @@ export default {
         const { data } = res
         this.checkHome({ ldbId: data._id })
         this.getLdbTasks({ ldbId: data._id })
-        this.getLdbRecords({ ldbInfo: data })
+        // this.getLdbRecords({ ldbInfo: data })
         this.getUserPendings({ ldbInfo: data })
         this.ldbInfo = Object.assign({}, this.ldbInfo, data)
       } else {
@@ -446,29 +454,29 @@ export default {
      * 获取当前建筑的交易记录
      * @param {Object} ldbInfo 当前建筑对象
      */
-    async getLdbRecords ({ ldbInfo = this.ldbInfo, ldbRecords = this.ldbRecords, more = false }) {
-      if (!more) this.recordsLoading = true
-      const { pn, ps } = ldbRecords
-      const params = {
-        tokenId: ldbInfo.chain.tokenId,
-        opt: {
-          pn: more ? pn + 1 : pn,
-          ps,
-          type: 'records'
-        }
-      }
-      const res = await getActivitysByTokenId(params)
-      if (res.code === 1000 && res.data) {
-        if (this.ldbRecords.total) {
-          this.ldbRecords = Object.assign({}, this.ldbRecords, res.data, {
-            list: this.ldbRecords.list
-          })
-        } else this.ldbRecords = res.data
-      }
-      this.$nextTick(() => {
-        this.recordsLoading = false
-      })
-    },
+    // async getLdbRecords ({ ldbInfo = this.ldbInfo, ldbRecords = this.ldbRecords, more = false }) {
+    //   if (!more) this.recordsLoading = true
+    //   const { pn, ps } = ldbRecords
+    //   const params = {
+    //     tokenId: ldbInfo.chain.tokenId,
+    //     opt: {
+    //       pn: more ? pn + 1 : pn,
+    //       ps,
+    //       type: 'records'
+    //     }
+    //   }
+    //   const res = await getActivitysByTokenId(params)
+    //   if (res.code === 1000 && res.data) {
+    //     if (this.ldbRecords.total) {
+    //       this.ldbRecords = Object.assign({}, this.ldbRecords, res.data, {
+    //         list: this.ldbRecords.list
+    //       })
+    //     } else this.ldbRecords = res.data
+    //   }
+    //   this.$nextTick(() => {
+    //     this.recordsLoading = false
+    //   })
+    // },
 
     /**
      * 获取当前建筑任务情况
@@ -515,7 +523,7 @@ export default {
     initStatus () {
       this.infoLoading = true
       this.ldbTaskLoading = true
-      this.recordsLoading = true
+      // this.recordsLoading = true
     },
 
     /**
@@ -524,7 +532,7 @@ export default {
     initContractStatus () {
       // this.orderModel = false
       // this.buyModel = false
-      this.sellModel = false
+      // this.sellModel = false
       this.ldbPendings = {
         isBuying: false,
         isSelling: false,
@@ -542,157 +550,126 @@ export default {
     /**
      * 购买建筑展开弹窗事件
      */
-    async buyHandle ({ ldbInfo = this.ldbInfo, web3Opt = this.web3Opt, NFTsCrowdsale = this.NFTsCrowdsale } = {}) {
-      try {
-        // 检查市场权限
-        const authorize = await this.$refs.authorize.checkoutAuthorize({ guide: true })
+    // async buyHandle ({ ldbInfo = this.ldbInfo, web3Opt = this.web3Opt, NFTsCrowdsale = this.NFTsCrowdsale } = {}) {
+    //   try {
+    //     // 检查市场权限
+    //     const authorize = await this.$refs.authorize.checkoutAuthorize({ guide: true })
 
-        const tokenId = ldbInfo.chain.tokenId
-        if (!authorize || (!tokenId && tokenId !== 0)) return
+    //     const tokenId = ldbInfo.chain.tokenId
+    //     if (!authorize || (!tokenId && tokenId !== 0)) return
 
-        // 根据 tokenId 获取建筑链上信息
-        const ldb = await NFTsCrowdsale.methods('getAuction', [tokenId])
-        console.log('buy => submitBuy --- getAuction:', ldb[2].toNumber(), tokenId)
-        // alert(ldb[2].toNumber())
+    //     // 根据 tokenId 获取建筑链上信息
+    //     const ldb = await NFTsCrowdsale.methods('getAuction', [tokenId])
+    //     console.log('buy => submitBuy --- getAuction:', ldb[2].toNumber(), tokenId)
+    //     // alert(ldb[2].toNumber())
 
-        this.metamaskChoose = true
+    //     this.metamaskChoose = true
 
-        const { gasPrice, address } = web3Opt
+    //     const { gasPrice, address } = web3Opt
 
-        // 传输的合约参数
-        const payByEth = {
-          name: 'payByEth',
-          values: [ tokenId ]
-        }
+    //     // 传输的合约参数
+    //     const payByEth = {
+    //       name: 'payByEth',
+    //       values: [ tokenId ]
+    //     }
 
-        // 估算 gas
-        // const gas = await NFTsCrowdsale.payByEth.estimateGas(tokenId)
-        const gas = (await NFTsCrowdsale.estimateGas(payByEth.name, payByEth.values)) || 600000
+    //     // 估算 gas
+    //     // const gas = await NFTsCrowdsale.payByEth.estimateGas(tokenId)
+    //     const gas = (await NFTsCrowdsale.estimateGas(payByEth.name, payByEth.values)) || 600000
 
-        // 根据链上信息购买建筑
-        const params = {
-          gas,
-          gasPrice,
-          data: NFTsCrowdsale.payByEth.getData(tokenId),
-          value: ldb[2],
-          // memo: 'buy a tavern by lordless',
-          // feeCustomizable: true,
-          to: NFTsCrowdsale.address,
-          from: address
-        }
+    //     // 根据链上信息购买建筑
+    //     const params = {
+    //       gas,
+    //       gasPrice,
+    //       data: NFTsCrowdsale.payByEth.getData(tokenId),
+    //       value: ldb[2],
+    //       // memo: 'buy a tavern by lordless',
+    //       // feeCustomizable: true,
+    //       to: NFTsCrowdsale.address,
+    //       from: address
+    //     }
 
-        // 使用自有封装对象
-        window.lordlessMethods.buy(params).then(tx => {
-          console.log('----- buyHandle tx', tx)
-          // this.buyPending = true
-          this.metamaskChoose = false
+    //     // 使用自有封装对象
+    //     window.lordlessMethods.buy(params).then(tx => {
+    //       console.log('----- buyHandle tx', tx)
+    //       this.metamaskChoose = false
 
-          this.checkTxEvent({ tx, action: payByEth.name, tokenId }, () => {
-            this.$router.push('/owner/activity')
-          })
-        })
-          .catch((err) => {
-            console.log('err', err)
-            this.tavernContractError(err)
-            this.metamaskChoose = false
-          })
-        // NFTsCrowdsale.methods(payByEth.name, payByEth.values.concat([{ gas, gasPrice, value: ldb[2] }]))
-        //   .then(tx => {
-        //     console.log('----- buyHandle tx', tx)
-        //     // this.buyPending = true
-        //     this.metamaskChoose = false
-
-        //     this.checkTxEvent({ tx, action: payByEth.name, tokenId }, () => {
-        //       this.$router.push('/owner/activity')
-        //     })
-        //   })
-        //   .catch((err) => {
-        //     console.log('err', err)
-        //     this.metamaskChoose = false
-        //   })
-
-        // this.buyModel = true
-      } catch (err) {
-        this.tavernContractError(err)
-      }
-    },
+    //       this.checkTxEvent({ tx, action: payByEth.name, tokenId }, () => {
+    //         this.$router.push('/owner/activity')
+    //       })
+    //     })
+    //       .catch((err) => {
+    //         console.log('err', err)
+    //         this.tavernContractError(err)
+    //         this.metamaskChoose = false
+    //       })
+    //   } catch (err) {
+    //     this.tavernContractError(err)
+    //   }
+    // },
 
     /**
      * 出售建筑
      */
-    async saleHandle ({ ldbInfo = this.ldbInfo } = {}) {
-      try {
-        // 检查市场权限
-        const authorize = await this.$refs.authorize.checkoutAuthorize({ guide: true, crowdsale: true })
-        console.log('sell --- authorize', authorize)
+    // async saleHandle ({ ldbInfo = this.ldbInfo } = {}) {
+    //   try {
+    //     // 检查市场权限
+    //     const authorize = await this.$refs.authorize.checkoutAuthorize({ guide: true, crowdsale: true })
+    //     console.log('sell --- authorize', authorize)
 
-        const tokenId = ldbInfo.chain.tokenId
-        if (!authorize || (!tokenId && tokenId !== 0)) return
+    //     const tokenId = ldbInfo.chain.tokenId
+    //     if (!authorize || (!tokenId && tokenId !== 0)) return
 
-        this.sellModel = true
-      } catch (err) {
-        console.log('err', err)
-      }
-    },
+    //     this.sellModel = true
+    //   } catch (err) {
+    //     console.log('err', err)
+    //   }
+    // },
 
     /**
      * 取消挂售
      */
-    async cancelSaleHandle ({ ldbInfo = this.ldbInfo, NFTsCrowdsale = this.NFTsCrowdsale, web3Opt = this.web3Opt } = {}) {
-      try {
-        const authorize = await this.$refs.authorize.checkoutAuthorize({ guide: true, crowdsale: true })
-        const tokenId = ldbInfo.chain.tokenId
-        if (!authorize || (!tokenId && tokenId !== 0)) return
+    // async cancelSaleHandle ({ ldbInfo = this.ldbInfo, NFTsCrowdsale = this.NFTsCrowdsale, web3Opt = this.web3Opt } = {}) {
+    //   try {
+    //     const authorize = await this.$refs.authorize.checkoutAuthorize({ guide: true, crowdsale: true })
+    //     const tokenId = ldbInfo.chain.tokenId
+    //     if (!authorize || (!tokenId && tokenId !== 0)) return
 
-        this.metamaskChoose = true
+    //     this.metamaskChoose = true
 
-        this.$set(this.ldbPendings, 'isCanceling', true)
-        // 传输的合约参数
-        const cancelAuction = {
-          name: 'cancelAuction',
-          values: [ tokenId ]
-        }
+    //     this.$set(this.ldbPendings, 'isCanceling', true)
+    //     // 传输的合约参数
+    //     const cancelAuction = {
+    //       name: 'cancelAuction',
+    //       values: [ tokenId ]
+    //     }
 
-        // 估算 gas，不准
-        const gas = (await NFTsCrowdsale.estimateGas(cancelAuction.name, cancelAuction.values)) || 599999
-        // const gas = 599999
+    //     // 估算 gas，不准
+    //     const gas = (await NFTsCrowdsale.estimateGas(cancelAuction.name, cancelAuction.values)) || 599999
+    //     // const gas = 599999
 
-        const { gasPrice } = web3Opt
+    //     const { gasPrice } = web3Opt
 
-        // 执行合约
-        NFTsCrowdsale.methods(cancelAuction.name, cancelAuction.values.concat([{ gas, gasPrice, from: this.account }]))
-          .then(tx => {
-            this.metamaskChoose = false
-            console.log('unsell tx', tx)
-            this.checkTxEvent({ tx, action: cancelAuction.name, tokenId }, () => {
-              this.$router.push('/owner/activity')
-            })
-            // const loop = () => {
-            //   this.checkTxEvent({ tx, action: cancelAuction.name, tokenId }, ({ err, data }) => {
-            //     if (err) return
-            //     if (data.isPending) return loop()
-
-            //     this.$set(this.ldbPendings, 'isCanceling', false)
-
-            //     // 改变市场状态
-            //     this.$set(this.ldbInfo.chain.auction, 'isOnAuction', false)
-
-            //     // this.checkOwner(tokenId)
-            //   })
-            // }
-            // loop()
-          })
-          .catch((err) => {
-            console.log('err', err)
-            this.tavernContractError(err)
-            this.metamaskChoose = false
-            this.$set(this.ldbPendings, 'isCanceling', false)
-          })
-      } catch (err) {
-        console.log('err', err)
-        this.$set(this.ldbPendings, 'isCanceling', false)
-      }
-    },
+    //     // 执行合约
+    //     NFTsCrowdsale.methods(cancelAuction.name, cancelAuction.values.concat([{ gas, gasPrice, from: this.account }]))
+    //       .then(tx => {
+    //         this.metamaskChoose = false
+    //         console.log('unsell tx', tx)
+    //         this.checkTxEvent({ tx, action: cancelAuction.name, tokenId }, () => {
+    //           this.$router.push('/owner/activity')
+    //         })
+    //       })
+    //       .catch((err) => {
+    //         console.log('err', err)
+    //         this.tavernContractError(err)
+    //         this.metamaskChoose = false
+    //         this.$set(this.ldbPendings, 'isCanceling', false)
+    //       })
+    //   } catch (err) {
+    //     console.log('err', err)
+    //     this.$set(this.ldbPendings, 'isCanceling', false)
+    //   }
+    // },
 
     /**
      * 购买建筑之后触发的合约 pending 状态
@@ -857,7 +834,7 @@ export default {
       // this.clearCInterval({ all: true })
 
       this.ldbInfo = null
-      this.ldbRecords = null
+      // this.ldbRecords = null
       this.ldbTasks = null
       this.candyTasks = null
       this.candies = null
@@ -939,7 +916,10 @@ export default {
     width: 100%;
     // max-width: 300px;
   }
-  .detail-sale-card {
+  // .detail-sale-card {
+  //   margin-bottom: 36px;
+  // }
+  .detail-further-card {
     margin-bottom: 36px;
   }
 </style>

@@ -1,26 +1,21 @@
 <template>
-  <div class="ld-market">
-    <div class="d-flex col-flex page-container market-container md">
-      <section class="text-center market-header">
-        <h1>Marketplace</h1>
-        <p>Marketplace is an easy, convenient way to buy and sell your Tavern.<br>
-          <span>
-            You can list Taverns in the marketplace to reach thousands of people<br>
-            in LORDLESS and find unique Taverns for sale.
-          </span>
-        </p>
+  <div class="ld-taverns">
+    <div class="d-flex col-flex page-container taverns-container md">
+      <section class="text-center taverns-header">
+        <h1>Taverns</h1>
+        <p>Tavern is a rare and specific digital asset in LORDLESS and it is an ERC-721 token. Most of the interactions in the virtual world are dependent on Tavern. Since the tavern is the most central and rare asset in LORDLESS, the official will issue a total of 4,000 taverns in multiple phases.</p>
       </section>
-      <section id="market-sort-bar" class="alone-layer lg-d-flex f-align-center market-sort-bar">
-        <p class="lg-v-flex sm-text-left sm-mar-b4">Total {{ ldbs.total }} Taverns on sale</p>
+      <section id="taverns-sort-bar" class="alone-layer lg-d-flex f-align-center taverns-sort-bar">
+        <p class="TTFontBolder lg-v-flex sm-text-left sm-mar-b4 taverns-sale-desc">Total {{ ldbs.total }} Taverns on sale</p>
         <div class="d-flex f-align-center">
-          <span>Sort <span class="sm-hidden">by</span></span>
+          <span class="taverns-sort-by">Sort <span class="sm-hidden">by</span></span>
           <ld-select
-            class="market-sort-select"
+            class="taverns-sort-select"
             v-model="ldbSort"
             :items="sortItems"
             @change="sortChange">
           </ld-select>
-          <div class="market-switch-input">
+          <div class="taverns-switch-input">
             <switch-input
               class="sm-hidden"
               v-model="ldbOrder"
@@ -36,7 +31,7 @@
           </div>
         </div>
       </section>
-      <section class="d-flex col-flex v-flex market-ldbs-box">
+      <section class="d-flex col-flex v-flex taverns-ldbs-box">
         <el-row :gutter="20" v-if="ldbsLoading">
           <el-col
             v-for="item in 4" :key="item"
@@ -51,7 +46,7 @@
             <svg>
               <use xlink:href="#icon-no-selling-ldb"/>
             </svg>
-            <p>Market have no building now.</p>
+            <p>Taverns have no building now.</p>
             <div class="d-flex f-auto-center TTFontBolder">
               <span>See all Taverns in</span>
               <span class="inline-block">
@@ -59,15 +54,15 @@
                   class="TTFontBolder no-asset-btn"
                   theme="default"
                   shadow
-                  @click="$router.push('mapbox')">Map</lordless-btn>
+                  @click="$router.push('map')">Map</lordless-btn>
               </span>
             </div>
           </div>
         </transition>
         <transition name="ld-hide-in-fade">
-          <el-row v-show="ldbs.total && !ldbsLoading" :gutter="20" class="v-flex market-cnt-box">
+          <el-row v-show="ldbs.total && !ldbsLoading" :gutter="20" class="v-flex taverns-cnt-box">
             <el-col
-              class="market-cnt-item"
+              class="taverns-cnt-item"
               v-for="ldb of ldbs.list" :key="ldb._id"
               :xs="12" :sm="6">
               <building-card
@@ -79,13 +74,13 @@
             </el-col>
           </el-row>
         </transition>
-        <div class="market-pagination-box">
+        <div class="taverns-pagination-box">
           <skeletion-pager v-if="ldbsLoading && !ldbs.total"/>
           <lordless-pagination
             v-if="ldbs.total"
             :scrollE="pageScrollE"
             :scrollOffset="150"
-            class="market-pagination-pages"
+            class="taverns-pagination-pages"
             theme="blue"
             :total="ldbs.total"
             :currentPage="ldbs.pn"
@@ -166,7 +161,7 @@ export default {
   },
   computed: {
     pageScrollE () {
-      return document.getElementById('market-sort-bar')
+      return document.getElementById('taverns-sort-bar')
     }
   },
   components: {
@@ -251,10 +246,10 @@ export default {
 
 <style lang="scss" scoped>
 
-  .ld-market {
+  .ld-taverns {
     background-color: #f8f8f8;
   }
-  .market-container {
+  .taverns-container {
     // min-height: 100%;
     @include viewport-unit(min-height, 100vh, 80px);
     @include padding('left', 20px, 1, -2);
@@ -262,34 +257,37 @@ export default {
   }
 
   /**
-   *  market-header --- begin
+   *  taverns-header --- begin
    */
-  .market-header {
+  .taverns-header {
+    margin: 0 auto;
+    max-width: 610px;
     padding: 95px 0;
     >h1 {
       font-size: 48px;
+      color: #0B2A48;
     }
     >p {
-      margin-top: 25px;
-      font-size: 20px;
-      color: #999;
+      margin-top: 24px;
+      font-size: 18px;
+      color: #777;
     }
   }
-  .market-sort-select {
+  .taverns-sort-select {
     margin-left: 20px;
   }
-  .market-switch-input {
+  .taverns-switch-input {
     display: inline-block;
     margin-left: 20px;
   }
   /**
-   *  market-header --- end
+   *  taverns-header --- end
    */
 
   /**
-   *  market-sort-bar --- begin
+   *  taverns-sort-bar --- begin
    */
-  .market-sort-bar {
+  .taverns-sort-bar {
     padding: 30px 35px;
     color: #fff;
     border-radius: 5px;
@@ -297,8 +295,14 @@ export default {
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .25);
     @include padding('left', 35px, 3, -2);
   }
+  .taverns-sale-desc {
+    font-size: 20px;
+  }
+  .taverns-sort-by {
+    font-size: 18px;
+  }
   /**
-   *  market-sort-bar --- begin
+   *  taverns-sort-bar --- begin
    */
 
   /*
@@ -312,12 +316,12 @@ export default {
    */
 
   /**
-   *  market-ldbs-box --- begin
+   *  taverns-ldbs-box --- begin
    */
-  .market-ldbs-box {
+  .taverns-ldbs-box {
     margin-top: 90px;
   }
-  .market-cnt-item {
+  .taverns-cnt-item {
     margin-bottom: 50px;
     padding-left: 10px;
     padding-right: 10px;
@@ -366,20 +370,20 @@ export default {
     width: 50px;
   }
   /**
-   *  market-ldbs-box --- end
+   *  taverns-ldbs-box --- end
    */
 
   /*
-   * market-pagination-box     --begin
+   * taverns-pagination-box     --begin
    */
-  .market-pagination-box {
+  .taverns-pagination-box {
     margin-top: 50px;
     margin-bottom: 60px;
   }
-  .market-pagination-pages {
+  .taverns-pagination-pages {
 
   }
-  .market-pagination-switch {
+  .taverns-pagination-switch {
     font-size: 18px;
     >span {
       margin-left: 30px;
@@ -388,6 +392,6 @@ export default {
     }
   }
   /*
-   * market-pagination-box     --end
+   * taverns-pagination-box     --end
    */
 </style>

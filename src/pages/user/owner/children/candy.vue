@@ -57,11 +57,11 @@
                 <div class="d-flex sm-col-flex f-auto-center TTFontBolder">
                   <span>Apply a</span>
                   <span class="inline-block sm-mar-t1">
-                    <lordless-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Task</lordless-btn>
+                    <lordless-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/taverns')">Task</lordless-btn>
                   </span>
                   <span class="sm-mar-t3">or buy a Tavern in</span>
                   <span class="inline-block sm-mar-t1 sm-mar-b3">
-                    <lordless-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Marketplace</lordless-btn>
+                    <lordless-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/taverns')">Taverns</lordless-btn>
                   </span>
                 </div>
               </div>
@@ -142,11 +142,11 @@
                 <div class="d-flex sm-col-flex f-auto-center TTFontBolder">
                   <span>Apply a</span>
                   <span class="inline-block sm-mar-t1">
-                    <lordless-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Task</lordless-btn>
+                    <lordless-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/taverns')">Task</lordless-btn>
                   </span>
                   <span class="sm-mar-t3">or buy a Tavern in</span>
                   <span class="inline-block sm-mar-t1 sm-mar-b3">
-                    <lordless-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/market')">Marketplace</lordless-btn>
+                    <lordless-btn class="no-asset-btn TTFontBolder" theme="default" shadow @click="$router.push('/taverns')">Taverns</lordless-btn>
                   </span>
                 </div>
               </div>

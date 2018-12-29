@@ -120,6 +120,8 @@ export default {
     font-size: 24px;
     color: #fff;
     background-image: linear-gradient(to right, #124BDC, #0079FF);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
   }
   .tavern-keeps-list {
   }

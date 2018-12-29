@@ -12,6 +12,7 @@ const actionTypes = {
   CONTRACT_SET_INSTANCE: 'setContractIntance_action',
   CONTRACT_INIT_INSTANCE: 'initContract_action',
   CONTRACT_CHECK_CROWDSALE: 'checkCrowdsale_action',
+  CONTRACT_SET_TOKEN_ALLOWANCE: 'setTokenAllowance_action',
   CONTRACT_SET_AIRDROP_TOKENS: 'setContractAirdropTokens_action'
 }
 

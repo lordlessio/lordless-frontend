@@ -24,7 +24,7 @@
                 theme="blue"
                 inverse
                 shadow
-                @click.native="$router.push('/market')">
+                @click.native="$router.push('/taverns')">
                 Buy a Tavern
               </lordless-btn>
             </div>
@@ -73,8 +73,8 @@
                 theme="blue"
                 inverse
                 shadow
-                @click.native="$router.push('/market')">
-                Marketplace
+                @click.native="$router.push('/taverns')">
+                Taverns
               </lordless-btn>
             </div>
           </div>

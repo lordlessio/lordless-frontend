@@ -94,11 +94,11 @@ export default {
           icon: 'taverns',
           path: '/owner/taverns'
         },
-        {
-          name: 'activity',
-          icon: 'activity',
-          path: '/owner/activity'
-        },
+        // {
+        //   name: 'activity',
+        //   icon: 'activity',
+        //   path: '/owner/activity'
+        // },
         {
           name: 'authorization',
           icon: 'authorization',

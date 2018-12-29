@@ -13,7 +13,12 @@
                   <router-link to="/map">Map</router-link>
                 </li>
                 <li>
-                  <router-link to="/market">Marketplace</router-link>
+                  <router-link to="/taverns">Taverns</router-link>
+                </li>
+                <li>
+                  <a href="https://opensea.io/assets/lordless" target="_blank">
+                    Marketplace
+                  </a>
                 </li>
                 <li>
                   <span class="cursor-pointer" @click.stop="jumpHome">Home</span>

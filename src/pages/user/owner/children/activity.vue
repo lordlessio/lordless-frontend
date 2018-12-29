@@ -12,7 +12,7 @@
         <div class="d-flex f-auto-center TTFontBolder">
           <span>Try to purchase or sell a Tavern in</span>
           <span class="inline-block">
-            <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/market')">Marketplace</lordless-btn>
+            <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/taverns')">Taverns</lordless-btn>
           </span>
         </div>
       </div>
