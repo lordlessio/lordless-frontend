@@ -51,7 +51,7 @@
         class="TTFontBold promotion-claim-btn"
         theme="promotion"
         inverse
-        :disabled="!web3Error && (isClaimed || loading || isEnd || info.status !== -1)"
+        :disabled="!web3Error && (isClaimed || loading || isEnd || (airdropUserInfo.status !== undefined && airdropUserInfo.status !== -1))"
         :loading="loading"
         @click="claimPromotion">{{ isEnd ? 'Ended' : isClaimed ? 'Claimed' : 'Claim now' }}</lordless-btn>
     </div>
@@ -90,6 +90,7 @@ export default {
       rendered: false,
       loading: true,
       isClaimed: false,
+      airdropUserInfo: {},
       progressNums: {
         completed: false,
         total: 1,
@@ -144,7 +145,7 @@ export default {
       this.$emit('update:claimed', val)
     },
     web3Error (val) {
-      this.initFailedClaim()
+      if (val) this.initFailedClaim()
     }
     // airdropTokens (val) {
     //   console.log('----- watch airdropTokens')
@@ -210,11 +211,14 @@ export default {
       try {
         let isConnected = false
         isConnected = await Airdrop.methods('isCollected', [ account, airdropId ])
-        // console.log('isConnected ---- before', isConnected)
+
+        const airdropUserInfo = (await getAirdropUserInfo({ airdropId: this.info._id, status: 0 })).data
+        console.log('isConnected ---- before', isConnected, airdropUserInfo)
         if (!isConnected) {
-          isConnected = !!((await getAirdropUserInfo({ airdropId: this.info._id })).data)
-          // console.log('isConnected ---- after', isConnected)
+          isConnected = !!airdropUserInfo
+          console.log('isConnected ---- after', isConnected)
         }
+        this.airdropUserInfo = airdropUserInfo || {}
         this.isClaimed = isConnected
       } catch (err) {
         this.loading = false
