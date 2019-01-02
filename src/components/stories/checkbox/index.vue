@@ -1,8 +1,8 @@
 <template>
   <div class="checkbox-box">
-    <span class="inline-block checkbox-inner" @click.stop="toggleChoose">
+    <span class="inline-block checkbox-inner" :class="loading ? 'rotating' : ''" @click.stop="toggleChoose">
       <svg>
-        <use :xlink:href="`#icon-radio-${(value || choose) ? 'selected' : 'unselected'}`"/>
+        <use :xlink:href="`#${loading ? 'icon-static-loading' : `icon-radio-${(value || choose) ? 'selected' : 'unselected'}`}`"/>
       </svg>
     </span>
   </div>
@@ -10,6 +10,7 @@
 
 <script>
 export default {
+  name: 'lordless-check-box',
   props: {
     value: {
       type: Boolean,
@@ -20,6 +21,10 @@ export default {
       default: false
     },
     choose: {
+      type: Boolean,
+      default: false
+    },
+    loading: {
       type: Boolean,
       default: false
     }
@@ -49,6 +54,15 @@ export default {
     height: inherit;
     line-height: 1;
   }
+
+  @keyframes rotateBox {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
   .checkbox-inner {
     position: relative;
     width: 100%;
@@ -76,5 +90,8 @@ export default {
     //     visibility: visible;
     //   }
     // }
+    &.rotating {
+      animation: rotateBox 1.2s linear infinite;
+    }
   }
 </style>

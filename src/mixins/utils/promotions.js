@@ -19,13 +19,17 @@ export default {
   },
   methods: {
     async getAirdropsHandle () {
+      const isPre = location.origin.includes('pre.')
+      const luckyBlockParams = {}
+      if (isPre) luckyBlockParams.pre = true
+
       this.loading = true
       try {
         const airdropRes = await getAirdrops()
         if (airdropRes.code === 1000 && airdropRes.data) {
           this.promotions = airdropRes.data
         }
-        const luckyblockRes = await getLuckyblocks()
+        const luckyblockRes = await getLuckyblocks(luckyBlockParams)
         if (luckyblockRes.code === 1000 && luckyblockRes.data) {
           this.luckyblocks = luckyblockRes.data
         }

@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="authorizeDialog"
-    :custom-class="`inline-block lordless-dialog message-dialog no-header transparent center ${metaOpen ? 'lg-blur' : ''}`"
+    :custom-class="`inline-block lordless-dialog message-dialog no-header transparent center ${metaOpen ? 'lg-blur' : '', showTokenAllowance ? 'full-style' : ''}`"
     width="100%"
     append-to-body
     center
@@ -12,7 +12,7 @@
     @open="$emit('open')"
     @close="$emit('close')"
     @closed="authorizeClosed">
-    <div class="lordless-message-box">
+    <div class="lordless-message-box" :class="showTokenAllowance ? 'full-style' : ''">
       <span
         @click.stop="closeDialog"
         class="inline-block line-height-1 lordless-message-close"

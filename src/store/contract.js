@@ -31,7 +31,7 @@ export default {
     [mutationTypes.CONTRACT_SET_INSTANCE]: (state, { key, value }) => {
       if (!key) return false
       state[key] = value
-      window[key] = value
+      // window[key] = value
     },
 
     /**

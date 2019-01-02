@@ -5,6 +5,9 @@ $--dialog-background-linear-start: #3023AE;
 // $--dialog-background-linear-end: #EE9AE5;
 $--dialog-background-linear-end: #C86DD7;
 
+$--full-dialog-background-linear-start: #1613B0;
+$--full-dialog-background-linear-end: #7D72F0;
+
 // lordless-logout-confirm
 .lordless-logout-confirm {
   position: absolute;
@@ -146,10 +149,14 @@ $--dialog-background-linear-end: #C86DD7;
   transform: translateX(-50%);
   @include grid('padding', 35px 20px 20px 20px, -1);
   @include viewport-unit('width', 100vw, 40px);
-  transition: all .3s;
+  transition: all .15s ease-in-out;
   &.full-style {
     @media screen and (max-width: 768px) {
       max-width: 768px;
+      background-image: linear-gradient(135deg, $--full-dialog-background-linear-start 0%, $--full-dialog-background-linear-end 100%);
+      // overflow: hidden;
+      border-radius: 0;
+      @include overflow();
       @include viewport-unit('width', 100vw);
       @include viewport-unit('height', 100vh);
     }

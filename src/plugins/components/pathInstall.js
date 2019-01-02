@@ -11,6 +11,7 @@ const files = [
 
   '/stories/blockies',
   '/stories/button',
+  '/stories/checkbox',
   '/stories/image',
   '/stories/linkSymbol',
   '/stories/pagination',

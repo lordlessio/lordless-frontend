@@ -1,19 +1,37 @@
 <template>
   <div v-if="value" class="crowdsale-box">
-    <div class="text-center mobile-crowdsale-container">
-      <h2>Token Authorize</h2>
-      <p>Authorize the Luckyblock contract to operate your Token on your behalf.</p>
-      <div
-        class="d-flex f-align-center token-crowdsale-item"
-        v-for="(bet, index) of tokenBets" :key="index">
-        <p class="TTFontBolder v-flex text-left">Betting with {{ bet.candy.symbol }}</p>
-        <lordless-btn
-          class="TTFontBolder crowdsale-btn"
-          theme="dialog"
-          shadow
-          :loading="allowancePendings[bet.candy.address]"
-          :disabled="allowancePendings[bet.candy.address] || allowanceModels[bet.candy.address]"
-          @click="approveAllowance(bet)">{{ allowanceModels[bet.candy.address] ? 'Allowed' : 'Go' }}</lordless-btn>
+    <div class="mobile-crowdsale-container">
+      <lordless-blockies class="token-crowdsale-blockies" seed="account" :scale="18"/>
+      <div class="token-crowdsale-header">
+        <h3>WALLET</h3>
+        <div class="crowdsale-header-item">
+          <p>Wallet address</p>
+          <p class="text-ellipsis crowdsale-account">{{ account }}</p>
+        </div>
+        <!-- <div>
+          <p></p>
+          <p></p>
+        </div> -->
+      </div>
+      <div class="token-crowdsale-box">
+        <h3>AUTHORIZATIONS</h3>
+        <p>For Lucky Blocks</p>
+        <ul>
+          <li class="token-crowdsale-item"
+            v-for="(bet, index) of tokenBets" :key="index">
+            <p class="d-flex f-align-center token-crowdsale-symbol">
+              <span class="inline-block token-bet-icon">
+                <lordless-check-box
+                  v-model="allowanceModels[bet.candy.address]"
+                  :loading="allowancePendings[bet.candy.address]"
+                  @click="approveAllowance(bet)"
+                  sync/>
+              </span>
+              <span class="TTFontBolder">Betting width <span class="text-upper">{{ bet.candy.symbol }}</span></span>
+            </p>
+            <p class="token-crowdsale-desc">Authorize the <a :href="contractLink" target="_blank">Luckyblock contract</a> to operate your <span class="text-upper">{{ bet.candy.symbol }}</span> on your behalf.</p>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -50,6 +68,10 @@ export default {
       'tokenAllowances'
     ]),
 
+    contractLink () {
+      return `${process.env.ETHERSCANURL}/address/${this.Luckyblock ? this.Luckyblock.address : ''}#code`
+    },
+
     luckyAddress () {
       return this.Luckyblock.address
     },
@@ -66,21 +88,6 @@ export default {
     value (val) {
       val && this.initTokenAllowance()
     }
-    // tokenAllowances (obj) {
-    //   console.log('----- watch tokenAllowances', obj)
-    //   for (const bet of this.tokenBets) {
-    //     const { candy } = bet
-    //     this.$set(this.allowancePendings, candy.address, obj[candy.address] === undefined)
-    //   }
-    // },
-    // allowanceModels (obj) {
-    //   const keys = Object.keys(obj)
-    //   const bool = !!keys.filter(key => !!obj[key]).length
-    //   if (keys.length === this.tokenBets.length && bool) {
-    //     console.log('--- allowance success')
-    //     this.$emit('success')
-    //   }
-    // }
   },
   methods: {
     ...mapActions('contract', [
@@ -91,7 +98,7 @@ export default {
       for (const bet of this.tokenBets) {
         const { candy } = bet
         const tokenApproveKey = `lordless_token_approve_${address}_${candy.address}`
-        const isPending = sessionStorage.getItem(tokenApproveKey)
+        const isPending = localStorage.getItem(tokenApproveKey)
         isPending && this.loopCheckTokenAllowance({ candy: candy.address, count: bet.count })
 
         this.$set(this.allowancePendings, candy.address, isPending || tokenAllowances[candy.address] === undefined)
@@ -172,7 +179,7 @@ export default {
       let timeout = null
       const loopFunc = () => {
         const tokenApproveKey = `lordless_token_approve_${address}_${candy}`
-        sessionStorage.setItem(tokenApproveKey, true)
+        localStorage.setItem(tokenApproveKey, true)
 
         // 创建新定时器实例
         timeout = setTimeout(async () => {
@@ -186,14 +193,14 @@ export default {
           }
           console.log('----- loopCheckTokenAllowance', luckyAddress, candy, count, this.tokenAllowances[candy])
           if (allowance >= count) {
-            sessionStorage.getItem(tokenApproveKey) && this.$notify.success({
+            localStorage.getItem(tokenApproveKey) && this.$notify.success({
               title: 'Success!',
               message: 'Betting with LESS Success!',
               position: 'bottom-right',
               duration: 2500
             })
 
-            sessionStorage.removeItem(tokenApproveKey)
+            localStorage.removeItem(tokenApproveKey)
             this.$set(this.allowanceModels, candy, true)
             this.$set(this.allowancePendings, candy, false)
             this.$nextTick(() => this.checkAllowance())
@@ -216,70 +223,74 @@ export default {
 
 <style lang="scss" scoped>
   .crowdsale-box {
-    padding-bottom: 10px;
+    padding-bottom: 30px;
     border-radius: 5px;
+    box-sizing: border-box;
+    @media screen and (max-width: 768px) {
+      padding-top: 30px;
+      padding-bottom: 10px;
+    }
   }
   .mobile-crowdsale-container {
-    >h2 {
-      font-size: 24px;
+    // >h2 {
+    //   font-size: 24px;
+    // }
+    // >p {
+    //   margin-top: 12px;
+    //   font-size: 16px;
+    // }
+  }
+  .token-crowdsale-blockies {
+    margin-bottom: 36px;
+  }
+  .token-crowdsale-header {
+    >h3 {
+      font-size: 18px;
     }
+  }
+  .crowdsale-header-item {
+    margin-top: 12px;
+    font-size: 16px;
+    >p {
+      &:nth-of-type(1) {
+        color: #BDB9FD;
+      }
+      &:nth-of-type(2) {
+        margin-top: 4px;
+        color: #fff;
+      }
+    }
+  }
+  .crowdsale-account {
+    width: 90%;
+  }
+
+
+  .token-crowdsale-box {
+    margin-top: 36px;
     >p {
       margin-top: 12px;
-      font-size: 16px;
+      color: #BDB9FD;
     }
-  }
-  .crowdsale-container {
-    position: relative;
-  }
-  .crowdsale-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    font-size: 30px;
-    cursor: pointer;
-  }
-  .crowdsale-cnt-box {
-    margin-top: 30px;
-    font-size: 18px;
-  }
-  .crowdsale-cnt-top {
-    margin-bottom: 30px;
-  }
-  .crowdsale-info-text {
-    font-size: 20px;
-    >a {
-      color: $--text-yellow-color;
-    }
-  }
-  .crowdsale-markline {
-    margin: 15px auto 25px;
-    height: 0;
-    border-bottom: 1px dashed #fff;
-    @include width(50%, 1);
-    @include margin-around(30px, auto, 45px, auto, 1);
-  }
-  // .crowdsale-choose {
-  //   width: 26px;
-  //   height: 26px;
-  //   border-radius: 5px;
-  //   overflow: hidden;
-  //   background-color: $--secondary-color;
-  // }
-  .crowdsale-text {
-    margin-left: 10px;
-    font-size: 18px;
   }
   .token-crowdsale-item {
-    margin-top: 40px;
-    &:not(:first-of-type) {
-      margin-top: 25px;
+    margin-top: 12px;
+  }
+  .token-crowdsale-symbol {
+    font-size: 16px;
+    color: #fff;
+  }
+  .token-crowdsale-desc {
+    margin-top: 4px;
+    font-size: 14px;
+    color: #BDB9FD;
+    >a {
+      color: $--color-btn-yellow;
     }
   }
-  .crowdsale-btn {
-    padding-left: 12px;
-    padding-right: 12px;
-    font-size: 14px;
-    height: 30px;
-    line-height: 30px;
+  .token-bet-icon {
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
   }
 </style>
