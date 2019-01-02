@@ -19,7 +19,7 @@
         <ul>
           <li class="token-crowdsale-item"
             v-for="(bet, index) of tokenBets" :key="index">
-            <p class="d-flex f-align-center token-crowdsale-symbol">
+            <p class="d-flex f-align-center token-crowdsale-symbol" @click="approveAllowance(bet)">
               <span class="inline-block token-bet-icon">
                 <lordless-check-box
                   v-model="allowanceModels[bet.candy.address]"
