@@ -20,7 +20,7 @@
               </a>
             </lordless-btn>
           </div>
-          <div class="home-promotions-item home-promotions-lucky">
+          <div v-if="luckyblocks.length" class="home-promotions-item home-promotions-lucky">
             <div class="home-promotions-title">
               <p class="TTFontBolder">Lucky Blocks</p>
               <p>Try your LUCK today on blockchain.</p>
@@ -41,7 +41,7 @@
               </li>
             </ul>
           </div>
-          <div class="home-promotions-item home-promotions-windfall">
+          <div v-if="promotions.length" class="home-promotions-item home-promotions-windfall">
             <div class="home-promotions-title">
               <p class="TTFontBolder">Favorite Windfall</p>
               <p>Claim your FREE token right now.</p>
