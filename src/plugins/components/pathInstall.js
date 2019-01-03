@@ -5,7 +5,8 @@ const files = [
 
   '/reuse/tavernPoster',
   '/reuse/dialog/authorize',
-  '/reuse/dialog/luckyRules',
+  '/reuse/dialog/luckyblock/rules',
+  '/reuse/dialog/luckyblock/conditions',
 
   '/content/layout/header/logo',
 

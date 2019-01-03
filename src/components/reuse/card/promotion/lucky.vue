@@ -46,6 +46,10 @@
         @click="playLuckblock">{{ isEnded ? 'Ended' : 'Play now'}}</lordless-btn>
     </div>
     <lordless-lucky-rules v-model="rulesModel"/>
+    <lordless-lucky-conditions
+      v-model="conditionsModel"
+      :ethBet="conditionsBets.ethBet"
+      :tokenBets="conditionsBets.tokenBets"/>
     <lordless-authorize
       ref="authorize"
       blurs
@@ -80,7 +84,11 @@ export default {
       isChecking: true,
       rulesModel: false,
       btnLoading: false,
-      InsufficientEth: false
+      InsufficientEth: false,
+
+      // conditions options
+      conditionsModel: false,
+      conditionsBets: {}
     }
   },
   computed: {

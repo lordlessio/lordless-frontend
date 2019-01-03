@@ -8,10 +8,6 @@
           <p>Wallet address</p>
           <p class="text-ellipsis crowdsale-account">{{ account }}</p>
         </div>
-        <!-- <div>
-          <p></p>
-          <p></p>
-        </div> -->
       </div>
       <div class="token-crowdsale-box">
         <h3>AUTHORIZATIONS</h3>
