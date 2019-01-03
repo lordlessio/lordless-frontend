@@ -94,7 +94,7 @@ export default {
       for (const bet of this.tokenBets) {
         const { candy } = bet
         const tokenApproveKey = `lordless_token_approve_${address}_${candy.address}`
-        const isPending = localStorage.getItem(tokenApproveKey)
+        const isPending = !!localStorage.getItem(tokenApproveKey)
         isPending && this.loopCheckTokenAllowance({ candy: candy.address, count: bet.count })
 
         this.$set(this.allowancePendings, candy.address, isPending || tokenAllowances[candy.address] === undefined)

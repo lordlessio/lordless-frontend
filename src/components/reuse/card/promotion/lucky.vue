@@ -48,8 +48,9 @@
     <lordless-lucky-rules v-model="rulesModel"/>
     <lordless-lucky-conditions
       v-model="conditionsModel"
-      :ethBet="conditionsBets.ethBet"
-      :tokenBets="conditionsBets.tokenBets"/>
+      :ethBets="conditionsInfo.ethBets"
+      :tokenBets="conditionsInfo.tokenBets"
+      :contractInfo="conditionsInfo.contractInfo"/>
     <lordless-authorize
       ref="authorize"
       blurs
@@ -88,7 +89,10 @@ export default {
 
       // conditions options
       conditionsModel: false,
-      conditionsBets: {}
+      conditionsInfo: {
+        ethBets: {},
+        tokenBets: []
+      }
     }
   },
   computed: {
@@ -144,24 +148,49 @@ export default {
 
       this.isChecking = true
 
-      const { ethWinnings } = blockInfos
+      const { ethWinnings, tokenWinnings } = blockInfos
       const winningNum = ethWinnings.count
 
-      console.log('luckyblockBase before', luckyblockId)
+      console.log('luckyblockBase before', luckyblockId, winningNum)
 
+      const contractAddress = Luckyblock.address
       // 获取活动的开启状态，如果 luckyblockBase 为true，代表活动关闭
       const luckyblockBase = await Luckyblock.methods('getLuckyblockBase', [ luckyblockId ])
       console.log('luckyblockBase', luckyblockBase)
 
       // 获取合约的 eth Balance，如果eth不足，则关闭活动
-      const { balance } = await getBalance(web3js, Luckyblock.address)
+      const { balance } = await getBalance(web3js, contractAddress)
 
+      let isEnded = false
+      const contractInfo = {}
+      contractInfo.ethBalance = winningNum ? balance : null
       if (balance < winningNum || luckyblockBase) {
-        this.isEnded = true
+        isEnded = true
       }
 
+      contractInfo.tokenWinnings = await Promise.all(tokenWinnings.map(async winnings => {
+        const candy = winnings.candy.address
+        const tokenBalance = (await this.airdropTokens[candy].methods('balanceOf', [ contractAddress ])).toNumber() || 0
+
+        console.log('tokenBalance', tokenBalance)
+        // 判断 token 是否充足
+        const tokenEnough = tokenBalance >= winnings.count
+        if (!tokenEnough) {
+          isEnded = true
+        }
+
+        // 返回处理之后的 tokenBet
+        return {
+          tokenBalance,
+          candy: winnings.candy
+        }
+      }))
+
+      this.$set(this.conditionsInfo, 'contractInfo', contractInfo)
+
       this.isChecking = false
-      console.log('---- winningNum', winningNum, balance, luckyblockBase)
+      this.isEnded = isEnded
+      console.log('---- winningNum', winningNum, balance, luckyblockBase, contractInfo)
       // this.$nextTick(() => {
       //   if (!this.rendered) this.rendered = true
       //   this.checkplayStatus()
@@ -195,43 +224,69 @@ export default {
 
       const web3js = web3Opt.web3js
 
+      let conditionsModel = false
+      const conditionsInfo = this.conditionsInfo
       const { balance } = await getBalance(web3js, address)
 
       console.log('balance', balance)
+      const ethEnough = balance >= info.blockInfos.ethBets.count
       // 判断 eth 是否足够
-      if (balance < info.blockInfos.ethBets.count) {
-        this.$notify.warning({
-          title: 'Warning!',
-          message: 'Insufficient ETH!',
-          position: 'bottom-right',
-          duration: 2500
-        })
-        this.btnLoading = false
-        return
+      if (!ethEnough) {
+        conditionsModel = true
       }
+      conditionsInfo.ethBets = Object.assign({}, info.blockInfos.ethBets, {
+        conditions: {
+          enough: ethEnough,
+          need: info.blockInfos.ethBets.count - balance
+        }
+      })
 
       const tokenBets = info.blockInfos.tokenBets
-      let tokenEnough = true
-      await (Promise.all(tokenBets.map(async tokenBet => {
+      conditionsInfo.tokenBets = await Promise.all(tokenBets.map(async tokenBet => {
         const candy = tokenBet.candy.address
         const balance = await this.airdropTokens[candy].methods('balanceOf', [ address ])
 
-        if (!tokenEnough) return tokenBet
         // 判断 token 是否充足
-        if (balance.toNumber() < tokenBet.count) {
-          this.$notify.warning({
-            title: 'Warning!',
-            message: `Insufficient ${tokenBet.candy.symbol.toLocaleUpperCase()}!`,
-            position: 'bottom-right',
-            duration: 2500
-          })
-          tokenEnough = false
+        const tokenEnough = balance.toNumber() >= tokenBet.count
+        if (!tokenEnough) {
+          conditionsModel = true
         }
-        return tokenBet
-      })))
 
-      if (!tokenEnough) {
+        // 返回处理之后的 tokenBet
+        return Object.assign({}, tokenBet, {
+          conditions: {
+            enough: tokenEnough,
+            need: tokenBet.count - balance.toNumber()
+          }
+        })
+      }))
+
+      console.log('conditionsInfo', conditionsInfo)
+
+      // const tokenBets = info.blockInfos.tokenBets
+      // let tokenEnough = true
+      // await (Promise.all(tokenBets.map(async tokenBet => {
+      //   const candy = tokenBet.candy.address
+      //   const balance = await this.airdropTokens[candy].methods('balanceOf', [ address ])
+
+      //   if (!tokenEnough) return tokenBet
+      //   // 判断 token 是否充足
+      //   if (balance.toNumber() < tokenBet.count) {
+      //     this.$notify.warning({
+      //       title: 'Warning!',
+      //       message: `Insufficient ${tokenBet.candy.symbol.toLocaleUpperCase()}!`,
+      //       position: 'bottom-right',
+      //       duration: 2500
+      //     })
+      //     tokenEnough = false
+      //   }
+      //   return tokenBet
+      // })))
+
+      if (conditionsModel) {
         this.btnLoading = false
+        this.conditionsModel = true
+        this.conditionsInfo = conditionsInfo
         return
       }
 
