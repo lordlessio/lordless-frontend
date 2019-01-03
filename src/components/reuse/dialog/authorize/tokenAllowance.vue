@@ -90,10 +90,10 @@ export default {
       actionTypes.CONTRACT_SET_TOKEN_ALLOWANCE
     ]),
 
-    checkAllowance (address = this.account, tokenAllowances = this.tokenAllowances, allowanceModels = this.allowanceModels) {
+    checkAllowance (address = this.account, luckyAddress = this.luckyAddress, tokenAllowances = this.tokenAllowances, allowanceModels = this.allowanceModels) {
       for (const bet of this.tokenBets) {
         const { candy } = bet
-        const tokenApproveKey = `lordless_token_approve_${address}_${candy.address}`
+        const tokenApproveKey = `lordless_token_approve_${address}_${candy.address}_${luckyAddress}`
         const isPending = !!localStorage.getItem(tokenApproveKey)
         isPending && this.loopCheckTokenAllowance({ candy: candy.address, count: bet.count })
 
@@ -174,7 +174,7 @@ export default {
 
       let timeout = null
       const loopFunc = () => {
-        const tokenApproveKey = `lordless_token_approve_${address}_${candy}`
+        const tokenApproveKey = `lordless_token_approve_${address}_${candy}_${luckyAddress}`
         localStorage.setItem(tokenApproveKey, true)
 
         // 创建新定时器实例
