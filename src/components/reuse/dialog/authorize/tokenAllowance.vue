@@ -149,7 +149,7 @@ export default {
       this.metamaskChoose = true
 
       // 授权给合约 erc20 可操作数量为 1e30
-      airdropTokens[candy].methods(setApprove.name, setApprove.values.concat([{ from: this.address, gas, gasPrice }]))
+      airdropTokens[candy].methods(setApprove.name, setApprove.values.concat([{ from: address, gas, gasPrice }]))
         .then(tx => {
           this.metamaskChoose = false
           this.loopCheckTokenAllowance({ luckyAddress, candy, count })
