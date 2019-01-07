@@ -173,7 +173,7 @@
                     <use :xlink:href="`#icon-${sociale.name.toLocaleLowerCase()}`"/>
                   </svg>
                 </span>
-                <a :href="sociale.link" target="_blank" class="v-flex d-flex f-justify-between resource-item-right">
+                <a :href="sociale.name.toLocaleLowerCase() === 'email' ? `mailto:${sociale.link}` : sociale.link" target="_blank" class="v-flex d-flex f-justify-between resource-item-right">
                   <span class="text-cap">{{ sociale.name }}</span>
                   <span class="inline-block inline-height-0 resource-item-arrow">
                     <svg>

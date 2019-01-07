@@ -129,7 +129,7 @@
                   v-for="sociale of projectInfo.socialeLinks"
                   :key="sociale._id"
                   class="text-center resource-cnt-item">
-                  <a :href="sociale.link" target="_blank" class="v-flex d-flex col-flex f-auto-center resource-item-right">
+                  <a :href="sociale.name.toLocaleLowerCase() === 'email' ? `mailto:${sociale.link}` : sociale.link" target="_blank" class="v-flex d-flex col-flex f-auto-center resource-item-right">
                     <span class="inline-block line-height-0 resource-item-icon">
                       <svg>
                         <use :xlink:href="`#icon-${sociale.name.toLocaleLowerCase()}`"/>

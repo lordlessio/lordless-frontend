@@ -32,7 +32,7 @@ export default {
   },
   data: () => {
     return {
-      filterSvgSymbols: ['BITE', 'LNM']
+      filterSvgSymbols: ['BITE', 'LNM', 'NK']
     }
   },
   computed: {
