@@ -161,8 +161,8 @@ export default {
   }
   .building-header-container {
     position: relative;
-    padding-top: 160px;
-    width: 160px;
+    padding-top: 100%;
+    width: 100%;
     >div {
       position: absolute;
       top: 0;

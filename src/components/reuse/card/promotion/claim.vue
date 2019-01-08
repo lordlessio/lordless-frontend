@@ -229,6 +229,7 @@ export default {
 
     async initProgressNumber (tokenAddress = this.tokenAddress, Airdrop = this.Airdrop) {
       const TokenContract = this.airdropTokens[tokenAddress]
+      const bridgeContract = this.info.bOfContract
       // console.log('airdropTokens', this.airdropTokens)
       if (!TokenContract) {
         this.progressNums = { total: 0, left: 0, dropping: 0, completed: true }
@@ -238,9 +239,10 @@ export default {
       // console.log('_count', _count[1].toNumber())
       let decimals = this.info.decimals || (await TokenContract.methods('decimals')).toNumber() || 18
 
-      const _left = await TokenContract.methods('balanceOf', [ Airdrop.address ])
+      const _left = await TokenContract.methods('balanceOf', [ bridgeContract || Airdrop.address ])
+      // console.log('_left', _left.toNumber() / Math.pow(10, decimals), this.info.project.symbol)
       // console.log('_left', _left, _left.toNumber() / Math.pow(10, decimals))
-      const _dropping = await Airdrop.methods('tokenTotalClaim', [ tokenAddress ])
+      const _dropping = await Airdrop.methods('tokenTotalClaim', [ bridgeContract || tokenAddress ])
       // console.log('_dropping', _dropping, _dropping.toNumber())
 
       const left = parseFloat(_left.toNumber() / Math.pow(10, decimals))

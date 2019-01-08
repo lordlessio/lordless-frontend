@@ -67,7 +67,7 @@
         <transition name="ld-hide-in-fade" mode="out-in">
           <ul v-if="ldbsLoading" class="v-flex d-flex f-wrap f-justify-between">
             <li
-              class="v-flex skeletion-building-item"
+              class="mobile-market-item"
               v-for="item of [1,2]" :key="item">
               <mobile-skeletion-building/>
             </li>
@@ -92,7 +92,7 @@
           </div>
           <ul v-else class="v-flex d-flex f-wrap f-justify-between market-cnt-box">
             <li
-              class="v-flex mobile-market-item"
+              class="cursor-pointer mobile-market-item"
               v-for="ldb of ldbs.list" :key="ldb._id">
               <mobile-building-card
                 :sale="ldb.chain.auction.isOnAuction"
@@ -561,10 +561,18 @@ export default {
   /*
    * skeletion style -- begin
    */
-  .skeletion-building-item {
-    max-width: 160px;
-    margin-bottom: 30px;
-  }
+  // .skeletion-building-item {
+  //   width: 50%;
+  //   // max-width: 160px;
+  //   margin-bottom: 30px;
+  //   box-sizing: border-box;
+  //   &:nth-of-type(2n) {
+  //     padding-left: 10px;
+  //   }
+  //   &:nth-of-type(2n + 1) {
+  //     padding-right: 10px;
+  //   }
+  // }
   /*
    * skeletion style -- end
    */
@@ -586,12 +594,19 @@ export default {
     }
   }
   .mobile-market-item {
-    max-width: 160px;
+    width: 50%;
     margin-bottom: 18px;
     // padding-left: 10px;
     // padding-right: 10px;
     color: #fff;
-    cursor: pointer;
+    // cursor: pointer;
+    box-sizing: border-box;
+    &:nth-of-type(2n) {
+      padding-left: 10px;
+    }
+    &:nth-of-type(2n + 1) {
+      padding-right: 10px;
+    }
   }
   .mobile-nomore-taverns {
     width: 100%;
