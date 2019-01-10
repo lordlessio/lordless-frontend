@@ -5,10 +5,9 @@
       <div class="onwer-children-cnt user-authorization-cnt">
         <el-row :gutter="20" class="authorization-cnt-container">
           <el-col
-            v-if="!(authorization.checkMobile && isMobile)"
             :xs="24" :sm="8"
             class="authorization-item"
-            v-for="(authorization, index) of authorizations"
+            v-for="(authorization, index) of _authorizations"
             :key="index">
             <authorization-card
               :active="authorization.active"
@@ -72,6 +71,12 @@ export default {
     // },
     marketModel () {
       return this.$root.$children[0].isCrowdsaleApproved
+    },
+
+    _authorizations () {
+      return this.authorizations.filter(item => {
+        return item.checkMobile && this.isMobile
+      })
     }
   },
   watch: {

@@ -81,6 +81,9 @@
     padding-left: env(safe-area-inset-left);
     box-sizing: border-box;
     // background-color: #f8f8f8;
+    &.hide-tab {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
   }
   // body {
   //   background-color: #f8f8f8;

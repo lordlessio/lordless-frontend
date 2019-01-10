@@ -150,7 +150,7 @@
           </li>
         </ul>
       </div>
-      <!-- <div class="mobile-user-card user-childrens-box">
+      <div class="mobile-user-card user-childrens-box">
         <div class="user-childrens-container">
           <ul>
             <li
@@ -173,7 +173,7 @@
             </li>
           </ul>
         </div>
-      </div> -->
+      </div>
       <div class="d-flex f-align-center card-margin mobile-user-card user-logout-box" @click.stop="$emit('logout')">
         <div class="v-flex d-flex f-align-center user-children-cnt">
           <span class="inline-block user-children-icon logout">
@@ -207,20 +207,25 @@ export default {
     return {
       pathChildrens: [
         {
-          name: 'Activities',
-          route: '/owner/activities',
+          name: 'Bind Telegram',
+          route: '/owner/bind/telegram',
           icon: '#icon-activity_selected'
-        },
-        {
-          name: 'Taverns',
-          route: '/owner/taverns',
-          icon: '#icon-beer'
-        },
-        {
-          name: 'Authorization',
-          route: '/owner/authorization',
-          icon: '#icon-authorization_selected'
         }
+        // {
+        //   name: 'Activities',
+        //   route: '/owner/activities',
+        //   icon: '#icon-activity_selected'
+        // },
+        // {
+        //   name: 'Taverns',
+        //   route: '/owner/taverns',
+        //   icon: '#icon-beer'
+        // },
+        // {
+        //   name: 'Authorization',
+        //   route: '/owner/authorization',
+        //   icon: '#icon-authorization_selected'
+        // }
         // {
         //   name: 'General',
         //   route: '/owner/general',
@@ -552,14 +557,14 @@ export default {
   /**
    *  user-childrens-box  -- begin
    */
-  // .user-childrens-box {
-
-  // }
-  // .user-children-item {
-  //   &:not(:first-of-type) {
-  //     margin-top: 28px;
-  //   }
-  // }
+  .user-childrens-box {
+    margin-top: 28px;
+  }
+  .user-children-item {
+    &:not(:first-of-type) {
+      margin-top: 28px;
+    }
+  }
   // .user-children-cnt {
   //   color: #777;
   // }

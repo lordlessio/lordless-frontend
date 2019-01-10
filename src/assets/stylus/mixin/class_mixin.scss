@@ -292,6 +292,9 @@
 }
 
 /* 字体 */
+@mixin ImpactFont () {
+  font-family: $--font-ImpactFont;
+}
 @mixin TTFontNormal () {
   font-family: $--font-TTNormsRegular;
 }

@@ -45,6 +45,7 @@ import MobileMeInfo from '@/pages/_mobile/owner/_user/info'
 import MobileMeActivity from '@/pages/_mobile/owner/_user/activity'
 import MobileMeAuthorization from '@/pages/_mobile/owner/_user/authorization'
 import MobileMeTaverns from '@/pages/_mobile/owner/_user/taverns'
+import OwnerBindTelegram from '@/pages/_mobile/owner/_user/bind/telegram'
 
 import MobileTavernDetail from '@/pages/_mobile/_tavern'
 
@@ -205,12 +206,18 @@ const mobileRoutes = [
           navText: 'Taverns',
           keepAlive: true,
           transition: false
-          // header: {
-          //   show: false
-          // },
-          // footer: {
-          //   show: false
-          // }
+        }
+      },
+      {
+        path: 'bind/telegram',
+        name: 'mobile-telegram-bind',
+        component: OwnerBindTelegram,
+        meta: {
+          title: 'Telegram bind - LORDLESS',
+          navText: 'Bind Telegram',
+          keepAlive: true,
+          transition: false,
+          hideTab: true
         }
       },
       {

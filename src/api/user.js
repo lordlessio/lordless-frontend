@@ -45,6 +45,11 @@ module.exports = axios => {
     // 用户登陆
     login: (params) => {
       return axios.post('/api/user/login', params)
+    },
+
+    // 初始化用户 tg 认证 code
+    initUserTgCode: () => {
+      return axios.get('/api/user/tgcode')
     }
 
     // 注销登陆

@@ -31,3 +31,11 @@
   font-weight: normal;
   text-rendering: optimizeLegibility;
 }
+@font-face {
+  font-family: 'Impact';
+  src: url('//lordless-sh.oss-cn-shanghai.aliyuncs.com/static/fonts/Impact.woff2') format('woff2'), /* Modern Browsers */
+       url('//lordless-sh.oss-cn-shanghai.aliyuncs.com/static/fonts/Impact.ttf') format('truetype'); /* Safari, Android, iOS */
+           font-style: normal;
+  font-weight: normal;
+  text-rendering: optimizeLegibility;
+}

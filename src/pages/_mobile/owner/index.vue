@@ -88,6 +88,12 @@ export default {
           match: /\/owner\/authorization/,
           show: true,
           history: true
+        },
+        {
+          text: 'Bind Telegram',
+          match: /\/owner\/bind\/telegram/,
+          show: true,
+          history: true
         }
       ]
     }

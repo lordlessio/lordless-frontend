@@ -292,7 +292,7 @@
     transform: translateZ(0);
   }
 }
-// @include tool-vars();
+@include tool-vars();
 
 /* 文字布局样式 */
 @mixin text-vars ($media: '') {
@@ -350,6 +350,9 @@
   }
   .#{$media}font-bolder {
     font-weight: bolder;
+  }
+  .#{$media}ImpactFont {
+    font-family: $--font-ImpactFont;
   }
   .#{$media}TTFontNormal {
     font-family: $--font-TTNormsRegular;
@@ -410,17 +413,17 @@
   @include layout-vars('lg-');
   @include text-vars('lg-');
   @include tool-vars('lg-');
-  @include tool-vars('', 2);
+  // @include tool-vars('', 2);
 }
 @media screen and (max-width: 992px) {
   @include layout-vars('md-');
   @include text-vars('md-');
   @include tool-vars('md-');
-  @include tool-vars('', 2);
+  // @include tool-vars('', 2);
 }
 @media screen and (max-width: 768px) {
   @include layout-vars('sm-');
   @include text-vars('sm-');
   @include tool-vars('sm-', 1);
-  @include tool-vars('', 1);
+  // @include tool-vars('', 1);
 }

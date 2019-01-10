@@ -31,19 +31,21 @@
           </p>
           <p class="conditions-warn-text">Still need <span class="color-yellow">{{ formatDecimal(weiByDecimals(ethBets.conditions.need)).toLocaleString() }}</span> more <span class="text-upper">ETH</span></p>
         </div>
-        <div class="block-conditions-item"
-          :class="{ 'is-error': !bets.conditions.enough }"
-          v-for="(bets, index) of tokenBets" :key="index"
-          v-if="tokenBets && tokenBets.length">
-          <p class="d-flex f-align-center conditions-token-status">
-            <span class="inline-block line-height-0 block-conditions-icon">
-              <svg>
-                <use :xlink:href="`#icon-${bets.conditions.enough ? 'radio-selected' : 'stop'}`"/>
-              </svg>
-            </span>
-            <span class="text-upper">{{ formatDecimal(weiByDecimals(bets.count)).toLocaleString() }} {{ bets.candy.symbol }}</span>
-          </p>
-          <p class="conditions-warn-text">Still need <span class="color-yellow">{{ formatDecimal(weiByDecimals(bets.conditions.need, bets.candy.decimals)).toLocaleString() }}</span> more <span class="text-upper">{{ bets.candy.symbol }}</span></p>
+        <div v-if="tokenBets && tokenBets.length">
+          <div
+            class="block-conditions-item"
+            :class="{ 'is-error': !bets.conditions.enough }"
+            v-for="(bets, index) of tokenBets" :key="index">
+            <p class="d-flex f-align-center conditions-token-status">
+              <span class="inline-block line-height-0 block-conditions-icon">
+                <svg>
+                  <use :xlink:href="`#icon-${bets.conditions.enough ? 'radio-selected' : 'stop'}`"/>
+                </svg>
+              </span>
+              <span class="text-upper">{{ formatDecimal(weiByDecimals(bets.count)).toLocaleString() }} {{ bets.candy.symbol }}</span>
+            </p>
+            <p class="conditions-warn-text">Still need <span class="color-yellow">{{ formatDecimal(weiByDecimals(bets.conditions.need, bets.candy.decimals)).toLocaleString() }}</span> more <span class="text-upper">{{ bets.candy.symbol }}</span></p>
+          </div>
         </div>
         <p class="conitions-item-desc">Your wallet balance of designated token is insufficient. Try to purchase some more in the exchanges please.</p>
       </div>
@@ -57,19 +59,28 @@
           </span>
           <span>{{ formatDecimal(weiByDecimals(contractInfo.ethBalance)).toLocaleString() }} ETH</span>
         </div>
-        <div class="d-flex f-align-center block-conditions-item"
-          v-for="(winnings, index) of contractInfo.tokenWinnings" :key="index"
-          v-if="contractInfo.tokenWinnings && contractInfo.tokenWinnings.length">
-          <span class="inline-block line-height-0 block-conditions-icon">
-            <svg>
-              <use xlink:href="#icon-radio-selected"/>
-            </svg>
-          </span>
-          <span>{{ formatDecimal(weiByDecimals(winnings.tokenBalance, winnings.candy.decimals)).toLocaleString() }} {{ winnings.candy.symbol }}</span>
+        <div v-if="contractInfo.tokenWinnings && contractInfo.tokenWinnings.length">
+          <div class="d-flex f-align-center block-conditions-item"
+            v-for="(winnings, index) of contractInfo.tokenWinnings" :key="index">
+            <span class="inline-block line-height-0 block-conditions-icon">
+              <svg>
+                <use xlink:href="#icon-radio-selected"/>
+              </svg>
+            </span>
+            <span>{{ formatDecimal(weiByDecimals(winnings.tokenBalance, winnings.candy.decimals)).toLocaleString() }} {{ winnings.candy.symbol }}</span>
+          </div>
         </div>
         <p class="conitions-item-desc">There is sufficient balance for you to win the game.</p>
       </div>
-      <lordless-btn theme="dialog" class="block-conditions-btn" @click="$emit('input', false)">Got it</lordless-btn>
+      <lordless-btn theme="dialog" class="block-conditions-btn" @click="$emit('input', false)">
+        <p v-if="!lessBetsEnough" class="purchase-less-info">
+          <a class="d-flex f-align-center" href="https://ddex.io/trade/LESS-WETH" target="_blank">
+            <img class="ddex-logo" src="//lordless-sh.oss-cn-shanghai.aliyuncs.com/exchanges/icon/DDEX.svg"/>
+            <span>Purchase LESS</span>
+          </a>
+        </p>
+        <span v-else>Got it</span>
+      </lordless-btn>
     </div>
   </el-dialog>
 </template>
@@ -109,6 +120,15 @@ export default {
 
     contractLink () {
       return `${process.env.ETHERSCANURL}/address/${this.Luckyblock ? this.Luckyblock.address : ''}#code`
+    },
+
+    lessBetsEnough () {
+      console.log('----- lessBetsEnough', this.tokenBets.filter(bets => {
+        return !bets.conditions.enough && bets.candy.symbol.toLocaleUpperCase() === 'LESS'
+      }))
+      return !this.tokenBets.filter(bets => {
+        return !bets.conditions.enough && bets.candy.symbol.toLocaleUpperCase() === 'LESS'
+      }).length
     }
   },
   watch: {
@@ -179,5 +199,14 @@ export default {
   .block-conditions-btn {
     padding: 12px 14px;
     margin-top: 36px;
+  }
+  .purchase-less-info {
+    margin: 0 6px;
+    color: #0024FF;
+  }
+  .ddex-logo {
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
   }
 </style>

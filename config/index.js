@@ -61,7 +61,7 @@ module.exports = {
     cssSourceMap: true,
     proxyTable: {
       '/lordless': {
-        target: 'http://10.229.4.202:7001',
+        target: 'http://10.229.4.170:7001',
         // target: 'https://game.lordless.io',
         changeOrigin: true,
         pathRewrite: {'^/lordless': ''}
