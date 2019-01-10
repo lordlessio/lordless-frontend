@@ -52,11 +52,10 @@
       <lordless-btn
         class="telegram-talk-btn"
         theme="blue-linear"
-        :disabled="!isCopyCode || !userInfo.telegram || !userInfo.telegram.code">
-        <a v-if="isCopyCode" :href="botLink" target="_blank">
+        :disabled="!userInfo.telegram || !userInfo.telegram.code">
+        <a :href="botLink" target="_blank">
           Talk with Telegram bot
         </a>
-        <span v-else>Should be copy your code.</span>
       </lordless-btn>
     </div>
   </div>
@@ -74,8 +73,7 @@ export default {
   mixins: [ clipboardMixins, publicMixins ],
   data: () => {
     return {
-      shortCode: '',
-      isCopyCode: false
+      shortCode: ''
     }
   },
   computed: {
@@ -84,11 +82,6 @@ export default {
     ]),
     botLink () {
       return `https://t.me/${process.env.tgBot}?start=bind`
-    }
-  },
-  watch: {
-    clipBool (val) {
-      if (val) this.isCopyCode = true
     }
   },
   methods: {
