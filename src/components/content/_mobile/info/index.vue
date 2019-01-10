@@ -279,8 +279,8 @@ export default {
     }
   },
   watch: {
-    userInfo (val) {
-      console.log('---------- user info account', val)
+    account (val) {
+      console.log('---------- user account', val)
       if (val) this.initInfo()
     }
   },

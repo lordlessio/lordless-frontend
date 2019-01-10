@@ -26,8 +26,8 @@
             <p class="bind-step-title">STEP 1</p>
             <p class="bind-step-desc">Tap the code below to copy it.</p>
             <p id="copy-link"
-              :data-clipboard-text="`${account}-${userInfo.telegram.code}`"
-              class="ImpactFont text-break telegram-bind-code">{{ account }}-{{ userInfo.telegram.code }}</p>
+              :data-clipboard-text="`${account}-${userInfo.telegram ? userInfo.telegram.code : ' --'}`"
+              class="ImpactFont text-break telegram-bind-code">{{ account }}-{{ userInfo.telegram ? userInfo.telegram.code : ' --' }}</p>
           </li>
           <li class="telegram-bind-item">
             <p class="bind-step-title">STEP 2</p>
@@ -52,8 +52,8 @@
       <lordless-btn
         class="telegram-talk-btn"
         theme="blue-linear"
-        :disabled="!isCopyCode || !userInfo.telegram.code">
-        <a v-if="isCopyCode" href="https://t.me/founybot?start=bind" target="_blank">
+        :disabled="!isCopyCode || !userInfo.telegram || !userInfo.telegram.code">
+        <a v-if="isCopyCode" :href="botLink" target="_blank">
           Talk with Telegram bot
         </a>
         <span v-else>Should be copy your code.</span>
@@ -81,7 +81,10 @@ export default {
   computed: {
     ...mapState('user', [
       'userInfo'
-    ])
+    ]),
+    botLink () {
+      return `https://t.me/${process.env.tgBot}?start=bind`
+    }
   },
   watch: {
     clipBool (val) {
@@ -97,7 +100,7 @@ export default {
      * 初始化用户 telegram bind code
      */
     async initBindCode () {
-      if (this.userInfo.telegram.code) return
+      if (this.userInfo.telegram && this.userInfo.telegram.code) return
       try {
         const res = await initUserTgCode()
         if (res.code === 1000 && res.data) {
@@ -129,7 +132,7 @@ export default {
         clearTimeout(intance)
         intance = null
 
-        if (this.userInfo.telegram.id) return
+        if (this.userInfo.telegram && this.userInfo.telegram.id) return
 
         this[actionTypes.USER_SET_USER_BY_TOKEN]()
         intance = setTimeout(() => {
@@ -147,6 +150,9 @@ export default {
         intance = null
       })
     }
+  },
+  deactivated () {
+    this.isCopyCode = false
   },
   mounted () {
     this.$nextTick(() => {

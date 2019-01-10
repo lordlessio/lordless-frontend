@@ -1,7 +1,7 @@
 <template>
   <div class="telegram-bind-page">
     <transition name="ld-hide-fade">
-      <telegram-bind v-if="!userInfo.telegram.id"/>
+      <telegram-bind v-if="!userInfo.telegram || !userInfo.telegram.id"/>
       <telegram-bind-success v-else/>
     </transition>
   </div>
