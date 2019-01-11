@@ -1,306 +1,132 @@
 <template>
   <div class="d-flex user-building-box">
-    <div class="d-flex v-flex col-flex user-candy-container">
+    <div class="d-flex v-flex col-flex container user-candy-container">
       <!-- <h1 class="text-cap owner-children-title">Taverns</h1> -->
       <transition name="ld-hide-in-fade">
         <div
-          v-if="!buildings.total && !saleBuildings.total && !loading"
-          class="d-flex v-flex col-flex f-auto-center text-center no-asset-box">
+          v-if="!ownerTaverns.total && !loading"
+          class="v-flex d-flex col-flex f-auto-center text-center no-taverns-box">
           <svg>
-            <use xlink:href="#icon-no-ldb"/>
+            <use xlink:href="#icon-sitdown-human"/>
           </svg>
-          <p>You have no Tavern now.</p>
-          <div class="d-flex f-auto-center TTFontBolder">
-            <span>Try to buy a Tavern in</span>
-            <span class="inline-block">
-              <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/taverns')">Taverns</lordless-btn>
-            </span>
+          <h3>You have no Taverns.</h3>
+          <div>
+            <p class="no-taverns-text">Try to purchase a Tavern and be a Tavernkeep to earn more candies.</p>
+            <lordless-btn
+              class="trading-opensea-btn"
+              theme="blue-linear"
+              shadow>
+              <a class="d-inline-flex f-align-center" href="https://opensea.io/assets/lordless" target="_blank">
+                Buy Tavern on OpenSea
+              </a>
+            </lordless-btn>
           </div>
         </div>
         <div
           v-else
           class="v-flex relative onwer-children-cnt user-building-tabs">
-          <el-tabs
-            v-model="buildingTab"
-            @tab-click="chooseTab">
-            <el-tab-pane
-              label="All"
-              name="all">
-              <div class="building-sort">
-                <span>Sort by</span>
-                <ld-select
-                  class="building-sort-select"
-                  v-model="buildingSort"
-                  :items="sortItems"
-                  @change="changeSort">
-                </ld-select>
+          <ul>
+            <li v-for="tavern of ownerTaverns.list" :key="tavern.id"
+              class="d-flex full-width mobile-user-card owner-taverns-item"
+              @click.stop="openTavern(tavern)">
+              <div class="owner-taverposter">
+                <lordless-tavern-poster
+                  :src="tavern.ldbIcon ? tavern.ldbIcon.source.preview : ''"
+                  :popularity="tavern.chain.popularity"
+                  shadow
+                  showPopularity
+                  isSmall/>
               </div>
-              <el-row class="mar-t3" :gutter="30" v-if="loading">
-                <el-col
-                  v-for="item of [1,2,3]" :key="item"
-                  :xs="24" :sm="8">
-                  <skeletion-building class="skeletion-building-item"></skeletion-building>
-                </el-col>
-              </el-row>
-              <transition name="ld-hide-in-fade">
-                <el-row v-if="buildings.total && !loading" :gutter="30" class="user-buildings-cnt">
-                  <el-col
-                    :xs="24" :sm="8"
-                    class="building-item"
-                    v-for="(building, index) of buildings.list"
-                    :key="index">
-                    <building-card
-                      :sale="building.chain.auction.isOnAuction"
-                      :presale="building.chain.auction.isOnPreAuction"
-                      :info="building"
-                      shadow
-                      @choose="chooseBuilding">
-                    </building-card>
-                  </el-col>
-                </el-row>
-              </transition>
-            </el-tab-pane>
-            <el-tab-pane
-              label="For sale"
-              name="sale">
-              <el-row class="mar-t3" :gutter="30" v-if="loading">
-                <el-col
-                  v-for="item of [1,2]" :key="item"
-                  :xs="24" :sm="8">
-                  <skeletion-building class="skeletion-building-item"></skeletion-building>
-                </el-col>
-              </el-row>
-              <transition name="ld-hide-fade" mode="out-in">
-                <div
-                  v-if="!saleBuildings.total && !loading"
-                  class="d-flex v-flex col-flex f-auto-center text-center no-asset-box user-no-sale-buildings">
-                  <svg>
-                    <use xlink:href="#icon-no-selling-ldb"/>
-                  </svg>
-                  <p>You have nothing on sale now.</p>
-                  <div class="d-flex f-auto-center TTFontBolder">
-                    <span>Make the first selling transaction for your</span>
-                    <span class="inline-block">
-                      <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="buildingTab = 'all'">LDB</lordless-btn>
-                    </span>
-                  </div>
+              <div class="v-flex d-flex col-flex f-justify-between owner-taverinfo">
+                <p class="d-flex f-align-center owner-tavertitle">
+                  <span class="text-nowrap owner-tavername">{{ tavern.name.zh }}</span>
+                </p>
+                <div>
+                  <p class="owner-taverlevel">Level {{ tavern.chain.level }}</p>
                 </div>
-                <el-row v-else :gutter="20" class="user-buildings-cnt">
-                  <el-col
-                    :xs="24" :sm="8"
-                    class="building-item"
-                    v-for="(sBuilding, index) of saleBuildings.list"
-                    :key="index">
-                    <building-card
-                      :sale="sBuilding.chain.auction.isOnAuction"
-                      :info="sBuilding"
-                      shadow
-                      @choose="chooseBuilding">
-                    </building-card>
-                  </el-col>
-                </el-row>
-              </transition>
-            </el-tab-pane>
-          </el-tabs>
-          <lordless-pagination
-            v-if="pageDatas.total"
-            class="ld-building-pagination"
-            :scrollE="$el"
-            :scrollPE="pageScrollPE"
-            :total="pageDatas.total"
-            :size="pageDatas.ps"
-            background
-            @currentChange="pageChange"/>
+              </div>
+              <div class="d-flex f-auto-center owner-taverjump">
+                <svg>
+                  <use xlink:href="#icon-arrow-circle"/>
+                </svg>
+              </div>
+            </li>
+          </ul>
         </div>
       </transition>
     </div>
-    <detail-dialog
-      v-model="detailModel"
-      theme="light"
-      :ldbId="detailInfo._id"
-      @close="dialogClose">
-    </detail-dialog>
   </div>
 </template>
 
 <script>
 import SkeletionBuilding from '@/components/skeletion/_mobile/building'
 
-import LdSelect from '@/components/stories/select'
-import DetailDialog from '@/components/reuse/dialog/ldb/detail'
 import BuildingCard from '@/components/reuse/_mobile/card/building'
-
-import { historyState } from 'utils/tool'
 
 import { getChainLdbs } from 'api'
 import { mapState } from 'vuex'
 
-import { activatedMixins } from '@/mixins'
+import { activatedMixins, publicMixins } from '@/mixins'
 export default {
   name: 'mobile-owner-taverns',
-  mixins: [activatedMixins],
+  mixins: [ activatedMixins, publicMixins ],
   data: () => {
     return {
 
       loading: true,
 
-      // 当前 tab 区域
-      buildingTab: 'all',
-
-      // 改变之前的 tab 区域
-      currentTab: 'all',
-
-      // ldb 弹窗
-      detailModel: false,
-
-      // 选中的建筑
-      detailInfo: {},
-
       /**
        * all building options
        */
 
-      // sort 列表选项
-      sortItems: [
-        {
-          value: 'influence',
-          label: 'Most influential'
-        }, {
-          value: 'popular',
-          label: 'Most popular'
-        }
-      ],
-
-      // sort model
-      buildingSort: 'influence',
-
       // 用户全部的建筑
-      buildings: {
+      ownerTaverns: {
         list: [],
         total: 0,
         pn: 1,
-        ps: 9
-      },
-
-      /**
-       * sort building options
-       */
-
-      // 用户出售的建筑
-      saleBuildings: {
-        list: [],
-        total: 0,
-        pn: 1,
-        ps: 9
+        ps: 20
       }
     }
   },
   computed: {
     ...mapState('user', [
       'userInfo'
-    ]),
-    pageScrollPE () {
-      return document.getElementById('user-main-content')
-    },
-    pageDatas () {
-      if (this.buildingTab === 'all') {
-        return { total: this.buildings.total, ps: this.buildings.ps }
-      }
-      return { total: this.saleBuildings.total, ps: this.saleBuildings.ps }
+    ])
+  },
+  watch: {
+    account (val) {
+      this.getOwnerTaverns()
     }
   },
   components: {
     SkeletionBuilding,
 
-    DetailDialog,
-    BuildingCard,
-    LdSelect
+    BuildingCard
   },
   methods: {
-    chooseTab () {
-      if (this.currentTab === this.buildingTab) return
-      this.currentTab = this.buildingTab
 
-      if (this.buildingTab === 'all') this.getAllBuilding()
-      else this.getSaleBuilding()
+    openTavern (tavern) {
+      this.$router.push(`/tavern/${tavern.id}?refer=${encodeURIComponent(this.$route.path)}`)
     },
 
-    changeSort (e) {
-      const params = {
-        page: 1,
-        offset: 10,
-        sort: e
-      }
-      this.getAllBuilding(params)
-    },
-
-    async getAllBuilding ({ lord = this.userInfo._id, sort = this.buildingSort, pn = this.buildings.pn, ps = this.buildings.ps } = {}) {
+    async getOwnerTaverns ({ lord = this.userInfo._id, pn = this.ownerTaverns.pn, ps = this.ownerTaverns.ps } = {}) {
       if (!lord) return
       this.loading = true
       const params = {
         pn,
         ps,
-        sort,
         lord
       }
       const res = await getChainLdbs(params)
       if (res.code === 1000 && res.data) {
-        this.buildings = res.data
+        this.ownerTaverns = res.data
       }
       this.loading = false
-    },
-
-    async getSaleBuilding ({ lord = this.userInfo._id, pn = this.saleBuildings.pn, ps = this.saleBuildings.ps } = {}) {
-      if (!lord) return
-      this.loading = true
-      const params = {
-        pn,
-        ps,
-        lord,
-        isOnAuction: true
-      }
-      const res = await getChainLdbs(params)
-      if (res.code === 1000 && res.data) {
-        this.saleBuildings = res.data
-      }
-      this.loading = false
-    },
-
-    pageChange (e) {
-      if (this.buildingTab === 'all') {
-        this.getAllBuilding({ page: e })
-      } else {
-        this.getSaleBuilding({ page: e })
-      }
-    },
-
-    chooseBuilding (item) {
-      this.detailModel = true
-      this.$nextTick(() => {
-        this.detailInfo = item
-        historyState(`/tavern/${item._id}`)
-      })
-    },
-
-    /**
-     * 对话框关闭触发函数
-     */
-    dialogClose (info) {
-      historyState(this.$route.path)
-    }
-  },
-  watch: {
-    userInfo (val) {
-      if (this.buildingTab === 'all') {
-        this.getAllBuilding()
-      } else {
-        this.getSaleBuilding()
-      }
     }
   },
   mounted () {
     this.$nextTick(() => {
-      this.getAllBuilding()
+      this.getOwnerTaverns()
     })
   }
 }
@@ -309,71 +135,115 @@ export default {
 <style lang="scss" scoped>
 
   .user-building-box {
-    margin-top: 35px;
+    padding-top: 44px;
+    // margin-top: 35px;
     font-size: 16px;
-    @include padding(-1, 30px, 1);
-    @include viewport-unit(min-height, 100vh);
-    /deep/ .el-tabs__header {
-      margin: 0;
-    }
-    /deep/ .el-tabs__content {
-      position: static;
-      overflow: initial;
-    }
-    /deep/ .el-tabs__item {
-      font-size: 18px;
-      color: #999;
-      &.is-active {
-        color: inherit;
-      }
-    }
+    // @include padding(-1, 30px, 1);
+    box-sizing: border-box;
+    @include viewport-unit(min-height, 100vh, 50px);
+  }
+  .user-candy-container {
+    padding-top: 25px;
   }
 
   .skeletion-building-item {
     margin-bottom: 50px;
   }
 
-  .ld-building-pagination {
-    position: absolute;
-    left: 0;
-    bottom: -100px;
+  /**
+   *  no-taverns-box  -- begin
+   */
+  .no-taverns-box {
+    >svg {
+      width: 300px;
+      height: 300px;
+    }
+    >h3 {
+      margin-top: 32px;
+      font-size: 20px;
+      color: #0B2A48;
+    }
   }
-
-  .building-sort {
+  .no-taverns-text {
+    margin-top: 12px;
+    width: 300px;
+    font-size: 16px;
+  }
+  .trading-opensea-btn {
     margin-top: 30px;
-  }
-  .building-sort-select {
-    margin-left: 10px;
-    /deep/ .el-input__inner {
-      width: 160px;
-      height: 34px;
-      line-height: 34px;
-      font-size: 16px;
-      color: #fff;
-      background-color: #4586FC;
-      border-radius: 20px;
-      border: none;
-    }
-    /deep/ .el-input {
-      .el-select__caret {
-        font-weight: bolder;
-        color: #fff;
-      }
+    height: 46px;
+    line-height: 46px;
+    >a {
+      padding: 0 20px;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
     }
   }
+  /**
+   *  no-taverns-box  -- end
+   */
 
-  // .user-building-tabs {
-  //   position: relative;
-  //   @include margin('top', 35px, 1);
-  //   @include margin('bottom', 150px, 1);
-  // }
-  .user-no-sale-buildings {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  .owner-taverns-item {
+    padding: 16px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-sizing: border-box;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, .25);
+    &:not(:first-of-type) {
+      margin-top: 16px;
+    }
   }
-  .building-item {
-    @include margin('top', 30px, 1);
+  .owner-taverposter {
+    width: 72px;
+    height: 72px;
+    &.none {
+      padding: 10px;
+      fill: #BDB9FD;
+      border-radius: 5px;
+      box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, .25);
+    }
+  }
+  .owner-tavermark {
+    margin-right: 5px;
+    padding: 2px 6px;
+    font-size: 12px;
+    color: #fff;
+    background-color: #4586FC;
+    border-radius: 5px;
+  }
+  .owner-tavername {
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .owner-taverinfo {
+    margin-left: 18px;
+  }
+  .user-info-btn {
+    display: inline-block;
+    padding: 8px 15px;
+    font-size: 14px;
+    @include margin('top', 15px, 1);
+  }
+  .owner-tavertitle {
+    font-size: 16px;
+    color: #777;
+  }
+  .owner-taverlevel {
+    font-size: 14px;
+    color: #777;
+  }
+  .owner-taverleftap {
+    font-size: 14px;
+    color: #4586FC;
+  }
+  .owner-taverjump {
+    width: 24px;
+    >svg {
+      width: 24px;
+      height: 24px;
+      fill: #4586FC;
+    }
   }
 </style>

@@ -39,8 +39,8 @@
             {{ info.status === -1 ? 'Failed' : 'Token Empty!' }}
           </div>
           <div v-else class="promotion-receive-info" :class="{ 'is-pending': info.status === 0 }">
-            <p class="TTFontBolder">+ {{ info.airdrop.countPerUser | weiByDecimals(info.airdrop.decimals) }}</p>
-            <p class="text-right promotion-info-pending">Pending...</p>
+            <p class="TTFontBolder promotion-receive-count">+ {{ info.airdrop.countPerUser | weiByDecimals(info.airdrop.decimals) }}</p>
+            <p class="TTFontBolder text-right promotion-info-pending">Pending</p>
             <p v-if="info.airdrop.project.USD2TokenCount" class="promotion-receive-value">≈ $ {{ info.airdrop.countPerUser / 1e18 / info.airdrop.project.USD2TokenCount | formatDecimal }}</p>
           </div>
           <!-- <p class="d-flex f-align-center">
@@ -204,11 +204,10 @@ export default {
   .promotion-receive-info {
     color: #0079FF;
     &.is-pending {
-      color: #bbb;
       .promotion-info-pending {
         display: block;
       }
-      .promotion-receive-value {
+      .promotion-receive-value, .promotion-receive-count {
         display: none;
       }
     }
@@ -216,7 +215,8 @@ export default {
   .promotion-info-pending {
     display: none;
     font-size: 16px;
-    color: #bbb;
+    color: #0079FF;
+    // color: #bbb;
   }
   .promotion-info-date, .promotion-receive-value {
     font-size: 14px;

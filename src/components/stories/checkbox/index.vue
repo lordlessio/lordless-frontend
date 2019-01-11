@@ -1,5 +1,5 @@
 <template>
-  <div class="checkbox-box">
+  <div class="checkbox-box" :class="[ theme, { 'loading': loading } ]">
     <span class="inline-block checkbox-inner" :class="loading ? 'rotating' : ''" @click.stop="toggleChoose">
       <svg>
         <use :xlink:href="`#${loading ? 'icon-static-loading' : `icon-radio-${(value || choose) ? 'selected' : 'unselected'}`}`"/>
@@ -27,6 +27,10 @@ export default {
     loading: {
       type: Boolean,
       default: false
+    },
+    theme: {
+      type: String,
+      default: 'light'
     }
   },
   data: () => {
@@ -53,6 +57,21 @@ export default {
     width: inherit;
     height: inherit;
     line-height: 1;
+    &.dark {
+      .checkbox-inner {
+        fill: #4586FC;
+      }
+      &.loading {
+        .checkbox-inner {
+          fill: #0024FF;
+        }
+      }
+    }
+    &.light {
+      .checkbox-inner {
+        fill: #fff;
+      }
+    }
   }
 
   @keyframes rotateBox {
@@ -69,7 +88,7 @@ export default {
     height: 100%;
     background-color: inherit;
     cursor: pointer;
-    fill: #fff;
+    // fill: #fff;
     // &::after {
     //   content: "";
     //   box-sizing: content-box;

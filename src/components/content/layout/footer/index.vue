@@ -10,6 +10,9 @@
                   <strong class="relative footer-lordless-title">LORDLESS</strong>
                 </li>
                 <li>
+                  <router-link to="/project/promotions">Game</router-link>
+                </li>
+                <li>
                   <router-link to="/map">Map</router-link>
                 </li>
                 <li>
@@ -112,7 +115,7 @@
           <p>The latest LORDLESS news, articles, and resources, sent straight to your inbox every month.</p>
           <a href="http://eepurl.com/dsLYcr" target="_blank" class="d-flex footer-subscribe-eamil">
             <p class="v-flex footer-subscribe-input">
-              <input aria-label="subscribe email" disabled type="text" placeholder="Email me when it's ready"/>
+              <input aria-label="subscribe email" disabled type="text" placeholder="Your email"/>
             </p>
             <span class="TTFontBolder inline-block">Subscribe</span>
           </a>
@@ -143,7 +146,7 @@
               </svg>
             </a>
           </div>
-          <p class="footer-copyright">Copyright © 2017 - 2018 LORDLESS. All right reserved</p>
+          <p class="footer-copyright">Copyright © 2017 - 2019 LORDLESS. All right reserved</p>
         </div>
       </div>
       <p class="text-center ld-footer-term"><router-link class="hover-underline" to="/terms">Term of use</router-link> & <router-link class="hover-underline" to="/privacy">Privacy policy</router-link></p>
@@ -267,7 +270,7 @@ export default {
       font-family: $--font-TTNormsBold;
       color: #fff;
       font-size: 12px;
-      background-color: #BDB9FD;
+      background-color: #7D72F0;
       border-radius: 2px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, .25);
       transform: scale(.75) translateX(100%);

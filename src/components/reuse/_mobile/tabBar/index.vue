@@ -38,7 +38,7 @@ export default {
           name: 'Home',
           route: '/home',
           // match: /\/(home|project)/,
-          match: /\/home/,
+          match: /^\/home/,
           active: true
         },
         {
@@ -46,7 +46,7 @@ export default {
           activeIcon: '#icon-beer',
           name: 'Taverns',
           route: '/taverns',
-          match: /\/taverns/,
+          match: /^\/taverns/,
           active: true
         },
         {
@@ -54,7 +54,7 @@ export default {
           activeIcon: '#icon-tab-candy_selected',
           name: 'Candies',
           route: '/owner/candy',
-          match: /\/owner\/candy/,
+          match: /^\/owner\/candy/,
           active: false
         },
         {
@@ -62,7 +62,7 @@ export default {
           activeIcon: '#icon-tab-quest_selected',
           name: 'Quests',
           route: '/owner/quests',
-          match: /\/owner\/quests/,
+          match: /^\/owner\/quests/,
           active: false
         },
         {
@@ -71,7 +71,7 @@ export default {
           name: 'Me',
           route: '/owner/info',
           // match: /\/owner\/(info|activities|taverns|authorization|general)/,
-          match: /\/owner\/info/,
+          match: /^\/owner\/info/,
           active: false
         }
       ]

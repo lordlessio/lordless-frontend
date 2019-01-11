@@ -42,6 +42,7 @@ import MobileOwnerQuest from '@/pages/_mobile/owner/quest'
 import MobileProject from '@/pages/_mobile/_project'
 
 import MobileMeInfo from '@/pages/_mobile/owner/_user/info'
+import MobileMeInfoDetail from '@/pages/_mobile/owner/_user/infoDetail'
 import MobileMeActivity from '@/pages/_mobile/owner/_user/activity'
 import MobileMeAuthorization from '@/pages/_mobile/owner/_user/authorization'
 import MobileMeTaverns from '@/pages/_mobile/owner/_user/taverns'
@@ -164,6 +165,16 @@ const mobileRoutes = [
         }
       },
       {
+        path: 'detail',
+        name: 'mobile-owner-info-detail',
+        component: MobileMeInfoDetail,
+        meta: {
+          title: 'OwnerInfoDetail - LORDLESS',
+          keepAlive: true,
+          transition: true
+        }
+      },
+      {
         path: 'activities',
         name: 'mobile-owner-activities',
         component: MobileMeActivity,
@@ -171,7 +182,7 @@ const mobileRoutes = [
           title: 'Owner Activities - LORDLESS',
           navText: 'Activities',
           keepAlive: true,
-          transition: false
+          transition: true
           // header: {
           //   show: false
           // },
@@ -188,7 +199,7 @@ const mobileRoutes = [
           title: 'Owner Authorization - LORDLESS',
           navText: 'Authorization',
           keepAlive: true,
-          transition: false
+          transition: true
           // header: {
           //   show: false
           // },
@@ -205,7 +216,7 @@ const mobileRoutes = [
           title: 'Owner Taverns - LORDLESS',
           navText: 'Taverns',
           keepAlive: true,
-          transition: false
+          transition: true
         }
       },
       {
@@ -216,7 +227,7 @@ const mobileRoutes = [
           title: 'Telegram bind - LORDLESS',
           navText: 'Bind Telegram',
           keepAlive: true,
-          transition: false,
+          transition: true,
           hideTab: true
         }
       },

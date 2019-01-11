@@ -84,7 +84,7 @@ export default {
           history: true
         },
         {
-          text: 'Authorization',
+          text: 'Authorizations',
           match: /\/owner\/authorization/,
           show: true,
           history: true
