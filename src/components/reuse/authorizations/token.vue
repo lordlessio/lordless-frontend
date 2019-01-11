@@ -64,11 +64,11 @@ export default {
     ]),
 
     contractLink () {
-      return `${process.env.ETHERSCANURL}/address/${this.Luckyblock ? this.Luckyblock.address : ''}#code`
+      return `${process.env.ETHERSCANURL}/address/${this.luckyAddress}#code`
     },
 
     luckyAddress () {
-      return this.Luckyblock.address
+      return this.Luckyblock ? this.Luckyblock.address : ''
     },
 
     web3Opt () {

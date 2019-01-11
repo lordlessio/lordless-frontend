@@ -18,13 +18,18 @@ export default {
       'tokenAllowances'
     ]),
     tokenBets () {
-      const candies = this.candySymbols.list
-      return candies.map(candy => {
-        return {
-          candy,
-          balance: 1
+      const filter = [ 'less' ]
+      const candies = this.candySymbols.list || []
+      const tokenBets = []
+      for (const candy of candies) {
+        if (filter.includes(candy.symbol.toLocaleLowerCase())) {
+          tokenBets.push({
+            candy,
+            balance: 1
+          })
         }
-      })
+      }
+      return tokenBets
     }
   },
   components: {
