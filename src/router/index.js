@@ -182,7 +182,7 @@ const mobileRoutes = [
           title: 'Owner Activities - LORDLESS',
           navText: 'Activities',
           keepAlive: true,
-          transition: true
+          transition: false
           // header: {
           //   show: false
           // },
@@ -199,7 +199,7 @@ const mobileRoutes = [
           title: 'Owner Authorization - LORDLESS',
           navText: 'Authorization',
           keepAlive: true,
-          transition: true
+          transition: false
           // header: {
           //   show: false
           // },
@@ -216,7 +216,7 @@ const mobileRoutes = [
           title: 'Owner Taverns - LORDLESS',
           navText: 'Taverns',
           keepAlive: true,
-          transition: true
+          transition: false
         }
       },
       {
@@ -227,7 +227,7 @@ const mobileRoutes = [
           title: 'Telegram bind - LORDLESS',
           navText: 'Bind Telegram',
           keepAlive: true,
-          transition: true,
+          transition: false,
           hideTab: true
         }
       },

@@ -14,12 +14,12 @@
       <ul>
         <li class="token-crowdsale-item"
           v-for="(bet, index) of tokenBets" :key="index">
-          <p class="d-flex f-align-center token-crowdsale-symbol" @click="approveAllowance(bet)">
+          <p class="d-flex f-align-center token-crowdsale-symbol" @click.stop="approveAllowance(bet, allowanceModels[bet.candy.address])">
             <span class="inline-block token-bet-icon">
               <lordless-check-box
                 v-model="allowanceModels[bet.candy.address]"
                 :loading="allowancePendings[bet.candy.address]"
-                @click="approveAllowance(bet)"
+                @click="approveAllowance(bet, allowanceModels[bet.candy.address])"
                 :theme="theme"
                 sync/>
             </span>
@@ -79,6 +79,15 @@ export default {
       return this.$root.$children[0].isMobile
     }
   },
+  // watch: {
+  //   tokenAllowances: {
+  //     deep: true,
+  //     handler: (val) => {
+  //       console.log('------ tokenAllowances total', val)
+  //       this.initTokenAllowance()
+  //     }
+  //   }
+  // },
   methods: {
     ...mapActions('contract', [
       actionTypes.CONTRACT_SET_TOKEN_ALLOWANCE
@@ -122,10 +131,24 @@ export default {
     },
 
     /**
+     * 在授权之前单独 check一下
+     */
+    checkSingleAllowance (candy, count, tokenAllowances = this.tokenAllowances) {
+      return tokenAllowances[candy] !== undefined && tokenAllowances[candy] > count
+    },
+
+    /**
      * 授权erc20合约
      */
-    async approveAllowance ({ address = this.account, luckyAddress = this.luckyAddress, airdropTokens = this.airdropTokens, web3Opt = this.web3Opt, candy, count } = {}) {
+    async approveAllowance ({ address = this.account, luckyAddress = this.luckyAddress, airdropTokens = this.airdropTokens, web3Opt = this.web3Opt, candy, count } = {}, isChoose = false) {
+      if (isChoose) return
+
       candy = typeof candy === 'object' ? candy.address : candy
+
+      if (this.checkSingleAllowance(candy, count)) {
+        if (!this.allowanceModels[candy]) this.initTokenAllowance()
+        return
+      }
       this.$set(this.allowancePendings, candy, true)
 
       const { gasPrice } = web3Opt
