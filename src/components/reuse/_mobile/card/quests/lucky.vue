@@ -140,7 +140,7 @@ export default {
         randoms.push(tokenW.percent)
       }
 
-      randoms = randoms.sort((a, b) => b - 1)
+      randoms = randoms.sort((a, b) => a - b)
 
       return {
         random: luckyRandom,
@@ -267,13 +267,24 @@ export default {
       &::after {
         content: 'PENDING';
       }
+      .lucky-left-content {
+        color: #555;
+      }
+      .lucky-winnings-icon {
+        display: none;
+      }
     }
     &.failed {
       &::after {
         content: 'FAILED';
       }
-      .bets {
+      .lucky-left-content {
         color: #555;
+      }
+      .lucky-winnings-icon {
+        display: none;
+      }
+      .bets {
         text-decoration: line-through;
       }
     }
@@ -311,7 +322,7 @@ export default {
 
   // lucky-winnings-info
   .lucky-winnings-info {
-    color: #00C1A7;
+    // color: #00C1A7;
     fill: #fff;
     &.miss {
       color: #999;

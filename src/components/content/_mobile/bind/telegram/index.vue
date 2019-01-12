@@ -36,14 +36,7 @@
           <li class="telegram-bind-item">
             <p class="bind-step-title">STEP 3</p>
             <p class="bind-step-desc">Enter /bind in the input box.</p>
-          </li>
-          <li class="telegram-bind-item">
-            <p class="bind-step-title">STEP 4</p>
             <p class="bind-step-desc">Send the code you copied to the LORDLESS bot.</p>
-          </li>
-          <li class="telegram-bind-item">
-            <p class="bind-step-title">STEP 5</p>
-            <p class="bind-step-desc">Get back to the wallet and wait for the result patiently. </p>
           </li>
         </ul>
       </div>
@@ -98,13 +91,6 @@ export default {
         const res = await initUserTgCode()
         if (res.code === 1000 && res.data) {
           return this[actionTypes.USER_SET_USER_BY_TOKEN]()
-        } else if (res.errorMsg) {
-          this.$notify.error({
-            title: 'Error!',
-            message: res.errorMsg,
-            position: 'bottom-right',
-            duration: 2500
-          })
         }
       } catch (err) {
         this.$notify.error({

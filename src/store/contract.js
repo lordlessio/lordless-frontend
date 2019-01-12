@@ -47,13 +47,13 @@ export default {
     /**
      * set token allowance
      */
-    [mutationTypes.CONTRACT_SET_TOKEN_ALLOWANCE]: (state, { candy = '', allowance }) => {
+    [mutationTypes.CONTRACT_SET_TOKEN_ALLOWANCE]: (state, { candy = '', allowance = 0 }) => {
       // 向 tokenContract 查询 address 给 luckyAddress 授权操作多少个 token
       // tokenContract.methods('allowance', [ address, luckyAddress ]).then(allowance => {
       //   state.tokenAllowances[candy.toLocaleLowerCase()] = allowance ? allowance.toNumber() : 0
       //   window.tokenAllowances = state.tokenAllowances
       // })
-      state.tokenAllowances[candy.toLocaleLowerCase()] = allowance ? allowance.toNumber() : 0
+      state.tokenAllowances[candy.toLocaleLowerCase()] = allowance.toNumber()
       // window.tokenAllowances = state.tokenAllowances
     }
   },

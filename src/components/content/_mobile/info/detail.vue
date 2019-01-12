@@ -239,7 +239,7 @@ export default {
       top: 0;
       left: 50%;
       width: 120%;
-      height: 244px;
+      height: 238px;
       background-image: linear-gradient(-225deg, #124BDC 0%, #0079FF 100%);
       border-bottom-left-radius: 100%;
       border-bottom-right-radius: 100%;
@@ -247,7 +247,7 @@ export default {
     }
   }
   .mobile-user-container {
-    padding: 120px 20px 30px;
+    padding: 100px 20px 30px;
     z-index: 1;
   }
   .info-detail-navbar {

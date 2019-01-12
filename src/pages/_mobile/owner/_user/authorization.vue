@@ -25,7 +25,7 @@ export default {
         if (filter.includes(candy.symbol.toLocaleLowerCase())) {
           tokenBets.push({
             candy,
-            balance: 1
+            count: 1
           })
         }
       }

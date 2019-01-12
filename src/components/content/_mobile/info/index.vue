@@ -264,7 +264,7 @@ export default {
    */
 
   .user-info-header {
-    padding-top: 44px;
+    // padding-top: 44px;
     background-image: linear-gradient(-225deg, #124BDC 0%, #0079FF 100%);
   }
   .info-header-content {

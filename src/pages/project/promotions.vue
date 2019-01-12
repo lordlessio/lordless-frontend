@@ -23,7 +23,7 @@
           <div class="home-promotions-title">
             <p class="TTFontBolder">Lucky Blocks</p>
           </div>
-          <ul class="d-flex f-wrap f-align-center promotions-list">
+          <ul class="d-flex f-wrap f-align-start promotions-list">
             <li class="promotions-item"
               v-for="(item, index) of luckyblocks" :key="index">
               <figure>
@@ -42,7 +42,7 @@
           <div class="home-promotions-title">
             <p class="TTFontBolder">Windfall</p>
           </div>
-          <ul class="d-flex f-wrap f-align-center promotions-list">
+          <ul class="d-flex f-wrap f-align-start promotions-list">
             <li class="promotions-item"
               v-for="(item, index) of promotions" :key="index">
               <figure>
