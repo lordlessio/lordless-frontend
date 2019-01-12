@@ -11,8 +11,8 @@
           <div class="v-flex bounty-card-info">
             <p class="bounty-info-title">{{ info.ldbTaskType.name }}</p>
             <p class="bounty-info-second">
-              <span class="inline-block">{{ info.ldb.info.name.zh }}</span>
-              <span class="inline-block text-upper bounty-candy-symbol">{{ info.reward.candy.symbol }}</span>
+              <span>{{ info.ldb.info.name.zh }}</span>
+              <span class="text-upper bounty-candy-symbol">{{ info.reward.candy.symbol }}</span>
             </p>
             <p class="bottoms-up-info-date">{{ info.update_at | dateFormat('MMM. DD YYYY HH:mm:ss') }}</p>
             <p class="inline-block bounty-info-status" :class="info.status === 0 ? 'under' : info.status === 1 ? 'approved' : 'rejected'">
