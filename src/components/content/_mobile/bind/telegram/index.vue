@@ -31,7 +31,8 @@
           </li>
           <li class="telegram-bind-item">
             <p class="bind-step-title">STEP 2</p>
-            <p class="bind-step-desc">Click the button “Talk with Telegram bot”.</p>
+            <!-- <p class="bind-step-desc">Click the button “Talk with Telegram bot”.</p> -->
+            <p class="bind-step-desc">Talking to Telegram robot: <a class="bind-step-link" :href="botLink" target="_blank">@{{ tgBot }}</a></p>
           </li>
           <li class="telegram-bind-item">
             <p class="bind-step-title">STEP 3</p>
@@ -41,7 +42,7 @@
         </ul>
       </div>
     </div>
-    <div class="TTFontBolder text-center telegram-bind-bottom">
+    <!-- <div class="TTFontBolder text-center telegram-bind-bottom">
       <lordless-btn
         class="telegram-talk-btn"
         theme="blue-linear"
@@ -50,7 +51,7 @@
           Talk with Telegram bot
         </a>
       </lordless-btn>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -73,8 +74,11 @@ export default {
     ...mapState('user', [
       'userInfo'
     ]),
+    tgBot () {
+      return process.env.tgBot
+    },
     botLink () {
-      return `https://t.me/${process.env.tgBot}?start=bind`
+      return `https://t.me/${this.tgBot}?start=bind`
     }
   },
   methods: {
@@ -207,6 +211,10 @@ export default {
     margin-top: 8px;
     font-size: 16px;
     color: #555;
+  }
+  .bind-step-link {
+    color: #0079FF;
+    text-decoration: underline;
   }
   .telegram-bind-code {
     font-size: 24px;
