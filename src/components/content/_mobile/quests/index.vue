@@ -1,7 +1,7 @@
 <template>
   <div class="mobile-quests-box">
     <el-tabs
-      class="mobile-quests-tabs"
+      class="mobile-quests-tabs light-tabs"
       v-model="currentTab"
       stretch
       @tab-click="chooseTab">

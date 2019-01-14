@@ -121,6 +121,11 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     top: 0;
     left: 0;
     width: 100%;
+    &.light-tabs {
+      .el-tabs__nav-next, .el-tabs__nav-prev {
+        color: #fff;
+      }
+    }
   }
 }
 
