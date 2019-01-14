@@ -43,14 +43,14 @@
             :info.sync="ldbInfo"
             :loading="infoLoading"/>
 
-          <quests-tool
+          <!-- <quests-tool
             v-if="!isMobile"
             class="sm-hidden"
             :quests="ldbTasks | ldbGroupTasks"
             :ldbId="ldbInfo._id"
             :owner="owner"
             :loading="ldbTaskLoading"
-            @receive="receiveTask"/>
+            @receive="receiveTask"/> -->
           <!-- <tasks-now-tool
             v-if="!isMobile"
             class="sm-hidden"
@@ -787,45 +787,45 @@ export default {
     /**
      * 领取任务事件
      */
-    async receiveTask ({ _id, countLeft } = {}, cb) {
-      if (!countLeft) {
-        this.$notify.error({
-          title: 'Error!',
-          message: 'quests count limit',
-          position: 'bottom-right',
-          duration: 3500
-        })
-      }
-      if (!countLeft || !_id) return cb()
+    // async receiveTask ({ _id, countLeft } = {}, cb) {
+    //   if (!countLeft) {
+    //     this.$notify.error({
+    //       title: 'Error!',
+    //       message: 'quests count limit',
+    //       position: 'bottom-right',
+    //       duration: 3500
+    //     })
+    //   }
+    //   if (!countLeft || !_id) return cb()
 
-      // 检查登陆权限状态
-      const authorize = await this.$refs.authorize.checkoutAuthorize({ telegram: true })
-      console.log('authorize', authorize)
-      if (!authorize) return cb()
+    //   // 检查登陆权限状态
+    //   const authorize = await this.$refs.authorize.checkoutAuthorize({ telegram: true })
+    //   console.log('authorize', authorize)
+    //   if (!authorize) return cb()
 
-      const cbData = {}
-      const res = await receiveTask({ roundId: _id, ldbId: this.ldbInfo._id })
-      if (res.code === 1000 && res.data) {
-        cbData.data = res.data
+    //   const cbData = {}
+    //   const res = await receiveTask({ roundId: _id, ldbId: this.ldbInfo._id })
+    //   if (res.code === 1000 && res.data) {
+    //     cbData.data = res.data
 
-        // 根据消耗的ap值，手动更新 userInfo 的ap值
-        this[actionTypes.USER_UPT_USER_PARAMS](res.data.apCost)
+    //     // 根据消耗的ap值，手动更新 userInfo 的ap值
+    //     this[actionTypes.USER_UPT_USER_PARAMS](res.data.apCost)
 
-        console.log('ldbInfo', this.ldbInfo)
-        // 根据返回的建筑经验，修改当前建筑经验
-        this.$set(this.ldbInfo, 'activeness', this.ldbInfo.activeness + res.data.ldb.activeness)
-        this.$set(this.ldbInfo, 'apLeft', this.ldbInfo.apLeft - res.data.apCost)
-      } else {
-        this.$notify.error({
-          title: 'Error!',
-          message: getMessageByCode(res),
-          position: 'bottom-right',
-          duration: 3500
-        })
-        cbData.errorMsg = res.errorMsg
-      }
-      return cb(cbData)
-    },
+    //     console.log('ldbInfo', this.ldbInfo)
+    //     // 根据返回的建筑经验，修改当前建筑经验
+    //     this.$set(this.ldbInfo, 'activeness', this.ldbInfo.activeness + res.data.ldb.activeness)
+    //     this.$set(this.ldbInfo, 'apLeft', this.ldbInfo.apLeft - res.data.apCost)
+    //   } else {
+    //     this.$notify.error({
+    //       title: 'Error!',
+    //       message: getMessageByCode(res),
+    //       position: 'bottom-right',
+    //       duration: 3500
+    //     })
+    //     cbData.errorMsg = res.errorMsg
+    //   }
+    //   return cb(cbData)
+    // },
 
     destory () {
       if (this.$refs.approvedTask) this.$refs.approvedTask.clearApproved()
