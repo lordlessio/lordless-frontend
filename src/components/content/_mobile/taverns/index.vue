@@ -147,7 +147,7 @@ export default {
       // ldb 建筑列表
       ldbs: {
         pn: 1,
-        ps: 20,
+        ps: 50,
         list: [],
         total: 0
       },
