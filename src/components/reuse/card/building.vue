@@ -230,10 +230,14 @@ export default {
     }
   }
   .building-name {
-    height: 46px;
+    height: 50px;
     font-size: 18px;
     color: #0B2A48;
     overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
   .building-tokenId {
     margin-top: 0px;

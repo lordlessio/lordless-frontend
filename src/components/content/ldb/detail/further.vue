@@ -121,6 +121,9 @@ export default {
     max-width: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     box-sizing: border-box;
   }
   .tavern-further-btn {

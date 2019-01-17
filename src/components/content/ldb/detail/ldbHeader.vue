@@ -51,7 +51,7 @@
               <div class="header-left-cnt-box">
                 <div class="header-left-cnt-container">
                   <figure class="header-left-cnt">
-                    <h1 v-if="info.name.zh" :class="{ 'md': info.name.zh.length > 6, 'sm': info.name.zh.length > 9 }">{{ info.name.zh }}</h1>
+                    <h1 v-if="info.name.zh" :class="{ 'lg': info.name.zh.length > 6, 'md': info.name.zh.length > 9, 'sm': info.name.zh.length > 46 }">{{ info.name.zh }}</h1>
                     <p class="detail-ldb-tag">
                       <span class="inline-block" v-for="type of info.ldbType" :key="type">{{ type | formatLdbType }}</span>
                     </p>
@@ -1272,11 +1272,14 @@ export default {
     height: 100%;
     z-index: 2;
     >h1 {
-      &.md {
+      &.lg {
         font-size: 42px;
       }
-      &.sm {
+      &.md {
         font-size: 36px;
+      }
+      &.sm {
+        font-size: 28px;
       }
     }
     >figcaption {
