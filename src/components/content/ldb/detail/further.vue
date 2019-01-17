@@ -11,7 +11,7 @@
         <div class="TTFontBolder d-flex f-auto-center tavern-further-info">
           <p class="full-width d-flex f-align-center">
             <span>#{{ info.id }}</span>
-            <span class="v-flex inline-block text-right tavern-name">{{ info.name.zh }}</span>
+            <span class="v-flex inline-block text-right text-multi-ellipsis tavern-name">{{ info.name.zh }}</span>
           </p>
         </div>
         <lordless-btn
@@ -119,12 +119,7 @@ export default {
   .tavern-name {
     padding-left: 25px;
     max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
     -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    box-sizing: border-box;
   }
   .tavern-further-btn {
     width: 100%;

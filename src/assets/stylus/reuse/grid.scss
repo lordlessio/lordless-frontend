@@ -316,6 +316,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .#{$media}text-multi-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
   .#{$media}text-cap {
     text-transform: capitalize;
   }
