@@ -50,6 +50,7 @@
           v-model="showTokenAllowance"
           :address="address"
           :tokenBets="tokenBets"
+          :tokenAllowanceType="tokenAllowanceType"
           @success="tokenAllowanceSuccess"
           @error="authorizeError"/>
 
@@ -125,7 +126,11 @@ export default {
     // tokenAllowance 参数
     tokenAddress: String,
     usedToken: Number,
-    tokenBets: Array
+    tokenBets: Array,
+    tokenAllowanceType: {
+      type: String,
+      default: 'luckyblock'
+    }
   },
   data: () => {
     return {
@@ -174,7 +179,8 @@ export default {
     ]),
     ...mapState('contract', [
       'isCrowdsaleApproved',
-      'tokenAllowances'
+      'luckyblockTokenAllowances',
+      'HOPSPlanTokenAllowances'
     ]),
     isWechatBool () {
       return isWechat()
@@ -478,14 +484,19 @@ export default {
       }
 
       if (tokenAllowance) {
-        console.log('--- come in tokenAllowance')
+        const _allowances = {
+          luckyblock: this.luckyblockTokenAllowances,
+          plant: this.HOPSPlanTokenAllowances
+        }
+        const allowances = _allowances[this.tokenAllowanceType]
+        console.log('--- come in tokenAllowance', _allowances, this.tokenAllowanceType, allowances)
 
         // 进入 tokenAllowance 之后，首先检查 tokenBets 中的 token
         const tokenBets = this.tokenBets
         console.log('tokenBets', tokenBets)
         const showTokenAllowance = !!(tokenBets.filter(bet => {
           const candy = bet.candy.address.toLocaleLowerCase()
-          return !this.tokenAllowances[candy] || this.tokenAllowances[candy] < bet.count
+          return !allowances[candy] || allowances[candy] < bet.count
         })).length
 
         console.log('showTokenAllowance', showTokenAllowance)

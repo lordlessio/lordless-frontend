@@ -132,12 +132,12 @@ export default {
     /**
      * 检查 token 合约是否授权成功
      */
-    // async checkAllowance ({ address = this.account, airdropTokens = this.airdropTokens, candy, count } = {}) {
+    // async checkAllowance ({ address = this.account, tokensContract = this.tokensContract, candy, count } = {}) {
     //   this.$set(this.allowancePendings, candy, true)
 
     //   try {
     //     // 获取用户授权操作 erc20 数量
-    //     const allowance = await airdropTokens[candy].methods('allowance', [ address, candy ])
+    //     const allowance = await tokensContract[candy].methods('allowance', [ address, candy ])
 
     //     // 如果授权的 erc20 操作数量大于或等于消耗数量，标示为 true
     //     if (allowance >= count) {

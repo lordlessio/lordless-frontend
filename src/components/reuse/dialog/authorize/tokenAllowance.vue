@@ -1,6 +1,9 @@
 <template>
   <div v-if="value" class="crowdsale-box">
-    <token-authorizations ref="tokenAuthorizations" :tokenBets="tokenBets"/>
+    <token-authorizations
+      ref="tokenAuthorizations"
+      :tokenBets="tokenBets"
+      :planType="tokenAllowanceType"/>
   </div>
 </template>
 
@@ -17,7 +20,9 @@ export default {
     tokenBets: {
       type: Array,
       default: () => []
-    }
+    },
+
+    tokenAllowanceType: String
   },
   // watch: {
   //   value (val) {

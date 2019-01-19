@@ -16,6 +16,7 @@ const activity = require('./activity')
 const home = require('./home')
 const region = require('./region')
 const airdrop = require('./airdrop')
+const plan = require('./plan')
 
 module.exports = merge(
   aMap(axios),
@@ -33,5 +34,6 @@ module.exports = merge(
   activity(axios),
   home(axios),
   region(axios),
-  airdrop(axios)
+  airdrop(axios),
+  plan(axios)
 )

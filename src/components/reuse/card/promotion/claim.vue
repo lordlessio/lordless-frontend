@@ -109,14 +109,14 @@ export default {
   },
   computed: {
     ...mapState('contract', [
-      'airdropTokens',
+      'tokensContract',
       'Airdrop'
     ]),
     ...mapState('web3', [
       'web3Opt'
     ]),
     claimInit () {
-      return !this.web3Opt.loading && this.web3Opt.isConnected && !!this.Airdrop && !!this.info._id && !this.airdropTokens[this.info.project.address]
+      return !this.web3Opt.loading && this.web3Opt.isConnected && !!this.Airdrop && !!this.info._id && !this.tokensContract[this.info.project.address]
     },
     web3Error () {
       const { loading, isConnected } = this.web3Opt
@@ -147,8 +147,8 @@ export default {
     web3Error (val) {
       if (val) this.initFailedClaim()
     }
-    // airdropTokens (val) {
-    //   console.log('----- watch airdropTokens')
+    // tokensContract (val) {
+    //   console.log('----- watch tokensContract')
     // }
   },
   methods: {
@@ -228,9 +228,9 @@ export default {
     },
 
     async initProgressNumber (tokenAddress = this.tokenAddress, Airdrop = this.Airdrop) {
-      const TokenContract = this.airdropTokens[tokenAddress]
+      const TokenContract = this.tokensContract[tokenAddress]
       const bridgeContract = this.info.bOfContract
-      // console.log('airdropTokens', this.airdropTokens)
+      // console.log('tokensContract', this.tokensContract)
       if (!TokenContract) {
         this.progressNums = { total: 0, left: 0, dropping: 0, completed: true }
         return

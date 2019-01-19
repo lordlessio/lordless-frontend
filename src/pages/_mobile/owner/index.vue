@@ -4,7 +4,7 @@
       ref="mobile-nav-bar"
       v-show="(scrollOpt.show && (!connectModel || !web3Model)) || connectModel || web3Model"
       v-bind="scrollOpt"
-      @history="$router.push('/owner/info')"/>
+      @history="$router.push(scrollOpt.historyPath || '/owner/info')"/>
 
     <transition :name="popTransition">
       <keep-alive :max="20">
@@ -52,48 +52,62 @@ export default {
         text: 'Candies',
         scroll: false,
         withdraw: false,
-        scrollMark: 0
+        scrollMark: 0,
+        historyPath: null
       },
       navbarTexts: [
         {
           text: 'Candies',
-          match: /\/owner\/candy/,
+          match: /^\/owner\/candy(\/){0,}$/,
           show: false,
           withdraw: true
         },
         {
           text: 'Quests',
-          match: /\/owner\/quest/,
+          match: /^\/owner\/quest(\/){0,}$/,
           show: false
         },
         {
           text: 'Me',
-          match: /\/owner\/info/,
+          match: /^\/owner\/info(\/){0,}$/,
           show: false
         },
         {
           text: 'Activities',
-          match: /\/owner\/activities/,
+          match: /^\/owner\/activities(\/){0,}$/,
           show: true,
           history: true
         },
         {
           text: 'Taverns',
-          match: /\/owner\/taverns/,
+          match: /^\/owner\/taverns(\/){0,}$/,
           show: true,
           history: true
         },
         {
           text: 'Authorizations',
-          match: /\/owner\/authorization/,
+          match: /^\/owner\/authorization(\/){0,}$/,
           show: true,
           history: true
         },
         {
           text: 'Bind Telegram',
-          match: /\/owner\/bind\/telegram/,
+          match: /^\/owner\/bind\/telegram(\/){0,}$/,
           show: true,
           history: true
+        },
+        {
+          text: 'HOPS',
+          match: /^\/owner\/hops(\/){0,}$/,
+          show: true,
+          history: true
+        },
+        {
+          text: 'Planting plan',
+          match: /^\/owner\/planBase/,
+          show: true,
+          history: true,
+          historyPath: '/owner/hops'
         }
       ]
     }

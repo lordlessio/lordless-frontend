@@ -81,6 +81,7 @@
             </span>
             <div class="v-flex d-flex f-align-center cnt-item-right">
               <p class="v-flex cnt-item-title">{{ item.title }}</p>
+              <p v-if="item.tips" class="bind-item-tips">{{ item.tips }}</p>
               <p v-if="item.isBindTelegram" class="d-flex f-align-center">
                 <span v-if="userInfo.telegram && userInfo.telegram.id">{{ userInfo.telegram.username || userInfo.telegram.first_name }}</span>
                 <span v-else class="inline-block bind-telegram-tip"></span>
@@ -184,11 +185,16 @@ export default {
       return [].concat([
         {
           icon: '#icon-link',
+          title: 'HOPS',
+          path: '/owner/hops',
+          tips: 'Grow Hops?'
+        },
+        {
+          icon: '#icon-link',
           title: 'Bind Telegram',
           path: '/owner/bind/telegram',
           isBindTelegram: true
-        }
-      ], [
+        },
         {
           icon: '#icon-authorization_selected',
           title: 'Authorizations',
@@ -347,6 +353,9 @@ export default {
   }
   .cnt-item-title {
     color: #555;
+  }
+  .bind-item-tips {
+    color: #999;
   }
   .cnt-item-right {
     margin-left: 12px;

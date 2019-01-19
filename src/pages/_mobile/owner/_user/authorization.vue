@@ -14,8 +14,7 @@ export default {
       'candySymbols'
     ]),
     ...mapState('contract', [
-      'airdropTokens',
-      'tokenAllowances'
+      'tokensContract'
     ]),
     tokenBets () {
       const filter = [ 'less' ]

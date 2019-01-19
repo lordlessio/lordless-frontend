@@ -46,7 +46,10 @@ import MobileMeInfoDetail from '@/pages/_mobile/owner/_user/infoDetail'
 import MobileMeActivity from '@/pages/_mobile/owner/_user/activity'
 import MobileMeAuthorization from '@/pages/_mobile/owner/_user/authorization'
 import MobileMeTaverns from '@/pages/_mobile/owner/_user/taverns'
+
 import OwnerBindTelegram from '@/pages/_mobile/owner/_user/bind/telegram'
+import MobileHops from '@/pages/_mobile/owner/_user/hops/index'
+import MobilePlanBaseDetail from '@/pages/_mobile/owner/_user/hops/planBaseDetail'
 
 import MobileTavernDetail from '@/pages/_mobile/_tavern'
 
@@ -229,6 +232,27 @@ const mobileRoutes = [
           keepAlive: true,
           transition: false,
           hideTab: true
+        }
+      },
+      {
+        path: 'hops',
+        name: 'mobile-hops-page',
+        component: MobileHops,
+        meta: {
+          title: 'HOPS - LORDLESS',
+          navText: 'HOPS',
+          keepAlive: true,
+          transition: false
+        }
+      },
+      {
+        path: 'planBase/:planBaseId',
+        name: 'mobile-planBase-detail',
+        component: MobilePlanBaseDetail,
+        meta: {
+          title: 'PlanBase Detail - LORDLESS',
+          keepAlive: true,
+          transition: false
         }
       },
       {

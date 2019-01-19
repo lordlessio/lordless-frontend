@@ -101,7 +101,7 @@ export default {
     ]),
     ...mapState('contract', [
       'Luckyblock',
-      'airdropTokens'
+      'tokensContract'
     ]),
 
     playInit () {
@@ -170,7 +170,7 @@ export default {
 
       contractInfo.tokenWinnings = await Promise.all(tokenWinnings.map(async winnings => {
         const candy = winnings.candy.address
-        const tokenBalance = (await this.airdropTokens[candy].methods('balanceOf', [ contractAddress ])).toNumber() || 0
+        const tokenBalance = (await this.tokensContract[candy].methods('balanceOf', [ contractAddress ])).toNumber() || 0
 
         console.log('tokenBalance', tokenBalance)
         // 判断 token 是否充足
@@ -244,7 +244,7 @@ export default {
       const tokenBets = info.blockInfos.tokenBets
       conditionsInfo.tokenBets = await Promise.all(tokenBets.map(async tokenBet => {
         const candy = tokenBet.candy.address
-        const balance = await this.airdropTokens[candy].methods('balanceOf', [ address ])
+        const balance = await this.tokensContract[candy].methods('balanceOf', [ address ])
 
         // 判断 token 是否充足
         const tokenEnough = balance.toNumber() >= tokenBet.count
@@ -267,7 +267,7 @@ export default {
       // let tokenEnough = true
       // await (Promise.all(tokenBets.map(async tokenBet => {
       //   const candy = tokenBet.candy.address
-      //   const balance = await this.airdropTokens[candy].methods('balanceOf', [ address ])
+      //   const balance = await this.tokensContract[candy].methods('balanceOf', [ address ])
 
       //   if (!tokenEnough) return tokenBet
       //   // 判断 token 是否充足

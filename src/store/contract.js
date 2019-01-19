@@ -2,7 +2,7 @@
 /**
  * contract store options
  */
-import { initContract, NFTsCrowdsale, TavernNFTs, Airdrop, Luckyblock } from '@/contract'
+import { initContract, NFTsCrowdsale, TavernNFTs, Airdrop, Luckyblock, HOPSPlan } from '@/contract'
 import { mutationTypes, actionTypes } from './types'
 import web3Store from './web3'
 import candyStore from './candy'
@@ -22,9 +22,15 @@ export default {
     Airdrop: null,
     Luckyblock: null,
 
-    // airdrop 中包含的 token 所需合约
-    airdropTokens: {},
-    tokenAllowances: {}
+    // 所有包括的 erc20 token 合约
+    tokensContract: {},
+    tokensContractInit: false,
+
+    HOPSPlanTokenAllowances: {},
+    HOPSPlanTokenAllowancesInit: false,
+
+    luckyblockTokenAllowances: {},
+    luckyblockTokenAllowancesInit: false
   },
 
   mutations: {
@@ -37,24 +43,36 @@ export default {
     /**
      * set airdrop tokens contract
      */
-    [mutationTypes.CONTRACT_SET_AIRDROP_TOKENS]: (state, { candy, contract }) => {
-      const _airdropTokens = state.airdropTokens
-      _airdropTokens[candy] = contract
-      state.airdropTokens = _airdropTokens
-      // window.airdropTokens = _airdropTokens
+    [mutationTypes.CONTRACT_SET_AIRDROP_TOKENS]: (state, { candiesTotal, candy, contract }) => {
+      const _tokensContract = state.tokensContract
+      _tokensContract[candy] = contract
+      state.tokensContract = _tokensContract
+      // window.tokensContract = _tokensContract
+
+      if (Object.keys(_tokensContract).length >= candiesTotal) state.tokensContractInit = true
     },
 
     /**
      * set token allowance
      */
-    [mutationTypes.CONTRACT_SET_TOKEN_ALLOWANCE]: (state, { candy = '', allowance = 0 }) => {
+    [mutationTypes.CONTRACT_SET_LUCKYBLOCK_TOKEN_ALLOWANCE]: (state, { candiesTotal = 0, candy = '', allowance = 0 }) => {
       // 向 tokenContract 查询 address 给 luckyAddress 授权操作多少个 token
       // tokenContract.methods('allowance', [ address, luckyAddress ]).then(allowance => {
       //   state.tokenAllowances[candy.toLocaleLowerCase()] = allowance ? allowance.toNumber() : 0
       //   window.tokenAllowances = state.tokenAllowances
       // })
-      state.tokenAllowances[candy.toLocaleLowerCase()] = allowance.toNumber()
-      // window.tokenAllowances = state.tokenAllowances
+      state.luckyblockTokenAllowances[candy.toLocaleLowerCase()] = allowance.toNumber()
+      if (Object.keys(state.luckyblockTokenAllowances).length >= candiesTotal) state.luckyblockTokenAllowancesInit = true
+      window.luckyblockTokenAllowances = state.luckyblockTokenAllowances
+    },
+
+    /**
+     * set token allowance
+     */
+    [mutationTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE]: (state, { candiesTotal = 0, candy = '', allowance = 0 }) => {
+      state.HOPSPlanTokenAllowances[candy.toLocaleLowerCase()] = allowance.toNumber()
+      if (Object.keys(state.HOPSPlanTokenAllowances).length >= candiesTotal) state.HOPSPlanTokenAllowancesInit = true
+      window.HOPSPlanTokenAllowances = state.HOPSPlanTokenAllowances
     }
   },
 
@@ -84,6 +102,7 @@ export default {
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'NFTsCrowdsale', value: await NFTsCrowdsale(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Airdrop', value: await Airdrop(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Luckyblock', value: await Luckyblock(web3js) })
+        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'HOPSPlan', value: await HOPSPlan(web3js) })
         // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Building', value: Building(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'TavernNFTs', value: await TavernNFTs(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'contractReady', value: true })
@@ -98,7 +117,7 @@ export default {
       const { candySymbols } = candyStore.state
       const _symbols = candySymbols.list
       for (const item of _symbols) {
-        dispatch(actionTypes.CONTRACT_SET_AIRDROP_TOKENS, { candy: item.address, luckyAddress: state.Luckyblock.address })
+        dispatch(actionTypes.CONTRACT_SET_AIRDROP_TOKENS, { candiesTotal: _symbols.length, candy: item.address, luckyAddress: state.Luckyblock.address })
       }
     },
 
@@ -110,6 +129,7 @@ export default {
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'NFTsCrowdsale', value: await NFTsCrowdsale(web3js) })
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Airdrop', value: await Airdrop(web3js) })
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Luckyblock', value: await Luckyblock(web3js) })
+      commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'HOPSPlan', value: await HOPSPlan(web3js) })
       // commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Building', value: Building(web3js) })
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'TavernNFTs', value: await TavernNFTs(web3js) })
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'address', value: null })
@@ -118,8 +138,8 @@ export default {
     /**
      * set airdrop tokens contract
      */
-    [actionTypes.CONTRACT_SET_AIRDROP_TOKENS]: async ({ state, commit, dispatch }, { candy, luckyAddress = state.Luckyblock.address } = {}) => {
-      // if (state.airdropTokens[candy]) return
+    [actionTypes.CONTRACT_SET_AIRDROP_TOKENS]: async ({ state, commit, dispatch }, { candiesTotal, candy, luckyAddress = state.Luckyblock.address, HOPSPlanAddress = state.HOPSPlan.address } = {}) => {
+      // if (state.tokensContract[candy]) return
 
       let { web3js, address } = web3Store.state.web3Opt
 
@@ -135,19 +155,33 @@ export default {
       if (contract) {
         console.log('candy, luckyAddress', candy, luckyAddress, address)
         // 存储 token contract
-        commit(mutationTypes.CONTRACT_SET_AIRDROP_TOKENS, { candy, contract })
+        commit(mutationTypes.CONTRACT_SET_AIRDROP_TOKENS, { candiesTotal, candy, contract })
 
-        // 存储用户授权到 token allowance
-        dispatch(actionTypes.CONTRACT_SET_TOKEN_ALLOWANCE, { candy, address, contract, luckyAddress })
+        // luckyblock 存储用户授权到 token allowance
+        dispatch(actionTypes.CONTRACT_SET_LUCKYBLOCK_TOKEN_ALLOWANCE, { candiesTotal, candy, address, contract, luckyAddress })
+
+        // HOPSPlan 存储用户授权到  token allowance
+        dispatch(actionTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE, { candiesTotal, candy, address, contract, HOPSPlanAddress })
       }
     },
+
     /**
      * set tokenAllowance
      */
-    [actionTypes.CONTRACT_SET_TOKEN_ALLOWANCE]: async ({ state, commit }, { candy, address, contract = state.airdropTokens[candy], luckyAddress = state.Luckyblock.address } = {}) => {
+    [actionTypes.CONTRACT_SET_LUCKYBLOCK_TOKEN_ALLOWANCE]: async ({ state, commit }, { candiesTotal, candy, address, erc20Contract = state.tokensContract[candy], contractAddress = state.Luckyblock.address } = {}) => {
       // 向 tokenContract 查询 address 给 luckyAddress 授权操作多少个 token
-      const allowance = await contract.methods('allowance', [ address, luckyAddress ])
-      commit(mutationTypes.CONTRACT_SET_TOKEN_ALLOWANCE, { candy, allowance })
+      const allowance = await erc20Contract.methods('allowance', [ address, contractAddress ])
+      commit(mutationTypes.CONTRACT_SET_LUCKYBLOCK_TOKEN_ALLOWANCE, { candiesTotal, candy, allowance })
+      return allowance
+    },
+
+    /**
+     * set hopsPlan tokenAllowance
+     */
+    [actionTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE]: async ({ state, commit }, { candiesTotal, candy, address, erc20Contract = state.tokensContract[candy], contractAddress = state.HOPSPlan.address } = {}) => {
+      // 向 erc20Contract 查询 address 给 HOPSPlan 授权操作多少个 token
+      const allowance = await erc20Contract.methods('allowance', [ address, contractAddress ])
+      commit(mutationTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE, { candiesTotal, candy, allowance })
       return allowance
     }
   }
