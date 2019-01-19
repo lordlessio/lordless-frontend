@@ -1,50 +1,53 @@
 <template>
   <div class="mobile-hops-box">
-    <div class="mobile-hops-container">
-      <div class="mobile-hops-header">
-        <div class="d-flex f-align-center hops-user-box">
-          <lordless-blockies theme="light" :scale="7" :seed="account"/>
-          <p class="v-flex text-break hops-user-account">{{ account }}</p>
-        </div>
-        <div class="d-flex f-align-center hops-wallet-box">
-          <div class="v-flex">
-            <p>LESS(Wallet)</p>
-            <h3>{{ lessBalanceNumber > 10000 ? formatNumber(lessBalanceNumber) : lessBalanceNumber.toLocaleString() }}</h3>
+    <transition name="ld-hide-fade" mode="out-in">
+      <mobile-hops-skeletion v-if="loading"/>
+      <div v-else class="mobile-hops-container">
+        <div class="mobile-hops-header">
+          <div class="d-flex f-align-center hops-user-box">
+            <lordless-blockies theme="light" :scale="7" :seed="account"/>
+            <p class="v-flex text-break hops-user-account">{{ account }}</p>
           </div>
-          <div class="v-flex">
-            <p>Purchase</p>
-            <h3>DDEX</h3>
+          <div class="d-flex f-align-center hops-wallet-box">
+            <div class="v-flex">
+              <p>LESS(Wallet)</p>
+              <h3>{{ lessBalanceNumber > 10000 ? formatNumber(lessBalanceNumber) : lessBalanceNumber.toLocaleString() }}</h3>
+            </div>
+            <div class="v-flex">
+              <p>Purchase</p>
+              <h3>DDEX</h3>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="hops-planting-box">
-        <h2 class="hops-planting-title">Planting plans</h2>
-        <p class="hops-planting-desc">Choose a planting plan to deposit your LESS and reap HOPS immediately.</p>
-        <p class="hops-planting-helm"><span class="TTFontBolder">HELM</span> = HOPS earned by 1 LESS per month</p>
+        <div class="hops-planting-box">
+          <h2 class="hops-planting-title">Planting plans</h2>
+          <p class="hops-planting-desc">Choose a planting plan to deposit your LESS and reap HOPS immediately.</p>
+          <p class="hops-planting-helm"><span class="TTFontBolder">HELM</span> = HOPS earned by 1 LESS per month</p>
 
-        <ul class="hops-planting-list">
-          <li class="hops-planting-item" v-for="(planBase, index) of planBases" :key="index">
-            <hops-plant
-              :info="planBase"
-              :level="index"
-              :lessBalance="lessBalance"
-              @choosePlan="choosePlan"/>
-          </li>
-        </ul>
-
-        <div class="plant-asked-box">
-          <p class="TTFontBolder text-center plant-asked-title">FREQUENTLY ASKED QUESTIONS</p>
-          <ul class="plant-asked-questions">
-            <li
-              class="asked-questions-item"
-              v-for="(item, index) of askedQuestions" :key="index">
-              <h3 class="asked-questions-title">{{ item.title }}</h3>
-              <p class="asked-questions-desc">{{ item.desc }}</p>
+          <ul class="hops-planting-list">
+            <li class="hops-planting-item" v-for="(planBase, index) of planBases" :key="index">
+              <hops-plant
+                :info="planBase"
+                :level="index"
+                :lessBalance="lessBalance"
+                @choosePlan="choosePlan"/>
             </li>
           </ul>
+
+          <div class="plant-asked-box">
+            <p class="TTFontBolder text-center plant-asked-title">FREQUENTLY ASKED QUESTIONS</p>
+            <ul class="plant-asked-questions">
+              <li
+                class="asked-questions-item"
+                v-for="(item, index) of askedQuestions" :key="index">
+                <h3 class="asked-questions-title">{{ item.title }}</h3>
+                <p class="asked-questions-desc">{{ item.desc }}</p>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
+    </transition>
     <lordless-authorize
       ref="authorize"
       blurs
@@ -54,6 +57,8 @@
 </template>
 
 <script>
+import MobileHopsSkeletion from '@/components/skeletion/_mobile/hops'
+
 import { getPlanBases } from 'api'
 import { formatNumber } from 'utils/tool'
 import HopsPlant from './plant'
@@ -102,7 +107,8 @@ export default {
     }
   },
   components: {
-    HopsPlant
+    HopsPlant,
+    MobileHopsSkeletion
   },
   methods: {
     formatNumber () {

@@ -1,64 +1,69 @@
 <template>
   <div class="hops-planBase-detail-box">
-    <div class="ImpactFont d-flex f-align-center hops-planBase-header">
-      <div class="planBase-header-helm">
-        <p class="planBase-info-title">HELM</p>
-        <p class="planBase-info-cnt">{{ helmValue }}</p>
-      </div>
-      <div class="v-flex planBase-header-term">
-        <p class="relative planBase-info-title">{{ planType }}</p>
-        <p class="planBase-info-cnt">{{ planLockDays }} DAYS term deposits</p>
-      </div>
-    </div>
-    <div class="hops-planBase-deposit">
-      <p class="d-flex f-align-center planBase-deposit-amount">
-        <span class="v-flex">Deposit amount</span>
-        <span class="TTFontBolder planBase-deposit-all" @click.stop="depositModel = lessBalanceNumber">Deposit all</span>
-      </p>
-      <div class="TTFontBolder d-flex f-align-center planBase-deposit-input-box">
-        <span>LESS</span>
-        <input
-          ref="depositInput"
-          v-model="depositModel"
-          type="number"
-          class="v-flex lordless-input planBase-deposit-input"
-          :class="{ 'is-error': !loading && (isInsufficientLess || !isMoreThanMix) }"
-          :placeholder="`${lessBalanceNumber.toLocaleString()} available`"/>
-      </div>
-      <div class="d-flex f-align-center planBase-deposit-tips-box">
-        <span class="inline-block line-height-0 deposit-tips-icon">
-          <svg v-if="!isInsufficientLess">
-            <use xlink:href="#coin-less"/>
-          </svg>
-          <img v-else class="full-width" src="//lordless-sh.oss-cn-shanghai.aliyuncs.com/exchanges/icon/DDEX.svg"/>
-        </span>
-        <div class="v-flex d-flex f-align-center deposit-tips-desc">
-          <p v-if="!depositModel">Input deposit amount to show how many HOPS  you can reap.</p>
-          <p v-else-if="!isMoreThanMix">The plan should be more than {{ depositInfo.minimumAmount | weiByDecimals }} LESS.</p>
-          <p v-else-if="!isInsufficientLess">
-            Reap <span>{{ depositModel * depositInfo.lessToHops }}</span> HOPS immediately.
-          </p>
-          <p v-else>Your balance of LESS is insufficient. Purchase some more on DDEX.</p>
+    <transition name="ld-hide-fade" mode="out-in">
+      <plan-base-detail-skeletion v-if="loading"/>
+      <div v-else>
+        <div class="ImpactFont d-flex f-align-center hops-planBase-header">
+        <div class="planBase-header-helm">
+          <p class="planBase-info-title">HELM</p>
+          <p class="planBase-info-cnt">{{ helmValue }}</p>
+        </div>
+        <div class="v-flex planBase-header-term">
+          <p class="relative planBase-info-title">{{ planType }}</p>
+          <p class="planBase-info-cnt">{{ planLockDays }} DAYS term deposits</p>
         </div>
       </div>
-    </div>
-    <ul class="hops-planBase-details">
-      <li class="planBase-details-title">Details</li>
-      <li class="d-flex f-align-center planBase-details-item"
-        v-for="(item, index) of detailsInfo" :key="index">
-        <span class="details-item-title">{{ item.title }}</span>
-        <span class="v-flex text-right details-item-text">{{ item.text }}</span>
-      </li>
-    </ul>
-    <div class="hops-planBase-btns">
-      <lordless-btn
-        class="full-width
-        hops-planBase-btn"
-        theme="blue-linear"
-        :loading="btnLoading"
-        :disabled="btnLoading || !isMoreThanMix || !depositModel || isInsufficientLess"
-        @click="growHops">Plant now</lordless-btn>
-    </div>
+      <div class="hops-planBase-deposit">
+        <p class="d-flex f-align-center planBase-deposit-amount">
+          <span class="v-flex">Deposit amount</span>
+          <span class="TTFontBolder planBase-deposit-all" @click.stop="depositModel = lessBalanceNumber">Deposit all</span>
+        </p>
+        <div class="TTFontBolder d-flex f-align-center planBase-deposit-input-box">
+          <span>LESS</span>
+          <input
+            ref="depositInput"
+            v-model="depositModel"
+            type="number"
+            class="v-flex lordless-input planBase-deposit-input"
+            :class="{ 'is-error': !loading && (isInsufficientLess || !isMoreThanMix) }"
+            :placeholder="`${lessBalanceNumber.toLocaleString()} available`"/>
+        </div>
+        <div class="d-flex f-align-center planBase-deposit-tips-box">
+          <span class="inline-block line-height-0 deposit-tips-icon">
+            <svg v-if="!isInsufficientLess">
+              <use xlink:href="#coin-less"/>
+            </svg>
+            <img v-else class="full-width" src="//lordless-sh.oss-cn-shanghai.aliyuncs.com/exchanges/icon/DDEX.svg"/>
+          </span>
+          <div class="v-flex d-flex f-align-center deposit-tips-desc">
+            <p v-if="!depositModel">Input deposit amount to show how many HOPS  you can reap.</p>
+            <p v-else-if="!isMoreThanMix">The plan should be more than {{ depositInfo.minimumAmount | weiByDecimals }} LESS.</p>
+            <p v-else-if="!isInsufficientLess">
+              Reap <span>{{ depositModel * depositInfo.lessToHops }}</span> HOPS immediately.
+            </p>
+            <p v-else>Your balance of LESS is insufficient. Purchase some more on DDEX.</p>
+          </div>
+        </div>
+      </div>
+      <ul class="hops-planBase-details">
+        <li class="planBase-details-title">Details</li>
+        <li class="d-flex f-align-center planBase-details-item"
+          v-for="(item, index) of detailsInfo" :key="index">
+          <span class="details-item-title">{{ item.title }}</span>
+          <span class="v-flex text-right details-item-text">{{ item.text }}</span>
+        </li>
+      </ul>
+      <div class="hops-planBase-btns">
+        <lordless-btn
+          class="full-width
+          hops-planBase-btn"
+          theme="blue-linear"
+          :loading="btnLoading"
+          :disabled="btnLoading || !isMoreThanMix || !depositModel || isInsufficientLess"
+          @click="growHops">Plant now</lordless-btn>
+      </div>
+      </div>
+    </transition>
     <lordless-authorize
       ref="authorize"
       blurs
@@ -68,6 +73,8 @@
 </template>
 
 <script>
+import PlanBaseDetailSkeletion from '@/components/skeletion/_mobile/hops/planBaseDetail'
+
 import { getPlanBaseDetail, saveGrowHopsPlan } from 'api'
 import { weiByDecimals, dateFormat } from 'utils/tool'
 
@@ -160,9 +167,17 @@ export default {
       }
     }
   },
+  components: {
+    PlanBaseDetailSkeletion
+  },
   methods: {
     weiByDecimals () {
       return weiByDecimals(...arguments)
+    },
+
+    reset () {
+      this.btnLoading = false
+      this.loading = true
     },
 
     initPlanBase () {
@@ -280,9 +295,15 @@ export default {
       if (!this.refresh) this.refresh = true
     }
   },
+  deactivated () {
+    this.reset()
+  },
   activated () {
-    if (this.refresh) return
+    if (!this.refresh) return
     this.$nextTick(() => this.initPlanBase())
+  },
+  beforeDestroy () {
+    this.reset()
   },
   mounted () {
     this.$nextTick(() => this.initPlanBase())
