@@ -214,9 +214,6 @@ export default {
   components: {
     PlanBaseDetailSkeletion
   },
-  components: {
-    PlanBaseDetailSkeletion
-  },
   methods: {
     weiByDecimals () {
       return weiByDecimals(...arguments)
