@@ -1,5 +1,6 @@
 <template>
   <div class="mobile-main-page">
+    <mobile-plan-bar/>
     <mobile-nav-bar
       ref="mobile-nav-bar"
       v-show="(scrollOpt.show && (!connectModel || !web3Model)) || connectModel || web3Model"
@@ -37,6 +38,7 @@
 <script>
 import MobileConnect from '@/components/reuse/_mobile/connect'
 import MobileWallets from '@/components/reuse/_mobile/wallets/trust'
+import MobilePlanBar from '@/components/reuse/_mobile/plan/planBar'
 // import Authorize from '@/components/reuse/dialog/authorize'
 
 import { publicMixins } from '@/mixins'
@@ -103,8 +105,15 @@ export default {
           history: true
         },
         {
-          text: 'Planting plan',
-          match: /^\/owner\/planBase/,
+          text: 'MyPlans',
+          match: /^\/owner\/myPlans/,
+          show: true,
+          history: true,
+          historyPath: '/owner/hops'
+        },
+        {
+          text: 'HOPS Records',
+          match: /^\/owner\/plan\/records/,
           show: true,
           history: true,
           historyPath: '/owner/hops'
@@ -146,7 +155,8 @@ export default {
   components: {
     // Authorize,
     MobileConnect,
-    MobileWallets
+    MobileWallets,
+    MobilePlanBar
   },
   methods: {
 

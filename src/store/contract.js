@@ -2,6 +2,7 @@
 /**
  * contract store options
  */
+import { weiByDecimals } from 'utils/tool'
 import { initContract, NFTsCrowdsale, TavernNFTs, Airdrop, Luckyblock, HOPSPlan } from '@/contract'
 import { mutationTypes, actionTypes } from './types'
 import web3Store from './web3'
@@ -21,6 +22,10 @@ export default {
     NFTsCrowdsale: null,
     Airdrop: null,
     Luckyblock: null,
+
+    // 所有的 erc20 balance
+    tokensBalance: {},
+    tokensBalanceInit: false,
 
     // 所有包括的 erc20 token 合约
     tokensContract: {},
@@ -73,6 +78,13 @@ export default {
       state.HOPSPlanTokenAllowances[candy.toLocaleLowerCase()] = allowance.toNumber()
       if (Object.keys(state.HOPSPlanTokenAllowances).length >= candiesTotal) state.HOPSPlanTokenAllowancesInit = true
       window.HOPSPlanTokenAllowances = state.HOPSPlanTokenAllowances
+    },
+
+    /**
+     * set token Balance
+     */
+    [mutationTypes.CONTRACT_SET_TOKEN_BALANCE]: (state, { symbol, data = {} }) => {
+      state.tokensBalance[symbol] = Object.assign({}, state.tokensBalance[symbol], data)
     }
   },
 
@@ -116,9 +128,9 @@ export default {
       // 根据所有的 candy，批量初始化合约
       const { candySymbols } = candyStore.state
       const _symbols = candySymbols.list
-      for (const item of _symbols) {
-        dispatch(actionTypes.CONTRACT_SET_AIRDROP_TOKENS, { candiesTotal: _symbols.length, candy: item.address, luckyAddress: state.Luckyblock.address })
-      }
+      await Promise.all(_symbols.map(item => dispatch(actionTypes.CONTRACT_SET_AIRDROP_TOKENS, { candiesTotal: _symbols.length, candy: item.address, luckyAddress: state.Luckyblock.address })))
+
+      dispatch(actionTypes.CONTRACT_SET_TOKENS_BALANCE)
     },
 
     /**
@@ -153,7 +165,7 @@ export default {
 
       const contract = await initContract(contractJson, web3js)
       if (contract) {
-        console.log('candy, luckyAddress', candy, luckyAddress, address)
+        // console.log('candy, luckyAddress', candy, luckyAddress, address)
         // 存储 token contract
         commit(mutationTypes.CONTRACT_SET_AIRDROP_TOKENS, { candiesTotal, candy, contract })
 
@@ -183,6 +195,37 @@ export default {
       const allowance = await erc20Contract.methods('allowance', [ address, contractAddress ])
       commit(mutationTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE, { candiesTotal, candy, allowance })
       return allowance
+    },
+
+    /**
+     * set tokens balance
+     */
+    [actionTypes.CONTRACT_SET_TOKENS_BALANCE]: async ({ state }, { tokensContract = state.tokensContract } = {}) => {
+      const { candySymbols } = candyStore.state
+      let { address } = web3Store.state.web3Opt
+
+      // 如果没有从 web3 中获取到 address, 使用 localStorage 中的地址
+      address = address || window.localStorage.getItem('currentAddress')
+
+      const tokens = candySymbols.list
+      if (!tokens || !tokens.length) return
+      const _tokensBalance = {}
+      await Promise.all(tokens.map(async token => {
+        const _address = token.address
+        const _symbol = token.symbol.toLocaleLowerCase()
+        const decimals = token.decimals || 18
+        if (!tokensContract[_address]) return
+        const tokenBalance = (await tokensContract[_address].methods('balanceOf', [ address ])).toNumber()
+        _tokensBalance[_symbol] = {
+          address: _address,
+          balance: tokenBalance,
+          balanceNumber: weiByDecimals(tokenBalance, decimals)
+        }
+      }))
+      state.tokensBalance = _tokensBalance
+      state.tokensBalanceInit = true
+      console.log(' ------ contract ', _tokensBalance)
+      return _tokensBalance
     }
   }
 }

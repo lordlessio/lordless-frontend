@@ -1,7 +1,7 @@
 <template>
   <div class="mobile-hops-box">
     <transition name="ld-hide-fade" mode="out-in">
-      <mobile-hops-skeletion v-if="loading"/>
+      <mobile-hops-skeletion v-if="!tokensBalanceInit || loading"/>
       <div v-else class="mobile-hops-container">
         <div class="mobile-hops-header">
           <div class="d-flex f-align-center hops-user-box">
@@ -15,14 +15,26 @@
             </div>
             <div class="v-flex">
               <p>Purchase</p>
-              <h3>DDEX</h3>
+              <h3>
+                <a class="d-flex f-align-center hops-wallet-purchase" href="https://ddex.io/trade/LESS-WETH" target="_blank">
+                  <img src="//lordless-sh.oss-cn-shanghai.aliyuncs.com/exchanges/icon/DDEX.svg"/>
+                  <span>DDEX</span>
+                </a>
+              </h3>
             </div>
           </div>
         </div>
         <div class="hops-planting-box">
-          <h2 class="hops-planting-title">Planting plans</h2>
+          <h2 class="d-flex f-align-center hops-planting-title">
+            <span>LESS Term Deposits</span>
+            <span class="inline-block line-height-0 hops-term-question" @click.stop="glossaryModel = true">
+              <svg>
+                <use xlink:href="#icon-question"/>
+              </svg>
+            </span>
+          </h2>
           <p class="hops-planting-desc">Choose a planting plan to deposit your LESS and reap HOPS immediately.</p>
-          <p class="hops-planting-helm"><span class="TTFontBolder">HELM</span> = HOPS earned by 1 LESS per month</p>
+          <p class="hops-planting-helm"><span class="TTFontBolder">HELM</span> = HOPS earned on every LESS per month</p>
 
           <ul class="hops-planting-list">
             <li class="hops-planting-item" v-for="(planBase, index) of planBases" :key="index">
@@ -48,6 +60,7 @@
         </div>
       </div>
     </transition>
+    <lordless-plan-glossary-dialog v-model="glossaryModel" type="deposit"/>
     <lordless-authorize
       ref="authorize"
       blurs
@@ -58,15 +71,15 @@
 
 <script>
 import MobileHopsSkeletion from '@/components/skeletion/_mobile/hops'
+import HopsPlant from '@/components/reuse/_mobile/card/plan/plant'
 
 import { getPlanBases } from 'api'
 import { formatNumber } from 'utils/tool'
-import HopsPlant from './plant'
 
-import { checkLessBalanceMixins } from '@/mixins'
+import { checkTokensBalanceMixins, publicMixins } from '@/mixins'
 export default {
   name: 'lordless-hops-component',
-  mixins: [ checkLessBalanceMixins ],
+  mixins: [ checkTokensBalanceMixins, publicMixins ],
   props: {
     // account: {
     //   type: String,
@@ -76,6 +89,8 @@ export default {
   data: () => {
     return {
       loading: true,
+      lessBalance: 0,
+      lessBalanceNumber: 0,
       planBases: [],
       tokenBets: [],
       askedQuestions: [
@@ -91,19 +106,8 @@ export default {
           title: 'What’s the meaning of HELM?',
           desc: 'A base is a collection of related tables, often reflecting a single project, process, or workflow that you collaborate on with your team. For example, you could make a base to organize your sales process, with tables for sales leads, companies, and deal opportunities. Each table contains records (similar to rows in a spreadsheet), which represent the individual objects, ideas, or people that you’re tracking. You’re free to create as many bases as you’d like on any of our plans.'
         }
-      ]
-    }
-  },
-  computed: {
-    lessAddress () {
-      let str
-      for (let item of this.planBases) {
-        if (item.lessCandy && item.lessCandy.address) {
-          str = item.lessCandy.address
-          break
-        }
-      }
-      return str
+      ],
+      glossaryModel: false
     }
   },
   components: {
@@ -166,7 +170,7 @@ export default {
    */
   .mobile-hops-header {
     margin: 0 -20px;
-    padding: 56px 20px 0;
+    padding: 66px 20px 0;
     background-color: #0079FF;
   }
   .hops-user-box {
@@ -190,6 +194,12 @@ export default {
       color: #0B2A48;
     }
   }
+  .hops-wallet-purchase {
+    >img {
+      margin-right: 6px;
+      width: 26px;
+    }
+  }
   /**
    *  mobile-hops-header -- end
    */
@@ -198,11 +208,17 @@ export default {
    *  hops-planting-box -- begin
    */
   .hops-planting-box {
-    padding-top: 36px;
+    padding-top: 48px;
     padding-bottom: 24px;
   }
   .hops-planting-title {
     font-size: 24px;
+  }
+  .hops-term-question {
+    margin-left: 8px;
+    width: 16px;
+    height: 16px;
+    fill: #999;
   }
   .hops-planting-desc {
     margin-top: 10px;

@@ -13,7 +13,12 @@ module.exports = axios => {
 
     // 根据 user token 获取 该用户的 plans
     getPlansByToken: (params) => {
-      return axios.get('/api/plans/byToken', { params })
+      return axios.get('/api/plans', { params })
+    },
+
+    // 根据 user token 获取 该用户的 plan records
+    getPlanRecordssByToken: (params) => {
+      return axios.get('/api/plan/records', { params })
     },
 
     // 根据 planId 获取 plan 详情
@@ -24,6 +29,11 @@ module.exports = axios => {
     // 用户 growHops
     saveGrowHopsPlan: (params) => {
       return axios.post('/api/plan/growHops', params)
+    },
+
+    // 用户提取 less
+    withdrawLessPlan: (params) => {
+      return axios.put('/api/plan/withdraw', params)
     }
   }
 }

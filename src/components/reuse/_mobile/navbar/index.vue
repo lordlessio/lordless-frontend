@@ -222,7 +222,7 @@ export default {
     }
   }
   .nav-history-icon {
-    padding: 8px;
+    padding: 10px;
     position: absolute;
     left: 20px;
     top: 50%;

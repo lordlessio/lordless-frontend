@@ -1,7 +1,13 @@
 <template>
   <div class="hops-planBase-detail-box">
+    <mobile-nav-bar
+      ref="mobile-nav-bar"
+      v-show="!web3Model || !connectModel"
+      v-bind="scrollOpt"
+      @history="$router.push(scrollOpt.historyPath)"/>
+
     <transition name="ld-hide-fade" mode="out-in">
-      <plan-base-detail-skeletion v-if="loading"/>
+      <plan-base-detail-skeletion v-if="!tokensBalanceInit || loading"/>
       <div v-else>
         <div class="ImpactFont d-flex f-align-center hops-planBase-header">
         <div class="planBase-header-helm">
@@ -10,7 +16,7 @@
         </div>
         <div class="v-flex planBase-header-term">
           <p class="relative planBase-info-title">{{ planType }}</p>
-          <p class="planBase-info-cnt">{{ planLockDays }} DAYS term deposits</p>
+          <p class="planBase-info-cnt">{{ planLockDays }} DAY term deposits</p>
         </div>
       </div>
       <div class="hops-planBase-deposit">
@@ -31,17 +37,24 @@
         <div class="d-flex f-align-center planBase-deposit-tips-box">
           <span class="inline-block line-height-0 deposit-tips-icon">
             <svg v-if="!isInsufficientLess">
-              <use xlink:href="#coin-less"/>
+              <use xlink:href="#coin-hops"/>
             </svg>
-            <img v-else class="full-width" src="//lordless-sh.oss-cn-shanghai.aliyuncs.com/exchanges/icon/DDEX.svg"/>
+            <a v-else class="full-width inline-block line-height-0" href="https://ddex.io/trade/LESS-WETH" target="_blank">
+              <img class="full-width" src="//lordless-sh.oss-cn-shanghai.aliyuncs.com/exchanges/icon/DDEX.svg"/>
+            </a>
           </span>
           <div class="v-flex d-flex f-align-center deposit-tips-desc">
             <p v-if="!depositModel">Input deposit amount to show how many HOPS  you can reap.</p>
-            <p v-else-if="!isMoreThanMix">The plan should be more than {{ depositInfo.minimumAmount | weiByDecimals }} LESS.</p>
+            <p v-else-if="!isMoreThanMix">The minimum amount of the PRO plan is {{ depositInfo.minimumAmount | weiByDecimals }} LESS.</p>
             <p v-else-if="!isInsufficientLess">
               Reap <span>{{ depositModel * depositInfo.lessToHops }}</span> HOPS immediately.
             </p>
-            <p v-else>Your balance of LESS is insufficient. Purchase some more on DDEX.</p>
+            <p v-else>
+              Your balance of LESS is insufficient. Purchase some more on
+              <a class="text-underline" href="https://ddex.io/trade/LESS-WETH" target="_blank">
+                DDEX.
+              </a>
+            </p>
           </div>
         </div>
       </div>
@@ -50,6 +63,11 @@
         <li class="d-flex f-align-center planBase-details-item"
           v-for="(item, index) of detailsInfo" :key="index">
           <span class="details-item-title">{{ item.title }}</span>
+          <span v-if="item.question" class="inline-block line-height-0 details-item-question" @click.stop="glossaryModel = true">
+            <svg>
+              <use xlink:href="#icon-question"/>
+            </svg>
+          </span>
           <span class="v-flex text-right details-item-text">{{ item.text }}</span>
         </li>
       </ul>
@@ -60,10 +78,11 @@
           theme="blue-linear"
           :loading="btnLoading"
           :disabled="btnLoading || !isMoreThanMix || !depositModel || isInsufficientLess"
-          @click="growHops">Plant now</lordless-btn>
+          @click="growHops">{{ depositInfo.open ? 'Plant now' : 'Closed' }}</lordless-btn>
       </div>
       </div>
     </transition>
+    <lordless-plan-glossary-dialog v-model="glossaryModel" type="helm"/>
     <lordless-authorize
       ref="authorize"
       blurs
@@ -79,28 +98,52 @@ import { getPlanBaseDetail, saveGrowHopsPlan } from 'api'
 import { weiByDecimals, dateFormat } from 'utils/tool'
 
 import { mapState } from 'vuex'
-import { metamaskMixins, checkLessBalanceMixins } from '@/mixins'
+import { metamaskMixins, checkTokensBalanceMixins, publicMixins } from '@/mixins'
 export default {
   name: 'hops-planBase-detail-component',
-  mixins: [ metamaskMixins, checkLessBalanceMixins ],
+  mixins: [ metamaskMixins, checkTokensBalanceMixins, publicMixins ],
   data: () => {
     return {
-      refresh: false,
+      rendered: false,
       btnLoading: false,
       loading: true,
       depositInfo: {},
       depositModel: '',
-      tokenBets: []
+      tokenBets: [],
+      lessBalance: 0,
+      lessBalanceNumber: 0,
+      glossaryModel: false
     }
   },
   computed: {
     ...mapState('contract', [
       'HOPSPlan'
     ]),
+    ...mapState('web3', [
+      'web3Opt'
+    ]),
+    ...mapState('user', [
+      'userInfo'
+    ]),
 
-    lessAddress () {
-      if (!this.depositInfo._id) return
-      return this.depositInfo.lessCandy.address
+    web3Loading () {
+      return this.web3Opt.loading
+    },
+    web3Model () {
+      const { loading, isConnected } = this.web3Opt
+      return this.isMobile && !loading && !isConnected
+    },
+    connectModel () {
+      return !this.userInfo.default && !this.userInfo._id
+    },
+
+    scrollOpt () {
+      return {
+        text: `${this.planLockDays} day term deposit`,
+        match: /^\/owner\/planBase/,
+        history: true,
+        historyPath: '/owner/hops'
+      }
     },
 
     isMoreThanMix () {
@@ -127,11 +170,11 @@ export default {
       const info = this.depositInfo
       if (!info._id) return {}
       const _planTypes = {
-        30: 'BASIC',
-        90: 'PLUS',
-        180: 'PRO'
+        1: 'BASIC',
+        2: 'PLUS',
+        3: 'PRO'
       }
-      return _planTypes[this.planLockDays]
+      return _planTypes[this.depositInfo.level]
     },
 
     detailsInfo () {
@@ -144,11 +187,12 @@ export default {
         },
         {
           title: 'HELM',
-          text: this.helmValue
+          text: this.helmValue,
+          question: true
         },
         {
           title: 'Deposit Period',
-          text: `${this.planLockDays} days`
+          text: `${this.planLockDays} day`
         },
         {
           title: 'Deposit on',
@@ -162,10 +206,13 @@ export default {
     }
   },
   watch: {
-    depositModel (val) {
-      if (val) {
-      }
-    }
+    // depositModel (val) {
+    //   if (val) {
+    //   }
+    // }
+  },
+  components: {
+    PlanBaseDetailSkeletion
   },
   components: {
     PlanBaseDetailSkeletion
@@ -187,6 +234,8 @@ export default {
     },
 
     async growHops (info = this.depositInfo) {
+      this.btnLoading = true
+
       const _depositModel = this.depositModel * 1e18
       this.tokenBets = [
         {
@@ -195,7 +244,6 @@ export default {
         }
       ]
       this.$nextTick(async () => {
-        this.btnLoading = true
         try {
           const authorize = await this.$refs.authorize.checkoutAuthorize({ tokenAllowance: true })
           if (!authorize) return
@@ -216,10 +264,10 @@ export default {
     async doGrowHops (lessAmount = this.depositModel * 1e18, account = this.account, info = this.depositInfo, HOPSPlan = this.HOPSPlan, web3Opt = this.web3Opt) {
       this.btnLoading = true
 
-      const lessBalance = await this.checkLessBalance()
+      const { balance } = (await this.setTokensBalance()).less || {}
 
       // 如果查询出来的 less余额 小于 需要种植的 less余额 lessAmount
-      if (lessBalance < lessAmount) {
+      if (balance < lessAmount) {
         this.btnLoading = false
         this.$notify.error({
           title: 'Error!',
@@ -251,19 +299,19 @@ export default {
           from: account
         }
 
-        console.log('params', params)
+        // console.log('params', params)
 
         // 使用自有封装对象
         window.lordlessMethods.buy(params).then(async tx => {
-          this.btnLoading = false
-          console.log('tx', tx)
+          // console.log('tx', tx)
 
           await saveGrowHopsPlan({ tx, lessAmount, planBase: info._id })
           this.metamaskChoose = false
+          this.btnLoading = false
 
-          // this.$nextTick(() => {
-          //   this.$router.push('/owner/hops/history')
-          // })
+          this.$nextTick(() => {
+            this.$router.push('/owner/myPlans?refresh=true')
+          })
         })
           .catch((err) => {
             console.log('err', err.message)
@@ -292,14 +340,14 @@ export default {
         console.log('err', err.message)
       }
       this.loading = false
-      if (!this.refresh) this.refresh = true
+      if (!this.rendered) this.rendered = true
     }
   },
   deactivated () {
     this.reset()
   },
   activated () {
-    if (!this.refresh) return
+    if (!this.rendered) return
     this.$nextTick(() => this.initPlanBase())
   },
   beforeDestroy () {
@@ -339,7 +387,7 @@ export default {
     height: 62px;
     background-color: #FF0079;
     border-radius: 5px;
-    box-shadow: 0 0 10px 2px rgba(0, 0, 0, .35);
+    box-shadow: 0 0 10px 1px #FF0079;
     box-sizing: border-box;
   }
 
@@ -439,6 +487,13 @@ export default {
     margin-bottom: 10px;
     font-size: 16px;
     color: #555;
+  }
+  .details-item-question {
+    margin-top: -2px;
+    margin-left: 6px;
+    width: 14px;
+    height: 14px;
+    fill: #999;
   }
   .details-item-title {
     color: #999;

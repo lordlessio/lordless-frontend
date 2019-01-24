@@ -204,6 +204,20 @@
         fill: #fff;
       }
     }
+    &.glossary {
+      color: #0B2A48;
+      background-color: #fff;
+      fill: #0B2A48;
+      &.shadow {
+        box-shadow: 2.5px 5px 10px 0 rgba(0, 0, 0, .25);
+        // box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
+      }
+      &.inverse {
+        color: #fff;
+        background-color: #0B2A48;
+        fill: #fff;
+      }
+    }
     // &.pink {
     //   color: #fff;
     //   border: none;

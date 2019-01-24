@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import MobileHops from '@/components/content/_mobile/hops'
+import MobileHops from '@/components/content/_mobile/plan/hops'
 
 import { publicMixins } from '@/mixins'
 export default {

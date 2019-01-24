@@ -334,6 +334,9 @@
   .#{$media}text-line-through {
     text-decoration: line-through;
   }
+  .#{$media}text-underline {
+    text-decoration: underline;
+  }
   .#{$media}cursor-pointer {
     cursor: pointer;
   }

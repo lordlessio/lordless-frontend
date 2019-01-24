@@ -689,7 +689,7 @@
     ]
   },
   "HOPSPlan": {
-    "address": "0xfd6363add6817ee3f3c78089af8f1d0b6f94cfc6",
+    "address": "0xdd8e4b65b793734380a615de224d16ff65d11789",
     "abi": [
       {
         "constant": false,
@@ -735,6 +735,24 @@
         "constant": false,
         "inputs": [],
         "name": "renounceOwnership",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "planBaseId",
+            "type": "bytes32"
+          },
+          {
+            "name": "isOpen",
+            "type": "bool"
+          }
+        ],
+        "name": "togglePlanBase",
         "outputs": [],
         "payable": false,
         "stateMutability": "nonpayable",
@@ -829,6 +847,134 @@
         "type": "event"
       },
       {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "planBaseId",
+            "type": "bytes32"
+          },
+          {
+            "indexed": false,
+            "name": "minimumAmount",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "lockTime",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "lessToHops",
+            "type": "uint32"
+          },
+          {
+            "indexed": false,
+            "name": "isOpen",
+            "type": "bool"
+          }
+        ],
+        "name": "PlanBaseEvt",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "planBaseId",
+            "type": "bytes32"
+          },
+          {
+            "indexed": false,
+            "name": "isOpen",
+            "type": "bool"
+          }
+        ],
+        "name": "TogglePlanBaseEvt",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "planId",
+            "type": "bytes32"
+          },
+          {
+            "indexed": false,
+            "name": "planBaseId",
+            "type": "bytes32"
+          },
+          {
+            "indexed": false,
+            "name": "plantuser",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "lessAmount",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "hopsAmount",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "lockAt",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "releaseAt",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "isWithdrawn",
+            "type": "bool"
+          }
+        ],
+        "name": "PlanEvt",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "planId",
+            "type": "bytes32"
+          },
+          {
+            "indexed": false,
+            "name": "plantuser",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "lessAmount",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "isWithdrawn",
+            "type": "bool"
+          },
+          {
+            "indexed": false,
+            "name": "withdrawAt",
+            "type": "uint256"
+          }
+        ],
+        "name": "WithdrawPlanEvt",
+        "type": "event"
+      },
+      {
         "constant": true,
         "inputs": [
           {
@@ -861,6 +1007,10 @@
           {
             "name": "",
             "type": "uint256"
+          },
+          {
+            "name": "",
+            "type": "bool"
           }
         ],
         "payable": false,
@@ -888,6 +1038,10 @@
           {
             "name": "",
             "type": "uint32"
+          },
+          {
+            "name": "",
+            "type": "bool"
           }
         ],
         "payable": false,
@@ -897,7 +1051,26 @@
       {
         "constant": true,
         "inputs": [],
-        "name": "getPlanBaseIds",
+        "name": "checkPlanBaseIds",
+        "outputs": [
+          {
+            "name": "",
+            "type": "bytes32[]"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [
+          {
+            "name": "planBaseId",
+            "type": "bytes32"
+          }
+        ],
+        "name": "checkPlanIdsByPlanBase",
         "outputs": [
           {
             "name": "",
@@ -916,7 +1089,7 @@
             "type": "address"
           }
         ],
-        "name": "getUserPlanIds",
+        "name": "checkPlanIdsByUser",
         "outputs": [
           {
             "name": "",

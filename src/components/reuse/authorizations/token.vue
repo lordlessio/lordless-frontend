@@ -48,7 +48,7 @@
                   :theme="theme"
                   sync/>
               </span>
-              <span class="TTFontBolder">{{ tokenCrowdsaleInfo.behavior }} with <span class="text-upper">{{ bet.candy.symbol }}</span></span>
+              <span class="TTFontBolder">{{ tokenCrowdsaleInfo.behavior }} <span v-if="tokenCrowdsaleInfo.behavior === 'Betting'">with <span class="text-upper">{{ bet.candy.symbol }}</span></span></span>
             </p>
             <p class="token-crowdsale-desc">Authorize the <a :href="tokenCrowdsaleInfo.contractLink" target="_blank">{{ tokenCrowdsaleInfo.contractText }} contract</a> to operate your <span class="text-upper">{{ bet.candy.symbol }}</span> on your behalf.</p>
           </li>
@@ -139,9 +139,9 @@ export default {
           contractLink: `${process.env.ETHERSCANURL}/address/${this.luckyAddress}#code`
         },
         {
-          name: 'HOPS planting',
-          behavior: 'Plant',
-          contractText: 'Plant HOPS',
+          name: 'LESS deposit',
+          behavior: 'Deposit LESS',
+          contractText: 'Deposit LESS',
           tokenAllowances: this.HOPSPlanTokenAllowances,
           checkAllowancesMethod: this[actionTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE],
           contractAddress: this.HOPSPlanAddress,
@@ -162,9 +162,9 @@ export default {
           contractLink: `${process.env.ETHERSCANURL}/address/${this.luckyAddress}#code`
         },
         plant: {
-          name: 'HOPS planting',
-          behavior: 'Plant',
-          contractText: 'Plant HOPS',
+          name: 'LESS deposit',
+          behavior: 'Deposit LESS',
+          contractText: 'Deposit LESS',
           tokenAllowances: this.HOPSPlanTokenAllowances,
           checkAllowancesMethod: this[actionTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE],
           contractAddress: this.HOPSPlanAddress,

@@ -7,6 +7,7 @@ const files = [
   '/reuse/dialog/authorize',
   '/reuse/dialog/luckyblock/rules',
   '/reuse/dialog/luckyblock/conditions',
+  '/reuse/dialog/plan/glossary',
 
   '/content/layout/header/logo',
 

@@ -164,6 +164,9 @@ $--full-dialog-background-linear-end: #7D72F0;
     //   height:
     // }
   }
+  &.theme-glossary {
+    background-image: linear-gradient(-45deg, #3A6073 0%, #16222A 100%);
+  }
 }
 .lordless-message-close {
   position: absolute;

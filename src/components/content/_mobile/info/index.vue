@@ -184,7 +184,7 @@ export default {
     infoChildrens () {
       return [].concat([
         {
-          icon: '#icon-link',
+          icon: '#coin-hops',
           title: 'HOPS',
           path: '/owner/hops',
           tips: 'Grow Hops?'

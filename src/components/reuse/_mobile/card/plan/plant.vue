@@ -4,7 +4,7 @@
     <div class="hops-plant-right">
       <h3 class="relative text-upper hops-plant-level">{{ levelText }}</h3>
       <div class="plant-deposits-info">
-        <p class="ImpactFont">{{ info.lockTime / 3600 / 24 }} DAYS term deposits</p>
+        <p class="ImpactFont">{{ info.lockTime / 3600 / 24 }} DAY term deposits</p>
         <p class="hops-plant-lessAmount">{{ info.minimumAmount | weiByDecimals }} LESS at least</p>
       </div>
       <p class="plant-income-info"><span class="TTFontBlack">{{ info.lessToHops * 100 }}</span> HOPS income on every  100 LESS invested.</p>
@@ -14,15 +14,11 @@
 
 <script>
 export default {
-  name: 'hops-plant-component',
+  name: 'mobile-hops-plant-card',
   props: {
     info: {
       type: Object,
       default: {}
-    },
-    level: {
-      type: Number,
-      default: 0
     },
     lessBalance: {
       type: Number,
@@ -35,11 +31,11 @@ export default {
     },
     levelText () {
       const levels = {
-        0: 'BASIC',
-        1: 'PLUS',
-        2: 'PRO'
+        1: 'BASIC',
+        2: 'PLUS',
+        3: 'PRO'
       }
-      return levels[this.level]
+      return levels[this.info.level]
     }
   },
   methods: {

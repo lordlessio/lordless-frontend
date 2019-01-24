@@ -48,8 +48,10 @@ import MobileMeAuthorization from '@/pages/_mobile/owner/_user/authorization'
 import MobileMeTaverns from '@/pages/_mobile/owner/_user/taverns'
 
 import OwnerBindTelegram from '@/pages/_mobile/owner/_user/bind/telegram'
-import MobileHops from '@/pages/_mobile/owner/_user/hops/index'
-import MobilePlanBaseDetail from '@/pages/_mobile/owner/_user/hops/planBaseDetail'
+import MobilePlanHops from '@/pages/_mobile/owner/_user/plan/hops'
+import MobilePlanBaseDetail from '@/pages/_mobile/owner/_user/plan/baseDetail'
+import MobileMyPlans from '@/pages/_mobile/owner/_user/plan/myPlans'
+import MobilePlanRecords from '@/pages/_mobile/owner/_user/plan/records'
 
 import MobileTavernDetail from '@/pages/_mobile/_tavern'
 
@@ -237,7 +239,7 @@ const mobileRoutes = [
       {
         path: 'hops',
         name: 'mobile-hops-page',
-        component: MobileHops,
+        component: MobilePlanHops,
         meta: {
           title: 'HOPS - LORDLESS',
           navText: 'HOPS',
@@ -251,6 +253,26 @@ const mobileRoutes = [
         component: MobilePlanBaseDetail,
         meta: {
           title: 'PlanBase Detail - LORDLESS',
+          keepAlive: true,
+          transition: false
+        }
+      },
+      {
+        path: 'myPlans',
+        name: 'mobile-myPlans-page',
+        component: MobileMyPlans,
+        meta: {
+          title: 'MyPlans - LORDLESS',
+          keepAlive: true,
+          transition: false
+        }
+      },
+      {
+        path: 'plan/records',
+        name: 'mobile-plan-records-page',
+        component: MobilePlanRecords,
+        meta: {
+          title: 'PlanRecords - LORDLESS',
           keepAlive: true,
           transition: false
         }

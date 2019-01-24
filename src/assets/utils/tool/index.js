@@ -546,3 +546,32 @@ export const mobileBool = () => {
 export const isWechat = () => {
   return typeof WeixinJSBridge !== 'undefined' && (navigator.userAgent.toLowerCase().indexOf('micromessenger') > -1 || typeof window.navigator.wxuserAgent !== 'undefined')
 }
+
+export const getLastYearMonths = () => {
+  const d = new Date()
+  const func = (d) => {
+    d = new Date(JSON.parse(JSON.stringify(d)))
+    let curM = d.getMonth() + 1
+    curM = curM < 10 ? '0' + curM : curM
+
+    const current = {
+      date: d.getFullYear() + '-' + curM,
+      timestamp: new Date(d.getFullYear() + '-' + curM).getTime()
+    }
+
+    d.setMonth(d.getMonth() + 1)
+    let nextM = d.getMonth() + 1
+    nextM = nextM < 10 ? '0' + nextM : nextM
+    const prev = {
+      nextDate: d.getFullYear() + '-' + nextM,
+      nextTimestamp: new Date(d.getFullYear() + '-' + nextM).getTime()
+    }
+    return Object.assign({}, current, prev)
+  }
+  const result = [func(d)]
+  for (var i = 0; i < 10; i++) {
+    d.setMonth(d.getMonth() - 1)
+    result.push(func(d))
+  }
+  return result
+}

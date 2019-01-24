@@ -1,18 +1,18 @@
 <template>
-  <section class="lordless-tab-bar" :class="{ 'is-hide': tabBarHide }">
+  <section class="lordless-plan-bar" :class="{ 'is-hide': tabBarHide }">
     <!-- <mobile-nav-bar :text="navigations[activeIndex].navbarText" :scroll="navigations[activeIndex].scroll"/> -->
-    <ul class="d-flex tab-bar-ul">
+    <ul class="d-flex plan-bar-ul">
       <li v-for="(item, index) of navigations" :key="index"
-        class="v-flex text-center tab-bar-item" :class="{ 'is-active': item.active, 'is-home': item.name === 'Home' }"
+        class="v-flex text-center plan-bar-item" :class="{ 'is-active': item.active }"
         :data-active="item.active.toString()" :data-index="index"
         @click.stop="chooseBar">
         <p class="d-inline-flex col-flex f-auto-center">
-          <span class="inline-block line-height-0 tab-bar-icon">
+          <span class="inline-block line-height-0 plan-bar-icon">
             <svg>
               <use :xlink:href="`${item.active ? item.activeIcon : item.icon}`"/>
             </svg>
           </span>
-          <span class="inline-block text-cap tab-bar-name">{{ item.name }}</span>
+          <span class="inline-block text-cap plan-bar-name">{{ item.name }}</span>
         </p>
       </li>
     </ul>
@@ -20,12 +20,8 @@
 </template>
 
 <script>
-// import MobileNavBar from '@/components/reuse/_mobile/navbar'
-// import { scrollToTop } from 'utils/tool/animate'
-// import { mutationTypes } from '@/store/types'
-// import { mapMutations } from 'vuex'
 export default {
-  name: 'mobile-hops-bar',
+  name: 'mobile-plan-bar',
   data: () => {
     return {
       tabBarHide: false,
@@ -33,28 +29,28 @@ export default {
       activeIndex: 0,
       navigations: [
         {
-          icon: '#icon-logo-image',
-          activeIcon: '#icon-logo-image',
-          name: 'Grow Hops',
-          route: '/home',
+          icon: '#icon-sprout',
+          activeIcon: '#icon-sprout',
+          name: 'LESS deposit',
+          route: '/owner/hops',
           // match: /\/(home|project)/,
           match: /^\/owner\/hops/,
           active: true
         },
         {
-          icon: '#icon-beer',
-          activeIcon: '#icon-beer',
+          icon: '#coin-hops',
+          activeIcon: '#coin-hops',
           name: 'My plans',
-          route: '/taverns',
-          match: /^\/owner\/hops/,
+          route: '/owner/myPlans',
+          match: /^\/owner\/myPlans/,
           active: false
         },
         {
-          icon: '#icon-tab-candy_unselected',
-          activeIcon: '#icon-tab-candy_selected',
+          icon: '#icon-tab-quest_unselected',
+          activeIcon: '#icon-tab-quest_selected',
           name: 'Records',
-          route: '/owner/hops',
-          match: /^\/owner\/hops/,
+          route: '/owner/plan/records',
+          match: /^\/owner\/plan\/records/,
           active: false
         }
       ]
@@ -127,7 +123,7 @@ export default {
       // scrollToTop()
     },
 
-    rewriteNavigation (route = '/home', navigations = this.navigations) {
+    rewriteNavigation (route = '/owner/hops', navigations = this.navigations) {
       let isHide = true
       this.navigations = navigations.map(item => {
         item.active = false
@@ -151,7 +147,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.lordless-tab-bar {
+.lordless-plan-bar {
   // padding: 10px 0;
   position: fixed;
   left: 0;
@@ -168,11 +164,11 @@ export default {
     visibility: hidden;
   }
 }
-.tab-bar-ul {
+.plan-bar-ul {
   margin-top: 8px;
   // height: 50px;
 }
-.tab-bar-item {
+.plan-bar-item {
   height: initial;
   font-size: 12px;
   color: #999;
@@ -181,26 +177,12 @@ export default {
     color: #4586fc;
     fill: #4586fc;
   }
-  &.is-home {
-    .tab-bar-icon {
-      padding: 4px;
-      border-radius: 100%;
-      background-color: #999;
-      fill: #fff;
-      box-sizing: border-box;
-    }
-    &.is-active {
-      .tab-bar-icon {
-        background-color: #4586fc;
-      }
-    }
-  }
 }
-.tab-bar-name {
+.plan-bar-name {
   // line-height: 12px;
   transform: scale(.84);
 }
-.tab-bar-icon {
+.plan-bar-icon {
   margin-bottom: 1px;
   width: 22px;
   height: 22px;
