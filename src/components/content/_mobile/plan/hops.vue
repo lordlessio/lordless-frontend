@@ -53,7 +53,7 @@
                 class="asked-questions-item"
                 v-for="(item, index) of askedQuestions" :key="index">
                 <h3 class="asked-questions-title">{{ item.title }}</h3>
-                <p class="asked-questions-desc">{{ item.desc }}</p>
+                <p class="TTFontNormal asked-questions-desc">{{ item.desc }}</p>
               </li>
             </ul>
           </div>
@@ -96,15 +96,15 @@ export default {
       askedQuestions: [
         {
           title: 'What’s a HOPS?',
-          desc: 'A base is a collection of related tables, often reflecting a single project, process, or workflow that you collaborate on with your team. For example, you could make a base to organize your sales process, with tables for sales leads, companies, and deal opportunities. Each table contains records (similar to rows in a spreadsheet), which represent the individual objects, ideas, or people that you’re tracking. You’re free to create as many bases as you’d like on any of our plans.'
+          desc: "HOPS is LORDLESS's fungible, ERC20 cryptocurrency token. HOPS will be mined when you make a LESS Term Deposit. HOPS is burned, or spent, in opening bounty chest and many other scenarios. So HOPS is mined and burned in real time."
         },
         {
           title: 'What’s a Planting plan?',
-          desc: 'A base is a collection of related tables, often reflecting a single project, process, or workflow that you collaborate on with your team. For example, you could make a base to organize your sales process, with tables for sales leads, companies, and deal opportunities. Each table contains records (similar to rows in a spreadsheet), which represent the individual objects, ideas, or people that you’re tracking. You’re free to create as many bases as you’d like on any of our plans.'
+          desc: 'A LESS term deposit is a LESS investment held at LORDLESS. Your LESS is invested for an agreed rate of interest over a fixed amount of time, or term. In contrast to traditional term deposit in the bank, LORDLESS would pay the HOPS as advance interest.'
         },
         {
           title: 'What’s the meaning of HELM?',
-          desc: 'A base is a collection of related tables, often reflecting a single project, process, or workflow that you collaborate on with your team. For example, you could make a base to organize your sales process, with tables for sales leads, companies, and deal opportunities. Each table contains records (similar to rows in a spreadsheet), which represent the individual objects, ideas, or people that you’re tracking. You’re free to create as many bases as you’d like on any of our plans.'
+          desc: 'HELM is acronym for "HELM = HOPS earned on every LESS per month". For example, 10 HELM means that 1 LESS can earn 10 HOPS per month. You can make more HOPS if you choose a LESS Term deposit with higher HELM.'
         }
       ],
       glossaryModel: false

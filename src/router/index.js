@@ -50,7 +50,7 @@ import MobileMeTaverns from '@/pages/_mobile/owner/_user/taverns'
 import OwnerBindTelegram from '@/pages/_mobile/owner/_user/bind/telegram'
 import MobilePlanHops from '@/pages/_mobile/owner/_user/plan/hops'
 import MobilePlanBaseDetail from '@/pages/_mobile/owner/_user/plan/baseDetail'
-import MobileMyPlans from '@/pages/_mobile/owner/_user/plan/myPlans'
+import MobileDeposits from '@/pages/_mobile/owner/_user/plan/deposits'
 import MobilePlanRecords from '@/pages/_mobile/owner/_user/plan/records'
 
 import MobileTavernDetail from '@/pages/_mobile/_tavern'
@@ -258,11 +258,11 @@ const mobileRoutes = [
         }
       },
       {
-        path: 'myPlans',
-        name: 'mobile-myPlans-page',
-        component: MobileMyPlans,
+        path: 'deposits',
+        name: 'mobile-deposits-page',
+        component: MobileDeposits,
         meta: {
-          title: 'MyPlans - LORDLESS',
+          title: 'Owner deposits - LORDLESS',
           keepAlive: true,
           transition: false
         }

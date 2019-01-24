@@ -1,10 +1,22 @@
 <template>
-  <div id="mobile-myPlans-box" class="mobile-myPlans-box">
+  <div id="mobile-deposits-box" class="mobile-deposits-box">
     <transition namd="ld-hide-fade" mode="out-in" @after-enter="afterEnter">
-      <my-plans-skeletion v-if="!tokensBalanceInit || loading"/>
+      <deposits-skeletion v-if="!tokensBalanceInit || loading"/>
+      <div v-else-if="!loading && !plans.total" class="d-flex f-auto-center text-center mobile-deposits-none">
+        <div class="deposits-none-container">
+          <span class="relative inline-block line-height-0 deposits-none-icon">
+            <svg>
+              <use xlink:href="#icon-human2"/>
+            </svg>
+          </span>
+          <h3>You have no LESS deposit.</h3>
+          <p>Deposit your LESS and reap HOPS immediately.</p>
+          <lordless-btn theme="blue-linear" class="deposits-none-btn" @click="$router.push('/owner/hops')">Deposit LESS</lordless-btn>
+        </div>
+      </div>
       <div v-else>
-        <div class="TTFontBolder mobile-myPlans-header">
-          <div class="d-flex f-align-center myPlans-header-item">
+        <div class="TTFontBolder mobile-deposits-header">
+          <div class="d-flex f-align-center deposits-header-item">
             <span class="inline-block line-height-0 header-item-icon hops-icon">
               <svg>
                 <use xlink:href="#icon-origin-hops"/>
@@ -15,7 +27,7 @@
               <h3>{{ hopsBalanceNumber.toLocaleString() }}</h3>
             </div>
           </div>
-          <div class="d-flex f-align-center myPlans-header-item">
+          <div class="d-flex f-align-center deposits-header-item">
             <span class="inline-block line-height-0 header-item-icon less-icon">
               <svg>
                 <use xlink:href="#coin-less"/>
@@ -27,14 +39,14 @@
             </div>
           </div>
         </div>
-        <ul class="mobile-myPlans-cnt">
+        <ul class="mobile-deposits-cnt">
           <li
             v-for="(plan, index) of plans.list" :key="index"
-            class="myPlans-cnt-item">
-            <my-plan-card :info="plan" @withdraw="withdrawLess($event, plan)"/>
+            class="deposits-cnt-item">
+            <my-deposit-card :info="plan" @withdraw="withdrawLess($event, plan)"/>
           </li>
         </ul>
-        <p v-if="plans.noMore" class="text-center myPlans-noMore-text">No more plans~</p>
+        <p v-if="plans.noMore" class="text-center deposits-noMore-text">No more plans~</p>
       </div>
     </transition>
     <lordless-authorize
@@ -44,16 +56,16 @@
 </template>
 
 <script>
-import MyPlansSkeletion from '@/components/skeletion/_mobile/hops/myPlans'
+import DepositsSkeletion from '@/components/skeletion/_mobile/hops/deposits'
 
-import MyPlanCard from '@/components/reuse/_mobile/card/plan/myPlan'
+import MyDepositCard from '@/components/reuse/_mobile/card/plan/deposit'
 
 import { getPlansByToken, withdrawLessPlan } from 'api'
 
 import { checkTokensBalanceMixins, metamaskMixins, publicMixins } from '@/mixins'
 import { mapState } from 'vuex'
 export default {
-  name: 'mobile-owner-myPlans-component',
+  name: 'mobile-owner-deposits-component',
   mixins: [ checkTokensBalanceMixins, metamaskMixins, publicMixins ],
   data: () => {
     return {
@@ -82,8 +94,8 @@ export default {
     ])
   },
   components: {
-    MyPlansSkeletion,
-    MyPlanCard
+    DepositsSkeletion,
+    MyDepositCard
   },
   methods: {
     afterEnter () {
@@ -137,7 +149,7 @@ export default {
       }
     },
 
-    async initMyPlans () {
+    async initDeposits () {
       this.loading = true
       const { list = [], pn = 1, ps = 10, total = 0 } = await this.getUserPlans({ pn: 1 })
       this.plans = {
@@ -192,7 +204,7 @@ export default {
       this.scrollHandle = null
 
       console.log(' --- scroll')
-      const box = document.getElementById('mobile-myPlans-box')
+      const box = document.getElementById('mobile-deposits-box')
       let bHeight = box ? box.offsetHeight : 0
       // 如果 bHeight 不存在或者 bHeight - bottom 小于 pHeight, return
       if (!bHeight || bHeight - bottom < pHeight) return
@@ -225,27 +237,66 @@ export default {
   },
   async activated () {
     if (!this.rendered) return
-    const { refresh } = this.$route.query
-    console.log('refresh', refresh)
-    refresh && await this.initMyPlans()
+    await this.initDeposits()
 
     this.$nextTick(() => this.scrollListenerFunc())
   },
   mounted () {
-    this.$nextTick(() => this.initMyPlans())
+    this.$nextTick(() => this.initDeposits())
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .mobile-myPlans-box {
+  .mobile-deposits-box {
 
   }
-  .mobile-myPlans-header {
+
+  /**
+   *  mobile-deposits-none  -- begin
+   */
+  .mobile-deposits-none {
+    padding: 74px 30px 30px;
+    box-sizing: border-box;
+    @include viewport-unit(min-height, 100vh, 50px);
+  }
+  .deposits-none-container {
+    margin: 0 auto;
+    max-width: 300px;
+    >h3 {
+      margin-top: 30px;
+      font-size: 20px;
+    }
+    >p {
+      margin-top: 12px;
+      font-size: 16px;
+      color: #555;
+    }
+  }
+  .deposits-none-icon {
+    width: 100%;
+    padding-top: 100%;
+    >svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .deposits-none-btn {
+    margin-top: 32px;
+    padding: 12px 20px;
+  }
+  /**
+   *  mobile-deposits-none  -- end
+   */
+
+  .mobile-deposits-header {
     padding: 44px 24px 0;
     background-color: #0079FF;
   }
-  .myPlans-header-item {
+  .deposits-header-item {
     padding: 16px 0 18px;
     color: #fff;
     &:not(:first-of-type) {
@@ -278,16 +329,16 @@ export default {
     }
   }
 
-  .mobile-myPlans-cnt {
+  .mobile-deposits-cnt {
     margin-top: 24px;
     padding: 0 20px 30px;
   }
-  .myPlans-cnt-item {
+  .deposits-cnt-item {
     &:not(:first-of-type) {
       margin-top: 24px;
     }
   }
-  .myPlans-noMore-text {
+  .deposits-noMore-text {
     margin-bottom: 16px;
     font-size: 16px;
     color: #999;

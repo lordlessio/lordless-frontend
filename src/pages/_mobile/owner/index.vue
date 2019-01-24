@@ -105,8 +105,8 @@ export default {
           history: true
         },
         {
-          text: 'MyPlans',
-          match: /^\/owner\/myPlans/,
+          text: 'My deposits',
+          match: /^\/owner\/deposits/,
           show: true,
           history: true,
           historyPath: '/owner/hops'

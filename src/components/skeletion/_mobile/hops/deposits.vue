@@ -1,15 +1,15 @@
 <template>
-  <div class="mobile-skeletion-myPlans-box">
-    <div class="skeletion-myPlans-container skeletion-breath">
-      <div class="skeletion-myPlans-header">
-        <div class="d-flex f-align-center myPlans-header-item">
+  <div class="mobile-skeletion-deposits-box">
+    <div class="skeletion-deposits-container skeletion-breath">
+      <div class="skeletion-deposits-header">
+        <div class="d-flex f-align-center deposits-header-item">
           <span class="inline-block header-item-icon"></span>
           <div class="v-flex header-item-right">
             <p></p>
             <p></p>
           </div>
         </div>
-        <div class="d-flex f-align-center myPlans-header-item">
+        <div class="d-flex f-align-center deposits-header-item">
           <span class="inline-block header-item-icon"></span>
           <div class="v-flex header-item-right">
             <p></p>
@@ -17,8 +17,8 @@
           </div>
         </div>
       </div>
-      <ul class="skeletion-myPlans-cnt">
-        <li class="myPlans-cnt-item">
+      <ul class="skeletion-deposits-cnt">
+        <li class="deposits-cnt-item">
           <h3></h3>
           <div class="cnt-item-info">
             <p></p>
@@ -34,22 +34,22 @@
 
 <script>
 export default {
-  name: 'mobile-myPlans-skeletion'
+  name: 'mobile-deposits-skeletion'
 }
 </script>
 
 <style lang="scss" scoped>
-  .mobile-skeletion-myPlans-box {
+  .mobile-skeletion-deposits-box {
     margin-top: 44px;
   }
-  .skeletion-myPlans-container {
+  .skeletion-deposits-container {
 
   }
-  .skeletion-myPlans-header {
+  .skeletion-deposits-header {
     padding: 10px 24px;
     background-color: $--skeletion-light;
   }
-  .myPlans-header-item {
+  .deposits-header-item {
     padding: 18px 0;
     &:not(:first-of-type) {
       border-top: 2px solid $--skeletion-dark;
@@ -77,11 +77,11 @@ export default {
     }
   }
 
-  .skeletion-myPlans-cnt {
+  .skeletion-deposits-cnt {
     margin-top: 24px;
     padding: 0 20px;
   }
-  .myPlans-cnt-item {
+  .deposits-cnt-item {
     padding: 20px;
     background-color: $--skeletion-light;
     border-radius: 5px;

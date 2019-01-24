@@ -1,6 +1,6 @@
 <template>
   <div class="relative d-flex f-align-start hops-plant-cnt" :class="{ 'not-balance': notBalance }" @click.stop="choosePlan">
-    <p class="ImpactFont relative hops-plant-helm">{{ (info.lessToHops / (info.lockTime / 3600 / 24 / 30)).toFixed(1) }}</p>
+    <p class="ImpactFont relative hops-plant-helm" :class="{ 'is-small': helmValue.length >4 }">{{ helmValue }}</p>
     <div class="hops-plant-right">
       <h3 class="relative text-upper hops-plant-level">{{ levelText }}</h3>
       <div class="plant-deposits-info">
@@ -36,6 +36,11 @@ export default {
         3: 'PRO'
       }
       return levels[this.info.level]
+    },
+    helmValue () {
+      const info = this.info
+      if (!info._id) return 0
+      return (info.lessToHops / (info.lockTime / 3600 / 24 / 30)).toFixed(1).toString()
     }
   },
   methods: {
@@ -89,6 +94,9 @@ export default {
       left: 0;
       top: 0;
       font-size: 16px;
+    }
+    &.is-small {
+      font-size: 18px;
     }
   }
 

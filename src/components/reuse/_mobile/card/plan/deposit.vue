@@ -1,27 +1,27 @@
 <template>
-  <div class="mobile-myPlan-card-box" :class="{ 'is-pending': isPending, 'is-failed': isFailed }">
-    <div class="myPlan-card-container">
-      <h3 class="myPlan-card-title">LESS {{ planLockDays }} DAY Term Deposit</h3>
-      <ul class="relative myPlan-planBase-details">
+  <div class="mobile-deposit-card-box" :class="{ 'is-pending': isPending, 'is-failed': isFailed }">
+    <div class="deposit-card-container">
+      <h3 class="deposit-card-title">LESS {{ planLockDays }} DAY Term Deposit</h3>
+      <ul class="relative deposit-planBase-details">
         <li class="d-flex f-align-center planBase-details-item"
           v-for="(item, index) of detailsInfo" :key="index">
           <span class="details-item-title">{{ item.title }}</span>
           <span class="v-flex text-right details-item-text">{{ item.text }}</span>
         </li>
       </ul>
-      <div class="myPlan-card-bottom">
-        <p class="d-flex f-align-center planBase-details-item myPlan-less-amount" :class="{ 'text-line-through': isFailed }">
+      <div class="deposit-card-bottom">
+        <p class="d-flex f-align-center planBase-details-item deposit-less-amount" :class="{ 'text-line-through': isFailed }">
           <span class="details-item-title">LESS</span>
           <span class="TTFontBolder v-flex text-right">{{ weiByDecimals(info.lessAmount).toLocaleString() }}</span>
         </p>
-        <div class="d-flex f-align-center myPlan-bottom-desc">
+        <div class="d-flex f-align-center deposit-bottom-desc">
           <p class="TTFontBolder v-flex" v-if="!isMature">The deposit is immature.</p>
           <p class="TTFontBolder v-flex" v-else-if="isFailed">The deposit was failed.</p>
           <p class="TTFontBolder v-flex" v-else-if="isWithdrawPending">The deposit is withdrawing.</p>
           <p class="TTFontBolder v-flex" v-else-if="info.isWithdrawn">You’ve withdrawn.</p>
           <p class="TTFontBolder v-flex" v-else>Your LESS is mature.</p>
           <lordless-btn
-            class="myPlan-withdraw-btn"
+            class="deposit-withdraw-btn"
             theme="blue"
             inverse
             :loading="btnLoading"
@@ -36,7 +36,7 @@
 <script>
 import { dateFormat, weiByDecimals } from 'utils/tool'
 export default {
-  name: 'mobile-myPlan-card',
+  name: 'mobile-deposit-card',
   props: {
     info: {
       type: Object,
@@ -79,7 +79,7 @@ export default {
     helmValue () {
       const info = this.info
       if (!info._id) return {}
-      return (info.planBase.lessToHops / (info.planBase.lockTime / 3600 / 24 / 30)).toFixed(1)
+      return (info.planBase.lessToHops / (info.planBase.lockTime / 3600 / 24 / 30)).toFixed(1).toString()
     },
 
     planLockDays () {
@@ -142,12 +142,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .mobile-myPlan-card-box {
+  .mobile-deposit-card-box {
     border-radius: 5px;
     background-color: #fff;
     box-shadow: 0 0 8px 2px rgba(0, 0, 0, .12);
     &.is-pending, &.is-failed {
-      .myPlan-planBase-details {
+      .deposit-planBase-details {
           &::before {
           content: '';
           position: absolute;
@@ -176,19 +176,19 @@ export default {
       }
     }
     &.is-pending {
-      .myPlan-planBase-details {
+      .deposit-planBase-details {
         &::after {
           content: 'PENDING';
         }
       }
     }
     &.is-failed {
-      .myPlan-planBase-details {
+      .deposit-planBase-details {
         &::after {
           content: 'FAILED';
         }
       }
-      .myPlan-less-amount {
+      .deposit-less-amount {
         color: #999;
       }
       .details-item-text {
@@ -196,14 +196,14 @@ export default {
       }
     }
   }
-  .myPlan-card-container {
+  .deposit-card-container {
     padding: 20px;
   }
-  .myPlan-card-title {
+  .deposit-card-title {
     font-size: 16px;
   }
 
-  .myPlan-planBase-details {
+  .deposit-planBase-details {
     margin-top: 10px;
     padding-top: 12px;
     padding-bottom: 12px;
@@ -220,22 +220,22 @@ export default {
     color: #999;
   }
 
-  .myPlan-card-bottom {
+  .deposit-card-bottom {
     padding-top: 12px;
     border-top: 1px solid #ddd;
   }
-  .myPlan-less-amount {
+  .deposit-less-amount {
     font-size: 16px;
     .details-item-title {
       font-size: 14px;
     }
   }
-  .myPlan-bottom-desc {
+  .deposit-bottom-desc {
     padding-top: 12px;
     font-size: 16px;
     color: #555;
   }
-  .myPlan-withdraw-btn {
+  .deposit-withdraw-btn {
     padding: 8px 15px;
     font-size: 14px;
     @include TTFontBold();

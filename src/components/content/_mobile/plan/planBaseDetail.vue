@@ -12,7 +12,7 @@
         <div class="ImpactFont d-flex f-align-center hops-planBase-header">
         <div class="planBase-header-helm">
           <p class="planBase-info-title">HELM</p>
-          <p class="planBase-info-cnt">{{ helmValue }}</p>
+          <p class="planBase-info-cnt" :class="{ 'is-small': helmValue.length > 4 }">{{ helmValue }}</p>
         </div>
         <div class="v-flex planBase-header-term">
           <p class="relative planBase-info-title">{{ planType }}</p>
@@ -157,7 +157,7 @@ export default {
     helmValue () {
       const info = this.depositInfo
       if (!info._id) return {}
-      return (info.lessToHops / (info.lockTime / 3600 / 24 / 30)).toFixed(1)
+      return (info.lessToHops / (info.lockTime / 3600 / 24 / 30)).toFixed(1).toString()
     },
 
     planLockDays () {
@@ -307,7 +307,7 @@ export default {
           this.btnLoading = false
 
           this.$nextTick(() => {
-            this.$router.push('/owner/myPlans?refresh=true')
+            this.$router.push('/owner/deposits?refresh=true')
           })
         })
           .catch((err) => {
@@ -376,6 +376,9 @@ export default {
   }
   .planBase-info-cnt {
     font-size: 24px;
+    &.is-small {
+      font-size: 16px;
+    }
   }
 
   .planBase-header-helm {

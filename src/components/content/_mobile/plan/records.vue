@@ -1,18 +1,34 @@
 <template>
-  <div id="mobile-plan-withdraw-records" class="mobile-plan-withdraw-records">
-    <div class="plan-withdraw-container">
-      <ul>
-        <li v-for="(record, index) of planRecords.list" :key="index">
-          <p v-if="record.month" class="plan-records-date">{{ record.month.timestamp | dateFormat('MMM YYYY') }}</p>
-          <plan-record-card :info="record" :recordType="record.type"/>
-        </li>
-      </ul>
-      <p v-if="planRecords.noMore" class="relative text-center records-noMore-text">No more planRecords~</p>
-    </div>
+  <div id="mobile-plan-records-records" class="mobile-plan-records-records">
+    <transition name="ld-hide-fade" mode="out-in">
+      <plan-records-skeletion v-if="loading"/>
+      <div v-else-if="!loading && !planRecords.total" class="d-flex f-auto-center text-center mobile-deposits-none">
+        <div class="deposits-none-container">
+          <span class="relative inline-block line-height-0 deposits-none-icon">
+            <svg>
+              <use xlink:href="#icon-human2"/>
+            </svg>
+          </span>
+          <h3>You have no HOPS records.</h3>
+          <p>Deposit your LESS and reap HOPS immediately.</p>
+          <lordless-btn theme="blue-linear" class="deposits-none-btn" @click="$router.push('/owner/hops')">Deposit LESS</lordless-btn>
+        </div>
+      </div>
+      <div v-else class="plan-records-container">
+        <ul>
+          <li v-for="(record, index) of planRecords.list" :key="index" class="plan-records-item">
+            <p v-if="record.month" class="plan-records-date">{{ record.month.timestamp | dateFormat('MMM YYYY') }}</p>
+            <plan-record-card :info="record" :recordType="record.type"/>
+          </li>
+        </ul>
+        <p v-if="planRecords.noMore" class="relative text-center records-noMore-text">No more planRecords~</p>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
+import PlanRecordsSkeletion from '@/components/skeletion/_mobile/hops/records'
 import PlanRecordCard from '@/components/reuse/_mobile/card/plan/record'
 
 import { getLastYearMonths } from 'utils/tool'
@@ -22,6 +38,7 @@ export default {
   name: 'mobile-plan-records-content',
   data: () => {
     return {
+      loading: true,
       planRecords: {
         list: [],
         pn: 1,
@@ -38,6 +55,7 @@ export default {
     }
   },
   components: {
+    PlanRecordsSkeletion,
     PlanRecordCard
   },
   methods: {
@@ -115,7 +133,7 @@ export default {
       this.scrollHandle = null
 
       console.log(' --- scroll')
-      const box = document.getElementById('mobile-plan-withdraw-records')
+      const box = document.getElementById('mobile-plan-records-records')
       let bHeight = box ? box.offsetHeight : 0
       // 如果 bHeight 不存在或者 bHeight - bottom 小于 pHeight, return
       if (!bHeight || bHeight - bottom < pHeight) return
@@ -148,8 +166,7 @@ export default {
   },
   async activated () {
     if (this.rendered) return
-    const { refresh } = this.$route.query
-    refresh && await this.initPlanRecords()
+    await this.initPlanRecords()
 
     this.$nextTick(() => this.scrollListenerFunc())
   },
@@ -160,11 +177,59 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .mobile-plan-withdraw-records {
+  /**
+   *  mobile-deposits-none  -- begin
+   */
+  .mobile-deposits-none {
+    padding: 30px;
+    box-sizing: border-box;
+    @include viewport-unit(min-height, 100vh, 94px);
+  }
+  .deposits-none-container {
+    margin: 0 auto;
+    max-width: 300px;
+    >h3 {
+      margin-top: 30px;
+      font-size: 20px;
+    }
+    >p {
+      margin-top: 12px;
+      font-size: 16px;
+      color: #555;
+    }
+  }
+  .deposits-none-icon {
+    width: 100%;
+    padding-top: 100%;
+    >svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .deposits-none-btn {
+    margin-top: 32px;
+    padding: 12px 20px;
+  }
+  /**
+   *  mobile-deposits-none  -- end
+   */
+  .mobile-plan-records-records {
     margin-top: 44px;
   }
-  .plan-withdraw-container {
+  .plan-records-container {
 
+  }
+  .plan-records-item {
+    &:not(:first-of-type) {
+      /deep/ {
+        .plan-record-info {
+          border-top: 1px solid #ddd;
+        }
+      }
+    }
   }
   .plan-records-date {
     padding-top: 12px;

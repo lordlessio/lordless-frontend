@@ -40,9 +40,9 @@ export default {
         {
           icon: '#coin-hops',
           activeIcon: '#coin-hops',
-          name: 'My plans',
-          route: '/owner/myPlans',
-          match: /^\/owner\/myPlans/,
+          name: 'My deposits',
+          route: '/owner/deposits',
+          match: /^\/owner\/deposits/,
           active: false
         },
         {

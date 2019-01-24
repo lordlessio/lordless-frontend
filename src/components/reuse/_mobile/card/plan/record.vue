@@ -5,15 +5,19 @@
         <use xlink:href="#icon-sprout"/>
       </svg>
     </span>
-    <div class="relative v-flex plan-record-info">
-      <p class="text-ellipsis record-info-title" data-type="growhops">LESS {{ planLockDays }} day term deposit</p>
-      <p class="text-ellipsis record-info-title" data-type="withdraw">Token withdrawal</p>
-      <p class="record-info-type" data-type="growhops">Deposit</p>
-      <p class="record-info-type" data-type="withdraw">Token payment</p>
-      <p>{{ info.records_at | dateFormat('HH:mm MMM DD YYYY') }}</p>
+    <div class="v-flex d-flex f-align-start plan-record-info">
+      <div class="relative v-flex record-main-info">
+        <p class="text-ellipsis record-info-title" data-type="growhops">LESS {{ planLockDays }} day term deposit</p>
+        <p class="text-ellipsis record-info-title" data-type="withdraw">Token withdrawal</p>
+        <p class="record-info-type" data-type="growhops">Deposit</p>
+        <p class="record-info-type" data-type="withdraw">Token payment</p>
+        <p class="record-info-time">{{ info.records_at | dateFormat('HH:mm MMM DD YYYY') }}</p>
+      </div>
+      <div class="plan-record-amount">
+        <p class="TTFontBolder text-right text-nowrap is-blue" data-type="growhops">+ {{ weiByDecimals(info.hopsAmount).toLocaleString() }}</p>
+        <p class="TTFontBolder text-right text-nowrap" data-type="withdraw">- 97,246,594</p>
+      </div>
     </div>
-    <p class="TTFontBolder text-right text-nowrap plan-record-amount is-blue" data-type="growhops">+ {{ weiByDecimals(info.hopsAmount).toLocaleString() }}</p>
-    <p class="TTFontBolder text-right text-nowrap plan-record-amount" data-type="withdraw">- 97,246,594</p>
   </div>
 </template>
 
@@ -48,7 +52,8 @@ export default {
 
 <style lang="scss" scoped>
   .plan-record-box {
-    padding: 20px 15px;
+    padding-bottom: 20px;
+    padding-left: 15px;
     background-color: #fff;
     &[data-type="growhops"] {
       [data-type="withdraw"] {
@@ -62,6 +67,7 @@ export default {
     }
   }
   .plan-record-icon {
+    margin-top: 20px;
     padding: 8px;
     width: 36px;
     height: 36px;
@@ -71,23 +77,20 @@ export default {
     border-radius: 5px;
   }
   .plan-record-info {
-    padding-top: 26px;
     margin-left: 16px;
-    // max-width: 160px;
-    // max-width: 160px;
+    padding-top: 20px;
+    padding-right: 18px;
     font-size: 14px;
     color: #bbb;
-    >p {
-      margin-top: 4px;
-      &.record-info-title {
-        margin-top: 0;
-      }
-    }
-    &:not(:first-of-type) {
-
-    }
+  }
+  .record-main-info {
+    padding-top: 26px;
+  }
+  .record-info-time {
+    margin-top: 4px;
   }
   .record-info-type {
+    margin-top: 4px;
     color: #999;
   }
   .record-info-title {
@@ -103,7 +106,7 @@ export default {
     margin-left: 16px;
     min-width: 50px;
     font-size: 16px;
-    &.is-blue {
+    .is-blue {
       color: #0079FF;
     }
   }
