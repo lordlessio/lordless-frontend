@@ -46,7 +46,12 @@
             <my-deposit-card :info="plan" @withdraw="withdrawLess($event, plan)"/>
           </li>
         </ul>
-        <p v-if="plans.noMore" class="text-center deposits-noMore-text">No more plans~</p>
+        <div class="text-center deposits-noMore-text">
+          <p v-if="loadMoreLoading && !plans.noMore">
+            <i class="el-icon-loading"></i>
+          </p>
+          <p v-else-if="plans.noMore">No more deposits~</p>
+        </div>
       </div>
     </transition>
     <lordless-authorize
@@ -71,17 +76,14 @@ export default {
     return {
       rendered: false,
       loading: true,
+      loadMoreLoading: false,
       plans: {
         list: [],
         pn: 1,
         ps: 10,
         total: 0,
         noMore: false
-      },
-      lessBalance: 0,
-      lessBalanceNumber: 0,
-      hopsBalance: 0,
-      hopsBalanceNumber: 0
+      }
     }
   },
   computed: {
@@ -150,6 +152,7 @@ export default {
     },
 
     async initDeposits () {
+      this.loadMoreLoading = false
       this.loading = true
       const { list = [], pn = 1, ps = 10, total = 0 } = await this.getUserPlans({ pn: 1 })
       this.plans = {
@@ -169,14 +172,16 @@ export default {
         if (res.code === 1000 && res.data) {
           return res.data
         }
+        return null
       } catch (err) {
         console.log('---- err', err)
         return null
       }
     },
 
-    // 获取更多 tasks
-    async loadMoreTasks (cb) {
+    // 获取更多 deposits
+    async loadMoreDeposits (cb) {
+      this.loadMoreLoading = true
       const info = this.plans
       const pn = info.pn + 1
       const { list, ps, total } = await this.getUserPlans({ pn })
@@ -193,6 +198,7 @@ export default {
         noMore
       }))
 
+      this.loadMoreLoading = false
       return cb && cb()
     },
 
@@ -218,7 +224,7 @@ export default {
         // 读取更多数据
         if (scrollTop + pHeight + bottom > bHeight) {
           bool = true
-          this.loadMoreTasks(() => {
+          this.loadMoreDeposits(() => {
             this.$nextTick(() => {
               bool = false
               bHeight = box.offsetHeight
@@ -249,7 +255,14 @@ export default {
 
 <style lang="scss" scoped>
   .mobile-deposits-box {
-
+  }
+  /**
+   *  mobile-deposits-none  -- begin
+   */
+  .mobile-deposits-none {
+    padding: 74px 30px 30px;
+    box-sizing: border-box;
+    @include viewport-unit(min-height, 100vh, 50px);
   }
 
   /**

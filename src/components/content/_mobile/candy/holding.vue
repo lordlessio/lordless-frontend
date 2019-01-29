@@ -7,9 +7,10 @@
           <span class="inline-block candies-holding-symbol">$</span>
           <span class="inline-block candies-holding-value">{{ holdingValue | formatDecimal({ len: 4 }) }}</span>
         </p>
-        <span class="relative inline-block line-height-0 nav-withdraw-icon" :class="{ 'show-tip': withdrawTip }" @click.stop="withdrawTip = true">
+        <!-- <span class="relative inline-block line-height-0 nav-withdraw-icon" :class="{ 'show-tip': withdrawTip }" @click.stop="withdrawTip = true"> -->
+        <span class="relative inline-block line-height-0 nav-withdraw-icon" @click.stop="$router.push('/owner/withdraw')">
           <svg>
-            <use xlink:href="#icon-withdraw"/>
+            <use xlink:href="#icon-outcome"/>
           </svg>
         </span>
       </div>
@@ -36,18 +37,18 @@ export default {
       rendered: false,
       scrollFunc: null,
       parentNode: null,
-      scrollNode: null,
-      withdrawTip: false
+      scrollNode: null
+      // withdrawTip: false
     }
   },
   watch: {
-    withdrawTip (val) {
-      if (val) {
-        setTimeout(() => {
-          this.withdrawTip = false
-        }, 1500)
-      }
-    }
+    // withdrawTip (val) {
+    //   if (val) {
+    //     setTimeout(() => {
+    //       this.withdrawTip = false
+    //     }, 1500)
+    //   }
+    // }
   },
   methods: {
     scrollListener () {
@@ -101,10 +102,10 @@ export default {
     }
   },
   beforeDestroy () {
-    this.$nextTick(() => this.destory())
+    this.destory()
   },
   deactivated () {
-    this.$nextTick(() => this.destory())
+    this.destory()
   },
   activated () {
     if (!this.rendered) return

@@ -117,6 +117,19 @@ export default {
           show: true,
           history: true,
           historyPath: '/owner/hops'
+        },
+        {
+          text: 'Withdraw',
+          match: /^\/owner\/withdraw/,
+          show: true,
+          history: true
+        },
+        {
+          text: 'My Bounty Chests',
+          match: /^\/owner\/bounty\/chests/,
+          show: true,
+          history: true,
+          historyPath: '/owner/info'
         }
       ]
     }

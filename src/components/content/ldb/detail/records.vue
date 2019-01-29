@@ -23,8 +23,7 @@
             <p class="v-flex quests-item-reward">TO</p>
           </li>
           <li class="lordless-table-item records-table-item"
-            v-if="!record.isPending"
-            v-for="(record, index) of list"
+            v-for="(record, index) of _list"
             :key="index">
             <a class="d-flex f-align-center" :href="`${ETHERSCANURL}/tx/${record.tx.transactionHash}`" target="_blank">
               <p class="v-flex d-flex f-align-center line-height-0 quests-item-name">
@@ -80,6 +79,10 @@ export default {
   computed: {
     ETHERSCANURL () {
       return process.env.ETHERSCANURL
+    },
+    _list () {
+      const list = this.list
+      return list.filter(item => !item.isPending)
     }
   }
 }

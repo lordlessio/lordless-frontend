@@ -1,35 +1,35 @@
 <template>
   <div class="d-flex user-authorization-box">
-    <token-authorizations :tokenBets="tokenBets" theme="dark"/>
+    <token-authorizations isAll theme="dark"/>
   </div>
 </template>
 
 <script>
 import TokenAuthorizations from '@/components/reuse/authorizations/token'
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 export default {
   name: 'mobile-owner-authorization',
   computed: {
-    ...mapState('candy', [
-      'candySymbols'
-    ]),
-    ...mapState('contract', [
-      'tokensContract'
-    ]),
-    tokenBets () {
-      const filter = [ 'less' ]
-      const candies = this.candySymbols.list || []
-      const tokenBets = []
-      for (const candy of candies) {
-        if (filter.includes(candy.symbol.toLocaleLowerCase())) {
-          tokenBets.push({
-            candy,
-            count: 1
-          })
-        }
-      }
-      return tokenBets
-    }
+    // ...mapState('candy', [
+    //   'candySymbols'
+    // ]),
+    // ...mapState('contract', [
+    //   'tokensContract'
+    // ]),
+    // tokenBets () {
+    //   const filter = [ 'less' ]
+    //   const candies = this.candySymbols.list || []
+    //   const tokenBets = []
+    //   for (const candy of candies) {
+    //     if (filter.includes(candy.symbol.toLocaleLowerCase())) {
+    //       tokenBets.push({
+    //         candy,
+    //         count: 1e18
+    //       })
+    //     }
+    //   }
+    //   return tokenBets
+    // }
   },
   components: {
     TokenAuthorizations

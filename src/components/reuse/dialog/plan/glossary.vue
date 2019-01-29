@@ -52,13 +52,13 @@ export default {
           title: 'LESS Term Deposits',
           desc: 'A LESS term deposit is a LESS investment held at LORDLESS. Your LESS is invested for an agreed rate of interest over a fixed amount of time, or term. In contrast to traditional term deposit in the bank, LORDLESS would pay the HOPS as advance interest.'
         },
-        helm: {
-          title: 'HELM',
-          desc: 'HELM is acronym for "HELM = HOPS earned on every LESS per month". For example, 10 HELM means that 1 LESS can earn 10 HOPS per month. You can make more HOPS if you choose a LESS Term deposit with higher HELM.'
+        held: {
+          title: 'HELD',
+          desc: 'HELD is acronym for "HELD = HOPS earned on every LESS per deposit". For example, 10 HELD means that 1 LESS can earn 10 HOPS per deposit. You can make more HOPS if you choose a LESS Term deposit with higher HELD.'
         }
       }
       console.log('this.type', this.type)
-      return infos[this.type]
+      return infos[this.type] || {}
     }
   },
   watch: {

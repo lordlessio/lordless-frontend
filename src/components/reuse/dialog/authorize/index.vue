@@ -180,7 +180,8 @@ export default {
     ...mapState('contract', [
       'isCrowdsaleApproved',
       'luckyblockTokenAllowances',
-      'HOPSPlanTokenAllowances'
+      'HOPSPlanTokenAllowances',
+      'BountyTokenAllowances'
     ]),
     isWechatBool () {
       return isWechat()
@@ -486,7 +487,8 @@ export default {
       if (tokenAllowance) {
         const _allowances = {
           luckyblock: this.luckyblockTokenAllowances,
-          plant: this.HOPSPlanTokenAllowances
+          plant: this.HOPSPlanTokenAllowances,
+          bounty: this.BountyTokenAllowances
         }
         const allowances = _allowances[this.tokenAllowanceType]
         console.log('--- come in tokenAllowance', _allowances, this.tokenAllowanceType, allowances)

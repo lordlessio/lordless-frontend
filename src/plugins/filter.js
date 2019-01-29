@@ -3,6 +3,7 @@ import {
   formatDue,
   formatNumber,
   formatDecimal,
+  formatMoneyNumber,
   sliceStr,
   splitAddress,
   reldbIcon,
@@ -28,6 +29,8 @@ Vue.filter('timeFormat', timeFormat)
 Vue.filter('formatNumber', formatNumber)
 
 Vue.filter('formatDecimal', formatDecimal)
+
+Vue.filter('formatMoneyNumber', formatMoneyNumber)
 
 Vue.filter('sliceStr', sliceStr)
 

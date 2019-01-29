@@ -48,15 +48,16 @@ export default {
           icon: 'icon-marketplace',
           active: false,
           loading: false
-        }, {
-          symbol: 'telegram',
-          title: 'Telegram',
-          desc: 'Authorize the Telegram to apply tasks',
-          icon: 'icon-telegram',
-          // customize: true,
-          active: false,
-          loading: false
         }
+        // }, {
+        //   symbol: 'telegram',
+        //   title: 'Telegram',
+        //   desc: 'Authorize the Telegram to apply tasks',
+        //   icon: 'icon-telegram',
+        //   // customize: true,
+        //   active: false,
+        //   loading: false
+        // }
       ],
       authModels: {}
     }

@@ -49,8 +49,13 @@ export const Airdrop = (web3js) => {
 export const Luckyblock = (web3js) => {
   return initContract(process.env.contract.Luckyblock, web3js)
 }
+
 export const HOPSPlan = (web3js) => {
   return initContract(process.env.contract.HOPSPlan, web3js)
+}
+
+export const Bounty = (web3js) => {
+  return initContract(process.env.contract.Bounty, web3js)
 }
 // export const Power = (web3js) => initContract(process.env.contract.Power, web3js)
 // export const Building = (web3js) => initContract(process.env.contract.Building, web3js)

@@ -1,8 +1,13 @@
 <template>
   <div class="d-flex f-align-start plan-record-box" :data-type="recordType">
-    <span class="inline-block line-height-0 plan-record-icon">
+    <span class="inline-block line-height-0 plan-record-icon" data-type="growhops">
       <svg>
         <use xlink:href="#icon-sprout"/>
+      </svg>
+    </span>
+    <span class="inline-block line-height-0 plan-record-icon" data-type="withdraw">
+      <svg>
+        <use xlink:href="#icon-outcome"/>
       </svg>
     </span>
     <div class="v-flex d-flex f-align-start plan-record-info">
@@ -11,18 +16,18 @@
         <p class="text-ellipsis record-info-title" data-type="withdraw">Token withdrawal</p>
         <p class="record-info-type" data-type="growhops">Deposit</p>
         <p class="record-info-type" data-type="withdraw">Token payment</p>
-        <p class="record-info-time">{{ info.records_at | dateFormat('HH:mm MMM DD YYYY') }}</p>
+        <p class="record-info-time">{{ info.recordsAt | dateFormat('HH:mm MMM DD YYYY') }}</p>
       </div>
       <div class="plan-record-amount">
-        <p class="TTFontBolder text-right text-nowrap is-blue" data-type="growhops">+ {{ weiByDecimals(info.hopsAmount).toLocaleString() }}</p>
-        <p class="TTFontBolder text-right text-nowrap" data-type="withdraw">- 97,246,594</p>
+        <p class="TTFontBolder text-right text-nowrap is-blue" data-type="growhops">+ {{ formatMoneyNumber(weiByDecimals(info.hopsAmount)) }}</p>
+        <p class="TTFontBolder text-right text-nowrap is-black" data-type="withdraw">- {{ formatMoneyNumber(weiByDecimals(info.needHopsAmount)) }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { weiByDecimals } from 'utils/tool'
+import { weiByDecimals, formatMoneyNumber } from 'utils/tool'
 export default {
   name: 'plan-record-card',
   props: {
@@ -39,12 +44,15 @@ export default {
     planLockDays () {
       const info = this.info
       if (!info._id) return {}
-      return info.planBase.lockTime / 3600 / 24
+      return info.planBase ? info.planBase.lockTime / 3600 / 24 : 0
     }
   },
   methods: {
     weiByDecimals () {
       return weiByDecimals(...arguments)
+    },
+    formatMoneyNumber () {
+      return formatMoneyNumber(...arguments)
     }
   }
 }
@@ -108,6 +116,9 @@ export default {
     font-size: 16px;
     .is-blue {
       color: #0079FF;
+    }
+    .is-black {
+      color: #0B2A48;
     }
   }
 </style>

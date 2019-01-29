@@ -689,7 +689,7 @@
     ]
   },
   "HOPSPlan": {
-    "address": "0xfd6363add6817ee3f3c78089af8f1d0b6f94cfc6",
+    "address": "0x167DFcB36d755932065928dFafcfA60C1cE264E7",
     "abi": [
       {
         "constant": false,
@@ -1003,5 +1003,149 @@
         "type": "function"
       }
     ]
+  },
+  "Bounty": {
+    "address": "0x63657b0b36b33124d3f6510d6a537b007961a013",
+    "abi": [
+      {
+        "constant": true,
+        "inputs": [
+          {
+            "name": "bountyId",
+            "type": "uint256"
+          }
+        ],
+        "name": "checkBounty",
+        "outputs": [
+          {
+            "name": "",
+            "type": "address"
+          },
+          {
+            "name": "",
+            "type": "uint256"
+          },
+          {
+            "name": "",
+            "type": "address[]"
+          },
+          {
+            "name": "",
+            "type": "uint256[]"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "bountyId",
+            "type": "uint256"
+          }
+        ],
+        "name": "openBounty",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "name": "needHopsAmount",
+            "type": "uint256"
+          },
+          {
+            "name": "tokenAddress",
+            "type": "address[]"
+          },
+          {
+            "name": "tokenAmount",
+            "type": "uint256[]"
+          }
+        ],
+        "name": "packageBounty",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "bountyId",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "needHopsAmount",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "tokenAddress",
+            "type": "address[]"
+          },
+          {
+            "indexed": false,
+            "name": "tokenAmount",
+            "type": "uint256[]"
+          }
+        ],
+        "name": "BountyEvt",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "bountyId",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "sender",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "needHopsAmount",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "tokenAddress",
+            "type": "address[]"
+          },
+          {
+            "indexed": false,
+            "name": "tokenAmount",
+            "type": "uint256[]"
+          }
+        ],
+        "name": "OpenBountyEvt",
+        "type": "event"
+      }
+    ]
+  },
+  "BountyNFT": {
+    "address": "0xb9250c9581e4594b7c6914897823ad18d6b78e96",
+    "abi": []
   }
 }

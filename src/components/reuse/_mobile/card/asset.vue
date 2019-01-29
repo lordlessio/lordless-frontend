@@ -11,9 +11,9 @@
           <span>{{ info.count | formatDecimal }} {{ info.candy.symbol }}</span>
           <span class="candy-price">× $ {{ 1 / info.candy.USD2TokenCount | formatDecimal }}</span>
         </p>
-        <p class="TTFontBolder candy-value">≈ $ {{ info.count / info.candy.USD2TokenCount | formatDecimal }}</p>
+        <p class="TTFontBolder candy-value">≈ $ {{ info.value | formatDecimal }}</p>
       </div>
-      <p class="card-candy-percent">{{ info.value / totalValue | formatDecimal({ len: 2, percentage: true }) }}%</p>
+      <p class="card-candy-percent">{{ info.value / ( totalValue || 1 ) | formatDecimal({ len: 2, percentage: true }) }}%</p>
     </div>
   </div>
 </template>

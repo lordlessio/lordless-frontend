@@ -13,6 +13,10 @@ export default {
     // 是否是移动端
     isMobile () {
       return this.$root.$children[0].isMobile
+    },
+
+    ETHERSCANURL () {
+      return process.env.ETHERSCANURL
     }
   }
 }

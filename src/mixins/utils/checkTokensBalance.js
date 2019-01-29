@@ -3,7 +3,11 @@ import { mapState, mapActions } from 'vuex'
 export default {
   data: () => {
     return {
-      rendered: false
+      CTBRendered: false,
+      lessBalance: 0,
+      lessBalanceNumber: 0,
+      hopsBalance: 0,
+      hopsBalanceNumber: 0
     }
   },
   computed: {
@@ -39,11 +43,11 @@ export default {
     }
   },
   activated () {
-    if (!this.rendered) return
+    if (!this.CTBRendered) return
     this.initTokensBalance()
   },
   mounted () {
     this.initTokensBalance()
-    if (!this.rendered) this.rendered = true
+    if (!this.CTBRendered) this.CTBRendered = true
   }
 }

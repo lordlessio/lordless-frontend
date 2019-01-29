@@ -558,7 +558,7 @@ export default {
   color: #999;
 }
 .quest-tasks-content {
-  padding-top: 59px;
+  padding-top: 39px;
   box-sizing: border-box;
 }
 

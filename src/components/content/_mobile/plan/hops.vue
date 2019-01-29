@@ -34,7 +34,7 @@
             </span>
           </h2>
           <p class="hops-planting-desc">Choose a planting plan to deposit your LESS and reap HOPS immediately.</p>
-          <p class="hops-planting-helm"><span class="TTFontBolder">HELM</span> = HOPS earned on every LESS per month</p>
+          <p class="hops-planting-held"><span class="TTFontBolder">HELD</span> = HOPS earned on every LESS per deposit</p>
 
           <ul class="hops-planting-list">
             <li class="hops-planting-item" v-for="(planBase, index) of planBases" :key="index">
@@ -89,8 +89,6 @@ export default {
   data: () => {
     return {
       loading: true,
-      lessBalance: 0,
-      lessBalanceNumber: 0,
       planBases: [],
       tokenBets: [],
       askedQuestions: [
@@ -103,8 +101,8 @@ export default {
           desc: 'A LESS term deposit is a LESS investment held at LORDLESS. Your LESS is invested for an agreed rate of interest over a fixed amount of time, or term. In contrast to traditional term deposit in the bank, LORDLESS would pay the HOPS as advance interest.'
         },
         {
-          title: 'What’s the meaning of HELM?',
-          desc: 'HELM is acronym for "HELM = HOPS earned on every LESS per month". For example, 10 HELM means that 1 LESS can earn 10 HOPS per month. You can make more HOPS if you choose a LESS Term deposit with higher HELM.'
+          title: 'What’s the meaning of HELD?',
+          desc: 'HELD is acronym for "HELD = HOPS earned on every LESS per deposit". For example, 10 HELD means that 1 LESS can earn 10 HOPS per deposit. You can make more HOPS if you choose a LESS Term deposit with higher HELD.'
         }
       ],
       glossaryModel: false
@@ -225,7 +223,7 @@ export default {
     font-size: 16px;
     color: #777;
   }
-  .hops-planting-helm {
+  .hops-planting-held {
     margin-top: 4px;
     font-size: 14px;
     color: #777;

@@ -401,6 +401,16 @@ export const formatNumber = (number) => {
   return str || number
 }
 
+export const formatMoneyNumber = (value, { len = 4 } = {}) => {
+  if (!value || typeof value !== 'number') return value
+  const values = value.toString().split('.')
+  if (len === 0) return values[0]
+  if (values[1]) {
+    value = parseInt(values[0]).toLocaleString() + '.' + values[1].slice(0, len)
+  }
+  return value
+}
+
 export const formatDecimal = (value, { len = 4, percentage = false } = {}) => {
   if (!value || typeof value !== 'number') return value
   if (len === 0) return Math.round(value)

@@ -16,7 +16,7 @@
       </div>
       <div class="skeletion-hops-cards">
         <div class="d-flex f-align-center hops-card-item">
-          <p class="ImpactFont">HELM</p>
+          <p class="ImpactFont">HELD</p>
           <div class="v-flex hops-card-right">
             <p></p>
             <div class="hops-card-days">

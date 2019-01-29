@@ -1,6 +1,6 @@
 <template>
   <div class="relative d-flex f-align-start hops-plant-cnt" :class="{ 'not-balance': notBalance }" @click.stop="choosePlan">
-    <p class="ImpactFont relative hops-plant-helm" :class="{ 'is-small': helmValue.length >4 }">{{ helmValue }}</p>
+    <p class="ImpactFont relative hops-plant-held" :class="{ 'is-small': heldValue.length > 4 }">{{ heldValue }}</p>
     <div class="hops-plant-right">
       <h3 class="relative text-upper hops-plant-level">{{ levelText }}</h3>
       <div class="plant-deposits-info">
@@ -37,10 +37,10 @@ export default {
       }
       return levels[this.info.level]
     },
-    helmValue () {
+    heldValue () {
       const info = this.info
       if (!info._id) return 0
-      return (info.lessToHops / (info.lockTime / 3600 / 24 / 30)).toFixed(1).toString()
+      return info.lessToHops.toFixed(1).toString()
     }
   },
   methods: {
@@ -60,7 +60,7 @@ export default {
     box-shadow: 0 0 10px 3px rgba(0, 0, 0, .1);
     &.not-balance {
       // background-color: #fff;
-      .hops-plant-helm, .hops-plant-level, .plant-deposits-info, .plant-income-info {
+      .hops-plant-held, .hops-plant-level, .plant-deposits-info, .plant-income-info {
         color: #bbb;
       }
       .hops-plant-level {
@@ -81,7 +81,7 @@ export default {
     }
   }
 
-  .hops-plant-helm {
+  .hops-plant-held {
     margin-right: 16px;
     padding-top: 18px;
     width: 72px;
@@ -89,7 +89,7 @@ export default {
     font-size: 36px;
     color: #0079FF;
     &::before {
-      content: 'HELM';
+      content: 'HELD';
       position: absolute;
       left: 0;
       top: 0;

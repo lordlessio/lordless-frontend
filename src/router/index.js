@@ -53,6 +53,10 @@ import MobilePlanBaseDetail from '@/pages/_mobile/owner/_user/plan/baseDetail'
 import MobileDeposits from '@/pages/_mobile/owner/_user/plan/deposits'
 import MobilePlanRecords from '@/pages/_mobile/owner/_user/plan/records'
 
+import MobileOwnerWithdraw from '@/pages/_mobile/owner/_user/bounty/package'
+import MobileOwnerBountyChests from '@/pages/_mobile/owner/_user/bounty/chests'
+import MobileOwnerBountyChestDetail from '@/pages/_mobile/owner/_user/bounty/_detail'
+
 import MobileTavernDetail from '@/pages/_mobile/_tavern'
 
 // mobile routes
@@ -275,6 +279,38 @@ const mobileRoutes = [
           title: 'PlanRecords - LORDLESS',
           keepAlive: true,
           transition: false
+        }
+      },
+      {
+        path: 'withdraw',
+        name: 'mobile-bounty-package',
+        component: MobileOwnerWithdraw,
+        meta: {
+          title: 'Withdraw - LORDLESS',
+          keepAlive: true,
+          transition: false
+        }
+      },
+      {
+        path: 'bounty/chests',
+        name: 'mobile-bounty-chests-package',
+        component: MobileOwnerBountyChests,
+        meta: {
+          title: 'My Bounty Chests - LORDLESS',
+          keepAlive: true,
+          transition: false,
+          hideTab: true
+        }
+      },
+      {
+        path: 'chest/:bountyId',
+        name: 'mobile-bounty-chest-detail',
+        component: MobileOwnerBountyChestDetail,
+        meta: {
+          title: 'Chest Detail - LORDLESS',
+          keepAlive: true,
+          transition: false,
+          hideTab: true
         }
       },
       {

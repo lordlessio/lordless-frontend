@@ -127,15 +127,15 @@ export default {
         this.holdingValue = res.data.totalValue
       }
       this.loading = false
+      if (!this.rendered) this.rendered = true
     },
     init () {
       this.getAssets()
-      this.rendered = false
     }
   },
   async activated () {
     // this.init()
-    if (this.rendered) return
+    if (!this.rendered) return
     const res = await getUserAssets()
     if (res.code === 1000 && res.data) {
       this.reSortAssets({}, res.data)
@@ -143,8 +143,7 @@ export default {
     }
   },
   mounted () {
-    this.init()
-    this.rendered = true
+    this.$nextTick(() => this.init())
   }
 }
 </script>

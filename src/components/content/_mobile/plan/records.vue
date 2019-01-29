@@ -1,6 +1,6 @@
 <template>
-  <div id="mobile-plan-records-records" class="mobile-plan-records-records">
-    <transition name="ld-hide-fade" mode="out-in">
+  <div id="mobile-plan-records" class="mobile-plan-records">
+    <transition name="ld-hide-fade" mode="out-in" @after-enter="afterEnter">
       <plan-records-skeletion v-if="loading"/>
       <div v-else-if="!loading && !planRecords.total" class="d-flex f-auto-center text-center mobile-deposits-none">
         <div class="deposits-none-container">
@@ -16,12 +16,17 @@
       </div>
       <div v-else class="plan-records-container">
         <ul>
-          <li v-for="(record, index) of planRecords.list" :key="index" class="plan-records-item">
+          <li v-for="(record, index) of planRecords.list" :key="index" class="plan-records-item" :class="{ 'none-line': record.month }">
             <p v-if="record.month" class="plan-records-date">{{ record.month.timestamp | dateFormat('MMM YYYY') }}</p>
             <plan-record-card :info="record" :recordType="record.type"/>
           </li>
         </ul>
-        <p v-if="planRecords.noMore" class="relative text-center records-noMore-text">No more planRecords~</p>
+        <div class="text-center records-noMore-text">
+          <p v-if="loadMoreLoading && !planRecords.noMore">
+            <i class="el-icon-loading"></i>
+          </p>
+          <p v-else-if="planRecords.noMore">No more planRecords~</p>
+        </div>
       </div>
     </transition>
   </div>
@@ -38,6 +43,7 @@ export default {
   name: 'mobile-plan-records-content',
   data: () => {
     return {
+      loadMoreLoading: false,
       loading: true,
       planRecords: {
         list: [],
@@ -69,7 +75,7 @@ export default {
         if (item.month) item.month = null
         if (!lastYearMonths.length) continue
         for (let i = 0; i < lastYearMonths.length; i++) {
-          if (item.records_at < lastYearMonths[i].nextTimestamp) {
+          if (item.recordsAt * 1000 < lastYearMonths[i].nextTimestamp) {
             item.month = lastYearMonths[i]
             lastYearMonths.splice(i, 1)
             break
@@ -79,6 +85,7 @@ export default {
     },
 
     async initPlanRecords () {
+      this.loadMoreLoading = false
       this.loading = true
       const { list = [], pn = 1, ps = 10, total = 0 } = await this.getUserPlanRecords({ pn: 1 })
       this.planRecords = {
@@ -98,14 +105,16 @@ export default {
         if (res.code === 1000 && res.data) {
           return res.data
         }
+        return null
       } catch (err) {
         console.log('---- err', err)
         return null
       }
     },
 
-    // 获取更多 tasks
-    async loadMoreTasks (cb) {
+    // 获取更多 records
+    async loadMoreRecords (cb) {
+      this.loadMoreLoading = true
       const info = this.planRecords
       const pn = info.pn + 1
       const { list, ps, total } = await this.getUserPlanRecords({ pn })
@@ -121,7 +130,7 @@ export default {
         total,
         noMore
       }))
-
+      this.loadMoreLoading = false
       return cb && cb()
     },
 
@@ -132,9 +141,9 @@ export default {
       this.scrollHandle && document.removeEventListener('scroll', this.scrollHandle)
       this.scrollHandle = null
 
-      console.log(' --- scroll')
-      const box = document.getElementById('mobile-plan-records-records')
+      const box = document.getElementById('mobile-plan-records')
       let bHeight = box ? box.offsetHeight : 0
+      console.log(' --- scroll', bHeight, bottom, pHeight)
       // 如果 bHeight 不存在或者 bHeight - bottom 小于 pHeight, return
       if (!bHeight || bHeight - bottom < pHeight) return
 
@@ -147,7 +156,7 @@ export default {
         // 读取更多数据
         if (scrollTop + pHeight + bottom > bHeight) {
           bool = true
-          this.loadMoreTasks(() => {
+          this.loadMoreRecords(() => {
             this.$nextTick(() => {
               bool = false
               bHeight = box.offsetHeight
@@ -216,17 +225,20 @@ export default {
   /**
    *  mobile-deposits-none  -- end
    */
-  .mobile-plan-records-records {
+  .mobile-plan-records {
     margin-top: 44px;
+
   }
   .plan-records-container {
 
   }
   .plan-records-item {
     &:not(:first-of-type) {
-      /deep/ {
+      &:not(.none-line) {
+        /deep/ {
         .plan-record-info {
-          border-top: 1px solid #ddd;
+            border-top: 1px solid #ddd;
+          }
         }
       }
     }

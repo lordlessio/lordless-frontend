@@ -10,9 +10,9 @@
       <plan-base-detail-skeletion v-if="!tokensBalanceInit || loading"/>
       <div v-else>
         <div class="ImpactFont d-flex f-align-center hops-planBase-header">
-        <div class="planBase-header-helm">
-          <p class="planBase-info-title">HELM</p>
-          <p class="planBase-info-cnt" :class="{ 'is-small': helmValue.length > 4 }">{{ helmValue }}</p>
+        <div class="planBase-header-held">
+          <p class="planBase-info-title">HELD</p>
+          <p class="planBase-info-cnt" :class="{ 'is-small': heldValue.length > 4 }">{{ heldValue }}</p>
         </div>
         <div class="v-flex planBase-header-term">
           <p class="relative planBase-info-title">{{ planType }}</p>
@@ -82,7 +82,7 @@
       </div>
       </div>
     </transition>
-    <lordless-plan-glossary-dialog v-model="glossaryModel" type="helm"/>
+    <lordless-plan-glossary-dialog v-model="glossaryModel" type="held"/>
     <lordless-authorize
       ref="authorize"
       blurs
@@ -110,8 +110,6 @@ export default {
       depositInfo: {},
       depositModel: '',
       tokenBets: [],
-      lessBalance: 0,
-      lessBalanceNumber: 0,
       glossaryModel: false
     }
   },
@@ -154,7 +152,7 @@ export default {
       return this.depositModel > this.lessBalanceNumber
     },
 
-    helmValue () {
+    heldValue () {
       const info = this.depositInfo
       if (!info._id) return {}
       return (info.lessToHops / (info.lockTime / 3600 / 24 / 30)).toFixed(1).toString()
@@ -179,15 +177,15 @@ export default {
 
     detailsInfo () {
       const info = this.depositInfo
-      if (!info._id) return {}
+      if (!info._id) return []
       return [
         {
           title: 'Plan',
           text: this.planType
         },
         {
-          title: 'HELM',
-          text: this.helmValue,
+          title: 'HELD',
+          text: this.heldValue,
           question: true
         },
         {
@@ -381,7 +379,7 @@ export default {
     }
   }
 
-  .planBase-header-helm {
+  .planBase-header-held {
     padding: 6px;
     width: 62px;
     height: 62px;
