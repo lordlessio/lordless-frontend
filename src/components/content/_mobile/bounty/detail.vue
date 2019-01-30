@@ -78,7 +78,7 @@
             </h3>
             <p v-if="account" class="chest-hops-available">Available: {{ hopsBalanceNumber || 0 | formatMoneyNumber }} HOPS</p>
             <ul class="chest-detail-candies-box">
-              <li class="TTFontBolder d-flex f-align-center bounty-candies-item cost" :class="{ 'is-green': chestStatus === 'unopened' && enoughHops, 'is-red': chestStatus === 'unopened' && !enoughHops }">
+              <li class="TTFontBolder d-flex f-align-center bounty-candies-item cost" :class="{ 'is-green': chestStatus === 'unopened' && enoughHops && tokensBalanceInit, 'is-red': chestStatus === 'unopened' && !enoughHops && tokensBalanceInit }">
                 <span class="inline-block line-height-0 bounty-candy-icon">
                   <svg>
                     <use xlink:href="#icon-origin-hops"/>
@@ -100,9 +100,9 @@
             </h3>
             <ul class="chest-detail-candies-box">
               <li v-for="(item, index) of packageBountyTxs" :key="`packageBounty_${index}`"
-                class="bounty-candies-item chest-tx-item tx" :class="{ 'is-red': item.status === -1 }">
+                class="bounty-candies-item chest-tx-item tx">
                 <a v-if="item.tx" class="d-flex f-align-center" :href="`${ETHERSCANURL}/tx/${item.tx}`" target="_blank">
-                  <span>{{ item.status === 0 ? 'Wrapping' : 'Wrap on' }}</span>
+                  <span>{{ item.status === 0 ? 'Wrapping ...' : 'Wrap on' }}</span>
                   <span class="v-flex text-right">{{ (item.status === 0 ? item.startAt : item.finishAt) * 1000 | dateFormat('HH:mm MMM DD YYYY') }}</span>
                   <span class="inline-block line-height-0 chest-arrow-icon">
                     <svg>
@@ -118,7 +118,7 @@
                 </div>
               </li>
               <li v-for="(item, index) of openBountyTxs" :key="`openBountyTxs_${index}`"
-                class="bounty-candies-item chest-tx-item tx" :class="{ 'is-red': item.status === -1 }">
+                class="bounty-candies-item chest-tx-item tx">
                 <a class="d-flex f-align-center" :href="`${ETHERSCANURL}/tx/${item.tx}`" target="_blank">
                   <span>{{ item.status === 0 ? 'Unlock it' : 'Unlock on' }}</span>
                   <span class="v-flex text-right">{{ (item.status === 1 ? item.finishAt : item.startAt) * 1000 | dateFormat('HH:mm MMM DD YYYY') }}</span>
@@ -142,11 +142,11 @@
           <lordless-btn
             v-else-if="chestStatus === 'unopened' || chestStatus === 'unlocking'"
             class="full-width chest-detail-btn"
-            :theme="(isChecking || !enoughHops) ? 'blue-linear' : 'red-linear'"
-            :loading="btnLoading"
+            :theme="(isChecking || enoughHops) ? 'blue-linear' : 'red-linear'"
+            :loading="isChecking || btnLoading"
             :disabled="isChecking || (enoughHops && (isDisabled || btnLoading || chestStatus === 'unlocking'))"
             @click="openPackage">
-            <span v-if="(isChecking || !enoughHops)">Unlock the Bounty Chest</span>
+            <span v-if="(isChecking || enoughHops)">Unlock the Bounty Chest</span>
             <span v-else>Deposit LESS to reap HOPS</span>
           </lordless-btn>
         </div>
@@ -424,9 +424,9 @@ export default {
       const isDisabled = await this.initBountyChestStatus()
       if (isDisabled) {
         this.btnLoading = false
-        this.$notify.info({
-          title: 'Info!',
-          message: 'Waiting for withdraw open...',
+        this.$notify.error({
+          title: 'Error!',
+          message: 'Unknow error!',
           position: 'bottom-right',
           duration: 3500
         })
@@ -627,6 +627,7 @@ export default {
     color: #555;
     background-color: #fff;
     border-radius: 5px;
+    transition: all .3s;
     &.bounty {
       box-shadow: 0 0 8px 0 rgba(0, 121, 255, 0.45);
       .bounty-candy-icon {
@@ -693,5 +694,6 @@ export default {
   .chest-detail-btn {
     padding: 16px 0;
     border-radius: 0;
+    transition: all .3s;
   }
 </style>
