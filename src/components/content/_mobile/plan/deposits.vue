@@ -154,7 +154,7 @@ export default {
     async initDeposits () {
       this.loadMoreLoading = false
       this.loading = true
-      const { list = [], pn = 1, ps = 10, total = 0 } = await this.getUserPlans({ pn: 1 })
+      const { list = [], pn = 1, ps = 10, total = 0 } = (await this.getUserPlans({ pn: 1 })) || {}
       this.plans = {
         list,
         pn,
@@ -166,7 +166,7 @@ export default {
       if (!this.rendered) this.rendered = true
     },
 
-    async getUserPlans ({ pn, ps = this.plans.ps }) {
+    async getUserPlans ({ pn, ps = this.plans.ps } = {}) {
       try {
         const res = await getPlansByToken({ pn, ps })
         if (res.code === 1000 && res.data) {
@@ -184,10 +184,10 @@ export default {
       this.loadMoreLoading = true
       const info = this.plans
       const pn = info.pn + 1
-      const { list, ps, total } = await this.getUserPlans({ pn })
+      const { list = [], ps = info.ps, total = 0 } = (await this.getUserPlans({ pn })) || {}
 
       let noMore = false
-      if (list && list.length < ps) {
+      if (total <= ps) {
         noMore = true
       }
       this.$set(this, 'plans', Object.assign({}, info, {

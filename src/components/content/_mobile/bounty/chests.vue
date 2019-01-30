@@ -159,7 +159,7 @@ export default {
     // 初始化 chest 数据函数
     async initChestMethod (type = this.currentTab) {
       this.loading = true
-      const { list = [], pn = 1, ps = 10, total = 0 } = await this.getBountyChestsMethod(type)
+      const { list = [], pn = 1, ps = 10, total = 0 } = (await this.getBountyChestsMethod(type)) || {}
       this.chests = {
         list,
         pn,
@@ -188,10 +188,10 @@ export default {
     async loadMoreChests (cb) {
       const info = this.chests
       const pn = info.pn + 1
-      const { list, ps, total } = await this.getBountyChestsMethod({ pn })
+      const { list = [], ps = info.ps, total = 0 } = (await this.getBountyChestsMethod({ pn })) || {}
 
       let noMore = false
-      if (list && list.length < ps) {
+      if (total <= ps) {
         noMore = true
       }
       this.$set(this, 'chests', Object.assign({}, info, {
