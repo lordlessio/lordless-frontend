@@ -459,8 +459,9 @@ export default {
           values: [ info.bountyId ]
         }
         const { gasPrice } = web3Opt
-        // const gas = (await growHopsParam.estimateGas(growHopsParam.name, growHopsParam.values)) || 139999
-        const gas = 299999
+        const gas = (await Bounty.estimateGas(openBountyParam.name, openBountyParam.values)) || 500000
+        console.log('--- gas', gas)
+        // const gas = 299999
 
         const params = {
           gas,
