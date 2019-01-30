@@ -142,11 +142,11 @@
           <lordless-btn
             v-else-if="chestStatus === 'unopened' || chestStatus === 'unlocking'"
             class="full-width chest-detail-btn"
-            :theme="enoughHops ? 'blue-linear' : 'red-linear'"
+            :theme="(isChecking || !enoughHops) ? 'blue-linear' : 'red-linear'"
             :loading="btnLoading"
-            :disabled="enoughHops && (isChecking || isDisabled || btnLoading || chestStatus === 'unlocking')"
+            :disabled="isChecking || (enoughHops && (isDisabled || btnLoading || chestStatus === 'unlocking'))"
             @click="openPackage">
-            <span v-if="enoughHops">Unlock the Bounty Chest</span>
+            <span v-if="(isChecking || !enoughHops)">Unlock the Bounty Chest</span>
             <span v-else>Deposit LESS to reap HOPS</span>
           </lordless-btn>
         </div>
@@ -383,8 +383,8 @@ export default {
         const tokenBalance = (await tokensContract[candy].methods('balanceOf', [ contractAddress ])).toNumber() || 0
 
         // 判断 token 是否充足
-        const tokenEnough = tokenBalance >= (item.count * Math.pow(10, item.candy.decimals))
-        console.log('tokenBalance', tokenBalance, tokenEnough)
+        const tokenEnough = tokenBalance >= (parseFloat(item.count) * Math.pow(10, parseInt(item.candy.decimals)))
+        console.log('tokenBalance', tokenBalance, item.count * Math.pow(10, item.candy.decimals), tokenEnough)
         if (!tokenEnough) {
           isDisabled = true
         }
