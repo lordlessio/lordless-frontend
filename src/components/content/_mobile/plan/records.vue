@@ -121,7 +121,7 @@ export default {
       const { list = [], ps = info.ps, total = 0 } = (await this.getUserPlanRecords({ pn })) || {}
 
       let noMore = false
-      if (total <= ps) {
+      if (list.length < ps) {
         noMore = true
       }
       this.$set(this, 'planRecords', Object.assign({}, info, {

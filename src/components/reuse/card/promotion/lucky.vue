@@ -202,7 +202,10 @@ export default {
       this.btnLoading = true
       try {
         const authorize = await this.$refs.authorize.checkoutAuthorize({ tokenAllowance: true })
-        if (!authorize) return
+        if (!authorize) {
+          this.btnLoading = false
+          return
+        }
 
         this.doLuckyblock()
       } catch (err) {

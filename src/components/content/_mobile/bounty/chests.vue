@@ -133,6 +133,7 @@ export default {
     initChestTabs (currentTab = this.currentTab) {
       const tabs = this.$refs['chests_tabs']
       if (!tabs) return
+      console.log('-------- come in initChestTabs')
       const box = tabs
       const parent = this.$refs['bounty-chests-box']
       if (!box || !parent) return
@@ -140,15 +141,18 @@ export default {
 
       this.changeChestTabs(currentTab)
       this.$once('hook:beforeDestroy', () => {
+        console.log('-------- beforeDestroy chest tabs destroy')
         parent.appendChild(box)
       })
       this.$once('hook:deactivated', () => {
+        console.log('-------- deactivated chest tabs destroy', parent, box)
         parent.appendChild(box)
       })
     },
 
     // 初始化 bounty chests 页面
     async initBountyChests () {
+      console.log('-------- initBountyChests', this.$route.path)
       this.loadMoreLoading = false
       this.initChestTabs()
       this.initChestMethod()
@@ -191,7 +195,7 @@ export default {
       const { list = [], ps = info.ps, total = 0 } = (await this.getBountyChestsMethod({ pn })) || {}
 
       let noMore = false
-      if (total <= ps) {
+      if (list.length < ps) {
         noMore = true
       }
       this.$set(this, 'chests', Object.assign({}, info, {
@@ -244,19 +248,19 @@ export default {
       })
     }
   },
-  // beforeDestroy () {
-  //   this.loading = true
-  // },
-  // deactivated () {
-  //   this.loading = true
-  // },
+  beforeDestroy () {
+    this.loading = true
+  },
+  deactivated () {
+    this.loading = true
+  },
   activated () {
     if (!this.rendered) return
     this.initBountyChests()
     this.$nextTick(() => this.scrollListenerFunc())
   },
   mounted () {
-    this.$nextTick(() => this.initBountyChests())
+    this.initBountyChests()
   }
 }
 </script>

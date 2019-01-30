@@ -11,7 +11,7 @@
           <router-view v-if="$route.meta.keepAlive" class="lordless-pop-page"></router-view>
         </keep-alive>
       </transition>
-      <router-view v-if="!$route.meta.keepAlive"></router-view>
+      <router-view v-if="!$route.meta.keepAlive && $route.meta.isPublic"></router-view>
     </div>
     <Footer v-if="!isMobile" v-bind="footerOpt"/>
     <!-- <msg-tip

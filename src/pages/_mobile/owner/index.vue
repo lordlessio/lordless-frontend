@@ -12,7 +12,7 @@
         <router-view v-if="$route.meta.keepAlive && pageShow" class="lordless-pop-page"/>
       </keep-alive>
     </transition>
-    <router-view v-if="!$route.meta.keepAlive && pageShow"/>
+    <router-view v-if="!$route.meta.keepAlive && pageShow && !$route.meta.isPublic"/>
     <div
       v-if="web3Model || connectModel || web3Loading"
       class="d-flex mobile-plugins-box">

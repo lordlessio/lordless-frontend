@@ -37,11 +37,11 @@
               <a class="d-flex f-align-center" :href="openseaLink" target="_blank">
                 <lordless-blockies :seed="chestDetail.user" :scale="7"/>
                 <p class="v-flex text-break chest-owner-address">{{ chestDetail.user }}</p>
-                <span class="inline-block line-height-0 chest-arrow-icon">
+                <!-- <span class="inline-block line-height-0 chest-arrow-icon">
                   <svg>
                     <use xlink:href="#icon-arrow-line-right"/>
                   </svg>
-                </span>
+                </span> -->
               </a>
             </div>
           </div>
@@ -76,6 +76,7 @@
               </span>
               <span>UNLOCKING COST</span>
             </h3>
+            <p v-if="account" class="chest-hops-available">Available: {{ hopsBalanceNumber || 0 | formatMoneyNumber }} HOPS</p>
             <ul class="chest-detail-candies-box">
               <li class="TTFontBolder d-flex f-align-center bounty-candies-item cost" :class="{ 'is-green': chestStatus === 'unopened' && enoughHops, 'is-red': chestStatus === 'unopened' && !enoughHops }">
                 <span class="inline-block line-height-0 bounty-candy-icon">
@@ -143,7 +144,7 @@
             class="full-width chest-detail-btn"
             :theme="enoughHops ? 'blue-linear' : 'red-linear'"
             :loading="btnLoading"
-            :disabled="btnLoading || chestStatus === 'unlocking'"
+            :disabled="isChecking || isDisabled || btnLoading || chestStatus === 'unlocking'"
             @click="openPackage">
             <span v-if="enoughHops">Unlock the Bounty Chest</span>
             <span v-else>Deposit LESS to reap HOPS</span>
@@ -184,12 +185,16 @@ export default {
         opened: 'gift-opened',
         unlocking: 'gift',
         unopened: 'gift'
-      }
+      },
+      isChecking: false,
+      isDisabled: false
     }
   },
   computed: {
     ...mapState('contract', [
-      'Bounty'
+      'Bounty',
+      'tokensContract',
+      'tokensContractInit'
     ]),
     ...mapState('web3', [
       'web3Opt'
@@ -213,10 +218,15 @@ export default {
       return !this.userInfo.default && !this.userInfo._id
     },
 
+    playInit () {
+      const { loading, isConnected } = this.web3Opt
+      return !loading && isConnected && !!this.chestDetail._id && !!this.Bounty && this.tokensContractInit
+    },
+
     isOwner () {
       const info = this.chestDetail
       if (!info._id) return false
-      return info.user.toLocaleLowerCase() === this.account.toLocaleLowerCase()
+      return this.account && info.user.toLocaleLowerCase() === this.account.toLocaleLowerCase()
     },
 
     enoughHops () {
@@ -273,6 +283,11 @@ export default {
       ]
     }
   },
+  watch: {
+    playInit (val) {
+      val && this.initBountyChestStatus()
+    }
+  },
   components: {
     BountyDetailSkeletion
   },
@@ -323,6 +338,8 @@ export default {
         if (res.code === 1000 && res.data) {
           this.chestDetail = res.data
           this.initChestStatus(res.data)
+          console.log('-0000-------- before status')
+          this.initBountyChestStatus(res.data)
         } else if (!res.data) {
           this.$router.push('/owner/bounty/chests')
         }
@@ -346,16 +363,51 @@ export default {
       })
     },
 
+    async initBountyChestStatus ({ bountyId, info } = this.chestDetail, Bounty = this.Bounty, { web3js } = this.web3Opt, tokensContract = this.tokensContract) {
+      console.log('come in bountychest')
+      if (!info || !Bounty) return false
+
+      console.log('come in bountychest ---- 2')
+
+      this.isChecking = true
+      let isDisabled = false
+
+      const contractAddress = Bounty.address
+      // // 获取活动的开启状态，如果 luckyblockBase 为true，代表活动关闭
+      // const luckyblockBase = await Bounty.methods('getLuckyblockBase', [ luckyblockId ])
+      // console.log('luckyblockBase', luckyblockBase)
+
+      await Promise.all(info.map(async item => {
+        if (isDisabled) return
+        const candy = item.candy.address
+        if (!tokensContract[candy]) return
+        // console.log('--- tokensContract', candy, tokensContract[candy].methods)
+        const tokenBalance = (await tokensContract[candy].methods('balanceOf', [ contractAddress ])).toNumber() || 0
+
+        // 判断 token 是否充足
+        const tokenEnough = tokenBalance >= (item.count * Math.pow(10, item.candy.decimals))
+        console.log('tokenBalance', tokenBalance, tokenEnough)
+        if (!tokenEnough) {
+          isDisabled = true
+        }
+        return item
+      }))
+
+      this.isChecking = false
+      this.isDisabled = isDisabled
+      return isDisabled
+    },
+
     async openPackage () {
       try {
         if (!this.enoughHops) {
           this.$router.push('/owner/hops')
           return
         }
-        this.btnLoading = true
         const authorize = await this.$refs.authorize.checkoutAuthorize({ tokenAllowance: true })
         console.log('openPackage', authorize)
         if (!authorize) return
+        this.btnLoading = true
         console.log('openBounty', authorize, openBounty)
         this.doOpenPackage()
       } catch (err) {
@@ -370,6 +422,18 @@ export default {
     },
     async doOpenPackage (account = this.account, info = this.chestDetail, web3Opt = this.web3Opt, Bounty = this.Bounty) {
       this.btnLoading = true
+
+      const isDisabled = await this.initBountyChestStatus()
+      if (isDisabled) {
+        this.btnLoading = false
+        this.$notify.info({
+          title: 'Info!',
+          message: 'Waiting for withdraw open...',
+          position: 'bottom-right',
+          duration: 3500
+        })
+        return
+      }
 
       const { balance } = (await this.setTokensBalance()).hops || {}
 
@@ -526,6 +590,11 @@ export default {
     &:not(:first-of-type) {
       margin-top: 24px;
     }
+  }
+  .chest-hops-available {
+    margin-left: 24px;
+    font-size: 14px;
+    color: #777;
   }
 
   // chest-detail-owner

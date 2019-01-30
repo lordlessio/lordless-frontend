@@ -241,7 +241,10 @@ export default {
       this.$nextTick(async () => {
         try {
           const authorize = await this.$refs.authorize.checkoutAuthorize({ tokenAllowance: true })
-          if (!authorize) return
+          if (!authorize) {
+            this.btnLoading = false
+            return
+          }
 
           this.doGrowHops(_depositModel)
         } catch (err) {

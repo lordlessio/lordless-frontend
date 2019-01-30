@@ -407,6 +407,8 @@ export const formatMoneyNumber = (value, { len = 4 } = {}) => {
   if (len === 0) return values[0]
   if (values[1]) {
     value = parseInt(values[0]).toLocaleString() + '.' + values[1].slice(0, len)
+  } else {
+    value = parseInt(values[0]).toLocaleString()
   }
   return value
 }

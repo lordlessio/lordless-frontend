@@ -7,6 +7,11 @@
         <p>Wallet address</p>
         <p class="text-ellipsis crowdsale-account">{{ account }}</p>
       </div>
+      <div class="crowdsale-header-item">
+        <p>Balance</p>
+        <p class="crowdsale-balance">{{ lessBalanceNumber | formatMoneyNumber }} LESS</p>
+        <p class="crowdsale-balance">{{ hopsBalanceNumber | formatMoneyNumber }} HOPS</p>
+      </div>
     </div>
     <div class="token-crowdsale-box">
       <h3>AUTHORIZATIONS</h3>
@@ -59,12 +64,12 @@
 </template>
 
 <script>
-import { metamaskMixins, publicMixins } from '@/mixins'
+import { checkTokensBalanceMixins, metamaskMixins, publicMixins } from '@/mixins'
 
 import { actionTypes } from '@/store/types'
 import { mapState, mapActions } from 'vuex'
 export default {
-  mixins: [metamaskMixins, publicMixins],
+  mixins: [checkTokensBalanceMixins, metamaskMixins, publicMixins],
   props: {
     tokenBets: {
       type: Array,
@@ -201,9 +206,9 @@ export default {
           contractLink: `${process.env.ETHERSCANURL}/address/${this.HOPSPlanAddress}#code`
         },
         bounty: {
-          name: 'Bounty HOPS',
-          behavior: 'Bounty HOPS',
-          contractText: 'Bounty HOPS',
+          name: 'Bounty Chest unlocking',
+          behavior: 'Unlock the Bounty Chest',
+          contractText: 'Bounty Chest unlocking',
           tokenAllowances: this.BountyTokenAllowances,
           checkAllowancesMethod: this[actionTypes.CONTRACT_SET_BOUNTY_TOKEN_ALLOWANCE],
           contractAddress: this.BountyAddress,
@@ -448,13 +453,14 @@ export default {
     // }
     &.dark {
       .crowdsale-header-item {
+        color: #555;
         >p {
           &:nth-of-type(1) {
             color: #999;
           }
-          &:nth-of-type(2) {
-            color: #555;
-          }
+        }
+        .balance {
+
         }
       }
       .token-crowdsale-name {
@@ -472,12 +478,10 @@ export default {
     }
     &.light {
       .crowdsale-header-item {
+        color: #fff;
         >p {
           &:nth-of-type(1) {
             color: #BDB9FD;
-          }
-          &:nth-of-type(2) {
-            color: #fff;
           }
         }
       }
@@ -508,11 +512,11 @@ export default {
     font-size: 16px;
     >p {
       &:nth-of-type(1) {
-        color: #BDB9FD;
+        // color: #BDB9FD;
       }
       &:nth-of-type(2) {
         margin-top: 4px;
-        color: #fff;
+        // color: #fff;
       }
     }
   }

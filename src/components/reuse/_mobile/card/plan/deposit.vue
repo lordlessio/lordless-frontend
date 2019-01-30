@@ -1,7 +1,39 @@
 <template>
-  <div class="mobile-deposit-card-box" :class="{ 'is-pending': isPending, 'is-failed': isFailed }">
+  <div class="mobile-deposit-card-box">
     <div class="deposit-card-container">
       <h3 class="deposit-card-title">LESS {{ planLockDays }} DAY Term Deposit</h3>
+      <div v-if="info.growHopsTx.length" class="deposit-planBase-txs">
+        <div v-for="(item, index) of info.growHopsTx" :key="`growhops_${index}`" class="planBase-tx-item">
+          <a class="d-flex f-align-center" :href="`${ETHERSCANURL}/tx/${item.tx}`" target="_blank">
+            <div class="v-flex planBase-tx-info">
+              <p>Deposit on &nbsp;&nbsp;{{ item.lockAt ? item.lockAt * 1000 : new Date() | dateFormat('HH:mm MMM DD YYYY') }}</p>
+              <p class="text-ellipsis planBase-tx-address">{{ item.tx }}</p>
+            </div>
+            <div class="text-right planBase-tx-right">
+              <span class="inline-block line-height-0 planBase-tx-icon">
+                <svg>
+                  <use xlink:href="#icon-arrow-line-right"/>
+                </svg>
+              </span>
+            </div>
+          </a>
+        </div>
+        <div v-for="(item, index) of info.withdrawTx" :key="`withdraw_${index}`" class="planBase-tx-item">
+          <a class="d-flex f-align-center" :href="`${ETHERSCANURL}/tx/${item.tx}`" target="_blank">
+            <div class="v-flex planBase-tx-info">
+              <p>Withdraw on &nbsp;&nbsp;{{ item.startAt * 1000 | dateFormat('HH:mm MMM DD YYYY') }}</p>
+              <p class="text-ellipsis planBase-tx-address">{{ item.tx }}</p>
+            </div>
+            <div class="text-right planBase-tx-right">
+              <span class="inline-block line-height-0 planBase-tx-icon">
+                <svg>
+                  <use xlink:href="#icon-arrow-line-right"/>
+                </svg>
+              </span>
+            </div>
+          </a>
+        </div>
+      </div>
       <ul class="relative deposit-planBase-details">
         <li class="d-flex f-align-center planBase-details-item"
           v-for="(item, index) of detailsInfo" :key="index">
@@ -10,23 +42,31 @@
         </li>
       </ul>
       <div class="deposit-card-bottom">
-        <p class="d-flex f-align-center planBase-details-item deposit-less-amount" :class="{ 'text-line-through': isFailed }">
+        <p class="d-flex f-align-center planBase-details-item deposit-less-amount" :class="{ 'text-line-through': isGrowFailed }">
           <span class="details-item-title">LESS</span>
           <span class="TTFontBolder v-flex text-right">{{ weiByDecimals(info.lessAmount).toLocaleString() }}</span>
         </p>
-        <div class="d-flex f-align-center deposit-bottom-desc">
-          <p class="TTFontBolder v-flex" v-if="!isMature">The deposit is immature.</p>
-          <p class="TTFontBolder v-flex" v-else-if="isFailed">The deposit was failed.</p>
+        <div class="text-right deposit-bottom-desc">
+          <!-- <p class="TTFontBolder v-flex" v-if="!isMature">The deposit is immature.</p>
+          <p class="TTFontBolder v-flex" v-else-if="isGrowFailed">The deposit was failed.</p>
           <p class="TTFontBolder v-flex" v-else-if="isWithdrawPending">The deposit is withdrawing.</p>
           <p class="TTFontBolder v-flex" v-else-if="info.isWithdrawn">You’ve withdrawn.</p>
-          <p class="TTFontBolder v-flex" v-else>Your LESS is mature.</p>
+          <p class="TTFontBolder v-flex" v-else>Your LESS is mature.</p> -->
           <lordless-btn
             class="deposit-withdraw-btn"
             theme="blue"
             inverse
             :loading="btnLoading"
-            :disabled="btnLoading || isWithdrawPending || !isMature || isPending || isFailed || info.isWithdrawn"
-            @click="withdraw">Withdraw</lordless-btn>
+            :disabled="btnLoading || !isMature || isGrowPending || isGrowFailed || isWithdrawPending || info.isWithdrawn"
+            @click="withdraw">
+            <span v-if="isGrowPending">Depositing</span>
+            <span v-else-if="isGrowFailed">Depositing</span>
+            <span v-else-if="isImmature">Immature</span>
+            <span v-else-if="isWithdrawFailed">Mature</span>
+            <span v-else-if="isWithdrawPending">Withdrawing</span>
+            <span v-else-if="info.isWithdrawn">Withdrawn</span>
+            <span v-else>Withdraw</span>
+            </lordless-btn>
         </div>
       </div>
     </div>
@@ -49,45 +89,58 @@ export default {
     }
   },
   computed: {
-
+    ETHERSCANURL () {
+      return process.env.ETHERSCANURL
+    },
     isWithdrawPending () {
       const info = this.info
       if (!info._id) return true
-      return info.withdrawTx.status === 0 && !!info.withdrawTx.tx
+      const { withdrawTx } = info
+      // const now = new Date().getTime() / 1000
+      // && now - item.startAt < 24 * 3600
+      const isComplete = withdrawTx.filter(item => item.status === 1).length
+      return withdrawTx.length && !isComplete && !!withdrawTx.filter(item => item.status === 0).length
     },
-
-    isPending () {
+    isWithdrawFailed () {
       const info = this.info
       if (!info._id) return true
-      return info.growHopsTx.status === 0
+      const { withdrawTx } = info
+      return withdrawTx[0] && withdrawTx[0].status === -1
     },
-
-    isFailed () {
+    isGrowPending () {
       const info = this.info
       if (!info._id) return true
-      return this.info.growHopsTx.status === -1
+      return info.growHopsTx[0] && info.growHopsTx[0].status === 0
     },
-
+    isGrowFailed () {
+      const info = this.info
+      if (!info._id) return true
+      return info.growHopsTx[0] && info.growHopsTx[0].status === -1
+    },
+    isImmature () {
+      const info = this.info
+      if (!info._id) return false
+      const { status, releaseAt } = info.growHopsTx[0]
+      return status === 1 && new Date() < new Date(releaseAt * 1000)
+    },
     isMature () {
       const info = this.info
       if (!info._id) return false
-      const { status, releaseAt } = this.info.growHopsTx
+      const { status, releaseAt } = info.growHopsTx[0]
       console.log('----- isMature', releaseAt, status, new Date() >= new Date(releaseAt * 1000))
+      // return (status === 1 || !info.withdrawTx.filter(item => item.status === 1).length) && new Date() >= new Date(releaseAt * 1000)
       return status === 1 && new Date() >= new Date(releaseAt * 1000)
     },
-
-    helmValue () {
+    heldValue () {
       const info = this.info
       if (!info._id) return {}
       return (info.planBase.lessToHops / (info.planBase.lockTime / 3600 / 24 / 30)).toFixed(1).toString()
     },
-
     planLockDays () {
       const info = this.info
       if (!info._id) return {}
       return info.planBase.lockTime / 3600 / 24
     },
-
     planType () {
       const info = this.info
       if (!info._id) return {}
@@ -98,7 +151,6 @@ export default {
       }
       return _planTypes[info.planBase.level]
     },
-
     detailsInfo () {
       const info = this.info
       if (!info._id) return {}
@@ -108,8 +160,8 @@ export default {
           text: this.planType
         },
         {
-          title: 'HELM',
-          text: this.helmValue
+          title: 'HELD',
+          text: this.heldValue
         },
         {
           title: 'Deposit Period',
@@ -117,11 +169,11 @@ export default {
         },
         {
           title: 'Deposit on',
-          text: (this.isPending || this.isFailed) ? '--' : dateFormat(new Date(info.growHopsTx.lockAt * 1000), 'MMM. DD YYYY HH:mm:ss')
+          text: (this.isGrowPending || this.isGrowFailed) ? '--' : dateFormat(new Date(info.growHopsTx[0].lockAt * 1000), 'MMM. DD YYYY HH:mm:ss')
         },
         {
           title: 'Mature on',
-          text: (this.isPending || this.isFailed) ? '--' : dateFormat(new Date(info.growHopsTx.releaseAt * 1000), 'MMM. DD YYYY HH:mm:ss')
+          text: (this.isGrowPending || this.isGrowFailed) ? '--' : dateFormat(new Date(info.growHopsTx[0].releaseAt * 1000), 'MMM. DD YYYY HH:mm:ss')
         }
       ]
     }
@@ -133,7 +185,9 @@ export default {
     withdraw () {
       this.btnLoading = true
       this.$emit('withdraw', (tx) => {
-        if (tx) this.$set(this.info.withdrawTx, 'tx', tx)
+        const _withdrawTx = this.info.withdrawTx
+        _withdrawTx.unshift({ tx, status: 0, startAt: Math.ceil(new Date().getTime() / 1000) })
+        if (tx) this.$set(this.info, 'withdrawTx', _withdrawTx)
         this.btnLoading = false
       })
     }
@@ -202,9 +256,8 @@ export default {
   .deposit-card-title {
     font-size: 16px;
   }
-
   .deposit-planBase-details {
-    margin-top: 10px;
+    // margin-top: 10px;
     padding-top: 12px;
     padding-bottom: 12px;
     background-color: #fff;
@@ -219,7 +272,6 @@ export default {
   .details-item-title {
     color: #999;
   }
-
   .deposit-card-bottom {
     padding-top: 12px;
     border-top: 1px solid #ddd;
@@ -240,4 +292,37 @@ export default {
     font-size: 14px;
     @include TTFontBold();
   }
+  /**
+   *  deposit-planBase-txs -- begin
+   */
+  .deposit-planBase-txs {
+    margin-top: 10px;
+    padding: 12px 0;
+    border-top: 1px solid #ddd;
+  }
+  .planBase-tx-item {
+    &:not(:first-of-type) {
+      margin-top: 18px;
+    }
+  }
+  .planBase-tx-info {
+    max-width: 90%;
+    font-size: 14px;
+    color: #777;
+  }
+  .planBase-tx-address {
+    font-size: 12px;
+    color: #bbb;
+  }
+  .planBase-tx-right {
+    width: 40px;
+  }
+  .planBase-tx-icon {
+    width: 14px;
+    height: 14px;
+    fill: #bbb;
+  }
+  /**
+   *  deposit-planBase-txs -- end
+   */
 </style>

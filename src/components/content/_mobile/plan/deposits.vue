@@ -1,7 +1,7 @@
 <template>
   <div id="mobile-deposits-box" class="mobile-deposits-box">
     <transition namd="ld-hide-fade" mode="out-in" @after-enter="afterEnter">
-      <deposits-skeletion v-if="!tokensBalanceInit || loading"/>
+      <deposits-skeletion v-if="loading"/>
       <div v-else-if="!loading && !plans.total" class="d-flex f-auto-center text-center mobile-deposits-none">
         <div class="deposits-none-container">
           <span class="relative inline-block line-height-0 deposits-none-icon">
@@ -24,7 +24,7 @@
             </span>
             <div class="v-flex header-item-cnt">
               <p>Cumulative income (HOPS)</p>
-              <h3>{{ hopsBalanceNumber.toLocaleString() }}</h3>
+              <h3>{{ weiByDecimals(plans.allCandies.hopsCount).toLocaleString() }}</h3>
             </div>
           </div>
           <div class="d-flex f-align-center deposits-header-item">
@@ -35,7 +35,7 @@
             </span>
             <div class="v-flex header-item-cnt">
               <p>Immature deposit (LESS)</p>
-              <h3>{{ lessBalanceNumber.toLocaleString() }}</h3>
+              <h3>{{ weiByDecimals(plans.allCandies.lessCount).toLocaleString() }}</h3>
             </div>
           </div>
         </div>
@@ -65,13 +65,15 @@ import DepositsSkeletion from '@/components/skeletion/_mobile/hops/deposits'
 
 import MyDepositCard from '@/components/reuse/_mobile/card/plan/deposit'
 
+import { weiByDecimals } from 'utils/tool'
+
 import { getPlansByToken, withdrawLessPlan } from 'api'
 
-import { checkTokensBalanceMixins, metamaskMixins, publicMixins } from '@/mixins'
+import { metamaskMixins, publicMixins } from '@/mixins'
 import { mapState } from 'vuex'
 export default {
   name: 'mobile-owner-deposits-component',
-  mixins: [ checkTokensBalanceMixins, metamaskMixins, publicMixins ],
+  mixins: [ metamaskMixins, publicMixins ],
   data: () => {
     return {
       rendered: false,
@@ -82,6 +84,7 @@ export default {
         pn: 1,
         ps: 10,
         total: 0,
+        allCandies: {},
         noMore: false
       }
     }
@@ -100,6 +103,10 @@ export default {
     MyDepositCard
   },
   methods: {
+    weiByDecimals () {
+      return weiByDecimals(...arguments)
+    },
+
     afterEnter () {
       this.scrollListenerFunc()
     },
@@ -154,12 +161,13 @@ export default {
     async initDeposits () {
       this.loadMoreLoading = false
       this.loading = true
-      const { list = [], pn = 1, ps = 10, total = 0 } = (await this.getUserPlans({ pn: 1 })) || {}
+      const { list = [], pn = 1, ps = 10, total = 0, allCandies = {} } = (await this.getUserPlans({ pn: 1 })) || {}
       this.plans = {
         list,
         pn,
         ps,
         total,
+        allCandies,
         noMore: total <= ps
       }
       this.loading = false
@@ -187,7 +195,7 @@ export default {
       const { list = [], ps = info.ps, total = 0 } = (await this.getUserPlans({ pn })) || {}
 
       let noMore = false
-      if (total <= ps) {
+      if (list.length < ps) {
         noMore = true
       }
       this.$set(this, 'plans', Object.assign({}, info, {

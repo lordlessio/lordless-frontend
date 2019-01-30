@@ -1,5 +1,5 @@
 <template>
-  <div class="bounty-chest-card-box" @click.stop="$router.push(`/owner/chest/${info._id}`)">
+  <div class="bounty-chest-card-box" @click.stop="$router.push(`/bountyChest/${info.bountyId || info._id}`)">
     <div class="d-flex f-align-start chest-card-container">
       <span class="inline-block line-height-0 chest-card-gift" :class="chestGifts[chestStatus]">
         <svg>

@@ -21,6 +21,7 @@
                 </svg>
               </span>
               <span>BOUNTIES</span>
+              <span>&nbsp;&nbsp;(≈ {{ bountyAssets.assetsByEth | formatDecimal }}ETH)</span>
             </h3>
             <ul class="package-bounty-candies-box">
               <li v-for="(item, index) of bountyAssets.detailBountiesInfo" :key="index"
