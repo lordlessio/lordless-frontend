@@ -24,7 +24,7 @@
             </span>
             <div class="v-flex header-item-cnt">
               <p>Cumulative income (HOPS)</p>
-              <h3>{{ weiByDecimals(plans.allCandies.hopsCount).toLocaleString() }}</h3>
+              <h3>{{ weiByDecimals(plans.depositsCandies.hopsCount).toLocaleString() }}</h3>
             </div>
           </div>
           <div class="d-flex f-align-center deposits-header-item">
@@ -35,7 +35,7 @@
             </span>
             <div class="v-flex header-item-cnt">
               <p>Immature deposit (LESS)</p>
-              <h3>{{ weiByDecimals(plans.allCandies.lessCount).toLocaleString() }}</h3>
+              <h3>{{ weiByDecimals(plans.depositsCandies.lessCount).toLocaleString() }}</h3>
             </div>
           </div>
         </div>
@@ -84,7 +84,7 @@ export default {
         pn: 1,
         ps: 10,
         total: 0,
-        allCandies: {},
+        depositsCandies: {},
         noMore: false
       }
     }
@@ -161,13 +161,13 @@ export default {
     async initDeposits () {
       this.loadMoreLoading = false
       this.loading = true
-      const { list = [], pn = 1, ps = 10, total = 0, allCandies = {} } = (await this.getUserPlans({ pn: 1 })) || {}
+      const { list = [], pn = 1, ps = 10, total = 0, depositsCandies = {} } = (await this.getUserPlans({ pn: 1 })) || {}
       this.plans = {
         list,
         pn,
         ps,
         total,
-        allCandies,
+        depositsCandies,
         noMore: total <= ps
       }
       this.loading = false

@@ -186,7 +186,7 @@ export default {
         unlocking: 'gift',
         unopened: 'gift'
       },
-      isChecking: false,
+      isChecking: true,
       isDisabled: false
     }
   },
@@ -285,6 +285,7 @@ export default {
   },
   watch: {
     playInit (val) {
+      console.log('----- playInit', val)
       val && this.initBountyChestStatus()
     }
   },
@@ -364,10 +365,7 @@ export default {
     },
 
     async initBountyChestStatus ({ bountyId, info } = this.chestDetail, Bounty = this.Bounty, { web3js } = this.web3Opt, tokensContract = this.tokensContract) {
-      console.log('come in bountychest')
       if (!info || !Bounty) return false
-
-      console.log('come in bountychest ---- 2')
 
       this.isChecking = true
       let isDisabled = false
