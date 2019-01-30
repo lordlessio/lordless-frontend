@@ -23,12 +23,12 @@
           <ul>
             <li class="token-crowdsale-item"
               v-for="(bet, index) of allTokenBets[betKey]" :key="index">
-              <p class="d-flex f-align-center token-crowdsale-symbol" @click.stop="approveAllowance(Object.assign({}, bet, allTokenCrowdsaleInfos[betKey]), allowanceModels[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`])">
+              <p class="d-flex f-align-center token-crowdsale-symbol" @click.stop="approveAllowance(Object.assign({}, bet, allTokenCrowdsaleInfos[betKey]), allowanceModels[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`], allowancePendings[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`])">
                 <span class="inline-block token-bet-icon">
                   <lordless-check-box
                     v-model="allowanceModels[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`]"
                     :loading="allowancePendings[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`]"
-                    @click="approveAllowance(Object.assign({}, bet, allTokenCrowdsaleInfos[betKey]), allowanceModels[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`])"
+                    @click="approveAllowance(Object.assign({}, bet, allTokenCrowdsaleInfos[betKey]), allowanceModels[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`], allowancePendings[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`])"
                     :theme="theme"
                     sync/>
                 </span>
@@ -44,12 +44,12 @@
         <ul>
           <li class="token-crowdsale-item"
             v-for="(bet, index) of tokenBets" :key="index">
-            <p class="d-flex f-align-center token-crowdsale-symbol" @click.stop="approveAllowance(bet, allowanceModels[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`])">
+            <p class="d-flex f-align-center token-crowdsale-symbol" @click.stop="approveAllowance(bet, allowanceModels[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`], allowancePendings[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`])">
               <span class="inline-block token-bet-icon">
                 <lordless-check-box
                   v-model="allowanceModels[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`]"
                   :loading="allowancePendings[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`]"
-                  @click="approveAllowance(bet, allowanceModels[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`])"
+                  @click="approveAllowance(bet, allowanceModels[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`], allowancePendings[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`])"
                   :theme="theme"
                   sync/>
               </span>
@@ -248,6 +248,7 @@ export default {
           const _contractAddress = _crowdsaleInfo.contractAddress
           const _tokenAllowances = _crowdsaleInfo.tokenAllowances
           const _checkAllowancesMethod = _crowdsaleInfo.checkAllowancesMethod
+          const _behavior = _crowdsaleInfo._behavior
           for (const bet of _tokenBets) {
             let { candy } = bet
             candy = typeof candy === 'object' ? candy.address.toLocaleLowerCase() : candy.toLocaleLowerCase()
@@ -255,7 +256,7 @@ export default {
             const tokenApproveKey = `lordless_token_approve_${account}_${candy}_${_contractAddress}`
             console.log('tokenApproveKey', tokenApproveKey)
             const isPending = !!localStorage.getItem(tokenApproveKey)
-            isPending && this.loopCheckTokenAllowance({ candy, count: bet.count, contractAddress: _contractAddress, tokenAllowances: _tokenAllowances, checkAllowancesMethod: _checkAllowancesMethod })
+            isPending && this.loopCheckTokenAllowance({ candy, count: bet.count, contractAddress: _contractAddress, tokenAllowances: _tokenAllowances, checkAllowancesMethod: _checkAllowancesMethod, _behavior })
 
             this.$set(this.allowancePendings, `${candy}_${_contractAddress}`, isPending || _tokenAllowances[candy] === undefined)
           }
@@ -341,8 +342,20 @@ export default {
     /**
      * 授权erc20合约
      */
-    async approveAllowance ({ account = this.account, candy, count, contractAddress = this.contractAddress, tokenAllowances = this.tokenAllowances, checkAllowancesMethod = this.checkAllowancesMethod, tokensContract = this.tokensContract } = {}, isChoose = false, web3Opt = this.web3Opt) {
-      if (isChoose) return
+    async approveAllowance ({
+      account = this.account,
+      candy, count,
+      contractAddress = this.contractAddress,
+      tokenAllowances = this.tokenAllowances,
+      checkAllowancesMethod = this.checkAllowancesMethod,
+      tokensContract = this.tokensContract,
+      behavior = this.tokenCrowdsaleInfo.behavior
+    } = {},
+    isChoose = false,
+    isPending = false,
+    web3Opt = this.web3Opt
+    ) {
+      if (isChoose || isPending) return
 
       candy = typeof candy === 'object' ? candy.address : candy
 
@@ -371,7 +384,7 @@ export default {
       tokensContract[candy].methods(setApprove.name, setApprove.values.concat([{ from: account, gas, gasPrice }]))
         .then(tx => {
           this.metamaskChoose = false
-          this.loopCheckTokenAllowance({ candy, count, contractAddress, tokenAllowances, checkAllowancesMethod })
+          this.loopCheckTokenAllowance({ candy, count, contractAddress, tokenAllowances, checkAllowancesMethod, behavior })
         })
         .catch(err => {
           console.log('err', err)
@@ -384,7 +397,15 @@ export default {
     /**
      * loop 监听 tokenAllowance 事件
      */
-    async loopCheckTokenAllowance ({ account = this.account, candy = '', count = 0, contractAddress = this.contractAddress, tokenAllowances = this.tokenAllowances, checkAllowancesMethod = this.checkAllowancesMethod, tokensContract = this.tokensContract } = {}) {
+    async loopCheckTokenAllowance ({
+      account = this.account,
+      candy = '', count = 0,
+      contractAddress = this.contractAddress,
+      tokenAllowances = this.tokenAllowances,
+      checkAllowancesMethod = this.checkAllowancesMethod,
+      behavior = this.tokenCrowdsaleInfo.behavior,
+      tokensContract = this.tokensContract
+    } = {}) {
       if (!account) return
 
       candy = candy.toLocaleLowerCase()
@@ -408,7 +429,7 @@ export default {
           if (allowance >= count) {
             localStorage.getItem(tokenApproveKey) && this.$notify.success({
               title: 'Success!',
-              message: 'Betting with LESS Success!',
+              message: `${behavior} Success!`,
               position: 'bottom-right',
               duration: 2500
             })

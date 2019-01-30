@@ -144,7 +144,7 @@
             class="full-width chest-detail-btn"
             :theme="enoughHops ? 'blue-linear' : 'red-linear'"
             :loading="btnLoading"
-            :disabled="isChecking || isDisabled || btnLoading || chestStatus === 'unlocking'"
+            :disabled="enoughHops && (isChecking || isDisabled || btnLoading || chestStatus === 'unlocking')"
             @click="openPackage">
             <span v-if="enoughHops">Unlock the Bounty Chest</span>
             <span v-else>Deposit LESS to reap HOPS</span>
