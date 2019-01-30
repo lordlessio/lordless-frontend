@@ -3,7 +3,7 @@
  * contract store options
  */
 import { weiByDecimals } from 'utils/tool'
-import { initContract, NFTsCrowdsale, TavernNFTs, Airdrop, Luckyblock, HOPSPlan, Bounty } from '@/contract'
+import { initContract, NFTsCrowdsale, TavernNFTs, Airdrop, Luckyblock, HOPSPlan, Bounty, BountyNFT } from '@/contract'
 import { mutationTypes, actionTypes } from './types'
 import web3Store from './web3'
 import candyStore from './candy'
@@ -23,6 +23,11 @@ export default {
     Airdrop: null,
     Luckyblock: null,
     Bounty: null,
+    BountyNFT: null,
+
+    // 所有的 erc721 授权
+    bountyNFTApproved: false,
+    checkBountyNFTApprovedInit: false,
 
     // 所有的 erc20 balance
     tokensBalance: {},
@@ -43,16 +48,16 @@ export default {
   },
 
   mutations: {
-    [mutationTypes.CONTRACT_SET_INSTANCE]: (state, { key, value }) => {
+    [mutationTypes.CONTRACT_SET_INSTANCE]: (state, { key, value } = {}) => {
       if (!key) return false
       state[key] = value
-      // window[key] = value
+      window[key] = value
     },
 
     /**
      * set airdrop tokens contract
      */
-    [mutationTypes.CONTRACT_SET_AIRDROP_TOKENS]: (state, { candiesTotal, candy, contract }) => {
+    [mutationTypes.CONTRACT_SET_AIRDROP_TOKENS]: (state, { candiesTotal, candy, contract } = {}) => {
       const _tokensContract = state.tokensContract
       _tokensContract[candy] = contract
       state.tokensContract = _tokensContract
@@ -64,7 +69,7 @@ export default {
     /**
      * set luckyblock token allowance
      */
-    [mutationTypes.CONTRACT_SET_LUCKYBLOCK_TOKEN_ALLOWANCE]: (state, { candiesTotal = 0, candy = '', allowance = 0 }) => {
+    [mutationTypes.CONTRACT_SET_LUCKYBLOCK_TOKEN_ALLOWANCE]: (state, { candiesTotal = 0, candy = '', allowance = 0 } = {}) => {
       state.luckyblockTokenAllowances[candy.toLocaleLowerCase()] = allowance.toNumber()
       if (Object.keys(state.luckyblockTokenAllowances).length >= candiesTotal) state.luckyblockTokenAllowancesInit = true
       // window.luckyblockTokenAllowances = state.luckyblockTokenAllowances
@@ -73,7 +78,7 @@ export default {
     /**
      * set HOPSPlan token allowance
      */
-    [mutationTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE]: (state, { candiesTotal = 0, candy = '', allowance = 0 }) => {
+    [mutationTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE]: (state, { candiesTotal = 0, candy = '', allowance = 0 } = {}) => {
       state.HOPSPlanTokenAllowances[candy.toLocaleLowerCase()] = allowance.toNumber()
       if (Object.keys(state.HOPSPlanTokenAllowances).length >= candiesTotal) state.HOPSPlanTokenAllowancesInit = true
       // window.HOPSPlanTokenAllowances = state.HOPSPlanTokenAllowances
@@ -82,10 +87,17 @@ export default {
     /**
      * set bounty token allowance
      */
-    [mutationTypes.CONTRACT_SET_BOUNTY_TOKEN_ALLOWANCE]: (state, { candiesTotal = 0, candy = '', allowance = 0 }) => {
+    [mutationTypes.CONTRACT_SET_BOUNTY_TOKEN_ALLOWANCE]: (state, { candiesTotal = 0, candy = '', allowance = 0 } = {}) => {
       state.BountyTokenAllowances[candy.toLocaleLowerCase()] = allowance.toNumber()
       if (Object.keys(state.BountyTokenAllowances).length >= candiesTotal) state.BountyTokenAllowancesInit = true
       // window.BountyTokenAllowances = state.BountyTokenAllowances
+    },
+
+    /**
+     * check bountyNFT isApproved
+     */
+    [mutationTypes.CONTRACT_SET_BOUNTYNFT_APPROVE]: (state, payload = false) => {
+      state.bountyNFTApproved = payload
     },
 
     /**
@@ -115,7 +127,7 @@ export default {
      */
     [actionTypes.CONTRACT_INIT_INSTANCE]: async ({ state, commit, dispatch }, { monitor = false } = {}) => {
       console.log('init contract')
-      const { web3js, address } = web3Store.state.web3Opt
+      const { web3js, address = window.localStorage.getItem('currentAddress') } = web3Store.state.web3Opt
 
       // 如果是 monitor 的状态，不重置合约文件
       if (!monitor) {
@@ -124,6 +136,7 @@ export default {
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Luckyblock', value: await Luckyblock(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'HOPSPlan', value: await HOPSPlan(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Bounty', value: await Bounty(web3js) })
+        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'BountyNFT', value: await BountyNFT(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'TavernNFTs', value: await TavernNFTs(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'contractReady', value: true })
       }
@@ -139,6 +152,8 @@ export default {
       await Promise.all(_symbols.map(item => dispatch(actionTypes.CONTRACT_SET_AIRDROP_TOKENS, { candiesTotal: _symbols.length, candy: item.address, luckyAddress: state.Luckyblock.address })))
 
       dispatch(actionTypes.CONTRACT_SET_TOKENS_BALANCE)
+
+      dispatch(actionTypes.CONTRACT_CHECK_BOUNTYNFT_APPROVE, { address })
     },
 
     /**
@@ -151,6 +166,7 @@ export default {
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Luckyblock', value: await Luckyblock(web3js) })
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'HOPSPlan', value: await HOPSPlan(web3js) })
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Bounty', value: await Bounty(web3js) })
+      commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'BountyNFT', value: await BountyNFT(web3js) })
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'TavernNFTs', value: await TavernNFTs(web3js) })
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'address', value: null })
     },
@@ -216,6 +232,18 @@ export default {
       const allowance = await erc20Contract.methods('allowance', [ address, contractAddress ])
       commit(mutationTypes.CONTRACT_SET_BOUNTY_TOKEN_ALLOWANCE, { candiesTotal, candy, allowance })
       return allowance
+    },
+
+    /**
+     * check bountyNFT approved
+     */
+    [actionTypes.CONTRACT_CHECK_BOUNTYNFT_APPROVE]: async ({ state, commit }, { address, BountyNFT = state.BountyNFT } = {}) => {
+      // check user isApprovedForAll for bountyNFT
+      const isApproved = await BountyNFT.methods('isApprovedForAll', [ address, BountyNFT.address ])
+      console.log('--------- isApproved', isApproved)
+      commit(mutationTypes.CONTRACT_SET_BOUNTYNFT_APPROVE, isApproved)
+      state.checkBountyNFTApprovedInit = true
+      return isApproved
     },
 
     /**

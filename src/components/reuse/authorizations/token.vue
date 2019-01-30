@@ -23,18 +23,34 @@
           <ul>
             <li class="token-crowdsale-item"
               v-for="(bet, index) of allTokenBets[betKey]" :key="index">
-              <p class="d-flex f-align-center token-crowdsale-symbol" @click.stop="approveAllowance(Object.assign({}, bet, allTokenCrowdsaleInfos[betKey]), allowanceModels[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`], allowancePendings[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`])">
-                <span class="inline-block token-bet-icon">
-                  <lordless-check-box
-                    v-model="allowanceModels[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`]"
-                    :loading="allowancePendings[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`]"
-                    @click="approveAllowance(Object.assign({}, bet, allTokenCrowdsaleInfos[betKey]), allowanceModels[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`], allowancePendings[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`])"
-                    :theme="theme"
-                    sync/>
-                </span>
-                <span class="TTFontBolder">{{ allTokenCrowdsaleInfos[betKey].behavior }} <span v-if="allTokenCrowdsaleInfos[betKey].behavior === 'Betting'">with <span class="text-upper">{{ bet.candy.symbol }}</span></span></span>
-              </p>
-              <p class="token-crowdsale-desc">Authorize the <a :href="allTokenCrowdsaleInfos[betKey].contractLink" target="_blank">{{ allTokenCrowdsaleInfos[betKey].contractText }} contract</a> to operate your <span class="text-upper">{{ bet.candy.symbol }}</span> on your behalf.</p>
+              <div v-if="bet.type === 'erc721'">
+                <div class="d-flex f-align-center token-crowdsale-symbol" @click.stop="approveAllowance(Object.assign({}, bet, Erc721CrowdsaleInfos[bet.contract]), allowanceModels[`${account}_${Erc721CrowdsaleInfos[bet.contract].contractAddress}`], allowancePendings[`${account}_${Erc721CrowdsaleInfos[bet.contract].contractAddress}`])">
+                  <span class="inline-block token-bet-icon">
+                    <lordless-check-box
+                      v-model="allowanceModels[`${account}_${Erc721CrowdsaleInfos[bet.contract].contractAddress}`]"
+                      :loading="allowancePendings[`${account}_${Erc721CrowdsaleInfos[bet.contract].contractAddress}`]"
+                      @click="approveAllowance(Object.assign({}, bet, Erc721CrowdsaleInfos[bet.contract]), allowanceModels[`${account}_${Erc721CrowdsaleInfos[bet.contract].contractAddress}`], allowancePendings[`${account}_${Erc721CrowdsaleInfos[bet.contract].contractAddress}`])"
+                      :theme="theme"
+                      sync/>
+                  </span>
+                  <span class="TTFontBolder">{{ Erc721CrowdsaleInfos[bet.contract].behavior }} <span v-if="Erc721CrowdsaleInfos[bet.contract].behavior === 'Betting'">with <span class="text-upper">{{ Erc721CrowdsaleInfos[bet.contract].operateText }}</span></span></span>
+                </div>
+                <p class="token-crowdsale-desc">Authorize the <a :href="allTokenCrowdsaleInfos[betKey].contractLink" target="_blank">{{ allTokenCrowdsaleInfos[betKey].contractText }} contract</a> to operate your <span>{{ allTokenCrowdsaleInfos[betKey].operateText }}</span> on your behalf.</p>
+              </div>
+              <div v-else>
+                <div class="d-flex f-align-center token-crowdsale-symbol" @click.stop="approveAllowance(Object.assign({}, bet, allTokenCrowdsaleInfos[betKey]), allowanceModels[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`], allowancePendings[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`])">
+                  <span class="inline-block token-bet-icon">
+                    <lordless-check-box
+                      v-model="allowanceModels[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`]"
+                      :loading="allowancePendings[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`]"
+                      @click="approveAllowance(Object.assign({}, bet, allTokenCrowdsaleInfos[betKey]), allowanceModels[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`], allowancePendings[`${bet.candy.address}_${allTokenCrowdsaleInfos[betKey].contractAddress}`])"
+                      :theme="theme"
+                      sync/>
+                  </span>
+                  <span class="TTFontBolder">{{ allTokenCrowdsaleInfos[betKey].behavior }} <span v-if="allTokenCrowdsaleInfos[betKey].behavior === 'Betting'">with <span class="text-upper">{{ bet.candy.symbol }}</span></span></span>
+                </div>
+                <p class="token-crowdsale-desc">Authorize the <a :href="allTokenCrowdsaleInfos[betKey].contractLink" target="_blank">{{ allTokenCrowdsaleInfos[betKey].contractText }} contract</a> to operate your <span>{{ allTokenCrowdsaleInfos[betKey].operateText || bet.candy.symbol }}</span> on your behalf.</p>
+              </div>
             </li>
           </ul>
         </div>
@@ -44,18 +60,34 @@
         <ul>
           <li class="token-crowdsale-item"
             v-for="(bet, index) of tokenBets" :key="index">
-            <p class="d-flex f-align-center token-crowdsale-symbol" @click.stop="approveAllowance(bet, allowanceModels[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`], allowancePendings[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`])">
-              <span class="inline-block token-bet-icon">
-                <lordless-check-box
-                  v-model="allowanceModels[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`]"
-                  :loading="allowancePendings[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`]"
-                  @click="approveAllowance(bet, allowanceModels[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`], allowancePendings[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`])"
-                  :theme="theme"
-                  sync/>
-              </span>
-              <span class="TTFontBolder">{{ tokenCrowdsaleInfo.behavior }} <span v-if="tokenCrowdsaleInfo.behavior === 'Betting'">with <span class="text-upper">{{ bet.candy.symbol }}</span></span></span>
-            </p>
-            <p class="token-crowdsale-desc">Authorize the <a :href="tokenCrowdsaleInfo.contractLink" target="_blank">{{ tokenCrowdsaleInfo.contractText }} contract</a> to operate your <span class="text-upper">{{ bet.candy.symbol }}</span> on your behalf.</p>
+            <div v-if="bet.type === 'erc721'">
+              <div class="d-flex f-align-center token-crowdsale-symbol" @click.stop="approveAllowance(Object.assign({}, bet, Erc721CrowdsaleInfos[bet.contract]), allowanceModels[`${account}_${Erc721CrowdsaleInfos[bet.contract].contractAddress}`], allowancePendings[`${account}_${Erc721CrowdsaleInfos[bet.contract].contractAddress}`])">
+                <span class="inline-block token-bet-icon">
+                  <lordless-check-box
+                    v-model="allowanceModels[`${account}_${Erc721CrowdsaleInfos[bet.contract].contractAddress}`]"
+                    :loading="allowancePendings[`${account}_${Erc721CrowdsaleInfos[bet.contract].contractAddress}`]"
+                    @click="approveAllowance(bet, allowanceModels[`${account}_${Erc721CrowdsaleInfos[bet.contract].contractAddress}`], allowancePendings[`${account}_${Erc721CrowdsaleInfos[bet.contract].contractAddress}`])"
+                    :theme="theme"
+                    sync/>
+                </span>
+                <span class="TTFontBolder">{{ Erc721CrowdsaleInfos[bet.contract].behavior }} <span v-if="Erc721CrowdsaleInfos[bet.contract].behavior === 'Betting'">with <span class="text-upper">{{ Erc721CrowdsaleInfos[bet.contract].operateText }}</span></span></span>
+              </div>
+              <p class="token-crowdsale-desc">Authorize the <a :href="Erc721CrowdsaleInfos[bet.contract].contractLink" target="_blank">{{ Erc721CrowdsaleInfos[bet.contract].contractText }} contract</a> to operate your <span>{{ Erc721CrowdsaleInfos[bet.contract].operateText }}</span> on your behalf.</p>
+            </div>
+            <div v-else>
+              <div class="d-flex f-align-center token-crowdsale-symbol" @click.stop="approveAllowance(bet, allowanceModels[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`], allowancePendings[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`])">
+                <span class="inline-block token-bet-icon">
+                  <lordless-check-box
+                    v-model="allowanceModels[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`]"
+                    :loading="allowancePendings[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`]"
+                    @click="approveAllowance(bet, allowanceModels[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`], allowancePendings[`${bet.candy.address}_${tokenCrowdsaleInfo.contractAddress}`])"
+                    :theme="theme"
+                    sync/>
+                </span>
+                <span class="TTFontBolder">{{ tokenCrowdsaleInfo.behavior }} <span v-if="tokenCrowdsaleInfo.behavior === 'Betting'">with <span class="text-upper">{{ bet.candy.symbol }}</span></span></span>
+              </div>
+              <p class="token-crowdsale-desc">Authorize the <a :href="tokenCrowdsaleInfo.contractLink" target="_blank">{{ tokenCrowdsaleInfo.contractText }} contract</a> to operate your <span>{{ tokenCrowdsaleInfo.operateText || bet.candy.symbol }}</span> on your behalf.</p>
+            </div>
           </li>
         </ul>
       </div>
@@ -103,17 +135,20 @@ export default {
       'Luckyblock',
       'HOPSPlan',
       'Bounty',
+      'BountyNFT',
+      'bountyNFTApproved',
       'tokensContract',
       'luckyblockTokenAllowances',
       'HOPSPlanTokenAllowances',
       'BountyTokenAllowances',
       'BountyTokenAllowancesInit',
       'HOPSPlanTokenAllowancesInit',
-      'luckyblockTokenAllowancesInit'
+      'luckyblockTokenAllowancesInit',
+      'checkBountyNFTApprovedInit'
     ]),
 
     allTokenAllowanceInit () {
-      return this.BountyTokenAllowancesInit && this.HOPSPlanTokenAllowancesInit && this.luckyblockTokenAllowancesInit
+      return this.BountyTokenAllowancesInit && this.HOPSPlanTokenAllowancesInit && this.luckyblockTokenAllowancesInit && this.checkBountyNFTApprovedInit
     },
 
     luckyAddress () {
@@ -126,6 +161,10 @@ export default {
 
     BountyAddress () {
       return this.Bounty ? this.Bounty.address : ''
+    },
+
+    BountyNFTAddress () {
+      return this.BountyNFT ? this.BountyNFT.address : ''
     },
 
     contractAddress () {
@@ -157,7 +196,13 @@ export default {
       const plantTokenBets = []
 
       const bountyFilter = [ 'hops' ]
-      const bountyTokenBets = []
+      const bountyTokenBets = [
+        {
+          type: 'erc721',
+          contract: 'BountyNFT'
+        }
+      ]
+
       for (const candy of _candies) {
         if (luckyblockFilter.includes(candy.symbol.toLocaleLowerCase())) {
           luckyblockTokenBets.push({
@@ -172,7 +217,7 @@ export default {
           })
         }
         if (bountyFilter.includes(candy.symbol.toLocaleLowerCase())) {
-          bountyTokenBets.push({
+          bountyTokenBets.unshift({
             candy,
             count: 1e25
           })
@@ -182,6 +227,22 @@ export default {
         luckyblock: luckyblockTokenBets,
         plant: plantTokenBets,
         bounty: bountyTokenBets
+      }
+    },
+
+    Erc721CrowdsaleInfos () {
+      return {
+        BountyNFT: {
+          type: 'erc721',
+          name: 'Bounty Chest unlocking',
+          behavior: 'Unlock the Bounty Chest',
+          contractText: 'Bounty Chest unlocking',
+          operateText: 'Bounty Chest',
+          isApproved: this.bountyNFTApproved,
+          checkApprovedMethod: this[actionTypes.CONTRACT_CHECK_BOUNTYNFT_APPROVE],
+          contractAddress: this.BountyNFTAddress,
+          contractLink: `${process.env.ETHERSCANURL}/address/${this.BountyNFTAddress}#code`
+        }
       }
     },
 
@@ -206,9 +267,9 @@ export default {
           contractLink: `${process.env.ETHERSCANURL}/address/${this.HOPSPlanAddress}#code`
         },
         bounty: {
-          name: 'Bounty Chest unlocking',
-          behavior: 'Unlock the Bounty Chest',
-          contractText: 'Bounty Chest unlocking',
+          name: 'Bounty Chest',
+          behavior: 'Cost HOPS',
+          contractText: 'Bounty unlocking',
           tokenAllowances: this.BountyTokenAllowances,
           checkAllowancesMethod: this[actionTypes.CONTRACT_SET_BOUNTY_TOKEN_ALLOWANCE],
           contractAddress: this.BountyAddress,
@@ -230,50 +291,84 @@ export default {
     ...mapActions('contract', [
       actionTypes.CONTRACT_SET_LUCKYBLOCK_TOKEN_ALLOWANCE,
       actionTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE,
-      actionTypes.CONTRACT_SET_BOUNTY_TOKEN_ALLOWANCE
+      actionTypes.CONTRACT_SET_BOUNTY_TOKEN_ALLOWANCE,
+      actionTypes.CONTRACT_CHECK_BOUNTYNFT_APPROVE
     ]),
 
     /**
      * 检查 token allowance 授权状态
      */
-    checkAllowance (account = this.account, allowanceModels = this.allowanceModels) {
+    checkAllowance (account = this.account, allowanceModels = this.allowanceModels, Erc721CrowdsaleInfos = this.Erc721CrowdsaleInfos) {
       // 如果是全部
       if (this.isAll) {
         const _allTokenCrowdsaleInfos = this.allTokenCrowdsaleInfos
         const _allBets = this.allTokenBets
         const keys = Object.keys(_allTokenCrowdsaleInfos)
         for (const key of keys) {
-          const _crowdsaleInfo = _allTokenCrowdsaleInfos[key]
           const _tokenBets = _allBets[key]
-          const _contractAddress = _crowdsaleInfo.contractAddress
-          const _tokenAllowances = _crowdsaleInfo.tokenAllowances
-          const _checkAllowancesMethod = _crowdsaleInfo.checkAllowancesMethod
-          const _behavior = _crowdsaleInfo._behavior
           for (const bet of _tokenBets) {
+            const _type = bet.type
+            // 如果是 721 授权
+            if (_type === 'erc721') {
+              const _contractName = bet.contract
+              const _crowdsaleInfo = Erc721CrowdsaleInfos[_contractName]
+              const { isApproved, behavior, contractAddress, checkApprovedMethod } = _crowdsaleInfo
+
+              const erc721ApproveKey = `lordless_erc721_approve_${account}_${contractAddress}`
+              console.log('tokenApproveKey', erc721ApproveKey)
+              const isPending = !!localStorage.getItem(erc721ApproveKey)
+              isPending && this.loopCheckErc721Approved({ contractAddress, isApproved, checkApprovedMethod, behavior })
+
+              this.$set(this.allowancePendings, `${account}_${contractAddress}`, isPending)
+              continue
+            }
+
+            // 如果是 token 授权
             let { candy } = bet
             candy = typeof candy === 'object' ? candy.address.toLocaleLowerCase() : candy.toLocaleLowerCase()
 
-            const tokenApproveKey = `lordless_token_approve_${account}_${candy}_${_contractAddress}`
+            const _crowdsaleInfo = _allTokenCrowdsaleInfos[key]
+            const { contractAddress, behavior, tokenAllowances, checkAllowancesMethod } = _crowdsaleInfo
+
+            const tokenApproveKey = `lordless_token_approve_${account}_${candy}_${contractAddress}`
             console.log('tokenApproveKey', tokenApproveKey)
             const isPending = !!localStorage.getItem(tokenApproveKey)
-            isPending && this.loopCheckTokenAllowance({ candy, count: bet.count, contractAddress: _contractAddress, tokenAllowances: _tokenAllowances, checkAllowancesMethod: _checkAllowancesMethod, _behavior })
+            isPending && this.loopCheckTokenAllowance({ candy, count: bet.count, contractAddress, tokenAllowances, checkAllowancesMethod, behavior })
 
-            this.$set(this.allowancePendings, `${candy}_${_contractAddress}`, isPending || _tokenAllowances[candy] === undefined)
+            this.$set(this.allowancePendings, `${candy}_${contractAddress}`, isPending || tokenAllowances[candy] === undefined)
           }
         }
         return
       }
 
       // 如果是单项
-      const { contractAddress, tokenAllowances, checkAllowancesMethod } = this.tokenCrowdsaleInfo
       for (const bet of this.tokenBets) {
+        const _type = bet.type
+        // 如果是 721 授权
+        if (_type === 'erc721') {
+          const _contractName = bet.contract
+          const _crowdsaleInfo = Erc721CrowdsaleInfos[_contractName]
+          const { behavior, contractAddress, isApproved, checkApprovedMethod } = _crowdsaleInfo
+
+          const erc721ApproveKey = `lordless_erc721_approve_${account}_${contractAddress}`
+          console.log('tokenApproveKey', erc721ApproveKey)
+          const isPending = !!localStorage.getItem(erc721ApproveKey)
+          isPending && this.loopCheckErc721Approved({ contractAddress, isApproved, checkApprovedMethod, behavior })
+
+          this.$set(this.allowancePendings, `${account}_${contractAddress}`, isPending)
+          continue
+        }
+
+        // 如果是 token 授权
         let { candy } = bet
         candy = typeof candy === 'object' ? candy.address.toLocaleLowerCase() : candy.toLocaleLowerCase()
+
+        const { behavior, contractAddress, tokenAllowances, checkAllowancesMethod } = this.tokenCrowdsaleInfo
 
         const tokenApproveKey = `lordless_token_approve_${account}_${candy}_${contractAddress}`
         console.log('tokenApproveKey', tokenApproveKey)
         const isPending = !!localStorage.getItem(tokenApproveKey)
-        isPending && this.loopCheckTokenAllowance({ candy, count: bet.count, contractAddress, tokenAllowances, checkAllowancesMethod })
+        isPending && this.loopCheckTokenAllowance({ candy, count: bet.count, contractAddress, tokenAllowances, checkAllowancesMethod, behavior })
 
         this.$set(this.allowancePendings, `${candy}_${contractAddress}`, isPending || tokenAllowances[candy] === undefined)
       }
@@ -288,44 +383,77 @@ export default {
     /**
      * 初始化 tokenAllowance
      */
-    async initTokenAllowance () {
+    async initTokenAllowance (account = this.account, Erc721CrowdsaleInfos = this.Erc721CrowdsaleInfos) {
       // 如果是全部
       if (this.isAll) {
         const _allTokenCrowdsaleInfos = this.allTokenCrowdsaleInfos
         const _allBets = this.allTokenBets
         const keys = Object.keys(_allTokenCrowdsaleInfos)
         for (const key of keys) {
-          const _crowdsaleInfo = _allTokenCrowdsaleInfos[key]
+          // 如果是 token 授权
           const _tokenBets = _allBets[key]
-          const _contractAddress = _crowdsaleInfo.contractAddress
-          const _tokenAllowances = _crowdsaleInfo.tokenAllowances
+          // const _tokenAllowances = _crowdsaleInfo.tokenAllowances
           for (const bet of _tokenBets) {
+            const _type = bet.type
+            // 如果是 721 授权
+            if (_type === 'erc721') {
+              const _contractName = bet.contract
+              const _crowdsaleInfo = Erc721CrowdsaleInfos[_contractName]
+              const { contractAddress, isApproved } = _crowdsaleInfo
+
+              // this.$set(this.allowancePendings, `${account}_${_contractAddress}`, true)
+
+              // 记录 721 是否是授权状态
+              this.$set(this.allowanceModels, `${account}_${contractAddress}`, isApproved === true)
+              continue
+            }
+
+            // 如果是 token 授权
             let { candy } = bet
             candy = typeof candy === 'object' ? candy.address.toLocaleLowerCase() : candy.toLocaleLowerCase()
             console.log(' init all token allowance bet', bet)
+            const _crowdsaleInfo = _allTokenCrowdsaleInfos[key]
+            const { contractAddress, tokenAllowances } = _crowdsaleInfo
 
             // 记录该 token pending 状态
-            this.$set(this.allowancePendings, `${candy}_${_contractAddress}`, _tokenAllowances[candy] === undefined)
+            this.$set(this.allowancePendings, `${candy}_${contractAddress}`, tokenAllowances[candy] === undefined)
 
             // 记录该 token 是否授权状态, 这里的数量都是 wei 单位
-            this.$set(this.allowanceModels, `${candy}_${_contractAddress}`, _tokenAllowances[candy] !== undefined && _tokenAllowances[candy] >= bet.count)
+            this.$set(this.allowanceModels, `${candy}_${contractAddress}`, tokenAllowances[candy] !== undefined && tokenAllowances[candy] >= bet.count)
           }
         }
-      } else {
-        // 如果是单项
-        const tokenBets = this.tokenBets
-        const { contractAddress, tokenAllowances } = this.tokenCrowdsaleInfo
-        for (const bet of tokenBets) {
-          let { candy } = bet
-          candy = typeof candy === 'object' ? candy.address.toLocaleLowerCase() : candy.toLocaleLowerCase()
-          console.log(' init token allowance bet', bet)
+        return
+      }
 
-          // 记录该 token pending 状态
-          this.$set(this.allowancePendings, `${candy}_${contractAddress}`, tokenAllowances[candy] === undefined)
+      // 如果是单项
+      const tokenBets = this.tokenBets
+
+      // 如果是 token 授权
+      for (const bet of tokenBets) {
+        const _type = bet.type
+        // 如果是 721 授权
+        if (_type === 'erc721') {
+          const _contractName = bet.contract
+          const _crowdsaleInfo = Erc721CrowdsaleInfos[_contractName]
+          const { contractAddress, isApproved } = _crowdsaleInfo
+
+          this.$set(this.allowancePendings, `${account}_${contractAddress}`, true)
 
           // 记录该 token 是否授权状态, 这里的数量都是 wei 单位
-          this.$set(this.allowanceModels, `${candy}_${contractAddress}`, tokenAllowances[candy] !== undefined && tokenAllowances[candy] >= bet.count)
+          this.$set(this.allowanceModels, `${account}_${contractAddress}`, isApproved === true)
+          continue
         }
+        const { contractAddress, tokenAllowances } = this.tokenCrowdsaleInfo
+
+        let { candy } = bet
+        candy = typeof candy === 'object' ? candy.address.toLocaleLowerCase() : candy.toLocaleLowerCase()
+        console.log(' init token allowance bet', bet)
+
+        // 记录该 token pending 状态
+        this.$set(this.allowancePendings, `${candy}_${contractAddress}`, tokenAllowances[candy] === undefined)
+
+        // 记录该 token 是否授权状态, 这里的数量都是 wei 单位
+        this.$set(this.allowanceModels, `${candy}_${contractAddress}`, tokenAllowances[candy] !== undefined && tokenAllowances[candy] >= bet.count)
       }
 
       this.$nextTick(() => this.checkAllowance())
@@ -349,13 +477,54 @@ export default {
       tokenAllowances = this.tokenAllowances,
       checkAllowancesMethod = this.checkAllowancesMethod,
       tokensContract = this.tokensContract,
-      behavior = this.tokenCrowdsaleInfo.behavior
+      behavior = this.tokenCrowdsaleInfo.behavior,
+      type, contract, isApproved, checkApprovedMethod
     } = {},
     isChoose = false,
     isPending = false,
-    web3Opt = this.web3Opt
+    web3Opt = this.web3Opt,
+    BountyNFT = this.BountyNFT,
+    Erc721CrowdsaleInfos = this.Erc721CrowdsaleInfos
     ) {
       if (isChoose || isPending) return
+
+      const { gasPrice } = web3Opt
+
+      if (type === 'erc721') {
+        const _crowdsaleInfo = Erc721CrowdsaleInfos[contract]
+        const _contractAddress = _crowdsaleInfo.contractAddress
+        const _isApproved = _crowdsaleInfo.isApproved
+        const _behavior = _crowdsaleInfo.behavior
+        const _checkApprovedMethod = _crowdsaleInfo.checkApprovedMethod
+        this.$set(this.allowancePendings, `${account}_${_contractAddress}`, true)
+
+        // 传输的合约参数
+        const set721Approve = {
+          name: 'setApprovalForAll',
+          values: [ _contractAddress, true ]
+        }
+
+        // 估算 gas
+        const gas = (await BountyNFT.estimateGas(set721Approve.name, set721Approve.values)) || 129999
+        console.log('erc721 gas', gas, _contractAddress, candy, account)
+
+        // metamask 是否被打开
+        this.metamaskChoose = true
+
+        // 授权给合约 erc20 可操作数量为 1e30
+        BountyNFT.methods(set721Approve.name, set721Approve.values.concat([{ from: account, gas, gasPrice }]))
+          .then(tx => {
+            this.metamaskChoose = false
+            this.loopCheckErc721Approved({ contractAddress: _contractAddress, isApproved: _isApproved, checkApprovedMethod: _checkApprovedMethod, behavior: _behavior })
+          })
+          .catch(err => {
+            console.log('err', err)
+            this.metamaskChoose = false
+            this.$set(this.allowancePendings, `${account}_${_contractAddress}`, false)
+            this.$emit('error', err)
+          })
+        return
+      }
 
       candy = typeof candy === 'object' ? candy.address : candy
 
@@ -364,8 +533,6 @@ export default {
         return
       }
       this.$set(this.allowancePendings, `${candy}_${contractAddress}`, true)
-
-      const { gasPrice } = web3Opt
 
       // 传输的合约参数
       const setApprove = {
@@ -437,6 +604,57 @@ export default {
             localStorage.removeItem(tokenApproveKey)
             this.$set(this.allowanceModels, `${candy}_${contractAddress}`, true)
             this.$set(this.allowancePendings, `${candy}_${contractAddress}`, false)
+            this.$nextTick(() => this.checkAllowance())
+          } else {
+            return loopFunc()
+          }
+        }, 5000)
+      }
+      this.$once('hook:beforeDestroy', () => {
+        timeout && clearTimeout(timeout)
+      })
+      this.$once('hook:deactivated', () => {
+        timeout && clearTimeout(timeout)
+      })
+      return loopFunc()
+    },
+
+    /**
+     * loop 监听 721Approved 事件
+     */
+    async loopCheckErc721Approved ({
+      account = this.account,
+      contractAddress, isApproved, checkApprovedMethod, behavior
+    } = {}) {
+      if (!account) return
+
+      console.log(' ====== come in loop_CheckErc721Approved')
+
+      let timeout = null
+      const loopFunc = () => {
+        const erc721ApproveKey = `lordless_erc721_approve_${account}_${contractAddress}`
+        localStorage.setItem(erc721ApproveKey, true)
+
+        // 创建新定时器实例
+        timeout = setTimeout(async () => {
+          isApproved = await checkApprovedMethod({ address: account })
+
+          console.log('721ApproveKey', erc721ApproveKey, isApproved)
+          clearTimeout(timeout)
+          timeout = null
+
+          console.log('----- loop_CheckErc721Approved', contractAddress, isApproved)
+          if (isApproved) {
+            localStorage.getItem(erc721ApproveKey) && this.$notify.success({
+              title: 'Success!',
+              message: `${behavior} Success!`,
+              position: 'bottom-right',
+              duration: 2500
+            })
+
+            localStorage.removeItem(erc721ApproveKey)
+            this.$set(this.allowanceModels, `${account}_${contractAddress}`, true)
+            this.$set(this.allowancePendings, `${account}_${contractAddress}`, false)
             this.$nextTick(() => this.checkAllowance())
           } else {
             return loopFunc()

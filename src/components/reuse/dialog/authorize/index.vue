@@ -181,7 +181,8 @@ export default {
       'isCrowdsaleApproved',
       'luckyblockTokenAllowances',
       'HOPSPlanTokenAllowances',
-      'BountyTokenAllowances'
+      'BountyTokenAllowances',
+      'bountyNFTApproved'
     ]),
     isWechatBool () {
       return isWechat()
@@ -497,6 +498,7 @@ export default {
         const tokenBets = this.tokenBets
         console.log('tokenBets', tokenBets)
         const showTokenAllowance = !!(tokenBets.filter(bet => {
+          if (bet.type === 'erc721') return !this.bountyNFTApproved
           const candy = bet.candy.address.toLocaleLowerCase()
           return !allowances[candy] || allowances[candy] < bet.count
         })).length

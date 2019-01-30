@@ -142,11 +142,11 @@
           <lordless-btn
             v-else-if="chestStatus === 'unopened' || chestStatus === 'unlocking'"
             class="full-width chest-detail-btn"
-            :theme="(isChecking || enoughHops) ? 'blue-linear' : 'red-linear'"
-            :loading="isChecking || btnLoading"
-            :disabled="isChecking || (enoughHops && (isDisabled || btnLoading || chestStatus === 'unlocking'))"
+            :theme="(isChecking || enoughHops || !tokensBalanceInit) ? 'blue-linear' : 'red-linear'"
+            :loading="isChecking || btnLoading || !tokensBalanceInit"
+            :disabled="isChecking || !tokensBalanceInit || (enoughHops && (isDisabled || btnLoading || chestStatus === 'unlocking'))"
             @click="openPackage">
-            <span v-if="(isChecking || enoughHops)">Unlock the Bounty Chest</span>
+            <span v-if="(isChecking || enoughHops || !tokensBalanceInit)">Unlock the Bounty Chest</span>
             <span v-else>Deposit LESS to reap HOPS</span>
           </lordless-btn>
         </div>
@@ -279,6 +279,10 @@ export default {
         {
           candy,
           count: this.chestDetail.needHopsAmount
+        },
+        {
+          type: 'erc721',
+          contract: 'BountyNFT'
         }
       ]
     }
