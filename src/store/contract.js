@@ -237,10 +237,10 @@ export default {
     /**
      * check bountyNFT approved
      */
-    [actionTypes.CONTRACT_CHECK_BOUNTYNFT_APPROVE]: async ({ state, commit }, { address = state.Bounty.address, BountyNFT = state.BountyNFT } = {}) => {
+    [actionTypes.CONTRACT_CHECK_BOUNTYNFT_APPROVE]: async ({ state, commit }, { address, approvedContractAddress = state.Bounty.address, BountyNFT = state.BountyNFT } = {}) => {
       // check user isApprovedForAll for bountyNFT
-      const isApproved = await BountyNFT.methods('isApprovedForAll', [ address, BountyNFT.address ])
-      console.log('--------- isApproved', isApproved, state.Bounty.address)
+      const isApproved = await BountyNFT.methods('isApprovedForAll', [ address, approvedContractAddress ])
+      console.log('--------- isApproved', isApproved, address, approvedContractAddress)
       commit(mutationTypes.CONTRACT_SET_BOUNTYNFT_APPROVE, isApproved)
       state.checkBountyNFTApprovedInit = true
       return isApproved

@@ -503,12 +503,12 @@ export default {
         // 传输的合约参数
         const set721Approve = {
           name: 'setApprovalForAll',
-          values: [ _contractAddress, true ]
+          values: [ _approvedContractAddress, true ]
         }
 
         // 估算 gas
         const gas = (await BountyNFT.estimateGas(set721Approve.name, set721Approve.values)) || 129999
-        console.log('erc721 gas', gas, _contractAddress, candy, account)
+        console.log('erc721 gas', gas, _approvedContractAddress, account)
 
         // metamask 是否被打开
         this.metamaskChoose = true
@@ -639,7 +639,7 @@ export default {
 
         // 创建新定时器实例
         timeout = setTimeout(async () => {
-          isApproved = await checkApprovedMethod({ address: approvedContractAddress })
+          isApproved = await checkApprovedMethod({ address: account, approvedContractAddress })
 
           console.log('721ApproveKey', erc721ApproveKey, isApproved)
           clearTimeout(timeout)
