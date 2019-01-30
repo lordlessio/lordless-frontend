@@ -241,6 +241,7 @@ export default {
           isApproved: this.bountyNFTApproved,
           checkApprovedMethod: this[actionTypes.CONTRACT_CHECK_BOUNTYNFT_APPROVE],
           contractAddress: this.BountyNFTAddress,
+          approvedContractAddress: this.BountyAddress,
           contractLink: `${process.env.ETHERSCANURL}/address/${this.BountyNFTAddress}#code`
         }
       }
@@ -312,12 +313,12 @@ export default {
             if (_type === 'erc721') {
               const _contractName = bet.contract
               const _crowdsaleInfo = Erc721CrowdsaleInfos[_contractName]
-              const { isApproved, behavior, contractAddress, checkApprovedMethod } = _crowdsaleInfo
+              const { isApproved, behavior, contractAddress, approvedContractAddress, checkApprovedMethod } = _crowdsaleInfo
 
               const erc721ApproveKey = `lordless_erc721_approve_${account}_${contractAddress}`
               console.log('tokenApproveKey', erc721ApproveKey)
               const isPending = !!localStorage.getItem(erc721ApproveKey)
-              isPending && this.loopCheckErc721Approved({ contractAddress, isApproved, checkApprovedMethod, behavior })
+              isPending && this.loopCheckErc721Approved({ contractAddress, approvedContractAddress, isApproved, checkApprovedMethod, behavior })
 
               this.$set(this.allowancePendings, `${account}_${contractAddress}`, isPending)
               continue
@@ -348,12 +349,12 @@ export default {
         if (_type === 'erc721') {
           const _contractName = bet.contract
           const _crowdsaleInfo = Erc721CrowdsaleInfos[_contractName]
-          const { behavior, contractAddress, isApproved, checkApprovedMethod } = _crowdsaleInfo
+          const { behavior, contractAddress, approvedContractAddress, isApproved, checkApprovedMethod } = _crowdsaleInfo
 
           const erc721ApproveKey = `lordless_erc721_approve_${account}_${contractAddress}`
           console.log('tokenApproveKey', erc721ApproveKey)
           const isPending = !!localStorage.getItem(erc721ApproveKey)
-          isPending && this.loopCheckErc721Approved({ contractAddress, isApproved, checkApprovedMethod, behavior })
+          isPending && this.loopCheckErc721Approved({ contractAddress, approvedContractAddress, isApproved, checkApprovedMethod, behavior })
 
           this.$set(this.allowancePendings, `${account}_${contractAddress}`, isPending)
           continue
@@ -493,6 +494,7 @@ export default {
       if (type === 'erc721') {
         const _crowdsaleInfo = Erc721CrowdsaleInfos[contract]
         const _contractAddress = _crowdsaleInfo.contractAddress
+        const _approvedContractAddress = _crowdsaleInfo.approvedContractAddress
         const _isApproved = _crowdsaleInfo.isApproved
         const _behavior = _crowdsaleInfo.behavior
         const _checkApprovedMethod = _crowdsaleInfo.checkApprovedMethod
@@ -515,7 +517,7 @@ export default {
         BountyNFT.methods(set721Approve.name, set721Approve.values.concat([{ from: account, gas, gasPrice }]))
           .then(tx => {
             this.metamaskChoose = false
-            this.loopCheckErc721Approved({ contractAddress: _contractAddress, isApproved: _isApproved, checkApprovedMethod: _checkApprovedMethod, behavior: _behavior })
+            this.loopCheckErc721Approved({ contractAddress: _contractAddress, approvedContractAddress: _approvedContractAddress, isApproved: _isApproved, checkApprovedMethod: _checkApprovedMethod, behavior: _behavior })
           })
           .catch(err => {
             console.log('err', err)
@@ -624,7 +626,7 @@ export default {
      */
     async loopCheckErc721Approved ({
       account = this.account,
-      contractAddress, isApproved, checkApprovedMethod, behavior
+      contractAddress, approvedContractAddress, isApproved, checkApprovedMethod, behavior
     } = {}) {
       if (!account) return
 
@@ -637,7 +639,7 @@ export default {
 
         // 创建新定时器实例
         timeout = setTimeout(async () => {
-          isApproved = await checkApprovedMethod({ address: account })
+          isApproved = await checkApprovedMethod({ address: approvedContractAddress })
 
           console.log('721ApproveKey', erc721ApproveKey, isApproved)
           clearTimeout(timeout)
