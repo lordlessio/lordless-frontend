@@ -155,7 +155,8 @@ export default {
     heldValue () {
       const info = this.depositInfo
       if (!info._id) return {}
-      return (info.lessToHops / (info.lockTime / 3600 / 24 / 30)).toFixed(1).toString()
+      // return (info.lessToHops / (info.lockTime / 3600 / 24 / 30)).toFixed(1).toString()
+      return info.lessToHops.toFixed(1).toString()
     },
 
     planLockDays () {

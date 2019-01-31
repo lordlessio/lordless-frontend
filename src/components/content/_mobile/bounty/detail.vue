@@ -256,7 +256,7 @@ export default {
       const info = this.chestDetail
       if (!info._id) return []
       const openBountyTx = info.openBountyTx
-      return openBountyTx.filter(item => !!item.tx)
+      return (openBountyTx.filter(item => !!item.tx) || []).slice(0, 1)
     },
 
     openseaLink () {
