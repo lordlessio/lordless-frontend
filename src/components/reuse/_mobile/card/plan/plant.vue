@@ -1,5 +1,5 @@
 <template>
-  <div class="relative d-flex f-align-start hops-plant-cnt" :class="{ 'not-balance': notBalance }" @click.stop="choosePlan">
+  <div class="relative d-flex f-align-start hops-plant-cnt" :class="{ 'not-balance': notBalance, 'is-pro': info.level === 3 }" @click.stop="choosePlan">
     <p class="ImpactFont relative hops-plant-held" :class="{ 'is-small': heldValue.length > 4 }">{{ heldValue }}</p>
     <div class="hops-plant-right">
       <h3 class="relative text-upper hops-plant-level">{{ levelText }}</h3>
@@ -31,6 +31,7 @@ export default {
     },
     levelText () {
       const levels = {
+        0: 'QUICK',
         1: 'BASIC',
         2: 'PLUS',
         3: 'PRO'
@@ -58,6 +59,16 @@ export default {
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 0 10px 3px rgba(0, 0, 0, .1);
+    &.is-pro {
+      .hops-plant-held {
+        color: #F5515F;
+      }
+      .hops-plant-level {
+        &::before {
+          background-color: #F5515F;
+        }
+      }
+    }
     &.not-balance {
       // background-color: #fff;
       .hops-plant-held, .hops-plant-level, .plant-deposits-info, .plant-income-info {

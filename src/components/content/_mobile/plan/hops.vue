@@ -33,7 +33,7 @@
               </svg>
             </span>
           </h2>
-          <p class="hops-planting-desc">Choose a planting plan to deposit your LESS and reap HOPS immediately.</p>
+          <p class="hops-planting-desc">Deposit your LESS and reap HOPS immediately.</p>
           <p class="hops-planting-held"><span class="TTFontBolder">HELD</span> = HOPS earned on every LESS per deposit</p>
 
           <ul class="hops-planting-list">

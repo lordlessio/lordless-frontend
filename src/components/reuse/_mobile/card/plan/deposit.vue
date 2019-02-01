@@ -147,6 +147,7 @@ export default {
       const info = this.info
       if (!info._id) return {}
       const _planTypes = {
+        0: 'QUICK',
         1: 'BASIC',
         2: 'PLUS',
         3: 'PRO'

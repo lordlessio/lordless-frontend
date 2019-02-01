@@ -191,7 +191,7 @@ export default {
           icon: '#coin-hops',
           title: 'HOPS',
           path: '/owner/hops',
-          tips: 'Grow Hops?'
+          tips: 'Deposit LESS'
         },
         {
           icon: '#icon-outcome',
