@@ -3,7 +3,7 @@
     <!-- <mobile-nav-bar :text="navigations[activeIndex].navbarText" :scroll="navigations[activeIndex].scroll"/> -->
     <ul class="d-flex tab-bar-ul">
       <li v-for="(item, index) of navigations" :key="index"
-        class="v-flex text-center tab-bar-item" :class="{ 'is-active': item.active, 'is-home': item.name === 'Home' }"
+        class="v-flex text-center tab-bar-item" :class="{ 'is-active': item.active }"
         :data-active="item.active.toString()" :data-index="index"
         @click.stop="chooseBar">
         <p class="d-inline-flex col-flex f-auto-center">
@@ -33,8 +33,8 @@ export default {
       activeIndex: 0,
       navigations: [
         {
-          icon: '#icon-logo-image',
-          activeIcon: '#icon-logo-image',
+          icon: '#icon-tab-lordless',
+          activeIcon: '#icon-tab-lordless',
           name: 'Home',
           route: '/home',
           // match: /\/(home|project)/,
@@ -42,32 +42,32 @@ export default {
           active: true
         },
         {
-          icon: '#icon-beer',
-          activeIcon: '#icon-beer',
+          icon: '#icon-tab-beer',
+          activeIcon: '#icon-tab-beer',
           name: 'Taverns',
           route: '/taverns',
           match: /^\/taverns/,
           active: true
         },
         {
-          icon: '#icon-tab-candy_unselected',
-          activeIcon: '#icon-tab-candy_selected',
-          name: 'Candies',
+          icon: '#icon-tab-coin',
+          activeIcon: '#icon-tab-coin',
+          name: 'Tokens',
           route: '/owner/candy',
           match: /^\/owner\/candy/,
           active: false
         },
         {
-          icon: '#icon-tab-quest_unselected',
-          activeIcon: '#icon-tab-quest_selected',
+          icon: '#icon-tab-quests',
+          activeIcon: '#icon-tab-quests',
           name: 'Quests',
           route: '/owner/quests',
           match: /^\/owner\/quests/,
           active: false
         },
         {
-          icon: '#icon-tab-user_unselected',
-          activeIcon: '#icon-tab-user_selected',
+          icon: '#icon-tab-user',
+          activeIcon: '#icon-tab-user',
           name: 'Me',
           route: '/owner/info',
           // match: /\/owner\/(info|activities|taverns|authorization|general)/,
@@ -198,20 +198,20 @@ export default {
     color: #4586fc;
     fill: #4586fc;
   }
-  &.is-home {
-    .tab-bar-icon {
-      padding: 4px;
-      border-radius: 100%;
-      background-color: #999;
-      fill: #fff;
-      box-sizing: border-box;
-    }
-    &.is-active {
-      .tab-bar-icon {
-        background-color: #4586fc;
-      }
-    }
-  }
+  // &.is-home {
+  //   .tab-bar-icon {
+  //     // padding: 4px;
+  //     border-radius: 100%;
+  //     background-color: #999;
+  //     fill: #fff;
+  //     box-sizing: border-box;
+  //   }
+  //   &.is-active {
+  //     .tab-bar-icon {
+  //       background-color: #4586fc;
+  //     }
+  //   }
+  // }
 }
 .tab-bar-name {
   // line-height: 12px;

@@ -27,13 +27,13 @@
                   <svg>
                     <use xlink:href="#icon-eth-price"/>
                   </svg>
-                  <span>{{ overviews.estimated / (candyPrice.eth ? candyPrice.eth.USD : 0) | formatDecimal }}</span>
+                  <span>{{ overviews.totalEarnings.value / (candyPrice.eth ? candyPrice.eth.USD : 0) | formatDecimal }}</span>
                 </p>
               </div>
               <div class="v-flex user-holdings-item right">
                 <p>In USD</p>
                 <p class="TTFontBolder holdings-value">
-                  $ {{ overviews.estimated | formatDecimal }}
+                  $ {{ overviews.totalEarnings.value | formatDecimal }}
                 </p>
               </div>
             </div>

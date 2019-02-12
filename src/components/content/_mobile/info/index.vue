@@ -195,7 +195,7 @@ export default {
         },
         {
           icon: '#icon-outcome',
-          title: 'Withdraw',
+          title: 'Make a chest',
           path: '/owner/withdraw',
           holdings: true
         },

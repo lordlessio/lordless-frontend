@@ -5,14 +5,14 @@
       ref="mobile-nav-bar"
       v-show="(scrollOpt.show && (!connectModel || !web3Model)) || connectModel || web3Model"
       v-bind="scrollOpt"
-      @history="$router.push(scrollOpt.historyPath || '/owner/info')"/>
+      @history="ownerNavbarHistory(scrollOpt.historyPath)"/>
 
     <transition :name="popTransition">
       <keep-alive :max="20">
         <router-view v-if="$route.meta.keepAlive && pageShow" class="lordless-pop-page"/>
       </keep-alive>
     </transition>
-    <router-view v-if="!$route.meta.keepAlive && pageShow && (!$route.meta.isPublic || !isMobile)"/>
+    <router-view v-if="!$route.meta.keepAlive && pageShow && ($route.meta.ownerChild || !isMobile)"/>
     <div
       v-if="web3Model || connectModel || web3Loading"
       class="d-flex mobile-plugins-box">
@@ -119,7 +119,7 @@ export default {
           historyPath: '/owner/hops'
         },
         {
-          text: 'Withdraw',
+          text: 'Make a chest',
           match: /^\/owner\/withdraw/,
           show: true,
           history: true
@@ -195,6 +195,11 @@ export default {
 
     async checkUser () {
       this.$refs.mobileOwnerAuthorize.checkoutAuthorize()
+    },
+
+    ownerNavbarHistory (path = '/owner/info') {
+      sessionStorage.setItem('lordless_direction', '_reverse')
+      return this.$router.push(path)
     }
   },
   activated () {

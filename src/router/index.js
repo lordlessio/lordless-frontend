@@ -146,6 +146,7 @@ const mobileRoutes = [
         component: MobileOwnerCandy,
         meta: {
           title: 'Candy - LORDLESS',
+          ownerChild: true,
           keepAlive: true,
           transition: true
 
@@ -163,6 +164,7 @@ const mobileRoutes = [
         component: MobileOwnerQuest,
         meta: {
           title: 'Quests - LORDLESS',
+          ownerChild: true,
           keepAlive: true,
           transition: true
           // header: {
@@ -179,6 +181,7 @@ const mobileRoutes = [
         component: MobileMeInfo,
         meta: {
           title: 'OwnerInfo - LORDLESS',
+          ownerChild: true,
           keepAlive: true,
           transition: true
           // header: {
@@ -195,6 +198,7 @@ const mobileRoutes = [
         component: MobileMeInfoDetail,
         meta: {
           title: 'OwnerInfoDetail - LORDLESS',
+          ownerChild: true,
           keepAlive: true,
           transition: true
         }
@@ -206,6 +210,7 @@ const mobileRoutes = [
         meta: {
           title: 'Owner Activities - LORDLESS',
           navText: 'Activities',
+          ownerChild: true,
           keepAlive: true,
           transition: false
           // header: {
@@ -223,6 +228,7 @@ const mobileRoutes = [
         meta: {
           title: 'Owner Authorization - LORDLESS',
           navText: 'Authorization',
+          ownerChild: true,
           keepAlive: true,
           transition: false
           // header: {
@@ -240,6 +246,7 @@ const mobileRoutes = [
         meta: {
           title: 'Owner Taverns - LORDLESS',
           navText: 'Taverns',
+          ownerChild: true,
           keepAlive: true,
           transition: false
         }
@@ -251,6 +258,7 @@ const mobileRoutes = [
         meta: {
           title: 'Telegram bind - LORDLESS',
           navText: 'Bind Telegram',
+          ownerChild: true,
           keepAlive: true,
           transition: false,
           hideTab: true
@@ -263,6 +271,7 @@ const mobileRoutes = [
         meta: {
           title: 'HOPS - LORDLESS',
           navText: 'HOPS',
+          ownerChild: true,
           keepAlive: true,
           transition: false
         }
@@ -273,6 +282,7 @@ const mobileRoutes = [
         component: MobilePlanBaseDetail,
         meta: {
           title: 'PlanBase Detail - LORDLESS',
+          ownerChild: true,
           keepAlive: true,
           transition: false
         }
@@ -283,6 +293,7 @@ const mobileRoutes = [
         component: MobileDeposits,
         meta: {
           title: 'Owner deposits - LORDLESS',
+          ownerChild: true,
           keepAlive: true,
           transition: false
         }
@@ -293,6 +304,7 @@ const mobileRoutes = [
         component: MobilePlanRecords,
         meta: {
           title: 'PlanRecords - LORDLESS',
+          ownerChild: true,
           keepAlive: true,
           transition: false
         }
@@ -313,6 +325,7 @@ const mobileRoutes = [
         component: MobileOwnerBountyChests,
         meta: {
           title: 'My Bounty Chests - LORDLESS',
+          ownerChild: true,
           keepAlive: true,
           transition: false,
           hideTab: true

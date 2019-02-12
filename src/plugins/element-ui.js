@@ -2,7 +2,7 @@ import Vue from 'vue'
 import {
   Container, Header, Main, Aside,
   Col, Row,
-  Tooltip, Progress, Select, Option, Carousel, CarouselItem,
+  Tooltip, Progress, Select, Option, Slider, Carousel, CarouselItem,
   Tabs, TabPane, Dialog, Autocomplete, Pagination,
   Notification, MessageBox,
   Collapse, CollapseItem
@@ -28,7 +28,7 @@ Vue.use(Dialog)
 Vue.use(Autocomplete)
 Vue.use(Pagination)
 
-// Vue.use(Slider)
+Vue.use(Slider)
 Vue.use(Carousel)
 Vue.use(CarouselItem)
 Vue.use(Collapse)

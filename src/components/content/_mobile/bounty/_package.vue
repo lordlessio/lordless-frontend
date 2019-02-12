@@ -14,6 +14,12 @@
             <p class="package-bounty-desc">You need to wrap your rewards up in a Bounty Chest and then you can open the chest with HOPS to reap all the tokens.</p>
           </div>
           <div class="package-bounty-candies-info package-bounty-bounties">
+            <div class="package-bounty-slider">
+              <el-slider
+                v-model="bountySliderModel">
+              </el-slider>
+              <p>{{ currentVolume }}</p>
+            </div>
             <h3 class="d-flex f-align-center">
               <span class="inline-block line-height-0 package-info-icon">
                 <svg>
@@ -21,11 +27,12 @@
                 </svg>
               </span>
               <span>BOUNTIES</span>
-              <span>&nbsp;&nbsp;(≈ {{ bountyAssets.assetsByEth | formatDecimal }}ETH)</span>
+              <span>&nbsp;&nbsp;(≈ {{ totalBountyVolume | formatDecimal }}ETH)</span>
             </h3>
             <ul class="package-bounty-candies-box">
-              <li v-for="(item, index) of bountyAssets.detailBountiesInfo" :key="index"
-                class="d-flex f-align-center bounty-candies-item bounty">
+              <li v-for="(item, index) of packageBountiesInfo" :key="index"
+                class="d-flex f-align-center bounty-candies-item bounty"
+                :class="{ 'is-hide': item.hide }">
                 <span class="inline-block line-height-0 bounty-candy-icon">
                   <svg>
                     <use :xlink:href="`#coin-${item.candy.symbol.toLocaleLowerCase()}`"/>
@@ -53,7 +60,7 @@
                   </svg>
                 </span>
                 <span class="bounty-candy-symbol">HOPS</span>
-                <span class="v-flex text-right">x {{ weiByDecimals(bountyAssets.needHopsAmount).toLocaleString() }}</span>
+                <span class="v-flex text-right">x {{ weiByDecimals(needHopsAmount).toLocaleString() }}</span>
               </li>
             </ul>
           </div>
@@ -84,6 +91,7 @@
 <script>
 import PackageBountySkeletion from '@/components/skeletion/_mobile/bounty/package'
 import { weiByDecimals, formatDecimal } from 'utils/tool'
+import { _add, _strip } from 'utils/tool/math'
 import { getBountyInfos, packageBounty } from 'api'
 export default {
   name: 'package-bounty-component',
@@ -95,14 +103,76 @@ export default {
       bountyAssets: {
         detailBountiesInfo: [],
         needHopsAmount: 0,
+        needHopsPrice: 0,
         assetsByEth: 0,
-        almostEth: 0
-      }
+        almostEth: 0,
+        ethPrice: 0
+      },
+      packageBountiesInfo: [],
+      // bounty slider option
+      bountySliderModel: 100
     }
   },
   computed: {
     insufficientAssets () {
       return this.bountyAssets.assetsByEth < this.bountyAssets.almostEth
+    },
+    totalBountyVolume () {
+      return this.bountyAssets.assetsByEth || 0
+    },
+    currentVolume () {
+      const almostEth = this.bountyAssets.almostEth
+      return _strip(almostEth + _strip(((this.totalBountyVolume - almostEth) / 100) * this.bountySliderModel))
+    },
+    needHopsAmount () {
+      const _needHopsPrice = this.bountyAssets.needHopsPrice
+      return _strip(_needHopsPrice * this.currentVolume)
+    }
+  },
+  watch: {
+    currentVolume (val) {
+      const _packageBountiesInfo = JSON.parse(JSON.stringify(this.packageBountiesInfo))
+      const _ethPrice = this.bountyAssets.ethPrice
+
+      // 总持有 token 的 eth 价值数量
+      const _tVolume = this.totalBountyVolume
+
+      // 当前选择的 eth 价值数量
+      const _cVolume = val
+
+      // 滚动 slider cut 掉的 eth 价值数量
+      const _cutVolume = _add(_tVolume, -_cVolume)
+      console.log('------- watch currentVolume', _tVolume, _cVolume, _cutVolume, _packageBountiesInfo)
+
+      // 使用 reduce 方法做 token操作
+      _packageBountiesInfo.reduce((a, item, index) => {
+        // _result 代表当前及之前所有的 ethVolume
+        const _result = a + item.ethVolume
+
+        // 如果 _result 小于等于 _cutVolume，则隐藏该 token
+        if (_result <= _cutVolume) {
+          _packageBountiesInfo[index].hide = true
+          _packageBountiesInfo[index].count = 0
+
+        // 如果 _cutVolume 减去之前token 的 ethVolume 大于 0,代表需要操作该 token 数据
+        } else if (_cutVolume - a > 0) {
+          // 获取该 token 剩余 volume
+          const _itemLeftVolume = item.ethVolume - (_cutVolume - a)
+
+          // 计算该 token 剩余 count
+          const _itemLeftCount = _itemLeftVolume * _ethPrice * item.candy.USD2TokenCount
+          console.log('----- _itemLeftVolume', _itemLeftVolume, '_itemLeftCount', _itemLeftCount, '_cutVolume', _cutVolume, a)
+          _packageBountiesInfo[index].hide = false
+          _packageBountiesInfo[index].count = _itemLeftCount
+
+        // 其他情况，恢复token数据
+        } else {
+          _packageBountiesInfo[index].hide = false
+          _packageBountiesInfo[index].count = item._count
+        }
+        return _result
+      }, 0)
+      this.packageBountiesInfo = _packageBountiesInfo
     }
   },
   components: {
@@ -132,6 +202,7 @@ export default {
         const res = await getBountyInfos()
         if (res.code === 1000 && res.data) {
           this.bountyAssets = res.data
+          this.packageBountiesInfo = res.data.detailBountiesInfo
         }
       } catch (err) {
         console.log('--- err', err)
@@ -157,7 +228,7 @@ export default {
     async packageBounty () {
       this.packageLoading = true
       try {
-        const res = await packageBounty()
+        const res = await packageBounty({ percent: this.bountySliderModel })
         if (res.code === 1000 && res.data) this.$router.push('/owner/bounty/chests')
         else if (res.code !== 1000) {
           this.$notify.error({
@@ -168,12 +239,18 @@ export default {
           })
         }
       } catch (err) {
-        console.log('---- packageBounty error', err.message)
+        this.$notify.error({
+          title: 'Package Error!',
+          message: err.message || 'Unknow Error!',
+          position: 'bottom-right',
+          duration: 2500
+        })
       }
       this.packageLoading = false
     }
   },
   deactivated () {
+    this.bountySliderModel = 100
     this.loading = true
   },
   activated () {
@@ -242,6 +319,7 @@ export default {
     border-radius: 5px;
     &.bounty {
       box-shadow: 0 0 8px 0 rgba(0, 121, 255, 0.45);
+      transition: all .3s, visibility 0s 0s;
       .bounty-candy-icon {
         width: 20px;
         height: 20px;
@@ -254,6 +332,16 @@ export default {
         width: 24px;
         height: 24px;
       }
+    }
+    &.is-hide {
+      opacity: 0;
+      visibility: hidden;
+      height: 0;
+      padding: 0;
+      margin: 0;
+      transform: scale(0);
+      transform-origin: center;
+      transition: all .3s, visibility 0s .3s;
     }
   }
   .bounty-candy-symbol {

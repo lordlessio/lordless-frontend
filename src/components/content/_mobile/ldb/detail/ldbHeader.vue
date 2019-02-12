@@ -453,8 +453,10 @@ export default {
     getCandyTasks (tasks = this.tasks) {
       if (this.owner) return
 
+      const _apLeft = this.info.apLeft
+      const _userLeftAp = this.userInfo.ap
       // 根据用户及建筑剩余ap判断显示糖果
-      const leftAp = this.userInfo._id ? (this.info.apLeft > this.userInfo.ap ? this.userInfo.ap : this.info.apLeft) : 6
+      const leftAp = this.userInfo._id ? (_apLeft > _userLeftAp ? _userLeftAp : _apLeft) : 6
       console.log('leftAp', leftAp)
       const clen = leftAp >= 6 ? 6 : leftAp
 
@@ -627,7 +629,18 @@ export default {
       _setTimeout({ duration: this.countUp.nAP.duration }, () => {
         this.$set(this.countUp.nAP, 'start', end)
       })
+    },
+
+    clearCandies () {
+      this.rendered = false
+      this.candyCoords = {}
+      this.candyTasks = []
+      this.hideTasks = 1
+      this.$emit('update:tasks', [])
     }
+  },
+  deactivated () {
+    this.clearCandies()
   }
 }
 </script>
