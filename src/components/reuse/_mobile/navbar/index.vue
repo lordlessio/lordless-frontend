@@ -200,6 +200,7 @@ export default {
       color: #fff;
       background-color: #0079FF;
       .nav-history-icon {
+        width: 18px;
         fill: #fff;
         background-color: transparent;
       }
@@ -226,7 +227,7 @@ export default {
     position: absolute;
     left: 20px;
     top: 50%;
-    width: 18px;
+    width: 36px;
     height: 36px;
     fill: #fff;
     background-color: #777;
