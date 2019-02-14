@@ -22,7 +22,6 @@ export const _add = function () {
 
 export const _mul = function () {
   const nums = Array.from(arguments)
-  console.log('==== _mul nums', arguments)
   if (nums.length < 2) return nums[0] || 0
   const digits = []
 

@@ -222,11 +222,11 @@ export default {
     }
   }
   .nav-history-icon {
-    padding: 10px;
+    padding: 9px 0;
     position: absolute;
     left: 20px;
     top: 50%;
-    width: 36px;
+    width: 18px;
     height: 36px;
     fill: #fff;
     background-color: #777;

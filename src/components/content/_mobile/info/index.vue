@@ -196,7 +196,7 @@ export default {
         {
           icon: '#icon-outcome',
           title: 'Make a chest',
-          path: '/owner/withdraw',
+          path: '/owner/bountyChest',
           holdings: true
         },
         {

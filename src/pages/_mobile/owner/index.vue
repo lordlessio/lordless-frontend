@@ -120,7 +120,7 @@ export default {
         },
         {
           text: 'Make a chest',
-          match: /^\/owner\/withdraw/,
+          match: /^\/owner\/bountyChest/,
           show: true,
           history: true
         },

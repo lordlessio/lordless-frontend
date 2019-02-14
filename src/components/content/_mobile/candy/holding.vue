@@ -8,7 +8,7 @@
           <span class="inline-block candies-holding-value">{{ holdingValue | formatDecimal({ len: 4 }) }}</span>
         </p>
         <!-- <span class="relative inline-block line-height-0 nav-withdraw-icon" :class="{ 'show-tip': withdrawTip }" @click.stop="withdrawTip = true"> -->
-        <span class="relative inline-block line-height-0 nav-withdraw-icon" @click.stop="$router.push('/owner/withdraw')">
+        <span class="relative inline-block line-height-0 nav-withdraw-icon" @click.stop="$router.push('/owner/bountyChest')">
           <svg>
             <use xlink:href="#icon-outcome"/>
           </svg>

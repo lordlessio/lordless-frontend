@@ -2,10 +2,14 @@
   <div class="skeletion-bounty-package-box">
     <div class="bounty-package-container skeletion-breath">
       <div class="bounty-package-header">
-        <h2></h2>
         <p></p>
         <p></p>
-        <p></p>
+      </div>
+      <div class="bounty-package-options">
+        <p class="package-item-title"></p>
+        <div class="d-flex f-align-center package-options-btns">
+          <span class="v-flex" v-for="item in 3" :key="item"></span>
+        </div>
       </div>
       <ul class="bounty-package-bounties">
         <li class="package-item-title"></li>
@@ -30,19 +34,47 @@ export default {
   .bounty-package-container {
     padding: 24px;
   }
+  // .bounty-package-header {
+  //   >h2 {
+  //     margin-bottom: 16px;
+  //     width: 50%;
+  //     height: 28px;
+  //     background-color: $--skeletion-dark;
+  //   }
+  //   >p {
+  //     margin-top: 6px;
+  //     height: 16px;
+  //     background-color: $--skeletion-dark;
+  //     &:last-of-type {
+  //       width: 60%;
+  //     }
+  //   }
+  // }
   .bounty-package-header {
-    >h2 {
-      margin-bottom: 16px;
-      width: 50%;
-      height: 28px;
-      background-color: $--skeletion-dark;
-    }
+    margin: -24px -24px 0;
+    padding: 24px 20px;
+    background-color: $--skeletion-light;
     >p {
-      margin-top: 6px;
-      height: 16px;
+      width: 60%;
+      height: 20px;
       background-color: $--skeletion-dark;
-      &:last-of-type {
-        width: 60%;
+      &:nth-of-type(2) {
+        margin-top: 10px;
+        width: 80%;
+      }
+    }
+  }
+  .bounty-package-options {
+    margin-top: 24px;
+  }
+  .package-options-btns {
+    margin-top: 18px;
+    >span {
+      height: 40px;
+      background-color: $--skeletion-dark;
+      border-radius: 5px;
+      &:not(:first-of-type) {
+        margin-left: 8px;
       }
     }
   }

@@ -310,11 +310,11 @@ const mobileRoutes = [
         }
       },
       {
-        path: 'withdraw',
+        path: 'bountyChest',
         name: 'mobile-bounty-package',
         component: MobileOwnerWithdraw,
         meta: {
-          title: 'Withdraw - LORDLESS',
+          title: 'Make a chest - LORDLESS',
           keepAlive: true,
           transition: false
         }
