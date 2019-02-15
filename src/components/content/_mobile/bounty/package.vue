@@ -650,6 +650,9 @@ export default {
     font-size: 16px;
     color: #555;
     box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.3);
+    &.blue-linear {
+      color: #fff;
+    }
     &[disabled] {
       box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.1);
     }
