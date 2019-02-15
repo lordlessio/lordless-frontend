@@ -216,19 +216,19 @@ export default {
       askedQuestions: [
         {
           title: 'Why do I need to make a Bounty Chest?',
-          desc: 'You need to wrap your rewards up in a Bounty Chest and then you can open the chest with HOPS to reap all the tokens.',
+          desc: 'If you want to take the tokens in LORDLESS account out, you have to wrap them into a Bounty Chest and unlock it by spending HOPS.',
           show: false
         }, {
           title: 'What is Bounty Chest?',
-          desc: 'You need to wrap your rewards up in a Bounty Chest and then you can open the chest with HOPS to reap all the tokens.',
+          desc: 'Bounty Chest is non-fungible, ERC-721 cryptocurrency token of LORDLESS. Bounty Chest behaves more like access right. It is a ticket for you to get the tokens from LORDLESS by spending HOPS. Therefore, the Bounty Chest is tradable. If you have a mass of HOPS, you can purchase Bounty Chest in the marketplace directly. However, you can also sell it in the marketplace to earn some money if you do not want to unlock it.',
           show: false
         }, {
           title: 'What is Bounty Chest size?',
-          desc: 'You need to wrap your rewards up in a Bounty Chest and then you can open the chest with HOPS to reap all the tokens.',
+          desc: 'The size of the Bounty Chest describes its value. For example, the total value of the tokens unlocked from the Bounty Chest is 0.1 ETH, and 0.1 ETH is the size of the Bounty Chest.',
           show: false
         }, {
           title: 'Why does the size of Bounty Chest change?',
-          desc: 'You need to wrap your rewards up in a Bounty Chest and then you can open the chest with HOPS to reap all the tokens.',
+          desc: 'The total value of the tokens in the Bounty Chest is calculated with the real-time token price. The size represents the value at that moment.',
           show: false
         }
       ]
