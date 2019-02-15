@@ -36,7 +36,7 @@
             <h3 class="d-flex f-align-center">
               <span class="inline-block line-height-0 package-info-icon">
                 <svg>
-                  <use xlink:href="#icon-bounty-diamond"/>
+                  <use xlink:href="#icon-bounty-chest-checked"/>
                 </svg>
               </span>
               <span>SIZE</span>

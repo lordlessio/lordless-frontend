@@ -9,7 +9,7 @@
       <div class="relative v-flex chest-card-right" :data-status="chestStatus">
         <div class="chest-right-info-item">
           <p>Bounty Chest</p>
-          <p>#{{ info.bountyId || 'wating' }}</p>
+          <p>#{{ info.bountyId || 'waiting' }}</p>
         </div>
         <div class="chest-right-info-item">
           <p>Unlocking cost</p>
