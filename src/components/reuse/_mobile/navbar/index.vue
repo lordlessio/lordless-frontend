@@ -9,6 +9,13 @@
       <p class="text-cap mobile-navbar-text">
         <span class="text-ellipsis inline-block">{{ text }}</span>
       </p>
+      <div v-if="rightIcon" class="d-inline-flex f-auto-center nav-right-box nav-right-icon-box" @click.stop="rightPath ? $router.push(rightPath) : null">
+        <span class="inline-block line-height-0 navbar-right-icon">
+          <svg>
+            <use :xlink:href="rightIcon"/>
+          </svg>
+        </span>
+      </div>
       <div v-if="userAvatar && userInfo._id" class="TTFontBold d-flex f-align-center nav-right-box navbar-header-tip">
         <span class="inline-block line-height-0 navbar-tip-icon">
           <svg>
@@ -64,6 +71,14 @@ export default {
     fixed: {
       type: Boolean,
       default: true
+    },
+    rightIcon: {
+      type: String,
+      default: null
+    },
+    rightPath: {
+      type: String,
+      default: null
     },
 
     // scroll-hidden
@@ -248,6 +263,14 @@ export default {
     right: 20px;
     top: 55%;
     transform: translateY(-50%);
+  }
+  .nav-right-icon-box {
+
+  }
+  .navbar-right-icon {
+    width: 18px;
+    height: 18px;
+    fill: #fff;
   }
   // .nav-withdraw-box {
   //   @include TTFontBold();

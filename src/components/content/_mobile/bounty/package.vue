@@ -32,7 +32,7 @@
           </h1> -->
         </div>
         <div ref="package-bounty-container" class="relative container package-bounty-container">
-          <div class="package-bounty-candies-info package-bounty-options">
+          <div v-if="!insufficientAssets" class="package-bounty-candies-info package-bounty-options">
             <h3 class="d-flex f-align-center">
               <span class="inline-block line-height-0 package-info-icon">
                 <svg>
@@ -40,7 +40,7 @@
                 </svg>
               </span>
               <span>SIZE</span>
-              <div v-if="!insufficientAssets" class="text-right v-flex translate-slider-box">
+              <div class="text-right v-flex translate-slider-box">
                 <span class="d-inline-flex f-align-center" @click.stop="bountySlider = !bountySlider">
                   <span class="inline-block line-height-0 translate-slider-icon">
                     <svg>
@@ -100,7 +100,7 @@
                   <span class="v-flex text-right">x {{ item.count | formatMoneyNumber }}</span>
                 </li>
               </ul>
-              <ul class="package-bounty-candies-box">
+              <ul v-if="!insufficientAssets" class="package-bounty-candies-box">
                 <li class="d-flex f-align-center bounties-box-title">
                   <span class="inline-block line-height-0 bounties-box-title-icon">
                     <svg>

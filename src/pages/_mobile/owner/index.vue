@@ -122,13 +122,16 @@ export default {
           text: 'Make a chest',
           match: /^\/owner\/bountyChest/,
           show: true,
-          history: true
+          history: true,
+          historyPath: '/owner/bounty/chests'
         },
         {
           text: 'My Bounty Chests',
           match: /^\/owner\/bounty\/chests/,
           show: true,
           history: true,
+          rightIcon: '#icon-bounty-chests',
+          rightPath: '/owner/bountyChest',
           historyPath: '/owner/info'
         }
       ]

@@ -193,12 +193,12 @@ export default {
           path: '/owner/hops',
           tips: 'Deposit LESS'
         },
-        {
-          icon: '#icon-outcome',
-          title: 'Make a chest',
-          path: '/owner/bountyChest',
-          holdings: true
-        },
+        // {
+        //   icon: '#icon-outcome',
+        //   title: 'Make a chest',
+        //   path: '/owner/bountyChest',
+        //   holdings: true
+        // },
         {
           icon: '#icon-bounty-chests',
           title: 'My Bounty Chests',
