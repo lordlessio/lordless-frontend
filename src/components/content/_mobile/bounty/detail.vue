@@ -145,13 +145,89 @@
             :theme="(isChecking || enoughHops || !tokensBalanceInit) ? 'blue-linear' : 'red-linear'"
             :loading="isChecking || btnLoading || !tokensBalanceInit"
             :disabled="isChecking || !tokensBalanceInit || (enoughHops && (isDisabled || btnLoading || chestStatus === 'unlocking'))"
-            @click="openPackage">
+            @click="unlockBountyMethod">
             <span v-if="(isChecking || enoughHops || !tokensBalanceInit)">Unlock the Bounty Chest</span>
             <span v-else>Deposit LESS to reap HOPS</span>
           </lordless-btn>
         </div>
       </div>
     </transition>
+
+    <lordless-popup-dialog
+      :visible.sync="bountyPopupModel"
+      @open="checkPendingTx"
+      @closed="txPendingLoading = false">
+      <div class="chest-detail-popup-box">
+        <div class="TTFontBolder relative text-center chest-popup-header">
+          {{ enoughHops ? 'Payment': 'Deposit' }}
+          <span
+            @click.stop="bountyPopupModel = false"
+            class="TTFontBolder inline-block line-height-1 chest-popup-close">
+            <i class="el-icon-close"></i>
+          </span>
+        </div>
+        <div v-if="txPendingLoading" class="chest-popup-pending-box">
+          <div class="d-flex f-auto-center chest-tx-pending-icon">
+            <span class="inline-block line-height-0">
+              <svg>
+                <use xlink:href="#icon-large-loading"/>
+              </svg>
+            </span>
+          </div>
+          <lordless-btn theme="default" class="chest-popup-btn chest-popup-pending-btn" disabled>Transaction pending</lordless-btn>
+        </div>
+        <div v-else-if="enoughHops" class="chest-payment-popup-cnt">
+          <div class="text-center chest-payment-header">
+            <p>HOPS</p>
+            <h1>{{ weiByDecimals(chestDetail.needHopsAmount).toLocaleString() }}</h1>
+          </div>
+          <ul class="payment-cnt-desc">
+            <li class="d-flex f-align-center payment-cnt-item">
+              <span>Item</span>
+              <span class="v-flex text-right payment-item-text">Unlock Bounty Chest</span>
+            </li>
+            <li class="d-flex f-align-center payment-cnt-item">
+              <span>Method</span>
+              <span class="v-flex text-right payment-item-text">Wallet</span>
+            </li>
+          </ul>
+          <lordless-btn
+            class="chest-popup-btn"
+            theme="blue-linear"
+            :loading="btnLoading"
+            :disabled="btnLoading"
+            @click="paymentBounty">Pay now</lordless-btn>
+        </div>
+        <div v-else class="chest-deposit-popup-cnt">
+          <div class="deposit-popup-header">
+            <p class="deposit-popup-need">
+              <span class="TTFontBolder">{{ weiByDecimals(chestDetail.needHopsAmount - hopsBalance).toLocaleString() }}</span> more HOPS needed.
+            </p>
+            <p class="deposit-popup-desc">Choose an option to calculate the minimum amount of LESS to deposit at least. <span @click.stop="$router.push('/owner/hops')">Click here to deposit more</span>.</p>
+          </div>
+          <ul class="text-nowrap deposit-popup-slider">
+            <li v-for="(item, index) of planBases" :key="index" class="inline-block deposit-slider-item">
+              <hops-plant :info="item" :isActive="item._id === activePlanBase._id" :lessBalance="-1" small @choosePlan="choosePlan($event, index)"/>
+            </li>
+          </ul>
+          <div class="deposit-popup-balance" :class="{ 'is-failed': !enoughDepositLess }">
+            <h2>≈ {{ activePlanBase._id ? weiByDecimals(depositLessAmount).toLocaleString() : '???' }} <span>LESS</span></h2>
+            <p v-if="enoughDepositLess">LESS balance in wallet sufficient.</p>
+            <p v-else>LESS insufficient. Still need <span class="TTFontBolder text-underline">{{ weiByDecimals(depositLessAmount - lessBalance).toLocaleString() }}</span>.</p>
+          </div>
+          <lordless-btn
+            class="chest-popup-btn"
+            theme="blue-linear"
+            :loading="btnLoading"
+            :disabled="btnLoading"
+            @click="depositLESS">
+            <span v-if="enoughDepositLess && activePlanBase._id">Deposit now</span>
+            <a v-else href="https://ddex.io/trade/LESS-WETH" target="_blank">Purchase on DDEX</a>
+          </lordless-btn>
+        </div>
+      </div>
+    </lordless-popup-dialog>
+
     <lordless-authorize
       ref="authorize"
       blurs
@@ -163,7 +239,9 @@
 <script>
 import BountyDetailSkeletion from '@/components/skeletion/_mobile/bounty/detail'
 
-import { getBountyDetail, openBounty } from 'api'
+import HopsPlant from '@/components/reuse/_mobile/card/plan/plant'
+
+import { getBountyDetail, openBounty, getPlanBases, saveGrowHopsPlan } from 'api'
 import { weiByDecimals } from 'utils/tool'
 
 import { metamaskMixins, checkTokensBalanceMixins, publicMixins } from '@/mixins'
@@ -187,11 +265,19 @@ export default {
         unopened: 'gift'
       },
       isChecking: true,
-      isDisabled: false
+      isDisabled: false,
+
+      // payment dialog
+      bountyPopupModel: false,
+      planBases: [],
+      activePlanBase: {},
+      txPendingLoading: false,
+      bountyChestPendingTx: null
     }
   },
   computed: {
     ...mapState('contract', [
+      'HOPSPlan',
       'Bounty',
       'tokensContract',
       'tokensContractInit'
@@ -234,6 +320,26 @@ export default {
       const _needHopsAmount = this.chestDetail.needHopsAmount
       console.log('----- _hopsBalance', _hopsBalance, _needHopsAmount)
       return _needHopsAmount && _hopsBalance >= _needHopsAmount
+    },
+
+    // 选择 plant 计算需要的 less 数量
+    depositLessAmount () {
+      const _activePlanBase = this.activePlanBase
+      const _lessBalance = this.lessBalance
+      let amount = (this.chestDetail.needHopsAmount - this.hopsBalance) / _activePlanBase.lessToHops
+      if (_lessBalance < _activePlanBase.minimumAmount) {
+        console.log('==========', _activePlanBase.minimumAmount - amount)
+        amount = _activePlanBase.minimumAmount
+      }
+      console.log('----- depositLessAmount', amount, 'minimum', _activePlanBase.minimumAmount, 'balance', _lessBalance)
+
+      // return _activePlanBase._id ? (this.chestDetail.needHopsAmount - this.hopsBalance) / _activePlanBase.lessToHops : 0
+      return amount
+    },
+
+    // less balance 是否足够
+    enoughDepositLess () {
+      return this.lessBalance >= this.depositLessAmount && this.lessBalance >= this.activePlanBase.minimumAmount
     },
 
     scrollOpt () {
@@ -294,7 +400,8 @@ export default {
     }
   },
   components: {
-    BountyDetailSkeletion
+    BountyDetailSkeletion,
+    HopsPlant
   },
   methods: {
     weiByDecimals () {
@@ -332,8 +439,25 @@ export default {
     },
 
     async initBountyChestDetail () {
+      this.getPlanBasesInfo()
       await this.getChestInfo()
       if (!this.rendered) this.rendered = true
+    },
+
+    async choosePlan (info, index) {
+      console.log('----- index', info, index)
+      this.activePlanBase = info
+    },
+
+    async getPlanBasesInfo () {
+      try {
+        const res = await getPlanBases()
+        if (res.code === 1000 && res.data) {
+          this.planBases = res.data
+        }
+      } catch (err) {
+        console.log('0---- err', err.message)
+      }
     },
 
     async getChestInfo (bountyId = this.$route.params.bountyId) {
@@ -400,20 +524,15 @@ export default {
       return isDisabled
     },
 
-    async openPackage () {
+    // unlock bounty 触发
+    async unlockBountyMethod () {
       try {
-        if (!this.enoughHops) {
-          this.$router.push('/owner/hops')
-          return
-        }
         const authorize = await this.$refs.authorize.checkoutAuthorize({ tokenAllowance: true })
-        console.log('openPackage', authorize)
+        console.log('unlockBountyMethod', authorize)
         if (!authorize) return
-        this.btnLoading = true
         console.log('openBounty', authorize, openBounty)
-        this.doOpenPackage()
+        this.bountyPopupModel = !this.bountyPopupModel
       } catch (err) {
-        this.btnLoading = false
         this.$notify.error({
           title: 'Error!',
           message: err.message || 'unknow error',
@@ -422,7 +541,9 @@ export default {
         })
       }
     },
-    async doOpenPackage (account = this.account, info = this.chestDetail, web3Opt = this.web3Opt, Bounty = this.Bounty) {
+
+    // 支付 hops 打开 bounty
+    async paymentBounty (account = this.account, info = this.chestDetail, web3Opt = this.web3Opt, Bounty = this.Bounty) {
       this.btnLoading = true
 
       const isDisabled = await this.initBountyChestStatus()
@@ -499,6 +620,10 @@ export default {
           }
           this.metamaskChoose = false
           this.btnLoading = false
+
+          this.txPendingLoading = true
+          console.log('------------ deposit less tx', tx)
+          this.loopCheckTx(tx)
         })
           .catch((err) => {
             console.log('err', err.message)
@@ -513,7 +638,134 @@ export default {
           duration: 3500
         })
       }
+    },
+
+    depositLESS () {
+      if (!this.enoughDepositLess || !this.activePlanBase._id) return
+      this.doDepositLESS()
+    },
+
+    // 种植 less
+    async doDepositLESS (lessAmount = this.depositLessAmount, account = this.account, info = this.activePlanBase, HOPSPlan = this.HOPSPlan, web3Opt = this.web3Opt) {
+      if (!info._id) return
+      this.btnLoading = true
+
+      const { balance } = (await this.setTokensBalance()).less || {}
+
+      // 如果查询出来的 less余额 小于 需要种植的 less余额 lessAmount
+      if (balance < lessAmount) {
+        this.btnLoading = false
+        this.$notify.error({
+          title: 'Error!',
+          message: 'Insufficient LESS Balance',
+          position: 'bottom-right',
+          duration: 3500
+        })
+        return
+      }
+
+      this.metamaskChoose = true
+      console.log('------- do deposit less', lessAmount, info.planBaseId)
+      try {
+        const growHopsParam = {
+          name: 'growHops',
+          values: [ info.planBaseId, lessAmount ]
+        }
+        const { gasPrice } = web3Opt
+        // const gas = (await growHopsParam.estimateGas(growHopsParam.name, growHopsParam.values)) || 139999
+        const gas = 299999
+
+        const params = {
+          gas,
+          gasPrice,
+          data: HOPSPlan[growHopsParam.name].getData(info.planBaseId, lessAmount),
+          // memo: 'buy a tavern by lordless',
+          // feeCustomizable: true,
+          value: 0,
+          to: HOPSPlan.address,
+          from: account
+        }
+
+        // console.log('params', params)
+
+        // 使用自有封装对象
+        window.lordlessMethods.buy(params).then(async tx => {
+          // console.log('tx', tx)
+
+          await saveGrowHopsPlan({ tx, lessAmount, planBase: info._id })
+          this.metamaskChoose = false
+          this.btnLoading = false
+
+          this.txPendingLoading = true
+          this.loopCheckTx(tx)
+        })
+          .catch((err) => {
+            console.log('err', err.message)
+            this.metamaskChoose = false
+            this.btnLoading = false
+          })
+      } catch (err) {
+        this.$notify.error({
+          title: 'Error!',
+          message: err.message || 'unknow error',
+          position: 'bottom-right',
+          duration: 3500
+        })
+      }
+    },
+
+    checkPendingTx (tx = this.bountyChestPendingTx) {
+      if (tx) {
+        this.txPendingLoading = true
+      }
+    },
+
+    async loopCheckTx (tx = this.bountyChestPendingTx, web3js = this.web3Opt.web3js) {
+      if (!tx) return
+
+      this.bountyChestPendingTx = tx
+
+      console.log(' ====== come in loop_CheckbountyChestPendingTx')
+
+      let timeout = null
+      const loopFunc = () => {
+        // 创建新定时器实例
+        timeout = setTimeout(async () => {
+          let bool = false
+          web3js.eth.getTransactionReceipt(tx, async (err, res) => {
+            console.log('-------- check tx', err, res, !!res)
+            if (err) {
+              bool = false
+              return
+            }
+            bool = !!res
+            console.log('bountyChestPendingTx', tx, bool)
+            clearTimeout(timeout)
+            timeout = null
+
+            if (bool) {
+              await this.setTokensBalance()
+              this.bountyChestPendingTx = null
+              this.bountyPopupModel = false
+            } else {
+              return loopFunc()
+            }
+          })
+        }, 5000)
+      }
+      this.$once('hook:beforeDestroy', () => {
+        timeout && clearTimeout(timeout)
+      })
+      this.$once('hook:deactivated', () => {
+        timeout && clearTimeout(timeout)
+      })
+      return loopFunc()
     }
+  },
+  deactivated () {
+    this.activePlanBase = {}
+    this.txPendingLoading = false
+    this.bountyChestPendingTx = null
   },
   async activated () {
     if (!this.rendered) return
@@ -701,4 +953,159 @@ export default {
     border-radius: 0;
     transition: all .3s;
   }
+
+  /**
+   *  chest-detail-popup-box  -- begin
+   */
+  .chest-detail-popup-box {
+    background-color: #fff;
+  }
+  .chest-popup-header {
+    padding: 14px 0;
+    font-size: 16px;
+    color: #555;
+    border-bottom: 1px solid #ddd;
+  }
+  .chest-popup-close {
+    position: absolute;
+    top: 50%;
+    right: 18px;
+    font-size: 22px;
+    color: #bbb;
+    transform: translateY(-50%);
+    >i {
+      font-weight: bolder;
+    }
+  }
+  .chest-popup-btn {
+    padding: 15px 0;
+    width: 100%;
+    border-radius: 0;
+  }
+
+  // chest-popup-pending-box
+  .chest-popup-pending-box {
+
+  }
+  @keyframes pendingRotate {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .chest-tx-pending-icon {
+    padding: 42px 0;
+    animation: pendingRotate 1s linear infinite;
+    >span {
+      width: 84px;
+      height: 84px;
+      fill: #0079FF;
+    }
+  }
+  .chest-popup-pending-btn {
+    color: #fff;
+    background-color: #000 !important;
+  }
+
+  // chest-payment-popup-cnt
+  .chest-payment-popup-cnt {
+
+  }
+  .chest-payment-header {
+    padding: 36px 0;
+    >p {
+      font-size: 14px;
+      color: #777;
+    }
+    >h1 {
+      font-size: 36px;
+      color: #0B2A48;
+    }
+  }
+  .payment-cnt-desc {
+    margin-bottom: 36px;
+    padding: 0 20px;
+  }
+  .payment-cnt-item {
+    padding: 12px 0;
+    font-size: 16px;
+    color: #777;
+    border-bottom: 1px solid #ddd;
+  }
+  .payment-item-text {
+    color: #0B2A48;
+  }
+
+  // chest-deposit-popup-cnt
+  .chest-deposit-popup-cnt {
+
+  }
+  .deposit-popup-header {
+    padding: 24px 20px 0;
+    color: #777;
+  }
+  .deposit-popup-need {
+    >span {
+      color: #555;
+    }
+  }
+  .deposit-popup-desc {
+    margin-top: 8px;
+    >span {
+      color: #0079FF;
+    }
+  }
+  .deposit-popup-slider {
+    padding: 18px 20px 30px;
+    @include overflow();
+  }
+  .deposit-slider-item {
+    width: 192px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.12);
+    // >p {
+    //   font-size: 14px;
+    //   color: #777;
+    // }
+    // .deposit-slider-held {
+    //   // margin-top: 2px;
+    //   font-size: 24px;
+    //   color: #0079FF;
+    // }
+    &:not(:first-of-type) {
+      margin-left: 12px;
+    }
+  }
+  .deposit-popup-balance {
+    margin-bottom: 25px;
+    padding: 0 20px;
+    >h2 {
+      padding-top: 12px;
+      font-size: 24px;
+      color: #0B2A48;
+      border-top: 1px solid #ddd;
+      >span {
+        font-size: 16px;
+      }
+    }
+    >p {
+      margin-top: 6px;
+      font-size: 16px;
+      color: #777;
+    }
+    &.is-failed {
+      >h2 {
+        color: #999;
+      }
+      >p {
+        color: #F5515F;
+      }
+    }
+  }
+  /**
+   *  chest-detail-popup-box  -- end
+   */
 </style>

@@ -23,6 +23,7 @@
     "clipboard": "^2.0.1",
     "countup.js": "^1.9.3",
     "date-fns": "^1.29.0",
+    "decimal.js-light": "^2.5.0",
     "element-ui": "^2.4.0",
     "ethereum-blockies": "github:ethereum/blockies",
     "fastclick": "^1.0.6",

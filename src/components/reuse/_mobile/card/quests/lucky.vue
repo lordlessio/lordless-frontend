@@ -122,7 +122,8 @@ export default {
       return process.env.LDBICON_ORIGIN
     },
     failed () {
-      return this.info.status === -1
+      const { status } = this.info || {}
+      return status === -1 || status === -2
     },
     pending () {
       return this.info.status === 0

@@ -40,7 +40,6 @@
             <li class="hops-planting-item" v-for="(planBase, index) of planBases" :key="index">
               <hops-plant
                 :info="planBase"
-                :level="index"
                 :lessBalance="lessBalance"
                 @choosePlan="choosePlan"/>
             </li>
@@ -61,11 +60,11 @@
       </div>
     </transition>
     <lordless-plan-glossary-dialog v-model="glossaryModel" type="deposit"/>
-    <lordless-authorize
+    <!-- <lordless-authorize
       ref="authorize"
       blurs
       tokenAllowanceType="plant"
-      :tokenBets="tokenBets"/>
+      :tokenBets="tokenBets"/> -->
   </div>
 </template>
 
@@ -90,7 +89,7 @@ export default {
     return {
       loading: true,
       planBases: [],
-      tokenBets: [],
+      // tokenBets: [],
       askedQuestions: [
         {
           title: 'What’s a HOPS?',
@@ -118,19 +117,20 @@ export default {
     },
 
     async choosePlan (planBase) {
-      this.tokenBets = [
-        {
-          candy: planBase.lessCandy,
-          count: planBase.minimumAmount
-        }
-      ]
+      // this.tokenBets = [
+      //   {
+      //     candy: planBase.lessCandy,
+      //     count: planBase.minimumAmount
+      //   }
+      // ]
 
-      this.$nextTick(async () => {
-        const authorize = await this.$refs.authorize.checkoutAuthorize({ tokenAllowance: true })
-        console.log('choosePlan', planBase, authorize)
-        if (!authorize) return
-        this.$router.push(`/owner/planBase/${planBase._id}`)
-      })
+      // this.$nextTick(async () => {
+      //   const authorize = await this.$refs.authorize.checkoutAuthorize({ tokenAllowance: true })
+      //   console.log('choosePlan', planBase, authorize)
+      //   if (!authorize) return
+      //   this.$router.push(`/owner/planBase/${planBase._id}`)
+      // })
+      this.$router.push(`/owner/planBase/${planBase._id}`)
     },
 
     initMethod () {

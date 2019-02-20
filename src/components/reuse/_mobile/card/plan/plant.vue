@@ -1,14 +1,26 @@
 <template>
-  <div class="relative d-flex f-align-start hops-plant-cnt" :class="{ 'not-balance': notBalance, 'is-pro': info.level === 3 }" @click.stop="choosePlan">
-    <p class="ImpactFont relative hops-plant-held" :class="{ 'is-small': heldValue.length > 4 }">{{ heldValue }}</p>
-    <div class="hops-plant-right">
-      <h3 class="relative text-upper hops-plant-level">{{ levelText }}</h3>
-      <div class="plant-deposits-info">
-        <p class="ImpactFont">{{ info.lockTime / 3600 / 24 }} DAY term deposits</p>
-        <p class="hops-plant-lessAmount">{{ info.minimumAmount | weiByDecimals }} LESS at least</p>
+  <div class="relative hops-plant-cnt" :class="{ 'not-balance': notBalance, 'is-pro': info.level === 3, 'is-large': !small }" @click.stop="choosePlan">
+    <div v-if="!small" class="d-flex f-align-start">
+      <p class="ImpactFont relative hops-plant-held" :class="{ 'is-small': heldValue.length > 4 }">{{ heldValue }}</p>
+      <div class="hops-plant-right">
+        <h3 class="relative text-upper hops-plant-level">{{ levelText }}</h3>
+        <div class="plant-deposits-info">
+          <p class="ImpactFont">{{ info.lockTime / 3600 / 24 }} DAY term deposits</p>
+          <p class="hops-plant-lessAmount">{{ info.minimumAmount | weiByDecimals }} LESS at least</p>
+        </div>
+        <p class="plant-income-info"><span class="TTFontBlack">{{ info.lessToHops * 100 }}</span> HOPS income on every  100 LESS invested.</p>
       </div>
-      <p class="plant-income-info"><span class="TTFontBlack">{{ info.lessToHops * 100 }}</span> HOPS income on every  100 LESS invested.</p>
     </div>
+    <div v-else class="hops-plant-small" :class="{ 'is-active': isActive }">
+      <p class="TTFontBolder plant-small-type">{{ levelText }} {{ info.lockTime / 3600 / 24 }} day</p>
+      <p class="ImpactFont plant-small-held">{{ heldValue }} HELD</p>
+      <p class="plant-small-min-least">{{ info.minimumAmount | weiByDecimals }} LESS at least</p>
+    </div>
+    <lordless-authorize
+      ref="authorize"
+      blurs
+      tokenAllowanceType="plant"
+      :tokenBets="tokenBets"/>
   </div>
 </template>
 
@@ -23,11 +35,24 @@ export default {
     lessBalance: {
       type: Number,
       default: 0
+    },
+    small: {
+      type: Boolean,
+      default: false
+    },
+    isActive: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data: () => {
+    return {
+      tokenBets: []
     }
   },
   computed: {
     notBalance () {
-      return this.info.minimumAmount > this.lessBalance
+      return this.lessBalance !== -1 && this.info.minimumAmount > this.lessBalance
     },
     levelText () {
       const levels = {
@@ -47,7 +72,20 @@ export default {
   methods: {
     choosePlan () {
       if (this.notBalance) return
-      this.$emit('choosePlan', this.info)
+      const _info = this.info
+      this.tokenBets = [
+        {
+          candy: _info.lessCandy,
+          count: _info.minimumAmount
+        }
+      ]
+
+      this.$nextTick(async () => {
+        const authorize = await this.$refs.authorize.checkoutAuthorize({ tokenAllowance: true })
+        console.log('choosePlan', _info, authorize)
+        if (!authorize) return
+        this.$emit('choosePlan', this.info)
+      })
     }
   }
 }
@@ -55,10 +93,12 @@ export default {
 
 <style lang="scss" scoped>
   .hops-plant-cnt {
-    padding: 16px 20px;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px 3px rgba(0, 0, 0, .1);
+    &.is-large {
+      padding: 16px 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px 3px rgba(0, 0, 0, .1);
+    }
     &.is-pro {
       .hops-plant-held {
         color: #F5515F;
@@ -88,6 +128,15 @@ export default {
         margin-top: -2px;
         color: #F5515F;
         @include TTFontBolder();
+      }
+
+      .hops-plant-small {
+        .plant-small-type {
+          color: #bbb;
+        }
+        .plant-small-held {
+          color: #bbb;
+        }
       }
     }
   }
@@ -144,5 +193,36 @@ export default {
     border-top: 1px solid #ddd;
     font-size: 14px;
     color: #555;
+  }
+
+  // hops-plant-small
+  .hops-plant-small {
+    // padding: 10px 16px;
+    // width: 144px;
+    // border-radius: 5px;
+    // box-sizing: border-box;
+    // background-color: #fff;
+    // box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.12);
+    padding: 10px 16px;
+    background-color: #fff;
+    border-radius: 5px;
+    .plant-small-type {
+      font-size: 14px;
+      color: #777;
+    }
+    .plant-small-held {
+      font-size: 24px;
+      color: #0079FF;
+    }
+    &.is-active {
+      background-color: #0079FF;
+      >p {
+        color: #fff;
+      }
+    }
+  }
+  .plant-small-min-least {
+    font-size: 14px;
+    color: #999;
   }
 </style>

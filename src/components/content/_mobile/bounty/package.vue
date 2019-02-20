@@ -189,6 +189,7 @@ import PackageBountySkeletion from '@/components/skeletion/_mobile/bounty/packag
 import { weiByDecimals, formatDecimal } from 'utils/tool'
 import { _add, _strip } from 'utils/tool/math'
 import { getBountyInfos, packageBounty } from 'api'
+import Decimal from 'decimal.js-light'
 export default {
   name: 'package-bounty-component',
   data: () => {
@@ -250,9 +251,11 @@ export default {
 
     // opitons slider choose volume
     sliderCVolume () {
-      const almostEth = this.bountyAssets.almostEth
       if (this.insufficientAssets) return this.totalBountyVolume
-      return this.bountySliderModel === 100 ? this.totalBountyVolume : _strip(almostEth + _strip(((this.totalBountyVolume - almostEth) / 100) * this.bountySliderModel))
+
+      const almostEth = new Decimal(this.bountyAssets.almostEth)
+      return this.bountySliderModel === 100 ? this.totalBountyVolume : almostEth.add(new Decimal(this.totalBountyVolume).sub(almostEth).div(100).mul(this.bountySliderModel)).toNumber()
+      // return this.bountySliderModel === 100 ? this.totalBountyVolume : _strip(almostEth + _strip(((this.totalBountyVolume - almostEth) / 100) * this.bountySliderModel))
     },
 
     // 根据判断，显示当前 volume
@@ -261,7 +264,8 @@ export default {
     },
     needHopsAmount () {
       const _needHopsPrice = this.bountyAssets.needHopsPrice
-      return _strip(_needHopsPrice * this.currentVolume)
+      console.log('---- needHopsAmount', _needHopsPrice * this.currentVolume, _strip(_needHopsPrice * this.currentVolume), new Decimal(_needHopsPrice).mul(this.currentVolume).toNumber())
+      return new Decimal(_needHopsPrice).mul(this.currentVolume).toNumber()
     }
   },
   watch: {
@@ -274,10 +278,11 @@ export default {
         return
       }
       // 当前选择的 eth 价值数量
-      const _cVolume = formatDecimal(val)
+      const _cVolume = new Decimal(formatDecimal(val))
 
       // 计算平均值
-      const averageVolume = _strip(_cVolume / _packageBountiesInfo.length)
+      const averageVolume = _cVolume.div(_packageBountiesInfo.length)
+      // const averageVolume = _strip(_cVolume / _packageBountiesInfo.length)
 
       // 多余的token存储
       const overTokens = {}
@@ -285,7 +290,7 @@ export default {
       // 消耗的token存储
       const costTokens = {}
 
-      console.log('averageVolume', averageVolume, this.totalBountyVolume, _cVolume)
+      console.log('averageVolume', averageVolume, this.totalBountyVolume, _cVolume.toNumber())
 
       // _packageBountiesInfo 初始为 ethVolume 降序排列状态,统一从后端处理的数据
       for (const item of _packageBountiesInfo) {
@@ -295,13 +300,14 @@ export default {
         // 如果当前 token 的 ethVolume 大于 平均值
         if (item.ethVolume > averageVolume) {
           // 计算超出的 ethVolume
-          const _overEthVolume = _add(item.ethVolume, -averageVolume)
+          const _overEthVolume = new Decimal(item.ethVolume).sub(averageVolume)
+          // const _overEthVolume = _add(item.ethVolume, -averageVolume)
 
           // 超出的数据 存储数据至 overTokens
           overTokens[token] = {
             candy: item.candy,
             _count: item._count,
-            overEthVolume: _overEthVolume
+            overEthVolume: _overEthVolume.toNumber()
           }
 
           // 存储token消耗数据
@@ -309,7 +315,7 @@ export default {
             candy: item.candy,
             _count: item._count,
             _ethVolume: item.ethVolume,
-            ethVolume: averageVolume
+            ethVolume: averageVolume.toNumber()
           }
           console.log('------ _overEthVolume', _overEthVolume, JSON.stringify(overTokens[token]), JSON.stringify(costTokens[token]))
         // 反之，如果当前 token 的 ethVolume 小于等于 平均值
@@ -318,7 +324,8 @@ export default {
           costTokens[token] = Object.assign({}, item, { _ethVolume: item.ethVolume })
 
           // 计算达到平均值还需要的 volume 为 needVolume
-          let needVolume = averageVolume - item.ethVolume
+          let needVolume = averageVolume.sub(item.ethVolume)
+          // let needVolume = averageVolume - item.ethVolume
 
           // 遍历 _overTokens 数据
           const _overTokens = Object.values(overTokens)
@@ -332,10 +339,12 @@ export default {
               console.log('--------- over', _add(overTokens[_token].overEthVolume, -needVolume), _add(costTokens[_token].ethVolume, needVolume))
 
               // 扣除 needVolume 数量的该 overToken 的 overEthVolume
-              overTokens[_token].overEthVolume = _add(overTokens[_token].overEthVolume, -needVolume)
+              overTokens[_token].overEthVolume = new Decimal(overTokens[_token].overEthVolume).sub(needVolume).toNumber()
+              // overTokens[_token].overEthVolume = _add(overTokens[_token].overEthVolume, -needVolume)
 
               // 增加 needVolume 数量的该 token 对应 costTokens 中的ethVolume
-              costTokens[_token].ethVolume = _add(costTokens[_token].ethVolume, needVolume)
+              costTokens[_token].ethVolume = new Decimal(costTokens[_token].ethVolume).add(needVolume).toNumber()
+              // costTokens[_token].ethVolume = _add(costTokens[_token].ethVolume, needVolume)
 
               // 跳出循环
               break
@@ -356,7 +365,7 @@ export default {
       console.log('overTokens', overTokens)
       console.log('costTokens', costTokens)
       console.log('=============', Object.values(costTokens).map(item => {
-        const count = item._count ? item.ethVolume / item._ethVolume * item._count : 0
+        const count = item._count ? new Decimal(item.ethVolume).div(item._ethVolume).mul(item._count).toNumber() : 0
         return Object.assign({}, item, {
           count,
           left: item._count - count
@@ -365,10 +374,12 @@ export default {
 
       // 处理 costTokens 数据为 packageBountiesInfo 格式数据,并赋值
       this.packageBountiesInfo = Object.values(costTokens).map(item => {
-        const count = item._count ? item.ethVolume / item._ethVolume * item._count : 0
+        const count = item._count ? new Decimal(item.ethVolume).div(item._ethVolume).mul(item._count).toNumber() : 0
+        // const count = item._count ? item.ethVolume / item._ethVolume * item._count : 0
+        console.log('------ =-= - packageBountiesInfo count', count)
         return Object.assign({}, item, {
           count,
-          left: item._count - count
+          left: new Decimal(item._count).sub(count).toNumber()
         })
       })
     }
@@ -658,6 +669,9 @@ export default {
     }
     &:not(:first-of-type) {
       margin-left: 8px;
+    }
+    &.blue-linear {
+      color: #fff;
     }
   }
 

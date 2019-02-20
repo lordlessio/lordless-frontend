@@ -35,8 +35,9 @@
             <p class="TTFontBolder">{{ info.airdrop.project.symbol }}</p>
             <p class="promotion-info-date">{{ info.update_at | dateFormat('MMM. DD YYYY') }}</p>
           </div>
-          <div v-if="info.status === 2 || info.status === -1" class="TTFontBolder promotion-failed-info">
-            {{ info.status === -1 ? 'Failed' : 'Token Empty!' }}
+          <div v-if="info.status === -2 || info.status === -1" class="TTFontBolder promotion-failed-info">
+            <!-- {{ info.status === -1 ? 'Failed' : 'Token Empty!' }} -->
+            Failed
           </div>
           <div v-else class="promotion-receive-info" :class="{ 'is-pending': info.status === 0 }">
             <p class="TTFontBolder promotion-receive-count">+ {{ info.airdrop.countPerUser | weiByDecimals(info.airdrop.decimals) }}</p>

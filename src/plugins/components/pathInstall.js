@@ -19,6 +19,7 @@ const files = [
   '/stories/pagination',
   '/stories/progress',
   '/stories/dialog/fade',
+  '/stories/dialog/popup',
   '/stories/candyIcon'
 ]
 

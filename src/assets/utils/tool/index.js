@@ -9,6 +9,7 @@ import {
   differenceInCalendarISOYears
 } from 'date-fns'
 import store from '@/store'
+import Decimal from 'decimal.js-light'
 
 window.requestAnimationFrame = (function () {
   return window.requestAnimationFrame ||
@@ -351,7 +352,8 @@ export const weiByDecimals = (value, decimals = 18) => {
   // 防止 1e+20 之类的数字转化失败，这里需要判断一下
   if (typeof value !== 'number') value = parseInt(value)
 
-  return parseFloat(parseFloat(value / Math.pow(10, decimals)).toFixed(4))
+  return parseFloat(new Decimal(value).div(Math.pow(10, decimals)).toFixed(4))
+  // return parseFloat(_strip(value / Math.pow(10, decimals)).toFixed(4))
 }
 /**
  * wei to eth

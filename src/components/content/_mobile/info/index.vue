@@ -201,7 +201,7 @@ export default {
         // },
         {
           icon: '#icon-bounty-chests',
-          title: 'My Bounty Chests',
+          title: 'Bounty Chests',
           path: '/owner/bounty/chests'
         },
         {
