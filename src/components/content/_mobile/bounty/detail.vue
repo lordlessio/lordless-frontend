@@ -142,11 +142,11 @@
           <lordless-btn
             v-else-if="chestStatus === 'unopened' || chestStatus === 'unlocking'"
             class="full-width chest-detail-btn"
-            :theme="(isChecking || enoughHops || !tokensBalanceInit) ? 'blue-linear' : 'red-linear'"
+            :theme="isCouldUnlock ? 'blue-linear' : 'red-linear'"
             :loading="isChecking || btnLoading || !tokensBalanceInit"
             :disabled="isChecking || !tokensBalanceInit || (enoughHops && (isDisabled || btnLoading || chestStatus === 'unlocking'))"
             @click="unlockBountyMethod">
-            <span v-if="(isChecking || enoughHops || !tokensBalanceInit)">Unlock the Bounty Chest</span>
+            <span v-if="isCouldUnlock">Unlock the Bounty Chest</span>
             <span v-else>Deposit LESS to reap HOPS</span>
           </lordless-btn>
         </div>
@@ -213,7 +213,8 @@
           <div class="deposit-popup-balance" :class="{ 'is-failed': !enoughDepositLess }">
             <h2>≈ {{ activePlanBase._id ? weiByDecimals(depositLessAmount).toLocaleString() : '???' }} <span>LESS</span></h2>
             <p v-if="enoughDepositLess">LESS balance in wallet sufficient.</p>
-            <p v-else>LESS insufficient. Still need <span class="TTFontBolder text-underline">{{ weiByDecimals(depositLessAmount - lessBalance).toLocaleString() }}</span>.</p>
+            <p v-else-if="!activePlanBase._id" class="deposit-choose-plan">Choose a deposit plan.</p>
+            <p v-else>LESS insufficient. Still need <span class="TTFontBolder text-underline">{{ weiByDecimals(depositLessAmount - lessBalance + 1e16).toLocaleString() }}</span>.</p>
           </div>
           <lordless-btn
             class="chest-popup-btn"
@@ -243,6 +244,7 @@ import HopsPlant from '@/components/reuse/_mobile/card/plan/plant'
 
 import { getBountyDetail, openBounty, getPlanBases, saveGrowHopsPlan } from 'api'
 import { weiByDecimals } from 'utils/tool'
+import Decimal from 'decimal.js-light'
 
 import { metamaskMixins, checkTokensBalanceMixins, publicMixins } from '@/mixins'
 
@@ -325,13 +327,15 @@ export default {
     // 选择 plant 计算需要的 less 数量
     depositLessAmount () {
       const _activePlanBase = this.activePlanBase
+      if (!_activePlanBase._id) return 0
       const _lessBalance = this.lessBalance
-      let amount = (this.chestDetail.needHopsAmount - this.hopsBalance) / _activePlanBase.lessToHops
+      let amount = new Decimal(this.chestDetail.needHopsAmount).sub(this.hopsBalance).div(_activePlanBase.lessToHops).toNumber()
+      // let amount = (this.chestDetail.needHopsAmount - this.hopsBalance) / _activePlanBase.lessToHops
       if (_lessBalance < _activePlanBase.minimumAmount) {
         console.log('==========', _activePlanBase.minimumAmount - amount)
         amount = _activePlanBase.minimumAmount
       }
-      console.log('----- depositLessAmount', amount, 'minimum', _activePlanBase.minimumAmount, 'balance', _lessBalance)
+      console.log('----- depositLessAmount', amount, 'minimum', _activePlanBase.minimumAmount, 'balance', _lessBalance, new Decimal(amount).sub(_lessBalance).toNumber())
 
       // return _activePlanBase._id ? (this.chestDetail.needHopsAmount - this.hopsBalance) / _activePlanBase.lessToHops : 0
       return amount
@@ -340,6 +344,10 @@ export default {
     // less balance 是否足够
     enoughDepositLess () {
       return this.lessBalance >= this.depositLessAmount && this.lessBalance >= this.activePlanBase.minimumAmount
+    },
+
+    isCouldUnlock () {
+      return this.isChecking || this.enoughHops || !this.tokensBalanceInit
     },
 
     scrollOpt () {
@@ -527,6 +535,10 @@ export default {
     // unlock bounty 触发
     async unlockBountyMethod () {
       try {
+        if (!this.isCouldUnlock) {
+          this.bountyPopupModel = !this.bountyPopupModel
+          return
+        }
         const authorize = await this.$refs.authorize.checkoutAuthorize({ tokenAllowance: true })
         console.log('unlockBountyMethod', authorize)
         if (!authorize) return
@@ -1096,12 +1108,18 @@ export default {
       font-size: 16px;
       color: #777;
     }
+    .deposit-choose-plan {
+      color: #0B2A48;
+    }
     &.is-failed {
       >h2 {
         color: #999;
       }
       >p {
         color: #F5515F;
+      }
+      .deposit-choose-plan {
+        color: #0B2A48;
       }
     }
   }

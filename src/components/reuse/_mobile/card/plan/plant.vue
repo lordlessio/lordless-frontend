@@ -12,7 +12,7 @@
       </div>
     </div>
     <div v-else class="hops-plant-small" :class="{ 'is-active': isActive }">
-      <p class="TTFontBolder plant-small-type">{{ levelText }} {{ info.lockTime / 3600 / 24 }} day</p>
+      <p class="TTFontBolder text-ellipsis plant-small-type">{{ levelText }} {{ info.lockTime / 3600 / 24 }} day</p>
       <p class="ImpactFont plant-small-held">{{ heldValue }} HELD</p>
       <p class="plant-small-min-least">{{ info.minimumAmount | weiByDecimals }} LESS at least</p>
     </div>

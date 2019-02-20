@@ -375,7 +375,7 @@ export default {
       // if (task) return
       if (task.status !== 'processing') return
 
-      this.candyTasks[index].choose = true
+      if (this.candyTasks[index]) this.candyTasks[index].choose = true
 
       this.receiveBoxShow = true
 
@@ -441,7 +441,7 @@ export default {
           iserror = true
           removeClass('hidden', cCandy)
           removeClass('animate', candy)
-          this.candyTasks[index].choose = false
+          if (this.candyTasks[index]) this.candyTasks[index].choose = false
           return
         }
 

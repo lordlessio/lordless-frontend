@@ -319,7 +319,7 @@ export default {
               console.log('tokenApproveKey', erc721ApproveKey)
               const isPending = !!localStorage.getItem(erc721ApproveKey)
               isPending && this.loopCheckErc721Approved({ contractAddress, approvedContractAddress, isApproved, checkApprovedMethod, behavior })
-
+              console.log('-------- isPending - -- 1', isPending)
               this.$set(this.allowancePendings, `${account}_${contractAddress}`, isPending)
               continue
             }
@@ -335,8 +335,8 @@ export default {
             console.log('tokenApproveKey', tokenApproveKey)
             const isPending = !!localStorage.getItem(tokenApproveKey)
             isPending && this.loopCheckTokenAllowance({ candy, count: bet.count, contractAddress, tokenAllowances, checkAllowancesMethod, behavior })
-
-            this.$set(this.allowancePendings, `${candy}_${contractAddress}`, isPending || tokenAllowances[candy] === undefined)
+            console.log('-------- isPending - -- 2', isPending, tokenAllowances, candy)
+            this.$set(this.allowancePendings, `${candy}_${contractAddress}`, isPending || !this.allTokenAllowanceInit)
           }
         }
         return
@@ -355,7 +355,7 @@ export default {
           console.log('tokenApproveKey', erc721ApproveKey)
           const isPending = !!localStorage.getItem(erc721ApproveKey)
           isPending && this.loopCheckErc721Approved({ contractAddress, approvedContractAddress, isApproved, checkApprovedMethod, behavior })
-
+          console.log('-------- isPending - -- 3', isPending)
           this.$set(this.allowancePendings, `${account}_${contractAddress}`, isPending)
           continue
         }
@@ -370,8 +370,8 @@ export default {
         console.log('tokenApproveKey', tokenApproveKey)
         const isPending = !!localStorage.getItem(tokenApproveKey)
         isPending && this.loopCheckTokenAllowance({ candy, count: bet.count, contractAddress, tokenAllowances, checkAllowancesMethod, behavior })
-
-        this.$set(this.allowancePendings, `${candy}_${contractAddress}`, isPending || tokenAllowances[candy] === undefined)
+        console.log('-------- isPending - -- 4', isPending, JSON.stringify(tokenAllowances), candy)
+        this.$set(this.allowancePendings, `${candy}_${contractAddress}`, isPending || !this.allTokenAllowanceInit)
       }
 
       const keys = Object.keys(allowanceModels)
@@ -417,10 +417,10 @@ export default {
             const { contractAddress, tokenAllowances } = _crowdsaleInfo
 
             // 记录该 token pending 状态
-            this.$set(this.allowancePendings, `${candy}_${contractAddress}`, tokenAllowances[candy] === undefined)
+            this.$set(this.allowancePendings, `${candy}_${contractAddress}`, !this.allTokenAllowanceInit)
 
             // 记录该 token 是否授权状态, 这里的数量都是 wei 单位
-            this.$set(this.allowanceModels, `${candy}_${contractAddress}`, tokenAllowances[candy] !== undefined && tokenAllowances[candy] >= bet.count)
+            this.$set(this.allowanceModels, `${candy}_${contractAddress}`, this.allTokenAllowanceInit && tokenAllowances[candy] >= bet.count)
           }
         }
         return
@@ -451,10 +451,10 @@ export default {
         console.log(' init token allowance bet', bet)
 
         // 记录该 token pending 状态
-        this.$set(this.allowancePendings, `${candy}_${contractAddress}`, tokenAllowances[candy] === undefined)
+        this.$set(this.allowancePendings, `${candy}_${contractAddress}`, !this.allTokenAllowanceInit)
 
         // 记录该 token 是否授权状态, 这里的数量都是 wei 单位
-        this.$set(this.allowanceModels, `${candy}_${contractAddress}`, tokenAllowances[candy] !== undefined && tokenAllowances[candy] >= bet.count)
+        this.$set(this.allowanceModels, `${candy}_${contractAddress}`, this.allTokenAllowanceInit && tokenAllowances[candy] >= bet.count)
       }
 
       this.$nextTick(() => this.checkAllowance())
