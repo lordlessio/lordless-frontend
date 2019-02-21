@@ -331,7 +331,7 @@ export default {
       const _lessBalance = this.lessBalance
       let amount = new Decimal(this.chestDetail.needHopsAmount).sub(this.hopsBalance).div(_activePlanBase.lessToHops).toNumber()
       // let amount = (this.chestDetail.needHopsAmount - this.hopsBalance) / _activePlanBase.lessToHops
-      if (_lessBalance < _activePlanBase.minimumAmount) {
+      if (amount < _activePlanBase.minimumAmount) {
         console.log('==========', _activePlanBase.minimumAmount - amount)
         amount = _activePlanBase.minimumAmount
       }
@@ -675,6 +675,7 @@ export default {
         })
         return
       }
+      lessAmount = new Decimal(lessAmount).toFixed(0)
 
       this.metamaskChoose = true
       console.log('------- do deposit less', lessAmount, info.planBaseId)
