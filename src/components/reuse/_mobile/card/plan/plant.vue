@@ -6,7 +6,7 @@
         <h3 class="relative text-upper hops-plant-level">{{ levelText }}</h3>
         <div class="plant-deposits-info">
           <p class="ImpactFont">{{ info.lockTime / 3600 / 24 }} DAY term deposits</p>
-          <p class="hops-plant-lessAmount">{{ info.minimumAmount | weiByDecimals }} LESS at least</p>
+          <p class="hops-plant-lessAmount">{{ weiByDecimals(info.minimumAmount).toLocaleString() }} LESS at least</p>
         </div>
         <p class="plant-income-info"><span class="TTFontBlack">{{ info.lessToHops * 100 }}</span> HOPS income on every  100 LESS invested.</p>
       </div>
@@ -14,7 +14,7 @@
     <div v-else class="hops-plant-small" :class="{ 'is-active': isActive }">
       <p class="TTFontBolder text-ellipsis plant-small-type">{{ levelText }} {{ info.lockTime / 3600 / 24 }} day</p>
       <p class="ImpactFont plant-small-held">{{ heldValue }} HELD</p>
-      <p class="plant-small-min-least">{{ info.minimumAmount | weiByDecimals }} LESS at least</p>
+      <p class="plant-small-min-least">{{ weiByDecimals(info.minimumAmount).toLocaleString() }} LESS at least</p>
     </div>
     <lordless-authorize
       ref="authorize"
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { weiByDecimals } from 'utils/tool'
 export default {
   name: 'mobile-hops-plant-card',
   props: {
@@ -70,6 +71,9 @@ export default {
     }
   },
   methods: {
+    weiByDecimals () {
+      return weiByDecimals(...arguments)
+    },
     choosePlan () {
       if (this.notBalance) return
       const _info = this.info

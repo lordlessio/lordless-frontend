@@ -159,7 +159,7 @@
       @closed="txPendingLoading = false">
       <div class="chest-detail-popup-box">
         <div class="TTFontBolder relative text-center chest-popup-header">
-          {{ enoughHops ? 'Payment': 'Deposit' }}
+          {{ enoughHops ? 'Payment': 'HOPS insufficient' }}
           <span
             @click.stop="bountyPopupModel = false"
             class="TTFontBolder inline-block line-height-1 chest-popup-close">
