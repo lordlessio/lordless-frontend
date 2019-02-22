@@ -205,12 +205,11 @@ export default {
       ]
     }
   },
-  watch: {
-    // depositModel (val) {
-    //   if (val) {
-    //   }
-    // }
-  },
+  // watch: {
+  //   depositModel (val) {
+  //     console.log(val * 1e18)
+  //   }
+  // },
   components: {
     PlanBaseDetailSkeletion
   },

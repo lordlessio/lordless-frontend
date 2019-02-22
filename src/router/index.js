@@ -36,7 +36,8 @@ import OwnerActivity from '@/pages/user/owner/children/activity'
 import MobileHome from '@/pages/_mobile/home'
 import MobileTaverns from '@/pages/_mobile/taverns'
 import MobileOwnerIndex from '@/pages/_mobile/owner'
-import MobileOwnerCandy from '@/pages/_mobile/owner/candy'
+// import MobileOwnerCandy from '@/pages/_mobile/owner/candy'
+import MobileOwnerBC from '@/pages/_mobile/owner/bc'
 import MobileOwnerQuest from '@/pages/_mobile/owner/quest'
 
 import MobileProject from '@/pages/_mobile/_project'
@@ -55,7 +56,7 @@ import MobileDeposits from '@/pages/_mobile/owner/_user/plan/deposits'
 import MobilePlanRecords from '@/pages/_mobile/owner/_user/plan/records'
 
 import MobileOwnerWithdraw from '@/pages/_mobile/owner/_user/bounty/package'
-import MobileOwnerBountyChests from '@/pages/_mobile/owner/_user/bounty/chests'
+// import MobileOwnerBountyChests from '@/pages/_mobile/owner/_user/bounty/chests'
 
 import MobileTavernDetail from '@/pages/_mobile/_tavern'
 
@@ -140,12 +141,30 @@ const mobileRoutes = [
     name: 'mobile-page',
     component: MobileOwnerIndex,
     children: [
+      // {
+      //   path: 'candy',
+      //   name: 'mobile-user-candy',
+      //   component: MobileOwnerCandy,
+      //   meta: {
+      //     title: 'Candy - LORDLESS',
+      //     ownerChild: true,
+      //     keepAlive: true,
+      //     transition: true
+
+      //     // header: {
+      //     //   show: false
+      //     // },
+      //     // footer: {
+      //     //   show: false
+      //     // }
+      //   }
+      // },
       {
-        path: 'candy',
-        name: 'mobile-user-candy',
-        component: MobileOwnerCandy,
+        path: 'bc',
+        name: 'mobile-user-bc',
+        component: MobileOwnerBC,
         meta: {
-          title: 'Candy - LORDLESS',
+          title: 'BC - LORDLESS',
           ownerChild: true,
           keepAlive: true,
           transition: true
@@ -319,18 +338,18 @@ const mobileRoutes = [
           transition: false
         }
       },
-      {
-        path: 'bounty/chests',
-        name: 'mobile-bounty-chests-package',
-        component: MobileOwnerBountyChests,
-        meta: {
-          title: 'My Bounty Chests - LORDLESS',
-          ownerChild: true,
-          keepAlive: true,
-          transition: false,
-          hideTab: true
-        }
-      },
+      // {
+      //   path: 'bounty/chests',
+      //   name: 'mobile-bounty-chests-package',
+      //   component: MobileOwnerBountyChests,
+      //   meta: {
+      //     title: 'My Bounty Chests - LORDLESS',
+      //     ownerChild: true,
+      //     keepAlive: true,
+      //     transition: false,
+      //     hideTab: true
+      //   }
+      // },
       {
         path: '*',
         redirect: '/home'

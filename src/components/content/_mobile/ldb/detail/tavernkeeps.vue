@@ -103,7 +103,7 @@ export default {
       try {
         const res = await getTavernkeeps(tokenId)
         if (res.code === 1000 && res.data) {
-          this.keeps = res.data.filter(item => !!item.lord)
+          this.keeps = (res.data || []).filter(item => item.lord)
         }
       } catch (err) {
         this.keepsLoading = false

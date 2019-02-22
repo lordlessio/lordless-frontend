@@ -50,13 +50,21 @@ export default {
           active: true
         },
         {
-          icon: '#icon-tab-coin',
-          activeIcon: '#icon-tab-coin',
-          name: 'Tokens',
-          route: '/owner/candy',
-          match: /^\/owner\/candy/,
+          icon: '#icon-tab-bc',
+          activeIcon: '#icon-tab-bc',
+          name: 'BC',
+          route: '/owner/bc',
+          match: /^\/owner\/bc/,
           active: false
         },
+        // {
+        //   icon: '#icon-tab-coin',
+        //   activeIcon: '#icon-tab-coin',
+        //   name: 'Tokens',
+        //   route: '/owner/candy',
+        //   match: /^\/owner\/candy/,
+        //   active: false
+        // },
         {
           icon: '#icon-tab-quests',
           activeIcon: '#icon-tab-quests',

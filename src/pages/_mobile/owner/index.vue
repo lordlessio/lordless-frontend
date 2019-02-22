@@ -3,6 +3,7 @@
     <mobile-plan-bar/>
     <mobile-nav-bar
       ref="mobile-nav-bar"
+      v-if="$route.path.match(scrollOpt.match) && scrollOpt.show"
       v-show="(scrollOpt.show && (!connectModel || !web3Model)) || connectModel || web3Model"
       v-bind="scrollOpt"
       @history="ownerNavbarHistory(scrollOpt.historyPath)"/>
@@ -123,17 +124,17 @@ export default {
           match: /^\/owner\/bountyChest/,
           show: true,
           history: true,
-          historyPath: '/owner/bounty/chests'
-        },
-        {
-          text: 'My Bounty Chests',
-          match: /^\/owner\/bounty\/chests/,
-          show: true,
-          history: true,
-          rightIcon: '#icon-bounty-chests',
-          rightPath: '/owner/bountyChest',
-          historyPath: '/owner/info'
+          historyPath: '/owner/bc?type=chests'
         }
+        // {
+        //   text: 'My Bounty Chests',
+        //   match: /^\/owner\/bounty\/chests/,
+        //   show: true,
+        //   history: true,
+        //   rightIcon: '#icon-bounty-chests',
+        //   rightPath: '/owner/bountyChest',
+        //   historyPath: '/owner/info'
+        // }
       ]
     }
   },
@@ -208,7 +209,7 @@ export default {
   activated () {
     console.log(' mobile owner activated ')
     this.checkRoute()
-    this.$nextTick(() => this.$refs['mobile-nav-bar'].init())
+    this.$nextTick(() => this.$refs['mobile-nav-bar'] ? this.$refs['mobile-nav-bar'].init() : null)
   },
   mounted () {
     this.$nextTick(() => this.checkRoute())

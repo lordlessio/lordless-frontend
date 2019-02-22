@@ -81,7 +81,7 @@
                   <use xlink:href="#icon-bounty-diamond"/>
                 </svg>
               </span>
-              <span>BOUNTIES</span>
+              <span>MATERIALS</span>
               <!-- <span>&nbsp;&nbsp;(≈ {{ totalBountyVolume | formatDecimal }}ETH)</span> -->
             </h3>
             <div class="package-bounties-cnt-box">
@@ -400,10 +400,6 @@ export default {
       this.initbountyBtnBox()
     },
 
-    initQuestions () {
-
-    },
-
     // toggle question label
     toggleQuestion (index) {
       const descDom = document.querySelectorAll('.asked-questions-item .asked-questions-desc')[index]
@@ -485,7 +481,7 @@ export default {
         else volume = formatDecimal(volume)
 
         const res = await packageBounty({ volume })
-        if (res.code === 1000 && res.data) this.$router.push('/owner/bounty/chests')
+        if (res.code === 1000 && res.data) this.$router.push('/owner/bc?type=chests')
         else if (res.code !== 1000) {
           this.$notify.error({
             title: 'Package Error!',
@@ -578,6 +574,7 @@ export default {
     >p {
       margin-top: 12px;
       font-size: 16px;
+      color: #555;
     }
   }
   .chest-empty-icon {

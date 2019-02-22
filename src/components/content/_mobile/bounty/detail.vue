@@ -142,12 +142,11 @@
           <lordless-btn
             v-else-if="chestStatus === 'unopened' || chestStatus === 'unlocking'"
             class="full-width chest-detail-btn"
-            :theme="isCouldUnlock ? 'blue-linear' : 'red-linear'"
+            theme="blue-linear"
             :loading="isChecking || btnLoading || !tokensBalanceInit"
             :disabled="isChecking || !tokensBalanceInit || (enoughHops && (isDisabled || btnLoading || chestStatus === 'unlocking'))"
             @click="unlockBountyMethod">
-            <span v-if="isCouldUnlock">Unlock the Bounty Chest</span>
-            <span v-else>Deposit LESS to reap HOPS</span>
+            Unlock the Bounty Chest
           </lordless-btn>
         </div>
       </div>
@@ -365,7 +364,7 @@ export default {
         text: `#${this.chestDetail.bountyId || '?'} Chest detail`,
         match: /^\/owner\/chest\//,
         history: true,
-        historyPath: '/owner/bounty/chests'
+        historyPath: '/owner/bc?type=chests'
       }
     },
 
@@ -544,7 +543,7 @@ export default {
           console.log('-0000-------- before status')
           this.initBountyChestStatus(res.data)
         } else if (!res.data) {
-          this.$router.push('/owner/bounty/chests')
+          this.$router.push('/owner/bc?type=chests')
         }
       } catch (err) {
         console.log('----- get chest info err', err.message)

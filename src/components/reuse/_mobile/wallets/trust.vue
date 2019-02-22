@@ -89,7 +89,7 @@ export default {
     max-width: 280px;
     >h2 {
       margin-top: 18px;
-      font-size: 24px;
+      font-size: 20px;
       color: #555;
     }
   }
@@ -103,7 +103,7 @@ export default {
   .wallet-main-desc {
     margin-top: 18px;
     font-size: 16px;
-    color: #777;
+    color: #555;
   }
   .trust-wallet-desc {
     margin-top: 18px;

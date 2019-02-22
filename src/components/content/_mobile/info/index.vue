@@ -199,11 +199,11 @@ export default {
         //   path: '/owner/bountyChest',
         //   holdings: true
         // },
-        {
-          icon: '#icon-bounty-chests',
-          title: 'Bounty Chests',
-          path: '/owner/bounty/chests'
-        },
+        // {
+        //   icon: '#icon-bounty-chests',
+        //   title: 'Bounty Chests',
+        //   path: '/owner/bounty/chests'
+        // },
         {
           icon: '#icon-beer',
           title: 'My Taverns',

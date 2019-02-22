@@ -24,7 +24,7 @@ export default {
 
 <style lang="scss">
   .skeletion-mobile-candy-box {
-    padding: 0 20px;
+    // padding: 0 20px;
   }
   .skeletion-mobile-candy-ul {
     margin-top: 10px;

@@ -229,7 +229,7 @@ export default {
       this.packageLoading = true
       try {
         const res = await packageBounty({ percent: this.bountySliderModel })
-        if (res.code === 1000 && res.data) this.$router.push('/owner/bounty/chests')
+        if (res.code === 1000 && res.data) this.$router.push('/owner/bc?type=chests')
         else if (res.code !== 1000) {
           this.$notify.error({
             title: 'Package Error!',
