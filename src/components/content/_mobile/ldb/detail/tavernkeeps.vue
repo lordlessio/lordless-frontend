@@ -9,7 +9,7 @@
     <transition name="ld-hide-fade" mode="out-in" @after-enter="datasEnter">
       <section v-if="!loading && !keepsLoading && keeps.length" class="d-flex col-flex f-align-ceter sm-col-flex detail-tavern-keeps">
         <h2 class="detail-mobile-title">Successive tavernkeeps</h2>
-        <div v-if="keep.lord"
+        <div
           v-for="(keep, index) of keeps" :key="keep._id"
           class="relative mobile-keeps-item">
           <div class="d-flex f-align-start keeps-item-info">
@@ -103,7 +103,7 @@ export default {
       try {
         const res = await getTavernkeeps(tokenId)
         if (res.code === 1000 && res.data) {
-          this.keeps = res.data
+          this.keeps = res.data.filter(item => !!item.lord)
         }
       } catch (err) {
         this.keepsLoading = false

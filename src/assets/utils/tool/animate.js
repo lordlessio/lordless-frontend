@@ -211,6 +211,35 @@ export const scrollToTop = ({ target = null, before = document.documentElement.s
   return window.requestAnimationFrame(step)
 }
 
+export const scrollToLeft = (target = null, { before = 0, end = 0, duration = 500, lname = 'Bounce', ltype = 'easeInOut' } = {}, cb) => {
+  if (!target) return
+  let st = 0
+  const step = (timestamp) => {
+    if (!st) st = timestamp
+    const t = timestamp - st
+
+    // const s = Tween[lname][ltype](t, 0, before - end, duration)
+    // let top = before > end ? before - s + end : before - s
+    const _func = ltype.toLocaleLowerCase() === 'linear' ? Tween['Linear'] : Tween[lname][ltype]
+
+    let left = _func(t, 0, end - before, duration)
+    console.log('---- left', left, _func(t, 0, end - before, duration))
+
+    // console.log('top', before, Tween[lname][ltype](t, 0, before - end, duration), end, top)
+
+    if (left >= end) left = end
+    // console.log('===== left', left)
+
+    if (target) target.scrollLeft = left
+    if (t >= duration) {
+      if (cb) return cb()
+      return true
+    }
+    return window.requestAnimationFrame(step)
+  }
+  return window.requestAnimationFrame(step)
+}
+
 // 已知抛物线两个点的坐标，求抛物线 二次项系数 Quadratic
 export const getBezierQuadratic = (a, b) => {
   const x1 = a.x
