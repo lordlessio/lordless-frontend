@@ -4,7 +4,8 @@
       <p class="loading-icon"></p>
     </div>
     <div v-if="loading" id="invitation-card-container" class="invitation-card-container">
-      <div class="invitation-card-top">
+      <div class="relative invitation-card-top">
+        <img class="full-width card-img-bg" src="/static/svg/referral/bg-pricing-education.svg"/>
         <p class="d-flex f-align-center invitation-card-icon">
           <span class="inline-block line-height-0 icon-image">
             <!-- <svg>
@@ -24,7 +25,7 @@
             <lordless-blockies :seed="address" :scale="4" theme="light"/>
             <p class="v-flex text-break">{{ address }}</p>
           </div>
-          <p class="ImpactFont text-nowrap invitation-impact-address">Invite you to join LORDLESS</p>
+          <p class="ImpactFont relative text-nowrap invitation-impact-address" style="text-shadow: 8px 10px 0px rgba(255, 204, 102, .25);">Invite you to join LORDLESS</p>
           <ul class="invitation-reward-box">
             <li class="d-flex f-align-center invitation-reward-item"
               v-for="(item, index) of rewards" :key="index">
@@ -85,7 +86,7 @@ export default {
   props: {
     address: {
       type: String,
-      default: '0x726b2d681be918a28bb852915fe83a11533a99b3'
+      default: ''
     }
   },
   data: () => {
@@ -99,7 +100,7 @@ export default {
         }, {
           title: 'HOPS deposit reward',
           cntIcon: 'reward',
-          desc: 'Get a <span>BOOST of HELD</span> of LESS Term Deposit.'
+          desc: 'Get a <span>HELD boost</span> in LESS Term Deposit.'
         }
       ],
       qrcode: null
@@ -201,6 +202,14 @@ export default {
     padding: 30px 30px 90px;
     background-color: #000;
   }
+  .card-img-bg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    opacity: .15;
+    z-index: 1;
+  }
   .invitation-card-icon {
     // fill: #fff;
     >.icon-image {
@@ -227,7 +236,16 @@ export default {
   .invitation-impact-address {
     margin-top: 18px;
     font-size: 30px;
-    color: #FFCC66;
+    color: $--main-yellow-color;
+    // &::before {
+    //   content: 'Invite you to join LORDLESS';
+    //   position: absolute;
+    //   bottom: -5px;
+    //   right: -5px;
+    //   font-size: 30px;
+    //   color: $--main-yellow-color;
+    //   opacity: .5;
+    // }
   }
   .invitation-reward-box {
     margin-top: 48px;
@@ -247,6 +265,7 @@ export default {
     >h3 {
       padding-left: 12px;
       font-size: 20px;
+      text-shadow: 0px 0px 0px #000;
       &::before {
         content: '';
         position: absolute;
@@ -261,9 +280,11 @@ export default {
   }
   .reward-item-desc {
     font-size: 16px;
-    >span {
-      font-family: $--font-TTNormsBold;
-      color: $--main-yellow-color;
+    /deep/ {
+      >span {
+        font-family: $--font-TTNormsBold;
+        color: $--main-yellow-color;
+      }
     }
   }
   .invitation-reward-tips {
@@ -332,7 +353,7 @@ export default {
     // transform-origin: 0 0;
   }
   .invitation-download-img {
-    overflow: hidden;
+    // overflow: hidden;
   }
   /**
    *  invitation-card-bottom -- end

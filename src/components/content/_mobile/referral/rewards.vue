@@ -2,14 +2,14 @@
   <div id="mobile-referral-rewards" class="referral-rewards-box">
     <transition name="ld-hide-fade" mode="out-in">
       <referral-rewards-skeletion v-if="loading"/>
-      <div v-else-if="loadDatas.total" class="referral-reward-container">
+      <div v-else class="referral-reward-container">
         <lordless-tabs-navbar
           :originTab="originTab"
           :tabs="tabs"
           history
           @history="$router.push('/owner/info')"
           @changeTab="tabChange"/>
-        <div class="referral-rewards-cnt referral-rewards-materials">
+        <div v-if="loadDatas.total" class="referral-rewards-cnt referral-rewards-materials">
           <ul>
             <li v-for="(record, index) of loadDatas.list" :key="index" class="referral-records-item" :class="{ 'none-line': record.month }">
               <p v-if="record.month" class="referral-records-date">{{ record.month.timestamp | dateFormat('MMM YYYY') }}</p>
@@ -43,17 +43,16 @@
             <p v-else-if="loadDatas.noMore">No more Referral rewards~</p>
           </div>
         </div>
-      </div>
-      <div v-else class="text-center d-flex col-flex f-auto-center referral-records-empty">
-        <mobile-nav-bar history text="Records" @history="$router.push('/owner/info')"/>
-        <span class="relative inline-block line-height-0 records-empty-icon">
-          <svg>
-            <use xlink:href="#icon-sitdown-human"/>
-          </svg>
-        </span>
-        <h3>You have no referral rewards.</h3>
-        <p>Invite your friends to get material rewards and deposit boost.</p>
-        <lordless-btn theme="blue-linear" class="records-empty-btn">Invite friends</lordless-btn>
+        <div v-else class="text-center d-flex col-flex f-auto-center referral-rewards-empty">
+          <span class="relative inline-block line-height-0 records-empty-icon">
+            <svg>
+              <use xlink:href="#icon-sitdown-human"/>
+            </svg>
+          </span>
+          <h3>You have no referral rewards.</h3>
+          <p>Invite your friends to get material rewards and deposit boost.</p>
+          <lordless-btn theme="blue-linear" class="records-empty-btn">Invite friends</lordless-btn>
+        </div>
       </div>
     </transition>
   </div>
@@ -115,6 +114,7 @@ export default {
       console.log('------ e', e)
     },
     rewriteRecords (list = this.loadDatas.list) {
+      if (!list.length) return
       const lastYearMonths = getLastYearMonths()
       for (let item of list) {
         if (item.month) item.month = null
@@ -139,6 +139,7 @@ export default {
         total,
         noMore: total <= ps
       }
+      console.log('---- loadDatas', this.loadDatas)
       this.changeLoading = false
     },
 
@@ -330,8 +331,8 @@ export default {
     }
   }
 
-  // referral-records-empty
-  .referral-records-empty {
+  // referral-rewards-empty
+  .referral-rewards-empty {
     padding: 30px;
     box-sizing: border-box;
     @include viewport-unit(min-height, 100vh, 94px);

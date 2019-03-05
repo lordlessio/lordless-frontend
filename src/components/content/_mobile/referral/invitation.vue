@@ -2,7 +2,7 @@
   <div class="referral-invitation-box">
     <transition name="ld-hide-fade" mode="out-in" @after-enter="afterEnter">
       <referral-invitation-skeletion v-if="loading"/>
-      <div v-else>
+      <div v-else class="relative referral-invitation-container">
         <div class="referral-invitation-header">
           <div class="d-flex f-align-center invitation-header-desc">
             <span class="inline-block line-height-0 invitation-desc-icon">
@@ -118,11 +118,11 @@ export default {
         {
           title: 'Material reward',
           cntIcon: '#icon-referral-handshake',
-          desc: 'You and your referee will both get 10,000 LESS material after the referee confirm to be your referee.'
+          desc: 'You and your referee will both get <span>10,000 LESS material</span> after the referee confirm to be your referee.'
         }, {
           title: 'HOPS deposit reward',
           cntIcon: '#icon-referral-reward',
-          desc: 'You and your referee will both get 10,000 LESS material after the referee confirm to be your referee.'
+          desc: 'After the referee’s confirmation, the referee would get <span>a HELD boost in LESS Term Deposit.</span> When the referee earned HOPS from LESS Term Deposit, the referrer can also acquire <span>a specific percentage of HOPS.</span>'
         }
       ],
       accountClipBool: false,
@@ -213,6 +213,12 @@ export default {
 <style lang="scss" scoped>
   .referral-invitation-box {
 
+  }
+  .referral-invitation-container {
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    background-position: 0 100%;
+    background-image: url('~static/svg/referral/bg-pricing-education.svg');
   }
 
   /**
@@ -321,6 +327,12 @@ export default {
   }
   .invitation-item-desc {
     color: #fff;
+    /deep/ {
+      >span {
+        font-family: $--font-TTNormsBold;
+        color: $--main-yellow-color;
+      }
+    }
   }
   /**
    *  referral-invitation-content  -- end
@@ -455,5 +467,4 @@ export default {
       }
     }
   }
-
 </style>

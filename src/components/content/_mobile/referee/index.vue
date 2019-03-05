@@ -1,108 +1,113 @@
 <template>
   <div class="lordless-referee-box">
-    <div class="lordless-referee-container">
-      <lordless-fixed :top="44">
-        <div class="d-flex f-auto-center lordless-referee-header">
-          <div class="TTFontBolder v-flex referee-header-container">
-            <p class="header-address-tip" :class="{ 'is-failed': referrerInputModel && !isRequireReferrer && editedReferrer }">{{ headerAddressTip }}</p>
-            <div class="d-flex f-align-center referee-header-info">
-              <div class="v-flex referee-header-left">
-                <input
-                  v-if="isShowInput"
-                  v-model="referrerInputModel"
-                  aria-label="input text"
-                  class="lordless-input referee-header-input"
-                  ref="referee-input"
-                  type="text"
-                  :maxlength="42"
-                  placeholder="Enter an address"
-                  @focus="referrerInputFocus"
-                  @blur="referrerInputBlur"/>
-                <div v-else class="referee-address-box">
-                  <!-- 如果 referrer 是从数据库中获取的, 或者是从 query 获取的有效地址 -->
-                  <h2 v-if="(!referrerAddress && !isShowInput) || (!editedReferrer && (refereeInfo.referrer || queryReferrer))" class="v-flex">
-                    <span v-if="referrerAddress">{{ referrerAddress | splitAddress({ before: 6, end: 4, symbol: '******' }) }}</span>
-                    <span v-else>No referrer</span>
-                  </h2>
-                  <p v-else class="TTFontBold text-break break-referee-address">{{ referrerAddress }}</p>
+    <transition name="ld-hide-fade" mode="out-in">
+      <referee-skeletion v-if="loading"/>
+      <div v-else class="lordless-referee-container">
+        <lordless-fixed :top="44">
+          <div class="d-flex f-auto-center lordless-referee-header">
+            <div class="TTFontBolder v-flex referee-header-container">
+              <p class="header-address-tip" :class="{ 'is-failed': (referrerInputModel && !isRequireReferrer && editedReferrer) || isReferrerOwner || isAddressReferrer }">{{ headerAddressTip }}</p>
+              <div class="d-flex f-align-center referee-header-info">
+                <div class="v-flex referee-header-left">
+                  <input
+                    v-if="isShowInput"
+                    v-model="referrerInputModel"
+                    aria-label="input text"
+                    class="lordless-input referee-header-input"
+                    ref="referee-input"
+                    type="text"
+                    :maxlength="42"
+                    placeholder="Enter an address"
+                    @focus="referrerInputFocus"
+                    @blur="referrerInputBlur"/>
+                  <div v-else class="referee-address-box">
+                    <!-- 如果 referrer 是从数据库中获取的, 或者是从 query 获取的有效地址 -->
+                    <h2 v-if="(!referrerAddress && !isShowInput) || (!editedReferrer && (refereeInfo.referrer || queryReferrer))" class="v-flex">
+                      <span v-if="referrerAddress">{{ referrerAddress | splitAddress({ before: 6, end: 4, symbol: '******' }) }}</span>
+                      <span v-else>No referrer</span>
+                    </h2>
+                    <p v-else class="TTFontBold text-break break-referee-address">{{ referrerAddress }}</p>
+                  </div>
                 </div>
-              </div>
 
-              <div class="referee-header-right">
-                <p v-if="isEditReferrer && !isShowInput && !isQueryReferrer"
-                  class="referee-header-control"
-                  @click.stop="editReferrer">
-                  {{ referrerAddress ? 'Edit' : 'Add referrer' }}
-                </p>
-                <lordless-blockies v-else-if="!isEditReferrer || isQueryReferrer" :seed="referrerAddress" theme="light" :scale="4"/>
+                <div class="referee-header-right">
+                  <p v-if="isEditReferrer && !isShowInput && (!isQueryReferrer || !isRequireReferrer)"
+                    class="referee-header-control"
+                    @click.stop="editReferrer">
+                    {{ referrerAddress ? 'Edit' : 'Add referrer' }}
+                  </p>
+                  <lordless-blockies v-else-if="!isEditReferrer || isQueryReferrer" :seed="referrerAddress" theme="light" :scale="4"/>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </lordless-fixed>
-      <div class="lordless-referee-cnt">
-        <div class="TTFontBolder d-flex col-flex f-auto-center referee-cnt-top">
-          <span class="inline-block line-height-0 referee-cnt-icon">
-            <svg>
-              <use :xlink:href="tipsStatus.icon"/>
-            </svg>
-          </span>
-          <h3>{{ tipsStatus.title }}</h3>
-          <p>{{ tipsStatus.desc }}</p>
-        </div>
-        <ul class="invitation-reward-box">
-          <li class="d-flex f-align-center invitation-reward-item"
-            v-for="(item, index) of rewards" :key="index">
-            <span class="inline-block line-height-0">
+        </lordless-fixed>
+        <div class="lordless-referee-cnt">
+          <div class="TTFontBolder d-flex col-flex f-auto-center referee-cnt-top">
+            <span class="inline-block line-height-0 referee-cnt-icon">
               <svg>
-                <use :xlink:href="item.cntIcon"/>
+                <use :xlink:href="tipsStatus.icon"/>
               </svg>
             </span>
-            <div class="v-flex reward-item-info">
-              <h3 class="relative">{{ item.title }}</h3>
-              <p v-html="item.desc" class="reward-item-desc"></p>
-            </div>
-          </li>
-        </ul>
-        <div class="invitation-reward-tips">
-          <p class="d-flex f-align-center">
-            <span class="inline-block line-height-0 invitation-tips-icon">
+            <h3>{{ tipsStatus.title }}</h3>
+            <p>{{ tipsStatus.desc }}</p>
+          </div>
+          <ul class="invitation-reward-box">
+            <li class="d-flex f-align-center invitation-reward-item"
+              v-for="(item, index) of rewards" :key="index">
+              <span class="inline-block line-height-0">
+                <svg>
+                  <use :xlink:href="item.cntIcon"/>
+                </svg>
+              </span>
+              <div class="v-flex reward-item-info">
+                <h3 class="relative">{{ item.title }}</h3>
+                <p v-html="item.desc" class="reward-item-desc"></p>
+              </div>
+            </li>
+          </ul>
+          <div class="invitation-reward-tips">
+            <p class="d-flex f-align-center">
+              <span class="inline-block line-height-0 invitation-tips-icon">
+                <svg>
+                  <use xlink:href="#icon-tips"/>
+                </svg>
+              </span>
+              <span>Tips</span>
+            </p>
+            <p>The materials can be made into Bounty Chest which can be sold or opened.</p>
+            <p>HELD, HOPS earned on every LESS per deposit, describes the income of the deposit.</p>
+          </div>
+          <div class="text-center invitation-tg-group-box">
+            <span class="inline-block line-height-0 tg-group-icon">
               <svg>
-                <use xlink:href="#icon-tips"/>
+                <use xlink:href="#icon-referral-telegram"/>
               </svg>
             </span>
-            <span>Tips</span>
-          </p>
-          <p>The materials can be made into Bounty Chest which can be sold or opened.</p>
-          <p>HELD, HOPS earned on every LESS per deposit, describes the income of the deposit.</p>
+            <h3>
+              <a href="https://t.me/lordless_global" target="_blank" class="text-underline">LORDLESS Global Group</a>
+            </h3>
+            <p>{{ telegramStatus.text }}</p>
+          </div>
         </div>
-        <div class="text-center invitation-tg-group-box">
-          <span class="inline-block line-height-0 tg-group-icon">
-            <svg>
-              <use xlink:href="#icon-referral-telegram"/>
-            </svg>
-          </span>
-          <h3>
-            <a href="https://t.me/lordless_global" target="_blank" class="text-underline">LORDLESS Global Group</a>
-          </h3>
-          <p>{{ telegramStatus.text }}</p>
-        </div>
+        <lordless-fixed :bottom="0" v-if="!isBinded && this.referrerAddress">
+          <lordless-btn
+            class="lordless-bottom-btn"
+            theme="blue-linear"
+            :loading="btnLoading"
+            :disabled="btnLoading || isTxPending || !isRequireReferrer"
+            @click="confirmInvitation">
+            {{ refererBtnText }}
+          </lordless-btn>
+        </lordless-fixed>
       </div>
-      <lordless-fixed :bottom="0" v-if="!isBinded && this.referrerAddress">
-        <lordless-btn
-          class="lordless-bottom-btn"
-          theme="blue-linear"
-          :loading="btnLoading"
-          :disabled="btnLoading || isTxPending || !isRequireReferrer"
-          @click="confirmInvitation">
-          {{ refererBtnText }}
-        </lordless-btn>
-      </lordless-fixed>
-    </div>
+    </transition>
   </div>
 </template>
 
 <script>
+import RefereeSkeletion from '@/components/skeletion/_mobile/referee'
+
 import { getRefereeInfo } from 'api'
 import { metamaskMixins, publicMixins, initLoadingMixins } from '@/mixins'
 import { mapState } from 'vuex'
@@ -132,7 +137,7 @@ export default {
         }, {
           title: 'HOPS deposit reward',
           cntIcon: '#icon-referral-reward',
-          desc: 'Get a <span>BOOST of HELD</span> of LESS Term Deposit.'
+          desc: 'Get a <span>HELD boost</span> in LESS Term Deposit.'
         }
       ]
     }
@@ -260,7 +265,7 @@ export default {
           break
         default:
           obj = {
-            icon: '#icon-certificate',
+            icon: '#icon-color-certificate',
             title: 'Become a referee',
             desc: 'The rewards below are waiting for you.'
           }
@@ -291,6 +296,9 @@ export default {
         this.checkUserReferrer()
       }
     }
+  },
+  components: {
+    RefereeSkeletion
   },
   methods: {
     referrerInputFocus () {
@@ -405,7 +413,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   .lordless-referee-header {
-    padding: 8px 20px auto;
+    padding: 8px 20px 0;
     height: 80px;
     background-color: $--main-blue-color;
     box-sizing: border-box;

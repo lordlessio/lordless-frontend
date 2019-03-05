@@ -14,11 +14,11 @@ export default {
       const texts = {
         referee: {
           text: 'Referee boost',
-          icon: '#icon-certificate'
+          icon: '#icon-color-certificate'
         },
         tavernkeep: {
           text: 'Tavernkeep boost',
-          icon: '#icon-certificate'
+          icon: '#icon-color-certificate'
         }
       }
       return this.planBoosts.list.map(item => {
