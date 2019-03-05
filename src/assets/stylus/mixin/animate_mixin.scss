@@ -98,3 +98,20 @@
 //     transform: translate3d(-20%, 0, 0) skew(-25deg) translateX(0px) translateZ(0px);
 //   }
 // }
+
+$loops: 26;
+$height: 30;
+$offsety: 5;
+$duration: 1s;
+$animation-name: loading;
+
+@keyframes #{$animation-name} {
+  @for $i from 0 through ($loops - 1) {
+
+    $percent: 0% + (100/($loops - 1))*$i;
+    $position-y: - ($i * ($height + $offsety));
+
+    #{$percent} {background-position: 50% #{$position-y}px; }
+
+  }
+}

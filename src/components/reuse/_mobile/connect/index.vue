@@ -3,7 +3,7 @@
     <div class="mobile-connect-container">
       <p class="mobile-connect-icon">
         <svg>
-          <use xlink:href="#icon-content-wallet"/>
+          <use xlink:href="#icon-connect-wallet"/>
         </svg>
       </p>
       <h2>Connect wallet</h2>

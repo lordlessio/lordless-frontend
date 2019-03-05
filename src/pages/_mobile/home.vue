@@ -161,16 +161,16 @@ export default {
     border-radius: 5px;
     overflow: hidden;
   }
-  .home-candy-icon {
-    margin-right: 6px;
-    padding: 6px;
-    width: 29px;
-    height: 29px;
-    border-radius: 100%;
-    box-sizing: border-box;
-    background-image: linear-gradient(-45deg, #00C0EB 0%, #0079FF 100%);
-    fill: #fff;
-  }
+  // .home-candy-icon {
+  //   margin-right: 6px;
+  //   padding: 6px;
+  //   width: 29px;
+  //   height: 29px;
+  //   border-radius: 100%;
+  //   box-sizing: border-box;
+  //   background-image: linear-gradient(-45deg, #00C0EB 0%, $--main-blue-color 100%);
+  //   fill: #fff;
+  // }
 
   /**
    *  mobile-home-promotions  -- begin
@@ -223,7 +223,7 @@ export default {
   }
   .candies-claimed-num {
     font-size: 20px;
-    color: #0079FF;
+    color: $--main-blue-color;
     >span {
       font-size: 16px;
     }

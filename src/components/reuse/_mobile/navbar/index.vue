@@ -188,7 +188,7 @@ export default {
     width: 100%;
     height: 44px;
     line-height: 44px;
-    background-color: #0079FF;
+    background-color: $--navbar-blue-color;
     font-size: 16px;
     color: #fff;
     &.scroll-hidden {
@@ -213,7 +213,7 @@ export default {
       opacity: 1;
       z-index: 99;
       color: #fff;
-      background-color: #0079FF;
+      background-color: $--navbar-blue-color;
       .nav-history-icon {
         width: 18px;
         fill: #fff;
@@ -255,7 +255,7 @@ export default {
     height: 44px;
     // font-size: 16px;
     >span {
-      max-width: 128px;
+      max-width: 150px;
     }
   }
   .nav-right-box {
@@ -322,7 +322,7 @@ export default {
     height: 35px;
     line-height: 35px;
     color: #fff;
-    background: linear-gradient(-225deg, #124BDC 0%, #0079FF 100%);
+    background: linear-gradient(-225deg, #124BDC 0%, $--navbar-blue-color 100%);
     border-radius: 5px;
   }
   .navbar-tip-icon {

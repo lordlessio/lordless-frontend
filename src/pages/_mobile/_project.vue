@@ -423,7 +423,7 @@ export default {
     margin-right: 12px;
     width: 20px;
     height: 20px;
-    fill: #0079FF;
+    fill: $--main-blue-color;
   }
   .market-item-right {
     padding-right: 20px;
@@ -488,7 +488,7 @@ export default {
     margin-right: 12px;
     width: 20px;
     height: 20px;
-    fill: #0079FF;
+    fill: $--main-blue-color;
   }
   .resource-item-right {
     padding-right: 20px;

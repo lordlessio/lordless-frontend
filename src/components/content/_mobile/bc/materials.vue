@@ -81,6 +81,9 @@ export default {
         this.materialAssets = res.data
         this.$emit('update:holdingValue', res.data.totalValue)
         this.$emit('update:tokenTotal', res.data.total)
+      } else {
+        this.$emit('update:holdingValue', 0)
+        this.$emit('update:tokenTotal', 0)
       }
       this.loading = false
       if (!this.rendered) this.rendered = true

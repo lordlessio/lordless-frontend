@@ -34,6 +34,11 @@ module.exports = axios => {
     // 用户提取 less
     withdrawLessPlan: (params) => {
       return axios.put('/api/plan/withdraw', params)
+    },
+
+    // 获取用户 boosts
+    getPlanBoosts: (params) => {
+      return axios.get('/api/plan/boosts', params)
     }
   }
 }

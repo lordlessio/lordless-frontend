@@ -132,9 +132,9 @@ export default {
   }
   .home-promotions-twitter-link {
     margin: 0 6px;
-    color: #0079FF;
+    color: $--main-blue-color;
     text-decoration: underline;
-    fill: #0079FF;
+    fill: $--main-blue-color;
   }
   .promotions-twitter-icon {
     margin-right: 2px;
@@ -240,7 +240,7 @@ export default {
     height: 32px;
     border-radius: 100%;
     box-sizing: border-box;
-    background-color: #0079FF;
+    background-color: $--main-blue-color;
     fill: #fff;
   }
   .candies-symbol-text {

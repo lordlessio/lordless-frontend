@@ -8,14 +8,14 @@
           <p></p>
         </div>
       </div>
-      <div class="skeletion-hops-cnt">
+      <!-- <div class="skeletion-hops-cnt">
         <h3></h3>
         <p></p>
         <p></p>
         <p></p>
-      </div>
+      </div> -->
       <div class="skeletion-hops-cards">
-        <div class="d-flex f-align-center hops-card-item">
+        <div v-for="item in 2" :key="item" class="d-flex f-align-center hops-card-item">
           <p class="ImpactFont">HELD</p>
           <div class="v-flex hops-card-right">
             <p></p>
@@ -66,25 +66,25 @@ export default {
     }
   }
 
-  .skeletion-hops-cnt {
-    margin-top: 30px;
-    padding: 0 20px;
-    >h3 {
-      margin-bottom: 16px;
-      width: 140px;
-      height: 24px;
-      background-color: $--skeletion-dark;
-    }
-    >p {
-      margin-top: 10px;
-      width: 100%;
-      height: 16px;
-      background-color: $--skeletion-dark;
-      &:last-of-type {
-        width: 50%;
-      }
-    }
-  }
+  // .skeletion-hops-cnt {
+  //   margin-top: 30px;
+  //   padding: 0 20px;
+  //   >h3 {
+  //     margin-bottom: 16px;
+  //     width: 140px;
+  //     height: 24px;
+  //     background-color: $--skeletion-dark;
+  //   }
+  //   >p {
+  //     margin-top: 10px;
+  //     width: 100%;
+  //     height: 16px;
+  //     background-color: $--skeletion-dark;
+  //     &:last-of-type {
+  //       width: 50%;
+  //     }
+  //   }
+  // }
 
   .skeletion-hops-cards {
     margin-top: 30px;
@@ -94,6 +94,9 @@ export default {
     padding: 20px;
     background-color: $--skeletion-light;
     border-radius: 5px;
+    &:not(:first-of-type) {
+      margin-top: 18px;
+    }
     >p {
       font-size: 36px;
       color: $--skeletion-dark;

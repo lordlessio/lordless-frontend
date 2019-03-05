@@ -1,6 +1,8 @@
 const Vue = require('vue').default
 const files = [
   '/reuse/_mobile/navbar',
+  '/reuse/_mobile/navbar/tabs',
+  '/reuse/_mobile/tabBar',
   '/reuse/_mobile/adSpace',
 
   '/reuse/tavernPoster',
@@ -20,7 +22,8 @@ const files = [
   '/stories/progress',
   '/stories/dialog/fade',
   '/stories/dialog/popup',
-  '/stories/candyIcon'
+  '/stories/candyIcon',
+  '/stories/fixed'
 ]
 
 for (const file of files) {

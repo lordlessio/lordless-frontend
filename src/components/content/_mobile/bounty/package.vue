@@ -1,6 +1,6 @@
 <template>
   <div class="package-bounty-box">
-    <transition name="ld-hide-fade" mode="out-in" @after-enter="afterEnter">
+    <transition name="ld-hide-fade" mode="out-in">
       <package-bounty-skeletion v-if="loading"/>
       <div v-else-if="!bountyAssets.assetsByEth" class="d-flex f-auto-center col-flex bounty-chest-empty">
         <span class="inline-block line-height-0 chest-empty-icon">
@@ -160,9 +160,9 @@
               </li>
             </ul>
           </div> -->
-          <div ref="package-bounty-btn-box" class="package-bounty-btn-box">
+          <lordless-fixed :bottom="0">
             <lordless-btn
-              class="full-width package-bounty-btn"
+              class="full-width lordless-bottom-btn"
               theme="blue"
               inverse
               :loading="packageLoading"
@@ -177,7 +177,7 @@
                 {{ bountyAssets.almostEth }} &nbsp;for a chest</span>
               <span v-else>Make a Bounty Chest now</span>
             </lordless-btn>
-          </div>
+          </lordless-fixed>
         </div>
       </div>
     </transition>
@@ -396,9 +396,9 @@ export default {
       return formatDecimal(...arguments)
     },
 
-    afterEnter () {
-      this.initbountyBtnBox()
-    },
+    // afterEnter () {
+    //   this.initbountyBtnBox()
+    // },
 
     // toggle question label
     toggleQuestion (index) {
@@ -425,7 +425,7 @@ export default {
     // 初始化组件数据
     initPackageBounty () {
       this.getBountyAssets()
-      this.initbountyBtnBox()
+      // this.initbountyBtnBox()
     },
 
     // 获取用户可打包 token 数据
@@ -442,21 +442,6 @@ export default {
       }
       this.loading = false
       if (!this.rendered) this.rendered = true
-    },
-
-    // 初始化 btn box
-    initbountyBtnBox () {
-      const box = this.$refs['package-bounty-btn-box']
-      const parent = this.$refs['package-bounty-container']
-      console.log('---- initbountyBtnBox', box, parent)
-      if (!box || !parent) return
-      document.body.appendChild(box)
-      this.$once('hook:beforeDestroy', () => {
-        parent.appendChild(box)
-      })
-      this.$once('hook:deactivated', () => {
-        parent.appendChild(box)
-      })
     },
 
     async packageBounty () {
@@ -758,16 +743,16 @@ export default {
   //   fill: #0079FF;
   // }
 
-  .package-bounty-btn-box {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-  }
-  .package-bounty-btn {
-    padding: 16px 0;
-    border-radius: 0;
-  }
+  // .package-bounty-btn-box {
+  //   position: fixed;
+  //   bottom: 0;
+  //   left: 0;
+  //   width: 100%;
+  // }
+  // .package-bounty-btn {
+  //   padding: 16px 0;
+  //   border-radius: 0;
+  // }
   .bounty-eth-icon {
     margin-left: 6px;
     margin-right: 4px;

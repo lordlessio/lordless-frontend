@@ -75,7 +75,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
       margin-top: 2px;
     }
     &.select, &.hover {
-      background-color: #4586FC;
+      background-color: $--navbar-blue-color;
     }
   }
   .popper__arrow {

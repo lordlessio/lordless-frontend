@@ -180,7 +180,8 @@ export default {
     ...mapState('contract', [
       'isCrowdsaleApproved',
       'luckyblockTokenAllowances',
-      'HOPSPlanTokenAllowances',
+      // 'HOPSPlanTokenAllowances',
+      'GrowHopsPlusTokenAllowances',
       'BountyTokenAllowances',
       'bountyNFTApproved'
     ]),
@@ -488,7 +489,8 @@ export default {
       if (tokenAllowance) {
         const _allowances = {
           luckyblock: this.luckyblockTokenAllowances,
-          plant: this.HOPSPlanTokenAllowances,
+          // plant: this.HOPSPlanTokenAllowances,
+          plant: this.GrowHopsPlusTokenAllowances,
           bounty: this.BountyTokenAllowances
         }
         const allowances = _allowances[this.tokenAllowanceType]

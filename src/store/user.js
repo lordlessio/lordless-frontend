@@ -69,14 +69,14 @@ export default {
     /**
      * metaMask login
      */
-    [actionTypes.USER_META_LOGIN]: ({ state, commit, dispatch }, { email, nickName, cb } = {}) => {
+    [actionTypes.USER_META_LOGIN]: ({ state, commit, dispatch }, { email, nickName, referrer, cb } = {}) => {
       const _address = window.localStorage.getItem('currentAddress')
       const { address = _address } = web3Store.state.web3Opt
       if (!address) return
 
       // 登陆
       const loginFunc = async (sigStr, addr) => {
-        const res = await login({ sigStr, address: addr.toLocaleLowerCase(), email, nickName })
+        const res = await login({ sigStr, address: addr.toLocaleLowerCase(), email, nickName, referrer })
         if (res.code === 1000) {
           dispatch(actionTypes.USER_SET_USER_TOKEN, ({ address: addr, token: res.token }))
           await dispatch(actionTypes.USER_SET_USER_BY_TOKEN)

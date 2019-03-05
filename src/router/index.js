@@ -57,6 +57,11 @@ import MobilePlanRecords from '@/pages/_mobile/owner/_user/plan/records'
 
 import MobileOwnerWithdraw from '@/pages/_mobile/owner/_user/bounty/package'
 // import MobileOwnerBountyChests from '@/pages/_mobile/owner/_user/bounty/chests'
+import MobileReferralInvitation from '@/pages/_mobile/owner/_user/referral/invitation'
+import MobileReferralReferees from '@/pages/_mobile/owner/_user/referral/referees'
+import MobileReferralRewards from '@/pages/_mobile/owner/_user/referral/rewards'
+
+import MobileReferee from '@/pages/_mobile/owner/referee'
 
 import MobileTavernDetail from '@/pages/_mobile/_tavern'
 
@@ -168,13 +173,17 @@ const mobileRoutes = [
           ownerChild: true,
           keepAlive: true,
           transition: true
-
-          // header: {
-          //   show: false
-          // },
-          // footer: {
-          //   show: false
-          // }
+        }
+      },
+      {
+        path: 'referee',
+        name: 'mobile-user-referee',
+        component: MobileReferee,
+        meta: {
+          title: 'Referee - LORDLESS',
+          ownerChild: true,
+          keepAlive: true,
+          transition: false
         }
       },
       {
@@ -350,6 +359,42 @@ const mobileRoutes = [
       //     hideTab: true
       //   }
       // },
+      {
+        path: 'referral/invitation',
+        name: 'mobile-referral-invitation-package',
+        component: MobileReferralInvitation,
+        meta: {
+          title: 'My Referral invitation - LORDLESS',
+          ownerChild: true,
+          keepAlive: true,
+          transition: false,
+          hideTab: true
+        }
+      },
+      {
+        path: 'referral/referees',
+        name: 'mobile-referral-referees-package',
+        component: MobileReferralReferees,
+        meta: {
+          title: 'My Referral referees - LORDLESS',
+          ownerChild: true,
+          keepAlive: true,
+          transition: false,
+          hideTab: true
+        }
+      },
+      {
+        path: 'referral/rewards',
+        name: 'mobile-referral-rewards-package',
+        component: MobileReferralRewards,
+        meta: {
+          title: 'My Referral rewards - LORDLESS',
+          ownerChild: true,
+          keepAlive: true,
+          transition: false,
+          hideTab: true
+        }
+      },
       {
         path: '*',
         redirect: '/home'

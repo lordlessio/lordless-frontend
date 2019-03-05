@@ -207,9 +207,26 @@
           </div>
           <ul ref="deposit-popup-slider" class="text-nowrap deposit-popup-slider">
             <li v-for="(item, index) of planBases" :key="index" class="inline-block deposit-slider-item" :data-active="item._id === activePlanBase._id">
-              <hops-plant :info="item" :isActive="item._id === activePlanBase._id" :lessBalance="-1" small @choosePlan="choosePlan($event, index)"/>
+              <hops-plant
+                :info="item"
+                :isActive="item._id === activePlanBase._id"
+                :lessBalance="-1"
+                small
+                :boost="userTotalBoost"
+                @choosePlan="choosePlan($event, index)"/>
             </li>
           </ul>
+          <div v-if="userTotalBoost" class="d-flex f-align-center deposit-boosts-box">
+            <span
+              v-for="(boost, index) of planBoostsList"
+              :key="index"
+              class="inline-block line-height-0 deposit-boost-icon">
+              <svg>
+                <use :xlink:href="boost.icon"/>
+              </svg>
+            </span>
+            <span class="TTFontBolder v-flex text-right">+ {{ userTotalBoost }}%</span>
+          </div>
           <div class="deposit-popup-balance" :class="{ 'is-failed': !enoughDepositLess }">
             <h2>≈ {{ activePlanBase._id ? weiByDecimals(depositLessAmount).toLocaleString() : '???' }} <span>LESS</span></h2>
             <p v-if="enoughDepositLess">LESS balance in wallet sufficient.</p>
@@ -253,12 +270,12 @@ import { weiByDecimals } from 'utils/tool'
 import { scrollToLeft } from 'utils/tool/animate'
 import Decimal from 'decimal.js-light'
 
-import { metamaskMixins, checkTokensBalanceMixins, publicMixins } from '@/mixins'
+import { metamaskMixins, checkTokensBalanceMixins, publicMixins, planBoostsMixins } from '@/mixins'
 
 import { mapState } from 'vuex'
 export default {
   name: 'bounty-chest-detail-component',
-  mixins: [ metamaskMixins, checkTokensBalanceMixins, publicMixins ],
+  mixins: [ metamaskMixins, checkTokensBalanceMixins, publicMixins, planBoostsMixins ],
   data: () => {
     return {
       rendered: false,
@@ -286,7 +303,8 @@ export default {
   },
   computed: {
     ...mapState('contract', [
-      'HOPSPlan',
+      // 'HOPSPlan',
+      'GrowHopsPlus',
       'Bounty',
       'tokensContract',
       'tokensContractInit'
@@ -734,7 +752,14 @@ export default {
     },
 
     // 种植 less
-    async doDepositLESS (lessAmount = this.depositLessAmount, account = this.account, info = this.activePlanBase, HOPSPlan = this.HOPSPlan, web3Opt = this.web3Opt) {
+    async doDepositLESS (
+      lessAmount = this.depositLessAmount,
+      account = this.account,
+      info = this.activePlanBase,
+      // HOPSPlan = this.HOPSPlan,
+      GrowHopsPlus = this.GrowHopsPlus,
+      web3Opt = this.web3Opt
+    ) {
       if (!info._id) return
       this.btnLoading = true
 
@@ -761,17 +786,19 @@ export default {
           values: [ info.planBaseId, lessAmount ]
         }
         const { gasPrice } = web3Opt
-        // const gas = (await growHopsParam.estimateGas(growHopsParam.name, growHopsParam.values)) || 139999
-        const gas = 299999
+        const gas = (await GrowHopsPlus.estimateGas(growHopsParam.name, growHopsParam.values)) || 299999
+        // const gas = 299999
 
         const params = {
           gas,
           gasPrice,
-          data: HOPSPlan[growHopsParam.name].getData(info.planBaseId, lessAmount),
+          // data: HOPSPlan[growHopsParam.name].getData(info.planBaseId, lessAmount),
+          data: GrowHopsPlus[growHopsParam.name].getData(info.planBaseId, lessAmount),
           // memo: 'buy a tavern by lordless',
           // feeCustomizable: true,
           value: 0,
-          to: HOPSPlan.address,
+          // to: HOPSPlan.address,
+          to: GrowHopsPlus.address,
           from: account
         }
 
@@ -1147,7 +1174,7 @@ export default {
     }
   }
   .deposit-popup-slider {
-    padding: 18px 20px 30px;
+    padding: 18px 20px 10px;
     @include overflow();
   }
   .deposit-slider-item {
@@ -1168,6 +1195,18 @@ export default {
       margin-left: 12px;
     }
   }
+
+  // deposit-boosts-box
+  .deposit-boosts-box {
+    margin: 12px 0;
+    padding: 0 20px;
+    color: $--main-blue-color;
+  }
+  .deposit-boost-icon {
+    width: 28px;
+    height: 28px;
+  }
+
   .deposit-popup-balance {
     margin-bottom: 25px;
     padding: 0 20px;

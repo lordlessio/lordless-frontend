@@ -69,15 +69,14 @@ import { weiByDecimals } from 'utils/tool'
 
 import { getPlansByToken, withdrawLessPlan } from 'api'
 
-import { metamaskMixins, publicMixins } from '@/mixins'
+import { metamaskMixins, publicMixins, initLoadingMixins } from '@/mixins'
 import { mapState } from 'vuex'
 export default {
   name: 'mobile-owner-deposits-component',
-  mixins: [ metamaskMixins, publicMixins ],
+  mixins: [ metamaskMixins, publicMixins, initLoadingMixins ],
   data: () => {
     return {
       rendered: false,
-      loading: true,
       loadMoreLoading: false,
       plans: {
         list: [],
@@ -95,7 +94,8 @@ export default {
     ]),
 
     ...mapState('contract', [
-      'HOPSPlan'
+      'HOPSPlan',
+      'GrowHopsPlus'
     ])
   },
   components: {
@@ -111,27 +111,38 @@ export default {
       this.scrollListenerFunc()
     },
 
-    async withdrawLess (cb, info = this.info, account = this.account, web3Opt = this.web3Opt, HOPSPlan = this.HOPSPlan) {
+    async withdrawLess (
+      cb,
+      info = this.info,
+      account = this.account,
+      web3Opt = this.web3Opt,
+      HOPSPlan = this.HOPSPlan,
+      GrowHopsPlus = this.GrowHopsPlus
+    ) {
       const authorize = await this.$refs.authorize.checkoutAuthorize()
       if (!authorize) return
 
       this.metamaskChoose = true
+      const Contract = info.planVersion === 2 ? GrowHopsPlus : HOPSPlan
       try {
         const withdrawLessParam = {
           name: 'withdraw',
           values: [ info.planId ]
         }
         const { gasPrice } = web3Opt
-        const gas = (await HOPSPlan.estimateGas(withdrawLessParam.name, withdrawLessParam.values)) || 139999
+        // const gas = (await HOPSPlan.estimateGas(withdrawLessParam.name, withdrawLessParam.values)) || 139999
+        const gas = (await Contract.estimateGas(withdrawLessParam.name, withdrawLessParam.values)) || 139999
 
         const params = {
           gas,
           gasPrice,
-          data: HOPSPlan[withdrawLessParam.name].getData(info.planId),
+          // data: HOPSPlan[withdrawLessParam.name].getData(info.planId),
+          data: Contract[withdrawLessParam.name].getData(info.planId),
           // memo: 'buy a tavern by lordless',
           // feeCustomizable: true,
           value: 0,
-          to: HOPSPlan.address,
+          // to: HOPSPlan.address,
+          to: Contract.address,
           from: account
         }
 
@@ -171,7 +182,6 @@ export default {
         noMore: total <= ps
       }
       this.loading = false
-      if (!this.rendered) this.rendered = true
     },
 
     async getUserPlans ({ pn, ps = this.plans.ps } = {}) {
@@ -250,7 +260,10 @@ export default {
     }
   },
   async activated () {
-    if (!this.rendered) return
+    if (!this.rendered) {
+      this.rendered = true
+      return
+    }
     await this.initDeposits()
 
     this.$nextTick(() => this.scrollListenerFunc())

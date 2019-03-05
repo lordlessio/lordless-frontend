@@ -68,6 +68,21 @@
               </span>
             </div>
           </li>
+          <li class="d-flex f-align-center info-cnt-item" @click.stop="$router.push('/owner/taverns')">
+            <span class="inline-block line-height-0 cnt-item-icon large">
+              <svg>
+                <use xlink:href="#icon-beer"/>
+              </svg>
+            </span>
+            <div class="v-flex d-flex f-align-center cnt-item-right">
+              <p class="v-flex cnt-item-title">My Taverns</p>
+              <span class="inline-block line-height-0 info-arrow-icon">
+                <svg>
+                  <use xlink:href="#icon-arrow-line-right"/>
+                </svg>
+              </span>
+            </div>
+          </li>
         </ul>
         <ul class="info-cnt-article blue">
           <li
@@ -82,10 +97,12 @@
             <div class="v-flex d-flex f-align-center cnt-item-right">
               <p class="v-flex cnt-item-title">{{ item.title }}</p>
               <p v-if="item.tips" class="bind-item-tips">{{ item.tips }}</p>
+              <p v-if="item.isNew" class="bind-item-tips is-red">New!</p>
               <p v-if="item.holdings" class="bind-item-tips">$ {{ overviews.holdings.value | formatDecimal }}</p>
+              <span v-if="item.redPoint" class="inline-block item-red-point"></span>
               <p v-if="item.isBindTelegram" class="d-flex f-align-center">
                 <span v-if="userInfo.telegram && userInfo.telegram.id">{{ userInfo.telegram.username || userInfo.telegram.first_name }}</span>
-                <span v-else class="inline-block bind-telegram-tip"></span>
+                <span v-else class="inline-block item-red-point"></span>
               </p>
               <span class="inline-block line-height-0 info-arrow-icon">
                 <svg>
@@ -188,6 +205,24 @@ export default {
     infoChildrens () {
       return [].concat([
         {
+          icon: '#icon-tab-diploma',
+          title: 'Invitation program',
+          path: '/owner/referral/invitation',
+          isNew: true
+        },
+        {
+          icon: '#icon-badge',
+          title: 'Referee boost',
+          path: '/owner/referee',
+          redPoint: true
+        },
+        {
+          icon: '#icon-link',
+          title: 'Bind Telegram',
+          path: '/owner/bind/telegram',
+          isBindTelegram: true
+        },
+        {
           icon: '#coin-hops',
           title: 'HOPS',
           path: '/owner/hops',
@@ -204,17 +239,6 @@ export default {
         //   title: 'Bounty Chests',
         //   path: '/owner/bounty/chests'
         // },
-        {
-          icon: '#icon-beer',
-          title: 'My Taverns',
-          path: '/owner/taverns'
-        },
-        {
-          icon: '#icon-link',
-          title: 'Bind Telegram',
-          path: '/owner/bind/telegram',
-          isBindTelegram: true
-        },
         {
           icon: '#icon-authorization_selected',
           title: 'Authorizations',
@@ -327,7 +351,7 @@ export default {
       height: 24px;
     }
   }
-  .bind-telegram-tip {
+  .item-red-point {
     width: 8px;
     height: 8px;
     background-color: #F5515F;
@@ -371,6 +395,9 @@ export default {
   }
   .bind-item-tips {
     color: #999;
+    &.is-red {
+      color: $--main-red-color;
+    }
   }
   .cnt-item-right {
     margin-left: 12px;

@@ -589,3 +589,20 @@ export const getLastYearMonths = () => {
   }
   return result
 }
+
+export const appendScript = (srcs) => {
+  return new Promise(resolve => {
+    let count = 0
+    for (const src of srcs) {
+      const script = document.createElement('script')
+      script.type = 'text/javascript'
+      script.src = src
+      script.sync = true
+      document.body.appendChild(script)
+      script.onload = () => {
+        count++
+        if (count === srcs.length) resolve(src)
+      }
+    }
+  })
+}

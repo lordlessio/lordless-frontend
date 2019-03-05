@@ -39,13 +39,14 @@ import PlanRecordCard from '@/components/reuse/_mobile/card/plan/record'
 import { getLastYearMonths } from 'utils/tool'
 
 import { getPlanRecordssByToken } from 'api'
+import { initLoadingMixins } from '@/mixins'
 export default {
   name: 'mobile-plan-records-content',
+  mixins: [ initLoadingMixins ],
   data: () => {
     return {
       rendered: false,
       loadMoreLoading: false,
-      loading: true,
       planRecords: {
         list: [],
         pn: 1,

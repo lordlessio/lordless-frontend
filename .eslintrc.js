@@ -38,5 +38,6 @@ module.exports = {
     imToken: true,
     lordlessMethods: true,
     AMap: true,
+    QRCode: true,
   }
 }

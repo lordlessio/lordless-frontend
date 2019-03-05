@@ -81,10 +81,10 @@ export default {
         bgcolor,
         spotcolor
       })
-      this.$refs.blockies.appendChild(icon)
+      this.$refs.blockies && this.$refs.blockies.appendChild(icon)
     },
     reset () {
-      this.$refs.blockies.removeChild(this.$refs.blockies.firstChild)
+      this.$refs.blockies && this.$refs.blockies.removeChild(this.$refs.blockies.firstChild)
       this.init()
     },
     jumpFunc () {

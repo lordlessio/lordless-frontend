@@ -60,7 +60,7 @@
             :disabled="btnLoading || !isMature || isGrowPending || isGrowFailed || isWithdrawPending || info.isWithdrawn"
             @click="withdraw">
             <span v-if="isGrowPending">Depositing</span>
-            <span v-else-if="isGrowFailed">Depositing</span>
+            <span v-else-if="isGrowFailed">Deposit failed</span>
             <span v-else-if="isImmature">Immature</span>
             <span v-else-if="isWithdrawFailed">Mature</span>
             <span v-else-if="isWithdrawPending">Withdrawing</span>

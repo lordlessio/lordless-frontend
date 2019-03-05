@@ -784,7 +784,7 @@ export default {
       }
       .history-header {
         color: #fff;
-        background-color: $--main-color;
+        background-color: $--main-blue-color;
       }
       .history-cnt-box {
         color: $--text-main-color;

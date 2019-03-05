@@ -7,7 +7,7 @@ const path = require('path');
 module.exports = {
   entry: {
     vue: ['vue', 'vue-router', 'vuex-router-sync', 'vuex', 'vue-i18n'],
-    utils: ['fastclick', 'date-fns', 'axios', 'lodash', 'clipboard', 'ethereum-blockies', '@xkeshi/vue-countdown', 'countup.js', 'decimal.js-light'],
+    utils: ['fastclick', 'date-fns', 'axios', 'lodash', 'clipboard', 'ethereum-blockies', '@xkeshi/vue-countdown', 'countup.js', 'decimal.js-light', 'html2canvas'],
     // mapbox: ['mapbox-gl']
   },
   output: {

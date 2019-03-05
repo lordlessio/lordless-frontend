@@ -1,7 +1,14 @@
 <template>
   <div class="bc-holding-box">
     <div class="relative d-flex f-align-center bc-tabs-box">
-      <div
+      <lordless-tabs-navbar
+        :originTab="currentTab"
+        :tabs="bcTabs"
+        :fixed="false"
+        rightIcon="#icon-bounty-chests"
+        rightPath="/owner/bountyChest"
+        @changeTab="tabChange"/>
+      <!-- <div
         ref="bc-holding-tabs"
         class="v-flex d-flex f-align-center text-center bc-holding-tabs"
         @click.stop="chooseTab">
@@ -17,7 +24,7 @@
         <svg>
           <use xlink:href="#icon-bounty-chests"/>
         </svg>
-      </span>
+      </span> -->
     </div>
     <div class="bc-holding-cnt">
       <div v-if="currentTab === 'materials' && holdingValue !== 0" class="d-flex f-align-start bc-holding-materials">
@@ -56,7 +63,7 @@ export default {
       default: 0
     }
   },
-  data: () => {
+  data: (vm) => {
     return {
       rendered: false,
       bcTabs: [
@@ -68,7 +75,7 @@ export default {
           name: 'chests'
         }
       ],
-      currentTab: 'materials',
+      currentTab: vm.$route.query.type === 'chests' ? 'chests' : 'materials',
 
       // bc chests options
       bcChests: [
@@ -114,12 +121,18 @@ export default {
       } else return this.getAttr(node.parentNode)
     },
 
-    chooseTab (e) {
-      const { name } = this.getAttr(e.target)
-      if (!name || name === this.currentTab) return
-      this.changeBCTab(name)
-      // this.initChestMethod(name)
+    tabChange (name) {
+      console.log('--- name', name)
+      historyState(`/owner/bc?type=${name}`)
+      this.currentTab = name
     },
+
+    // chooseTab (e) {
+    //   const { name } = this.getAttr(e.target)
+    //   if (!name || name === this.currentTab) return
+    //   this.changeBCTab(name)
+    //   // this.initChestMethod(name)
+    // },
 
     chooseChest (e) {
       const { name } = this.getAttr(e.target)
@@ -128,38 +141,59 @@ export default {
     },
 
     // 改变 tabs 处理事件
-    changeBCTab (currentTab = this.currentTab) {
-      const tabChildrens = document.querySelectorAll('.bc-tabs-item')
-      if (!tabChildrens.length) return
+    // changeBCTab (currentTab = this.currentTab) {
+    //   const tabChildrens = document.querySelectorAll('.bc-tabs-item')
+    //   if (!tabChildrens.length) return
 
-      const activeBar = this.$refs['bc_tab_active_bar']
-      for (const item of tabChildrens) {
-        const name = item.getAttribute('data-name')
-        if (name === currentTab) {
-          const nodeLeft = item.offsetLeft
-          // const nodeWidth = item.offsetWidth
-          const textWidth = item.firstChild.offsetWidth
-          activeBar.style = `width: 32px;left: ${nodeLeft + textWidth / 2 - 16}px;`
-          break
-        }
-      }
-      historyState(`/owner/bc?type=${currentTab}`)
-      this.currentTab = currentTab
-    },
+    //   const activeBar = this.$refs['bc_tab_active_bar']
+    //   for (const item of tabChildrens) {
+    //     const name = item.getAttribute('data-name')
+    //     if (name === currentTab) {
+    //       const nodeLeft = item.offsetLeft
+    //       // const nodeWidth = item.offsetWidth
+    //       const textWidth = item.firstChild.offsetWidth
+    //       activeBar.style = `width: 32px;left: ${nodeLeft + textWidth / 2 - 16}px;`
+    //       break
+    //     }
+    //   }
+    //   historyState(`/owner/bc?type=${currentTab}`)
+    //   this.currentTab = currentTab
+    // }
 
     // 初始化 chest tabs
-    initBCTabs (currentTab = this.currentTab) {
-      let _currentTab = this.$route.query.type === 'chests' ? 'chests' : 'materials'
-      currentTab = _currentTab
+    // initBCTabs (currentTab = this.currentTab) {
+    //   let _currentTab = this.$route.query.type === 'chests' ? 'chests' : 'materials'
+    //   currentTab = _currentTab
+    //   const dom = this.$el
+    //   const parent = this.$el.parentNode
+    //   console.log('------- parent', parent)
+    //   if (!dom || !parent || parent.tagName === 'BODY') return
+    //   document.body.appendChild(dom)
+
+    //   if (!this.rendered) this.rendered = true
+
+    //   this.changeBCTab(currentTab)
+    //   this.$once('hook:beforeDestroy', () => {
+    //     console.log('-------- beforeDestroy bc tabs destroy')
+    //     parent.appendChild(dom)
+    //   })
+    //   this.$once('hook:deactivated', () => {
+    //     console.log('-------- deactivated bc tabs destroy', parent, dom)
+    //     parent.appendChild(dom)
+    //   })
+    // }
+    initBCHolding (currentTab = this.currentTab) {
       const dom = this.$el
       const parent = this.$el.parentNode
-      console.log('------- parent', parent)
+      console.log('------- parent', parent, currentTab)
       if (!dom || !parent || parent.tagName === 'BODY') return
       document.body.appendChild(dom)
 
       if (!this.rendered) this.rendered = true
 
-      this.changeBCTab(currentTab)
+      // this.changeBCTab(currentTab)
+      this.$emit('bcTab', currentTab)
+
       this.$once('hook:beforeDestroy', () => {
         console.log('-------- beforeDestroy bc tabs destroy')
         parent.appendChild(dom)
@@ -170,20 +204,20 @@ export default {
       })
     }
   },
-  beforeDestroy () {
-    // this.destory()
-  },
-  deactivated () {
-    // this.destory()
-  },
+  // beforeDestroy () {
+  //   // this.destory()
+  // },
+  // deactivated () {
+  //   // this.destory()
+  // },
   activated () {
     if (!this.rendered) return
     console.log('-------- holding activated')
-    this.initBCTabs()
+    this.initBCHolding()
   },
   mounted () {
     console.log('-------- holding mounted')
-    this.initBCTabs()
+    this.initBCHolding()
   }
 }
 </script>
@@ -206,34 +240,34 @@ export default {
     border-bottom: 1px solid #4AA0FF;
     box-sizing: border-box;
   }
-  .bc-holding-tabs {
-    padding: 0 20px;
-  }
-  .bc-tabs-item {
-    font-size: 16px;
-    color: #fff;
-    &:not(:first-of-type) {
-      margin-left: 24px;
-    }
-  }
-  .bc-tab-active-bar {
-    position: absolute;
-    bottom: -0.5px;
-    width: 0;
-    height: 6px;
-    background-color: #FFCC66;
-    transition: left .15s;
-  }
+  // .bc-holding-tabs {
+  //   padding: 0 20px;
+  // }
+  // .bc-tabs-item {
+  //   font-size: 16px;
+  //   color: #fff;
+  //   &:not(:first-of-type) {
+  //     margin-left: 24px;
+  //   }
+  // }
+  // .bc-tab-active-bar {
+  //   position: absolute;
+  //   bottom: -0.5px;
+  //   width: 0;
+  //   height: 6px;
+  //   background-color: #FFCC66;
+  //   transition: left .15s;
+  // }
   /**
    *  bc-tabs-box -- end
    */
 
-  .bc-bounty-icon {
-    margin-right: 20px;
-    width: 24px;
-    height: 24px;
-    fill: #fff;
-  }
+  // .bc-bounty-icon {
+  //   margin-right: 20px;
+  //   width: 24px;
+  //   height: 24px;
+  //   fill: #fff;
+  // }
 
   /**
    *  bc-holding-cnt  -- begin

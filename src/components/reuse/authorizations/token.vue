@@ -133,30 +133,37 @@ export default {
     ]),
     ...mapState('contract', [
       'Luckyblock',
-      'HOPSPlan',
+      // 'HOPSPlan',
+      'GrowHopsPlus',
       'Bounty',
       'BountyNFT',
       'bountyNFTApproved',
       'tokensContract',
       'luckyblockTokenAllowances',
-      'HOPSPlanTokenAllowances',
+      // 'HOPSPlanTokenAllowances',
+      'GrowHopsPlusTokenAllowances',
       'BountyTokenAllowances',
       'BountyTokenAllowancesInit',
-      'HOPSPlanTokenAllowancesInit',
+      // 'HOPSPlanTokenAllowancesInit',
+      'GrowHopsPlusTokenAllowancesInit',
       'luckyblockTokenAllowancesInit',
       'checkBountyNFTApprovedInit'
     ]),
 
     allTokenAllowanceInit () {
-      return this.BountyTokenAllowancesInit && this.HOPSPlanTokenAllowancesInit && this.luckyblockTokenAllowancesInit && this.checkBountyNFTApprovedInit
+      // return this.BountyTokenAllowancesInit && this.HOPSPlanTokenAllowancesInit && this.luckyblockTokenAllowancesInit && this.checkBountyNFTApprovedInit
+      return this.BountyTokenAllowancesInit && this.GrowHopsPlusTokenAllowancesInit && this.luckyblockTokenAllowancesInit && this.checkBountyNFTApprovedInit
     },
 
     luckyAddress () {
       return this.Luckyblock ? this.Luckyblock.address : ''
     },
 
-    HOPSPlanAddress () {
-      return this.HOPSPlan ? this.HOPSPlan.address : ''
+    // HOPSPlanAddress () {
+    //   return this.HOPSPlan ? this.HOPSPlan.address : ''
+    // },
+    GrowHopsPlusAddress () {
+      return this.GrowHopsPlus ? this.GrowHopsPlus.address : ''
     },
 
     BountyAddress () {
@@ -262,10 +269,14 @@ export default {
           name: 'LESS deposit',
           behavior: 'Deposit LESS',
           contractText: 'Deposit LESS',
-          tokenAllowances: this.HOPSPlanTokenAllowances,
-          checkAllowancesMethod: this[actionTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE],
-          contractAddress: this.HOPSPlanAddress,
-          contractLink: `${process.env.ETHERSCANURL}/address/${this.HOPSPlanAddress}#code`
+          // tokenAllowances: this.HOPSPlanTokenAllowances,
+          tokenAllowances: this.GrowHopsPlusTokenAllowances,
+          // checkAllowancesMethod: this[actionTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE],
+          checkAllowancesMethod: this[actionTypes.CONTRACT_SET_GROW_HOPS_PLUS_TOKEN_ALLOWANCE],
+          // contractAddress: this.HOPSPlanAddress,
+          contractAddress: this.GrowHopsPlusAddress,
+          // contractLink: `${process.env.ETHERSCANURL}/address/${this.HOPSPlanAddress}#code`
+          contractLink: `${process.env.ETHERSCANURL}/address/${this.GrowHopsPlusAddress}#code`
         },
         bounty: {
           name: 'Bounty Chest',
@@ -291,7 +302,8 @@ export default {
   methods: {
     ...mapActions('contract', [
       actionTypes.CONTRACT_SET_LUCKYBLOCK_TOKEN_ALLOWANCE,
-      actionTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE,
+      // actionTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE,
+      actionTypes.CONTRACT_SET_GROW_HOPS_PLUS_TOKEN_ALLOWANCE,
       actionTypes.CONTRACT_SET_BOUNTY_TOKEN_ALLOWANCE,
       actionTypes.CONTRACT_CHECK_BOUNTYNFT_APPROVE
     ]),

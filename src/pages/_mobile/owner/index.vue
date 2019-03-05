@@ -1,6 +1,7 @@
 <template>
   <div class="mobile-main-page">
-    <mobile-plan-bar/>
+    <lordless-mobile-tab-bar :list="planBarNavigations"/>
+    <lordless-mobile-tab-bar :list="referralBarNavigations"/>
     <mobile-nav-bar
       ref="mobile-nav-bar"
       v-if="$route.path.match(scrollOpt.match) && scrollOpt.show"
@@ -39,7 +40,6 @@
 <script>
 import MobileConnect from '@/components/reuse/_mobile/connect'
 import MobileWallets from '@/components/reuse/_mobile/wallets/trust'
-import MobilePlanBar from '@/components/reuse/_mobile/plan/planBar'
 // import Authorize from '@/components/reuse/dialog/authorize'
 
 import { publicMixins } from '@/mixins'
@@ -100,7 +100,7 @@ export default {
           history: true
         },
         {
-          text: 'HOPS',
+          text: 'LESS Term Deposits',
           match: /^\/owner\/hops(\/){0,}$/,
           show: true,
           history: true
@@ -125,6 +125,24 @@ export default {
           show: true,
           history: true,
           historyPath: '/owner/bc?type=chests'
+        },
+        {
+          text: 'Invitation',
+          match: /^\/owner\/referral\/invitation/,
+          show: true,
+          history: true
+        },
+        {
+          text: 'Referees',
+          match: /^\/owner\/referral\/referees/,
+          show: true,
+          history: true
+        },
+        {
+          text: 'Referee program',
+          match: /^\/owner\/referee/,
+          show: true,
+          history: true
         }
         // {
         //   text: 'My Bounty Chests',
@@ -135,6 +153,60 @@ export default {
         //   rightPath: '/owner/bountyChest',
         //   historyPath: '/owner/info'
         // }
+      ],
+      referralBarNavigations: [
+        {
+          icon: '#icon-tab-diploma',
+          activeIcon: '#icon-tab-diploma',
+          name: 'Invitation',
+          route: '/owner/referral/invitation',
+          // match: /\/(home|project)/,
+          match: /^\/owner\/referral\/invitation/,
+          active: true
+        },
+        {
+          icon: '#icon-tab-ingots',
+          activeIcon: '#icon-tab-ingots',
+          name: 'Referees',
+          route: '/owner/referral/referees',
+          match: /^\/owner\/referral\/referees/,
+          active: false
+        },
+        {
+          icon: '#icon-tab-star-user',
+          activeIcon: '#icon-tab-star-user',
+          name: 'Rewards',
+          route: '/owner/referral/rewards',
+          match: /^\/owner\/referral\/rewards/,
+          active: false
+        }
+      ],
+      planBarNavigations: [
+        {
+          icon: '#icon-sprout',
+          activeIcon: '#icon-sprout',
+          name: 'LESS deposit',
+          route: '/owner/hops',
+          // match: /\/(home|project)/,
+          match: /^\/owner\/hops/,
+          active: true
+        },
+        {
+          icon: '#coin-hops',
+          activeIcon: '#coin-hops',
+          name: 'My deposits',
+          route: '/owner/deposits',
+          match: /^\/owner\/deposits/,
+          active: false
+        },
+        {
+          icon: '#icon-tab-quest_unselected',
+          activeIcon: '#icon-tab-quest_selected',
+          name: 'Records',
+          route: '/owner/plan/records',
+          match: /^\/owner\/plan\/records/,
+          active: false
+        }
       ]
     }
   },
@@ -170,10 +242,8 @@ export default {
     }
   },
   components: {
-    // Authorize,
     MobileConnect,
-    MobileWallets,
-    MobilePlanBar
+    MobileWallets
   },
   methods: {
 
@@ -203,7 +273,8 @@ export default {
 
     ownerNavbarHistory (path = '/owner/info') {
       sessionStorage.setItem('lordless_direction', '_reverse')
-      return this.$router.push(path)
+      const refer = this.$route.query.refer
+      return this.$router.push(refer || path)
     }
   },
   activated () {

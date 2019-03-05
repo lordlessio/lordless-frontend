@@ -248,10 +248,12 @@ export default {
 
       // metamask 是否被打开
       this.metamaskChoose = true
-      this[actionTypes.USER_META_LOGIN]({ cb: (err) => {
-        this.metamaskChoose = false
-        if (!err) this.$emit('success')
-      }})
+      const referrer = this.$route.query.r
+      this[actionTypes.USER_META_LOGIN]({ referrer,
+        cb: (err) => {
+          this.metamaskChoose = false
+          if (!err) this.$emit('success')
+        }})
     },
 
     // 检查用户是否已经注册过

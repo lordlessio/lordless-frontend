@@ -47,7 +47,7 @@
             <p v-if="!depositModel">Input deposit amount to show how many HOPS  you can reap.</p>
             <p v-else-if="!isMoreThanMix">The minimum amount of the PRO plan is {{ depositInfo.minimumAmount | weiByDecimals }} LESS.</p>
             <p v-else-if="!isInsufficientLess">
-              Reap <span>{{ depositModel * depositInfo.lessToHops }}</span> HOPS immediately.
+              Reap <span>{{ depositModel * depositInfo.lessToHops * (1 + userTotalBoost) }}</span> HOPS immediately.
             </p>
             <p v-else>
               Your balance of LESS is insufficient. Purchase some more on
@@ -68,7 +68,7 @@
               <use xlink:href="#icon-question"/>
             </svg>
           </span>
-          <span class="v-flex text-right details-item-text">{{ item.text }}</span>
+          <span class="v-flex text-right details-item-text">{{ item.text }}<span v-if="item.title === 'HELD' && userTotalBoost" class="text-line-through planBase-info-old-held">{{ oldHeldValue }}</span></span>
         </li>
       </ul>
       <div class="hops-planBase-btns">
@@ -98,15 +98,14 @@ import { getPlanBaseDetail, saveGrowHopsPlan } from 'api'
 import { weiByDecimals, dateFormat } from 'utils/tool'
 
 import { mapState } from 'vuex'
-import { metamaskMixins, checkTokensBalanceMixins, publicMixins } from '@/mixins'
+import { metamaskMixins, checkTokensBalanceMixins, publicMixins, initLoadingMixins, planBoostsMixins } from '@/mixins'
 export default {
   name: 'hops-planBase-detail-component',
-  mixins: [ metamaskMixins, checkTokensBalanceMixins, publicMixins ],
+  mixins: [ metamaskMixins, checkTokensBalanceMixins, publicMixins, initLoadingMixins, planBoostsMixins ],
   data: () => {
     return {
       rendered: false,
       btnLoading: false,
-      loading: true,
       depositInfo: {},
       depositModel: '',
       tokenBets: [],
@@ -115,7 +114,8 @@ export default {
   },
   computed: {
     ...mapState('contract', [
-      'HOPSPlan'
+      // 'HOPSPlan'
+      'GrowHopsPlus'
     ]),
     ...mapState('web3', [
       'web3Opt'
@@ -152,11 +152,15 @@ export default {
       return this.depositModel > this.lessBalanceNumber
     },
 
+    oldHeldValue () {
+      const info = this.depositInfo
+      if (!info._id) return 0
+      return info.lessToHops.toFixed(1).toString()
+    },
     heldValue () {
       const info = this.depositInfo
-      if (!info._id) return {}
-      // return (info.lessToHops / (info.lockTime / 3600 / 24 / 30)).toFixed(1).toString()
-      return info.lessToHops ? info.lessToHops.toFixed(1).toString() : '?'
+      if (!info._id) return 0
+      return (info.lessToHops * (1 + this.userTotalBoost)).toFixed(1).toString()
     },
 
     planLockDays () {
@@ -220,7 +224,6 @@ export default {
 
     reset () {
       this.btnLoading = false
-      this.loading = true
     },
 
     initPlanBase () {
@@ -260,7 +263,14 @@ export default {
       })
     },
 
-    async doGrowHops (lessAmount = this.depositModel * 1e18, account = this.account, info = this.depositInfo, HOPSPlan = this.HOPSPlan, web3Opt = this.web3Opt) {
+    async doGrowHops (
+      lessAmount = this.depositModel * 1e18,
+      account = this.account,
+      info = this.depositInfo,
+      // HOPSPlan = this.HOPSPlan,
+      GrowHopsPlus = this.GrowHopsPlus,
+      web3Opt = this.web3Opt
+    ) {
       this.btnLoading = true
 
       const { balance } = (await this.setTokensBalance()).less || {}
@@ -284,17 +294,19 @@ export default {
           values: [ info.planBaseId, lessAmount ]
         }
         const { gasPrice } = web3Opt
-        // const gas = (await growHopsParam.estimateGas(growHopsParam.name, growHopsParam.values)) || 139999
-        const gas = 299999
+        const gas = (await GrowHopsPlus.estimateGas(growHopsParam.name, growHopsParam.values)) || 299999
+        // const gas = 299999
 
         const params = {
           gas,
           gasPrice,
-          data: HOPSPlan[growHopsParam.name].getData(info.planBaseId, lessAmount),
+          // data: HOPSPlan[growHopsParam.name].getData(info.planBaseId, lessAmount),
+          data: GrowHopsPlus[growHopsParam.name].getData(info.planBaseId, lessAmount),
           // memo: 'buy a tavern by lordless',
           // feeCustomizable: true,
           value: 0,
-          to: HOPSPlan.address,
+          // to: HOPSPlan.address,
+          to: GrowHopsPlus.address,
           from: account
         }
 
@@ -381,6 +393,10 @@ export default {
     &.is-small {
       font-size: 16px;
     }
+  }
+  .planBase-info-old-held {
+    margin-left: 6px;
+    color: #999;
   }
 
   .planBase-header-held {

@@ -43,7 +43,10 @@ export default {
     }
   },
   activated () {
-    if (!this.CTBRendered) return
+    if (!this.CTBRendered) {
+      this.CTBRendered = true
+      return
+    }
     this.initTokensBalance()
   },
   mounted () {

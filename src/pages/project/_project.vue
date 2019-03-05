@@ -402,7 +402,7 @@ export default {
     margin-bottom: 6px;
     width: 30px;
     height: 30px;
-    fill: #0079FF;
+    fill: $--main-blue-color;
   }
 
   // project-intro-exchanges

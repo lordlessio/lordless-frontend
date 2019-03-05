@@ -27,6 +27,7 @@
     "element-ui": "^2.4.0",
     "ethereum-blockies": "github:ethereum/blockies",
     "fastclick": "^1.0.6",
+    "html2canvas": "^1.0.0-alpha.12",
     "lodash": "^4.17.10",
     "vue": "^2.5.2",
     "vue-analytics": "^5.16.0",

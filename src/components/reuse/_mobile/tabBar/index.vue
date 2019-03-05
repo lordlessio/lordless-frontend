@@ -25,64 +25,71 @@
 // import { mutationTypes } from '@/store/types'
 // import { mapMutations } from 'vuex'
 export default {
-  name: 'mobile-tab-bar',
-  data: () => {
+  name: 'lordless-mobile-tab-bar',
+  props: {
+    list: {
+      type: Array,
+      default: () => []
+    }
+  },
+  data: (vm) => {
     return {
       tabBarHide: false,
       // activeText: 'Marketplace',
       activeIndex: 0,
-      navigations: [
-        {
-          icon: '#icon-tab-lordless',
-          activeIcon: '#icon-tab-lordless',
-          name: 'Home',
-          route: '/home',
-          // match: /\/(home|project)/,
-          match: /^\/home/,
-          active: true
-        },
-        {
-          icon: '#icon-tab-beer',
-          activeIcon: '#icon-tab-beer',
-          name: 'Taverns',
-          route: '/taverns',
-          match: /^\/taverns/,
-          active: true
-        },
-        {
-          icon: '#icon-tab-bc',
-          activeIcon: '#icon-tab-bc',
-          name: 'BC',
-          route: '/owner/bc',
-          match: /^\/owner\/bc/,
-          active: false
-        },
-        // {
-        //   icon: '#icon-tab-coin',
-        //   activeIcon: '#icon-tab-coin',
-        //   name: 'Tokens',
-        //   route: '/owner/candy',
-        //   match: /^\/owner\/candy/,
-        //   active: false
-        // },
-        {
-          icon: '#icon-tab-quests',
-          activeIcon: '#icon-tab-quests',
-          name: 'Quests',
-          route: '/owner/quests',
-          match: /^\/owner\/quests/,
-          active: false
-        },
-        {
-          icon: '#icon-tab-user',
-          activeIcon: '#icon-tab-user',
-          name: 'Me',
-          route: '/owner/info',
-          // match: /\/owner\/(info|activities|taverns|authorization|general)/,
-          match: /^\/owner\/info/,
-          active: false
-        }
-      ]
+      navigations: vm.list
+      // navigations: [
+      //   {
+      //     icon: '#icon-tab-lordless',
+      //     activeIcon: '#icon-tab-lordless',
+      //     name: 'Home',
+      //     route: '/home',
+      //     // match: /\/(home|project)/,
+      //     match: /^\/home/,
+      //     active: true
+      //   },
+      //   {
+      //     icon: '#icon-tab-beer',
+      //     activeIcon: '#icon-tab-beer',
+      //     name: 'Taverns',
+      //     route: '/taverns',
+      //     match: /^\/taverns/,
+      //     active: true
+      //   },
+      //   {
+      //     icon: '#icon-tab-bc',
+      //     activeIcon: '#icon-tab-bc',
+      //     name: 'BC',
+      //     route: '/owner/bc',
+      //     match: /^\/owner\/bc/,
+      //     active: false
+      //   },
+      //   // {
+      //   //   icon: '#icon-tab-coin',
+      //   //   activeIcon: '#icon-tab-coin',
+      //   //   name: 'Tokens',
+      //   //   route: '/owner/candy',
+      //   //   match: /^\/owner\/candy/,
+      //   //   active: false
+      //   // },
+      //   {
+      //     icon: '#icon-tab-quests',
+      //     activeIcon: '#icon-tab-quests',
+      //     name: 'Quests',
+      //     route: '/owner/quests',
+      //     match: /^\/owner\/quests/,
+      //     active: false
+      //   },
+      //   {
+      //     icon: '#icon-tab-user',
+      //     activeIcon: '#icon-tab-user',
+      //     name: 'Me',
+      //     route: '/owner/info',
+      //     // match: /\/owner\/(info|activities|taverns|authorization|general)/,
+      //     match: /^\/owner\/info/,
+      //     active: false
+      //   }
+      // ]
     }
   },
   watch: {

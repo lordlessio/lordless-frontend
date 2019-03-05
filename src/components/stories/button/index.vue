@@ -1,5 +1,5 @@
 <template>
-  <button role="button" aria-label="click" :disabled="disabled" class="button-styles" :class="[`${theme}`, { 'shadow': shadow, 'inverse': inverse }]" @click.stop="onClick">
+  <button role="button" aria-label="click" :disabled="disabled" class="button-styles" :class="[`${theme}`, { 'shadow': shadow, 'inverse': inverse, 'none-radius': !radius }]" @click.stop="onClick">
     <slot v-if="!loading"></slot>
     <span v-if="loading">
       <i class="el-icon-loading"></i>
@@ -35,6 +35,11 @@
       loading: {
         type: Boolean,
         default: false
+      },
+
+      radius: {
+        type: Number,
+        default: 5
       }
     },
     methods: {
@@ -63,6 +68,9 @@
     }
     a {
       color: inherit;
+    }
+    &.none-radius {
+      border-radius: 0;
     }
     &.inherit {
       &.shadow {
@@ -190,6 +198,20 @@
         fill: #F5515F;
       }
     }
+    &.purple-linear {
+      color: #fff;
+      background-image: linear-gradient(-45deg, #7D72F0 0%, #1613B0 100%);
+      fill: #fff;
+      &.shadow {
+        box-shadow: 2.5px 5px 10px 0 rgba(0, 0, 0, .25);
+        // box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
+      }
+      &.inverse {
+        color: #7D72F0;
+        background-color: #fff;
+        fill: #7D72F0;
+      }
+    }
     &.dialog {
       color: $--dialog-btn-color;
       background-color: #fff;
@@ -216,6 +238,20 @@
         color: #fff;
         background-color: #0B2A48;
         fill: #fff;
+      }
+    }
+    &.yellow {
+      color: #555;
+      fill: #555;
+      background-color: #FFCC66;
+      &.shadow {
+        box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, .15);
+        // box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
+      }
+      &.inverse {
+        color: #FFCC66;
+        background-color: #fff;
+        background-image: none;
       }
     }
     // &.pink {

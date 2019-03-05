@@ -18,6 +18,8 @@ const region = require('./region')
 const airdrop = require('./airdrop')
 const plan = require('./plan')
 const bounty = require('./bounty')
+const referer = require('./referer')
+const activityTask = require('./activityTask')
 
 module.exports = merge(
   aMap(axios),
@@ -37,5 +39,7 @@ module.exports = merge(
   region(axios),
   airdrop(axios),
   plan(axios),
-  bounty(axios)
+  bounty(axios),
+  referer(axios),
+  activityTask(axios)
 )

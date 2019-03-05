@@ -568,7 +568,7 @@ export default {
     padding: 0 20px;
     height: 44px;
     line-height: 44px;
-    background-color: #4586FC;
+    background-color: $--navbar-blue-color;
     color: #fff;
   }
   .el-tabs__active-bar {

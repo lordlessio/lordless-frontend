@@ -66,6 +66,7 @@ export default {
   },
   methods: {
     chestsAfterEnter () {
+      console.log('---------- this.chests.total', this.chests.total)
       this.chests.total && this.chestsScrollListen()
     },
 
@@ -139,7 +140,8 @@ export default {
       this.chestScrollHandle && document.removeEventListener('scroll', this.chestScrollHandle)
       this.chestScrollHandle = null
 
-      if (this.currentTab !== 'chests') return
+      console.log('- this.currentTab', this.chestModel)
+      // if (this.currentTab !== 'chests') return
 
       const box = document.getElementById('bounty-chests-scroll-box')
       let bHeight = box ? box.offsetHeight : 0
