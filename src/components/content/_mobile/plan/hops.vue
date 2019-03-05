@@ -49,14 +49,14 @@
                   </svg>
                 </span>
               </li>
-              <li class="TTFontBolder d-flex f-align-center hops-boost-item hops-boost-total-item" :class="{ 'total-none': !userTotalBoost }">
+              <li class="TTFontBolder d-flex f-align-center hops-boost-item hops-boost-total-item" :class="{ 'total-none': !boostNumber }">
                 <span class="inline-block line-height-0 hops-boost-icon">
                   <svg>
                     <use xlink:href="#icon-rocket"/>
                   </svg>
                 </span>
                 <span class="v-flex boost-item-text boost-total-text">Total</span>
-                <span class="inline-block line-height-0 boost-total-number">+ {{ userTotalBoost * 100 }}%</span>
+                <span class="inline-block line-height-0 boost-total-number">+ {{ boostNumber * 100 }}%</span>
               </li>
             </ul>
           </div>
@@ -78,7 +78,7 @@
               <hops-plant
                 :info="planBase"
                 :lessBalance="lessBalance"
-                :boost="userTotalBoost"
+                :boost="boostNumber"
                 :isActive="activePlan._id === planBase._id"
                 @choosePlan="choosePlan"/>
             </li>
@@ -186,6 +186,9 @@ export default {
     }
   },
   computed: {
+    boostNumber () {
+      return this.activePlan.version === 2 ? this.userTotalBoost : 0
+    },
     needLessNumber () {
       const activePlan = this.activePlan
       return weiByDecimals(activePlan.minimumAmount) - this.lessBalanceNumber
@@ -228,7 +231,7 @@ export default {
     async getPlanBasesMethod () {
       this.loading = true
       try {
-        const res = await getPlanBases()
+        const res = await getPlanBases({ version: 2 })
         if (res.code === 1000 && res.data) {
           this.planBases = res.data
           this.activePlan = res.data[0]

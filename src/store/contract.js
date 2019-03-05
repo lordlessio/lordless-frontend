@@ -45,8 +45,8 @@ export default {
     BountyTokenAllowances: {},
     BountyTokenAllowancesInit: false,
 
-    // HOPSPlanTokenAllowances: {},
-    // HOPSPlanTokenAllowancesInit: false,
+    HOPSPlanTokenAllowances: {},
+    HOPSPlanTokenAllowancesInit: false,
 
     GrowHopsPlusTokenAllowances: {},
     GrowHopsPlusTokenAllowancesInit: false,
@@ -86,11 +86,11 @@ export default {
     /**
      * set HOPSPlan token allowance
      */
-    // [mutationTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE]: (state, { candiesTotal = 0, candy = '', allowance = 0 } = {}) => {
-    //   state.HOPSPlanTokenAllowances[candy.toLocaleLowerCase()] = allowance.toNumber()
-    //   if (Object.keys(state.HOPSPlanTokenAllowances).length >= candiesTotal) state.HOPSPlanTokenAllowancesInit = true
-    //   // window.HOPSPlanTokenAllowances = state.HOPSPlanTokenAllowances
-    // },
+    [mutationTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE]: (state, { candiesTotal = 0, candy = '', allowance = 0 } = {}) => {
+      state.HOPSPlanTokenAllowances[candy.toLocaleLowerCase()] = allowance.toNumber()
+      if (Object.keys(state.HOPSPlanTokenAllowances).length >= candiesTotal) state.HOPSPlanTokenAllowancesInit = true
+      window.HOPSPlanTokenAllowances = state.HOPSPlanTokenAllowances
+    },
 
     /**
      * set GrowHOPSPlus token allowance
@@ -98,7 +98,7 @@ export default {
     [mutationTypes.CONTRACT_SET_GROW_HOPS_PLUS_TOKEN_ALLOWANCE]: (state, { candiesTotal = 0, candy = '', allowance = 0 } = {}) => {
       state.GrowHopsPlusTokenAllowances[candy.toLocaleLowerCase()] = allowance.toNumber()
       if (Object.keys(state.GrowHopsPlusTokenAllowances).length >= candiesTotal) state.GrowHopsPlusTokenAllowancesInit = true
-      // window.GrowHopsPlusTokenAllowances = state.GrowHopsPlusTokenAllowances
+      window.GrowHopsPlusTokenAllowances = state.GrowHopsPlusTokenAllowances
     },
 
     /**
@@ -201,7 +201,7 @@ export default {
           candiesTotal,
           candy,
           luckyAddress = state.Luckyblock.address,
-          // HOPSPlanAddress = state.HOPSPlan.address,
+          HOPSPlanAddress = state.HOPSPlan.address,
           GrowHopsPlusAddress = state.GrowHopsPlus.address,
           BountyAddress = state.Bounty.address
         } = {}) => {
@@ -227,7 +227,8 @@ export default {
           dispatch(actionTypes.CONTRACT_SET_LUCKYBLOCK_TOKEN_ALLOWANCE, { candiesTotal, candy, address, contract, luckyAddress })
 
           // HOPSPlan 存储用户授权到  token allowance
-          // dispatch(actionTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE, { candiesTotal, candy, address, contract, HOPSPlanAddress })
+          dispatch(actionTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE, { candiesTotal, candy, address, contract, HOPSPlanAddress })
+
           // GrowHOPSPlus 存储用户授权到  token allowance
           dispatch(actionTypes.CONTRACT_SET_GROW_HOPS_PLUS_TOKEN_ALLOWANCE, { candiesTotal, candy, address, contract, GrowHopsPlusAddress })
 
@@ -249,12 +250,22 @@ export default {
     /**
      * set hopsPlan tokenAllowance
      */
-    // [actionTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE]: async ({ state, commit }, { candiesTotal, candy, address, erc20Contract = state.tokensContract[candy], contractAddress = state.HOPSPlan.address } = {}) => {
-    //   // 向 erc20Contract 查询 address 给 HOPSPlan 授权操作多少个 token
-    //   const allowance = await erc20Contract.methods('allowance', [ address, contractAddress ])
-    //   commit(mutationTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE, { candiesTotal, candy, allowance })
-    //   return allowance
-    // },
+    [actionTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE]:
+      async (
+        { state, commit },
+        {
+          candiesTotal,
+          candy,
+          address,
+          erc20Contract = state.tokensContract[candy],
+          contractAddress = state.HOPSPlan.address
+        } = {}
+      ) => {
+        // 向 erc20Contract 查询 address 给 HOPSPlan 授权操作多少个 token
+        const allowance = await erc20Contract.methods('allowance', [ address, contractAddress ])
+        commit(mutationTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE, { candiesTotal, candy, allowance })
+        return allowance
+      },
 
     /**
      * set GrowHopsPlus tokenAllowance
@@ -272,7 +283,6 @@ export default {
       ) => {
       // 向 erc20Contract 查询 address 给 GrowHopsPlus 授权操作多少个 token
         const allowance = await erc20Contract.methods('allowance', [ address, contractAddress ])
-        window.tokensContract = state.tokensContract
         commit(mutationTypes.CONTRACT_SET_GROW_HOPS_PLUS_TOKEN_ALLOWANCE, { candiesTotal, candy, allowance })
         return allowance
       },

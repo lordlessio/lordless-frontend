@@ -253,9 +253,15 @@
       :tokenBets="unlockBountyTokenBets"/>
 
     <lordless-authorize
-      ref="depositAuthorize"
+      ref="plantAuthorize"
       blurs
       tokenAllowanceType="plant"
+      :tokenBets="depositTokenBets"/>
+
+    <lordless-authorize
+      ref="growplusAuthorize"
+      blurs
+      tokenAllowanceType="growplus"
       :tokenBets="depositTokenBets"/>
   </div>
 </template>
@@ -303,7 +309,7 @@ export default {
   },
   computed: {
     ...mapState('contract', [
-      // 'HOPSPlan',
+      'HOPSPlan',
       'GrowHopsPlus',
       'Bounty',
       'tokensContract',
@@ -542,7 +548,7 @@ export default {
 
     async getPlanBasesInfo () {
       try {
-        const res = await getPlanBases()
+        const res = await getPlanBases({ version: 2 })
         if (res.code === 1000 && res.data) {
           this.planBases = res.data
         }
@@ -735,11 +741,14 @@ export default {
       }
     },
 
-    async depositLESS () {
-      if (!this.enoughDepositLess || !this.activePlanBase._id) return
+    async depositLESS (info = this.activePlanBase) {
+      if (!this.enoughDepositLess || !info._id) return
       try {
-        const authorize = await this.$refs.depositAuthorize.checkoutAuthorize({ tokenAllowance: true })
+        const authorize = info.version === 2 ? this.$refs.growplusAuthorize : this.$refs.plantAuthorize
         if (!authorize) return
+        const bool = await authorize.checkoutAuthorize({ tokenAllowance: true })
+        // const authorize = await this.$refs.depositAuthorize.checkoutAuthorize({ tokenAllowance: true })
+        if (!bool) return
         this.doDepositLESS()
       } catch (err) {
         this.$notify.error({
@@ -756,7 +765,7 @@ export default {
       lessAmount = this.depositLessAmount,
       account = this.account,
       info = this.activePlanBase,
-      // HOPSPlan = this.HOPSPlan,
+      HOPSPlan = this.HOPSPlan,
       GrowHopsPlus = this.GrowHopsPlus,
       web3Opt = this.web3Opt
     ) {
@@ -778,6 +787,8 @@ export default {
       }
       lessAmount = new Decimal(lessAmount).toFixed(0)
 
+      const GrowContract = info.version === 2 ? GrowHopsPlus : HOPSPlan
+
       this.metamaskChoose = true
       console.log('------- do deposit less', lessAmount, info.planBaseId)
       try {
@@ -786,19 +797,19 @@ export default {
           values: [ info.planBaseId, lessAmount ]
         }
         const { gasPrice } = web3Opt
-        const gas = (await GrowHopsPlus.estimateGas(growHopsParam.name, growHopsParam.values)) || 299999
+        const gas = (await GrowContract.estimateGas(growHopsParam.name, growHopsParam.values)) || 299999
         // const gas = 299999
 
         const params = {
           gas,
           gasPrice,
           // data: HOPSPlan[growHopsParam.name].getData(info.planBaseId, lessAmount),
-          data: GrowHopsPlus[growHopsParam.name].getData(info.planBaseId, lessAmount),
+          data: GrowContract[growHopsParam.name].getData(info.planBaseId, lessAmount),
           // memo: 'buy a tavern by lordless',
           // feeCustomizable: true,
           value: 0,
           // to: HOPSPlan.address,
-          to: GrowHopsPlus.address,
+          to: GrowContract.address,
           from: account
         }
 

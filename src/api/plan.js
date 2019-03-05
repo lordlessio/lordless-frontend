@@ -2,8 +2,8 @@ module.exports = axios => {
   return {
 
     // 获取 planBase 信息
-    getPlanBases: () => {
-      return axios.get('/api/planBases')
+    getPlanBases: (params) => {
+      return axios.get('/api/planBases', { params })
     },
 
     // 根据 planBaseId 获取 planBase 详情

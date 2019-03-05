@@ -123,7 +123,7 @@ export default {
       if (!authorize) return
 
       this.metamaskChoose = true
-      const Contract = info.planVersion === 2 ? GrowHopsPlus : HOPSPlan
+      const GrowContract = info.planVersion === 2 ? GrowHopsPlus : HOPSPlan
       try {
         const withdrawLessParam = {
           name: 'withdraw',
@@ -131,18 +131,18 @@ export default {
         }
         const { gasPrice } = web3Opt
         // const gas = (await HOPSPlan.estimateGas(withdrawLessParam.name, withdrawLessParam.values)) || 139999
-        const gas = (await Contract.estimateGas(withdrawLessParam.name, withdrawLessParam.values)) || 139999
+        const gas = (await GrowContract.estimateGas(withdrawLessParam.name, withdrawLessParam.values)) || 139999
 
         const params = {
           gas,
           gasPrice,
           // data: HOPSPlan[withdrawLessParam.name].getData(info.planId),
-          data: Contract[withdrawLessParam.name].getData(info.planId),
+          data: GrowContract[withdrawLessParam.name].getData(info.planId),
           // memo: 'buy a tavern by lordless',
           // feeCustomizable: true,
           value: 0,
           // to: HOPSPlan.address,
-          to: Contract.address,
+          to: GrowContract.address,
           from: account
         }
 

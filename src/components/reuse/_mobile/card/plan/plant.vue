@@ -1,5 +1,5 @@
 <template>
-  <div class="relative hops-plant-cnt" :class="{ 'is-mega': info.level === 4, 'is-large': !small, 'is-boost': boost, 'is-selected': isActive && !small }" @click.stop="choosePlan">
+  <div class="relative hops-plant-cnt" :class="{ 'is-mega': info.level === 4, 'is-large': !small, 'is-boost': boostNumber, 'is-selected': isActive && !small }" @click.stop="choosePlan">
     <div v-if="!small" class="hops-plant-sub-box">
       <span class="inline-block line-height-0 plant-sub-icon">
         <svg>
@@ -34,13 +34,18 @@
     </div>
     <div v-else class="hops-plant-small" :class="{ 'is-active': isActive }">
       <p class="TTFontBolder text-ellipsis plant-small-type">{{ levelText }} {{ info.lockTime / 3600 / 24 }} day</p>
-      <p class="ImpactFont plant-small-held">{{ heldValue }} HELD<span v-if="boost" class="TTFontBold text-line-through plant-small-old-held">{{ oldHeldValue }}</span></p>
+      <p class="ImpactFont plant-small-held">{{ heldValue }} HELD<span v-if="boostNumber" class="TTFontBold text-line-through plant-small-old-held">{{ oldHeldValue }}</span></p>
       <p class="plant-small-min-least">{{ weiByDecimals(info.minimumAmount).toLocaleString() }} LESS at least</p>
     </div>
     <lordless-authorize
-      ref="authorize"
+      ref="plantAuthorize"
       blurs
       tokenAllowanceType="plant"
+      :tokenBets="tokenBets"/>
+    <lordless-authorize
+      ref="growplusAuthorize"
+      blurs
+      tokenAllowanceType="growplus"
       :tokenBets="tokenBets"/>
   </div>
 </template>
@@ -80,6 +85,9 @@ export default {
     // notBalance () {
     //   return this.lessBalance !== -1 && this.info.minimumAmount > this.lessBalance
     // },
+    boostNumber () {
+      return this.info.version === 2 ? this.boost : 0
+    },
     levelText () {
       const levels = {
         0: 'QUICK',
@@ -98,7 +106,7 @@ export default {
     heldValue () {
       const info = this.info
       if (!info._id) return 0
-      return (info.lessToHops * (1 + this.boost)).toFixed(1).toString()
+      return (info.lessToHops * (1 + this.boostNumber)).toFixed(1).toString()
     }
   },
   methods: {
@@ -116,9 +124,11 @@ export default {
       ]
 
       this.$nextTick(async () => {
-        const authorize = await this.$refs.authorize.checkoutAuthorize({ tokenAllowance: true })
-        console.log('choosePlan', _info, authorize)
+        const authorize = _info.version === 2 ? this.$refs.growplusAuthorize : this.$refs.plantAuthorize
         if (!authorize) return
+        const bool = await authorize.checkoutAuthorize({ tokenAllowance: true })
+        console.log('choosePlan', _info, bool)
+        if (!bool) return
         this.$emit('choosePlan', this.info)
       })
     }
@@ -138,11 +148,13 @@ export default {
       // .hops-plant-held {
       //   color: $--main-blue-color;
       // }
-      .hops-plant-level {
-        color: $--main-blue-color;
-        // &::before {
-        //   background-color: $--main-red-color;
-        // }
+      &:not(.is-boost) {
+        .hops-plant-level {
+          color: $--main-blue-color;
+          // &::before {
+          //   background-color: $--main-red-color;
+          // }
+        }
       }
     }
     &.is-boost {
@@ -152,6 +164,11 @@ export default {
       .hops-plant-level {
         &::before {
           background-color: $--main-red-color;
+        }
+      }
+      .plant-level-choice {
+        &::before {
+          background-color: #555;
         }
       }
       .plant-held-boost-icon {

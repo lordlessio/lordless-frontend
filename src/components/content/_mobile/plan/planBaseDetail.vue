@@ -47,7 +47,7 @@
             <p v-if="!depositModel">Input deposit amount to show how many HOPS  you can reap.</p>
             <p v-else-if="!isMoreThanMix">The minimum amount of the PRO plan is {{ depositInfo.minimumAmount | weiByDecimals }} LESS.</p>
             <p v-else-if="!isInsufficientLess">
-              Reap <span>{{ depositModel * depositInfo.lessToHops * (1 + userTotalBoost) }}</span> HOPS immediately.
+              Reap <span>{{ depositModel * depositInfo.lessToHops * (1 + boostNumber) }}</span> HOPS immediately.
             </p>
             <p v-else>
               Your balance of LESS is insufficient. Purchase some more on
@@ -68,7 +68,7 @@
               <use xlink:href="#icon-question"/>
             </svg>
           </span>
-          <span class="v-flex text-right details-item-text">{{ item.text }}<span v-if="item.title === 'HELD' && userTotalBoost" class="text-line-through planBase-info-old-held">{{ oldHeldValue }}</span></span>
+          <span class="v-flex text-right details-item-text">{{ item.text }}<span v-if="item.title === 'HELD' && boostNumber" class="text-line-through planBase-info-old-held">{{ oldHeldValue }}</span></span>
         </li>
       </ul>
       <div class="hops-planBase-btns">
@@ -84,9 +84,14 @@
     </transition>
     <lordless-plan-glossary-dialog v-model="glossaryModel" type="held"/>
     <lordless-authorize
-      ref="authorize"
+      ref="plantAuthorize"
       blurs
       tokenAllowanceType="plant"
+      :tokenBets="tokenBets"/>
+    <lordless-authorize
+      ref="growplusAuthorize"
+      blurs
+      tokenAllowanceType="growplus"
       :tokenBets="tokenBets"/>
   </div>
 </template>
@@ -114,7 +119,7 @@ export default {
   },
   computed: {
     ...mapState('contract', [
-      // 'HOPSPlan'
+      'HOPSPlan',
       'GrowHopsPlus'
     ]),
     ...mapState('web3', [
@@ -123,6 +128,10 @@ export default {
     ...mapState('user', [
       'userInfo'
     ]),
+
+    boostNumber () {
+      return this.depositInfo.version === 2 ? this.userTotalBoost : 0
+    },
 
     web3Loading () {
       return this.web3Opt.loading
@@ -160,7 +169,7 @@ export default {
     heldValue () {
       const info = this.depositInfo
       if (!info._id) return 0
-      return (info.lessToHops * (1 + this.userTotalBoost)).toFixed(1).toString()
+      return (info.lessToHops * (1 + this.boostNumber)).toFixed(1).toString()
     },
 
     planLockDays () {
@@ -244,8 +253,10 @@ export default {
       ]
       this.$nextTick(async () => {
         try {
-          const authorize = await this.$refs.authorize.checkoutAuthorize({ tokenAllowance: true })
-          if (!authorize) {
+          const authorize = info.version === 2 ? this.$refs.growplusAuthorize : this.$refs.plantAuthorize
+          if (!authorize) return
+          const bool = await authorize.checkoutAuthorize({ tokenAllowance: true })
+          if (!bool) {
             this.btnLoading = false
             return
           }
@@ -267,7 +278,7 @@ export default {
       lessAmount = this.depositModel * 1e18,
       account = this.account,
       info = this.depositInfo,
-      // HOPSPlan = this.HOPSPlan,
+      HOPSPlan = this.HOPSPlan,
       GrowHopsPlus = this.GrowHopsPlus,
       web3Opt = this.web3Opt
     ) {
@@ -287,6 +298,8 @@ export default {
         return
       }
 
+      const GrowContract = info.version === 2 ? GrowHopsPlus : HOPSPlan
+
       this.metamaskChoose = true
       try {
         const growHopsParam = {
@@ -294,19 +307,19 @@ export default {
           values: [ info.planBaseId, lessAmount ]
         }
         const { gasPrice } = web3Opt
-        const gas = (await GrowHopsPlus.estimateGas(growHopsParam.name, growHopsParam.values)) || 299999
+        const gas = (await GrowContract.estimateGas(growHopsParam.name, growHopsParam.values)) || 299999
         // const gas = 299999
 
         const params = {
           gas,
           gasPrice,
           // data: HOPSPlan[growHopsParam.name].getData(info.planBaseId, lessAmount),
-          data: GrowHopsPlus[growHopsParam.name].getData(info.planBaseId, lessAmount),
+          data: GrowContract[growHopsParam.name].getData(info.planBaseId, lessAmount),
           // memo: 'buy a tavern by lordless',
           // feeCustomizable: true,
           value: 0,
           // to: HOPSPlan.address,
-          to: GrowHopsPlus.address,
+          to: GrowContract.address,
           from: account
         }
 

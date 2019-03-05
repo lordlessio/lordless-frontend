@@ -136,7 +136,7 @@ export default {
       if (!info._id) return {}
       // return (info.planBase.lessToHops / (info.planBase.lockTime / 3600 / 24 / 30)).toFixed(1).toString()
       const _planBase = info.planBase
-      return _planBase ? _planBase.lessToHops.toFixed(1).toString() : '?'
+      return _planBase ? (_planBase.lessToHops * (1 + (info.boost / 100))).toFixed(1).toString() : '?'
     },
     planLockDays () {
       const info = this.info
