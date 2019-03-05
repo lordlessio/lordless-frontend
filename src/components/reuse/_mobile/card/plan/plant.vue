@@ -178,6 +178,11 @@ export default {
           background-color: #fff;
         }
       }
+      .plant-level-choice {
+        &::before {
+          background-color: #fff;
+        }
+      }
       .plant-held-boost-icon {
         fill: #fff;
       }
