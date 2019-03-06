@@ -80,7 +80,7 @@
       <div class="invitation-poster-box">
         <div class="d-flex col-flex invitation-poster-container">
           <div class="v-flex invitation-poster-top">
-            <div class="poster-card-box" :class="{ 'is-drawing': drawing }">
+            <div class="poster-card-box">
               <invitation-card
                 class="invitation-card"
                 ref="invitation-card"
@@ -378,25 +378,27 @@ export default {
     @include viewport-unit(height, 80vh);
   }
   .invitation-poster-top {
-    @include overflow;
+    // @include overflow;
+    overflow: hidden;
   }
   .poster-card-box {
     margin: 0 auto;
-    width: 200px;
+    width: 256px;
     height: auto;
     border: 6px solid #0079FF;
     border-radius: 5px;
-    // overflow: hidden;
-    &.is-drawing {
-      @include viewport-unit(height, 80vh, 150px);
-      .invitation-card {
-        height: 100%;
-        overflow: hidden;
-      }
-    }
+    @include viewport-unit(height, 80vh, 150px);
+    overflow: hidden;
+    // &.is-drawing {
+    //   @include viewport-unit(height, 80vh, 150px);
+    //   .invitation-card {
+    //     height: 100%;
+    //     overflow: hidden;
+    //   }
+    // }
   }
   .invitation-poster-middle {
-    padding-top: 44px;
+    padding-top: 24px;
     padding-bottom: 30px;
     font-size: 18px;
     color: #555;
@@ -408,7 +410,7 @@ export default {
       left: 50%;
       width: 65%;
       height: 0;
-      box-shadow: 0 0 70px 10px rgba(0, 121, 255, .6);
+      box-shadow: 0 0 40px 8px rgba(0, 121, 255, .75);
       border-radius: 50%;
       transform: translateX(-50%);
       z-index: 3;
