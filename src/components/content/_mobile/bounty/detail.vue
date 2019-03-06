@@ -1178,16 +1178,18 @@ export default {
 
   }
   .deposit-popup-header {
-    padding: 24px 20px 0;
+    padding: 20px 20px 0;
     color: #777;
   }
   .deposit-popup-need {
+    font-size: 16px;
     >span {
       color: #555;
     }
   }
   .deposit-popup-desc {
-    margin-top: 8px;
+    margin-top: 6px;
+    font-size: 14px;
     >span {
       color: #0079FF;
     }
@@ -1230,8 +1232,8 @@ export default {
     margin-bottom: 25px;
     padding: 0 20px;
     >h2 {
-      padding-top: 12px;
-      font-size: 24px;
+      padding-top: 10px;
+      font-size: 20px;
       color: #0B2A48;
       border-top: 1px solid #ddd;
       >span {

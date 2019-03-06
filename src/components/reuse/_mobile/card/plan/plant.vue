@@ -34,7 +34,7 @@
     </div>
     <div v-else class="hops-plant-small" :class="{ 'is-active': isActive }">
       <p class="TTFontBolder text-ellipsis plant-small-type">{{ levelText }} {{ info.lockTime / 3600 / 24 }} day</p>
-      <p class="ImpactFont plant-small-held">{{ heldValue }} HELD<span v-if="boostNumber" class="TTFontBold text-line-through plant-small-old-held">{{ oldHeldValue }}</span></p>
+      <p class="ImpactFont d-flex f-align-center plant-small-held">{{ heldValue }} HELD<span v-if="boostNumber" class="TTFontBold text-line-through plant-small-old-held">{{ oldHeldValue }}</span></p>
       <p class="plant-small-min-least">{{ weiByDecimals(info.minimumAmount).toLocaleString() }} LESS at least</p>
     </div>
     <lordless-authorize
@@ -374,7 +374,7 @@ export default {
       color: #777;
     }
     .plant-small-held {
-      font-size: 24px;
+      font-size: 20px;
       color: #0079FF;
     }
     &.is-active {

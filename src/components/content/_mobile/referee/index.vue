@@ -8,9 +8,9 @@
             <div class="TTFontBolder v-flex referee-header-container">
               <p class="header-address-tip" :class="{ 'is-failed': (referrerInputModel && !isRequireReferrer && editedReferrer) || isReferrerOwner || isAddressReferrer }">{{ headerAddressTip }}</p>
               <div class="d-flex f-align-center referee-header-info">
-                <div class="v-flex referee-header-left">
+                <div class="v-flex referee-header-left" @click.stop>
                   <input
-                    v-if="isShowInput"
+                    v-show="isShowInput"
                     v-model="referrerInputModel"
                     aria-label="input text"
                     class="lordless-input referee-header-input"
@@ -20,7 +20,7 @@
                     placeholder="Enter an address"
                     @focus="referrerInputFocus"
                     @blur="referrerInputBlur"/>
-                  <div v-else class="referee-address-box">
+                  <div v-show="!isShowInput" class="referee-address-box">
                     <!-- 如果 referrer 是从数据库中获取的, 或者是从 query 获取的有效地址 -->
                     <h2 v-if="(!referrerAddress && !isShowInput) || (!editedReferrer && (refereeInfo.referrer || queryReferrer))" class="v-flex">
                       <span v-if="referrerAddress">{{ referrerAddress | splitAddress({ before: 6, end: 4, symbol: '******' }) }}</span>
@@ -31,12 +31,16 @@
                 </div>
 
                 <div class="referee-header-right">
-                  <p v-if="isEditReferrer && !isShowInput && (!isQueryReferrer || !isRequireReferrer)"
+                  <p v-if="!isTxPending && isEditReferrer && !isShowInput && (!isQueryReferrer || !isRequireReferrer)"
                     class="referee-header-control"
                     @click.stop="editReferrer">
                     {{ referrerAddress ? 'Edit' : 'Add referrer' }}
                   </p>
-                  <lordless-blockies v-else-if="!isEditReferrer || isQueryReferrer" :seed="referrerAddress" theme="light" :scale="4"/>
+                  <lordless-blockies
+                    v-else-if="!isEditReferrer || isQueryReferrer || isTxPending"
+                    :seed="referrerAddress"
+                    theme="light"
+                    :scale="4"/>
                 </div>
               </div>
             </div>
@@ -44,7 +48,7 @@
         </lordless-fixed>
         <div class="lordless-referee-cnt">
           <div class="TTFontBolder d-flex col-flex f-auto-center referee-cnt-top">
-            <span class="inline-block line-height-0 referee-cnt-icon">
+            <span class="inline-block line-height-0 referee-cnt-icon" @click.stop="test">
               <svg>
                 <use :xlink:href="tipsStatus.icon"/>
               </svg>
@@ -152,7 +156,7 @@ export default {
 
     // referrer 地址
     referrerAddress () {
-      return this.refereeInfo.referrer || (this.editedReferrer ? this.referrerInputModel : this.queryReferrer || '')
+      return this.refereeInfo.referrer || (this.editedReferrer ? this.referrerInputModel : this.queryReferrer)
     },
 
     // 通过 query 传入的 referrer 地址
@@ -314,9 +318,9 @@ export default {
       this.isShowInput = true
       this.referrerInputModel = this.referrerAddress
       this.editedReferrer = true
-      this.$nextTick(() => {
-        this.$refs['referee-input'].focus()
-      })
+      // setTimeout(() => {
+      //   this.$refs['referee-input'].focus()
+      // }, 1000)
     },
 
     initReferee () {
@@ -413,13 +417,15 @@ export default {
 </script>
 <style lang="scss" scoped>
   .lordless-referee-header {
+    // padding: 52px 20px 0;
+    // height: 124px;
     padding: 8px 20px 0;
     height: 80px;
     background-color: $--main-blue-color;
     box-sizing: border-box;
   }
   .referee-header-container {
-    padding: 0 20px;
+    // padding: 0 20px;
     font-size: 14px;
     color: #fff;
   }
@@ -432,8 +438,12 @@ export default {
     margin-top: 2px;
   }
   .referee-header-input {
+    padding-left: 0;
     font-family: $--font-TTNormsBold;
     font-size: 24px;
+    color: #fff;
+    caret-color: #fff;
+    // border: 1px solid #fff;
     &::placeholder {
       color: rgba(255, 255, 255, .25);
     }
@@ -462,6 +472,7 @@ export default {
    *  lordless-referee-cnt  -- begin
    */
   .lordless-referee-cnt {
+    // padding: 0px 20px 0;
     padding: 124px 20px 0;
   }
   .referee-cnt-top {

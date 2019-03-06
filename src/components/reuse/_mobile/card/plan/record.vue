@@ -16,7 +16,7 @@
         <p class="text-ellipsis record-info-title" data-type="withdraw">Token withdrawal</p>
         <p class="record-info-type" data-type="growhops">Deposit</p>
         <p class="record-info-type" data-type="withdraw">Token payment</p>
-        <p class="record-info-time">{{ info.recordsAt | dateFormat('HH:mm MMM DD YYYY') }}</p>
+        <p class="record-info-time">{{ info.recordsAt * 1000 | dateFormat('HH:mm MMM DD YYYY') }}</p>
       </div>
       <div class="plan-record-amount">
         <p class="TTFontBolder text-right text-nowrap is-blue" data-type="growhops">+ {{ formatMoneyNumber(weiByDecimals(info.hopsAmount)) }}</p>
