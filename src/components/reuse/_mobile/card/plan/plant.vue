@@ -9,7 +9,7 @@
     </div>
     <div v-if="!small" class="d-flex f-align-start">
       <div class="hops-plant-left">
-        <p class="ImpactFont relative hops-plant-held" :class="{ 'is-small': heldValue.length > 4 }">
+        <p class="ImpactFont relative hops-plant-held" :class="{ 'is-small': heldValue.length > 5 }">
           <span class="relative">
             {{ heldValue }}
             <span class="inline-block line-height-0 plant-held-boost-icon">
@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import Decimal from 'decimal.js-light'
 import { weiByDecimals } from 'utils/tool'
 export default {
   name: 'mobile-hops-plant-card',
@@ -106,7 +107,9 @@ export default {
     heldValue () {
       const info = this.info
       if (!info._id) return 0
-      return (info.lessToHops * (1 + this.boostNumber)).toFixed(1).toString()
+      const _boostNumber = this.boostNumber
+      const _heldValue = (new Decimal(info.lessToHops).mul(1 + _boostNumber)).toString()
+      return _heldValue.split('.')[1] ? _heldValue : _heldValue + '.0'
     }
   },
   methods: {

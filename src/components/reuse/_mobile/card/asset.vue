@@ -8,7 +8,7 @@
       </p>
       <div class="v-flex card-candy-cnt">
         <p>
-          <span>{{ info.count | formatDecimal }} {{ info.candy.symbol }}</span>
+          <span>{{ info.count | formatMoneyNumber }} {{ info.candy.symbol }}</span>
           <span class="candy-price">× $ {{ 1 / info.candy.USD2TokenCount | formatDecimal }}</span>
         </p>
         <p class="TTFontBolder candy-value">≈ $ {{ info.value | formatDecimal }}</p>

@@ -74,6 +74,7 @@
 </template>
 
 <script>
+import Decimal from 'decimal.js-light'
 import { dateFormat, weiByDecimals } from 'utils/tool'
 export default {
   name: 'mobile-deposit-card',
@@ -136,7 +137,11 @@ export default {
       if (!info._id) return {}
       // return (info.planBase.lessToHops / (info.planBase.lockTime / 3600 / 24 / 30)).toFixed(1).toString()
       const _planBase = info.planBase
-      return _planBase ? (_planBase.lessToHops * (1 + (info.boost / 100))).toFixed(1).toString() : '?'
+      if (!_planBase) return '?'
+      const _boostNumber = info.boost / 100
+      const _heldValue = (new Decimal(_planBase.lessToHops).mul(1 + _boostNumber)).toString()
+      return _heldValue.split('.')[1] ? _heldValue : _heldValue + '.0'
+      // return _planBase ? (_planBase.lessToHops * (1 + (info.boost / 100))).toFixed(1).toString() : '?'
     },
     planLockDays () {
       const info = this.info

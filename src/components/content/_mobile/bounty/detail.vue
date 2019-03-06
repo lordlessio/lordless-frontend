@@ -225,7 +225,7 @@
                 <use :xlink:href="boost.icon"/>
               </svg>
             </span>
-            <span class="TTFontBolder v-flex text-right">+ {{ userTotalBoost }}%</span>
+            <span class="TTFontBolder v-flex text-right">+ {{ userTotalBoost * 100 }}%</span>
           </div>
           <div class="deposit-popup-balance" :class="{ 'is-failed': !enoughDepositLess }">
             <h2>≈ {{ activePlanBase._id ? weiByDecimals(depositLessAmount).toLocaleString() : '???' }} <span>LESS</span></h2>
@@ -348,6 +348,12 @@ export default {
       return this.account && info.user.toLocaleLowerCase() === this.account.toLocaleLowerCase()
     },
 
+    boostNumber () {
+      const info = this.activePlanBase
+      if (!info._id) return 0
+      return new Decimal(info.lessToHops).mul(1 + this.userTotalBoost).toNumber()
+    },
+
     enoughHops () {
       const _hopsBalance = this.hopsBalance
       const _needHopsAmount = this.chestDetail.needHopsAmount
@@ -358,14 +364,15 @@ export default {
     // 选择 plant 计算需要的 less 数量
     depositLessAmount () {
       const { _id, minimumAmount, lessToHops } = this.activePlanBase || {}
+      const _boostNumber = this.boostNumber || lessToHops
       const _hopsBalance = this.hopsBalance
       const _needHopsAmount = this.chestDetail.needHopsAmount
       if (!_id || _hopsBalance === undefined) return 0
       // const _lessBalance = this.lessBalance
 
-      // 计算公式: (_needHopsAmount - _hopsBalance) / lessToHops
-      let amount = new Decimal(_needHopsAmount).sub(_hopsBalance).div(lessToHops).toNumber()
-      // let amount = (_needHopsAmount - _hopsBalance) / lessToHops
+      // 计算公式: (_needHopsAmount - _hopsBalance) / _boostNumber
+      let amount = new Decimal(_needHopsAmount).sub(_hopsBalance).div(_boostNumber).toNumber()
+      // let amount = (_needHopsAmount - _hopsBalance) / _boostNumber
       if (amount < minimumAmount) {
         amount = minimumAmount
       }
@@ -494,10 +501,11 @@ export default {
       const betterBase = (planBases.map(item => {
         const { _id, minimumAmount, lessToHops } = item || {}
         if (!_id) return item
+        const _boostNumber = this.boostNumber || lessToHops
 
-        // 计算公式: (this.chestDetail.needHopsAmount - this.hopsBalance) / lessToHops
-        let _amount = new Decimal(this.chestDetail.needHopsAmount).sub(_hopsBalance).div(lessToHops).toNumber()
-        // let amount = (this.chestDetail.needHopsAmount - this.hopsBalance) / lessToHops
+        // 计算公式: (this.chestDetail.needHopsAmount - this.hopsBalance) / _boostNumber
+        let _amount = new Decimal(this.chestDetail.needHopsAmount).sub(_hopsBalance).div(_boostNumber).toNumber()
+        // let amount = (this.chestDetail.needHopsAmount - this.hopsBalance) / _boostNumber
         if (_amount < minimumAmount) {
           _amount = minimumAmount
         }

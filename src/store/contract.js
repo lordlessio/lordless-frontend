@@ -322,18 +322,23 @@ export default {
       const tokens = candySymbols.list
       if (!tokens || !tokens.length) return
       const _tokensBalance = {}
-      await Promise.all(tokens.map(async token => {
-        const _address = token.address
-        const _symbol = token.symbol.toLocaleLowerCase()
-        const decimals = token.decimals || 18
-        if (!tokensContract[_address]) return
-        const tokenBalance = (await tokensContract[_address].methods('balanceOf', [ address ])).toNumber()
-        _tokensBalance[_symbol] = {
-          address: _address,
-          balance: tokenBalance,
-          balanceNumber: weiByDecimals(tokenBalance, decimals)
-        }
-      }))
+      try {
+        await Promise.all(tokens.map(async token => {
+          const _address = token.address
+          const _symbol = token.symbol.toLocaleLowerCase()
+          const decimals = token.decimals || 18
+          if (!tokensContract[_address]) return
+          const tokenBalance = (await tokensContract[_address].methods('balanceOf', [ address ])).toNumber()
+          _tokensBalance[_symbol] = {
+            address: _address,
+            balance: tokenBalance,
+            balanceNumber: weiByDecimals(tokenBalance, decimals)
+          }
+        }))
+      } catch (err) {
+        state.tokensBalance = _tokensBalance
+        state.tokensBalanceInit = true
+      }
       state.tokensBalance = _tokensBalance
       state.tokensBalanceInit = true
       console.log(' ------ contract ', _tokensBalance)

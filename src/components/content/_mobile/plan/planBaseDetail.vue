@@ -97,6 +97,7 @@
 </template>
 
 <script>
+import Decimal from 'decimal.js-light'
 import PlanBaseDetailSkeletion from '@/components/skeletion/_mobile/hops/planBaseDetail'
 
 import { getPlanBaseDetail, saveGrowHopsPlan } from 'api'
@@ -169,7 +170,9 @@ export default {
     heldValue () {
       const info = this.depositInfo
       if (!info._id) return 0
-      return (info.lessToHops * (1 + this.boostNumber)).toFixed(1).toString()
+      const _boostNumber = this.boostNumber
+      const _heldValue = (new Decimal(info.lessToHops).mul(1 + _boostNumber)).toString()
+      return _heldValue.split('.')[1] ? _heldValue : _heldValue + '.0'
     },
 
     planLockDays () {
