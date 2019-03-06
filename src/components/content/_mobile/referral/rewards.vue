@@ -1,6 +1,7 @@
 <template>
   <div id="mobile-referral-rewards" class="referral-rewards-box">
-    <transition name="ld-hide-fade" mode="out-in">
+    <transition name="ld-hide-fade" mode="out-in" @after-enter="afterEnter
+    ">
       <referral-rewards-skeletion v-if="loading"/>
       <div v-else class="referral-reward-container">
         <lordless-tabs-navbar
@@ -51,7 +52,14 @@
           </span>
           <h3>You have no referral rewards.</h3>
           <p>Invite your friends to get material rewards and deposit boost.</p>
-          <lordless-btn theme="blue-linear" class="records-empty-btn">Invite friends</lordless-btn>
+          <span
+            id="copy-invitation-link"
+            class="TTFontBolder text-center invitation-friends-btn invitation-copy-btn"
+            :class="{ 'clipboard': linkClipBool }"
+            :data-clipboard-text="invitationLink">
+            Invite friends
+          </span>
+          <!-- <lordless-btn theme="blue-linear" class="records-empty-btn">Invite friends</lordless-btn> -->
         </div>
       </div>
     </transition>
@@ -59,6 +67,7 @@
 </template>
 
 <script>
+import Clipboard from 'clipboard'
 import ReferralRewardsSkeletion from '@/components/skeletion/_mobile/referral/rewards'
 
 import { getLastYearMonths } from 'utils/tool'
@@ -90,8 +99,14 @@ export default {
         total: 0,
         noMore: false
       },
-      changeLoading: false
+      changeLoading: false,
+      linkClipBool: false
       // loadMoreLoading: false
+    }
+  },
+  computed: {
+    invitationLink () {
+      return `${location.origin}/owner/referee?r=${this.account}`
     }
   },
   watch: {
@@ -107,6 +122,17 @@ export default {
     ReferralRewardsSkeletion
   },
   methods: {
+    afterEnter () {
+      this.initLinkClipboard()
+      this.scrollListenerFunc()
+    },
+    initLinkClipboard () {
+      const clip = new Clipboard('#copy-invitation-link')
+      clip.on('success', (e) => {
+        this.linkClipBool = true
+        e.clearSelection()
+      })
+    },
     tabChange (e) {
       this.originTab = e
       this.loadMoreLoading = false
@@ -333,7 +359,7 @@ export default {
 
   // referral-rewards-empty
   .referral-rewards-empty {
-    padding: 30px;
+    padding: 50px 30px 100px;
     box-sizing: border-box;
     @include viewport-unit(min-height, 100vh, 94px);
     >h3 {
@@ -359,8 +385,62 @@ export default {
       height: 100%;
     }
   }
-  .records-empty-btn {
+  // .records-empty-btn {
+  //   margin-top: 32px;
+  //   padding: 12px 20px;
+  // }
+
+  .invitation-friends-btn {
     margin-top: 32px;
-    padding: 12px 20px;
+    padding: 0 20px;
+    height: 44px;
+    line-height: 44px;
+    font-size: 16px;
+    color: #fff;
+    fill: #fff;
+    background-image: linear-gradient(-225deg, #124BDC 0%, #0079FF 100%);
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  .invitation-copy-btn {
+    position: relative;
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      border-bottom: 5px solid rgba(0, 0, 0, .75);
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      transform: translateX(-50%);
+      opacity: 0;
+      visibility: hidden;
+      transition: all .4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    &::after {
+      content: 'Copied!';
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      padding: 0 14px;
+      height: 30px;
+      line-height: 30px;
+      background-color: rgba(0, 0, 0, .75);
+      font-size: 14px;
+      color: #fff;
+      border-radius: 5px;
+      white-space: nowrap;
+      transform: translateX(-50%);
+      opacity: 0;
+      visibility: hidden;
+      transition: all .4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    &.clipboard {
+      &::before, &::after {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
   }
 </style>

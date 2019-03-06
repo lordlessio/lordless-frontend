@@ -289,7 +289,7 @@ export default {
 
   // referral-referees-empty
   .referral-referees-empty {
-    padding: 30px;
+    padding: 50px 30px;
     box-sizing: border-box;
     @include viewport-unit(min-height, 100vh, 94px);
     >h3 {
