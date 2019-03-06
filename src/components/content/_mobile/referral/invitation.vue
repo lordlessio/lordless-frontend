@@ -386,7 +386,7 @@ export default {
     height: auto;
     border: 6px solid #0079FF;
     border-radius: 5px;
-    overflow: hidden;
+    // overflow: hidden;
     &.is-drawing {
       @include viewport-unit(height, 80vh, 150px);
       .invitation-card {

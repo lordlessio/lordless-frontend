@@ -234,7 +234,7 @@ export default {
         const res = await getPlanBases({ version: 2 })
         if (res.code === 1000 && res.data) {
           this.planBases = res.data
-          this.activePlan = res.data[0]
+          this.activePlan = res.data[1]
         }
       } catch (err) {
         console.log('0---- err', err.message)

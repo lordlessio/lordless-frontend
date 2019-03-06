@@ -35,20 +35,28 @@
         </span>
         <h3>You have no referees.</h3>
         <p>Invite your friends to get material rewards and deposit boost.</p>
-        <lordless-btn theme="blue-linear" class="referees-empty-btn">Invite friends</lordless-btn>
+        <span
+          id="copy-invitation-link"
+          class="TTFontBolder text-center invitation-friends-btn invitation-copy-btn"
+          :class="{ 'clipboard': linkClipBool }"
+          :data-clipboard-text="invitationLink">
+          Invite friends
+        </span>
+        <!-- <lordless-btn theme="blue-linear" class="referees-empty-btn">Invite friends</lordless-btn> -->
       </div>
     </transition>
   </div>
 </template>
 
 <script>
+import Clipboard from 'clipboard'
 import ReferralRefereesSkeletion from '@/components/skeletion/_mobile/referral/referees'
 import { getReferees } from 'api'
 
-import { initLoadingMixins } from '@/mixins'
+import { initLoadingMixins, publicMixins } from '@/mixins'
 export default {
   name: 'referral-referees-component',
-  mixins: [ initLoadingMixins ],
+  mixins: [ initLoadingMixins, publicMixins ],
   data: () => {
     return {
       rendered: false,
@@ -62,7 +70,22 @@ export default {
         noMore: false
       },
       loadMoreLoading: false,
-      scrollHandle: null
+      scrollHandle: null,
+      linkClipBool: false
+    }
+  },
+  computed: {
+    invitationLink () {
+      return `${location.origin}/owner/referee?r=${this.account}`
+    }
+  },
+  watch: {
+    linkClipBool (val) {
+      if (val) {
+        setTimeout(() => {
+          this.linkClipBool = false
+        }, 1500)
+      }
     }
   },
   components: {
@@ -70,7 +93,15 @@ export default {
   },
   methods: {
     afterEnter () {
+      this.initLinkClipboard()
       this.scrollListenerFunc()
+    },
+    initLinkClipboard () {
+      const clip = new Clipboard('#copy-invitation-link')
+      clip.on('success', (e) => {
+        this.linkClipBool = true
+        e.clearSelection()
+      })
     },
     async initReferees () {
       this.loadMoreLoading = false
@@ -284,10 +315,10 @@ export default {
       height: 100%;
     }
   }
-  .referees-empty-btn {
-    margin-top: 32px;
-    padding: 12px 20px;
-  }
+  // .referees-empty-btn {
+  //   margin-top: 32px;
+  //   padding: 12px 20px;
+  // }
 
   .referees-noMore-text {
     padding-bottom: 16px;
@@ -303,6 +334,60 @@ export default {
       width: 60%;
       height: 1px;
       background-color: #eee;
+    }
+  }
+
+  .invitation-friends-btn {
+    margin-top: 32px;
+    padding: 0 20px;
+    height: 44px;
+    line-height: 44px;
+    font-size: 16px;
+    color: #fff;
+    fill: #fff;
+    background-image: linear-gradient(-225deg, #124BDC 0%, #0079FF 100%);
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  .invitation-copy-btn {
+    position: relative;
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      border-bottom: 5px solid rgba(0, 0, 0, .75);
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      transform: translateX(-50%);
+      opacity: 0;
+      visibility: hidden;
+      transition: all .4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    &::after {
+      content: 'Copied!';
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      padding: 0 14px;
+      height: 30px;
+      line-height: 30px;
+      background-color: rgba(0, 0, 0, .75);
+      font-size: 14px;
+      color: #fff;
+      border-radius: 5px;
+      white-space: nowrap;
+      transform: translateX(-50%);
+      opacity: 0;
+      visibility: hidden;
+      transition: all .4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    &.clipboard {
+      &::before, &::after {
+        opacity: 1;
+        visibility: visible;
+      }
     }
   }
 </style>

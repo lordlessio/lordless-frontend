@@ -179,7 +179,7 @@
         // box-shadow: 8px 16px 22px 0 rgba(87, 14, 192, 0.25);
       }
       &.inverse {
-        color: #0079FF;
+        color: $--main-blue-color;
         background-color: #fff;
         background-image: none;
       }
