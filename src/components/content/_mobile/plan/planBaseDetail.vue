@@ -22,7 +22,7 @@
       <div class="hops-planBase-deposit">
         <p class="d-flex f-align-center planBase-deposit-amount">
           <span class="v-flex">Deposit amount</span>
-          <span class="TTFontBolder planBase-deposit-all" @click.stop="depositModel = lessBalanceNumber">Deposit all</span>
+          <span class="TTFontBolder planBase-deposit-all" @click.stop="depositAll">Deposit all</span>
         </p>
         <div class="TTFontBolder d-flex f-align-center planBase-deposit-input-box">
           <span>LESS</span>
@@ -232,6 +232,12 @@ export default {
   methods: {
     weiByDecimals () {
       return weiByDecimals(...arguments)
+    },
+
+    depositAll () {
+      const _number = new Decimal(this.lessBalance).div(1e18).toString()
+      const _numberSplits = _number.split('.')
+      this.depositModel = _numberSplits[0] + '.' + (_numberSplits[1] ? _numberSplits[1].slice(0, 4) : 0)
     },
 
     reset () {

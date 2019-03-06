@@ -183,7 +183,8 @@ const mobileRoutes = [
           title: 'Referee - LORDLESS',
           ownerChild: true,
           keepAlive: true,
-          transition: false
+          transition: false,
+          hideTab: true
         }
       },
       {

@@ -416,6 +416,13 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+  .lordless-referee-container {
+    padding-bottom: 50px;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    background-position: 0 100%;
+    background-image: url('~static/svg/referral/bg-pricing-education.svg');
+  }
   .lordless-referee-header {
     // padding: 52px 20px 0;
     // height: 124px;
@@ -439,6 +446,8 @@ export default {
   }
   .referee-header-input {
     padding-left: 0;
+    height: 33px;
+    line-height: 33px;
     font-family: $--font-TTNormsBold;
     font-size: 24px;
     color: #fff;
