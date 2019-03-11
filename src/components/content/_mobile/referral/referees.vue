@@ -119,9 +119,9 @@ export default {
       this.loading = false
     },
 
-    async getRefereeMethod () {
+    async getRefereeMethod (params) {
       try {
-        const res = await getReferees()
+        const res = await getReferees(params)
         if (res.code === 1000 && res.data) {
           return res.data
         }
