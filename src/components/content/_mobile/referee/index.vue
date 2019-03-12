@@ -137,7 +137,7 @@ export default {
         {
           title: 'Material reward',
           cntIcon: '#icon-referral-handshake',
-          desc: 'After the confirmation you will get <span>10,000 LESS material.</span>'
+          desc: 'After the confirmation you will get <span>5,000 LESS material.</span>'
         }, {
           title: 'HOPS deposit reward',
           cntIcon: '#icon-referral-reward',

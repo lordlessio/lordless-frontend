@@ -118,7 +118,7 @@ export default {
         {
           title: 'Material reward',
           cntIcon: '#icon-referral-handshake',
-          desc: 'You and your referee will both get <span>10,000 LESS material</span> after the referee confirm to be your referee.'
+          desc: 'You and your referee will both get <span>5,000 LESS material</span> after the referee confirm to be your referee.'
         }, {
           title: 'HOPS deposit reward',
           cntIcon: '#icon-referral-reward',
