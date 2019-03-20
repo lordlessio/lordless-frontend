@@ -48,7 +48,6 @@
             </div>
           </div>
           <div class="detail-mobile-poster">
-            <!-- <img src="http://lordless-sh.oss-cn-shanghai.aliyuncs.com//lordlesstest/ldbicon/!-4-detail.jpg?x-oss-process=image/resize,w_1600"/> -->
             <lordless-img absolute type="span" :src="info.ldbIcon.source.detail | reldbIcon('detail')"></lordless-img>
           </div>
           <!-- <div class="alone-layer detail-mobile-level">
@@ -90,9 +89,9 @@
                       </p>
                     </div>
                   </div>
-                  <div class="d-flex f-justify-end line-height-0 detail-mobile-level">
+                  <!-- <div class="d-flex f-justify-end line-height-0 detail-mobile-level">
                     <img :alt="`tavern popularity ${info.chain.popularity}`" :src="`/img/tavern/ldb-level-${info.chain.popularity}.png` | originSource({ size: 450 })"/>
-                  </div>
+                  </div> -->
                 </div>
                 <!-- <p class="detail-mobile-desc">{{ info.desc.zh | sliceStr({ end: 78 }) }}...</p> -->
                 <div class="detail-progress-box">
@@ -141,7 +140,7 @@
                     to refill.
                   </p>
                 </div>
-                <figcaption class="d-flex f-align-center">
+                <!-- <figcaption class="d-flex f-align-center">
                   <div v-if="info.lord" class="v-flex d-flex f-align-center detail-lord-box">
                     <lordless-blockies
                       theme="dark"
@@ -160,7 +159,7 @@
                     inverse
                     :disabled="isHome"
                     @click="setHome(isHome)">{{ isHome ? 'Your home' : 'Set as home' }}</lordless-btn>
-                </figcaption>
+                </figcaption> -->
               </figure>
             </div>
           </div>
@@ -360,10 +359,10 @@ export default {
     /**
      * 设置home
      */
-    async setHome (isReset) {
-      // if (this.isHome) return
-      this.$emit('setHome', isReset)
-    },
+    // async setHome (isReset) {
+    //   // if (this.isHome) return
+    //   this.$emit('setHome', isReset)
+    // },
 
     /**
      * 领取糖果
@@ -1247,24 +1246,17 @@ export default {
     width: 100%;
     background-color: #fff;
   }
-  .detail-mobile-level {
-    position: relative;
-    // margin-left: 10px;
-    width: 86px;
-    // height: 86px;
-    padding-top: 86px;
-    // position: absolute;
-    // bottom: 0;
-    // right: 0;
-    // width: 100%;
-    // height: 86px;
-    >img {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-    }
-  }
+  // .detail-mobile-level {
+  //   position: relative;
+  //   width: 86px;
+  //   padding-top: 86px;
+  //   >img {
+  //     position: absolute;
+  //     bottom: 0;
+  //     left: 0;
+  //     width: 100%;
+  //   }
+  // }
   .detail-mobile-poster {
     position: relative;
     padding-top: 100%;

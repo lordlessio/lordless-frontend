@@ -1,30 +1,47 @@
 <template>
-  <div>
-    <lordless-fixed :bottom="0" v-if="!loading">
-      <div class="d-flex f-align-center mobile-further-box" :class="{ 'lg-blur': blurs[0] }">
-        <lordless-btn
-          v-if="recruitBtnInfo.show"
-          class="v-flex tavern-further-btn"
-          theme="purple-linear"
-          :loading="furtherLoading"
-          :disabled="furtherLoading || recruitBtnInfo.pending || recruitBtnInfo.disabled"
-          @click="recruitHome">
-          {{ recruitBtnInfo.text }}
-        </lordless-btn>
-        <lordless-btn
-          class="v-flex tavern-further-btn"
-          theme="blue-linear">
-            <a class="d-inline-flex f-align-center" :href="`https://opensea.io/assets/0x15820072729d045ec5232ba3bd060ec5df38e09a/${info.id}`" target="_blank">
-              <!-- <span class="inline-block line-height-0 trading-opensea-icon">
-                <svg>
-                  <use xlink:href="#icon-open-sea"/>
-                </svg>
-              </span> -->
-              <span>{{ userHome ? 'Trade on OpenSea' : 'Trade' }}</span>
-            </a>
+  <div class="relative alone-layer tavern-recruits-box">
+    <transition name="ld-hide-fade" mode="out-in">
+      <section v-if="!loading && !recruitsLoading" class="d-flex col-flex f-align-ceter sm-col-flex detail-tavern-recruits">
+        <div class="tavern-recruits-cnt">
+          <div class="d-flex f-align-center recruits-cnt-top">
+            <div class="v-flex recruits-limit-box">
+              <p>Recruits / Maximum limit</p>
+              <h3>
+                <span class="recruits-current-limit" :class="{ 'color-blue': info.hunterMembers !== info.maxHunterMembers, 'color-gray': info.hunterMembers >= info.maxHunterMembers }">{{ info.hunterMembers }}</span> <span :class="{ 'color-red': info.hunterMembers / info.maxHunterMembers > 0.9 }">/ {{ info.maxHunterMembers || 30 }}</span>
+              </h3>
+            </div>
+            <div class="alone-layer recruits-tavern-level">
+              <img class="full-width" :alt="`tavern popularity ${info.chain.popularity}`" :src="`/img/tavern/ldb-level-${info.chain.popularity}.png` | originSource({ size: 450 })"/>
+            </div>
+          </div>
+          <div class="d-flex col-flex f-auto-center recruits-cnt-bottom">
+            <p>Recruit boost comparison</p>
+            <div class="d-flex f-align-center recruits-boosts-box">
+              <div class="v-flex recruits-boosts-item">
+                <h3 class="text-nowrap">+ {{ info.chain.popularity }}%</h3>
+                <p>Tavern’s</p>
+              </div>
+              <p class="v-flex recruits-boosts-vs">VS.</p>
+              <div class="v-flex recruits-boosts-item">
+                <h3 class="text-nowrap">+ {{ userHome ? userHome.homeInfo.tavern.chain.popularity : 0 }}%</h3>
+                <p>Yours</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tavern-recruit-btns">
+          <lordless-btn
+            v-if="recruitBtnInfo.show"
+            class="tavern-recruit-btn"
+            theme="purple-linear"
+            :loading="furtherLoading"
+            :disabled="furtherLoading || recruitBtnInfo.pending || recruitBtnInfo.disabled"
+            @click="recruitHome">
+            {{ recruitBtnInfo.text }}
           </lordless-btn>
-      </div>
-    </lordless-fixed>
+        </div>
+      </section>
+    </transition>
     <recruit-reminder-dialog v-model="dialogModel" @confirm="dialogConfirm"/>
     <lordless-authorize
       ref="recruitedAuthorize"
@@ -39,20 +56,26 @@ import RecruitReminderDialog from '@/components/reuse/dialog/recruit/reminder'
 import { mapState } from 'vuex'
 import { metamaskMixins, publicMixins } from '@/mixins'
 export default {
+  name: 'website-tavern-recruits',
   mixins: [ metamaskMixins, publicMixins ],
   props: {
     info: {
       type: Object,
-      default: () => {}
+      default: () => {
+        return {}
+      }
     },
+
     loading: {
       type: Boolean,
       default: false
     }
   },
-  data: () => {
+  data: (vm) => {
     return {
-      rendered: false,
+      recruitsLoading: false,
+
+      // recruit btn options
       furtherLoading: true,
       recruitPending: false,
       dialogModel: false,
@@ -249,9 +272,6 @@ export default {
       this.recruitPending = false
     }
   },
-  deactivated () {
-    this.initStatus()
-  },
   beforeDestroy () {
     console.log('-=========== further beforeDestroy')
     this.initStatus()
@@ -264,26 +284,59 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .mobile-further-box {
-    // padding: 0 18px;
-    position: fixed;
-    // position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    overflow: hidden;
-    z-index: 2199;
+  .tavern-recruits-box {
+    // overflow: hidden;
   }
-  .tavern-further-btn {
+  .tavern-recruits-cnt {
+    padding: 16px 18px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 3px 10px 2px rgba(0, 0, 0, .15);
+  }
+  .recruits-cnt-top {
+    padding-bottom: 16px;
+    border-bottom: 1px solid #ddd;
+  }
+  .recruits-limit-box {
+    font-size: 14px;
+    color: #777;
+    >h3 {
+      margin-top: 2px;
+      font-size: 16px;
+    }
+  }
+  .recruits-current-limit {
+    // color: $--main-blue-color;
+  }
+  .recruits-tavern-level {
+    width: 48px;
+    height: 48px;
+    line-height: 1;
+  }
+
+  // recruits-cnt-bottom
+  .recruits-cnt-bottom {
+    padding-top: 12px;
+    font-size: 14px;
+    color: #777;
+  }
+  .recruits-boosts-box {
+    margin-top: 12px;
+    line-height: 1.2;
+  }
+  .recruits-boosts-item {
+    >h3 {
+      font-size: 20px;
+      color: $--main-color;
+    }
+  }
+  .recruits-boosts-vs {
+    margin: 0 24px;
+  }
+
+  .tavern-recruit-btn {
+    margin-top: 12px;
     width: 100%;
     height: 50px;
-    line-height: 50px;
-    border-radius: 0;
   }
-  // .trading-opensea-icon {
-  //   margin-right: 8px;
-  //   width: 20px;
-  //   height: 20px;
-  //   fill: #fff;
-  // }
 </style>

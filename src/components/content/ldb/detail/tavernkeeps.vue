@@ -15,7 +15,8 @@
           <li class="d-flex f-align-center lordless-table-item lordless-table-thead tavern-keeps-tr tavern-keeps-thead">
             <p class="tavern-keeps-index">#</p>
             <p class="v-flex tavern-keeps-user">TAVERNKEEP</p>
-            <p class="tavern-keeps-earnings">EARNINGS</p>
+            <p class="tavern-keeps-earnings">Materials</p>
+            <p class="tavern-keeps-earnings">Commission of HOPS</p>
           </li>
           <li class="d-flex f-align-center tavern-keeps-tr lordless-table-item tavern-keeps-item"
             v-for="(keep, index) of keeps" :key="index"
@@ -35,7 +36,8 @@
               </p>
               <p v-else class="keeps-user-name">{{ keep.lord._id | splitAddress({ before: 10, end: 8 }) }}</p>
             </div>
-            <p class="tavern-keeps-earnings">$ {{ keep.reward | formatNumber | formatDecimal }}</p>
+            <p class="tavern-keeps-earnings">$ {{ keep.materials | formatDecimal({ len: 2 }) }}</p>
+            <p class="tavern-keeps-earnings">{{ keep.commissions.toLocaleString() }}</p>
           </li>
         </ul>
       </section>
@@ -67,8 +69,6 @@ export default {
       keepsLoading: true,
       keeps: []
     }
-  },
-  computed: {
   },
   watch: {
     info (val) {
@@ -107,7 +107,7 @@ export default {
   }
   .detail-tavern-keeps {
     // padding: 0 18px;
-    background-color: #fff;
+    // background-color: #fff;
     border-radius: 5px;
     overflow: hidden;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, .25);

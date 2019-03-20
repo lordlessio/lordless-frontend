@@ -182,9 +182,9 @@ export default {
   },
   methods: {
     jumpHome () {
-      const home = this.userHome || {}
-      if (!home._id) return
-      this.$router.push(`/tavern/${home.ldb.id}`)
+      // const home = this.userHome || {}
+      if (!this.userHome) return
+      this.$router.push(`/tavern/${this.userHome.homeInfo.tavern.id}`)
     }
   }
 }

@@ -21,6 +21,7 @@ import LdbDetail from '@/components/content/ldb/detail'
 export default {
   data: () => {
     return {
+      rendered: false,
       tavernInfo: null,
       scrollOpt: {
         show: true,
@@ -64,6 +65,10 @@ export default {
     }
   },
   activated () {
+    if (!this.rendered) {
+      this.rendered = true
+      return
+    }
     this.initTavern()
   },
   mounted () {

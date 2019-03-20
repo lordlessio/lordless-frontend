@@ -69,5 +69,9 @@ export const BountyNFT = (web3js) => {
 export const Referer = (web3js) => {
   return initContract(process.env.contract.Referer, web3js)
 }
+
+export const Recruited = (web3js) => {
+  return initContract(process.env.contract.Recruited, web3js)
+}
 // export const Power = (web3js) => initContract(process.env.contract.Power, web3js)
 // export const Building = (web3js) => initContract(process.env.contract.Building, web3js)

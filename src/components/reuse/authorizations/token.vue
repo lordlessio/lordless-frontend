@@ -60,7 +60,7 @@
         <p class="token-crowdsale-name">For {{ tokenCrowdsaleInfo.name }}</p>
         <ul>
           <li class="token-crowdsale-item"
-            v-for="(bet, index) of tokenBets" :key="index">
+            v-for="(bet, index) of singleTokenBets" :key="index">
             <div v-if="bet.type === 'erc721'">
               <div class="d-flex f-align-center token-crowdsale-symbol" @click.stop="approveAllowance(Object.assign({}, bet, Erc721CrowdsaleInfos[bet.contract]), allowanceModels[`${account}_${Erc721CrowdsaleInfos[bet.contract].contractAddress}`], allowancePendings[`${account}_${Erc721CrowdsaleInfos[bet.contract].contractAddress}`])">
                 <span class="inline-block token-bet-icon">
@@ -138,6 +138,7 @@ export default {
       'GrowHopsPlus',
       'Bounty',
       'BountyNFT',
+      'Recruited',
       'bountyNFTApproved',
       'tokensContract',
       'luckyblockTokenAllowances',
@@ -145,6 +146,8 @@ export default {
       'GrowHopsPlusTokenAllowances',
       'BountyTokenAllowances',
       'BountyTokenAllowancesInit',
+      'RecruitedTokenAllowances',
+      'RecruitedTokenAllowancesInit',
       'HOPSPlanTokenAllowancesInit',
       'GrowHopsPlusTokenAllowancesInit',
       'luckyblockTokenAllowancesInit',
@@ -172,6 +175,10 @@ export default {
       return this.Bounty ? this.Bounty.address : ''
     },
 
+    RecruitedAddress () {
+      return this.Recruited ? this.Recruited.address : ''
+    },
+
     BountyNFTAddress () {
       return this.BountyNFT ? this.BountyNFT.address : ''
     },
@@ -196,6 +203,24 @@ export default {
       return this.$root.$children[0].isMobile
     },
 
+    singleTokenBets () {
+      const tokenBets = JSON.parse(JSON.stringify(this.tokenBets))
+      return tokenBets.map(item => {
+        if (!item.candy) return item
+        const obj = {}
+        if (typeof item.candy === 'object') {
+          obj.candy = {
+            address: item.candy.address.toLocaleLowerCase()
+          }
+        } else {
+          obj.candy = {
+            address: item.candy.toLocaleLowerCase()
+          }
+        }
+        return Object.assign({}, item, obj)
+      })
+    },
+
     allTokenBets () {
       const _candies = this.candySymbols.list || []
       const luckyblockFilter = [ 'less' ]
@@ -215,10 +240,15 @@ export default {
         }
       ]
 
+      const recruitedFilter = [ 'hops' ]
+      const recruitedTokenBets = []
+
       for (const candy of _candies) {
         if (luckyblockFilter.includes(candy.symbol.toLocaleLowerCase())) {
           luckyblockTokenBets.push({
-            candy,
+            candy: {
+              address: candy.address.toLocaleLowerCase()
+            },
             count: 1e25
           })
         }
@@ -240,12 +270,19 @@ export default {
             count: 1e25
           })
         }
+        if (recruitedFilter.includes(candy.symbol.toLocaleLowerCase())) {
+          recruitedTokenBets.unshift({
+            candy,
+            count: 1e25
+          })
+        }
       }
       return {
         luckyblock: luckyblockTokenBets,
         // plant: plantTokenBets,
         growplus: growplusTokenBets,
-        bounty: bountyTokenBets
+        bounty: bountyTokenBets,
+        recruited: recruitedTokenBets
       }
     },
 
@@ -308,6 +345,15 @@ export default {
           checkAllowancesMethod: this[actionTypes.CONTRACT_SET_BOUNTY_TOKEN_ALLOWANCE],
           contractAddress: this.BountyAddress,
           contractLink: `${process.env.ETHERSCANURL}/address/${this.BountyAddress}#code`
+        },
+        recruited: {
+          name: 'Recruited',
+          behavior: 'Cost HOPS',
+          contractText: 'Recruited',
+          tokenAllowances: this.RecruitedTokenAllowances,
+          checkAllowancesMethod: this[actionTypes.CONTRACT_SET_RECRUITED_TOKEN_ALLOWANCE],
+          contractAddress: this.RecruitedAddress,
+          contractLink: `${process.env.ETHERSCANURL}/address/${this.RecruitedAddress}#code`
         }
       }
     },
@@ -327,6 +373,7 @@ export default {
       actionTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE,
       actionTypes.CONTRACT_SET_GROW_HOPS_PLUS_TOKEN_ALLOWANCE,
       actionTypes.CONTRACT_SET_BOUNTY_TOKEN_ALLOWANCE,
+      actionTypes.CONTRACT_SET_RECRUITED_TOKEN_ALLOWANCE,
       actionTypes.CONTRACT_CHECK_BOUNTYNFT_APPROVE
     ]),
 
@@ -360,8 +407,9 @@ export default {
             }
 
             // 如果是 token 授权
-            let { candy } = bet
-            candy = typeof candy === 'object' ? candy.address.toLocaleLowerCase() : candy.toLocaleLowerCase()
+            const candy = bet.candy.address
+            // let { candy } = bet
+            // candy = typeof candy === 'object' ? candy.address.toLocaleLowerCase() : candy.toLocaleLowerCase()
 
             const _crowdsaleInfo = _allTokenCrowdsaleInfos[key]
             const { contractAddress, behavior, tokenAllowances, checkAllowancesMethod } = _crowdsaleInfo
@@ -378,7 +426,7 @@ export default {
       }
 
       // 如果是单项
-      for (const bet of this.tokenBets) {
+      for (const bet of this.singleTokenBets) {
         const _type = bet.type
         // 如果是 721 授权
         if (_type === 'erc721') {
@@ -396,8 +444,7 @@ export default {
         }
 
         // 如果是 token 授权
-        let { candy } = bet
-        candy = typeof candy === 'object' ? candy.address.toLocaleLowerCase() : candy.toLocaleLowerCase()
+        const candy = bet.candy.address
 
         const { behavior, contractAddress, tokenAllowances, checkAllowancesMethod } = this.tokenCrowdsaleInfo
 
@@ -411,7 +458,7 @@ export default {
 
       const keys = Object.keys(allowanceModels)
       const bool = !!keys.filter(key => !!allowanceModels[key]).length
-      if (keys.length === this.tokenBets.length && bool) {
+      if (keys.length === this.singleTokenBets.length && bool) {
         this.$emit('success')
       }
     },
@@ -446,8 +493,9 @@ export default {
             }
 
             // 如果是 token 授权
-            let { candy } = bet
-            candy = typeof candy === 'object' ? candy.address.toLocaleLowerCase() : candy.toLocaleLowerCase()
+            const candy = bet.candy.address
+            // let { candy } = bet
+            // candy = typeof candy === 'object' ? candy.address.toLocaleLowerCase() : candy.toLocaleLowerCase()
             console.log(' init all token allowance bet', bet)
             const _crowdsaleInfo = _allTokenCrowdsaleInfos[key]
             const { contractAddress, tokenAllowances } = _crowdsaleInfo
@@ -463,7 +511,7 @@ export default {
       }
 
       // 如果是单项
-      const tokenBets = this.tokenBets
+      const tokenBets = this.singleTokenBets
 
       // 如果是 token 授权
       for (const bet of tokenBets) {
@@ -482,8 +530,9 @@ export default {
         }
         const { contractAddress, tokenAllowances } = this.tokenCrowdsaleInfo
 
-        let { candy } = bet
-        candy = typeof candy === 'object' ? candy.address.toLocaleLowerCase() : candy.toLocaleLowerCase()
+        const candy = bet.candy.address
+        // let { candy } = bet
+        // candy = typeof candy === 'object' ? candy.address.toLocaleLowerCase() : candy.toLocaleLowerCase()
         console.log(' init token allowance bet', bet)
 
         // 记录该 token pending 状态
@@ -564,6 +613,8 @@ export default {
         return
       }
 
+      console.log('------------- token approveAllowance', candy)
+
       candy = typeof candy === 'object' ? candy.address : candy
 
       if (this.checkSingleAllowance({ candy, count, contractAddress, tokenAllowances })) {
@@ -577,6 +628,7 @@ export default {
         name: 'approve',
         values: [ contractAddress, 1e30 ]
       }
+      console.log('---------- tokensContract', tokensContract)
 
       // 估算 gas
       const gas = (await tokensContract[candy].estimateGas(setApprove.name, setApprove.values)) || 129999

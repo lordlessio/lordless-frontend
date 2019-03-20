@@ -1,11 +1,6 @@
 <template>
   <div class="relative alone-layer tavern-keeps-box">
 
-    <!-- ldb detail datas skeletion -->
-    <!-- <transition name="ld-suspension-hide-fade">
-      <tavernkeeps-skeletion v-if="loading || keepsLoading"/>
-    </transition> -->
-
     <transition name="ld-hide-fade" mode="out-in" @after-enter="datasEnter">
       <section v-if="!loading && !keepsLoading && keeps.length" class="d-flex col-flex f-align-ceter sm-col-flex detail-tavern-keeps">
         <h2 class="detail-mobile-title">Successive tavernkeeps</h2>
@@ -16,41 +11,25 @@
             <lordless-blockies
               class="tavern-keeps-avatar"
               theme="dark"
-              :scale="6"
-              :size="6"
-              jump
-              :seed="keep.lord._id"/>
-            <div class="v-flex keep-info-detail">
-              <p v-if="keep.lord.nickName" class="d-flex col-flex">
-                <span class="TTFontBolder line-height-1 keeps-user-name">{{ keep.lord.nickName | sliceStr({ end: 6, symbol: true }) }}</span>
-                <span class="keeps-user-address">{{ keep.lord._id | splitAddress({ before: 6, end: 4 }) }}</span>
-              </p>
-              <p v-else class="TTFontBolder keeps-user-name">{{ keep.lord._id | splitAddress({ before: 6, end: 4, symbol: '******' }) }}</p>
-            </div>
-            <p class="TTFontBolder mobile-keeps-index"># {{ keeps.length - index }}</p>
-          </div>
-          <div class="d-flex f-align-center keeps-item-earnings">
-            <p>EARNINGS</p>
-            <h2 class="v-flex text-right">$ {{ keep.reward | formatNumber | formatDecimal }}</h2>
-          </div>
-          <!-- <p class="mobile-keeps-index"># {{ keeps.length - index }}</p>
-          <span class="d-flex f-align-center">Earnings Value</span>
-          <p class="price text-upper">{{ keep.reward | formatNumber | formatDecimal }} ETH</p>
-          <span>Tavernkeep</span>
-          <div class="v-flex d-flex f-align-center tavern-keeps-user">
-            <lordless-blockies
-              class="tavern-keeps-avatar"
-              theme="dark"
-              :scale="6"
+              :scale="4"
               :size="5"
               jump
               :seed="keep.lord._id"/>
-            <p v-if="keep.lord.nickName" class="d-flex f-align-center">
-              <span class="keeps-user-name">{{ keep.lord.nickName | sliceStr({ end: 6, symbol: true }) }}</span>
-              <span class="keeps-user-address">{{ keep.lord._id | splitAddress({ before: 6, end: 4 }) }}</span>
-            </p>
-            <p v-else class="keeps-user-name">{{ keep.lord._id | splitAddress({ before: 10, end: 8 }) }}</p> -->
-          <!-- </div> -->
+            <div class="TTFontBolder v-flex d-flex f-align-center keep-info-detail">
+              <span class="mobile-keeps-index">[{{ index === 0 ? 'current' : index + 1 }}]</span>
+              <p class="v-flex keeps-user-name">{{ keep.lord._id | splitAddress({ before: 6, end: 4, symbol: '******' }) }}</p>
+            </div>
+          </div>
+          <ul class="keeps-item-earnings">
+            <li class="keeps-earnings-item">
+              <p>Earned Materials value in USD</p>
+              <h3>$ {{ keep.materials | formatDecimal({ len: 2 }) }}</h3>
+            </li>
+            <li class="keeps-earnings-item">
+              <p>Commission of HOPS</p>
+              <h3>{{ keep.commissions.toLocaleString() }}</h3>
+            </li>
+          </ul>
         </div>
       </section>
     </transition>
@@ -58,8 +37,6 @@
 </template>
 
 <script>
-import TavernkeepsSkeletion from '@/components/skeletion/ldb/detail/tavernkeeps'
-
 import { getTavernkeeps } from 'api'
 export default {
   name: 'mobile-tavern-keeps',
@@ -82,17 +59,12 @@ export default {
       keeps: []
     }
   },
-  computed: {
-  },
   watch: {
     info (val) {
       if (val && val.id) {
         this.getTavernkeepsHandle(val.id)
       }
     }
-  },
-  components: {
-    TavernkeepsSkeletion
   },
   methods: {
     datasEnter () {
@@ -122,8 +94,8 @@ export default {
   .detail-mobile-title {
     margin-top: 28px;
     margin-bottom: 10px;
-    font-size: 24px;
-    color: #0B2A48;
+    font-size: 18px;
+    color: $--main-color;
   }
   .mobile-keeps-item {
     padding: 16px 18px;
@@ -156,17 +128,19 @@ export default {
     // position: absolute;
     // right: 15px;
     // top: 15px;
-    font-size: 18px;
-    color: #0B2A48;
+    font-size: 14px;
+    color: $--main-color;
   }
   // .tavern-keeps-user {
   //   margin-top: 6px;
   // }
   .keep-info-detail {
-    margin-left: 10px;
+    margin-left: 6px;
   }
   .keeps-user-name {
-    color: #555;
+    margin-left: 6px;
+    font-size: 14px;
+    color: #777;
   }
   .keeps-user-address {
     margin-top: 2px;
@@ -185,6 +159,18 @@ export default {
     >h2 {
       font-size: 24px;
       color: $--text-blue-color;
+    }
+  }
+  .keeps-earnings-item {
+    font-size: 14px;
+    color: #777;
+    >h3 {
+      margin-top: 4px;
+      font-size: 16px;
+      color: $--main-color;
+    }
+    &:not(:first-of-type) {
+      margin-top: 12px;
     }
   }
 </style>

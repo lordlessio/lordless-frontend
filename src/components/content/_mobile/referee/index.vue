@@ -70,6 +70,17 @@
               </div>
             </li>
           </ul>
+          <div class="text-center invitation-tg-group-box">
+            <span class="inline-block line-height-0 tg-group-icon">
+              <svg>
+                <use xlink:href="#icon-referral-telegram"/>
+              </svg>
+            </span>
+            <h3>
+              <a href="https://t.me/lordless_global" target="_blank" class="text-underline">LORDLESS Global Group</a>
+            </h3>
+            <p>{{ telegramStatus.text }}</p>
+          </div>
           <div class="invitation-reward-tips">
             <p class="d-flex f-align-center">
               <span class="inline-block line-height-0 invitation-tips-icon">
@@ -81,17 +92,6 @@
             </p>
             <p>The materials can be made into Bounty Chest which can be sold or opened.</p>
             <p>HELD, HOPS earned on every LESS per deposit, describes the income of the deposit.</p>
-          </div>
-          <div class="text-center invitation-tg-group-box">
-            <span class="inline-block line-height-0 tg-group-icon">
-              <svg>
-                <use xlink:href="#icon-referral-telegram"/>
-              </svg>
-            </span>
-            <h3>
-              <a href="https://t.me/lordless_global" target="_blank" class="text-underline">LORDLESS Global Group</a>
-            </h3>
-            <p>{{ telegramStatus.text }}</p>
           </div>
         </div>
         <lordless-fixed :bottom="0" v-if="!isBinded && this.referrerAddress">
@@ -417,7 +417,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   .lordless-referee-container {
-    padding-bottom: 50px;
+    padding-bottom: 100px;
     background-repeat: no-repeat;
     background-size: 100% auto;
     background-position: 0 100%;
@@ -566,8 +566,7 @@ export default {
 
   // invitation-tg-group-box
   .invitation-tg-group-box {
-    margin-top: 32px;
-    padding: 32px 0 84px;
+    margin-top: 64px;
     >h3 {
       margin-top: 24px;
       font-size: 16px;

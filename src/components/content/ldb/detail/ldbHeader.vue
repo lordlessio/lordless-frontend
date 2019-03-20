@@ -114,12 +114,12 @@
                       </li>
                     </ul>
                     <!-- <p class="detail-ldb-desc">{{ info.desc.zh | sliceStr({ end: 62 }) }}...</p> -->
-                    <lordless-btn
+                    <!-- <lordless-btn
                       class="TTFontBolder ldb-home-btn"
                       theme="blue"
                       shadow
                       :disabled="isHome"
-                      @click="setHome">{{ isHome ? 'Your home' : 'Set as home' }}</lordless-btn>
+                      @click="setHome">{{ isHome ? 'Your home' : 'Set as home' }}</lordless-btn> -->
                   </figure>
                 </div>
               </div>
@@ -380,10 +380,10 @@ export default {
     /**
      * 设置home
      */
-    async setHome (ldbInfo = this.info) {
-      if (this.isHome) return
-      this.$emit('setHome')
-    },
+    // async setHome (ldbInfo = this.info) {
+    //   if (this.isHome) return
+    //   this.$emit('setHome')
+    // },
 
     /**
      * 领取糖果
@@ -1254,7 +1254,7 @@ export default {
 
 
   .header-left-cnt-container {
-    padding-top: 48px;
+    padding-top: 68px;
     padding-bottom: 40px;
     margin-left: 51%;
     width: 100%;
@@ -1315,7 +1315,7 @@ export default {
   }
   .header-info-item {
     &:not(:first-of-type) {
-      margin-top: 16px;
+      margin-top: 20px;
     }
   }
   .header-info-title {

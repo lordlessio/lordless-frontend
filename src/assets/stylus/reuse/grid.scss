@@ -384,13 +384,16 @@
   color: $--color-btn-green;
 }
 .color-red {
-  color: $--color-btn-red;
+  color: $--main-red-color;
 }
 .color-yellow {
-  color: $--color-btn-yellow;
+  color: $--main-yellow-color;
 }
 .color-blue {
-  color: $--color-btn-blue;
+  color: $--main-blue-color;
+}
+.color-gray {
+  color: $--main-gray-color;
 }
 .color-deep-blue {
   color: $--text-deep-blue-color;

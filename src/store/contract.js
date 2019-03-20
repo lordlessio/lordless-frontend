@@ -6,7 +6,7 @@ import { weiByDecimals } from 'utils/tool'
 import {
   initContract, NFTsCrowdsale, TavernNFTs,
   Airdrop, Luckyblock, HOPSPlan, GrowHopsPlus,
-  Bounty, BountyNFT, Referer
+  Bounty, BountyNFT, Referer, Recruited
 } from '@/contract'
 import { mutationTypes, actionTypes } from './types'
 import web3Store from './web3'
@@ -29,6 +29,7 @@ export default {
     Bounty: null,
     BountyNFT: null,
     Referer: null,
+    Recruited: null,
 
     // 所有的 erc721 授权
     bountyNFTApproved: false,
@@ -41,6 +42,9 @@ export default {
     // 所有包括的 erc20 token 合约
     tokensContract: {},
     tokensContractInit: false,
+
+    RecruitedTokenAllowances: {},
+    RecruitedTokenAllowancesInit: false,
 
     BountyTokenAllowances: {},
     BountyTokenAllowancesInit: false,
@@ -59,13 +63,13 @@ export default {
     [mutationTypes.CONTRACT_SET_INSTANCE]: (state, { key, value } = {}) => {
       if (!key) return false
       state[key] = value
-      // window[key] = value
+      window[key] = value
     },
 
     /**
      * set airdrop tokens contract
      */
-    [mutationTypes.CONTRACT_SET_AIRDROP_TOKENS]: (state, { candiesTotal, candy, contract } = {}) => {
+    [mutationTypes.CONTRACT_SET_TOKENS_CONTRACT]: (state, { candiesTotal, candy, contract } = {}) => {
       const _tokensContract = state.tokensContract
       _tokensContract[candy] = contract
       state.tokensContract = _tokensContract
@@ -107,6 +111,15 @@ export default {
     [mutationTypes.CONTRACT_SET_BOUNTY_TOKEN_ALLOWANCE]: (state, { candiesTotal = 0, candy = '', allowance = 0 } = {}) => {
       state.BountyTokenAllowances[candy.toLocaleLowerCase()] = allowance.toNumber()
       if (Object.keys(state.BountyTokenAllowances).length >= candiesTotal) state.BountyTokenAllowancesInit = true
+      // window.BountyTokenAllowances = state.BountyTokenAllowances
+    },
+
+    /**
+     * set Recruited token allowance
+     */
+    [mutationTypes.CONTRACT_SET_RECRUITED_TOKEN_ALLOWANCE]: (state, { candiesTotal = 0, candy = '', allowance = 0 } = {}) => {
+      state.RecruitedTokenAllowances[candy.toLocaleLowerCase()] = allowance.toNumber()
+      if (Object.keys(state.RecruitedTokenAllowances).length >= candiesTotal) state.RecruitedTokenAllowancesInit = true
       // window.BountyTokenAllowances = state.BountyTokenAllowances
     },
 
@@ -156,6 +169,7 @@ export default {
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Bounty', value: await Bounty(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'BountyNFT', value: await BountyNFT(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Referer', value: await Referer(web3js) })
+        commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Recruited', value: await Recruited(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'TavernNFTs', value: await TavernNFTs(web3js) })
         commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'contractReady', value: true })
       }
@@ -168,7 +182,7 @@ export default {
       // 根据所有的 candy，批量初始化合约
       const { candySymbols } = candyStore.state
       const _symbols = candySymbols.list
-      await Promise.all(_symbols.map(item => dispatch(actionTypes.CONTRACT_SET_AIRDROP_TOKENS, { candiesTotal: _symbols.length, candy: item.address, luckyAddress: state.Luckyblock.address })))
+      await Promise.all(_symbols.map(item => dispatch(actionTypes.CONTRACT_SET_TOKENS_CONTRACT, { candiesTotal: _symbols.length, candy: item.address })))
 
       dispatch(actionTypes.CONTRACT_SET_TOKENS_BALANCE)
 
@@ -188,6 +202,7 @@ export default {
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Bounty', value: await Bounty(web3js) })
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'BountyNFT', value: await BountyNFT(web3js) })
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Referer', value: await Referer(web3js) })
+      commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'Recruited', value: await Recruited(web3js) })
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'TavernNFTs', value: await TavernNFTs(web3js) })
       commit(mutationTypes.CONTRACT_SET_INSTANCE, { key: 'address', value: null })
     },
@@ -195,7 +210,7 @@ export default {
     /**
      * set airdrop tokens contract
      */
-    [actionTypes.CONTRACT_SET_AIRDROP_TOKENS]:
+    [actionTypes.CONTRACT_SET_TOKENS_CONTRACT]:
       async ({ state, commit, dispatch },
         {
           candiesTotal,
@@ -203,7 +218,8 @@ export default {
           luckyAddress = state.Luckyblock.address,
           HOPSPlanAddress = state.HOPSPlan.address,
           GrowHopsPlusAddress = state.GrowHopsPlus.address,
-          BountyAddress = state.Bounty.address
+          BountyAddress = state.Bounty.address,
+          RecruitedAddress = state.Recruited.address
         } = {}) => {
       // if (state.tokensContract[candy]) return
 
@@ -221,19 +237,22 @@ export default {
         if (contract) {
         // console.log('candy, luckyAddress', candy, luckyAddress, address)
         // 存储 token contract
-          commit(mutationTypes.CONTRACT_SET_AIRDROP_TOKENS, { candiesTotal, candy, contract })
+          commit(mutationTypes.CONTRACT_SET_TOKENS_CONTRACT, { candiesTotal, candy, contract })
 
           // luckyblock 存储用户授权到 token allowance
-          dispatch(actionTypes.CONTRACT_SET_LUCKYBLOCK_TOKEN_ALLOWANCE, { candiesTotal, candy, address, contract, luckyAddress })
+          dispatch(actionTypes.CONTRACT_SET_LUCKYBLOCK_TOKEN_ALLOWANCE, { candiesTotal, candy, address, erc20Contract: contract, contractAddress: luckyAddress })
 
           // HOPSPlan 存储用户授权到  token allowance
-          dispatch(actionTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE, { candiesTotal, candy, address, contract, HOPSPlanAddress })
+          dispatch(actionTypes.CONTRACT_SET_HOPS_PLAN_TOKEN_ALLOWANCE, { candiesTotal, candy, address, erc20Contract: contract, contractAddress: HOPSPlanAddress })
 
           // GrowHOPSPlus 存储用户授权到  token allowance
-          dispatch(actionTypes.CONTRACT_SET_GROW_HOPS_PLUS_TOKEN_ALLOWANCE, { candiesTotal, candy, address, contract, GrowHopsPlusAddress })
+          dispatch(actionTypes.CONTRACT_SET_GROW_HOPS_PLUS_TOKEN_ALLOWANCE, { candiesTotal, candy, address, erc20Contract: contract, contractAddress: GrowHopsPlusAddress })
 
           // Bounty 存储用户授权到  token allowance
-          dispatch(actionTypes.CONTRACT_SET_BOUNTY_TOKEN_ALLOWANCE, { candiesTotal, candy, address, contract, BountyAddress })
+          dispatch(actionTypes.CONTRACT_SET_BOUNTY_TOKEN_ALLOWANCE, { candiesTotal, candy, address, erc20Contract: contract, contractAddress: BountyAddress })
+
+          // Recruited 存储用户授权到  token allowance
+          dispatch(actionTypes.CONTRACT_SET_RECRUITED_TOKEN_ALLOWANCE, { candiesTotal, candy, address, erc20Contract: contract, contractAddress: RecruitedAddress })
         }
       },
 
@@ -294,6 +313,16 @@ export default {
       // 向 erc20Contract 查询 address 给 Bounty 授权操作多少个 token
       const allowance = await erc20Contract.methods('allowance', [ address, contractAddress ])
       commit(mutationTypes.CONTRACT_SET_BOUNTY_TOKEN_ALLOWANCE, { candiesTotal, candy, allowance })
+      return allowance
+    },
+
+    /**
+     * set Recruited tokenAllowance
+     */
+    [actionTypes.CONTRACT_SET_RECRUITED_TOKEN_ALLOWANCE]: async ({ state, commit }, { candiesTotal, candy, address, erc20Contract = state.tokensContract[candy], contractAddress = state.Recruited.address } = {}) => {
+      // 向 erc20Contract 查询 address 给 Recruited 授权操作多少个 token
+      const allowance = await erc20Contract.methods('allowance', [ address, contractAddress ])
+      commit(mutationTypes.CONTRACT_SET_RECRUITED_TOKEN_ALLOWANCE, { candiesTotal, candy, allowance })
       return allowance
     },
 

@@ -10,7 +10,6 @@
       :loading="infoLoading"
       :owner="owner"
       :userInfo="userInfo"
-      @setHome="setHome"
       @receive="receiveCandy"/>
     <mobile-header-tool
       v-if="isMobile"
@@ -24,12 +23,17 @@
       :userInfo="userInfo"
       @tClose="$emit('tClose')"
       @enter="contentShow = true"
-      @setHome="setHome"
       @receive="receiveCandy"
       @refresh="init(ldbInfo._id)"/>
     <section id="ldb-detail-content" class="ldb-detail-content" :class="{ 'show': contentShow, 'is-mobile': isMobile }">
       <div class="container detail-container md d-flex sm-col-flex">
         <div class="detail-cnt-left v-flex">
+          <mobile-tavern-recruits
+            v-if="isMobile"
+            ref="tavernRecruits"
+            :info.sync="ldbInfo"
+            :loading="infoLoading"/>
+
           <tavern-keeps
             v-if="!isMobile"
             ref="ldbDatas"
@@ -97,7 +101,13 @@
             @cancel="cancelSaleHandle"/> -->
 
           <ldb-further-tool
-            class="detail-further-card"
+            class="detail-right-card"
+            :info.sync="ldbInfo"
+            :loading="infoLoading"/>
+
+          <tavern-recruits
+            class="detail-right-card"
+            ref="tavernRecruits"
             :info.sync="ldbInfo"
             :loading="infoLoading"/>
 
@@ -143,6 +153,9 @@ import MobileHeaderTool from '@/components/content/_mobile/ldb/detail/ldbHeader'
 import TavernKeeps from './tavernkeeps'
 import MobileTavernKeeps from '@/components/content/_mobile/ldb/detail/tavernkeeps'
 
+import TavernRecruits from '@/components/content/ldb/detail/recruits'
+import MobileTavernRecruits from '@/components/content/_mobile/ldb/detail/recruits'
+
 // import TasksNowTool from './tasksNow'
 import QuestsTool from './questsTool'
 // import MobileQuestsTool from '@/components/content/_mobile/ldb/detail/quests'
@@ -170,7 +183,7 @@ import MobileTaverFurther from '@/components/content/_mobile/ldb/detail/further'
 import range from 'lodash/range'
 import { getMessageByCode } from 'utils/tool'
 import { contractMixins, dialogMixins, metamaskMixins } from '@/mixins'
-import { setHome, getHome, receiveTask, getLdbById, getUserPendingsByTokenId, getLdb2Round } from 'api'
+import { getHome, receiveTask, getLdbById, getLdb2Round } from 'api'
 
 import { actionTypes } from '@/store/types'
 import { mapActions } from 'vuex'
@@ -287,7 +300,7 @@ export default {
         this.checkHome({ userId: val })
         this.getLdbTasks({ userId: val })
         // this.checkOwner(this.ldbInfo.chain.tokenId)
-        this.getUserPendings()
+        // this.getUserPendings()
       }
     }
   },
@@ -297,6 +310,9 @@ export default {
 
     TavernKeeps,
     MobileTavernKeeps,
+
+    TavernRecruits,
+    MobileTavernRecruits,
 
     // TasksNowTool,
     QuestsTool,
@@ -350,30 +366,30 @@ export default {
     //   })
     // },
 
-    async setHome (reset, ldbInfo = this.ldbInfo) {
-      const authorize = await this.$refs.authorize.checkoutAuthorize()
-      if (!authorize) return
+    // async setHome (reset, ldbInfo = this.ldbInfo) {
+    //   const authorize = await this.$refs.authorize.checkoutAuthorize()
+    //   if (!authorize) return
 
-      let res
-      // if (reset) {
-      //   res = await resetHome()
-      // } else
-      res = await setHome({ ldbId: ldbInfo._id })
+    //   let res
+    //   // if (reset) {
+    //   //   res = await resetHome()
+    //   // } else
+    //   res = await setHome({ ldbId: ldbInfo._id })
 
-      if (res.code === 1000) {
-        this.$notify({
-          // type: `${reset ? 'warning' : 'success'}`,
-          // title: `Home ${reset ? 'reset' : 'set'} successfully!`,
-          type: 'success',
-          title: 'Home set successfully!',
-          message: ``,
-          position: 'bottom-right',
-          duration: 1500
-        })
-        this[actionTypes.USER_SET_USER_HOME]({ home: { ldb: ldbInfo }, update: true })
-        this.isHome = true
-      }
-    },
+    //   if (res.code === 1000) {
+    //     this.$notify({
+    //       // type: `${reset ? 'warning' : 'success'}`,
+    //       // title: `Home ${reset ? 'reset' : 'set'} successfully!`,
+    //       type: 'success',
+    //       title: 'Home set successfully!',
+    //       message: ``,
+    //       position: 'bottom-right',
+    //       duration: 1500
+    //     })
+    //     this[actionTypes.USER_SET_USER_HOME]({ home: { ldb: ldbInfo }, update: true })
+    //     this.isHome = true
+    //   }
+    // },
 
     async checkHome ({ ldbId = this.ldbInfo._id, userId = this.userInfo.address } = {}) {
       const res = await getHome()
@@ -396,7 +412,7 @@ export default {
         this.checkHome({ ldbId: data._id })
         this.getLdbTasks({ ldbId: data._id })
         // this.getLdbRecords({ ldbInfo: data })
-        this.getUserPendings({ ldbInfo: data })
+        // this.getUserPendings({ ldbInfo: data })
         this.ldbInfo = Object.assign({}, this.ldbInfo, data)
       } else {
         this.$notify.error({
@@ -417,38 +433,38 @@ export default {
      * 获取当前用户基于当前建筑的市场合约执行状态
      * @param {Object} ldbInfo 当前建筑对象
      */
-    async getUserPendings ({ ldbInfo = this.ldbInfo } = {}) {
-      const res = await getUserPendingsByTokenId({ tokenId: ldbInfo.chain.tokenId })
-      if (res.code === 1000) {
-        // 获取合约 pending 状态 及 pending的合约信息
-        const { pendings, txs } = res.data
+    // async getUserPendings ({ ldbInfo = this.ldbInfo } = {}) {
+    //   const res = await getUserPendingsByTokenId({ tokenId: ldbInfo.chain.tokenId })
+    //   if (res.code === 1000) {
+    //     // 获取合约 pending 状态 及 pending的合约信息
+    //     const { pendings, txs } = res.data
 
-        // 修改 ldbPendings
-        this.ldbPendings = pendings
+    //     // 修改 ldbPendings
+    //     this.ldbPendings = pendings
 
-        const status = {
-          PayByEth: 'isBuying',
-          NewAuction: 'isSelling',
-          CancelAuction: 'isCanceling'
-        }
+    //     const status = {
+    //       PayByEth: 'isBuying',
+    //       NewAuction: 'isSelling',
+    //       CancelAuction: 'isCanceling'
+    //     }
 
-        // 如果有 pending 状态，轮询此合约信息
-        if (txs.length) {
-          txs.map(item => {
-            const loop = () => {
-              this.checkTxEvent({ tx: item.tx.transactionHash }, ({ err, data }) => {
-                if (err) return
-                if (data.isPending) return loop()
+    //     // 如果有 pending 状态，轮询此合约信息
+    //     if (txs.length) {
+    //       txs.map(item => {
+    //         const loop = () => {
+    //           this.checkTxEvent({ tx: item.tx.transactionHash }, ({ err, data }) => {
+    //             if (err) return
+    //             if (data.isPending) return loop()
 
-                // 合约信息更新成功，修改 ldbPendings
-                this.$set(this.ldbPendings, status[item.market[0].action], false)
-              })
-            }
-            loop()
-          })
-        }
-      }
-    },
+    //             // 合约信息更新成功，修改 ldbPendings
+    //             this.$set(this.ldbPendings, status[item.market[0].action], false)
+    //           })
+    //         }
+    //         loop()
+    //       })
+    //     }
+    //   }
+    // },
 
     /**
      * 获取当前建筑的交易记录
@@ -919,7 +935,7 @@ export default {
   // .detail-sale-card {
   //   margin-bottom: 36px;
   // }
-  .detail-further-card {
+  .detail-right-card {
     margin-bottom: 36px;
   }
 </style>

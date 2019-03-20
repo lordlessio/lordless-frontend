@@ -186,7 +186,7 @@
 </template>
 
 <script>
-import { getUserByAddress, getUserOverview, getUserHome } from 'api'
+import { getUserByAddress, getUserOverview } from 'api'
 import { scrollTo } from 'utils/tool'
 
 // import { historyState } from 'utils/tool'
@@ -204,6 +204,8 @@ import InfoPrestige from '@/components/reuse/card/user/prestige'
 import InfoHome from '@/components/reuse/card/user/home'
 import InfoTask from '@/components/reuse/card/user/task'
 // import InfoAssets from '@/components/reuse/card/user/assets'
+import { actionTypes } from '@/store/types'
+import { mapState, mapActions } from 'vuex'
 export default {
   data: () => {
     return {
@@ -211,7 +213,6 @@ export default {
       user: null,
       clipBool: false,
 
-      userHome: null,
       homeLoading: true,
 
       overviewLoading: true,
@@ -274,6 +275,11 @@ export default {
       // detailInfo: {}
     }
   },
+  computed: {
+    ...mapState('user', [
+      'userHome'
+    ])
+  },
   components: {
     // DetailDialog,
     // BuildingCard,
@@ -289,6 +295,10 @@ export default {
     // InfoAssets
   },
   methods: {
+    ...mapActions('user', [
+      actionTypes.USER_SET_USER_HOME
+    ]),
+
     // 初始化 黏贴板
     initClipboard () {
       const clip = new Clipboard('#copy-address')
@@ -322,10 +332,10 @@ export default {
     // 获取用户 home
     async getUserHome ({ user } = {}) {
       this.homeLoading = true
-      const res = await getUserHome({ user })
-      if (res.code === 1000 && res.data) {
-        this.userHome = res.data
-      }
+      await this[actionTypes.USER_SET_USER_HOME]()
+      // if (res.code === 1000 && res.data) {
+      //   this.userHome = res.data
+      // }
       this.homeLoading = false
     },
 

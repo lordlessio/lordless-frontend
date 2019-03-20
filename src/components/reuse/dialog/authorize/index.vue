@@ -183,6 +183,7 @@ export default {
       'HOPSPlanTokenAllowances',
       'GrowHopsPlusTokenAllowances',
       'BountyTokenAllowances',
+      'RecruitedTokenAllowances',
       'bountyNFTApproved'
     ]),
     isWechatBool () {
@@ -491,7 +492,8 @@ export default {
           luckyblock: this.luckyblockTokenAllowances,
           plant: this.HOPSPlanTokenAllowances,
           growplus: this.GrowHopsPlusTokenAllowances,
-          bounty: this.BountyTokenAllowances
+          bounty: this.BountyTokenAllowances,
+          recruited: this.RecruitedTokenAllowances
         }
         const allowances = _allowances[this.tokenAllowanceType]
         console.log('--- come in tokenAllowance', _allowances, this.tokenAllowanceType, allowances)
@@ -501,7 +503,7 @@ export default {
         console.log('tokenBets', tokenBets)
         const showTokenAllowance = !!(tokenBets.filter(bet => {
           if (bet.type === 'erc721') return !this.bountyNFTApproved
-          const candy = bet.candy.address.toLocaleLowerCase()
+          const candy = typeof bet.candy === 'object' ? bet.candy.address.toLocaleLowerCase() : bet.candy.toLocaleLowerCase()
           return !allowances[candy] || allowances[candy] < bet.count
         })).length
 

@@ -3,14 +3,14 @@
  */
 
 import { mutationTypes, actionTypes } from './types'
-import { getUserByAddress, getUserByToken, getUserHome, login } from '../api'
+import { getUserByAddress, getUserByToken, getRecruitUserHome, login } from '../api'
 import { stringifyParse, getObjStorage, nextAC } from 'utils/tool'
 import web3Store from './web3'
 export default {
   namespaced: true,
   state: {
 
-    userHome: {},
+    userHome: null,
 
     // 当前用户
     userInfo: { default: true },
@@ -162,7 +162,7 @@ export default {
         commit(mutationTypes.USER_SET_USER_HOME, { home, update })
         return
       }
-      const res = await getUserHome()
+      const res = await getRecruitUserHome()
       if (res.code === 1000 && res.data) {
         commit(mutationTypes.USER_SET_USER_HOME, { home: res.data })
       } else commit(mutationTypes.USER_SET_USER_HOME)
