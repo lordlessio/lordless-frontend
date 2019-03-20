@@ -1,67 +1,83 @@
 <template>
-  <div class="referral-invitation-box">
+  <div class="referral-invitation-box" :class="{ 'is-website': isWebsite }">
     <transition name="ld-hide-fade" mode="out-in" @after-enter="afterEnter">
       <referral-invitation-skeletion v-if="loading"/>
       <div v-else class="relative referral-invitation-container">
         <div class="referral-invitation-header">
-          <div class="d-flex f-align-center invitation-header-desc">
-            <span class="inline-block line-height-0 invitation-desc-icon">
-              <svg>
-                <use xlink:href="#icon-referral-envelope"/>
-              </svg>
-            </span>
-            <div class="invitation-desc-text">
-              <p>Invite friends to get</p>
-              <h3>Two-sided rewards</h3>
-            </div>
-          </div>
-          <div class="invitation-address-box">
-            <p class="TTFontBolder">Invitation address</p>
-            <h2 class="d-flex f-align-center invitation-header-address">
-              <span>{{ account | splitAddress({ before: 6, end: 4, symbol: '******' }) }}</span>
-              <span
-                id="copy-user-account"
-                class="inline-block line-height-1 invitation-copy-icon invitation-copy-btn"
-                :class="{ 'clipboard': accountClipBool }"
-                :data-clipboard-text="account">
+          <div class="invitation-header-top">
+            <div class="d-flex f-align-center invitation-header-desc">
+              <span class="inline-block line-height-0 invitation-desc-icon">
                 <svg>
-                  <use xlink:href="#icon-copy"/>
+                  <use xlink:href="#icon-referral-envelope"/>
                 </svg>
               </span>
-            </h2>
+              <div class="invitation-desc-text">
+                <p>Invite friends to get</p>
+                <h3>Two-sided rewards</h3>
+              </div>
+            </div>
+            <div class="invitation-address-box">
+              <p class="TTFontBolder">Invitation address</p>
+              <h2 class="d-flex f-align-center invitation-header-address">
+                <span v-if="isWebsite">{{ account }}</span>
+                <span v-else>{{ account | splitAddress({ before: 6, end: 4, symbol: '******' }) }}</span>
+                <span
+                  id="copy-user-account"
+                  class="inline-block line-height-1 invitation-copy-icon invitation-copy-btn"
+                  :class="{ 'clipboard': accountClipBool }"
+                  :data-clipboard-text="account">
+                  <svg>
+                    <use xlink:href="#icon-copy"/>
+                  </svg>
+                </span>
+              </h2>
+            </div>
           </div>
-          <div class="d-flex f-align-center invitation-header-btns">
-            <span
-              id="copy-invitation-link"
-              class="TTFontBolder v-flex text-center invitation-friends-btn invitation-copy-btn"
-              :class="{ 'clipboard': linkClipBool }"
-              :data-clipboard-text="invitationLink">
-              Invite friends
-            </span>
-            <lordless-btn theme="blue" class="invitation-header-btn" @click="cardModel = true">Exclusive poster</lordless-btn>
+          <div class="invitation-header-btns">
+            <div v-if="isWebsite">
+              <span
+                id="copy-invitation-link"
+                class="TTFontBolder text-center invitation-friends-btn invitation-copy-btn"
+                :class="{ 'clipboard': linkClipBool }"
+                :data-clipboard-text="invitationLink">
+                Invite friends
+              </span>
+            </div>
+            <div v-else class="d-flex f-align-center">
+              <span
+                id="copy-invitation-link"
+                class="TTFontBolder v-flex text-center invitation-friends-btn invitation-copy-btn"
+                :class="{ 'clipboard': linkClipBool }"
+                :data-clipboard-text="invitationLink">
+                Invite friends
+              </span>
+              <lordless-btn theme="blue" class="invitation-header-btn" @click="cardModel = true">Exclusive poster</lordless-btn>
+            </div>
           </div>
         </div>
         <div class="referral-invitation-content">
           <h3>Why become a REFERRER?</h3>
-          <div class="invitation-content-item"
-            v-for="(item, index) of invitations" :key="index">
-            <p class="TTFontBolder d-flex f-align-center invitation-content-title">
-              <span class="inline-block line-height-0 invitation-cnt-title-icon">
-                <svg>
-                  <use xlink:href="#icon-bounty-chest-checked"/>
-                </svg>
-              </span>
-              <span>{{ item.title }}</span>
-            </p>
-            <div class="d-flex col-flex f-auto-center invitation-item-cnt">
-              <span class="inline-block line-height-0 invitation-item-icon">
-                <svg>
-                  <use :xlink:href="item.cntIcon"/>
-                </svg>
-              </span>
-              <p v-html="item.desc" class="invitation-item-desc"></p>
-            </div>
-          </div>
+          <ul class="invitation-content-ul">
+            <li class="invitation-content-item"
+              v-for="(item, index) of invitations" :key="index">
+              <p class="TTFontBolder d-flex f-align-center invitation-content-title">
+                <span class="inline-block line-height-0 invitation-cnt-title-icon">
+                  <svg>
+                    <use xlink:href="#icon-bounty-chest-checked"/>
+                  </svg>
+                </span>
+                <span>{{ item.title }}</span>
+              </p>
+              <div class="text-center invitation-item-cnt">
+                <span class="inline-block line-height-0 invitation-item-icon">
+                  <svg>
+                    <use :xlink:href="item.cntIcon"/>
+                  </svg>
+                </span>
+                <p v-html="item.desc" class="text-left invitation-item-desc"></p>
+              </div>
+            </li>
+          </ul>
           <div class="text-center invitation-tg-group-box">
             <span class="inline-block line-height-0 tg-group-icon">
               <svg>
@@ -111,6 +127,12 @@ import { publicMixins, initLoadingMixins } from '@/mixins'
 export default {
   name: 'referral-invitation-component',
   mixins: [ publicMixins, initLoadingMixins ],
+  props: {
+    isWebsite: {
+      type: Boolean,
+      default: false
+    }
+  },
   data: () => {
     return {
       rendered: false,
@@ -212,7 +234,36 @@ export default {
 
 <style lang="scss" scoped>
   .referral-invitation-box {
-
+    &.is-website {
+      // .invitation-header-top {
+      //   display: flex;
+      // }
+      .referral-invitation-header {
+        padding: 32px 24px;
+      }
+      .invitation-content-ul {
+        display: flex;
+      }
+      .invitation-content-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        &:not(:first-of-type) {
+          margin-top: 0;
+          margin-left: 30px;
+        }
+      }
+      .invitation-item-cnt {
+        flex: 1;
+      }
+      .invitation-tg-group-box {
+        margin-top: 50px;
+        padding: 50px 0 120px;
+      }
+      .invitation-friends-btn {
+        padding: 14px 20px;
+      }
+    }
   }
   .referral-invitation-container {
     background-repeat: no-repeat;

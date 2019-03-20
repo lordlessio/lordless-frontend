@@ -3,217 +3,124 @@
     <div class="d-flex v-flex col-flex user-candy-container">
       <h1 class="text-cap owner-children-title">Quests</h1>
       <div
-        class="v-flex relative onwer-children-cnt">
+        class="user-tabs-box">
         <el-tabs
           v-model="currentTab"
           @tab-click="chooseTab">
           <el-tab-pane
             label="Bottoms up"
-            name="bottoms">
-            <!-- <div class="tasks-sort">
-              <span>Filter by</span>
-              <ld-select
-                class="tasks-sort-select"
-                v-model="tasksSort"
-                :items="sortItems"
-                @change="filterTasks">
-              </ld-select>
-            </div> -->
-            <transition name="ld-hide-fade" mode="out-in">
-              <div v-if="loading" class="user-tasks-skeletion">
-                <div class="d-flex skeletion-breath">
-                  <div class="v-flex tasks-skeletion-left">
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                  </div>
-                  <div class="d-flex col-flex tasks-skeletion-right">
-                    <p></p>
-                    <p></p>
-                  </div>
-                </div>
-              </div>
-              <div
-                v-else-if="!taskInfos.bottoms.total && !loading"
-                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box absolute user-no-sale-tasks">
-                <svg>
-                  <use xlink:href="#icon-no-candy"/>
-                </svg>
-                <p>You have no Bootoms up now.</p>
-                <div class="d-flex f-auto-center TTFontBolder">
-                  <span>recive candy in Tavern</span>
-                  <span class="inline-block">
-                    <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/map')">Map</lordless-btn>
-                  </span>
-                </div>
-              </div>
-              <el-row v-else :gutter="20" class="relative user-tasks-cnt">
-                <el-col
-                  :xs="24"
-                  class="tasks-item"
-                  v-for="(task, index) of taskInfos.bottoms.list"
-                  :key="index">
-                  <task-card
-                    :info="task"
-                    @play="playTask"
-                    @choose="chooseTask">
-                  </task-card>
-                </el-col>
-              </el-row>
-            </transition>
-          </el-tab-pane>
+            name="bottoms"/>
           <el-tab-pane
             label="Promotion"
-            name="promotion">
-            <transition name="ld-hide-fade" mode="out-in">
-              <promotion-skeletion v-if="loading"/>
-              <div
-                v-else-if="!taskInfos.promotion.total && !loading"
-                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box absolute user-no-sale-tasks">
-                <svg>
-                  <use xlink:href="#icon-no-candy"/>
-                </svg>
-                <p>You have nothing on Promotion now.</p>
-                <div class="d-flex f-auto-center TTFontBolder">
-                  <span>Try to Receive a promotion in</span>
-                  <span class="inline-block">
-                    <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/project/promotions')">Promotions</lordless-btn>
-                  </span>
-                </div>
-              </div>
-              <el-row v-else :gutter="20" class="relative user-tasks-cnt">
-                <el-col
-                  :xs="24"
-                  class="tasks-item"
-                  v-for="(promotion, index) of taskInfos.promotion.list"
-                  :key="index">
-                  <promotion-airdrop v-if="promotion.airdrop" :info="promotion" lg shadow/>
-                  <promotion-lucky v-else :info="promotion" lg shadow/>
-                </el-col>
-              </el-row>
-            </transition>
-          </el-tab-pane>
+            name="promotion"/>
           <el-tab-pane
             label="Bounty"
-            name="bounty">
-            <div class="tasks-sort">
-              <span>Filter by</span>
-              <ld-select
-                class="tasks-sort-select"
-                v-model="tasksSort"
-                :items="sortItems"
-                @change="filterTasks">
-              </ld-select>
-            </div>
-            <transition name="ld-hide-fade" mode="out-in">
-              <div v-if="loading" class="user-tasks-skeletion has-filter">
-                <div class="d-flex skeletion-breath">
-                  <div class="v-flex tasks-skeletion-left">
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                  </div>
-                  <div class="d-flex col-flex tasks-skeletion-right">
-                    <p></p>
-                    <p></p>
-                  </div>
-                </div>
-              </div>
-              <div
-                v-else-if="!taskInfos.bounty.total && !loading"
-                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box absolute user-no-sale-tasks">
-                <svg>
-                  <use xlink:href="#icon-no-candy"/>
-                </svg>
-                <p>You have nothing Bounty now.</p>
-                <!-- <div class="d-flex f-auto-center TTFontBolder">
-                  <span>Make the first selling transaction for your</span>
-                </div> -->
-                <div class="d-flex f-auto-center TTFontBolder">
-                  <span>recive Task in Taverns</span>
-                  <span class="inline-block">
-                    <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/map')">Map</lordless-btn>
-                  </span>
-                </div>
-              </div>
-              <el-row v-else :gutter="20" class="relative user-tasks-cnt">
-                <el-col
-                  :xs="24"
-                  class="tasks-item"
-                  v-for="(task, index) of taskInfos.bounty.list"
-                  :key="index">
-                  <task-card
-                    :info="task"
-                    @play="playTask"
-                    @choose="chooseTask">
-                  </task-card>
-                </el-col>
-              </el-row>
-            </transition>
-          </el-tab-pane>
+            name="bounty"/>
           <el-tab-pane
             label="Reward"
-            name="reward">
-            <!-- <div class="tasks-sort">
-              <span>Filter by</span>
-              <ld-select
-                class="tasks-sort-select"
-                v-model="tasksSort"
-                :items="sortItems"
-                @change="filterTasks">
-              </ld-select>
-            </div> -->
-            <transition name="ld-hide-fade" mode="out-in">
-              <div v-if="loading" class="user-tasks-skeletion">
-                <div class="d-flex skeletion-breath">
-                  <div class="v-flex tasks-skeletion-left">
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                  </div>
-                  <div class="d-flex col-flex tasks-skeletion-right">
-                    <p></p>
-                    <p></p>
-                  </div>
-                </div>
-              </div>
-              <div
-                v-else-if="!taskInfos.reward.total && !loading"
-                class="d-flex v-flex col-flex f-auto-center text-center no-asset-box absolute user-no-sale-tasks">
-                <svg>
-                  <use xlink:href="#icon-no-candy"/>
-                </svg>
-                <p>You have nothing on LORD rewarded now.</p>
-                <div class="d-flex f-auto-center TTFontBolder">
-                  <span>Try to buy a Tavern in</span>
-                  <span class="inline-block">
-                    <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="$router.push('/taverns')">Taverns</lordless-btn>
-                  </span>
-                </div>
-              </div>
-              <el-row v-else :gutter="20" class="relative user-tasks-cnt">
-                <el-col
-                  :xs="24"
-                  class="tasks-item"
-                  v-for="(task, index) of taskInfos.reward.list"
-                  :key="index">
-                  <task-card
-                    :info="task"
-                    reward
-                    @choose="chooseTask">
-                  </task-card>
-                </el-col>
-              </el-row>
-            </transition>
-          </el-tab-pane>
+            name="reward"/>
         </el-tabs>
+      </div>
+      <div v-if="tasksCurrentInfo.select" class="owner-children-sort-box">
+        <span>Filter by</span>
+        <ld-select
+          class="owner-children-select"
+          v-model="tasksSort"
+          :items="sortItems"
+          @change="filterTasks"/>
+      </div>
+      <div class="v-flex d-flex">
+        <transition name="ld-hide-fade" mode="out-in">
+          <div v-if="loading" class="v-flex user-tasks-skeletion">
+            <promotion-skeletion v-if="tasksCurrentInfo.skeletion"/>
+            <div v-else>
+              <div class="d-flex skeletion-breath">
+                <div class="v-flex tasks-skeletion-left">
+                  <p></p>
+                  <p></p>
+                  <p></p>
+                </div>
+                <div class="d-flex col-flex tasks-skeletion-right">
+                  <p></p>
+                  <p></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            v-else-if="!tasksCurrentInfo.total && !loading"
+            class="v-flex d-flex col-flex f-auto-center text-center no-asset-box">
+            <svg>
+              <use :xlink:href="emptyInfo.icon"/>
+            </svg>
+            <p>{{ emptyInfo.desc }}</p>
+            <div class="d-flex f-auto-center TTFontBolder">
+              <span>{{ emptyInfo.text }}</span>
+              <span class="inline-block">
+                <lordless-btn class="TTFontBolder no-asset-btn" theme="default" shadow @click="emptyInfo.routePath ? $router.push(emptyInfo.routePath) : null">{{ emptyInfo.btnText }}</lordless-btn>
+              </span>
+            </div>
+          </div>
+          <div v-else>
+            <el-row v-if="currentTab === 'bottoms'" :gutter="20" class="relative user-tasks-cnt">
+              <el-col
+                :xs="24"
+                class="tasks-item"
+                v-for="(task, index) of tasksCurrentInfo.list"
+                :key="index">
+                <task-card
+                  :info="task"
+                  @play="playTask"
+                  @choose="chooseTask">
+                </task-card>
+              </el-col>
+            </el-row>
+            <el-row v-else-if="currentTab === 'promotion'" :gutter="20" class="relative user-tasks-cnt">
+              <el-col
+                :xs="24"
+                class="tasks-item"
+                v-for="(promotion, index) of tasksCurrentInfo.list"
+                :key="index">
+                <promotion-airdrop v-if="promotion.airdrop" :info="promotion" lg shadow/>
+                <promotion-lucky v-else :info="promotion" lg shadow/>
+              </el-col>
+            </el-row>
+            <el-row v-if="currentTab === 'reward'" :gutter="20" class="relative user-tasks-cnt">
+              <el-col
+                :xs="24"
+                class="tasks-item"
+                v-for="(task, index) of tasksCurrentInfo.list"
+                :key="index">
+                <task-card
+                  :info="task"
+                  reward
+                  @choose="chooseTask">
+                </task-card>
+              </el-col>
+            </el-row>
+            <el-row v-else :gutter="20" class="relative user-tasks-cnt">
+              <el-col
+                :xs="24"
+                class="tasks-item"
+                v-for="(task, index) of tasksCurrentInfo.list"
+                :key="index">
+                <task-card
+                  :info="task"
+                  reward
+                  @choose="chooseTask">
+                </task-card>
+              </el-col>
+            </el-row>
+          </div>
+        </transition>
+      </div>
+      <div v-if="tasksCurrentInfo.total"
+          class="owner-children-pagination">
         <lordless-pagination
-          v-if="showPagination"
-          class="ld-tasks-pagination"
           :scrollE="$el"
-          :currentPage="currentPage"
+          :currentPage="tasksCurrentInfo.pn"
           :scrollPE="pageScrollPE"
-          :total="pageTotal"
+          :total="tasksCurrentInfo.total"
           background
           @currentChange="pageChange"/>
       </div>
@@ -221,8 +128,7 @@
     <task-dialog
       v-model="detailModel"
       :taskId="taskInfo._id"
-      @close="dialogClose">
-    </task-dialog>
+      @close="dialogClose"/>
   </div>
 </template>
 
@@ -341,25 +247,59 @@ export default {
     ...mapState('status', {
       popstateModel: 'popstate'
     }),
+
+    emptyInfo () {
+      const _currentTab = this.currentTab
+      const obj = {
+        bottoms: {
+          icon: '#icon-no-candy',
+          desc: 'You have no Bootoms up now.',
+          text: 'recive candy in Taverns',
+          routePath: '/map',
+          btnText: 'Map'
+        },
+        promotion: {
+          icon: '#icon-no-candy',
+          desc: 'You have nothing on Promotion now.',
+          text: 'Try to Receive a promotion in',
+          routePath: '/project/promotions',
+          btnText: 'Promotions'
+        },
+        bounty: {
+          icon: '#icon-no-candy',
+          desc: 'You have nothing Bounty now.',
+          text: 'recive Task in Taverns',
+          routePath: '/map',
+          btnText: 'Map'
+        },
+        reward: {
+          icon: '#icon-no-candy',
+          desc: 'You have nothing on LORD rewarded now.',
+          text: 'recive Task in Taverns',
+          routePath: '/map',
+          btnText: 'Map'
+        }
+      }
+      return obj[_currentTab]
+    },
+
+    tasksCurrentInfo () {
+      const _currentTab = this.currentTab
+      const obj = {
+        bootoms: {},
+        promotion: {
+          skeletion: true
+        },
+        bounty: {
+          select: true
+        },
+        reward: {}
+      }
+      return Object.assign({}, this.taskInfos[_currentTab], obj[_currentTab])
+    },
+
     pageScrollPE () {
       return document.getElementById('user-main-content')
-    },
-    currentPage () {
-      return this.taskInfos[this.currentTab].pn
-    },
-    pageTotal () {
-      // if (this.currentTab === 'tasks') {
-      //   return this.tTotal
-      // }
-      return this.taskInfos[this.currentTab].total
-    },
-    showPagination () {
-      const { total, pn, ps } = this.taskInfos[this.currentTab]
-      return total > pn * ps
-    //   if (this.currentTab === 'tasks') {
-    //     return this.tasks.length
-    //   }
-    //   return this.taskRewards.lnegth
     }
   },
   watch: {
@@ -388,6 +328,12 @@ export default {
   methods: {
     // afterEnter () {
     //   this.scrollListenerFunc()
+    // },
+    // tasksMethod () {
+    //   const _currentTab = this.currentTab
+    //   const obj = {
+    //     bootoms:
+    //   }
     // },
 
     /**
@@ -445,7 +391,7 @@ export default {
     /**
      * 获取 task 基础事件
      */
-    async getTasks ({ pn = this.taskInfos[this.currentTab].pn, ps = this.taskInfos[this.currentTab].ps, status = this.tasksSort, type = this.currentTab } = {}) {
+    async getTasks ({ pn = this.tasksCurrentInfo.pn, ps = this.tasksCurrentInfo.ps, status = this.tasksSort, type = this.currentTab } = {}) {
       // if (!this.userInfo.address) return
 
       // 根据选择器的key，过滤后端对应sort字符
@@ -633,34 +579,22 @@ export default {
 <style lang="scss" scoped>
 
   .user-tasks-box {
-    padding: 30px 30px 100px;
+    // padding: 30px 30px 100px;
+    // padding-bottom: 100px;
     font-size: 16px;
     // @include padding(-1, 30px, 1);
-    /deep/ .el-tabs__header {
-      margin: 0;
-    }
-    /deep/ .el-tabs__content {
-      position: static;
-      overflow: initial;
-    }
-    /deep/ .el-tabs__item {
-      font-size: 18px;
-      color: #999;
-      &.is-active {
-        color: inherit;
-      }
-    }
   }
 
   // user-tasks-skeletion
   .user-tasks-skeletion {
-    position: absolute;
-    left: 0;
-    top: 70px;
-    width: 100%;
-    &.has-filter {
-      top: 130px;
-    }
+    margin-top: 35px;
+    // position: absolute;
+    // left: 0;
+    // top: 70px;
+    // width: 100%;
+    // &.has-filter {
+    //   top: 130px;
+    // }
     >div {
       padding: 30px 45px;
       background-color: $--skeletion-light;
@@ -725,11 +659,13 @@ export default {
     }
   }
 
-  .ld-tasks-pagination {
-    position: absolute;
-    left: 0;
-    bottom: -100px;
-  }
+  // .ld-tasks-pagination {
+  //   // position: absolute;
+  //   // left: 0;
+  //   // bottom: -100px;
+  //   margin-top: 50px;
+  //   margin-bottom: 50px;
+  // }
 
   .user-no-sale-tasks {
     // width: 100%;

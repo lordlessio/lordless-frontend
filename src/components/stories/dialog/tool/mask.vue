@@ -5,7 +5,7 @@
     <div
       v-if="visible"
       class="alone-layer ld-dialog-mask"
-      :class="{ 'is-fade': isFade }"
+      :class="{ 'is-fade': isFade, 'is-absolute': absolute }"
       @click="$emit('update:visible', false)"
       @touchmove.prevent>
     </div>
@@ -23,6 +23,10 @@ export default {
       type: Boolean,
       default: true
     },
+    absolute: {
+      type: Boolean,
+      default: false
+    },
     isFade: {
       type: Boolean,
       default: false
@@ -36,7 +40,7 @@ export default {
   },
   watch: {
     visible (val) {
-      if (val) {
+      if (val && this.appendToBody) {
         document.body.appendChild(this.$el)
       }
     }
@@ -46,7 +50,7 @@ export default {
       this.$emit('closed')
     },
     destroy () {
-      if (this.$el && this.$el.parentNode) {
+      if (this.$el && this.$el.parentNode && this.appendToBody) {
         this.$el.parentNode.removeChild(this.$el)
       }
     }
@@ -73,6 +77,9 @@ export default {
     &.is-fade {
       background-color: rgba(255, 255, 255, 0.5);
       z-index: 3000;
+    }
+    &.is-absolute {
+      position: absolute;
     }
   }
 </style>

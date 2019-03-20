@@ -1,5 +1,5 @@
 <template>
-  <div class="package-bounty-box">
+  <div class="package-bounty-box" :class="{ 'is-website': !isMobile }">
     <transition name="ld-hide-fade" mode="out-in">
       <package-bounty-skeletion v-if="loading"/>
       <div v-else-if="!bountyAssets.assetsByEth" class="d-flex f-auto-center col-flex bounty-chest-empty">
@@ -116,6 +116,23 @@
                 </li>
               </ul>
             </div>
+            <lordless-btn
+              v-if="!isMobile"
+              class="full-width website-package-btn"
+              theme="blue"
+              inverse
+              :loading="packageLoading"
+              :disabled="insufficientAssets || packageLoading"
+              @click="packageBounty">
+              <span v-if="insufficientAssets" class="d-flex f-auto-center">At least
+                <span class="inline-block line-height-0 bounty-eth-icon">
+                  <svg>
+                    <use xlink:href="#icon-eth-price"/>
+                  </svg>
+                </span>
+                {{ bountyAssets.almostEth }} &nbsp;for a chest</span>
+              <span v-else>Make a Bounty Chest now</span>
+            </lordless-btn>
           </div>
           <div class="chest-asked-box">
             <p class="TTFontBolder text-center chest-asked-title">FREQUENTLY ASKED QUESTIONS</p>
@@ -125,7 +142,7 @@
                 :class="{ 'is-show': item.show }"
                 v-for="(item, index) of askedQuestions" :key="index"
                 @click.stop="toggleQuestion(index)">
-                <h3 class="relative asked-questions-title">
+                <h3 class="relative cursor-pointer asked-questions-title">
                   <span>{{ item.title }}</span>
                   <span class="inline-block line-height-0 asked-title-triangle">
                     <svg>
@@ -160,7 +177,7 @@
               </li>
             </ul>
           </div> -->
-          <lordless-fixed :bottom="0">
+          <lordless-fixed :bottom="0" v-if="isMobile">
             <lordless-btn
               class="full-width lordless-bottom-btn"
               theme="blue"
@@ -192,6 +209,12 @@ import { getBountyInfos, packageBounty } from 'api'
 import Decimal from 'decimal.js-light'
 export default {
   name: 'package-bounty-component',
+  props: {
+    isMobile: {
+      type: Boolean,
+      default: true
+    }
+  },
   data: () => {
     return {
       rendered: false,
@@ -545,6 +568,12 @@ export default {
         }
       }
     }
+    &.is-website {
+      .package-bounty-header {
+        padding: 24px;
+        font-size: 20px;
+      }
+    }
   }
 
   /**
@@ -822,4 +851,9 @@ export default {
   /**
    *  chest-asked-box   -- end
    */
+  .website-package-btn {
+    margin-top: 32px;
+    margin-bottom: 32px;
+    height: 50px;
+  }
 </style>

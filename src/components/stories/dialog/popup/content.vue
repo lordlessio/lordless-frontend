@@ -7,6 +7,7 @@
       v-if="visible"
       ref="popup"
       class="alone-layer ld-popup-dialog-box"
+      :class="{ 'is-absolute': absolute }"
       @click.stop>
       <transition name="ld-popup-in">
         <div v-if="rendered && showCnt" class="ld-popup-container">
@@ -27,6 +28,10 @@ export default {
     appendToBody: {
       type: Boolean,
       default: true
+    },
+    absolute: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => {
@@ -104,6 +109,9 @@ export default {
     left: 0;
     width: 100%;
     z-index: 2001;
+    &.is-absolute {
+      position: absolute;
+    }
   }
   .ld-popup-container {
     // position: relative;

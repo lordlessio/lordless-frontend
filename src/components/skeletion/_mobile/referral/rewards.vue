@@ -1,6 +1,6 @@
 <template>
   <div class="referral-rewards-skeletion">
-    <div class="rewards-container-skeletion skeletion-breath">
+    <div class="rewards-container-skeletion skeletion-breath" :class="{ 'is-website': isWebsite }">
       <div class="d-flex f-align-center rewards-tabs-skeletion">
         <span class="inline-block line-height-0 rewards-tabs-icon">
           <svg>
@@ -27,13 +27,25 @@
 
 <script>
 export default {
-  name: 'mobile-referral-rewards-skeletion'
+  name: 'mobile-referral-rewards-skeletion',
+  props: {
+    isWebsite: {
+      type: Boolean,
+      default: false
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
   .rewards-container-skeletion {
     margin-top: -44px;
+    &.is-website {
+      margin-top: 0;
+      .rewards-tabs-skeletion {
+        display: none;
+      }
+    }
   }
   .rewards-tabs-skeletion {
     height: 44px;

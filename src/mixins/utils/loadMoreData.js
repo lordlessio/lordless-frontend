@@ -35,6 +35,7 @@ export default {
     scrollListenerFunc ({ bool = false, bottom = 80, pHeight = document.body.offsetHeight } = {}) {
       this.scrollHandle && document.removeEventListener('scroll', this.scrollHandle)
       this.scrollHandle = null
+      if (this.disabledScroll) return
 
       const box = this.$refs['lordless-load-more-box']
       let bHeight = box ? box.offsetHeight : 0

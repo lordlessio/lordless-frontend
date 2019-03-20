@@ -24,7 +24,7 @@
         </div>
         <div
           v-else
-          class="v-flex relative onwer-children-cnt user-building-tabs">
+          class="v-flex relative owner-children-cnt user-building-tabs">
           <ul>
             <li v-for="tavern of ownerTaverns.list" :key="tavern.id"
               class="d-flex full-width mobile-user-card owner-taverns-item"

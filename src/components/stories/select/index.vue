@@ -19,6 +19,7 @@
 
 <script>
 export default {
+  name: 'lordless-select',
   props: {
     value: {
       type: [String, Number],

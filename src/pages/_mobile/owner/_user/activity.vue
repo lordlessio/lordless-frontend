@@ -18,7 +18,7 @@
       </div>
       <div
         v-if="activities.total"
-        class="v-flex  relative onwer-children-cnt user-activity-tabs">
+        class="v-flex  relative owner-children-cnt user-activity-tabs">
         <el-tabs
           v-model="activityTab">
           <el-tab-pane

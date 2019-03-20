@@ -1,29 +1,32 @@
 <template>
-  <div class="chest-detail-box">
+  <div class="chest-detail-box" :class="{ 'is-website': isWebsite, 'is-dialog': dialog }">
     <mobile-nav-bar
+      v-if="!isWebsite"
       ref="mobile-nav-bar"
       v-show="!web3Model || !connectModel"
       v-bind="scrollOpt"
       @history="$router.push(scrollOpt.historyPath)"/>
-    <transition name="ld-hide-fade" mode="out-in" @after-enter="afterEnter">
+    <transition name="ld-hide-fade" mode="out-in">
       <bounty-detail-skeletion v-if="loading"/>
       <div v-else>
-        <div class="d-flex f-align-center chest-detail-header">
-          <span class="inline-block line-height-0 chest-detail-box-icon">
-            <svg>
-              <use :xlink:href="`#icon-bounty-${chestGifts[chestStatus]}`"/>
-            </svg>
-          </span>
-          <div class="chest-header-right">
-            <p class="d-flex f-align-center">
-              <span class="TTFontBolder relative text-upper chest-header-status">{{ chestStatus }}</span>
-              <span></span>
-              Bounty Chest
-            </p>
-            <h1>#{{ chestDetail.bountyId || '?' }}</h1>
+        <div class="chest-detail-header">
+          <div class="d-flex f-align-center chest-detail-header-container" :class="{ 'container md': isWebsite }">
+            <span class="inline-block line-height-0 chest-detail-box-icon">
+              <svg>
+                <use :xlink:href="`#icon-bounty-${chestGifts[chestStatus]}`"/>
+              </svg>
+            </span>
+            <div class="chest-header-right">
+              <p class="d-flex f-align-center">
+                <span class="TTFontBolder relative text-upper chest-header-status">{{ chestStatus }}</span>
+                <span></span>
+                Bounty Chest
+              </p>
+              <h1>#{{ chestDetail.bountyId || '?' }}</h1>
+            </div>
           </div>
         </div>
-        <div ref="chest-detail-cnt" class="chest-detail-cnt">
+        <div ref="chest-detail-cnt" class="chest-detail-cnt" :class="{ 'container md': isWebsite }">
           <div v-if="!isOwner" class="chest-detail-candies-info chest-detail-owner">
             <h3 class="d-flex f-align-center">
               <span class="inline-block line-height-0 package-info-icon">
@@ -131,29 +134,33 @@
               </li>
             </ul>
           </div>
-        </div>
-        <div ref="chest-detail-btn-box" class="chest-detail-btn-box">
-          <lordless-btn
-            v-if="!isOwner"
-            class="full-width chest-detail-btn"
-            theme="blue-linear">
-            <a class="full-width inline-block" :href="openseaLink" target="_blank">View on OpenSea</a>
-          </lordless-btn>
-          <lordless-btn
-            v-else-if="chestStatus === 'unopened' || chestStatus === 'unlocking'"
-            class="full-width chest-detail-btn"
-            theme="blue-linear"
-            :loading="isChecking || btnLoading || !tokensBalanceInit"
-            :disabled="isChecking || !tokensBalanceInit || (enoughHops && (isDisabled || btnLoading || chestStatus === 'unlocking'))"
-            @click="unlockBountyMethod">
-            Unlock the Bounty Chest
-          </lordless-btn>
+          <lordless-fixed :bottom="0" :isStatic="isWebsite">
+            <div class="chest-detail-btn-box">
+              <lordless-btn
+                v-if="!isOwner"
+                class="chest-detail-btn"
+                theme="blue-linear">
+                <a class="full-width inline-block" :href="openseaLink" target="_blank">View on OpenSea</a>
+              </lordless-btn>
+              <lordless-btn
+                v-else-if="chestStatus === 'unopened' || chestStatus === 'unlocking'"
+                class="chest-detail-btn"
+                theme="blue-linear"
+                :loading="isChecking || btnLoading || !tokensBalanceInit"
+                :disabled="isChecking || !tokensBalanceInit || (enoughHops && (isDisabled || btnLoading || chestStatus === 'unlocking'))"
+                @click="unlockBountyMethod">
+                Unlock the Bounty Chest
+              </lordless-btn>
+            </div>
+          </lordless-fixed>
         </div>
       </div>
     </transition>
 
     <lordless-popup-dialog
       :visible.sync="bountyPopupModel"
+      :absolute="dialog"
+      :appendToBody="!dialog"
       @open="checkPendingTx"
       @opened="bountyPopupOpened"
       @closed="txPendingLoading = false">
@@ -162,7 +169,7 @@
           {{ enoughHops ? 'Payment': 'HOPS insufficient' }}
           <span
             @click.stop="bountyPopupModel = false"
-            class="TTFontBolder inline-block line-height-1 chest-popup-close">
+            class="TTFontBolder cursor-pointer inline-block line-height-1 chest-popup-close">
             <i class="el-icon-close"></i>
           </span>
         </div>
@@ -206,7 +213,7 @@
             <p class="deposit-popup-desc">Choose an option to calculate the minimum amount of LESS to deposit at least. <span @click.stop="$router.push('/owner/hops')">Click here to deposit more</span>.</p>
           </div>
           <ul ref="deposit-popup-slider" class="text-nowrap deposit-popup-slider">
-            <li v-for="(item, index) of planBases" :key="index" class="inline-block deposit-slider-item" :data-active="item._id === activePlanBase._id">
+            <li v-for="(item, index) of planBases" :key="index" class="cursor-pointer inline-block deposit-slider-item" :data-active="item._id === activePlanBase._id">
               <hops-plant
                 :info="item"
                 :isActive="item._id === activePlanBase._id"
@@ -282,11 +289,26 @@ import { mapState } from 'vuex'
 export default {
   name: 'bounty-chest-detail-component',
   mixins: [ metamaskMixins, checkTokensBalanceMixins, publicMixins, planBoostsMixins ],
-  data: () => {
+  props: {
+    isWebsite: {
+      type: Boolean,
+      default: false
+    },
+    bountyId: {
+      type: [ Number, String ],
+      default: null
+    },
+    dialog: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data: (vm) => {
     return {
       rendered: false,
       loading: true,
       btnLoading: false,
+      bountyDetailId: vm.bountyId || vm.$route.params.bountyId,
       chestDetail: {},
       chestStatus: 'wrapping',
       chestGifts: {
@@ -458,6 +480,12 @@ export default {
         this.initBountyChestStatus()
         this.initBetterPlanBase()
       }
+    },
+    bountyId (val) {
+      if (val) {
+        this.bountyDetailId = val
+        this.getChestInfo(val)
+      }
     }
   },
   components: {
@@ -469,9 +497,9 @@ export default {
       return weiByDecimals(...arguments)
     },
 
-    afterEnter () {
-      this.initChestDetailBtnBox()
-    },
+    // afterEnter () {
+    //   this.initChestDetailBtnBox()
+    // },
 
     bountyPopupOpened () {
       this.scrollToActiveBase()
@@ -565,7 +593,7 @@ export default {
       }
     },
 
-    async getChestInfo (bountyId = this.$route.params.bountyId) {
+    async getChestInfo (bountyId = this.bountyDetailId) {
       this.loading = true
       try {
         const res = await getBountyDetail({ bountyId })
@@ -584,18 +612,18 @@ export default {
     },
 
     // 初始化 chest 按钮
-    initChestDetailBtnBox () {
-      const box = this.$refs['chest-detail-btn-box']
-      const parent = this.$refs['chest-detail-cnt']
-      if (!box || !parent) return
-      document.body.appendChild(box)
-      this.$once('hook:beforeDestroy', () => {
-        parent.appendChild(box)
-      })
-      this.$once('hook:deactivated', () => {
-        parent.appendChild(box)
-      })
-    },
+    // initChestDetailBtnBox () {
+    //   const box = this.$refs['chest-detail-btn-box']
+    //   const parent = this.$refs['chest-detail-cnt']
+    //   if (!box || !parent) return
+    //   document.body.appendChild(box)
+    //   this.$once('hook:beforeDestroy', () => {
+    //     parent.appendChild(box)
+    //   })
+    //   this.$once('hook:deactivated', () => {
+    //     parent.appendChild(box)
+    //   })
+    // },
 
     async initBountyChestStatus ({ bountyId, info } = this.chestDetail, Bounty = this.Bounty, { web3js } = this.web3Opt, tokensContract = this.tokensContract) {
       if (!info || !Bounty) return false
@@ -905,7 +933,7 @@ export default {
   async activated () {
     if (!this.rendered) return
     await this.initBountyChestDetail()
-    this.$nextTick(() => this.initChestDetailBtnBox())
+    // this.$nextTick(() => this.initChestDetailBtnBox())
   },
   mounted () {
     this.$nextTick(() => this.initBountyChestDetail())
@@ -916,6 +944,25 @@ export default {
 <style lang="scss" scoped>
   .chest-detail-box {
     padding-bottom: 50px;
+    &.is-website {
+      padding-top: 90px;
+      .chest-detail-header {
+        padding-top: 35px;
+      }
+      .chest-detail-btn-box {
+        margin-top: 35px;
+      }
+      .chest-detail-btn {
+        padding: 16px 24px;
+        width: auto;
+        border-radius: 5px;
+      }
+    }
+    &.is-dialog {
+      position: relative;
+      padding-top: 0;
+      @include viewport-unit(min-height, 100vh);
+    }
   }
   /**
    *  chest-detail-header  -- begin
@@ -1078,13 +1125,14 @@ export default {
   }
 
   .chest-detail-btn-box {
-    position: fixed;
-    bottom: 0;
-    left: 0;
+    // position: fixed;
+    // bottom: 0;
+    // left: 0;
     width: 100%;
   }
   .chest-detail-btn {
     padding: 16px 0;
+    width: 100%;
     border-radius: 0;
     transition: all .3s;
   }

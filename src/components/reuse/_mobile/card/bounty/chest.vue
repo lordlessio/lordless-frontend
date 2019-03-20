@@ -1,5 +1,5 @@
 <template>
-  <div class="bounty-chest-card-box" @click.stop="$router.push(`/bountyChest/${!info.bountyId && info.bountyId !== 0 ? info._id : info.bountyId}`)">
+  <div class="bounty-chest-card-box" @click.stop="chooseBountyChest">
     <div class="d-flex f-align-start chest-card-container">
       <span class="inline-block line-height-0 chest-card-gift" :class="chestGifts[chestStatus]">
         <svg>
@@ -39,6 +39,10 @@ export default {
     info: {
       type: Object,
       default: () => { return {} }
+    },
+    outer: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => {
@@ -110,6 +114,15 @@ export default {
 
     formatDecimal () {
       return formatDecimal(...arguments)
+    },
+
+    chooseBountyChest () {
+      const info = this.info
+      if (this.outer) {
+        this.$emit('choose', info)
+        return
+      }
+      this.$router.push(`/bountyChest/${!info.bountyId && info.bountyId !== 0 ? info._id : info.bountyId}`)
     }
   }
 }

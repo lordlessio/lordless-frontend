@@ -18,7 +18,7 @@
       </div>
       <div
         v-if="activities.total"
-        class="v-flex  relative onwer-children-cnt user-activity-tabs">
+        class="v-flex  relative owner-children-cnt user-activity-tabs">
         <el-tabs
           v-model="activityTab">
           <el-tab-pane
@@ -59,7 +59,7 @@
           </el-tab-pane>
         </el-tabs>
         <lordless-pagination
-          class="ld-activity-pagination"
+          class="owner-children-pagination"
           :scrollE="pageScrollE"
           :scrollPE="pageScrollPE"
           :total="activities.total"
@@ -170,12 +170,6 @@ export default {
     }
   }
 
-  .ld-activity-pagination {
-    position: absolute;
-    left: 0;
-    bottom: -100px;
-  }
-
   // user-activity-skeletion
   .user-activity-skeletion {
     position: absolute;
@@ -239,9 +233,9 @@ export default {
     @include margin('top', 30px, 1);
   }
 
-  .ld-activity-pagination {
-    position: absolute;
-    left: 0;
-    bottom: -100px;
-  }
+  // .ld-activity-pagination {
+  //   position: absolute;
+  //   left: 0;
+  //   bottom: -100px;
+  // }
 </style>

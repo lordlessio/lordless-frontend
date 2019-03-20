@@ -20,7 +20,7 @@
         </el-tooltip>
       </h1>
       <div
-        class="v-flex d-flex relative onwer-children-cnt user-candy-tabs">
+        class="v-flex d-flex relative owner-children-cnt user-tabs-box">
         <el-tabs
           class="relative v-flex"
           v-model="candyTab"
@@ -305,7 +305,7 @@
         </el-tabs>
         <lordless-pagination
           v-if="showPagination"
-          class="ld-candy-pagination"
+          class="owner-children-pagination"
           :scrollE="$el"
           :scrollPE="pageScrollPE"
           :total="userRecords.total"
@@ -472,23 +472,8 @@ export default {
 
 <style lang="scss" scoped>
   .user-candy-box {
+    // padding: 30px;
     font-size: 16px;
-    @include padding(-1, 30px, 1);
-    /deep/ .el-tabs__header {
-      margin: 0;
-    }
-    /deep/ .el-tabs__content {
-      // overflow: initial;
-      width: 100%;
-      @include overflow();
-    }
-    /deep/ .el-tabs__item {
-      font-size: 18px;
-      color: #999;
-      &.is-active {
-        color: inherit;
-      }
-    }
   }
 
   .user-withdraw-btn {
@@ -525,11 +510,11 @@ export default {
     }
   }
 
-  .ld-candy-pagination {
-    position: absolute;
-    left: 0;
-    bottom: -70px;
-  }
+  // .ld-candy-pagination {
+  //   position: absolute;
+  //   left: 0;
+  //   bottom: -70px;
+  // }
 
   // .user-candy-tabs {
   //   position: relative;
@@ -538,9 +523,9 @@ export default {
   // }
 
   .candy-tabs-title {
+    margin-top: 25px;
+    margin-bottom: 10px;
     color:#bbb;
-    @include margin('top', 25px, 1);
-    @include margin('bottom', 10px, 1);
   }
   .candy-list-item {
     color: #999;
@@ -554,16 +539,16 @@ export default {
   }
 
   .candy-balance-item {
+    padding-top: 25px;
+    padding-bottom: 25px;
     background-color: #fff;
     box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, .1);
     border-radius: 5px;
-    @include padding('top', 25px, 1);
-    @include padding('bottom', 25px, 1);
     span {
       display: inline-block;
     }
     &:not(:first-of-type) {
-      @include margin('top', 15px, 1);
+      margin-top: 15px;
     }
   }
   .candy-coin-svg {
@@ -626,7 +611,7 @@ export default {
     color: #4586FC;
     fill: #4586FC;
     .candy-down-svg {
-      @include margin('right', 3px, 1);
+      margin-right: 3px;
     }
   }
 

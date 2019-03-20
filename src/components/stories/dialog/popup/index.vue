@@ -2,6 +2,8 @@
   <div>
     <popup-content
       :visible.sync="dialogModel"
+      :absolute="absolute"
+      :appendToBody="appendToBody"
       @opened="$emit('opened')"
       @open="openModel"
       @close="closeModel"
@@ -10,7 +12,9 @@
     </popup-content>
 
     <dialog-mask
-      :visible.sync="dialogModel"/>
+      :visible.sync="dialogModel"
+      :absolute="absolute"
+      :appendToBody="appendToBody"/>
   </div>
 </template>
 
@@ -26,6 +30,14 @@ export default {
   mixins: [layoutMixins],
   props: {
     visible: {
+      type: Boolean,
+      default: false
+    },
+    appendToBody: {
+      type: Boolean,
+      default: true
+    },
+    absolute: {
       type: Boolean,
       default: false
     }

@@ -1,11 +1,5 @@
 <template>
   <el-container class="ld-user-box">
-    <!-- <Loading
-      :loading="false"
-      crown
-      position="fixed"
-      :index="99">
-    </Loading> -->
     <aside class="d-flex lg-col-flex sm-row-flex ld-user-navgation" :style="`background-image: url(${ossOrigin}/frontend/static/svg/city.svg)`">
     <!-- <aside class="d-flex lg-col-flex sm-row-flex ld-user-navgation"> -->
       <div class="d-flex f-auto-center user-navgation-logo sm-hidden">
@@ -15,14 +9,14 @@
         <ul class="d-flex v-flex sm-row-flex lg-col-flex user-navgation-list">
           <li
             class="user-navgation-item"
-            :class="{ 'active': $route.meta.navgation === nav.name.toLowerCase() }"
+            :class="{ 'active': $route.path.match(nav.match) }"
             v-for="(nav, index) of navgations"
             :key="index"
             @click="$router.push(nav.path)">
             <div class="d-flex f-align-center sm-f-justify-center TTFontBolder navgation-item-cnt">
               <span class="navgation-item-icon">
                 <svg>
-                  <use :xlink:href="`#icon-${nav.icon}_${$route.meta.navgation === nav.name.toLowerCase() ? 'selected' : 'unselected'}`"/>
+                  <use :xlink:href="$route.meta.navgation === nav.name.toLowerCase() ? nav.selectIcon : nav.unSelectIcon"/>
                 </svg>
               </span>
               <span class="text-cap">{{ nav.name }}</span>
@@ -76,23 +70,52 @@ export default {
       navgations: [
         {
           name: 'overview',
-          icon: 'overview',
-          path: '/owner/info'
+          selectIcon: '#icon-overview_selected',
+          unSelectIcon: '#icon-overview_unselected',
+          path: '/owner/info',
+          match: /^\/owner\/info/
         },
         {
           name: 'candy',
-          icon: 'candy',
-          path: '/owner/candy'
+          selectIcon: '#icon-candy_selected',
+          unSelectIcon: '#icon-candy_unselected',
+          path: '/owner/candy',
+          match: /^\/owner\/candy/
+        },
+        {
+          name: 'Invitation',
+          selectIcon: '#icon-bounty-chests',
+          unSelectIcon: '#icon-bounty-chests',
+          path: '/owner/invitation',
+          match: /^\/owner\/invitation/
+        },
+        {
+          name: 'BC',
+          selectIcon: '#icon-bounty-chests',
+          unSelectIcon: '#icon-bounty-chests',
+          path: '/owner/bc',
+          match: /^\/owner\/bc/
+        },
+        {
+          name: 'Bounty',
+          selectIcon: '#icon-bounty-chests',
+          unSelectIcon: '#icon-bounty-chests',
+          path: '/owner/bounty/package',
+          match: /^\/owner\/bounty\/package/
         },
         {
           name: 'quests',
-          icon: 'quests',
-          path: '/owner/quests'
+          selectIcon: '#icon-quests_selected',
+          unSelectIcon: '#icon-quests_unselected',
+          path: '/owner/quests',
+          match: /^\/owner\/quests/
         },
         {
           name: 'taverns',
-          icon: 'taverns',
-          path: '/owner/taverns'
+          selectIcon: '#icon-taverns_selected',
+          unSelectIcon: '#icon-taverns_unselected',
+          path: '/owner/taverns',
+          match: /^\/owner\/taverns/
         },
         // {
         //   name: 'activity',
@@ -101,8 +124,10 @@ export default {
         // },
         {
           name: 'authorization',
-          icon: 'authorization',
-          path: '/owner/authorization'
+          selectIcon: '#icon-authorization_selected',
+          unSelectIcon: '#icon-authorization_unselected',
+          path: '/owner/authorization',
+          match: /^\/owner\/authorization/
         }
       ],
       headerOpt: {
@@ -282,11 +307,13 @@ export default {
     @include viewport-unit(width, 100vw);
   }
   .owner-cnt-box {
+    padding: 30px;
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
     min-height: 100%;
+    box-sizing: border-box;
     // @include overflow();
   }
   @media screen and (max-width: 991px) {

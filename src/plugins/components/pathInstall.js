@@ -20,8 +20,10 @@ const files = [
   '/stories/linkSymbol',
   '/stories/pagination',
   '/stories/progress',
+  '/stories/select',
   '/stories/dialog/fade',
   '/stories/dialog/popup',
+  '/stories/dialog/slider',
   '/stories/candyIcon',
   '/stories/fixed'
 ]

@@ -574,7 +574,7 @@ export default {
   @import '@/assets/stylus/reuse/single/user_detail.scss';
 
   .user-info-box {
-    padding: 30px;
+    // padding: 30px;
   }
   .user-info-container {
     padding-bottom: 35px;

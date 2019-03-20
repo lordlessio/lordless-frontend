@@ -2,7 +2,7 @@
   <div class="d-flex user-authorization-box">
     <div class="d-flex v-flex col-flex user-authorization-container">
       <h1 class="text-cap owner-children-title">authorization</h1>
-      <div class="onwer-children-cnt user-authorization-cnt">
+      <div class="owner-children-cnt user-authorization-cnt">
         <el-row :gutter="20" class="authorization-cnt-container">
           <el-col
             :xs="24" :sm="8"

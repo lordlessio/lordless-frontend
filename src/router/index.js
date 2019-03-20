@@ -32,6 +32,12 @@ import OwnerQuests from '@/pages/user/owner/children/tasks'
 import OwnerAuthorization from '@/pages/user/owner/children/authorization'
 import OwnerActivity from '@/pages/user/owner/children/activity'
 
+import OwnerPackageBounty from '@/pages/user/owner/children/packageBounty'
+import OwnerBC from '@/pages/user/owner/children/bc'
+import OwnerInvitation from '@/pages/user/owner/children/invitation'
+
+import BountyChestDetail from '@/pages/bountyChest/_detail'
+
 // mobile page
 import MobileHome from '@/pages/_mobile/home'
 import MobileTaverns from '@/pages/_mobile/taverns'
@@ -524,6 +530,14 @@ const routes = [
     }
   },
   {
+    path: '/bountyChest/:bountyId',
+    name: 'BountyChestDetail',
+    component: BountyChestDetail,
+    meta: {
+      title: 'BountyChest Detail - LORDLESS'
+    }
+  },
+  {
     path: '/project/',
     name: 'project',
     component: LordlessProject,
@@ -649,6 +663,51 @@ const routes = [
         meta: {
           title: 'My Activities - LORDLESS',
           navgation: 'activity',
+          header: {
+            show: false
+          },
+          footer: {
+            show: false
+          }
+        }
+      },
+      {
+        path: 'bounty/package',
+        name: 'Owner-packageBounty',
+        component: OwnerPackageBounty,
+        meta: {
+          title: 'Package Bounty - LORDLESS',
+          navgation: 'Package',
+          header: {
+            show: false
+          },
+          footer: {
+            show: false
+          }
+        }
+      },
+      {
+        path: 'bc',
+        name: 'Owner-BC',
+        component: OwnerBC,
+        meta: {
+          title: 'BC - LORDLESS',
+          navgation: 'BC',
+          header: {
+            show: false
+          },
+          footer: {
+            show: false
+          }
+        }
+      },
+      {
+        path: 'invitation',
+        name: 'Owner-Invitation',
+        component: OwnerInvitation,
+        meta: {
+          title: 'Invitation - LORDLESS',
+          navgation: 'Invitation',
           header: {
             show: false
           },

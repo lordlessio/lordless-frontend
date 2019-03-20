@@ -4,8 +4,41 @@
   @include fontSize(36px, 1.5);
 }
 
-.onwer-children-cnt {
+.owner-children-cnt {
   min-height: 400px;
   @include margin('top', 35px, 2);
   @include margin('bottom', 50px, 1.4);
 }
+
+.user-tabs-box {
+  margin-top: 35px;
+  .el-tabs__header {
+    margin: 0;
+  }
+  .el-tabs__content {
+    overflow: visible;
+    width: 100%;
+    // @include overflow();
+  }
+  .el-tabs__item {
+    font-size: 18px;
+    color: #999;
+    &.is-active {
+      color: inherit;
+    }
+  }
+}
+
+.owner-children-sort-box {
+  margin-top: 30px;
+}
+
+.owner-children-select {
+  margin-left: 12px;
+}
+
+.owner-children-pagination {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
