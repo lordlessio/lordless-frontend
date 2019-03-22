@@ -129,11 +129,11 @@
       @pending="ldbSellPending"
       @blurs="dialogSetBlurs($event, dialog ? 1 : 0)"/> -->
 
-    <mobile-taver-further
+    <!-- <mobile-taver-further
       v-if="isMobile"
       :info.sync="ldbInfo"
       :user="userInfo"
-      :loading="infoLoading"/>
+      :loading="infoLoading"/> -->
     <!-- <mobile-sale-bar-tool
       v-if="isMobile"
       :info.sync="ldbInfo"

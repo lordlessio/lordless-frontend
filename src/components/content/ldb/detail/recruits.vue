@@ -7,7 +7,7 @@
             <div class="v-flex recruits-limit-box">
               <p>Recruits / Maximum limit</p>
               <h3>
-                <span class="recruits-current-limit" :class="{ 'color-blue': info.hunterMembers !== info.maxHunterMembers, 'color-gray': info.hunterMembers >= info.maxHunterMembers }">{{ info.hunterMembers }}</span> <span :class="{ 'color-red': info.hunterMembers / info.maxHunterMembers > 0.9 }">/ {{ info.maxHunterMembers || 30 }}</span>
+                <span class="recruits-current-limit" :class="{ 'color-blue': info.recruits.hunterMembers !== info.recruits.maxHunterMembers, 'color-gray': info.recruits.hunterMembers >= info.recruits.maxHunterMembers }">{{ info.recruits.hunterMembers }}</span> <span :class="{ 'color-red': info.recruits.hunterMembers / info.recruits.maxHunterMembers > 0.9 }">/ {{ info.recruits.maxHunterMembers || 60 }}</span>
               </h3>
             </div>
             <div class="alone-layer recruits-tavern-level">
@@ -107,7 +107,7 @@ export default {
       return !this.web3Opt.loading && this.web3Opt.isConnected && !!this.Recruited && !!this.info.id
     },
     isFullWarn () {
-      return this.info && (this.info.hunterMembers / this.info.maxHunterMembers) > 0.9
+      return this.info && (this.info.recruits.hunterMembers / this.info.recruits.maxHunterMembers) > 0.9
     }
   },
   watch: {
@@ -153,7 +153,7 @@ export default {
       console.log('----------- initRecruitBtnInfo', info, userHome)
       if (!info) {
         btnInfo.show = false
-      } else if (info.maxHunterMembers <= info.hunterMembers) {
+      } else if (info.recruits.maxHunterMembers <= info.recruits.hunterMembers) {
         btnInfo.text = 'Full Members'
         btnInfo.disabled = true
       } else if (this.recruitPending) {

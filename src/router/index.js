@@ -70,6 +70,8 @@ import MobileReferralRewards from '@/pages/_mobile/owner/_user/referral/rewards'
 import MobileReferee from '@/pages/_mobile/owner/referee'
 
 import MobileTavernDetail from '@/pages/_mobile/_tavern'
+import MobileTavernRecruitsDetail from '@/pages/_mobile/_recruits'
+import MobileTavernCommissionsDetail from '@/pages/_mobile/_commissions'
 
 // mobile routes
 const mobileRoutes = [
@@ -113,6 +115,40 @@ const mobileRoutes = [
     component: MobileTavernDetail,
     meta: {
       title: 'Tavern Detail - LORDLESS',
+      isPublic: true,
+      keepAlive: true,
+      transition: true
+      // header: {
+      //   show: false
+      // },
+      // footer: {
+      //   show: false
+      // }
+    }
+  },
+  {
+    path: '/recruits/:tavernId',
+    name: 'mobile-tavern-recruits-detail',
+    component: MobileTavernRecruitsDetail,
+    meta: {
+      title: 'Tavern Recruits Detail - LORDLESS',
+      isPublic: true,
+      keepAlive: true,
+      transition: true
+      // header: {
+      //   show: false
+      // },
+      // footer: {
+      //   show: false
+      // }
+    }
+  },
+  {
+    path: '/commissions/:tavernId',
+    name: 'mobile-tavern-commissions-detail',
+    component: MobileTavernCommissionsDetail,
+    meta: {
+      title: 'Tavern Commissions Detail - LORDLESS',
       isPublic: true,
       keepAlive: true,
       transition: true

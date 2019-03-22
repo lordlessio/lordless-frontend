@@ -2,116 +2,96 @@
   <div class="mobile-user-info-box">
     <div class="user-info-container">
       <div class="user-info-header">
-        <div class="d-flex f-align-center info-header-content" @click.stop="$router.push('/owner/detail')">
+        <div class="d-flex f-align-start info-header-content" @click.stop="$router.push('/owner/detail')">
           <lordless-blockies
             :seed="account"
-            :scale="7"
+            :scale="6"
             theme="light"/>
-          <div class="v-flex">
-            <p class="text-break info-user-account">{{ account }}</p>
+          <div class="v-flex info-user-account-box">
+            <div class="d-flex f-align-center text-break">
+              <p class="v-flex">
+                <span class="inline-block info-user-account">
+                  {{ account }}
+                </span>
+              </p>
+              <span class="inline-block line-height-0 info-arrow-icon light">
+                <svg>
+                  <use xlink:href="#icon-arrow-line-right"/>
+                </svg>
+              </span>
+            </div>
+            <p class="d-flex f-align-center info-user-ap-box">
+              <span class="inline-block line-height-1 user-ap-icon">
+                <svg>
+                  <use xlink:href="#icon-color-star"/>
+                </svg>
+              </span>
+              <span>AP</span>
+              <span class="TTFontBolder user-ap-text">{{ userInfo.ap }}</span>
+            </p>
           </div>
-          <span class="inline-block line-height-0 info-arrow-icon light">
-            <svg>
-              <use xlink:href="#icon-arrow-line-right"/>
-            </svg>
-          </span>
         </div>
       </div>
+      <div class="d-flex f-align-center user-permission-box">
+        <div class="d-flex f-align-center user-permission-container">
+          <ul class="d-flex f-align-center user-boosts-box user-permission-ul">
+            <li class="user-permission-item"
+              v-for="(boost, index) of ownerBoosts" :key="index">
+              <span class="inline-block line-height-0 user-permission-icon">
+                <svg>
+                  <use :xlink:href="boost.number ? boost.icon : boost.grayIcon"/>
+                </svg>
+              </span>
+            </li>
+          </ul>
+          <ul class="d-flex f-align-center user-commissions-box user-permission-ul">
+            <li class="user-permission-item"
+              v-for="(commission, index) of ownerCommissions" :key="index">
+              <span class="inline-block line-height-0 user-permission-icon">
+                <svg>
+                  <use :xlink:href="commission.open ? commission.icon : commission.grayIcon"/>
+                </svg>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="user-info-assets">
+        <h3>Assets</h3>
+        <ul class="d-flex f-wrap user-assets-ul">
+          <li class="user-asset-item"
+            v-for="(asset, index) of ownerAssets" :key="index"
+            @click.stop="asset.path ? $router.push(asset.path) : null">
+            <h3>{{ asset.text }}</h3>
+            <p class="d-flex f-align-center asset-item-cnt">
+              <span class="v-flex asset-cnt-value">{{ asset.value }}</span>
+              <span v-if="asset.path" class="inline-block line-height-0 asset-arrow-icon">
+                <svg>
+                  <use xlink:href="#icon-arrow-line-right"/>
+                </svg>
+              </span>
+            </p>
+          </li>
+        </ul>
+      </div>
+      <div class="user-info-services">
+        <h3>Services</h3>
+        <ul class="d-flex f-wrap user-services-ul">
+          <li class="relative user-service-item"
+            v-for="(service, index) of ownerServices" :key="index"
+            @click.stop="$router.push(service.path)">
+            <div class="d-flex col-flex f-auto-center user-service-item-container">
+              <span class="inline-block line-height-0 user-service-icon">
+                <svg>
+                  <use :xlink:href="service.icon"/>
+                </svg>
+              </span>
+              <p>{{ service.text }}</p>
+            </div>
+          </li>
+        </ul>
+      </div>
       <div class="user-info-content">
-        <ul class="info-cnt-article deep-blue">
-          <li class="d-flex f-align-center info-cnt-item">
-            <span class="inline-block line-height-0 cnt-item-icon">
-              <svg>
-                <use xlink:href="#icon-tap"/>
-              </svg>
-            </span>
-            <div class="v-flex d-flex f-align-center cnt-item-right">
-              <p class="v-flex cnt-item-title">Action point</p>
-              <span>{{ userInfo.ap }}</span>
-            </div>
-          </li>
-          <li class="d-flex f-align-center info-cnt-item">
-            <span class="inline-block line-height-0 cnt-item-icon">
-              <svg>
-                <use xlink:href="#icon-issue-price"/>
-              </svg>
-            </span>
-            <div class="v-flex d-flex f-align-center cnt-item-right">
-              <p class="v-flex cnt-item-title">Total earnings</p>
-              <span>$ {{ overviews.totalEarnings.value | formatDecimal }}</span>
-            </div>
-          </li>
-          <li class="d-flex f-align-center info-cnt-item">
-            <span class="inline-block line-height-0 cnt-item-icon">
-              <svg>
-                <use xlink:href="#icon-circulating-supply"/>
-              </svg>
-            </span>
-            <div class="v-flex d-flex f-align-center cnt-item-right">
-              <p class="v-flex cnt-item-title">Holdings</p>
-              <span>$ {{ overviews.holdings.value | formatDecimal }}</span>
-            </div>
-          </li>
-          <li v-if="userHome" class="d-flex f-align-center info-cnt-item" @click.stop="$emit('home', userHome.ldb)">
-            <span class="inline-block line-height-0 cnt-item-icon large">
-              <svg>
-                <use xlink:href="#icon-building_selected"/>
-              </svg>
-            </span>
-            <div class="v-flex d-flex f-align-center cnt-item-right">
-              <p class="v-flex cnt-item-title">Home Tavern</p>
-              <span># {{ (userHome && userHome.ldb) ? userHome.ldb.id : '' }}</span>
-              <span class="inline-block line-height-0 info-arrow-icon">
-                <svg>
-                  <use xlink:href="#icon-arrow-line-right"/>
-                </svg>
-              </span>
-            </div>
-          </li>
-          <li class="d-flex f-align-center info-cnt-item" @click.stop="$router.push('/owner/taverns')">
-            <span class="inline-block line-height-0 cnt-item-icon large">
-              <svg>
-                <use xlink:href="#icon-beer"/>
-              </svg>
-            </span>
-            <div class="v-flex d-flex f-align-center cnt-item-right">
-              <p class="v-flex cnt-item-title">My Taverns</p>
-              <span class="inline-block line-height-0 info-arrow-icon">
-                <svg>
-                  <use xlink:href="#icon-arrow-line-right"/>
-                </svg>
-              </span>
-            </div>
-          </li>
-        </ul>
-        <ul class="info-cnt-article blue">
-          <li
-            class="d-flex f-align-center info-cnt-item"
-            v-for="(item, index) of infoChildrens" :key="index"
-            @click.stop="$router.push(item.path)">
-            <span class="inline-block line-height-0 cnt-item-icon" :class="{ 'large': item.large }">
-              <svg>
-                <use :xlink:href="item.icon"/>
-              </svg>
-            </span>
-            <div class="v-flex d-flex f-align-center cnt-item-right">
-              <p class="v-flex cnt-item-title">{{ item.title }}</p>
-              <p v-if="item.tips" class="bind-item-tips">{{ item.tips }}</p>
-              <p v-if="item.isNew" class="bind-item-tips is-red">New!</p>
-              <p v-if="item.holdings" class="bind-item-tips">$ {{ overviews.holdings.value | formatDecimal }}</p>
-              <span v-if="item.redPoint" class="inline-block item-red-point"></span>
-              <p v-if="item.isBindTelegram" class="d-flex f-align-center">
-                <span v-if="userInfo.telegram && userInfo.telegram.id">{{ userInfo.telegram.username || userInfo.telegram.first_name }}</span>
-                <span v-else class="inline-block item-red-point"></span>
-              </p>
-              <span class="inline-block line-height-0 info-arrow-icon">
-                <svg>
-                  <use xlink:href="#icon-arrow-line-right"/>
-                </svg>
-              </span>
-            </div>
-          </li>
-        </ul>
         <ul class="info-cnt-article purple">
           <li
             class="d-flex f-align-center info-cnt-item"
@@ -157,21 +137,23 @@
 </template>
 
 <script>
-import { publicMixins } from '@/mixins'
+import { checkTokensBalanceMixins, planBoostsMixins, publicMixins } from '@/mixins'
 
 import { getUserOverview } from 'api'
+import { formatDecimal } from 'utils/tool'
 
 import { actionTypes } from '@/store/types'
 import { mapState, mapActions } from 'vuex'
 export default {
   name: 'mobile-lordless-user-info',
-  mixins: [ publicMixins ],
+  mixins: [ checkTokensBalanceMixins, planBoostsMixins, publicMixins ],
   data: () => {
     return {
       loading: true,
       overviews: {
         holdings: {},
-        totalEarnings: {}
+        totalEarnings: {},
+        depositsCandies: {}
       },
 
       lordlessOuterInfos: [
@@ -202,50 +184,120 @@ export default {
       'candyPrice'
     ]),
 
-    infoChildrens () {
-      return [].concat([
-        {
-          icon: '#icon-tab-diploma',
-          title: 'Invitation program',
-          path: '/owner/referral/invitation',
-          isNew: true
+    ownerBoosts () {
+      const planBoosts = this.planBoosts
+      if (!planBoosts.boosts) return []
+
+      const infos = {
+        referee: {
+          icon: '#icon-color-certificate',
+          grayIcon: '#icon-gray-certificate',
+          path: '/owner/referee'
         },
-        {
-          icon: '#icon-badge',
-          title: 'Referee boost',
-          path: '/owner/referee',
-          redPoint: true
+        recruit: {
+          icon: '#icon-color-shield',
+          grayIcon: '#icon-gray-shield',
+          path: '/taverns'
         },
-        {
-          icon: '#icon-link',
-          title: 'Bind Telegram',
-          path: '/owner/bind/telegram',
-          isBindTelegram: true
-        },
-        {
-          icon: '#coin-hops',
-          title: 'HOPS',
-          path: '/owner/hops',
-          tips: 'Deposit LESS'
-        },
-        // {
-        //   icon: '#icon-outcome',
-        //   title: 'Make a chest',
-        //   path: '/owner/bountyChest',
-        //   holdings: true
-        // },
-        // {
-        //   icon: '#icon-bounty-chests',
-        //   title: 'Bounty Chests',
-        //   path: '/owner/bounty/chests'
-        // },
-        {
-          icon: '#icon-authorization_selected',
-          title: 'Authorizations',
-          path: '/owner/authorization',
-          large: true
+        tavernkeep: {
+          icon: '#icon-color-tavernkeep',
+          grayIcon: '#icon-gray-tavernkeep',
+          path: '/taverns'
         }
-      ])
+      }
+      return planBoosts.boosts.map((item) => {
+        return Object.assign({}, item, infos[item.type])
+      })
+    },
+
+    ownerCommissions () {
+      const planBoosts = this.planBoosts
+      if (!planBoosts.commissions) return []
+
+      const infos = {
+        referrer: {
+          icon: '#icon-color-diploma',
+          grayIcon: '#icon-gray-diploma',
+          path: '/taverns'
+        },
+        recruit: {
+          icon: '#icon-color-flag',
+          grayIcon: '#icon-gray-flag',
+          path: '/taverns'
+        }
+      }
+      return planBoosts.commissions.map((item) => {
+        return Object.assign({}, item, infos[item.type])
+      })
+    },
+
+    ownerAssets () {
+      const overviews = this.overviews
+      return [
+        {
+          text: 'LESS(Wallet)',
+          value: (this.lessBalanceNumber || '0').toLocaleString()
+        },
+        {
+          text: 'HOPS(Wallet)',
+          value: (this.hopsBalanceNumber || '0').toLocaleString()
+        },
+        {
+          text: 'Materials',
+          value: `$ ${(formatDecimal(overviews.holdings.value) || '0').toLocaleString()}`,
+          path: '/owner/bc?type=materials'
+        },
+        {
+          text: 'Bounty Chests',
+          value: overviews.bountyCount,
+          path: '/owner/bc?type=chests'
+        },
+        {
+          text: 'Deposited',
+          value: `${(overviews.depositsCandies.lessCount || '0').toLocaleString()} LESS`,
+          path: '/owner/hops'
+        },
+        {
+          text: 'Taverns',
+          value: overviews.tavernCount,
+          path: '/owner/taverns'
+        }
+      ]
+    },
+
+    ownerServices () {
+      return [
+        {
+          icon: '#icon-blue-linear-diploma',
+          text: 'Invitation',
+          path: '/owner/referral/invitation'
+        },
+        {
+          icon: '#icon-blue-linear-badge',
+          text: 'Referee boost',
+          path: '/owner/referee'
+        },
+        {
+          icon: '#icon-blue-linear-marketplace',
+          text: 'Home',
+          path: this.userHome ? `/tavern/${this.userHome.homeInfo.tavern.id}` : '/taverns'
+        },
+        {
+          icon: '#icon-blue-linear-link',
+          text: 'Bind Telegram',
+          path: '/owner/bind/telegram'
+        },
+        {
+          icon: '#icon-blue-linear-hops',
+          text: 'HOPS',
+          path: '/owner/hops'
+        },
+        {
+          icon: '#icon-blue-linear-authorization',
+          text: 'Authorizations',
+          path: '/owner/authorization'
+        }
+      ]
     }
   },
   watch: {
@@ -310,17 +362,34 @@ export default {
 
   .user-info-header {
     // padding-top: 44px;
-    background-image: linear-gradient(-225deg, #124BDC 0%, #0079FF 100%);
+    // background-image: linear-gradient(-225deg, #124BDC 0%, #0079FF 100%);
+    background-color: $--main-blue-color;
   }
   .info-header-content {
-    padding: 30px 20px;
+    padding: 30px 20px 48px;
   }
-  .info-user-account {
+
+  .info-user-account-box {
     margin-left: 18px;
-    width: 220px;
-    font-size: 16px;
+    font-size: 14px;
     color: #fff;
   }
+  .info-user-account {
+    width: 220px;
+  }
+
+  .info-user-ap-box {
+    margin-top: 12px;
+  }
+  .user-ap-icon {
+    margin-right: 3px;
+    width: 14px;
+    height: 14px;
+  }
+  .user-ap-text {
+    margin-left: 8px;
+  }
+
   .info-arrow-icon {
     margin-left: 12px;
     width: 14px;
@@ -332,7 +401,136 @@ export default {
   }
 
   /**
-   *  user-info-header  -- en
+   *  user-info-header  -- end
+   */
+
+  /**
+   *  user-permission-box  -- begin
+   */
+  .user-permission-box {
+    padding: 0 27px;
+    background-color: #fff;
+  }
+  .user-permission-container {
+    padding: 12px 20px;
+    border-radius: 5px;
+    background-color: #fff;
+    transform: translateY(-26px);
+    box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.12);
+  }
+  .user-boosts-box {
+
+  }
+  .user-commissions-box {
+    position: relative;
+    margin-left: 28px;
+    padding-left: 28px;
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 4px;
+      width: 1px;
+      height: 20px;
+      background-color: #ddd;
+    }
+  }
+  .user-permission-item {
+    height: 28px;
+    &:not(:first-of-type) {
+      margin-left: 28px;
+    }
+  }
+  .user-permission-icon {
+    width: 28px;
+    height: 28px;
+  }
+  /**
+   *  user-permission-box  -- end
+   */
+
+  /**
+   *  user-info-assets  -- begin
+   */
+  .user-info-assets {
+    background-color: #fff;
+    >h3 {
+      padding-left: 20px;
+      font-size: 16px;
+      color: $--main-color;
+    }
+  }
+  .user-assets-ul {
+    margin-top: 12px;
+  }
+  .user-asset-item {
+    padding: 18px 20px;
+    width: 50%;
+    font-size: 14px;
+    color: #999;
+    line-height: 1.2;
+    border-top: 1px solid #f0f0f0;
+    box-sizing: border-box;
+    &:nth-of-type(2n + 1) {
+      border-right: 1px solid #f0f0f0;
+    }
+    >h3 {
+      margin-bottom: 3px;
+      font-size: 14px;
+      color: #555;
+    }
+  }
+  .asset-arrow-icon {
+    width: 12px;
+    height: 12px;
+    fill: #999;
+  }
+  /**
+   *  user-info-assets  -- end
+   */
+
+  /**
+   *  user-info-services  -- begin
+   */
+  .user-info-services {
+    margin-top: 16px;
+    line-height: 1.2;
+    background-color: #fff;
+    >h3 {
+      padding: 12px 0 12px 20px;
+      font-size: 16px;
+      color: $--main-color;
+    }
+  }
+  .user-service-item {
+    padding-top: 33%;
+    width: 33%;
+    border-top: 1px solid #f0f0f0;
+    box-sizing: border-box;
+    &:nth-of-type(3n + 2) {
+      width: 34%;
+      border-left: 1px solid #f0f0f0;
+      border-right: 1px solid #f0f0f0;
+    }
+  }
+  .user-service-item-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 12px;
+    color: #555;
+    >p {
+      margin-top: 12px;
+    }
+  }
+  .user-service-icon {
+    width: 28px;
+    height: 28px;
+  }
+  /**
+   *  user-info-services  -- end
    */
 
   /**
@@ -340,6 +538,7 @@ export default {
    */
 
   .user-info-content {
+    margin-top: 16px;
     // margin-bottom: 30px;
   }
   .cnt-item-icon {
@@ -362,12 +561,6 @@ export default {
     background-color: #fff;
     &:not(:first-of-type) {
       margin-top: 16px;
-    }
-    &.deep-blue {
-      fill: #0024FF;
-    }
-    &.blue {
-      fill: #0079FF;
     }
     &.purple {
       fill: #7D72F0;
@@ -392,12 +585,6 @@ export default {
   }
   .cnt-item-title {
     color: #555;
-  }
-  .bind-item-tips {
-    color: #999;
-    &.is-red {
-      color: $--main-red-color;
-    }
   }
   .cnt-item-right {
     margin-left: 12px;

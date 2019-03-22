@@ -51,7 +51,7 @@
               <div class="header-left-cnt-box">
                 <div class="header-left-cnt-container">
                   <figure class="header-left-cnt">
-                    <h1 v-if="info.name.zh" :class="{ 'lg': info.name.zh.length > 6, 'md': info.name.zh.length > 9, 'sm': info.name.zh.length > 46 }">{{ info.name.zh }}</h1>
+                    <h1 v-if="info.name.zh" :class="{ 'lg': info.name.zh.length > 6, 'md': info.name.zh.length > 9, 'sm': info.name.zh.length > 46 }">[{{ levelText }}]{{ info.name.zh }}</h1>
                     <p class="detail-ldb-tag">
                       <span class="inline-block" v-for="type of info.ldbType" :key="type">{{ type | formatLdbType }}</span>
                     </p>
@@ -258,6 +258,16 @@ export default {
     // },
     apLeft () {
       return this.info.apLeft
+    },
+    levelText () {
+      const info = this.info
+      const texts = {
+        4: 'SS',
+        3: 'S',
+        2: 'A',
+        1: 'B'
+      }
+      return texts[info.chain.popularity]
     }
   },
   watch: {

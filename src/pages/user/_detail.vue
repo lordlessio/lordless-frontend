@@ -5,7 +5,7 @@
         <info-header
           :loading="!user"
           :user="user"
-          :lord="overviews.lord">
+          :lord="overviews.tavernCount">
         </info-header>
         <!-- <div class="d-flex f-align-center">
           <div class="user-header-avatar">

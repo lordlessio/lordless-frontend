@@ -80,11 +80,11 @@
           <div
             v-if="userHome && userHome._id"
             class="d-flex full-width user-has-home"
-            @click.stop="$emit('home', userHome.ldb)">
+            @click.stop="$emit('home', userHome.homeInfo.tavern)">
             <div class="user-home-poster">
               <lordless-tavern-poster
-                :src="userHome.ldb.ldbIcon.source.preview"
-                :popularity="userHome.ldb.chain.popularity"
+                :src="userHome.homeInfo.tavern.ldbIcon.source.preview"
+                :popularity="userHome.homeInfo.tavern.chain.popularity"
                 shadow
                 showPopularity
                 isSmall/>
@@ -92,11 +92,11 @@
             <div class="v-flex d-flex col-flex f-justify-between user-home-info">
               <p class="d-flex f-align-center user-home-title">
                 <span class="inline-block user-home-mark">HOME</span>
-                <span class="text-nowrap user-home-name">{{ userHome.ldb.name.zh }}</span>
+                <span class="text-nowrap user-home-name">{{ userHome.homeInfo.tavern.name.zh }}</span>
               </p>
               <div>
-                <p class="user-home-level">Level {{ userHome.ldb.chain.level }}</p>
-                <p class="user-home-leftap">{{ userHome.ldb.apLeft }} AP remaining</p>
+                <p class="user-home-level">Level {{ userHome.homeInfo.tavern.chain.level }}</p>
+                <p class="user-home-leftap">{{ userHome.homeInfo.tavern.apLeft }} AP remaining</p>
               </div>
             </div>
             <div class="d-flex f-auto-center user-home-jump">
@@ -143,7 +143,10 @@ export default {
     return {
 
       loading: true,
-      overviews: {},
+      overviews: {
+        totalEarnings: {},
+        holdings: {}
+      },
 
       levelProgress: {
         gradient: {

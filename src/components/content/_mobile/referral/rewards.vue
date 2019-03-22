@@ -211,7 +211,6 @@ export default {
       }
       if (this.isWebsite) {
         this.$emit('update:propTotal', total)
-        this.$emit('update:propTotal', total)
       }
       this.loading = false
     },

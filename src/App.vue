@@ -40,11 +40,13 @@ import { mobileBool } from 'utils/tool'
 
 import { initWeb3 } from '@/assets/utils/web3/initWeb3'
 // import { loopCandyClamied } from '@/assets/utils/loop'
+import { publicMixins } from '@/mixins'
 
 import { actionTypes } from '@/store/types'
 import { mapState, mapActions } from 'vuex'
 export default {
   name: 'App',
+  mixins: [ publicMixins ],
   async created () {
     initWeb3().then(({ loading, isConnected }) => {
       console.log(' --- web3 init')
@@ -70,7 +72,7 @@ export default {
       wechatBlockModel: false,
       // mobileWalletModel: false,
 
-      isMobile: false,
+      isAppMobile: false,
       reloginDialog: false,
       tabBarNavigation: [
         {
@@ -146,7 +148,14 @@ export default {
   watch: {
     headerOpt (val) {
       this.$nextTick(() => this.$refs.lordlessHeader && this.$refs.lordlessHeader.init())
+    },
+    account (val) {
+      console.log('---------- account', val)
+      val && this.initStoreData()
     }
+    // userInfo (val, oval) {
+    //   val && oval && this.initStoreData()
+    // }
   },
   components: {
     Header,
@@ -169,7 +178,8 @@ export default {
     ]),
     ...mapActions('user', [
       actionTypes.USER_SET_USER_BY_TOKEN,
-      actionTypes.USER_SET_USER_HOME
+      actionTypes.USER_SET_USER_HOME,
+      actionTypes.USER_SET_PLAN_BOOSTS
     ]),
     ...mapActions('layout', [
       actionTypes.LAYOUT_SET_MESSAGE_TIP,
@@ -178,6 +188,13 @@ export default {
 
     closeTip () {
       this[actionTypes.LAYOUT_SET_MESSAGE_TIP]({ show: false })
+    },
+    initStoreData () {
+      this[actionTypes.CANDY_SET_CANDY_PRICE]()
+      this[actionTypes.STATUS_INIT_BROSWER]()
+      this[actionTypes.USER_SET_USER_BY_TOKEN]()
+      this[actionTypes.USER_SET_USER_HOME]()
+      this[actionTypes.USER_SET_PLAN_BOOSTS]()
     }
 
     // 监听主网络环境
@@ -207,13 +224,10 @@ export default {
     // }
   },
   beforeMount () {
-    this.isMobile = mobileBool()
+    this.isAppMobile = mobileBool()
   },
   mounted () {
-    this[actionTypes.CANDY_SET_CANDY_PRICE]()
-    this[actionTypes.STATUS_INIT_BROSWER]()
-    this[actionTypes.USER_SET_USER_BY_TOKEN]()
-    this[actionTypes.USER_SET_USER_HOME]()
+    this.initStoreData()
     // loopCandyClamied()
     // document.getElementById('outside-loading').style = 'display: none'
     // this.$nextTick(() => {

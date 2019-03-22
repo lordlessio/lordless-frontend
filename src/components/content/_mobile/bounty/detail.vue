@@ -1274,6 +1274,9 @@ export default {
   .deposit-boost-icon {
     width: 28px;
     height: 28px;
+    &:not(:first-of-type) {
+      margin-left: 12px;
+    }
   }
 
   .deposit-popup-balance {

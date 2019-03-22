@@ -2991,7 +2991,7 @@
     ]
   },
   "Recruited": {
-    "address": "0x03a033c673f01c7eb3a6428487e5affb75d3f417",
+    "address": "0x0f409930c6b6b2153fe84b81f1ba67f6edccce6b",
     "abi": [
       {
         "constant": false,
@@ -3156,6 +3156,41 @@
           {
             "name": "",
             "type": "bool"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [
+          {
+            "name": "tavernId",
+            "type": "uint256"
+          }
+        ],
+        "name": "checkOriginHomeInfo",
+        "outputs": [
+          {
+            "name": "",
+            "type": "bool"
+          },
+          {
+            "name": "",
+            "type": "uint256"
+          },
+          {
+            "name": "",
+            "type": "uint256"
+          },
+          {
+            "name": "",
+            "type": "uint256"
+          },
+          {
+            "name": "",
+            "type": "uint256"
           }
         ],
         "payable": false,

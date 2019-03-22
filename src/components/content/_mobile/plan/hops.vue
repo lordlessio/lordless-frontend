@@ -38,7 +38,7 @@
               class="TTFontBolder d-flex f-align-center hops-boost-item" :class="{ 'is-none': boost.none }" @click.stop="boost.routePath ? $router.push(boost.routePath) : null">
                 <span class="inline-block line-height-0 hops-boost-icon">
                   <svg>
-                    <use :xlink:href="boost.icon"/>
+                    <use :xlink:href="boost.number ? boost.icon : boost.grayIcon"/>
                   </svg>
                 </span>
                 <span class="v-flex boost-item-text">{{ boost.text }}</span>

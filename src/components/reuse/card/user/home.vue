@@ -15,7 +15,7 @@
           <svg v-if="!home || !home._id">
             <use xlink:href="#icon-help"/>
           </svg>
-          <img v-else alt="tavern popularity" :src="`/img/tavern/ldb-level-${home.ldb.chain.popularity}.png` | originSource({ size: 135 })"/>
+          <img v-else alt="tavern popularity" :src="`/img/tavern/ldb-level-${home.homeInfo.tavern.chain.popularity}.png` | originSource({ size: 135 })"/>
         </div>
         <div class="v-flex info-home-cnt">
           <div class="info-home-unknow" v-if="!home || !home._id">
@@ -31,16 +31,16 @@
             </lordless-btn>
           </div>
           <div class="info-home-know" v-if="home && home._id">
-            <p class="info-ldb-name">{{ home.ldb.name.zh }}</p>
-            <p class="text-ellipsis info-ldb-influence">{{ home.ldb.chain.influence }} influence</p>
+            <p class="info-ldb-name">{{ home.homeInfo.tavern.name.zh }}</p>
+            <p class="text-ellipsis info-ldb-influence">{{ home.homeInfo.tavern.chain.influence }} influence</p>
             <div class="d-flex f-align-baseline info-home-status">
-              <p class="v-flex">{{ home.ldb.apLeft }} AP remaining</p>
+              <p class="v-flex">{{ home.homeInfo.tavern.apLeft }} AP remaining</p>
               <lordless-btn
                 class="user-info-btn"
                 theme="blue"
                 inverse
                 shadow
-                @click="$router.push(`/tavern/${home.ldb.id}`)">
+                @click="$router.push(`/tavern/${home.homeInfo.tavern.id}`)">
                 Go
               </lordless-btn>
             </div>

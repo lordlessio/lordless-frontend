@@ -1,60 +1,44 @@
-import { getPlanBoosts } from 'api'
+import { mapState } from 'vuex'
 export default {
-  data: () => {
-    return {
-      boostRender: false,
-      planBoosts: {}
-    }
-  },
   computed: {
+    ...mapState('user', {
+      planBoosts: 'userPlanBoosts'
+    }),
     userTotalBoost () {
-      return (this.planBoosts.total || 0) / 100
+      return (this.planBoosts.boostTotal || 0) / 100
     },
     planBoostsList () {
       const texts = {
         referee: {
           text: 'Referee boost',
-          icon: '#icon-color-certificate'
+          icon: '#icon-color-certificate',
+          grayIcon: '#icon-gray-certificate'
         },
         tavernkeep: {
           text: 'Tavernkeep boost',
-          icon: '#icon-color-certificate'
+          icon: '#icon-color-tavernkeep',
+          grayIcon: '#icon-gray-tavernkeep'
+        },
+        recruit: {
+          text: 'Recruit boost',
+          icon: '#icon-color-shield',
+          grayIcon: '#icon-gray-shield'
         }
       }
-      return this.planBoosts.list.map(item => {
+      return this.planBoosts.boosts.map(item => {
         const data = Object.assign({}, item, texts[item.type])
         if (item.number === 0 && item.type === 'referee') {
           data.none = true
           data.text = 'Get referee boost'
           data.routePath = `/owner/referee?refer=${this.$route.fullPath}`
+        } else if (item.number === 0 && item.type !== 'referee') {
+          data.hide = true
         }
         return data
-      })
+      }).filter(item => !item.hide).sort((a, b) => b.number - a.number)
     },
     isRefereeBoost () {
-      return !!this.planBoosts.list.filter(item => item.type === 'referee').length
+      return !!this.planBoosts.boosts.filter(item => item.type === 'referee').length
     }
-  },
-  methods: {
-    async initPlanBoost () {
-      try {
-        const res = await getPlanBoosts()
-        if (res.code === 1000 && res.data) {
-          this.planBoosts = res.data
-        }
-      } catch (err) {
-        console.log('---- plan boost err', err.message)
-      }
-    }
-  },
-  activated () {
-    if (!this.boostRender) {
-      this.boostRender = true
-      return
-    }
-    this.initPlanBoost()
-  },
-  mounted () {
-    this.$nextTick(() => this.initPlanBoost())
   }
 }

@@ -69,15 +69,17 @@
           <div class="detail-header-bottom">
             <div class="header-bottom-container">
               <figure class="header-bottom-figure">
-                <h1 v-if="info.name.zh" :class="{ 'md': info.name.zh.length > 6, 'sm': info.name.zh.length > 9 }">{{ info.name.zh }}</h1>
+                <h2 v-if="info.name.zh">[{{ levelText }}]{{ info.name.zh }}</h2>
                 <div class="d-flex f-align-end relative">
                   <div class="v-flex">
                     <p class="text-nowrap detail-mobile-tag">
                       <!-- <span class="inline-block level">LVL {{ countUp.level.end }}</span> -->
                       <span class="inline-block" v-for="type of info.ldbType" :key="type">{{ type | formatLdbType }}</span>
+                      <span class="inline-block region">{{ info.chain.lng | transferCoords | sliceStr }}, {{ info.chain.lat | transferCoords | sliceStr }}</span>
                       <!-- <span class="inline-block region">Shanghai</span> -->
                     </p>
-                    <div class="d-flex row-flex f-align-center detail-mobile-location">
+                    <p class="detail-tavern-address">{{ info.address }}</p>
+                    <!-- <div class="d-flex row-flex f-align-center detail-mobile-location">
                       <p>
                         <svg>
                           <use xlink:href="#icon-location"/>
@@ -87,14 +89,14 @@
                         <span>{{ info.chain.lng | transferCoords | sliceStr}}, {{ info.chain.lat | transferCoords | sliceStr }}</span>
                         <span>{{ info.address }}</span>
                       </p>
-                    </div>
+                    </div> -->
                   </div>
                   <!-- <div class="d-flex f-justify-end line-height-0 detail-mobile-level">
                     <img :alt="`tavern popularity ${info.chain.popularity}`" :src="`/img/tavern/ldb-level-${info.chain.popularity}.png` | originSource({ size: 450 })"/>
                   </div> -->
                 </div>
                 <!-- <p class="detail-mobile-desc">{{ info.desc.zh | sliceStr({ end: 78 }) }}...</p> -->
-                <div class="detail-progress-box">
+                <div class="detail-progress-box first">
                   <p class="d-flex detail-progress-tip">
                     <span class="v-flex">LEVEL {{ countUp.level.end }}</span>
                     <span>
@@ -161,6 +163,14 @@
                     @click="setHome(isHome)">{{ isHome ? 'Your home' : 'Set as home' }}</lordless-btn>
                 </figcaption> -->
               </figure>
+              <lordless-btn
+                class="tavern-further-btn"
+                theme="blue"
+                inverse>
+                  <a class="d-inline-flex f-align-center" :href="`https://opensea.io/assets/0x15820072729d045ec5232ba3bd060ec5df38e09a/${info.id}`" target="_blank">
+                    <span>Trade on OpenSea</span>
+                  </a>
+                </lordless-btn>
             </div>
           </div>
         </div>
@@ -273,6 +283,16 @@ export default {
   computed: {
     apLeft () {
       return this.info.apLeft
+    },
+    levelText () {
+      const info = this.info
+      const texts = {
+        4: 'SS',
+        3: 'S',
+        2: 'A',
+        1: 'B'
+      }
+      return texts[info.chain.popularity]
     }
   },
   watch: {
@@ -760,8 +780,8 @@ export default {
 
   .detail-progress-box {
     margin-top: 24px;
-    &:first-of-type {
-      margin-top: 18px;
+    &.first {
+      margin-top: 12px;
     }
   }
   .detail-progress-tip {
@@ -795,6 +815,12 @@ export default {
   }
   .task-status-time {
     min-width: 105px;
+  }
+  .tavern-further-btn {
+    width: 100%;
+    height: 48px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
   }
 
   // header-candy-layer
@@ -1055,104 +1081,29 @@ export default {
 
   // detail-header-bottom
   .detail-header-bottom {
-    // position: absolute;
-    // left: 0;
-    // top: 50%;
     width: 100%;
-    // padding: 15px;
-    // height: 90%;
-    // transform: translate3d(-100%, -50%, 0);;
     color: #fff;
-    // opacity: 0;
     border-radius: 5px;
     box-shadow: 0 2px 5px 0px rgba(0, 0, 0, .25);
     background-color: #fff;
     z-index: 3;
-    // transition: all 0s .45s;
-    // transition: all .55s 0s;
-    // transition: left .55s spring, opacity .55s spring;
-    // background-blend-mode: soft-light;
-    // &::before {
-    //   content: '';
-    //   position: absolute;
-    //   top: 0;
-    //   width: 50%;
-    //   height: 100%;
-    //   right: 25%;
-    //   border-radius: 10px;
-    //   transform: skew(-25deg) translateZ(0);
-    //   background-color: #3588FD;
-    //   z-index: -1;
-    //   box-shadow: 13px 13px 30px 3px rgba(0, 0, 0, .35);
-    //   opacity: 0;
-    //   transition: opacity .3s ease-in .45s;
-    // }
   }
-  // .header-left-container {
-  //   position: relative;
-  //   // padding-top: 80px;
-  //   // padding-bottom: 40px;
-  //   // padding-left: 140px;
-  //   width: 100%;
-  //   // height: 100%;
-  //   overflow: hidden;
-  // }
-  // .header-left-mask {
-  //   position: absolute;
-  //   top: 0;
-  //   left: -25%;
-  //   width: 100%;
-  //   height: 100%;
-  //   border-radius: 10px;
-  //   transform: skew(-25deg) translateZ(0);
-  //   background-color: #3588FD;
-  //   overflow: hidden;
-  //   &::after {
-  //     content: '';
-  //     position: absolute;
-  //     top: -15%;
-  //     left: -50%;
-  //     width: 100%;
-  //     padding-top: 100%;
-  //     border-radius: 100%;
-  //     background-image: linear-gradient(45deg, #3588FD, #00C0EB);
-  //     // background-color: #3588FD;
-  //     transform: skew(25deg) scale(1.4);
-  //     mix-blend-mode: soft-light;
-  //     overflow: hidden;
-  //     z-index: 1;
-  //   }
-  // }
-  // .header-bottom-figure-box {
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  //   max-width: 1280px;
-  //   min-width: 1100px;
-  //   height: 100%;
-  //   @include viewport-unit('width', 100vw, 0px, 1);
-  // }
 
 
   .header-bottom-container {
     margin-top: -30px;
-    padding: 20px 20px 30px;
     width: 100%;
     box-sizing: border-box;
     color: #555;
   }
   .header-bottom-figure {
     position: relative;
+    padding: 20px 20px 30px;
     // max-width: 400px;
     // height: 100%;
     z-index: 2;
-    >h1 {
-      &.md {
-        font-size: 36px;
-      }
-      &.sm {
-        font-size: 28px;
-      }
+    >h2 {
+      font-size: 24px;
     }
     >figcaption {
       margin-top: 20px;
@@ -1166,40 +1117,45 @@ export default {
     }
   }
   .detail-mobile-tag {
-    margin-top: 5px;
+    margin-top: 12px;
     color: #fff;
     >span {
       padding: 3px 7px;
       font-size: 12px;
-      background-color: #4586FC;
+      background-color: #0079FF;
       border-radius: 5px;
-      &.level {
+      // &.level {
+      //   background-color: #7d72f0;
+      // }
+      &.region {
         background-color: #7d72f0;
       }
-      &.region {
-        background-color: #2D0EBD;
-      }
     }
   }
-  .detail-mobile-location {
-    margin-top: 14px;
+  .detail-tavern-address {
+    margin-top: 8px;
     font-size: 14px;
-    color: #bbb;
-    fill: #4586FC;
-    svg {
-      width: 16px;
-      height: 16px;
-    }
-    >p {
-      &:not(:first-of-type) {
-        margin-left: 8px;
-      }
-    }
+    color: #999;
   }
-  .detail-mobile-address {
-    margin-top: 10px;
-    font-size: 20px;
-  }
+  // .detail-mobile-location {
+  //   margin-top: 14px;
+  //   font-size: 14px;
+  //   color: #bbb;
+  //   fill: #4586FC;
+  //   svg {
+  //     width: 16px;
+  //     height: 16px;
+  //   }
+  //   >p {
+  //     &:not(:first-of-type) {
+  //       margin-left: 8px;
+  //     }
+  //   }
+  // }
+  // .detail-mobile-address {
+  //   margin-top: 10px;
+  //   font-size: 20px;
+  // }
   // .detail-mobile-desc {
   //   margin-top: 20px;
   //   max-width: 300px;
@@ -1287,10 +1243,10 @@ export default {
    */
 
   @media screen and (max-width: 1200px) {
-    .header-bottom-figure {
-      >h1 {
-        font-size: 42px;
-      }
-    }
+    // .header-bottom-figure {
+    //   >h2 {
+    //     font-size: 42px;
+    //   }
+    // }
   }
 </style>

@@ -14,11 +14,17 @@ export default {
     ...mapState('contract', [
       'tokensBalance',
       'tokensBalanceInit'
+    ]),
+    ...mapState('user', [
+      'userInfo'
     ])
   },
   watch: {
     tokensBalanceInit (val) {
       val && this.initTokensBalance()
+    },
+    userInfo (val, oval) {
+      val && oval && this.initTokensBalance()
     }
   },
   methods: {
