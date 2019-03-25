@@ -10,7 +10,7 @@
         <div class="v-flex commission-info-box">
           <p>HOPS commission</p>
           <p class="d-flex f-align-center commission-address-box">
-            <lordless-blockies :scale="3" :seed="info.from"/>
+            <lordless-blockies :scale="3" :seed="info.from" jump/>
             <span class="commission-user-address">{{ info.from | splitAddress({ before: 8, end: 6, symbol: '******' }) }}</span>
           </p>
           <p class="commission-info-date">{{ new Date(info.created_at) | dateFormat('HH:mm MMM dd YYYY') }}</p>

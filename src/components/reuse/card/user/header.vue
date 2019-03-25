@@ -30,7 +30,8 @@
             theme="light"
             :scale="18"
             radius="20px"
-            :seed="user.address"></lordless-blockies>
+            :seed="user.address"
+            jump/>
         </div>
         <div class="v-flex d-flex lg-f-align-center sm-text-center sm-col-reverse-flex info-header-cnt">
           <div class="v-flex header-cnt-text">

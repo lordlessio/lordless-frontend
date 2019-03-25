@@ -40,7 +40,8 @@
                     v-else-if="!isEditReferrer || isQueryReferrer || isTxPending"
                     :seed="referrerAddress"
                     theme="light"
-                    :scale="4"/>
+                    :scale="4"
+                    jump/>
                 </div>
               </div>
             </div>

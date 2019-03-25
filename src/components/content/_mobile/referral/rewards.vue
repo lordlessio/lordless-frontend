@@ -29,7 +29,7 @@
                   <div class="d-flex f-align-center record-info-middle">
                     <span class="text-upper">{{ record.candy ? record.candy.symbol : 'Token' }}</span>
                     <div class="v-flex d-flex f-align-center record-info-address-box">
-                      <lordless-blockies :scale="3" :seed="record.from"/>
+                      <lordless-blockies :scale="3" :seed="record.from" jump/>
                       <span>{{ record.from | splitAddress({ before: 8, end: 8, symbol: '***' }) }}</span>
                     </div>
                   </div>
@@ -106,7 +106,7 @@ export default {
         },
         {
           name: 'hops',
-          label: 'HOPS'
+          label: 'Commission'
         }
       ],
       rendered: false,
@@ -335,12 +335,12 @@ export default {
     background-color: #fff;
   }
   .referral-record-icon {
-    padding: 8px;
+    padding: 6px;
     width: 32px;
     height: 32px;
     fill: #fff;
     background-image: linear-gradient(-225deg, #124BDC 0%, #0079FF 100%);
-    border-radius: 100%;
+    border-radius: 5px;
     box-sizing: border-box;
     transform: translateY(20px);
   }

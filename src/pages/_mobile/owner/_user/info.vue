@@ -7,13 +7,13 @@
 </template>
 
 <script>
-import MobileOwnerInfo from '@/components/content/_mobile/info'
+import MobileOwnerInfo from '@/components/content/_mobile/user/info'
 import { userMixins, activatedMixins } from '@/mixins'
 
 import { historyState } from 'utils/tool'
 export default {
   name: 'mobile-me-info',
-  mixins: [userMixins, activatedMixins],
+  mixins: [ userMixins, activatedMixins ],
   data: () => {
     return {
       detailModel: false

@@ -44,7 +44,7 @@
                       :scale="3"
                       radius="3px"
                       jump
-                      :seed="item.executor.info"></lordless-blockies>
+                      :seed="item.executor.info"/>
                   </div>
                   <span class="earnings-item-reward">+{{ item.lord.reward.count | sliceStr({ end: 6 }) }} <span>{{ item.reward.candy.symbol }}</span></span>
                 </li>

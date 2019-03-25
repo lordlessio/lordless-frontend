@@ -1,7 +1,7 @@
 <template>
   <div class="recruit-card-box">
     <div class="d-flex f-align-start recruit-card-container">
-      <lordless-blockies :scale="5"/>
+      <lordless-blockies :scale="5" :seed="info.sender" jump/>
       <div class="recruit-card-cnt">
         <div class="v-flex recruit-info-box">
           <p class="text-break recruit-user-address">{{ info.sender }}</p>

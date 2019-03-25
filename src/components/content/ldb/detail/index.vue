@@ -28,7 +28,7 @@
     <section id="ldb-detail-content" class="ldb-detail-content" :class="{ 'show': contentShow, 'is-mobile': isMobile }">
       <div class="container detail-container md d-flex sm-col-flex">
         <div class="detail-cnt-left v-flex">
-          <mobile-tavern-recruits
+          <tavern-recruits
             v-if="isMobile"
             ref="tavernRecruits"
             :info.sync="ldbInfo"
@@ -108,8 +108,14 @@
           <tavern-recruits
             class="detail-right-card"
             ref="tavernRecruits"
+            isWebsite
             :info.sync="ldbInfo"
             :loading="infoLoading"/>
+          <!-- <tavern-recruits
+            class="detail-right-card"
+            ref="tavernRecruits"
+            :info.sync="ldbInfo"
+            :loading="infoLoading"/> -->
 
           <approved-tasks-tool
             ref="approvedTask"
@@ -153,8 +159,8 @@ import MobileHeaderTool from '@/components/content/_mobile/ldb/detail/ldbHeader'
 import TavernKeeps from './tavernkeeps'
 import MobileTavernKeeps from '@/components/content/_mobile/ldb/detail/tavernkeeps'
 
-import TavernRecruits from '@/components/content/ldb/detail/recruits'
-import MobileTavernRecruits from '@/components/content/_mobile/ldb/detail/recruits'
+// import TavernRecruits from '@/components/content/ldb/detail/recruits'
+import TavernRecruits from '@/components/content/_mobile/ldb/detail/recruits'
 
 // import TasksNowTool from './tasksNow'
 import QuestsTool from './questsTool'
@@ -312,7 +318,6 @@ export default {
     MobileTavernKeeps,
 
     TavernRecruits,
-    MobileTavernRecruits,
 
     // TasksNowTool,
     QuestsTool,

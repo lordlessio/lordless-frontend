@@ -23,7 +23,8 @@
                 theme="dark"
                 :scale="3"
                 :size="5"
-                :seed="info.lord._id || info.lord "/>
+                :seed="info.lord._id || info.lord"
+                jump/>
               <span class="building-owner-address">{{ info.lord._id || info.lord | splitAddress({ before: 3, end: 4 }) }}</span>
             </div>
             <!-- <div v-if="!info.chain.auction.isOnAuction && !info.chain.auction.isOnPreAuction"

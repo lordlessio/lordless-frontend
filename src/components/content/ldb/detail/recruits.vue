@@ -37,7 +37,7 @@
             :loading="furtherLoading"
             :disabled="furtherLoading || recruitBtnInfo.pending || recruitBtnInfo.disabled"
             @click="recruitHome">
-            {{ recruitBtnInfo.text }}
+            <span>{{ recruitBtnInfo.text }}</span>
           </lordless-btn>
         </div>
       </section>
@@ -54,10 +54,10 @@
 <script>
 import RecruitReminderDialog from '@/components/reuse/dialog/recruit/reminder'
 import { mapState } from 'vuex'
-import { metamaskMixins, publicMixins } from '@/mixins'
+import { metamaskMixins, publicMixins, checkTokensBalanceMixins } from '@/mixins'
 export default {
   name: 'website-tavern-recruits',
-  mixins: [ metamaskMixins, publicMixins ],
+  mixins: [ metamaskMixins, publicMixins, checkTokensBalanceMixins ],
   props: {
     info: {
       type: Object,
@@ -108,6 +108,9 @@ export default {
     },
     isFullWarn () {
       return this.info && (this.info.recruits.hunterMembers / this.info.recruits.maxHunterMembers) > 0.9
+    },
+    enoughHopsFee () {
+      return this.info.recruits.fee
     }
   },
   watch: {

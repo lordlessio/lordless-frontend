@@ -89,12 +89,13 @@ export default {
     },
     jumpFunc () {
       if (!this.jump) return
+      this.$router.push(`/user/${this.seed}/info?refer=${this.$route.path}`)
       console.log('--- jump', this.seed)
-      if (this.userInfo._id && this.userInfo._id.toLowerCase() === this.seed.toLowerCase()) {
-        this.$router.push('/owner/info')
-      } else {
-        this.$router.push(`/user/${this.seed}`)
-      }
+      // if (this.userInfo._id && this.userInfo._id.toLowerCase() === this.seed.toLowerCase()) {
+      //   this.$router.push('/owner/info')
+      // } else {
+      //   this.$router.push(`/user/${this.seed}/info?refer=${this.$route.path}`)
+      // }
     }
   },
   mounted () {

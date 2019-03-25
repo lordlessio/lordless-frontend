@@ -1,6 +1,6 @@
 <template>
   <div class="full-width mobile-crowdsale-container" :class="[ theme ]">
-    <lordless-blockies class="token-crowdsale-blockies" seed="account" :scale="18"/>
+    <lordless-blockies class="token-crowdsale-blockies" :seed="account" :scale="18"/>
     <div class="token-crowdsale-header">
       <h3>WALLET</h3>
       <div class="crowdsale-header-item">

@@ -79,7 +79,7 @@
                   :scale="5"
                   jump
                   theme="light"
-                  radius="5px"></lordless-blockies>
+                  radius="5px"/>
               </p>
             </li>
           </ul>
@@ -104,7 +104,7 @@
                   :scale="5"
                   jump
                   theme="light"
-                  radius="5px"></lordless-blockies>
+                  radius="5px"/>
               </p>
             </li>
           </ul>

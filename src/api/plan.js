@@ -16,8 +16,8 @@ module.exports = axios => {
       return axios.get('/api/plans', { params })
     },
 
-    // 根据 user token 获取 该用户的 plan records
-    getPlanRecordssByToken: (params) => {
+    // 根据 user 获取 该用户的 plan records
+    getUserPlanRecords: (params) => {
       return axios.get('/api/plan/records', { params })
     },
 
@@ -38,7 +38,7 @@ module.exports = axios => {
 
     // 获取用户 boosts
     getPlanBoosts: (params) => {
-      return axios.get('/api/plan/boosts', params)
+      return axios.get('/api/plan/boosts', { params })
     }
   }
 }

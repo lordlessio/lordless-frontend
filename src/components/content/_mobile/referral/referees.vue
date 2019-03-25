@@ -10,7 +10,7 @@
         <ul class="referral-referees-list">
           <li class="d-flex f-align-start referral-referees-item"
             v-for="(item, index) of referees.list" :key="index">
-            <lordless-blockies :scale="5" :seed="item.referee.address"/>
+            <lordless-blockies :scale="5" :seed="item.referee.address" jump/>
             <div class="v-flex col-flex referees-item-info">
               <p class="text-break referees-item-address">{{ item.referee.address }}</p>
               <span class="inline-block referees-tx-status" :class="{ 'is-confirmed': item.refererTx.status === 1, 'is-confirming': item.refererTx.status === 0 }">

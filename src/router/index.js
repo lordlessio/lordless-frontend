@@ -69,6 +69,9 @@ import MobileReferralRewards from '@/pages/_mobile/owner/_user/referral/rewards'
 
 import MobileReferee from '@/pages/_mobile/owner/referee'
 
+import MobileUserDetail from '@/pages/_mobile/user/_detail'
+import MobileUserTaverns from '@/pages/_mobile/user/taverns'
+
 import MobileTavernDetail from '@/pages/_mobile/_tavern'
 import MobileTavernRecruitsDetail from '@/pages/_mobile/_recruits'
 import MobileTavernCommissionsDetail from '@/pages/_mobile/_commissions'
@@ -180,6 +183,30 @@ const mobileRoutes = [
       isPublic: true,
       keepAlive: false,
       transition: false,
+      hideTab: true
+    }
+  },
+  {
+    path: '/user/:address/info',
+    name: 'mobile-user-info-detail',
+    component: MobileUserDetail,
+    meta: {
+      title: 'User Info Detail - LORDLESS',
+      isPublic: true,
+      keepAlive: true,
+      transition: true,
+      hideTab: true
+    }
+  },
+  {
+    path: '/user/:address/taverns',
+    name: 'mobile-user-taverns-detail',
+    component: MobileUserTaverns,
+    meta: {
+      title: 'User Taverns - LORDLESS',
+      isPublic: true,
+      keepAlive: true,
+      transition: true,
       hideTab: true
     }
   },
@@ -558,7 +585,7 @@ const routes = [
     }
   },
   {
-    path: '/user/:address',
+    path: '/user/:address/info',
     name: 'userDetail',
     component: UserDetail,
     meta: {

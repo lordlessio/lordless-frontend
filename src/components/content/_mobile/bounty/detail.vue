@@ -38,7 +38,7 @@
             </h3>
             <div class="chest-owner-card">
               <a class="d-flex f-align-center" :href="openseaLink" target="_blank">
-                <lordless-blockies :seed="chestDetail.user" :scale="7"/>
+                <lordless-blockies :seed="chestDetail.user" :scale="7" jump/>
                 <p class="v-flex text-break chest-owner-address">{{ chestDetail.user }}</p>
                 <!-- <span class="inline-block line-height-0 chest-arrow-icon">
                   <svg>

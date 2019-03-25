@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import MobileOwnerInfoDetail from '@/components/content/_mobile/info/detail'
+import MobileOwnerInfoDetail from '@/components/content/_mobile/user/detail'
 
 export default {
   name: 'mobile-me-info',

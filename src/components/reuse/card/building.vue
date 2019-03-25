@@ -46,7 +46,8 @@
                 theme="dark"
                 :scale="4"
                 :size="6"
-                :seed="info.lord._id || info.lord "/>
+                :seed="info.lord._id || info.lord"
+                jump/>
               <span class="building-lord-address">{{ info.lord._id || info.lord | splitAddress({ before: 6, end: 2, symbol: '**' }) }}</span>
             </div>
           </div>

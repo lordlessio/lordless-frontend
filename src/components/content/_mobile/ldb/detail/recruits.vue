@@ -1,5 +1,5 @@
 <template>
-  <div class="relative alone-layer tavern-recruits-box">
+  <div class="relative alone-layer tavern-recruits-box" :class="{ 'is-website': isWebsite }">
     <transition name="ld-hide-fade" mode="out-in">
       <section v-if="!loading" class="d-flex col-flex f-align-ceter sm-col-flex detail-tavern-recruits">
         <h2 class="detail-mobile-title">Recruits</h2>
@@ -23,12 +23,13 @@
           <lordless-btn
             v-if="recruitBtnInfo.show"
             class="v-flex tavern-recruits-btn"
-            theme="blue"
-            inverse
+            :theme="enoughHopsFee ? 'blue' : 'red-linear'"
+            :inverse="enoughHopsFee"
             :loading="recruitsLoading"
             :disabled="recruitsLoading || recruitBtnInfo.pending || recruitBtnInfo.disabled"
             @click="recruitHome">
-            {{ recruitBtnInfo.text }}
+            <span v-if="enoughHopsFee">{{ recruitBtnInfo.text }}</span>
+            <span v-else>Insufficient HOPS</span>
           </lordless-btn>
         </div>
       </section>
@@ -48,10 +49,10 @@ import RecruitReminderDialog from '@/components/reuse/dialog/recruit/reminder'
 
 import { weiByDecimals, formatMoneyNumber } from 'utils/tool'
 import { mapState } from 'vuex'
-import { metamaskMixins, publicMixins } from '@/mixins'
+import { metamaskMixins, publicMixins, checkTokensBalanceMixins } from '@/mixins'
 export default {
   name: 'mobile-tavern-recruits',
-  mixins: [ metamaskMixins, publicMixins ],
+  mixins: [ metamaskMixins, publicMixins, checkTokensBalanceMixins ],
   props: {
     info: {
       type: Object,
@@ -61,6 +62,11 @@ export default {
     },
 
     loading: {
+      type: Boolean,
+      default: false
+    },
+
+    isWebsite: {
       type: Boolean,
       default: false
     }
@@ -101,6 +107,9 @@ export default {
     isFullWarn () {
       return this.info && (this.info.recruits.hunterMembers / this.info.recruits.maxHunterMembers) > 0.9
     },
+    enoughHopsFee () {
+      return this.hopsBalance >= this.info.recruits.fee
+    },
     recruits () {
       const info = this.info
       if (!info.id) return []
@@ -108,11 +117,11 @@ export default {
         {
           text: 'Recruits',
           value: (info.recruits.hunterMembers || '0').toLocaleString(),
-          path: `/recruits/${info.id}`
+          path: this.isWebsite ? null : `/recruits/${info.id}`
         },
         {
           text: 'Commissions',
-          path: `/commissions/${info.id}`,
+          path: this.isWebsite ? null : `/commissions/${info.id}`,
           line: true
         },
         {
@@ -227,6 +236,10 @@ export default {
     },
 
     async recruitHome (Recruited = this.Recruited) {
+      if (!this.enoughHopsFee) {
+        this.$router.push(`/owner/hops?refer=${this.$route.path}`)
+        return
+      }
       try {
         const authorize = await this.$refs.recruitedAuthorize.checkoutAuthorize({ tokenAllowance: true })
         if (!authorize) return
@@ -315,6 +328,18 @@ export default {
 <style lang="scss" scoped>
   .tavern-recruits-box {
     // overflow: hidden;
+    &.is-website {
+      .detail-mobile-title {
+        display: none;
+      }
+      .tavern-recruits-cnt {
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+      }
+      .tavern-recruits-bottom {
+        box-shadow: 0 3px 10px 2px rgba(0, 0, 0, 0.15);
+      }
+    }
   }
   .detail-mobile-title {
     margin-top: 28px;

@@ -18,7 +18,7 @@
         <ul>
           <li v-for="(record, index) of planRecords.list" :key="index" class="plan-records-item" :class="{ 'none-line': record.month }">
             <p v-if="record.month" class="plan-records-date">{{ record.month.timestamp | dateFormat('MMM YYYY') }}</p>
-            <plan-record-card :info="record" :recordType="record.type"/>
+            <plan-record-card :user="userAddress" :info="record" :recordType="record.type"/>
           </li>
         </ul>
         <div class="text-center records-noMore-text">
@@ -38,11 +38,11 @@ import PlanRecordCard from '@/components/reuse/_mobile/card/plan/record'
 
 import { getLastYearMonths } from 'utils/tool'
 
-import { getPlanRecordssByToken } from 'api'
-import { initLoadingMixins } from '@/mixins'
+import { getUserPlanRecords } from 'api'
+import { initLoadingMixins, publicMixins } from '@/mixins'
 export default {
   name: 'mobile-plan-records-content',
-  mixins: [ initLoadingMixins ],
+  mixins: [ initLoadingMixins, publicMixins ],
   data: () => {
     return {
       rendered: false,
@@ -60,6 +60,11 @@ export default {
     'planRecords.list' (val) {
       this.rewriteRecords(val)
       console.log('------ watch planRecords.list')
+    }
+  },
+  computed: {
+    userAddress () {
+      return this.$route.params.address || this.account
     }
   },
   components: {
@@ -103,7 +108,7 @@ export default {
 
     async getUserPlanRecords ({ pn, ps = this.planRecords.ps } = {}) {
       try {
-        const res = await getPlanRecordssByToken({ pn, ps })
+        const res = await getUserPlanRecords({ pn, ps, type: 'all' })
         if (res.code === 1000 && res.data) {
           return res.data
         }

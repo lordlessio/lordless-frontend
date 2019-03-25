@@ -15,6 +15,7 @@ const promotionsMixins = require('./utils/promotions')
 const checkTokensBalanceMixins = require('./utils/checkTokensBalance')
 const planBoostsMixins = require('./utils/planBoosts')
 const loadMoreDataMixins = require('./utils/loadMoreData')
+const overviewPublicMixins = require('./user/overviewPublic')
 
 // console.log('contractMixins', contractMixins)
 // // export const loginMixins = login
@@ -32,5 +33,6 @@ module.exports = {
   clipboardMixins: clipboardMixins.default,
   initLoadingMixins: initLoadingMixins.default,
   planBoostsMixins: planBoostsMixins.default,
-  loadMoreDataMixins: loadMoreDataMixins.default
+  loadMoreDataMixins: loadMoreDataMixins.default,
+  overviewPublicMixins: overviewPublicMixins.default
 }
