@@ -11,8 +11,8 @@
         <p class="record-info-time">{{ recordInfo.date | dateFormat('HH:mm MMM DD YYYY') }}</p>
       </div>
       <div class="plan-record-amount">
-        <p v-if="recordInfo.reward" class="TTFontBolder text-right text-nowrap is-blue">+ {{ recordInfo.reward }}</p>
-        <p v-else class="TTFontBolder text-right text-nowrap is-black">- {{ recordInfo.cost }}</p>
+        <p v-if="recordInfo.cost" class="TTFontBolder text-right text-nowrap is-black">- {{ recordInfo.cost || 0 }}</p>
+        <p v-else class="TTFontBolder text-right text-nowrap is-blue">+ {{ recordInfo.reward || 0 }}</p>
       </div>
     </div>
   </div>

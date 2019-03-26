@@ -160,9 +160,10 @@ import UserDetailSkeletion from '@/components/skeletion/_mobile/user/detail'
 
 import { getPlanBoosts } from 'api'
 
-import { nextAC, formatDecimal, splitAddress } from 'utils/tool'
+import { nextAC, formatDecimal, weiByDecimals } from 'utils/tool'
 
 import { publicMixins, planBoostsMixins, overviewPublicMixins } from '@/mixins'
+import { mapState } from 'vuex'
 export default {
   name: 'mobile-user-info-detail',
   mixins: [ publicMixins, planBoostsMixins, overviewPublicMixins ],
@@ -176,6 +177,14 @@ export default {
     return {
       boostsLoading: true,
       unOwnerPlanBoosts: null,
+      tokensBalance: {
+        less: {
+          balance: 0
+        },
+        hops: {
+          balance: 0
+        }
+      },
 
       levelProgress: {
         gradient: {
@@ -194,6 +203,16 @@ export default {
     }
   },
   computed: {
+    ...mapState('contract', [
+      'tokensContract',
+      'tokensContractInit'
+    ]),
+    ...mapState('candy', [
+      'candySymbols'
+    ]),
+    detailTokenInit () {
+      return this.tokensContractInit && this.candySymbols.list && this.candySymbols.list.length
+    },
     userAddress () {
       return this.$route.params.address
     },
@@ -222,6 +241,14 @@ export default {
       const overviews = this.overviews
       return [
         {
+          text: 'LESS(Wallet)',
+          value: (weiByDecimals(this.tokensBalance.less.balance, this.tokensBalance.less.decimals) || '0').toLocaleString()
+        },
+        {
+          text: 'HOPS(Wallet)',
+          value: (weiByDecimals(this.tokensBalance.hops.balance, this.tokensBalance.hops.decimals) || '0').toLocaleString()
+        },
+        {
           text: 'Materials',
           value: `$ ${(formatDecimal(overviews.holdings.value) || '0').toLocaleString()}`
         },
@@ -243,8 +270,13 @@ export default {
     scrollOpt () {
       return {
         history: true,
-        text: `${splitAddress(this.userAddress, { before: 4, end: 2 })} Info`
+        text: ''
       }
+    }
+  },
+  watch: {
+    detailTokenInit (val) {
+      val && this.checkUserWalletTokens()
     }
   },
   components: {
@@ -256,6 +288,10 @@ export default {
       const refer = this.$route.query.refer
       return this.$router.push(refer || path)
     },
+    initUserDetail () {
+      this.checkUserPlanBoosts()
+      this.checkUserWalletTokens()
+    },
     async checkUserPlanBoosts (user = this.userAddress) {
       this.boostsLoading = true
       try {
@@ -266,15 +302,51 @@ export default {
       } catch (err) {
       }
       this.boostsLoading = false
+    },
+    async checkUserWalletTokens (userAddress = this.userAddress, candySymbols = this.candySymbols, tokensContract = this.tokensContract) {
+      console.log('------------ checkUserWalletTokens', candySymbols.list)
+      if (!this.detailTokenInit) return
+      let lessObj
+      let hopsObj
+      const candies = candySymbols.list
+      for (const item of candies) {
+        if (item.symbol === 'LESS') {
+          lessObj = {
+            address: item.address,
+            decimals: item.decimals
+          }
+        }
+        if (item.symbol === 'HOPS') {
+          hopsObj = {
+            address: item.address,
+            decimals: item.decimals
+          }
+        }
+      }
+
+      const lessBalance = (await tokensContract[lessObj.address].methods('balanceOf', [ userAddress ])).toNumber()
+      const hopsBalance = (await tokensContract[hopsObj.address].methods('balanceOf', [ userAddress ])).toNumber()
+      this.tokensBalance = {
+        less: {
+          balance: lessBalance,
+          decimals: lessObj.decimals
+        },
+        hops: {
+          balance: hopsBalance,
+          decimals: hopsObj.decimals
+        }
+      }
+      // const lessAddress =
+      console.log('-------- candySymbols', candySymbols)
     }
   },
   activated () {
     if (!this.rendered) return
-    this.checkUserPlanBoosts()
+    this.initUserDetail()
   },
   async mounted () {
     this.$nextTick(() => {
-      this.checkUserPlanBoosts()
+      this.initUserDetail()
     })
   }
 }

@@ -200,7 +200,7 @@ export default {
         {
           text: 'Taverns',
           value: overviews.tavernCount,
-          path: `/user/${this.account}/taverns`
+          path: `/user/${this.account}/taverns?refer=${this.$route.path}`
         }
       ]
     },
