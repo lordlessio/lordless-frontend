@@ -1,15 +1,19 @@
 <template>
   <div class="relative mobile-user-box">
+    <mobile-nav-bar
+      ref="mobile-nav-bar"
+      v-bind="scrollOpt"
+      @history="historyBack"/>
     <transition name="ld-hide-fade" mode="out-in">
       <user-detail-skeletion v-if="loading || boostsLoading"/>
       <div v-else class="relative mobile-user-container">
-        <div class="info-detail-navbar">
+        <!-- <div class="info-detail-navbar">
           <span class="inline-block line-height-0 detail-back-icon" @click.stop="historyBack">
             <svg>
               <use xlink:href="#icon-back"/>
             </svg>
           </span>
-        </div>
+        </div> -->
         <div class="text-center user-detail-card user-detail-header">
           <div class="mobile-user-content">
             <div class="mobile-user-avatar">
@@ -156,7 +160,7 @@ import UserDetailSkeletion from '@/components/skeletion/_mobile/user/detail'
 
 import { getPlanBoosts } from 'api'
 
-import { nextAC, formatDecimal } from 'utils/tool'
+import { nextAC, formatDecimal, splitAddress } from 'utils/tool'
 
 import { publicMixins, planBoostsMixins, overviewPublicMixins } from '@/mixins'
 export default {
@@ -235,6 +239,12 @@ export default {
           path: `/user/${this.userAddress}/taverns`
         }
       ]
+    },
+    scrollOpt () {
+      return {
+        history: true,
+        text: `${splitAddress(this.userAddress, { before: 4, end: 2 })} Info`
+      }
     }
   },
   components: {
@@ -284,7 +294,8 @@ export default {
       left: 50%;
       width: 120%;
       height: 238px;
-      background-image: linear-gradient(-225deg, #124BDC 0%, #0079FF 100%);
+      // background-image: linear-gradient(-225deg, #124BDC 0%, #0079FF 100%);
+      background-color: $--main-blue-color;
       border-bottom-left-radius: 100%;
       border-bottom-right-radius: 100%;
       transform: translateX(-50%);

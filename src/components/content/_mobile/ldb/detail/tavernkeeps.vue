@@ -3,7 +3,14 @@
 
     <transition name="ld-hide-fade" mode="out-in" @after-enter="datasEnter">
       <section v-if="!loading && !keepsLoading && keeps.length" class="d-flex col-flex f-align-ceter sm-col-flex detail-tavern-keeps">
-        <h2 class="detail-mobile-title">Successive tavernkeeps</h2>
+        <h2 class="d-flex f-align-center detail-mobile-title">
+          <span class="inline-block line-height-0 mobile-title-icon">
+            <svg>
+              <use xlink:href="#icon-color-tavernkeep"/>
+            </svg>
+          </span>
+          <span>Tavernkeeps</span>
+        </h2>
         <div
           v-for="(keep, index) of keeps" :key="keep._id"
           class="relative mobile-keeps-item">
@@ -96,6 +103,11 @@ export default {
     margin-bottom: 10px;
     font-size: 18px;
     color: $--main-color;
+  }
+  .mobile-title-icon {
+    margin-right: 8px;
+    width: 22px;
+    height: 22px;
   }
   .mobile-keeps-item {
     padding: 16px 18px;

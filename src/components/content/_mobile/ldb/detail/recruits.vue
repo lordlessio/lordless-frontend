@@ -2,7 +2,14 @@
   <div class="relative alone-layer tavern-recruits-box" :class="{ 'is-website': isWebsite }">
     <transition name="ld-hide-fade" mode="out-in">
       <section v-if="!loading" class="d-flex col-flex f-align-ceter sm-col-flex detail-tavern-recruits">
-        <h2 class="detail-mobile-title">Recruits</h2>
+        <h2 class="d-flex f-align-center detail-mobile-title">
+          <span class="inline-block line-height-0 mobile-title-icon">
+            <svg>
+              <use xlink:href="#icon-color-shield"/>
+            </svg>
+          </span>
+          <span>Recruits</span>
+        </h2>
         <div class="tavern-recruits-bottom">
           <div class="tavern-recruits-cnt">
             <ul class="tavern-recruit-ul">
@@ -346,6 +353,11 @@ export default {
     margin-bottom: 10px;
     font-size: 18px;
     color: $--main-color;
+  }
+  .mobile-title-icon {
+    margin-right: 8px;
+    width: 22px;
+    height: 22px;
   }
   .tavern-recruits-bottom {
     border-radius: 5px;
