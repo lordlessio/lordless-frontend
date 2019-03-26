@@ -161,6 +161,13 @@ export default {
 
   }
   .tavern-recruits-item {
+    &:not(:last-of-type) {
+      /deep/ {
+        .recruit-card-cnt {
+          border-bottom: 1px solid #ddd;
+        }
+      }
+    }
   }
   .recruit-item-cnt {
     padding-left: 20px;

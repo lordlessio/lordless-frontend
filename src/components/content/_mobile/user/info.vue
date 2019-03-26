@@ -33,11 +33,10 @@
         </div>
       </div>
       <div class="d-flex f-align-center user-permission-box">
-        <div class="d-flex f-align-center user-permission-container">
+        <div class="d-flex f-align-center user-permission-container" @click.stop="$router.push('/owner/privileges')">
           <ul class="d-flex f-align-center user-boosts-box user-permission-ul">
             <li class="user-permission-item"
-              v-for="(boost, index) of userBoosts" :key="index"
-              @click.stop="boost.path ? $router.push(boost) : null">
+              v-for="(boost, index) of userBoosts" :key="index">
               <span class="inline-block line-height-0 user-permission-icon">
                 <svg>
                   <use :xlink:href="boost.number ? boost.icon : boost.grayIcon"/>
@@ -47,8 +46,7 @@
           </ul>
           <ul class="d-flex f-align-center user-commissions-box user-permission-ul">
             <li class="user-permission-item"
-              v-for="(commission, index) of userCommissions" :key="index"
-              @click.stop="commission.path ? $router.push(commission) : null">
+              v-for="(commission, index) of userCommissions" :key="index">
               <span class="inline-block line-height-0 user-permission-icon">
                 <svg>
                   <use :xlink:href="commission.open ? commission.icon : commission.grayIcon"/>

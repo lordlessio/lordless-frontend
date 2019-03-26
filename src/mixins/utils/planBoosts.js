@@ -1,9 +1,9 @@
 import { mapState } from 'vuex'
 export default {
   computed: {
-    ...mapState('user', {
-      userPlanBoosts: 'userPlanBoosts'
-    }),
+    ...mapState('user',
+      [ 'userPlanBoosts' ]
+    ),
     planBoosts () {
       return this.unOwnerPlanBoosts || this.userPlanBoosts
     },

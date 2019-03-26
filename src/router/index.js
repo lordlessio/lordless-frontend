@@ -68,6 +68,7 @@ import MobileReferralReferees from '@/pages/_mobile/owner/_user/referral/referee
 import MobileReferralRewards from '@/pages/_mobile/owner/_user/referral/rewards'
 
 import MobileReferee from '@/pages/_mobile/owner/referee'
+import MobilePrivileges from '@/pages/_mobile/owner/privileges'
 
 import MobileUserDetail from '@/pages/_mobile/user/_detail'
 import MobileUserTaverns from '@/pages/_mobile/user/taverns'
@@ -253,6 +254,18 @@ const mobileRoutes = [
           ownerChild: true,
           keepAlive: true,
           transition: false,
+          hideTab: true
+        }
+      },
+      {
+        path: 'privileges',
+        name: 'mobile-user-privileges',
+        component: MobilePrivileges,
+        meta: {
+          title: 'Privileges - LORDLESS',
+          ownerChild: true,
+          keepAlive: true,
+          transition: true,
           hideTab: true
         }
       },
