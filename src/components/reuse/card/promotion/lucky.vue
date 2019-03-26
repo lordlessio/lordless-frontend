@@ -101,12 +101,13 @@ export default {
     ]),
     ...mapState('contract', [
       'Luckyblock',
-      'tokensContract'
+      'tokensContract',
+      'tokensContractInit'
     ]),
 
     playInit () {
       const { loading, isConnected } = this.web3Opt
-      return !loading && isConnected && !!this.info._id && !!this.Luckyblock
+      return !loading && isConnected && !!this.info._id && !!this.Luckyblock && this.tokensContractInit
     },
 
     web3Error () {
@@ -144,7 +145,7 @@ export default {
       //   this.initFailedplay()
       //   return
       // }
-      if (!blockInfos || !Luckyblock) return
+      if (!blockInfos || !Luckyblock || !this.playInit) return
 
       this.isChecking = true
 
@@ -170,7 +171,12 @@ export default {
 
       contractInfo.tokenWinnings = await Promise.all(tokenWinnings.map(async winnings => {
         const candy = winnings.candy.address
-        const tokenBalance = (await this.tokensContract[candy].methods('balanceOf', [ contractAddress ])).toNumber() || 0
+        let tokenBalance = 0
+        if (this.tokensContract[candy]) {
+          tokenBalance = (await this.tokensContract[candy].methods('balanceOf', [ contractAddress ])).toNumber() || 0
+        } else {
+          isEnded = true
+        }
 
         console.log('tokenBalance', tokenBalance)
         // 判断 token 是否充足
