@@ -55,7 +55,8 @@
 import RecruitReminderDialog from '@/components/reuse/dialog/recruit/reminder'
 
 import { weiByDecimals, formatMoneyNumber } from 'utils/tool'
-import { mapState } from 'vuex'
+import { actionTypes } from '@/store/types'
+import { mapState, mapActions } from 'vuex'
 import { metamaskMixins, publicMixins, checkTokensBalanceMixins } from '@/mixins'
 export default {
   name: 'mobile-tavern-recruits',
@@ -160,6 +161,9 @@ export default {
     RecruitReminderDialog
   },
   methods: {
+    ...mapActions('user', [
+      actionTypes.USER_SET_USER_HOME
+    ]),
     async checkRecruitTavernInfo (info = this.info, Recruited = this.Recruited) {
       this.recruitsLoading = true
       const candySymbols = this.candySymbols.list
@@ -169,7 +173,10 @@ export default {
       const hopsAddress = await Recruited.methods('hopsAddress')
       console.log(' ========= candySymbols', candySymbols, info.id)
 
-      if (!info.id) return []
+      if (!info.id) {
+        this.recruitsLoading = false
+        return []
+      }
       if (!result['0'] && !parseInt(result['1'])) {
         result = await Recruited.methods('checkOriginHomeInfo', [ info.id ])
       }
@@ -214,15 +221,34 @@ export default {
       if (!this.recruitsInit) return
 
       const recruitTxKey = 'lordless-recruit-tx'
-      const recruitTx = localStorage.getItem(recruitTxKey)
-      if (recruitTx) {
+      const recruitTxData = localStorage.getItem(recruitTxKey)
+      if (recruitTxData) {
+        const recruitTx = recruitTxData.split('_')[0]
+        const tavernId = recruitTxData.split('_')[1]
+
+        // check recruitTx and tavernId is valid
+        if (!recruitTx.match(/^(0x)[a-fA-F0-9]{64}$/) || isNaN(parseInt(tavernId))) {
+          localStorage.removeItem(recruitTxKey)
+          this.checkRecruitTavernInfo()
+          return
+        }
         web3js.eth.getTransactionReceipt(recruitTx, (err, res) => {
           let bool = false
+
           if (err) {
             bool = false
-            return
+
+            // 如果合约执行失败，即 status 为 0x0 的时候
+          } else if (res && res.status === '0x0') {
+            bool = true
+          } else {
+            const userHomeBool = this.userHome && parseInt(tavernId) === parseInt(this.userHome.homeInfo.tavern.id)
+            bool = !!res && userHomeBool
+
+            // 如果 tx 返回成功，但是 userHome 还未更新，则执行更新 userHome
+            !userHomeBool && this[actionTypes.USER_SET_USER_HOME]()
           }
-          bool = !!res
+          console.log('---------- has recruit tx bool', bool)
           if (bool) {
             localStorage.removeItem(recruitTxKey)
             this.checkRecruitTavernInfo()
@@ -291,7 +317,7 @@ export default {
         // 使用自有封装对象
         window.lordlessMethods.buy(params).then(async tx => {
           // console.log('tx', tx)
-          localStorage.setItem('lordless-recruit-tx', tx)
+          localStorage.setItem('lordless-recruit-tx', `${tx}_${info.id}`)
 
           this.metamaskChoose = false
           this.recruitsLoading = false
@@ -314,7 +340,7 @@ export default {
       }
     },
     initStatus () {
-      this.recruitsLoading = true
+      this.recruitsLoading = false
       this.recruitPending = false
     }
   },
