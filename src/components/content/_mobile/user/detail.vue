@@ -258,7 +258,7 @@ export default {
         },
         {
           text: 'Deposited',
-          value: `${(overviews.depositsCandies.lessCount || '0').toLocaleString()} LESS`
+          value: `${(overviews.depositsCandies.lessCount ? weiByDecimals(overviews.depositsCandies.lessCount) : '0').toLocaleString()} LESS`
         },
         {
           text: 'Taverns',

@@ -125,7 +125,7 @@
                 <use xlink:href="#icon-telegram"/>
               </svg>
             </a>
-            <a class="inline-block" href="https://twitter.com/LordLessIo" target="_blank">
+            <a class="inline-block" href="https://twitter.com/lordless_global" target="_blank">
               <svg>
                 <use xlink:href="#icon-twitter"/>
               </svg>

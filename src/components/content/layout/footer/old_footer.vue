@@ -17,7 +17,7 @@
         </div>
         <div class="sm-d-flex sm-f-justify-around lg-text-right footer-icons-box">
           <div class="sm-v-flex footer-icons-item">
-            <a class="inline-block" target="__blank" href="https://twitter.com/LordLessIo">
+            <a class="inline-block" target="__blank" href="https://twitter.com/lordless_global">
               <svg v-if="theme !== 'default'">
                 <use xlink:href="#icon-twitter"/>
               </svg>

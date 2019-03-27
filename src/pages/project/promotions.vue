@@ -7,7 +7,7 @@
         <div class="home-promotions-tips">
           <p class="d-flex f-align-center">
             <span>Follow</span>
-            <a class="d-inline-flex f-align-center home-promotions-twitter-link" target="_blank" href="https://twitter.com/LordLessIo">
+            <a class="d-inline-flex f-align-center home-promotions-twitter-link" target="_blank" href="https://twitter.com/lordless_global">
               <span class="inline-block line-height-0 promotions-twitter-icon">
                 <svg>
                   <use xlink:href="#icon-twitter"/>

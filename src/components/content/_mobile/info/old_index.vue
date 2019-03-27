@@ -183,7 +183,7 @@ export default {
         {
           icon: '#icon-twitter',
           title: '@LordLessIo',
-          link: 'https://twitter.com/LordLessIo'
+          link: 'https://twitter.com/lordless_global'
         },
         {
           icon: '#icon-lordless',

@@ -10,7 +10,7 @@
           <div class="home-promotions-tips">
             <p>Follow our Twitter to make you never miss any promotions in LORDLESS.</p>
             <lordless-btn class="promotions-twitter-btn" theme="red-linear" shadow>
-              <a class="d-flex f-align-center" target="_blank" href="https://twitter.com/LordLessIo">
+              <a class="d-flex f-align-center" target="_blank" href="https://twitter.com/lordless_global">
                 <span class="inline-block line-height-0 promotions-twitter-icon">
                   <svg>
                     <use xlink:href="#icon-twitter"/>

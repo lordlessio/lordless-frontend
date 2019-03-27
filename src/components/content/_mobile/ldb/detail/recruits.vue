@@ -124,7 +124,7 @@ export default {
       return [
         {
           text: 'Recruits',
-          value: (info.recruits.hunterMembers || '0').toLocaleString(),
+          value: `${(info.recruits.hunterMembers || '0').toLocaleString()} / ${(info.recruits.maxHunterMembers || '0').toLocaleString()}`,
           path: this.isWebsite ? null : `/recruits/${info.id}`
         },
         {
@@ -132,10 +132,10 @@ export default {
           path: this.isWebsite ? null : `/commissions/${info.id}`,
           line: true
         },
-        {
-          text: 'Max recruits',
-          value: (info.recruits.maxHunterMembers || '0').toLocaleString()
-        },
+        // {
+        //   text: 'Max recruits',
+        //   value: (info.recruits.maxHunterMembers || '0').toLocaleString()
+        // },
         {
           text: 'Recruit boost',
           value: `${(info.chain.popularity - 1) * 0.5 + 3}%`
