@@ -32,28 +32,40 @@
           </div>
         </div>
       </div>
-      <div class="d-flex f-align-center user-permission-box">
-        <div class="d-flex f-align-center user-permission-container" @click.stop="$router.push('/owner/privileges')">
-          <ul class="d-flex f-align-center user-boosts-box user-permission-ul">
-            <li class="user-permission-item"
-              v-for="(boost, index) of userBoosts" :key="index">
-              <span class="inline-block line-height-0 user-permission-icon">
-                <svg>
-                  <use :xlink:href="boost.number ? boost.icon : boost.grayIcon"/>
-                </svg>
-              </span>
-            </li>
-          </ul>
-          <ul class="d-flex f-align-center user-commissions-box user-permission-ul">
-            <li class="user-permission-item"
-              v-for="(commission, index) of userCommissions" :key="index">
-              <span class="inline-block line-height-0 user-permission-icon">
-                <svg>
-                  <use :xlink:href="commission.open ? commission.icon : commission.grayIcon"/>
-                </svg>
-              </span>
-            </li>
-          </ul>
+      <div class="user-permission-box">
+        <div class="user-permission-container">
+          <transition name="ld-hide-fade" mode="out-in">
+            <div v-if="!userBoosts || !userBoosts.length" class="permission-container-skeletion">
+              <ul class="d-flex f-align-center permission-ul-skeletion skeletion-breath">
+                <li v-for="item in 5" :key="item" class="v-flex d-flex f-auto-center permission-item-skeletion">
+                  <span class="inline-block line-height-0"></span>
+                </li>
+              </ul>
+            </div>
+            <div v-else class="user-permission-cnt" @click.stop="$router.push(`/user/${account}/privileges?refer=${$route.path}`)">
+              <ul class="d-flex f-align-center user-boosts-box user-permission-ul">
+                <li class="v-flex d-flex f-auto-center user-permission-item"
+                  :class="{ 'permission-line-item': index === userBoosts.length }"
+                  v-for="(boost, index) of [].concat(userBoosts, userCommissions)" :key="index">
+                  <span class="inline-block line-height-0 user-permission-icon">
+                    <svg>
+                      <use :xlink:href="(boost.open || boost.number) ? boost.icon : boost.grayIcon"/>
+                    </svg>
+                  </span>
+                </li>
+              </ul>
+              <!-- <ul class="d-flex f-align-center user-commissions-box user-permission-ul">
+                <li class="v-flex user-permission-item"
+                  v-for="(commission, index) of userCommissions" :key="index">
+                  <span class="inline-block line-height-0 user-permission-icon">
+                    <svg>
+                      <use :xlink:href="commission.open ? commission.icon : commission.grayIcon"/>
+                    </svg>
+                  </span>
+                </li>
+              </ul> -->
+            </div>
+          </transition>
         </div>
       </div>
       <div class="user-info-assets">
@@ -307,33 +319,50 @@ export default {
     background-color: #fff;
   }
   .user-permission-container {
+    transform: translateY(-26px);
+  }
+  .user-permission-cnt {
     padding: 12px 20px;
     border-radius: 5px;
     background-color: #fff;
-    transform: translateY(-26px);
     box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.12);
   }
   .user-boosts-box {
 
   }
-  .user-commissions-box {
-    position: relative;
-    margin-left: 28px;
-    padding-left: 28px;
-    &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 4px;
-      width: 1px;
-      height: 20px;
-      background-color: #ddd;
-    }
-  }
+  // .user-commissions-box {
+  //   position: relative;
+  //   margin-left: 28px;
+  //   padding-left: 28px;
+  //   &::before {
+  //     content: '';
+  //     position: absolute;
+  //     left: 0;
+  //     top: 4px;
+  //     width: 1px;
+  //     height: 20px;
+  //     background-color: #ddd;
+  //   }
+  // }
   .user-permission-item {
     height: 28px;
-    &:not(:first-of-type) {
-      margin-left: 28px;
+    // &:not(:first-of-type) {
+    //   margin-left: 28px;
+    // }
+    &.permission-line-item {
+      position: relative;
+      margin-left: 14px;
+      padding-left: 14px;
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 4px;
+        width: 1px;
+        height: 20px;
+        background-color: #ddd;
+      }
+      // border-
     }
   }
   .user-permission-icon {
@@ -495,5 +524,24 @@ export default {
     margin-bottom: 25px;
     font-size: 14px;
     color: #bbb;
+  }
+
+
+  // permission-container-skeletion
+  .permission-container-skeletion {
+    padding: 12px 20px;
+    border-radius: 5px;
+    background-color: $--skeletion-light;
+  }
+  .permission-ul-skeletion {
+
+  }
+  .permission-item-skeletion {
+    >span {
+      width: 28px;
+      height: 28px;
+      background-color: $--skeletion-dark;
+      border-radius: 100%;
+    }
   }
 </style>

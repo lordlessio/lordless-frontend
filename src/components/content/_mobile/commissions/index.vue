@@ -44,10 +44,10 @@ import CommissionCard from '@/components/reuse/_mobile/card/commission'
 
 import { getTavernCommissions } from 'api'
 
-import { initLoading, loadMoreDataMixins } from '@/mixins'
+import { loadMoreDataMixins } from '@/mixins'
 export default {
   name: 'tavern-commissions-component',
-  mixins: [ initLoading, loadMoreDataMixins ],
+  mixins: [ loadMoreDataMixins ],
   props: {
     isWebsite: {
       type: Boolean,
@@ -64,6 +64,7 @@ export default {
   },
   data: (vm) => {
     return {
+      loading: true,
       rendered: false,
       loadDatas: {
         list: [],
@@ -147,6 +148,13 @@ export default {
 
   }
   .tavern-commission-item {
+    &:not(:last-of-type) {
+      /deep/ {
+        .commission-card-cnt {
+          border-bottom: 1px solid #ddd;
+        }
+      }
+    }
   }
 
 

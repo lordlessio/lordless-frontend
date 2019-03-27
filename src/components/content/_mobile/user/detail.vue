@@ -24,7 +24,7 @@
               <!-- <p class="user-info-email">{{ userInfo.email }}</p> -->
               <p class="text-break text-upper user-info-address">{{ userInfo.address }}</p>
             </div>
-            <div class="d-flex f-align-center user-permission-container">
+            <div class="d-flex f-align-center user-permission-container" @click.stop="$router.push(`/user/${userInfo.address}/privileges?refer=${$route.path}`)">
               <ul class="d-flex f-align-center user-boosts-box user-permission-ul">
                 <li class="user-permission-item"
                   v-for="(boost, index) of userBoosts" :key="index">

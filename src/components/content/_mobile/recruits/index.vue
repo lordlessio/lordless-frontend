@@ -44,10 +44,10 @@ import RecruitCard from '@/components/reuse/_mobile/card/recruit'
 
 import { getRecruitsByTavernId } from 'api'
 
-import { initLoading, loadMoreDataMixins } from '@/mixins'
+import { loadMoreDataMixins } from '@/mixins'
 export default {
-  name: 'tavern-recruits-component',
-  mixins: [ initLoading, loadMoreDataMixins ],
+  name: 'mobile-tavern-recruits-component',
+  mixins: [ loadMoreDataMixins ],
   props: {
     isWebsite: {
       type: Boolean,
@@ -64,6 +64,7 @@ export default {
   },
   data: (vm) => {
     return {
+      loading: true,
       rendered: false,
       loadDatas: {
         list: [],

@@ -5,12 +5,12 @@
       v-bind="scrollOpt"
       :text="`#${$route.params.tavernId} recruits`"
       @history="tCloseHandle"/>
-    <tavern-recruits/>
+    <mobile-tavern-recruits/>
   </div>
 </template>
 
 <script>
-import TavernRecruits from '@/components/content/_mobile/recruits'
+import MobileTavernRecruits from '@/components/content/_mobile/recruits'
 export default {
   name: 'mobile-tavern-recruits-page',
   data: () => {
@@ -22,7 +22,7 @@ export default {
     }
   },
   components: {
-    TavernRecruits
+    MobileTavernRecruits
   },
   methods: {
     tCloseHandle () {

@@ -68,7 +68,6 @@ import MobileReferralReferees from '@/pages/_mobile/owner/_user/referral/referee
 import MobileReferralRewards from '@/pages/_mobile/owner/_user/referral/rewards'
 
 import MobileReferee from '@/pages/_mobile/owner/referee'
-import MobilePrivileges from '@/pages/_mobile/owner/privileges'
 
 import MobileUserDetail from '@/pages/_mobile/user/_detail'
 import MobileUserTaverns from '@/pages/_mobile/user/taverns'
@@ -76,6 +75,7 @@ import MobileUserTaverns from '@/pages/_mobile/user/taverns'
 import MobileTavernDetail from '@/pages/_mobile/_tavern'
 import MobileTavernRecruitsDetail from '@/pages/_mobile/_recruits'
 import MobileTavernCommissionsDetail from '@/pages/_mobile/_commissions'
+import MobileUserPrivileges from '@/pages/_mobile/_privileges'
 
 // mobile routes
 const mobileRoutes = [
@@ -135,7 +135,7 @@ const mobileRoutes = [
     name: 'mobile-tavern-recruits-detail',
     component: MobileTavernRecruitsDetail,
     meta: {
-      title: 'Tavern Recruits Detail - LORDLESS',
+      title: 'Tavern Recruits - LORDLESS',
       isPublic: true,
       keepAlive: true,
       transition: true
@@ -152,7 +152,7 @@ const mobileRoutes = [
     name: 'mobile-tavern-commissions-detail',
     component: MobileTavernCommissionsDetail,
     meta: {
-      title: 'Tavern Commissions Detail - LORDLESS',
+      title: 'Tavern Commissions - LORDLESS',
       isPublic: true,
       keepAlive: true,
       transition: true
@@ -185,6 +185,24 @@ const mobileRoutes = [
       keepAlive: false,
       transition: false,
       hideTab: true
+    }
+  },
+  {
+    path: '/user/:address/privileges',
+    name: 'mobile-user-privileges',
+    component: MobileUserPrivileges,
+    meta: {
+      title: 'User Privileges - LORDLESS',
+      isPublic: true,
+      keepAlive: true,
+      transition: false,
+      hideTab: true
+      // header: {
+      //   show: false
+      // },
+      // footer: {
+      //   show: false
+      // }
     }
   },
   {
@@ -254,18 +272,6 @@ const mobileRoutes = [
           ownerChild: true,
           keepAlive: true,
           transition: false,
-          hideTab: true
-        }
-      },
-      {
-        path: 'privileges',
-        name: 'mobile-user-privileges',
-        component: MobilePrivileges,
-        meta: {
-          title: 'Privileges - LORDLESS',
-          ownerChild: true,
-          keepAlive: true,
-          transition: true,
           hideTab: true
         }
       },

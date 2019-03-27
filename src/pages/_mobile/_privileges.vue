@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import UserPrivileges from '@/components/content/_mobile/user/privileges'
+import UserPrivileges from '@/components/content/_mobile/privileges'
 export default {
   name: 'mobile-user-privileges-page',
   computed: {
