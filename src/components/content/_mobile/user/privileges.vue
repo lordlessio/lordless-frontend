@@ -126,7 +126,7 @@ export default {
       }
       return planBoosts.boosts.map((item) => {
         return Object.assign({}, item, infos[item.type], {
-          text: `${item.maxNumber && !item.number ? 'max' : ''} ${item.number || item.maxNumber}% boost if you deposit`
+          text: `${item.dynamic && !item.number ? 'max' : ''} ${item.number || item.static || item.dynamic}% boost if you deposit`
         })
       })
     },
@@ -153,7 +153,7 @@ export default {
       }
       return planBoosts.commissions.map((item) => {
         return Object.assign({}, item, infos[item.type], {
-          text: `${item.maxNumber ? 'max' : ''} ${item.maxNumber || item.number}% HOPS commission if your referee deposits`
+          text: `${item.dynamic ? 'max' : ''} ${item.number || item.dynamic || item.static}% HOPS commission if your referee deposits`
         })
       })
     }
