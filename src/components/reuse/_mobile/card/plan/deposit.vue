@@ -172,6 +172,10 @@ export default {
           text: this.heldValue
         },
         {
+          title: 'HOPS',
+          text: `+ ${(info.hopsAmount ? weiByDecimals(info.hopsAmount) : '0').toLocaleString()}`
+        },
+        {
           title: 'Deposit Period',
           text: `${this.planLockDays} day`
         },
