@@ -188,11 +188,11 @@ export default {
       return [
         {
           text: 'LESS(Wallet)',
-          value: (this.lessBalanceNumber || '0').toLocaleString()
+          value: this.tokensBalanceInit ? (this.lessBalanceNumber || '0').toLocaleString() : '--'
         },
         {
           text: 'HOPS(Wallet)',
-          value: (this.hopsBalanceNumber || '0').toLocaleString()
+          value: this.tokensBalanceInit ? (this.hopsBalanceNumber || '0').toLocaleString() : '--'
         },
         {
           text: 'Materials',

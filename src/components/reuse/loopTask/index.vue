@@ -5,7 +5,7 @@
         <div class="building-poster">
           <lordless-tavern-poster
             shadow
-            :src="task.ldb.info.ldbIcon.source.preview"
+            :src="task.ldb.info.ldbIcon ? task.ldb.info.ldbIcon.source.preview : ''"
             :popularity="task.ldb.info.chain.popularity"/>
           <!-- <lordless-img
             alt="tavern preview"

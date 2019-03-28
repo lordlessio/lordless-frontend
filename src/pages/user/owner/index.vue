@@ -1,36 +1,38 @@
 <template>
   <el-container class="ld-user-box">
-    <aside class="d-flex lg-col-flex sm-row-flex ld-user-navgation" :style="`background-image: url(${ossOrigin}/frontend/static/svg/city.svg)`">
+    <aside class="ld-user-navgation">
     <!-- <aside class="d-flex lg-col-flex sm-row-flex ld-user-navgation"> -->
       <div class="d-flex f-auto-center user-navgation-logo sm-hidden">
         <lordless-header-logo theme="light" shadow reverse/>
       </div>
-      <div class="relative d-flex col-flex v-flex">
-        <ul class="d-flex v-flex sm-row-flex lg-col-flex user-navgation-list">
-          <li
-            class="user-navgation-item"
-            :class="{ 'active': $route.path.match(nav.match) }"
-            v-for="(nav, index) of navgations"
-            :key="index"
-            @click="$router.push(nav.path)">
-            <div class="d-flex f-align-center sm-f-justify-center TTFontBolder navgation-item-cnt">
+      <div class="overflow user-navgation-cnt">
+        <div class="relative user-navgation-container" :style="`background-image: url(${ossOrigin}/frontend/static/svg/city.svg)`">
+          <ul class="d-flex sm-row-flex lg-col-flex user-navgation-list">
+            <li
+              class="user-navgation-item"
+              :class="{ 'active': $route.path.match(nav.match) }"
+              v-for="(nav, index) of navgations"
+              :key="index"
+              @click="$router.push(nav.path)">
+              <div class="d-flex f-align-center sm-f-justify-center TTFontBolder navgation-item-cnt">
+                <span class="navgation-item-icon">
+                  <svg>
+                    <use :xlink:href="$route.meta.navgation === nav.name.toLowerCase() ? nav.selectIcon : nav.unSelectIcon"/>
+                  </svg>
+                </span>
+                <span class="text-cap">{{ nav.name }}</span>
+              </div>
+            </li>
+          </ul>
+          <div class="TTFontBolder user-navgation-item user-logout sm-hidden">
+            <div class="d-flex f-align-center cursor-pointer navgation-item-cnt">
               <span class="navgation-item-icon">
                 <svg>
-                  <use :xlink:href="$route.meta.navgation === nav.name.toLowerCase() ? nav.selectIcon : nav.unSelectIcon"/>
+                  <use xlink:href="#icon-logout"/>
                 </svg>
               </span>
-              <span class="text-cap">{{ nav.name }}</span>
+              <span class="text-cap" @click="logout">Logout</span>
             </div>
-          </li>
-        </ul>
-        <div class="TTFontBolder user-navgation-item user-logout sm-hidden">
-          <div class="d-flex f-align-center cursor-pointer navgation-item-cnt">
-            <span class="navgation-item-icon">
-              <svg>
-                <use xlink:href="#icon-logout"/>
-              </svg>
-            </span>
-            <span class="text-cap" @click="logout">Logout</span>
           </div>
         </div>
       </div>
@@ -75,26 +77,19 @@ export default {
           path: '/owner/info',
           match: /^\/owner\/info/
         },
+        // {
+        //   name: 'candy',
+        //   selectIcon: '#icon-candy_selected',
+        //   unSelectIcon: '#icon-candy_unselected',
+        //   path: '/owner/candy',
+        //   match: /^\/owner\/candy/
+        // },
         {
-          name: 'candy',
-          selectIcon: '#icon-candy_selected',
-          unSelectIcon: '#icon-candy_unselected',
-          path: '/owner/candy',
-          match: /^\/owner\/candy/
-        },
-        {
-          name: 'Invitation',
-          selectIcon: '#icon-bounty-chests',
-          unSelectIcon: '#icon-bounty-chests',
-          path: '/owner/invitation',
-          match: /^\/owner\/invitation/
-        },
-        {
-          name: 'BC',
-          selectIcon: '#icon-bounty-chests',
-          unSelectIcon: '#icon-bounty-chests',
-          path: '/owner/bc',
-          match: /^\/owner\/bc/
+          name: 'HOPS',
+          selectIcon: '#coin-hops',
+          unSelectIcon: '#coin-hops',
+          path: '/owner/hops',
+          match: /^\/owner\/hops/
         },
         {
           name: 'Bounty',
@@ -102,6 +97,27 @@ export default {
           unSelectIcon: '#icon-bounty-chests',
           path: '/owner/bounty/package',
           match: /^\/owner\/bounty\/package/
+        },
+        {
+          name: 'BC',
+          selectIcon: '#icon-tab-bc',
+          unSelectIcon: '#icon-tab-bc',
+          path: '/owner/bc',
+          match: /^\/owner\/bc/
+        },
+        {
+          name: 'Invitation',
+          selectIcon: '#icon-tab-diploma',
+          unSelectIcon: '#icon-tab-diploma',
+          path: '/owner/invitation',
+          match: /^\/owner\/invitation/
+        },
+        {
+          name: 'Referee',
+          selectIcon: '#icon-badge',
+          unSelectIcon: '#icon-badge',
+          path: '/owner/referee',
+          match: /^\/owner\/referee/
         },
         {
           name: 'quests',
@@ -208,10 +224,6 @@ export default {
     min-height: 670px;
     z-index: 1;
     box-shadow: 1px 3px 5px 0 rgba(0, 0, 0, .1);
-    background-size: 100% auto;
-    background-position-y: 100%;
-    background-repeat: no-repeat;
-    background-color: #fff;
     // @include viewport-unit(min-height, 100vh, 90px);
   }
 
@@ -223,6 +235,19 @@ export default {
     svg {
       width: 150px;
     }
+  }
+
+  .user-navgation-cnt {
+    @include viewport-unit(height, 100vh, 80px);
+  }
+  .user-navgation-container {
+    padding-bottom: 260px;
+    background-size: 100% auto;
+    background-position-y: 100%;
+    background-repeat: no-repeat;
+    background-color: #fff;
+    box-sizing: broder-box;
+    @include viewport-unit(min-height, 100vh, 80px);
   }
   .user-navgation-item {
     position: relative;

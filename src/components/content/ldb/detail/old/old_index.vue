@@ -226,7 +226,6 @@
                     <p>暂无交易哦</p>
                   </el-row>
                   <el-row
-                      v-if="ldbRecords.length"
                       v-for="record of ldbRecords"
                       :key="record._id"
                       class="history-item history-cnt">

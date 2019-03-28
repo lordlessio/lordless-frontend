@@ -2,6 +2,9 @@
 .owner-children-title {
   color: #999;
   @include fontSize(36px, 1.5);
+  &.margin-bottom {
+    margin-bottom: 30px;
+  }
 }
 
 .owner-children-cnt {

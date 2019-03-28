@@ -3,21 +3,17 @@
     <div class="d-flex v-flex col-flex user-candy-container">
       <h1 class="d-flex f-align-baseline text-cap owner-children-title">
         <span class="v-flex">BC</span>
-        <el-tooltip class="item" effect="dark" content="Coming soon" placement="left">
-          <span>
-            <lordless-btn
-              class="d-flex f-align-center user-withdraw-btn"
-              theme="deep-blue"
-              disabled
-              shadow
-              inverse>
-              <svg>
-                <use xlink:href="#icon-bounty-chest"/>
-              </svg>
-              <span>BountyChest</span>
-            </lordless-btn>
-          </span>
-        </el-tooltip>
+        <lordless-btn
+          class="d-flex f-align-center user-withdraw-btn"
+          theme="blue"
+          shadow
+          inverse
+          @click="$router.push('/owner/bounty/package')">
+          <svg>
+            <use xlink:href="#icon-bounty-chests"/>
+          </svg>
+          <span>BountyChest</span>
+        </lordless-btn>
       </h1>
       <div
         class="user-tabs-box">
@@ -52,13 +48,13 @@
       </div>
       <div class="v-flex d-flex">
         <transition name="ld-hide-fade" mode="out-in">
-          <div v-if="loading" class="v-flex user-candy-skeletion">
+          <div v-if="loading" class="v-flex user-candy-skeletion skeletion-breath">
             <p></p>
             <div class="d-flex f-justify-around" v-for="item of [1,2]" :key="item">
-              <p class="skeletion-breath"></p>
-              <p class="skeletion-breath"></p>
-              <p class="skeletion-breath"></p>
-              <p class="skeletion-breath"></p>
+              <p></p>
+              <p></p>
+              <p></p>
+              <p></p>
             </div>
           </div>
           <div
@@ -508,9 +504,9 @@ export default {
     padding: 10px 15px;
     font-size: 16px;
     >svg {
-      margin-right: 5px;
-      width: 25px;
-      height: 25px;
+      margin-right: 8px;
+      width: 22px;
+      height: 22px;
     }
   }
 

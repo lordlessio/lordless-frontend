@@ -5,7 +5,7 @@
 
         <div class="building-header">
           <lordless-tavern-poster
-            :src="info.ldbIcon.source.preview"
+            :src="info.ldbIcon ? info.ldbIcon.source.preview : ''"
             :popularity="info.chain.popularity"
             :presale="presale"
             showPopularity/>

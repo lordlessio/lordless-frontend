@@ -3,7 +3,7 @@
     <figure class="d-flex col-flex f-align-stretch" @click="chooseTavern">
       <div class="building-header-container">
         <lordless-tavern-poster
-          :src="info.ldbIcon.source.preview"
+          :src="info.ldbIcon ? info.ldbIcon.source.preview : ''"
           :popularity="info.chain.popularity"
           isMedium
           showPopularity/>

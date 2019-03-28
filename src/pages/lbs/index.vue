@@ -135,9 +135,9 @@ export default {
     async getLdbs () {
       const result = await getChainLdbs({ extensions: 'base', ps: -1, type: 'map' })
       if (result.code === 1000) {
-        const ldbs = result.data.list
+        const ldbs = (result.data.list || []).sort((a, b) => b.chain.lat - a.chain.lat)
         this.ldbs = ldbs
-        console.log('ldbs', ldbs)
+        console.log('ldbs', ldbs, ldbs.map(item => `${item.id}_${item.name.zh}`))
         this.$nextTick(() => {
           if (this.$refs.lordMap) {
             this.$refs.lordMap.createImageMarkers(ldbs)
@@ -315,6 +315,7 @@ export default {
     left: 60px;
     width: 100%;
     max-width: 400px;
+    z-index: 91;
     @include padding(-1, 20px, 1, -2);
   }
   .lbs-tx-box {
@@ -324,13 +325,14 @@ export default {
     width: 100%;
     max-width: 750px;
     box-sizing: border-box;
-    z-index: 2;
+    z-index: 92;
     @include padding(-1, 20px, 1, -2);
   }
   .lbs-user-box {
     position: absolute;
     right: 60px;
     top: 50px;
+    z-index: 93;
     // width: 54px;
     // height: 54px;
     // border-radius: 6px;

@@ -151,13 +151,11 @@ export default {
       // .hops-plant-held {
       //   color: $--main-blue-color;
       // }
-      &:not(.is-boost) {
-        .hops-plant-level {
-          color: $--main-blue-color;
-          // &::before {
-          //   background-color: $--main-red-color;
-          // }
-        }
+      .hops-plant-level {
+        color: $--main-blue-color;
+        // &::before {
+        //   background-color: $--main-red-color;
+        // }
       }
     }
     &.is-boost {
@@ -165,13 +163,14 @@ export default {
         color: $--main-red-color;
       }
       .hops-plant-level {
+        color: $--main-red-color;
         &::before {
           background-color: $--main-red-color;
         }
       }
       .plant-level-choice {
         &::before {
-          background-color: #555;
+          background-color: $--main-red-color;
         }
       }
       .plant-held-boost-icon {

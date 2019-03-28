@@ -108,7 +108,7 @@
               @click.stop="$emit('home', userHome.homeInfo.tavern)">
               <div class="user-home-poster">
                 <lordless-tavern-poster
-                  :src="userHome.homeInfo.tavern.ldbIcon.source.preview"
+                  :src="userHome.homeInfo.tavern.ldbIcon ? userHome.homeInfo.tavern.ldbIcon.source.preview : ''"
                   :popularity="userHome.homeInfo.tavern.chain.popularity"
                   shadow
                   showPopularity

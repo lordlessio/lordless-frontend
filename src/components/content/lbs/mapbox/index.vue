@@ -108,11 +108,12 @@ export default {
     /**
      * 创建 Image marker dom
      */
-    createImageMarker ({ name, imgSrc, level, ap, apLeft } = {}) {
+    createImageMarker ({ name, imgSrc, level, ap, apLeft, index } = {}) {
       const box = document.createElement('div')
       box.className = `marker _marker--ldb-box _marker--level-${level}`
       box.style.width = 'inherit'
       box.style.height = 'inherit'
+      box.style.zIndex = index + 1
       // const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}" style="width: 100%"/><p>${name}</p><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>800 / 1000</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${600 / 1000 * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
       // const boxHtml = `<div class="_marker--ldb-container"><img src="${imgSrc}"/><div class="_marker--info-box"><div class="d-flex col-flex _marker--info-container"><div class="d-flex f-align-center _marker--info-top"><span><img/></span><span>${apLeft} / ${ap}</span></div><div class="_marker--info-bottom"><div class="_marker--info-progress" style="width: ${apLeft / ap * 100}%"><span class="inline-block info-progress-main"></span></div></div></div>`
       const boxHtml = `
@@ -140,14 +141,15 @@ export default {
      * marker是以添加 dom 的形式显示在地图中
      */
     createImageMarkers (list, map = this.map) {
-      list.map(item => {
+      list.map((item, index) => {
         const { _id, name, chain, ldbIcon, ap, apLeft } = item
+        if (!ldbIcon) return item
         const coords = [chain.lng / 1e16, chain.lat / 1e16]
 
         // 创建 Image markers
         const imgSrc = `${process.env.LDBICON_ORIGIN}${ldbIcon.source.map}`
         // const imgSrc = 'http://lordless-sh.oss-cn-shanghai.aliyuncs.com/console/ldbIcon/2018-08-04/1533395070990.png'
-        const markerDom = this.createImageMarker({ name, imgSrc, level: chain.level, ap, apLeft })
+        const markerDom = this.createImageMarker({ name, imgSrc, level: chain.level, ap, apLeft, index })
         // const { id, fields } = item
         // const _id = id
         // const coords = fields.location.split(',')
@@ -297,6 +299,7 @@ export default {
     createPointMarkers (list, map = this.map) {
       list.map(item => {
         const { _id, name, chain, ldbIcon } = item
+        if (!ldbIcon) return
         const coords = [chain.lng / 1e16, chain.lat / 1e16]
 
         // 创建 markers

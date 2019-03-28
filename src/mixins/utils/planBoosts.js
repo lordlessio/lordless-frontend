@@ -41,7 +41,7 @@ export default {
       }).filter(item => !item.hide).sort((a, b) => b.number - a.number)
     },
     isRefereeBoost () {
-      return !!this.planBoosts.boosts.filter(item => item.type === 'referee').length
+      return !!this.planBoosts.boosts.filter(item => item.type === 'referee' && item.number).length
     }
   }
 }

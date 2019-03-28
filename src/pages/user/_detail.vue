@@ -423,6 +423,7 @@ export default {
 
   .ld-detail-user-box {
     padding-top: 130px;
+    padding-bottom: 50px;
     background-color: #f4f4f4;
     @include viewport-unit('min-height', 100vh);
   }

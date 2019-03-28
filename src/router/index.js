@@ -26,7 +26,7 @@ import UserDetail from '@/pages/user/_detail'
 
 import Owner from '@/pages/user/owner'
 import OwnerInfo from '@/pages/user/owner/children/info'
-import OwnerCandy from '@/pages/user/owner/children/candy'
+// import OwnerCandy from '@/pages/user/owner/children/candy'
 import OwnerTaverns from '@/pages/user/owner/children/taverns'
 import OwnerQuests from '@/pages/user/owner/children/tasks'
 import OwnerAuthorization from '@/pages/user/owner/children/authorization'
@@ -35,6 +35,8 @@ import OwnerActivity from '@/pages/user/owner/children/activity'
 import OwnerPackageBounty from '@/pages/user/owner/children/packageBounty'
 import OwnerBC from '@/pages/user/owner/children/bc'
 import OwnerInvitation from '@/pages/user/owner/children/invitation'
+import OwnerReferee from '@/pages/user/owner/children/referee'
+import OwnerPlan from '@/pages/user/owner/children/plan'
 
 import BountyChestDetail from '@/pages/bountyChest/_detail'
 
@@ -678,21 +680,21 @@ const routes = [
           }
         }
       },
-      {
-        path: 'candy',
-        name: 'Owner-candy',
-        component: OwnerCandy,
-        meta: {
-          title: 'My Candies - LORDLESS',
-          navgation: 'candy',
-          header: {
-            show: false
-          },
-          footer: {
-            show: false
-          }
-        }
-      },
+      // {
+      //   path: 'candy',
+      //   name: 'Owner-candy',
+      //   component: OwnerCandy,
+      //   meta: {
+      //     title: 'My Candies - LORDLESS',
+      //     navgation: 'candy',
+      //     header: {
+      //       show: false
+      //     },
+      //     footer: {
+      //       show: false
+      //     }
+      //   }
+      // },
       {
         path: 'taverns',
         name: 'Owner-taverns',
@@ -790,6 +792,36 @@ const routes = [
         meta: {
           title: 'Invitation - LORDLESS',
           navgation: 'Invitation',
+          header: {
+            show: false
+          },
+          footer: {
+            show: false
+          }
+        }
+      },
+      {
+        path: 'referee',
+        name: 'Owner-Referee',
+        component: OwnerReferee,
+        meta: {
+          title: 'Referee - LORDLESS',
+          navgation: 'Referee',
+          header: {
+            show: false
+          },
+          footer: {
+            show: false
+          }
+        }
+      },
+      {
+        path: 'hops',
+        name: 'Owner-Hops',
+        component: OwnerPlan,
+        meta: {
+          title: 'HOPS - LORDLESS',
+          navgation: 'HOPS',
           header: {
             show: false
           },
