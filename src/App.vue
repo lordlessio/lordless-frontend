@@ -108,12 +108,20 @@ export default {
         //   match: /^\/owner\/candy/,
         //   active: false
         // },
+        // {
+        //   icon: '#icon-tab-quests',
+        //   activeIcon: '#icon-tab-quests',
+        //   name: 'Quests',
+        //   route: '/owner/quests',
+        //   match: /^\/owner\/quests/,
+        //   active: false
+        // },
         {
-          icon: '#icon-tab-quests',
-          activeIcon: '#icon-tab-quests',
-          name: 'Quests',
-          route: '/owner/quests',
-          match: /^\/owner\/quests/,
+          icon: '#icon-tab-dice',
+          activeIcon: '#icon-tab-dice',
+          name: 'LB',
+          route: '/lb',
+          match: /^\/lb/,
           active: false
         },
         {
@@ -149,13 +157,10 @@ export default {
     headerOpt (val) {
       this.$nextTick(() => this.$refs.lordlessHeader && this.$refs.lordlessHeader.init())
     },
-    account (val) {
-      console.log('---------- account', val)
+    userInfo (val) {
+      console.log('---------- userInfo', val)
       val && this.initStoreData()
     }
-    // userInfo (val, oval) {
-    //   val && oval && this.initStoreData()
-    // }
   },
   components: {
     Header,

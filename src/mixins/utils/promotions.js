@@ -1,5 +1,5 @@
-import { getAirdrops, getLuckyblocks } from 'api'
-import { loopCandyClamied } from 'utils/loop'
+import { getLuckyblocks } from 'api'
+// import { loopCandyClamied } from 'utils/loop'
 import { mapState } from 'vuex'
 export default {
   data: () => {
@@ -25,10 +25,10 @@ export default {
 
       this.loading = true
       try {
-        const airdropRes = await getAirdrops()
-        if (airdropRes.code === 1000 && airdropRes.data) {
-          this.promotions = airdropRes.data
-        }
+        // const airdropRes = await getAirdrops()
+        // if (airdropRes.code === 1000 && airdropRes.data) {
+        //   this.promotions = airdropRes.data
+        // }
         const luckyblockRes = await getLuckyblocks(luckyBlockParams)
         if (luckyblockRes.code === 1000 && luckyblockRes.data) {
           this.luckyblocks = luckyblockRes.data
@@ -38,9 +38,5 @@ export default {
       }
       this.loading = false
     }
-  },
-  mounted () {
-    this.getAirdropsHandle()
-    loopCandyClamied()
   }
 }

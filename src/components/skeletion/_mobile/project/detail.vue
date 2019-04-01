@@ -1,11 +1,11 @@
 <template>
   <div class="mobile-project-detail-skeletion skeletion-breath">
     <div class="project-detail-container">
-      <p class="d-flex f-align-center">
+      <!-- <p class="d-flex f-align-center">
         <span class="inline-block detail-symbol-icon"></span>
         <span class="inline-block detail-symbol-text"></span>
       </p>
-      <h2></h2>
+      <h2></h2> -->
       <div class="detail-promotion-skeletion">
         <p class="detail-promotion-poster"></p>
         <div class="detail-promotion-info">
@@ -14,7 +14,7 @@
           <p class="detail-promotion-claimed"></p>
         </div>
       </div>
-      <div class="detail-intro-skeletion">
+      <!-- <div class="detail-intro-skeletion">
         <h3></h3>
         <ul class="intro-ul-skeletion">
           <li v-for="item in 3" :key="item" class="intro-li-skeletion">
@@ -24,7 +24,7 @@
             <p></p>
           </li>
         </ul>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -71,39 +71,39 @@ export default {
   }
 
   // detail-intro-skeletion
-  .detail-intro-skeletion {
-    // padding: 20px;
-    margin-top: 24px;
-    >h3 {
-      width: 100px;
-      height: 24px;
-      background-color: $--skeletion-light;
-    }
-  }
-  .intro-ul-skeletion {
-    margin-top: 20px;
-    // padding: 20px;
-  }
-  .intro-li-skeletion {
-    &:not(:first-of-type) {
-      margin-top: 20px;
-    }
-    p {
-      height: 16px;
-      background-color: $--skeletion-light;
-    }
-    >p {
-      width: 95%;
-      &:first-of-type {
-        margin-bottom: 10px;
-        width: 150px;
-      }
-      &:not(:first-of-type) {
-        margin-top: 5px;
-      }
-      &:last-of-type {
-        width: 120px;
-      }
-    }
-  }
+  // .detail-intro-skeletion {
+  //   // padding: 20px;
+  //   margin-top: 24px;
+  //   >h3 {
+  //     width: 100px;
+  //     height: 24px;
+  //     background-color: $--skeletion-light;
+  //   }
+  // }
+  // .intro-ul-skeletion {
+  //   margin-top: 20px;
+  //   // padding: 20px;
+  // }
+  // .intro-li-skeletion {
+  //   &:not(:first-of-type) {
+  //     margin-top: 20px;
+  //   }
+  //   p {
+  //     height: 16px;
+  //     background-color: $--skeletion-light;
+  //   }
+  //   >p {
+  //     width: 95%;
+  //     &:first-of-type {
+  //       margin-bottom: 10px;
+  //       width: 150px;
+  //     }
+  //     &:not(:first-of-type) {
+  //       margin-top: 5px;
+  //     }
+  //     &:last-of-type {
+  //       width: 120px;
+  //     }
+  //   }
+  // }
 </style>

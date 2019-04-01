@@ -2,7 +2,7 @@
   <div
     :ref="refName"
     class="lordless-fixed-container"
-    :class="{ 'is-leave': isLeave, 'is-shadow': shadow, 'is-static': isStatic }"
+    :class="{ 'is-leave': isLeave, 'is-shadow': shadow, 'is-static': isStatic, 'initial': initial }"
     :style="fixedStyle">
     <slot/>
   </div>
@@ -20,11 +20,23 @@ export default {
       type: Boolean,
       default: false
     },
+    initial: {
+      type: Boolean,
+      default: false
+    },
     top: {
       type: Number,
       default: 0
     },
     bottom: {
+      type: Number,
+      default: null
+    },
+    left: {
+      type: Number,
+      default: 0
+    },
+    right: {
       type: Number,
       default: null
     },
@@ -46,9 +58,9 @@ export default {
   },
   computed: {
     fixedStyle () {
-      const { top = 0, bottom } = this
-      if (bottom !== null) return `bottom: ${bottom}px;z-index: ${this.zIndex};`
-      return `top: ${top}px;z-index: ${this.zIndex};`
+      const { top = 0, bottom, left = 0, right } = this
+      if (bottom !== null) return `bottom: ${bottom}px;${right !== null ? 'right: ' + right + 'px;' : 'left: ' + left + 'px;'}z-index: ${this.zIndex};`
+      return `top: ${top}px;${right !== null ? 'right: ' + right + 'px;' : 'left: ' + left + 'px;'}z-index: ${this.zIndex};`
     },
     refName () {
       return `fixed-${this.container}`
@@ -101,10 +113,12 @@ export default {
 <style lang="scss" scoped>
   .lordless-fixed-container {
     position: fixed;
-    left: 0;
     width: 100%;
     opacity: 1;
     transition: opacity .4s;
+    &.initial {
+      width: initial;
+    }
     &.is-static {
       position: static;
     }

@@ -1,5 +1,5 @@
 <template>
-  <div id="mobile-tavern-recruits" class="tavern-recruits-box" :class="{ 'is-website': isWebsite }">
+  <div id="mobile-tavern-recruits" ref="lordless-load-more-box" class="tavern-recruits-box" :class="{ 'is-website': isWebsite }">
     <transition name="ld-hide-fade" mode="out-in" @after-enter="afterEnter">
       <referral-rewards-skeletion isWebsite v-if="loading"/>
       <div v-else class="tavern-recruits-container">
@@ -44,10 +44,10 @@ import RecruitCard from '@/components/reuse/_mobile/card/recruit'
 
 import { getRecruitsByTavernId } from 'api'
 
-import { loadMoreDataMixins } from '@/mixins'
+import { loadMoreDataMixins, initLoadingMixins } from '@/mixins'
 export default {
   name: 'mobile-tavern-recruits-component',
-  mixins: [ loadMoreDataMixins ],
+  mixins: [ loadMoreDataMixins, initLoadingMixins ],
   props: {
     isWebsite: {
       type: Boolean,
@@ -64,7 +64,6 @@ export default {
   },
   data: (vm) => {
     return {
-      loading: true,
       rendered: false,
       loadDatas: {
         list: [],

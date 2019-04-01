@@ -1,5 +1,5 @@
 <template>
-  <div id="mobile-tavern-commissions" class="tavern-commissions-box" :class="{ 'is-website': isWebsite }">
+  <div id="mobile-tavern-commissions" ref="lordless-load-more-box" class="tavern-commissions-box" :class="{ 'is-website': isWebsite }">
     <transition name="ld-hide-fade" mode="out-in" @after-enter="afterEnter">
       <referral-rewards-skeletion isWebsite v-if="loading"/>
       <div v-else class="tavern-commissions-container">
@@ -44,10 +44,10 @@ import CommissionCard from '@/components/reuse/_mobile/card/commission'
 
 import { getTavernCommissions } from 'api'
 
-import { loadMoreDataMixins } from '@/mixins'
+import { loadMoreDataMixins, initLoadingMixins } from '@/mixins'
 export default {
   name: 'tavern-commissions-component',
-  mixins: [ loadMoreDataMixins ],
+  mixins: [ loadMoreDataMixins, initLoadingMixins ],
   props: {
     isWebsite: {
       type: Boolean,
@@ -64,7 +64,6 @@ export default {
   },
   data: (vm) => {
     return {
-      loading: true,
       rendered: false,
       loadDatas: {
         list: [],

@@ -47,6 +47,7 @@ import MobileOwnerIndex from '@/pages/_mobile/owner'
 // import MobileOwnerCandy from '@/pages/_mobile/owner/candy'
 import MobileOwnerBC from '@/pages/_mobile/owner/bc'
 import MobileOwnerQuest from '@/pages/_mobile/owner/quest'
+import MobileLB from '@/pages/_mobile/luckyblocks'
 
 import MobileProject from '@/pages/_mobile/_project'
 import MobileBountyChestDetail from '@/pages/_mobile/_bountyChest'
@@ -104,6 +105,23 @@ const mobileRoutes = [
     component: MobileTaverns,
     meta: {
       title: 'Taverns - LORDLESS',
+      isPublic: true,
+      keepAlive: true,
+      transition: true
+      // header: {
+      //   show: false
+      // },
+      // footer: {
+      //   show: false
+      // }
+    }
+  },
+  {
+    path: '/lb',
+    name: 'mobile-LB',
+    component: MobileLB,
+    meta: {
+      title: 'LuckyBlocks - LORDLESS',
       isPublic: true,
       keepAlive: true,
       transition: true
@@ -403,7 +421,8 @@ const mobileRoutes = [
           title: 'PlanBase Detail - LORDLESS',
           ownerChild: true,
           keepAlive: true,
-          transition: false
+          transition: false,
+          hideTab: true
         }
       },
       {

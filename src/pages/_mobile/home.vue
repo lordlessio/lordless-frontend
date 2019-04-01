@@ -2,236 +2,362 @@
   <section class="mobile-home-box">
     <transition name="ld-hide-fade" mode="out-in">
       <home-skeletion v-if="loading"/>
-
       <div v-else>
-        <mobile-ad-space class="home-ad-space"/>
-        <div class="mobile-home-promotions">
-          <h2 class="mobile-home-title">Promotions</h2>
-          <div class="home-promotions-tips">
-            <p>Follow our Twitter to make you never miss any promotions in LORDLESS.</p>
-            <lordless-btn class="promotions-twitter-btn" theme="red-linear" shadow>
-              <a class="d-flex f-align-center" target="_blank" href="https://twitter.com/lordless_global">
-                <span class="inline-block line-height-0 promotions-twitter-icon">
-                  <svg>
-                    <use xlink:href="#icon-twitter"/>
-                  </svg>
-                </span>
-                <span>Follow right now</span>
-              </a>
-            </lordless-btn>
-          </div>
-          <div v-if="luckyblocks.length" class="home-promotions-item home-promotions-lucky">
-            <div class="home-promotions-title">
-              <p class="TTFontBolder">Lucky Blocks</p>
-              <p>Try your LUCK today on blockchain.</p>
+        <div class="mobile-home-section" v-if="popularTavern">
+          <h2 class="home-section-title">Popular Tavern</h2>
+          <div class="home-section-cnt">
+            <div class="d-flex f-align-center popular-tavern-container">
+              <div
+                class="d-flex full-width"
+                @click.stop="$router.push(`/taver/${popularTavern._id}`)">
+                <div class="popular-tavern-poster">
+                  <lordless-tavern-poster
+                    :src="popularTavern.ldbIcon ? popularTavern.ldbIcon.source.preview : ''"
+                    :popularity="popularTavern.chain.popularity"
+                    shadow
+                    showPopularity
+                    isSmall/>
+                </div>
+                <div class="v-flex d-flex col-flex f-justify-between popular-tavern-info">
+                  <div>
+                    <h3 class="d-flex f-align-center popular-tavern-title">
+                      <span class="text-nowrap text-ellipsis popular-tavern-name">{{ popularTavern.name.zh }}</span>
+                    </h3>
+                    <div class="d-flex f-align-center popular-tavern-desc">
+                      <p class="popular-tavern-level">Level {{ popularTavern.chain.level }}</p>
+                      <p class="popular-tavern-recruits">Recruits {{ popularTavern.apLeft }}</p>
+                    </div>
+                  </div>
+                  <div class="apleft-progress-box">
+                    <p class="d-flex f-align-center apleft-progress-tip">
+                      <span>AP</span>
+                      <span class="v-flex text-right">{{ popularTavern.apLeft }}</span>
+                    </p>
+                    <div class="apleft-progress-bar">
+                      <lordless-progress
+                        :current="popularTavern.apLeft"
+                        :max="popularTavern.ap"
+                        :underColor="apProgress.underColor"
+                        :gradient="apProgress.gradient"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <ul class="promotions-lucky-ul">
-              <li
-                v-for="(item, index) of luckyblocks"
-                :key="index"
-                class="home-info-item promotions-public-item promotions-lucky-item">
-                <figure>
-                  <figcaption>
-                    <img class="full-width" :src="ossOrigin + item.banners[0]"/>
-                  </figcaption>
-                  <promotion-lucky
-                    class="promotion-item-info"
-                    :info="item"/>
-                </figure>
-              </li>
-            </ul>
-          </div>
-          <div v-if="promotions.length" class="home-promotions-item home-promotions-windfall">
-            <div class="home-promotions-title">
-              <p class="TTFontBolder">Favorite Windfall</p>
-              <p>Claim your FREE token right now.</p>
-            </div>
-            <ul class="promotions-windfall-ul">
-              <li
-                v-for="(item, index) of promotions"
-                :key="index"
-                class="home-info-item promotions-public-item promotions-windfall-item"
-                @click.stop="$router.push(`/project/${item.project._id}`)">
-                <figure>
-                  <figcaption>
-                    <img :alt="`promotions_${item.project.symbol}`" class="full-width" :src="ossOrigin + item.banners[0]"/>
-                  </figcaption>
-                  <promotion-claim
-                    class="promotion-item-info"
-                    :info="item"/>
-                </figure>
-              </li>
-            </ul>
           </div>
         </div>
-        <!-- <div class="mobile-home-candies">
-          <h2 class="mobile-home-title">Candies</h2>
-          <ul class="mobile-home-ul home-candies-ul">
-            <li
-              v-for="(candy, index) of Object.values(candyClaimed)" :key="index"
-              class="home-info-item home-candies-item"
-              @click.stop="$router.push(`/project/${candy._id}`)">
-              <div class="d-flex f-align-center candies-symbol-box">
-                <p class="line-height-0 home-candy-icon candies-symbol-coin">
-                  <svg>
-                    <use :xlink:href="`#coin-${candy.symbol.toLocaleLowerCase()}`"/>
-                  </svg>
+        <div class="mobile-home-section" v-if="recommendDepositTerm">
+          <h2 class="d-flex f-align-center home-section-title">
+            <span class="v-flex">LESS Term Deposit</span>
+            <span class="d-flex f-align-center home-section-viewmore" @click.stop="$router.push('/owner/hops?type=recommend')">
+              <span class="inline-block line-height-0">View more</span>
+              <span class="inline-block line-height-0 home-view-more-icon">
+                <svg>
+                  <use xlink:href="#icon-arrow-line-right"/>
+                </svg>
+              </span>
+            </span>
+          </h2>
+          <div class="home-section-cnt">
+            <plan-deposit-card
+              :info="recommendDepositTerm"
+              :lessBalance="-1"
+              :boost="userTotalBoost"
+              @choosePlan="choosePlan"/>
+          </div>
+        </div>
+        <div class="mobile-home-section" v-if="recommendLuckyBlock">
+          <h2 class="d-flex f-align-center home-section-title">
+            <span class="v-flex">Lucky Blocks</span>
+            <span class="d-flex f-align-center home-section-viewmore" @click.stop="$router.push('/lb?type=luckyblocks')">
+              <span class="inline-block line-height-0">View more</span>
+              <span class="inline-block line-height-0 home-view-more-icon">
+                <svg>
+                  <use xlink:href="#icon-arrow-line-right"/>
+                </svg>
+              </span>
+            </span>
+          </h2>
+          <div class="home-section-cnt">
+            <figure>
+              <figcaption class="line-height-1">
+                <img class="full-width" :src="ossOrigin + recommendLuckyBlock.banners[0]"/>
+              </figcaption>
+              <lucky-block-card :info="recommendLuckyBlock"/>
+            </figure>
+          </div>
+        </div>
+        <div class="mobile-home-section">
+          <h2 class="home-section-title">Guidelines</h2>
+          <ul class="home-section-cnt guideline-cnt-box">
+            <li v-for="(item, index) of guidelines" :key="index" class="guideline-item">
+              <a :href="item.link" target="_blank" class="d-flex f-align-start">
+                <p class="d-flex f-auto-center guideline-icon-box">
+                  <span class="inline-block line-height-0 guideline-item-icon">
+                    <svg>
+                      <use :xlink:href="item.icon"/>
+                    </svg>
+                  </span>
                 </p>
-                <p class="v-flex">{{ candy.coinmarketcap.name || candy.symbol }}<span class="text-upper">&nbsp;({{ candy.symbol }})</span></p>
-              </div>
-              <div class="d-flex f-align-center candies-claimed-box">
-                <span class="TTFontBolder candies-claimed-num">{{ (candy.count + (promotionClaimeds[candy.symbol.toLocaleLowerCase()] || 0)) | formatNumber | formatDecimal({ len: 2 }) }}<span>&nbsp;($ {{ (candy.count + (promotionClaimeds[candy.symbol.toLocaleLowerCase()] || 0)) / candy.USD2TokenCount | formatNumber | formatDecimal({ len: 2 }) }})</span>&nbsp;&nbsp;</span>
-                has been claimed
-              </div>
+                <div class="v-flex guideline-item-right">
+                  <h2 class="text-break guideline-item-title">{{ item.title }}</h2>
+                  <p class="guideline-item-date">Last updated: {{ item.date | dateFormat('MMM DD,YYYY') }}</p>
+                </div>
+              </a>
             </li>
           </ul>
-        </div> -->
+        </div>
       </div>
     </transition>
   </section>
 </template>
 
 <script>
-import PromotionClaim from '@/components/reuse/card/promotion/claim'
-import PromotionLucky from '@/components/reuse/card/promotion/lucky'
-
 import HomeSkeletion from '@/components/skeletion/_mobile/home'
 
-import { promotionsMixins } from '@/mixins'
+import PlanDepositCard from '@/components/reuse/_mobile/card/plan/plant'
+import LuckyBlockCard from '@/components/reuse/card/promotion/lucky'
+
+import { getLdbById, getPlanBases, getLuckyblocks } from 'api'
+import { initLoadingMixins, promotionsMixins, planBoostsMixins } from '@/mixins'
 export default {
   name: 'mobile-home-page',
-  mixins: [ promotionsMixins ],
+  mixins: [ initLoadingMixins, promotionsMixins, planBoostsMixins ],
+  data: () => {
+    return {
+      rendered: false,
+      apProgress: {
+        underColor: '#ddd',
+        gradient: {
+          direction: 'to right',
+          start: '#4586FC',
+          end: '#4586FC'
+        }
+      },
+      popularTavern: null,
+      recommendDepositTerm: null,
+      recommendLuckyBlock: null,
+      guidelines: [
+        {
+          icon: '#icon-color-letter',
+          title: 'LORDLESS Referral Program Guidelines',
+          date: 1553644800000,
+          link: 'https://medium.com/lordless/lordless-referral-program-guidelines-a7c1c63058d8'
+        },
+        {
+          icon: '#icon-color-bank',
+          title: 'LORDLESS LESS Term Deposit Guidelines',
+          date: 1553644800000,
+          link: 'https://medium.com/lordless/less-term-deposit-2453c3ae2a5c'
+        },
+        {
+          icon: '#icon-bounty-gift',
+          title: 'LORDLESS Bounty Chest Guidelines',
+          date: 1553644800000,
+          link: 'https://medium.com/lordless/lordless-withdraw-guide-efcf9dc2cf67'
+        }
+      ]
+    }
+  },
+  computed: {
+    ossOrigin () {
+      return process.env.LDBICON_ORIGIN
+    }
+  },
   components: {
-    PromotionClaim,
-    PromotionLucky,
+    HomeSkeletion,
 
-    HomeSkeletion
+    PlanDepositCard,
+    LuckyBlockCard
+  },
+  methods: {
+
+    choosePlan (plant) {
+      this.$router.push(`/owner/planBase/${plant._id}?refer=${this.$route.path}`)
+    },
+
+    async getPopularTavern () {
+      try {
+        const res = await getLdbById({ id: 0 })
+        if (res.code === 1000 && res.data) {
+          this.popularTavern = res.data
+        }
+      } catch (err) {}
+    },
+
+    async getRecommendTermDeposit () {
+      try {
+        const res = await getPlanBases({ version: 2, recommend: true })
+        if (res.code === 1000 && res.data) {
+          this.recommendDepositTerm = res.data[0]
+        }
+      } catch (err) {}
+    },
+
+    async getRecommendLuckyBlock () {
+      try {
+        const res = await getLuckyblocks({ recommend: true })
+        if (res.code === 1000 && res.data) {
+          this.recommendLuckyBlock = res.data[0]
+        }
+      } catch (err) {}
+    },
+
+    async initHome () {
+      this.loading = true
+      await Promise.all([ this.getPopularTavern(), this.getRecommendTermDeposit(), this.getRecommendLuckyBlock() ])
+      this.$nextTick(() => {
+        this.loading = false
+        this.rendered = true
+      })
+    }
+  },
+  activated () {
+    if (!this.rendered) {
+      this.rendered = true
+      return
+    }
+    this.initHome()
+  },
+  mounted () {
+    this.$nextTick(() => this.initHome())
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .home-ad-space {
-    margin: -20px -20px 0;
+  .mobile-home-box {
+    padding: 20px;
   }
 
-  .mobile-home-box {
-    padding: 20px 20px 50px;
-  }
-  .mobile-home-title {
-    font-size: 24px;
-    color: #555;
-  }
-  .home-promotions-tips {
-    margin-top: 10px;
-    padding-bottom: 24px;
-    font-size: 16px;
-    color: #777;
-    border-bottom: 1px solid #ddd;
-    box-sizing: border-box;
-  }
-  .promotions-twitter-btn {
-    margin-top: 10px;
-    padding: 0 20px;
-    height: 46px;
-    line-height: 46px;
-  }
-  .promotions-twitter-icon {
-    margin-right: 6px;
-    width: 22px;
-    height: 22px;
-  }
-  .home-promotions-item {
-    margin-top: 36px;
-  }
-  .home-promotions-title {
-    margin-bottom: 6px;
-    font-size: 16px;
-    color: #777;
-    >p {
-      &:first-of-type {
-        margin-bottom: 4px;
-        font-size: 18px;
-        color: #0B2A48;
-      }
+  .mobile-home-section {
+    &:not(:first-of-type) {
+      margin-top: 28px;
     }
   }
-  .home-info-item {
-    box-shadow: 0 0 10px 3px rgba(222, 222, 222, 1);
+  .home-section-title {
+    font-size: 18px;
+    color: $--main-color;
+  }
+  .home-section-viewmore {
+    font-family: $--font-TTNormsMedium;
+    font-weight: initial;
+    font-size: 14px;
+    color: #777;
+  }
+  .home-view-more-icon {
+    margin-left: 6px;
+    width: 12px;
+    height: 12px;
+    fill: #999;
+  }
+  .home-section-cnt {
+    margin-top: 12px;
+    box-shadow: 0 0 8px 3px rgba(0, 0, 0, .1);
     border-radius: 5px;
     overflow: hidden;
   }
-  // .home-candy-icon {
-  //   margin-right: 6px;
-  //   padding: 6px;
-  //   width: 29px;
-  //   height: 29px;
-  //   border-radius: 100%;
-  //   box-sizing: border-box;
-  //   background-image: linear-gradient(-45deg, #00C0EB 0%, $--main-blue-color 100%);
-  //   fill: #fff;
+
+  /**
+   *  popular-tavern-box  -- begin
+   */
+
+  .popular-tavern-container {
+    padding: 16px 32px 16px 16px;
+    background-color: #fff;
+  }
+
+  .popular-tavern-box {
+    margin-top: 24px;
+  }
+  .popular-tavern-poster {
+    width: 96px;
+    height: 96px;
+    &.none {
+      padding: 10px;
+      fill: #BDB9FD;
+      border-radius: 5px;
+      box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, .25);
+    }
+  }
+  // .popular-tavern-name {
+  //   max-width: 130px;
+  //   overflow: hidden;
+  //   text-overflow: ellipsis;
   // }
-
-  /**
-   *  mobile-home-promotions  -- begin
-   */
-  .mobile-home-promotions {
-    padding-top: 16px;
+  .popular-tavern-info {
+    margin-left: 18px;
+    @include viewport-unit(width, 100vw, 220px);
   }
-
-  .promotions-lucky-item {
-
+  .user-info-btn {
+    display: inline-block;
+    padding: 8px 15px;
+    font-size: 14px;
+    @include margin('top', 15px, 1);
   }
-
-  .promotions-public-item {
-    &:not(:first-of-type) {
-      margin-top: 24px;
-    }
-    figcaption {
-      width: 100%;
-      // height: 128px;
-      // @include bg-size();
-    }
-  }
-
-  /**
-   *  mobile-home-promotions  -- end
-   */
-
-  /**
-   *  mobile-home-candies  -- begin
-   */
-  .mobile-home-candies {
-    margin-top: 40px;
-  }
-  .home-candies-item {
-    padding: 20px;
-    &:not(:first-of-type) {
-      margin-top: 16px;
-    }
-  }
-  .candies-symbol-box {
-    font-size: 18px;
+  .popular-tavern-title {
+    font-size: 16px;
     color: #777;
   }
-  .candies-symbol-coin {
+  .popular-tavern-name {
+
   }
-  .candies-claimed-box {
-    margin-top: 10px;
-    font-size: 16px;
+  .popular-tavern-desc {
+    margin-top: 4px;
+    font-size: 14px;
+    color: #777;
+  }
+  .popular-tavern-recruits {
+    margin-left: 16px;
+  }
+
+  .apleft-progress-tip {
+    margin-bottom: 2px;
+    font-size: 14px;
     color: #999;
   }
-  .candies-claimed-num {
-    font-size: 20px;
-    color: $--main-blue-color;
-    >span {
-      font-size: 16px;
+
+  .apleft-progress-bar {
+    width: 100%;
+    height: 6px;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  /**
+   *  popular-tavern-box  -- end
+   */
+
+  // guideline-cnt-box
+  .guideline-cnt-box {
+    padding: 20px;
+    background-color: #fff;
+  }
+  .guideline-item {
+    &:not(:first-of-type) {
+      margin-top: 22px;
     }
   }
-  .promotion-item-info {
-    padding: 20px;
+  .guideline-icon-box {
+    width: 44px;
+    height: 44px;
+    background-image: linear-gradient(-225deg, #124bdc 0%, #0079ff 100%);
+    border-radius: 5px;
   }
-  /**
-   *  mobile-home-candies  -- end
-   */
+  .guideline-item-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .guideline-item-right {
+    margin-left: 12px;
+  }
+  .guideline-item-title {
+    font-size: 16px;
+  }
+  .guideline-item-date {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #777;
+  }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="mobile-referral-rewards" class="referral-rewards-box" :class="{ 'is-website': isWebsite }">
+  <div ref="lordless-load-more-box" id="mobile-referral-rewards" class="referral-rewards-box" :class="{ 'is-website': isWebsite }">
     <transition name="ld-hide-fade" mode="out-in" @after-enter="afterEnter
     ">
       <referral-rewards-skeletion isWebsite v-if="loading"/>
@@ -303,6 +303,7 @@ export default {
 <style lang="scss" scoped>
   .referral-rewards-box {
     padding-top: 44px;
+    padding-bottom: 50px;
     &.is-website {
       padding-top: 0px;
       // .referral-rewards-cnt {

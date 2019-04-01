@@ -40,7 +40,7 @@
             Failed
           </div>
           <div v-else class="promotion-receive-info" :class="{ 'is-pending': info.status === 0 }">
-            <p class="TTFontBolder promotion-receive-count">+ {{ info.airdrop.countPerUser | weiByDecimals(info.airdrop.decimals) }}</p>
+            <p class="TTFontBolder text-right promotion-receive-count">+ {{ info.airdrop.countPerUser | weiByDecimals(info.airdrop.decimals) }}</p>
             <p class="TTFontBolder text-right promotion-info-pending">Pending</p>
             <p v-if="info.airdrop.project.USD2TokenCount" class="promotion-receive-value">≈ $ {{ info.airdrop.countPerUser / 1e18 / info.airdrop.project.USD2TokenCount | formatDecimal }}</p>
           </div>

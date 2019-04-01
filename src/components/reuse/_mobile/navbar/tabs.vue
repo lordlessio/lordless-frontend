@@ -64,6 +64,11 @@ export default {
       currentTab: vm.originTab || vm.tabs[0].name
     }
   },
+  watch: {
+    originTab (val) {
+      val && this.changeTab(val)
+    }
+  },
   methods: {
     getAttr (node) {
       if (!node || node.nodeName === 'BODY') return {}

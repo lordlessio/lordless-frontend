@@ -25,10 +25,10 @@
             <div class="lucky-section-content">
               <div class="lucky-left-content bets">
                 <div class="d-flex f-align-center" v-if="info.luckyblock.blockInfos.ethBets">
-                  <p class="v-flex">- {{ info.luckyblock.blockInfos.ethBets.count | weiByDecimals(info.luckyblock.blockInfos.ethBets.decimals) }} ETH</p>
+                  <p class="v-flex">- {{ weiByDecimals(info.luckyblock.blockInfos.ethBets.count, info.luckyblock.blockInfos.ethBets.decimals).toLocaleString() }} ETH</p>
                 </div>
                 <div class="d-flex f-align-center" v-for="(item, index) of info.luckyblock.blockInfos.tokenBets" :key="index">
-                  <p class="v-flex">- {{ item.count | weiByDecimals(item.decimals) }} {{ item.candy.symbol }}</p>
+                  <p class="v-flex">- {{ weiByDecimals(item.count, item.decimals).toLocaleString() }} {{ item.candy.symbol }}</p>
                 </div>
               </div>
             </div>
@@ -47,7 +47,7 @@
                         <use :xlink:href="`#icon-${(info.status === 0 || (info.luckyRandom + info.luckyblock.blockInfos.ethWinnings.percent >= 100)) ? 'ok' : 'close'}`"/>
                       </svg>
                     </span>
-                    <span>+ {{ info.luckyblock.blockInfos.ethWinnings.count | weiByDecimals(info.luckyblock.blockInfos.ethWinnings.decimals) }} ETH</span>
+                    <span>+ {{ weiByDecimals(info.luckyblock.blockInfos.ethWinnings.count, info.luckyblock.blockInfos.ethWinnings.decimals).toLocaleString() }} ETH</span>
                   </p>
                   <p class="lucky-right-content">{{ info.luckyblock.blockInfos.ethWinnings.percent }}%</p>
                 </div>
@@ -61,7 +61,7 @@
                         <use :xlink:href="`#icon-${(info.status === 0 || (info.luckyRandom + item.percent >= 100)) ? 'ok' : 'close'}`"/>
                       </svg>
                     </span>
-                    <span>+ {{ item.count | weiByDecimals(item.decimals) }} {{ item.candy.symbol }}</span>
+                    <span>+ {{ weiByDecimals(item.count, item.decimals).toLocaleString() }} {{ item.candy.symbol }}</span>
                   </p>
                   <p class="lucky-right-content">{{ item.percent }}%</p>
                 </div>
@@ -98,6 +98,7 @@
 </template>
 
 <script>
+import { weiByDecimals } from 'utils/tool'
 export default {
   name: 'mobile-quest-lucky-card',
   props: {
@@ -174,6 +175,11 @@ export default {
         default:
           return '#icon-cool'
       }
+    }
+  },
+  methods: {
+    weiByDecimals () {
+      return weiByDecimals(...arguments)
     }
   }
 }

@@ -2,7 +2,7 @@
   <div class="projecct-promotions-skeletion">
     <div class="promotions-skeletion-container breath-skeletion">
       <div class="promotions-public-skeletion promotions-airdrops-skeletion">
-        <p></p>
+        <!-- <p></p> -->
         <div class="info-promotion-skeletion">
           <div class="promotion-card-skeletion">
             <p class="promotion-card-title"></p>
@@ -15,7 +15,7 @@
           </div>
         </div>
       </div>
-      <div class="promotions-public-skeletion promotions-candies-skeletion">
+      <!-- <div class="promotions-public-skeletion promotions-candies-skeletion">
         <p></p>
         <ul>
           <li class="d-flex f-auto-center candies-table-thead">
@@ -27,7 +27,7 @@
             <p class="v-flex"></p>
           </li>
         </ul>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -40,18 +40,20 @@ export default {
 
 <style lang="scss" scoped>
   .projecct-promotions-skeletion {
-    padding-bottom: 48px;
+    padding: 0 20px 48px;
+    box-sizing: border-box;
     p {
       background-color: $--skeletion-dark;
     }
   }
   .promotions-skeletion-container {
     margin: 0 auto;
+    width: 100%;
     max-width: 1100px;
   }
 
   .promotions-public-skeletion {
-    margin-top: 48px;
+    margin-top: 24px;
     >p {
       margin-bottom: 24px;
       height: 30px;
@@ -65,11 +67,11 @@ export default {
   }
   .info-promotion-skeletion {
     // margin-left: 20px;
-    width: 376px;
+    // width: 376px;
   }
   .promotion-card-skeletion {
     padding: 20px;
-    width: 376px;
+    // width: 376px;
     background-color: $--skeletion-light;
     border-radius: 5px;
   }
@@ -103,24 +105,24 @@ export default {
   }
 
   // promotions-candies-skeletion
-  .promotions-candies-skeletion {
-    >ul {
-      padding: 0 20px;
-      background-color: $--skeletion-light;
-      border-radius: 5px;
-    }
-  }
-  .candies-table-item {
-    height: 80px;
-    border-top: 1px solid #dddddd80;
-    >p {
-      height: 20px;
-    }
-  }
-  .candies-table-thead {
-    height: 70px;
-    >p {
-      height: 16px;
-    }
-  }
+  // .promotions-candies-skeletion {
+  //   >ul {
+  //     padding: 0 20px;
+  //     background-color: $--skeletion-light;
+  //     border-radius: 5px;
+  //   }
+  // }
+  // .candies-table-item {
+  //   height: 80px;
+  //   border-top: 1px solid #dddddd80;
+  //   >p {
+  //     height: 20px;
+  //   }
+  // }
+  // .candies-table-thead {
+  //   height: 70px;
+  //   >p {
+  //     height: 16px;
+  //   }
+  // }
 </style>

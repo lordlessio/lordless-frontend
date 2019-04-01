@@ -104,7 +104,7 @@
         </ul>
       </div>
       <div class="user-info-content">
-        <ul class="info-cnt-article purple">
+        <ul class="info-cnt-article">
           <li
             class="d-flex f-align-center info-cnt-item"
             v-for="(item, index) of lordlessOuterInfos" :key="index">
@@ -115,17 +115,18 @@
             </span>
             <div class="v-flex cnt-item-right">
               <a class="d-flex f-align-center" :href="item.link" target="_blank">
-                <p class="v-flex cnt-item-title">{{ item.title }}</p>
-                <span class="inline-block line-height-0 info-arrow-icon">
+                <p class="TTFontBolder v-flex cnt-item-title">{{ item.title }}</p>
+                <p class="cnt-item-text">{{ item.text }}</p>
+                <!-- <span class="inline-block line-height-0 info-arrow-icon">
                   <svg>
                     <use xlink:href="#icon-arrow-line-right"/>
                   </svg>
-                </span>
+                </span> -->
               </a>
             </div>
           </li>
         </ul>
-        <ul class="info-cnt-article gray">
+        <ul class="info-cnt-article">
           <li class="d-flex f-align-center info-cnt-item" @click.stop="$emit('logout')">
             <span class="inline-block line-height-0 cnt-item-icon">
               <svg>
@@ -133,7 +134,7 @@
               </svg>
             </span>
             <div class="v-flex d-flex f-align-center cnt-item-right">
-              <p class="v-flex cnt-item-title">Logout</p>
+              <p class="TTFontBolder v-flex cnt-item-title">Logout</p>
               <span class="inline-block line-height-0 info-arrow-icon">
                 <svg>
                   <use xlink:href="#icon-arrow-line-right"/>
@@ -160,18 +161,27 @@ export default {
 
       lordlessOuterInfos: [
         {
+          icon: '#icon-promotion',
+          title: 'Changelog',
+          text: '1.3.5',
+          link: 'https://medium.com/lordless/lordless-web-updates-for-mobile-a5f31728b7fe'
+        },
+        {
           icon: '#icon-telegram',
-          title: '@lordless_global',
+          title: 'Telegram',
+          text: '@lordless_global',
           link: 'https://t.me/lordless_global'
         },
         {
           icon: '#icon-twitter',
-          title: '@LordLessIo',
+          title: 'Twitter',
+          text: '@lordless_global',
           link: 'https://twitter.com/lordless_global'
         },
         {
           icon: '#icon-lordless',
-          title: 'lordless.io',
+          title: 'Website',
+          text: 'lordless.io',
           link: 'https://lordless.io'
         }
       ]
@@ -466,8 +476,8 @@ export default {
     // margin-bottom: 30px;
   }
   .cnt-item-icon {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     &.large {
       margin-left: -4px;
       width: 24px;
@@ -483,15 +493,16 @@ export default {
   .info-cnt-article {
     padding-left: 20px;
     background-color: #fff;
+    fill: #555;
     &:not(:first-of-type) {
       margin-top: 16px;
     }
-    &.purple {
-      fill: #7D72F0;
-    }
-    &.gray {
-      fill: #555;
-    }
+    // &.purple {
+    //   fill: rgb(174, 173, 187);
+    // }
+    // &.gray {
+    //   fill: #555;
+    // }
   }
   .info-cnt-item {
     height: 50px;
@@ -501,19 +512,22 @@ export default {
       width: 100%;
       height: 100%;
     }
-    &:not(:first-of-type) {
-      .cnt-item-right {
-        border-top: 1px solid #ddd;
-      }
-    }
+    // &:not(:first-of-type) {
+    //   .cnt-item-right {
+    //     border-top: 1px solid #ddd;
+    //   }
+    // }
   }
   .cnt-item-title {
     color: #555;
   }
+  .cnt-item-text {
+    color: #999;
+  }
   .cnt-item-right {
     margin-left: 12px;
     padding-right: 20px;
-    color: #0B2A48;
+    color: #555;
   }
 
   /**

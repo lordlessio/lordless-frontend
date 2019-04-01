@@ -11,7 +11,8 @@
     :show-close="false"
     @open="$emit('open')"
     @close="$emit('close')">
-    <div class="text-center lordless-message-box lordless-lucky-rules-dialog">
+    <div class="text-center lordless-message-box theme-glossary lordless-lucky-rules-dialog">
+      <p class="lordless-glossary">LORDLESS Glossary</p>
       <span
         @click.stop="$emit('input', false)"
         class="inline-block line-height-1 lordless-message-close">
@@ -31,7 +32,7 @@
       </div>
       <p class="lucky-rules-icon">GOOD LUCK!</p>
       <p class="lucky-rules-btns">
-        <lordless-btn class="lucky-rules-btn" theme="dialog" @click="$emit('input', false)">Got it</lordless-btn>
+        <lordless-btn class="lucky-rules-btn" theme="glossary" @click="$emit('input', false)">Got it</lordless-btn>
       </p>
     </div>
   </el-dialog>
@@ -75,6 +76,13 @@ export default {
     max-width: 480px;
     padding-top: 50px;
     padding-bottom: 50px;
+  }
+  .lordless-glossary {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    font-size: 12px;
+    color: #fff;
   }
   .lordless-lucky-rules-dialog {
     // font-size: 16px;

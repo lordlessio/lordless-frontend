@@ -5,8 +5,6 @@
         :originTab="currentTab"
         :tabs="bcTabs"
         :fixed="false"
-        rightIcon="#icon-bounty-chests"
-        rightPath="/owner/bountyChest"
         @changeTab="tabChange"/>
       <!-- <div
         ref="bc-holding-tabs"
@@ -70,6 +68,9 @@ export default {
         {
           label: 'Materials',
           name: 'materials'
+        }, {
+          label: 'Records',
+          name: 'records'
         }, {
           label: 'Bounty Chests',
           name: 'chests'

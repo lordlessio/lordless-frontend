@@ -50,6 +50,10 @@ module.exports = axios => {
     // 初始化用户 tg 认证 code
     initUserTgCode: () => {
       return axios.get('/api/user/tgcode')
+    },
+
+    getUserBCRecords: (params) => {
+      return axios.get('/api/user/bcRecords', { params })
     }
 
     // 注销登陆

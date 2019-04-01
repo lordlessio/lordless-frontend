@@ -204,6 +204,9 @@ export default {
     }
   },
   data: (vm) => {
+    let type = vm.$route.query.type
+    const types = [ 'bottoms', 'reward', 'promotion' ]
+    type = types.includes(type) ? type : 'bottoms'
     return {
       rendered: false,
       // popstateModel: false,
@@ -214,10 +217,10 @@ export default {
       },
 
       // 当前 tab 区域,默认为地址栏参数
-      currentTab: vm.$route.query.type || 'bottoms',
+      currentTab: type,
 
       // 上一个历史的 tab 区域
-      prevTab: vm.$route.query.type || 'bottoms',
+      prevTab: type,
 
       loading: true,
 

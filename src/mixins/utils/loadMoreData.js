@@ -10,6 +10,7 @@ export default {
     async loadMoreData (cb) {
       this.loadMoreLoading = true
       const info = this.loadDatas
+      console.log('------ loadMoreData info', info)
       const pn = info.pn + 1
       const result = (await this.getDataMethod({ pn })) || {}
       const { list = [], ps = 10 } = result
@@ -44,7 +45,7 @@ export default {
       if (!bHeight || bHeight - bottom < pHeight) return
 
       const handleFunc = () => {
-        if (bool || this.planRecords.noMore) return
+        if (bool || this.loadDatas.noMore) return
         if (!bHeight) bHeight = box.offsetHeight
         const scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
 
