@@ -4,12 +4,22 @@
       <home-skeletion v-if="loading"/>
       <div v-else>
         <div class="mobile-home-section" v-if="popularTavern">
-          <h2 class="home-section-title">Popular Tavern</h2>
+          <h2 class="d-flex f-align-center home-section-title">
+            <span class="v-flex">Popular Tavern</span>
+            <span class="d-flex f-align-center home-section-viewmore" @click.stop="$router.push('/taverns')">
+              <span class="inline-block line-height-0">View more</span>
+              <span class="inline-block line-height-0 home-view-more-icon">
+                <svg>
+                  <use xlink:href="#icon-arrow-line-right"/>
+                </svg>
+              </span>
+            </span>
+          </h2>
           <div class="home-section-cnt">
             <div class="d-flex f-align-center popular-tavern-container">
               <div
                 class="d-flex full-width"
-                @click.stop="$router.push(`/taver/${popularTavern._id}`)">
+                @click.stop="$router.push(`/tavern/${popularTavern._id}?refer=${$route.path}`)">
                 <div class="popular-tavern-poster">
                   <lordless-tavern-poster
                     :src="popularTavern.ldbIcon ? popularTavern.ldbIcon.source.preview : ''"
