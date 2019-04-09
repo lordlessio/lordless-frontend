@@ -19,7 +19,7 @@
           </p>
         </div>
 
-        <div class="home-promotions-item home-promotions-lucky">
+        <div class="home-promotions-item home-promotions-lucky" v-if="luckyblocks.length">
           <div class="home-promotions-title">
             <p class="TTFontBolder">Lucky Blocks</p>
           </div>
@@ -38,7 +38,7 @@
           </ul>
         </div>
 
-        <div class="home-promotions-item home-promotions-windfall">
+        <div class="home-promotions-item home-promotions-windfall" v-if="promotions.length">
           <div class="home-promotions-title">
             <p class="TTFontBolder">Windfall</p>
           </div>
@@ -92,21 +92,26 @@
 </template>
 
 <script>
-import { promotionsMixins } from '@/mixins'
+import { promotionsMixins, publicMixins } from '@/mixins'
 import PromotionsBreadcrumb from '@/components/reuse/promotions/breadcrumb'
 import PromotionClaim from '@/components/reuse/card/promotion/claim'
 import PromotionLucky from '@/components/reuse/card/promotion/lucky'
 
 import PromotionsSkeletion from '@/components/skeletion/project/promotions'
+import { loopCandyClamied } from 'utils/loop'
 export default {
   name: 'lordless-project-promotions',
-  mixins: [ promotionsMixins ],
+  mixins: [ promotionsMixins, publicMixins ],
   components: {
     PromotionsBreadcrumb,
     PromotionClaim,
     PromotionLucky,
 
     PromotionsSkeletion
+  },
+  mounted () {
+    this.getAirdropsHandle()
+    loopCandyClamied()
   }
 }
 </script>
