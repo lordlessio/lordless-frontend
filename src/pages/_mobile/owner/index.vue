@@ -143,6 +143,12 @@ export default {
           match: /^\/owner\/referee/,
           show: true,
           history: true
+        },
+        {
+          text: 'Bounty Hunter tasks',
+          match: /^\/owner\/hunterTasks/,
+          show: true,
+          history: true
         }
         // {
         //   text: 'My Bounty Chests',

@@ -24,7 +24,7 @@
               </svg>
             </span>
             <div class="v-flex bc-record-cnt">
-              <p class="record-card-title">{{ bcTypeDatas[record.type].title }}</p>
+              <p class="record-card-title">{{ record.type === 'hunterTasks' ? taskInfos[record.taskType].title : bcTypeDatas[record.type].title }}</p>
               <p class="d-flex f-align-center record-card-desc">
                 <span>{{ record.candy.symbol }}</span>
                 <span v-if="record.ldb" class="relative inline-block">#{{ record.ldb.info }}</span>
@@ -63,6 +63,57 @@ export default {
       currentTag: type,
       smallLoading: true,
 
+      taskInfos: {
+        1: {
+          icon: '#icon-hunter-task-like',
+          title: 'Follow LORDLESS Telegram',
+          desc: 'Follow the @lordless_global.',
+          path: '/owner/bind/telegram'
+        },
+        2: {
+          icon: '#icon-hunter-task-wallet',
+          title: 'Hold LESS in the wallet',
+          desc: 'You have to hold 1,000 LESS at least.',
+          path: '/owner/info'
+        },
+        3: {
+          icon: '#icon-hunter-task-badge',
+          title: 'Referee program',
+          desc: 'Become a referee.',
+          path: '/owner/referee'
+        },
+        4: {
+          icon: '#icon-hunter-task-email',
+          title: 'Invitation program',
+          desc: 'Invite one friend at least.',
+          path: '/owner/referral/invitation'
+        },
+        5: {
+          icon: '#icon-hunter-task-coin',
+          title: 'LESS Term Deposit',
+          desc: 'Make LESS Term Deposit once at least.',
+          path: '/owner/hops'
+        },
+        6: {
+          icon: '#icon-hunter-task-sword',
+          title: 'Get recruited',
+          desc: 'Become a Recruit.',
+          path: '/taverns'
+        },
+        7: {
+          icon: '#icon-hunter-task-box',
+          title: 'Unlock a Bounty Chest',
+          desc: 'Unlock the Bounty Chest once at least.',
+          path: '/owner/bc?type=chests'
+        },
+        8: {
+          icon: '#icon-hunter-task-viking-helmet',
+          title: 'Become a Tavernkeep',
+          desc: 'Hold one Tavern at least.',
+          path: '/taverns'
+        }
+      },
+
       // 记录第一次 enter 状态
       firstEnter: false,
       recordTags: [
@@ -85,6 +136,10 @@ export default {
         {
           name: 'bc',
           label: 'Bounty Chest'
+        },
+        {
+          name: 'hunterTasks',
+          label: 'Bounty Hunter tasks'
         }
       ],
       bcTypeDatas: {
@@ -107,6 +162,10 @@ export default {
         bc: {
           title: 'Bounty Chest',
           icon: '#icon-blue-linear-paper-bag'
+        },
+        hunterTasks: {
+          title: 'Bounty Hunter task',
+          icon: '#icon-blue-linear-hunter-task'
         }
       },
       loadDatas: {

@@ -258,6 +258,11 @@ export default {
           icon: '#icon-blue-linear-authorization',
           text: 'Authorizations',
           path: '/owner/authorization'
+        },
+        {
+          icon: '#icon-blue-linear-hunter-task',
+          text: 'BH task',
+          path: '/owner/hunterTasks'
         }
       ]
     }
@@ -440,11 +445,19 @@ export default {
     padding-top: 33%;
     width: 33%;
     border-top: 1px solid #f0f0f0;
+    border-right: 1px solid #f0f0f0;
     box-sizing: border-box;
     &:nth-of-type(3n + 2) {
       width: 34%;
-      border-left: 1px solid #f0f0f0;
-      border-right: 1px solid #f0f0f0;
+    }
+    &:nth-of-type(3n - 1), &:nth-of-type(3n - 2), &:nth-of-type(3n - 3) {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    &:nth-of-type(3n + 4), &:nth-of-type(3n + 5), &:nth-of-type(3n + 6) {
+      border-top: 1px solid transparent;
+    }
+    &:nth-of-type(3n) {
+      border-right: 1px solid transparent;
     }
   }
   .user-service-item-container {

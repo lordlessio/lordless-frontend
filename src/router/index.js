@@ -71,6 +71,7 @@ import MobileReferralReferees from '@/pages/_mobile/owner/_user/referral/referee
 import MobileReferralRewards from '@/pages/_mobile/owner/_user/referral/rewards'
 
 import MobileReferee from '@/pages/_mobile/owner/referee'
+import MobileHunterTasks from '@/pages/_mobile/owner/hunterTasks'
 
 import MobileUserDetail from '@/pages/_mobile/user/_detail'
 import MobileUserTaverns from '@/pages/_mobile/user/taverns'
@@ -289,6 +290,18 @@ const mobileRoutes = [
         component: MobileReferee,
         meta: {
           title: 'Referee - LORDLESS',
+          ownerChild: true,
+          keepAlive: true,
+          transition: false,
+          hideTab: true
+        }
+      },
+      {
+        path: 'hunterTasks',
+        name: 'mobile-user-hunterTasks',
+        component: MobileHunterTasks,
+        meta: {
+          title: 'Bounty Hunter tasks - LORDLESS',
           ownerChild: true,
           keepAlive: true,
           transition: false,

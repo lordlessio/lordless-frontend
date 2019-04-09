@@ -3,6 +3,30 @@
     <transition name="ld-hide-fade" mode="out-in">
       <home-skeletion v-if="loading"/>
       <div v-else>
+        <div class="mobile-hunterTask-section">
+          <h2 class="home-section-title">Bounty Hunter tasks</h2>
+          <div class="home-section-cnt hunterTask-cnt-box" @click.stop="$router.push(`/owner/hunterTasks?refer=${$route.path}`)">
+            <div class="d-flex f-align-center hunterTask-cnt-container">
+              <div class="v-flex hunterTask-cnt-left">
+                <p class="ImpactFont hunterTask-cnt-title">Do tasks. Earn LESS.</p>
+                <ul class="d-flex f-align-center hunterTask-icon-box">
+                  <li v-for="(item, index) of hunterTaskIcons" :key="index" class="hunterTask-icon-item">
+                    <span class="inline-block line-height-0 hunterTask-item-icon">
+                      <svg>
+                        <use :xlink:href="item.icon"/>
+                      </svg>
+                    </span>
+                  </li>
+                </ul>
+              </div>
+              <span class="inline-block line-height-0 hunterTask-go-icon">
+                <svg>
+                  <use xlink:href="#icon-hunter-task-go"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+        </div>
         <div class="mobile-home-section" v-if="popularTavern">
           <h2 class="d-flex f-align-center home-section-title">
             <span class="v-flex">Popular Tavern</span>
@@ -166,6 +190,24 @@ export default {
           date: 1553644800000,
           link: 'https://medium.com/lordless/lordless-withdraw-guide-efcf9dc2cf67'
         }
+      ],
+
+      // hunterTask options
+      hunterTaskTypes: [],
+      userHunterTasks: [],
+      hunterTaskIcons: [
+        {
+          icon: '#icon-hunter-task-badge'
+        },
+        {
+          icon: '#icon-hunter-task-sword'
+        },
+        {
+          icon: '#icon-hunter-task-email'
+        },
+        {
+          icon: '#icon-hunter-task-like'
+        }
       ]
     }
   },
@@ -267,6 +309,45 @@ export default {
     border-radius: 5px;
     overflow: hidden;
   }
+
+  /**
+   *  hunterTask-cnt-box  -- begin
+   */
+  .hunterTask-cnt-box {
+    border-radius: 64px;
+    box-shadow: 0px 0px 12px 0px rgb(0, 121, 255);
+  }
+  .hunterTask-cnt-container {
+    padding: 10px 30px;
+    padding-right: 10px;
+    background-image: linear-gradient(-225deg, rgb(18, 75, 220) 0%, rgb(0, 121, 255) 100%);
+  }
+  .hunterTask-cnt-left {
+
+  }
+  .hunterTask-cnt-title {
+    font-size: 20px;
+    color: #fff;
+  }
+  .hunterTask-icon-box {
+    margin-top: 5px;
+  }
+  .hunterTask-icon-item {
+    &:not(:first-of-type) {
+      margin-left: 8px;
+    }
+  }
+  .hunterTask-item-icon {
+    width: 24px;
+    height: 24px;
+  }
+  .hunterTask-go-icon {
+    width: 64px;
+    height: 64px;
+  }
+  /**
+   *  hunterTask-cnt-box  -- end
+   */
 
   /**
    *  popular-tavern-box  -- begin

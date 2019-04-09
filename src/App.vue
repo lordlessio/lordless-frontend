@@ -137,6 +137,9 @@ export default {
     }
   },
   computed: {
+    ...mapState('user', [
+      'userInfo'
+    ]),
     ...mapState('layout', {
       headerOpt: 'header',
       footerOpt: 'footer',
@@ -159,7 +162,7 @@ export default {
     },
     userInfo (val) {
       console.log('---------- userInfo', val)
-      val && this.initStoreData()
+      val && val._id && this.initStoreData()
     }
   },
   components: {
@@ -197,7 +200,6 @@ export default {
     initStoreData () {
       this[actionTypes.CANDY_SET_CANDY_PRICE]()
       this[actionTypes.STATUS_INIT_BROSWER]()
-      this[actionTypes.USER_SET_USER_BY_TOKEN]()
       this[actionTypes.USER_SET_USER_HOME]()
       this[actionTypes.USER_SET_PLAN_BOOSTS]()
     }
@@ -232,6 +234,7 @@ export default {
     this.isAppMobile = mobileBool()
   },
   mounted () {
+    this[actionTypes.USER_SET_USER_BY_TOKEN]()
     this.initStoreData()
     // loopCandyClamied()
     // document.getElementById('outside-loading').style = 'display: none'

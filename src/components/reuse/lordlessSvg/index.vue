@@ -10,6 +10,7 @@
     <market-svg/>
     <coin-svg/>
     <bounty-svg/>
+    <hunter-task-svg/>
   </div>
 </template>
 
@@ -24,6 +25,7 @@ import MobileSvg from './mobile'
 import MarketSvg from './market'
 import CoinSvg from './coin'
 import BountySvg from './bounty'
+import HunterTaskSvg from './hunterTask'
 export default {
   components: {
     GradientSvg,
@@ -35,7 +37,8 @@ export default {
     MobileSvg,
     MarketSvg,
     CoinSvg,
-    BountySvg
+    BountySvg,
+    HunterTaskSvg
   },
   mounted () {
     document.body.appendChild(this.$el)

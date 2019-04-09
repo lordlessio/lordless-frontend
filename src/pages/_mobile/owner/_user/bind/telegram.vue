@@ -27,7 +27,7 @@ export default {
   },
   watch: {
     'userInfo.telegram' (val) {
-      if (val.id) {
+      if (val && val.id) {
         scrollTo(0)
       }
     }

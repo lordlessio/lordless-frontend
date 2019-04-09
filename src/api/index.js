@@ -21,6 +21,7 @@ const bounty = require('./bounty')
 const referer = require('./referer')
 const activityTask = require('./activityTask')
 const recruit = require('./recruit')
+const hunterTask = require('./hunterTask')
 
 module.exports = merge(
   aMap(axios),
@@ -43,5 +44,6 @@ module.exports = merge(
   bounty(axios),
   referer(axios),
   activityTask(axios),
-  recruit(axios)
+  recruit(axios),
+  hunterTask(axios)
 )
