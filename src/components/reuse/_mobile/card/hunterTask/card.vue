@@ -24,17 +24,18 @@
         <p class="TTFontBolder">Reward(Material)</p>
         <h3>{{ hunterTaskInfo.rewardCount.toLocaleString() }}{{ hunterTaskInfo.token.symbol }}</h3>
       </div>
-      <lordless-btn 
+      <lordless-btn
         class="task-card-btn"
         :theme="btnInfo.theme"
         :disabled="this.finished"
         @click="openDialog">{{ btnInfo.text }}</lordless-btn>
     </div>
-    <hunter-task-dialog 
+    <hunter-task-dialog
       v-model="taskDialogModel"
       :taskTitle="hunterTaskInfo.title"
       :dialogType="dialogType"
       :btnLoading="checkLoading"
+      :rewardCount="hunterTaskInfo.rewardCount"
       @confirm="checkTask"/>
   </div>
 </template>

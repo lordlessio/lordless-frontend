@@ -46,9 +46,13 @@ export default {
     btnLoading: {
       type: Boolean,
       default: false
+    },
+    rewardCount: {
+      type: Number,
+      default: 0
     }
   },
-  data: () => {
+  data: (vm) => {
     return {
       dialogModel: false,
       typeInfos: {
@@ -60,12 +64,12 @@ export default {
         1: {
           title: 'Congratulations',
           desc: 'You have completed the task.',
-          btnText: 'Back to the task'
+          btnText: `${(vm.rewardCount || '0').toLocaleString()} LESS reward`
         },
         2: {
           title: 'Rejected',
           desc: 'You have not met the conditions for completing the task.',
-          btnText: 'Okey'
+          btnText: 'Okay'
         }
       }
     }
