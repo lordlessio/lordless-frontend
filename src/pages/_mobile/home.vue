@@ -121,6 +121,29 @@
             </figure>
           </div>
         </div>
+        <div class="mobile-home-section" v-if="airdrops && airdrops.length">
+          <h2 class="d-flex f-align-center home-section-title">
+            <span class="v-flex">Airdrops</span>
+          </h2>
+          <div class="home-section-cnt no-shadow">
+            <ul class="promotions-windfall-ul">
+              <li
+                v-for="(item, index) of airdrops"
+                :key="index"
+                class="home-info-item promotions-windfall-item"
+                @click.stop="$router.push(`/project/${item.project._id}`)">
+                <figure>
+                  <!-- <figcaption>
+                    <img :alt="`promotions_${item.project.symbol}`" class="full-width" :src="ossOrigin + item.banners[0]"/>
+                  </figcaption> -->
+                  <airdrop-card
+                    class="promotion-item-info"
+                    :info="item"/>
+                </figure>
+              </li>
+            </ul>
+          </div>
+        </div>
         <div class="mobile-home-section">
           <h2 class="home-section-title">Guidelines</h2>
           <ul class="home-section-cnt guideline-cnt-box">
@@ -151,8 +174,9 @@ import HomeSkeletion from '@/components/skeletion/_mobile/home'
 
 import PlanDepositCard from '@/components/reuse/_mobile/card/plan/plant'
 import LuckyBlockCard from '@/components/reuse/card/promotion/lucky'
+import AirdropCard from '@/components/reuse/card/promotion/claim'
 
-import { getLdbById, getPlanBases, getLuckyblocks } from 'api'
+import { getLdbById, getPlanBases, getLuckyblocks, getAirdrops } from 'api'
 import { initLoadingMixins, promotionsMixins, planBoostsMixins } from '@/mixins'
 export default {
   name: 'mobile-home-page',
@@ -171,6 +195,7 @@ export default {
       popularTavern: null,
       recommendDepositTerm: null,
       recommendLuckyBlock: null,
+      airdrops: [],
       guidelines: [
         {
           icon: '#icon-color-letter',
@@ -220,7 +245,8 @@ export default {
     HomeSkeletion,
 
     PlanDepositCard,
-    LuckyBlockCard
+    LuckyBlockCard,
+    AirdropCard
   },
   methods: {
 
@@ -255,9 +281,18 @@ export default {
       } catch (err) {}
     },
 
+    async getAirdropsMethod () {
+      try {
+        const airdropRes = await getAirdrops()
+        if (airdropRes.code === 1000 && airdropRes.data) {
+          this.airdrops = airdropRes.data
+        }
+      } catch (err) {}
+    },
+
     async initHome () {
       this.loading = true
-      await Promise.all([ this.getPopularTavern(), this.getRecommendTermDeposit(), this.getRecommendLuckyBlock() ])
+      await Promise.all([ this.getPopularTavern(), this.getRecommendTermDeposit(), this.getRecommendLuckyBlock(), this.getAirdropsMethod() ])
       this.$nextTick(() => {
         this.loading = false
         this.rendered = true
@@ -308,6 +343,10 @@ export default {
     box-shadow: 0 0 8px 3px rgba(0, 0, 0, .1);
     border-radius: 5px;
     overflow: hidden;
+    &.no-shadow {
+      box-shadow: none;
+      overflow: visible;
+    }
   }
 
   /**
@@ -418,6 +457,23 @@ export default {
   /**
    *  popular-tavern-box  -- end
    */
+
+  .promotions-windfall-item {
+    box-shadow: 0 0 8px 3px rgba(0, 0, 0, .1);
+    border-radius: 5px;
+    overflow: hidden;
+    &:not(:first-of-type) {
+      margin-top: 24px;
+    }
+    figcaption {
+      width: 100%;
+      // height: 128px;
+      // @include bg-size();
+    }
+  }
+  .promotion-item-info {
+    padding: 20px;
+  }
 
   // guideline-cnt-box
   .guideline-cnt-box {

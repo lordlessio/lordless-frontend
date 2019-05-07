@@ -39,7 +39,7 @@
                 <span v-else>{{ claimed / projectInfo.USD2TokenCount | formatNumber | formatDecimal({ len: 2 }) }} US dollars</span>
                 <span class="TTFontBold candy-claimed-been">has been claimed.</span>
               </p>
-              <div class="project-candy-carousel">
+              <div v-if="projectInfo.airdrop.banners && projectInfo.airdrop.banners.length" class="project-candy-carousel">
                 <el-carousel trigger="click" height="128px" :interval="5000" arrow="never" :indicator-position="projectInfo.airdrop.banners.length <= 1 ? 'none' : ''" :loop="projectInfo.airdrop.banners.length > 1">
                   <el-carousel-item v-for="(banner, index) of projectInfo.airdrop.banners" :key="index">
                     <div class="project-airdrop-banner" :style="`background-image: url(${ossOrigin + banner})`"></div>
